@@ -2,8 +2,8 @@
 
 Sistema integral de gestión de restaurante, cafetería, menú digital y comandas por mesa para **La Terraza de Vida & Sabor**.
 
-Este proyecto es una aplicación completamente **NUEVA e INDEPENDIENTE** ubicada en la unidad dedicada:
-`/Volumes/ORICO ExFAT/terraza-vidasabor-system`
+* **Repositorio GitHub**: [https://github.com/Jreyesh2024/terraza-vidasabor-system](https://github.com/Jreyesh2024/terraza-vidasabor-system)
+* **Ubicación Local en Unidad Dedicada**: `/Volumes/ORICO ExFAT/terraza-vidasabor-system`
 
 ---
 
@@ -20,7 +20,7 @@ Este proyecto es una aplicación completamente **NUEVA e INDEPENDIENTE** ubicada
 ```
 /Volumes/ORICO ExFAT/terraza-vidasabor-system/
 ├── README.md                          # Este documento de referencia
-├── .gitignore                         # Control de versiones git sin metadatos macOS
+├── .gitignore                         # Control de versiones git
 ├── .env.example                       # Plantilla de variables de entorno
 ├── .env                               # Variables de entorno locales
 ├── database/
