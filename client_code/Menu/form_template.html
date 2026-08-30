@@ -1,35 +1,16 @@
-<!--
-  ============================================================================
-  LA TERRAZA DE VIDA & SABOR (V&S) - ANVIL CUSTOM HTML FORM
-  Formulario: Menu.html
-  ============================================================================
--->
-
-
-
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<style>
-  body, html { background-color: #090d16 !important; color: #f8fafc !important; }
-  .glass-card { background: rgba(22, 30, 46, 0.85) !important; border: 1px solid rgba(255, 255, 255, 0.12) !important; }
-</style>
-
-<!--
-  ============================================================================
-  LA TERRAZA DE VIDA & SABOR (V&S) - ANVIL CUSTOM HTML FORM
-  Formulario: Menu.html
-  Encapsulado en 
-  ============================================================================
--->
-
-
+<anvil-form container="HtmlTemplate" prop:html="">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    body, html { background-color: #090d16 !important; color: #f8fafc !important; }
+    .glass-card { background: rgba(22, 30, 46, 0.85) !important; border: 1px solid rgba(255, 255, 255, 0.12) !important; }
+  </style>
   <!-- TAILWIND CSS CDN INJECTION & FONTS -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <style>
     body, .anvil-container {
       font-family: 'Inter', sans-serif;
@@ -51,72 +32,71 @@
       box-shadow: 0 0 25px rgba(16, 185, 129, 0.3);
     }
   </style>
-
   <div class="min-h-screen bg-[#090d16] text-slate-100 flex flex-col font-sans">
-
+  
     <!-- HEADER BAR / BRANDING V&S -->
     <header class="glass-nav sticky top-0 z-50 px-6 py-4 flex items-center justify-between">
       <div class="flex items-center gap-3">
         <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-700 flex items-center justify-center font-black text-xl text-white shadow-lg brand-glow">
-          V&S
+          V&amp;S
         </div>
         <div>
-          <h1 class="text-lg font-bold tracking-tight text-white">La Terraza de Vida & Sabor</h1>
-          <p class="text-xs text-slate-400 font-medium">Menú Digital & Comandas en Mesa</p>
+          <h1 class="text-lg font-bold tracking-tight text-white">La Terraza de Vida &amp; Sabor</h1>
+          <p class="text-xs text-slate-400 font-medium">Menú Digital &amp; Comandas en Mesa</p>
         </div>
       </div>
-
-            <!-- BOTONES DE NAVEGACIÓN Y MÓDULOS DEL SISTEMA -->
+  
+      <!-- BOTONES DE NAVEGACIÓN Y MÓDULOS DEL SISTEMA -->
       <div class="flex flex-wrap items-center gap-2">
-        <button onclick="window.navMenu && window.navMenu('menu')" class="px-3 py-1.5 text-xs font-bold rounded-xl bg-emerald-600/30 border border-emerald-500/50 text-emerald-300 transition flex items-center gap-1.5">
+        <button onclick="window.navMenu &amp;&amp; window.navMenu('menu')" class="px-3 py-1.5 text-xs font-bold rounded-xl bg-emerald-600/30 border border-emerald-500/50 text-emerald-300 transition flex items-center gap-1.5">
           <i class="fa-solid fa-mobile-screen-button text-emerald-400"></i> 📱 Cliente QR
         </button>
-        <button onclick="window.navMenu && window.navMenu('pos_mesero')" class="px-3 py-1.5 text-xs font-bold rounded-xl glass-card text-amber-300 border-amber-500/30 hover:bg-amber-500/10 transition flex items-center gap-1.5">
+        <button onclick="window.navMenu &amp;&amp; window.navMenu('pos_mesero')" class="px-3 py-1.5 text-xs font-bold rounded-xl glass-card text-amber-300 border-amber-500/30 hover:bg-amber-500/10 transition flex items-center gap-1.5">
           <i class="fa-solid fa-chair text-amber-400"></i> 📲 POS Croquis
         </button>
-        <button onclick="window.navMenu && window.navMenu('monitor_cocina')" class="px-3 py-1.5 text-xs font-bold rounded-xl glass-card text-sky-300 border-sky-500/30 hover:bg-sky-500/10 transition flex items-center gap-1.5">
+        <button onclick="window.navMenu &amp;&amp; window.navMenu('monitor_cocina')" class="px-3 py-1.5 text-xs font-bold rounded-xl glass-card text-sky-300 border-sky-500/30 hover:bg-sky-500/10 transition flex items-center gap-1.5">
           <i class="fa-solid fa-fire text-amber-400"></i> 👨‍🍳 Cocina KDS
         </button>
-        <button onclick="window.navMenu && window.navMenu('monitor_fiscal')" class="px-3 py-1.5 text-xs font-bold rounded-xl glass-card text-slate-300 border-slate-700 hover:bg-slate-800 transition flex items-center gap-1.5">
+        <button onclick="window.navMenu &amp;&amp; window.navMenu('monitor_fiscal')" class="px-3 py-1.5 text-xs font-bold rounded-xl glass-card text-slate-300 border-slate-700 hover:bg-slate-800 transition flex items-center gap-1.5">
           <i class="fa-solid fa-chart-pie text-sky-400"></i> 🧾 Fiscal
         </button>
-        <button onclick="window.navMenu && window.navMenu('clientes_lealtad')" class="px-3 py-1.5 text-xs font-bold rounded-xl glass-card text-purple-300 border-purple-500/30 hover:bg-purple-500/10 transition flex items-center gap-1.5">
+        <button onclick="window.navMenu &amp;&amp; window.navMenu('clientes_lealtad')" class="px-3 py-1.5 text-xs font-bold rounded-xl glass-card text-purple-300 border-purple-500/30 hover:bg-purple-500/10 transition flex items-center gap-1.5">
           <i class="fa-solid fa-award text-purple-400"></i> 💳 Rewards
         </button>
       </div>
     </header>
-
+  
     <!-- CONTENIDO PRINCIPAL DEL MENÚ DIGITAL -->
     <main class="flex-1 max-w-7xl w-full mx-auto p-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
-
+  
       <!-- SECCIÓN IZQUIERDA: CATÁLOGO Y PRODUCTOS -->
       <section class="lg:col-span-2 flex flex-col gap-6">
-
+  
         <!-- BUSCADOR & BARRA DE CATEGORÍAS -->
         <div class="flex flex-col sm:flex-row gap-4 justify-between items-center">
           <div class="relative w-full sm:w-80">
             <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3.5 text-slate-500 text-sm"></i>
-            <input type="text" id="searchInput" placeholder="Buscar platillos o bebidas..." oninput="window.filtrarProductos()" class="w-full pl-10 pr-4 py-2.5 bg-slate-900/80 border border-slate-700/80 rounded-xl text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-emerald-500 transition">
+            <input type="text" id="searchInput" placeholder="Buscar platillos o bebidas..." oninput="window.filtrarProductos()" class="w-full pl-10 pr-4 py-2.5 bg-slate-900/80 border border-slate-700/80 rounded-xl text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-emerald-500 transition" />
           </div>
-
+  
           <!-- CHIPS DE CATEGORÍAS -->
-          <div class="flex gap-2 overflow-x-auto w-full sm:w-auto pb-1" id="categoriesChips">
+          <div id="categoriesChips" class="flex gap-2 overflow-x-auto w-full sm:w-auto pb-1">
             <button onclick="window.seleccionarCategoria('Todos')" class="cat-chip active px-4 py-2 text-xs font-bold rounded-xl bg-emerald-500 text-white shadow-md shadow-emerald-500/20 whitespace-nowrap transition">
               Todos
             </button>
           </div>
         </div>
-
+  
         <!-- GRID DE TARJETAS DE PLATILLOS -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="productsGridContainer">
+        <div id="productsGridContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div class="text-center py-12 text-slate-500 col-span-2">
             <i class="fa-solid fa-spinner animate-spin text-2xl text-emerald-500 mb-2"></i>
-            <p>Cargando menú de La Terraza V&S...</p>
+            <p>Cargando menú de La Terraza V&amp;S...</p>
           </div>
         </div>
-
+  
       </section>
-
+  
       <!-- SECCIÓN DERECHA: SIDEBAR DE COMANDA Y COBRO -->
       <aside class="glass-card rounded-2xl p-6 flex flex-col justify-between h-full border border-slate-800 shadow-2xl">
         <div>
@@ -131,36 +111,36 @@
               Abierta
             </span>
           </div>
-
+  
           <!-- LISTA DE ITEMS REGISTRADOS -->
-          <div class="space-y-3 max-h-80 overflow-y-auto pr-1" id="cartItemsList">
+          <div id="cartItemsList" class="space-y-3 max-h-80 overflow-y-auto pr-1">
             <div class="text-center py-8 text-slate-500 text-xs">
               No hay consumos agregados a esta comanda.
             </div>
           </div>
         </div>
-
+  
         <!-- TOTALES Y ACCIONES DE COBRO -->
         <div class="pt-4 border-t border-slate-800 mt-6 space-y-4">
           <div class="space-y-2 text-xs">
             <div class="flex justify-between text-slate-400">
               <span>Subtotal:</span>
-              <span class="font-semibold text-slate-200" id="txtSubtotal">$0.00</span>
+              <span id="txtSubtotal" class="font-semibold text-slate-200">$0.00</span>
             </div>
             <div class="flex justify-between text-slate-400">
               <span>IVA (16% Desglosado):</span>
-              <span class="font-semibold text-slate-200" id="txtIVA">$0.00</span>
+              <span id="txtIVA" class="font-semibold text-slate-200">$0.00</span>
             </div>
             <div class="flex justify-between text-slate-400">
               <span>Propina Sugerida (10%):</span>
-              <span class="font-semibold text-slate-200" id="txtPropina">$0.00</span>
+              <span id="txtPropina" class="font-semibold text-slate-200">$0.00</span>
             </div>
             <div class="flex justify-between text-base font-black text-white pt-2 border-t border-slate-800">
               <span>Total Mesa:</span>
-              <span class="text-emerald-400" id="txtTotal">$0.00</span>
+              <span id="txtTotal" class="text-emerald-400">$0.00</span>
             </div>
           </div>
-
+  
           <!-- BOTONES DE COBRO MULTICANAL -->
           <div class="grid grid-cols-2 gap-2">
             <button onclick="window.abrirModalCobro('santander')" class="py-3 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-100 text-xs font-bold border border-slate-700 transition flex items-center justify-center gap-1.5">
@@ -171,175 +151,174 @@
             </button>
           </div>
         </div>
-
+  
       </aside>
-
+  
     </main>
-
+  
   </div>
-
   <script>
     window.vsMenuData = [
-      {id: 1, categoria_nombre: "Barra de Café & Infusiones", nombre: "Café Capuchino Especial V&S", descripcion: "Espresso doble con leche cremada artesanal y toque de canela", precio_unitario: 68.00, estacion_preparacion: "barra_cafe", icono: "☕"},
-      {id: 2, categoria_nombre: "Barra de Café & Infusiones", nombre: "Espresso Italiano Robusto", descripcion: "Grano seleccionado 100% arábica tostado de la casa", precio_unitario: 48.00, estacion_preparacion: "barra_cafe", icono: "☕"},
-      {id: 3, categoria_nombre: "Barra de Café & Infusiones", nombre: "Latte Machiatto Vainilla Bourbon", descripcion: "Espresso con leche de almendra y jarabe natural de vainilla bourbon", precio_unitario: 75.00, estacion_preparacion: "barra_cafe", icono: "🥛"},
-      {id: 4, categoria_nombre: "Desayunos & Brunch Gourmet", nombre: "Chilaquiles Verdes con Pollo y Queso Gouda", descripcion: "Totopos artesanos en salsa de tomatillo con pollo deshebrado y gouda", precio_unitario: 148.00, estacion_preparacion: "cocina", icono: "🥘"},
-      {id: 5, categoria_nombre: "Desayunos & Brunch Gourmet", nombre: "Omelette Supremo La Terraza", descripcion: "3 huevos orgánicos rellenos de portobello, espinacas baby y queso asadero", precio_unitario: 155.00, estacion_preparacion: "cocina", icono: "🍳"},
-      {id: 6, categoria_nombre: "Desayunos & Brunch Gourmet", nombre: "Molletes de Masa Madre con Chorizo", descripcion: "Pan artesano de masa madre con frijol negro, gouda y chorizo", precio_unitario: 125.00, estacion_preparacion: "cocina", icono: "🥖"},
-      {id: 7, categoria_nombre: "Especialidades Fuertes", nombre: "Rib Eye Grill V&S (350g)", descripcion: "Corte de alta calidad a las brasas servido con papas gajo y espárragos", precio_unitario: 385.00, estacion_preparacion: "cocina", icono: "🥩"},
+      {id: 1, categoria_nombre: "Barra de Café &amp;amp;amp; Infusiones", nombre: "Café Capuchino Especial V&amp;amp;amp;S", descripcion: "Espresso doble con leche cremada artesanal y toque de canela", precio_unitario: 68.00, estacion_preparacion: "barra_cafe", icono: "☕"},
+      {id: 2, categoria_nombre: "Barra de Café &amp;amp;amp; Infusiones", nombre: "Espresso Italiano Robusto", descripcion: "Grano seleccionado 100% arábica tostado de la casa", precio_unitario: 48.00, estacion_preparacion: "barra_cafe", icono: "☕"},
+      {id: 3, categoria_nombre: "Barra de Café &amp;amp;amp; Infusiones", nombre: "Latte Machiatto Vainilla Bourbon", descripcion: "Espresso con leche de almendra y jarabe natural de vainilla bourbon", precio_unitario: 75.00, estacion_preparacion: "barra_cafe", icono: "🥛"},
+      {id: 4, categoria_nombre: "Desayunos &amp;amp;amp; Brunch Gourmet", nombre: "Chilaquiles Verdes con Pollo y Queso Gouda", descripcion: "Totopos artesanos en salsa de tomatillo con pollo deshebrado y gouda", precio_unitario: 148.00, estacion_preparacion: "cocina", icono: "🥘"},
+      {id: 5, categoria_nombre: "Desayunos &amp;amp;amp; Brunch Gourmet", nombre: "Omelette Supremo La Terraza", descripcion: "3 huevos orgánicos rellenos de portobello, espinacas baby y queso asadero", precio_unitario: 155.00, estacion_preparacion: "cocina", icono: "🍳"},
+      {id: 6, categoria_nombre: "Desayunos &amp;amp;amp; Brunch Gourmet", nombre: "Molletes de Masa Madre con Chorizo", descripcion: "Pan artesano de masa madre con frijol negro, gouda y chorizo", precio_unitario: 125.00, estacion_preparacion: "cocina", icono: "🥖"},
+      {id: 7, categoria_nombre: "Especialidades Fuertes", nombre: "Rib Eye Grill V&amp;amp;amp;S (350g)", descripcion: "Corte de alta calidad a las brasas servido con papas gajo y espárragos", precio_unitario: 385.00, estacion_preparacion: "cocina", icono: "🥩"},
       {id: 8, categoria_nombre: "Especialidades Fuertes", nombre: "Pasta Fettuccine con Camarones al Trufado", descripcion: "Pasta fresca hecha en casa con camarones u-15 y crema suave de trufa", precio_unitario: 265.00, estacion_preparacion: "cocina", icono: "🍝"},
-      {id: 9, categoria_nombre: "Repostería & Postres de Autor", nombre: "Pastel Supremo de Chocolate Valrhona", descripcion: "Rebanada caliente de pastel de chocolate amargo con helado de vainilla", precio_unitario: 105.00, estacion_preparacion: "reposteria", icono: "🍰"},
-      {id: 10, categoria_nombre: "Bebidas & Coctelería de Autor", nombre: "Limonada Botánica de Hierbabuena & Jengibre", descripcion: "Agua mineral infucionada con jengibre fresco, limón eufrata y hierbabuena", precio_unitario: 60.00, estacion_preparacion: "barra_cafe", icono: "🍋"}
+      {id: 9, categoria_nombre: "Repostería &amp;amp;amp; Postres de Autor", nombre: "Pastel Supremo de Chocolate Valrhona", descripcion: "Rebanada caliente de pastel de chocolate amargo con helado de vainilla", precio_unitario: 105.00, estacion_preparacion: "reposteria", icono: "🍰"},
+      {id: 10, categoria_nombre: "Bebidas &amp;amp;amp; Coctelería de Autor", nombre: "Limonada Botánica de Hierbabuena &amp;amp;amp; Jengibre", descripcion: "Agua mineral infucionada con jengibre fresco, limón eufrata y hierbabuena", precio_unitario: 60.00, estacion_preparacion: "barra_cafe", icono: "🍋"}
     ];
-
+  
     window.vsCategoriasData = [
-      {id: 1, nombre: "Barra de Café & Infusiones", icono: "☕"},
-      {id: 2, nombre: "Desayunos & Brunch Gourmet", icono: "🍳"},
-      {id: 3, nombre: "Entradas & Tapas de la Terraza", icono: "🥗"},
+      {id: 1, nombre: "Barra de Café &amp;amp;amp; Infusiones", icono: "☕"},
+      {id: 2, nombre: "Desayunos &amp;amp;amp; Brunch Gourmet", icono: "🍳"},
+      {id: 3, nombre: "Entradas &amp;amp;amp; Tapas de la Terraza", icono: "🥗"},
       {id: 4, nombre: "Especialidades Fuertes", icono: "🥩"},
-      {id: 5, nombre: "Repostería & Postres de Autor", icono: "🍰"},
-      {id: 6, nombre: "Bebidas & Coctelería de Autor", icono: "🍹"}
+      {id: 5, nombre: "Repostería &amp;amp;amp; Postres de Autor", icono: "🍰"},
+      {id: 6, nombre: "Bebidas &amp;amp;amp; Coctelería de Autor", icono: "🍹"}
     ];
-
+  
     window.vsCartItems = [];
     window.categoriaActual = "Todos";
-
+  
     window.cargarDatosMenu = function(productos, categorias) {
-      if (productos && productos.length > 0) window.vsMenuData = productos;
-      if (categorias && categorias.length > 0) window.vsCategoriasData = categorias;
+      if (productos &amp;amp;amp;&amp;amp;amp; productos.length &amp;amp;gt; 0) window.vsMenuData = productos;
+      if (categorias &amp;amp;amp;&amp;amp;amp; categorias.length &amp;amp;gt; 0) window.vsCategoriasData = categorias;
       window.renderCategoriasChips(window.vsCategoriasData);
       window.renderProductos();
     };
-
+  
     window.renderCategoriasChips = function(categorias) {
       const container = document.getElementById('categoriesChips');
       if (!container) return;
-      container.innerHTML = `<button onclick="window.seleccionarCategoria('Todos')" class="cat-chip ${window.categoriaActual === 'Todos' ? 'active bg-emerald-500 text-white' : 'bg-slate-800/80 text-slate-400'} px-4 py-2 text-xs font-bold rounded-xl whitespace-nowrap transition">Todos</button>`;
-
-      categorias.forEach(cat => {
+      container.innerHTML = `&amp;amp;lt;button onclick="window.seleccionarCategoria('Todos')" class="cat-chip ${window.categoriaActual === 'Todos' ? 'active bg-emerald-500 text-white' : 'bg-slate-800/80 text-slate-400'} px-4 py-2 text-xs font-bold rounded-xl whitespace-nowrap transition"&amp;amp;gt;Todos&amp;amp;lt;/button&amp;amp;gt;`;
+  
+      categorias.forEach(cat =&amp;amp;gt; {
         const btn = document.createElement('button');
         const isActive = window.categoriaActual === cat.nombre;
         btn.className = `cat-chip ${isActive ? 'active bg-emerald-500 text-white shadow-md shadow-emerald-500/20' : 'bg-slate-800/80 text-slate-400 hover:text-white'} px-4 py-2 text-xs font-bold rounded-xl whitespace-nowrap transition`;
         btn.innerText = `${cat.icono || '🍽️'} ${cat.nombre}`;
-        btn.onclick = () => window.seleccionarCategoria(cat.nombre);
+        btn.onclick = () =&amp;amp;gt; window.seleccionarCategoria(cat.nombre);
         container.appendChild(btn);
       });
     };
-
+  
     window.seleccionarCategoria = function(catNombre) {
       window.categoriaActual = catNombre;
       const chips = document.querySelectorAll('.cat-chip');
-      chips.forEach(c => c.classList.remove('active', 'bg-emerald-500', 'text-white'));
+      chips.forEach(c =&amp;amp;gt; c.classList.remove('active', 'bg-emerald-500', 'text-white'));
       window.renderProductos();
     };
-
+  
     window.filtrarProductos = function() {
       window.renderProductos();
     };
-
+  
     window.renderProductos = function() {
       const container = document.getElementById('productsGridContainer');
       if (!container) return;
       const searchInput = document.getElementById('searchInput');
       const searchVal = searchInput ? (searchInput.value || '').toLowerCase() : '';
       container.innerHTML = '';
-
+  
       const list = window.vsMenuData || [];
-      const filtrados = list.filter(p => {
+      const filtrados = list.filter(p =&amp;amp;gt; {
         const matchCat = window.categoriaActual === 'Todos' || p.categoria_nombre === window.categoriaActual;
-        const matchSearch = p.nombre.toLowerCase().includes(searchVal) || (p.descripcion && p.descripcion.toLowerCase().includes(searchVal));
-        return matchCat && matchSearch;
+        const matchSearch = p.nombre.toLowerCase().includes(searchVal) || (p.descripcion &amp;amp;amp;&amp;amp;amp; p.descripcion.toLowerCase().includes(searchVal));
+        return matchCat &amp;amp;amp;&amp;amp;amp; matchSearch;
       });
-
+  
       if (filtrados.length === 0) {
-        container.innerHTML = `<div class="text-center py-12 text-slate-500 text-sm col-span-2">No se encontraron platillos o bebidas disponibles</div>`;
+        container.innerHTML = `&amp;amp;lt;div class="text-center py-12 text-slate-500 text-sm col-span-2"&amp;amp;gt;No se encontraron platillos o bebidas disponibles&amp;amp;lt;/div&amp;amp;gt;`;
         return;
       }
-
-      filtrados.forEach(prod => {
+  
+      filtrados.forEach(prod =&amp;amp;gt; {
         const card = document.createElement('div');
         card.className = 'glass-card p-4 rounded-2xl flex justify-between items-center hover:border-emerald-500/50 transition cursor-pointer group';
-        card.onclick = () => window.agregarAlCarrito(prod);
-
+        card.onclick = () =&amp;amp;gt; window.agregarAlCarrito(prod);
+  
         card.innerHTML = `
-          <div class="flex items-center gap-3">
-            <div class="w-12 h-12 rounded-xl bg-slate-800 flex items-center justify-center text-2xl group-hover:scale-110 transition">
+          &amp;amp;lt;div class="flex items-center gap-3"&amp;amp;gt;
+            &amp;amp;lt;div class="w-12 h-12 rounded-xl bg-slate-800 flex items-center justify-center text-2xl group-hover:scale-110 transition"&amp;amp;gt;
               ${prod.icono || '🍲'}
-            </div>
-            <div>
-              <h3 class="text-sm font-bold text-white group-hover:text-emerald-400 transition">${prod.nombre}</h3>
-              <p class="text-xs text-slate-400 line-clamp-1">${prod.descripcion || ''}</p>
-            </div>
-          </div>
-          <div class="text-right">
-            <span class="text-sm font-black text-emerald-400 block">$${Number(prod.precio_unitario).toFixed(2)}</span>
-            <span class="text-[10px] text-slate-500 font-semibold uppercase">${prod.estacion_preparacion || 'cocina'}</span>
-          </div>
+            &amp;amp;lt;/div&amp;amp;gt;
+            &amp;amp;lt;div&amp;amp;gt;
+              &amp;amp;lt;h3 class="text-sm font-bold text-white group-hover:text-emerald-400 transition"&amp;amp;gt;${prod.nombre}&amp;amp;lt;/h3&amp;amp;gt;
+              &amp;amp;lt;p class="text-xs text-slate-400 line-clamp-1"&amp;amp;gt;${prod.descripcion || ''}&amp;amp;lt;/p&amp;amp;gt;
+            &amp;amp;lt;/div&amp;amp;gt;
+          &amp;amp;lt;/div&amp;amp;gt;
+          &amp;amp;lt;div class="text-right"&amp;amp;gt;
+            &amp;amp;lt;span class="text-sm font-black text-emerald-400 block"&amp;amp;gt;$${Number(prod.precio_unitario).toFixed(2)}&amp;amp;lt;/span&amp;amp;gt;
+            &amp;amp;lt;span class="text-[10px] text-slate-500 font-semibold uppercase"&amp;amp;gt;${prod.estacion_preparacion || 'cocina'}&amp;amp;lt;/span&amp;amp;gt;
+          &amp;amp;lt;/div&amp;amp;gt;
         `;
         container.appendChild(card);
       });
     };
-
+  
     window.agregarAlCarrito = function(prod) {
-      const index = window.vsCartItems.findIndex(i => i.id === prod.id);
-      if (index >= 0) {
+      const index = window.vsCartItems.findIndex(i =&amp;amp;gt; i.id === prod.id);
+      if (index &amp;amp;gt;= 0) {
         window.vsCartItems[index].cantidad += 1;
       } else {
         window.vsCartItems.push({ ...prod, cantidad: 1 });
       }
       window.renderCarrito();
     };
-
+  
     window.renderCarrito = function() {
       const container = document.getElementById('cartItemsList');
       if (!container) return;
       container.innerHTML = '';
-
+  
       let subtotal = 0;
-
+  
       if (window.vsCartItems.length === 0) {
-        container.innerHTML = `<div class="text-center py-8 text-slate-500 text-xs">No hay consumos agregados a esta comanda.</div>`;
+        container.innerHTML = `&amp;amp;lt;div class="text-center py-8 text-slate-500 text-xs"&amp;amp;gt;No hay consumos agregados a esta comanda.&amp;amp;lt;/div&amp;amp;gt;`;
       } else {
-        window.vsCartItems.forEach((item, idx) => {
+        window.vsCartItems.forEach((item, idx) =&amp;amp;gt; {
           const itemSubtotal = item.precio_unitario * item.cantidad;
           subtotal += itemSubtotal;
-
+  
           const row = document.createElement('div');
           row.className = 'flex justify-between items-center bg-slate-900/60 p-2.5 rounded-xl border border-slate-800/80 text-xs';
           row.innerHTML = `
-            <div>
-              <span class="font-bold text-white">${item.nombre} x${item.cantidad}</span>
-              <span class="block text-[10px] text-slate-400">$${Number(item.precio_unitario).toFixed(2)} c/u</span>
-            </div>
-            <div class="flex items-center gap-2">
-              <span class="font-black text-slate-200">$${itemSubtotal.toFixed(2)}</span>
-              <button onclick="window.quitarDelCarrito(${idx})" class="text-red-400 hover:text-red-300 text-xs ml-1"><i class="fa-solid fa-trash"></i></button>
-            </div>
+            &amp;amp;lt;div&amp;amp;gt;
+              &amp;amp;lt;span class="font-bold text-white"&amp;amp;gt;${item.nombre} x${item.cantidad}&amp;amp;lt;/span&amp;amp;gt;
+              &amp;amp;lt;span class="block text-[10px] text-slate-400"&amp;amp;gt;$${Number(item.precio_unitario).toFixed(2)} c/u&amp;amp;lt;/span&amp;amp;gt;
+            &amp;amp;lt;/div&amp;amp;gt;
+            &amp;amp;lt;div class="flex items-center gap-2"&amp;amp;gt;
+              &amp;amp;lt;span class="font-black text-slate-200"&amp;amp;gt;$${itemSubtotal.toFixed(2)}&amp;amp;lt;/span&amp;amp;gt;
+              &amp;amp;lt;button onclick="window.quitarDelCarrito(${idx})" class="text-red-400 hover:text-red-300 text-xs ml-1"&amp;amp;gt;&amp;amp;lt;i class="fa-solid fa-trash"&amp;amp;gt;&amp;amp;lt;/i&amp;amp;gt;&amp;amp;lt;/button&amp;amp;gt;
+            &amp;amp;lt;/div&amp;amp;gt;
           `;
           container.appendChild(row);
         });
       }
-
+  
       const iva = subtotal * 0.16;
       const propina = subtotal * 0.10;
       const total = subtotal + propina;
-
+  
       const txtSubtotal = document.getElementById('txtSubtotal');
       const txtIVA = document.getElementById('txtIVA');
       const txtPropina = document.getElementById('txtPropina');
       const txtTotal = document.getElementById('txtTotal');
-
+  
       if (txtSubtotal) txtSubtotal.innerText = `$${subtotal.toFixed(2)}`;
       if (txtIVA) txtIVA.innerText = `$${iva.toFixed(2)}`;
       if (txtPropina) txtPropina.innerText = `$${propina.toFixed(2)}`;
       if (txtTotal) txtTotal.innerText = `$${total.toFixed(2)}`;
     };
-
+  
     window.quitarDelCarrito = function(index) {
       window.vsCartItems.splice(index, 1);
       window.renderCarrito();
     };
-
+  
     window.navMenu = function(modulo) {
       if (window.anvilAppNav) {
         window.anvilAppNav(modulo);
@@ -347,7 +326,7 @@
         alert(`Navegación a módulo: ${modulo}`);
       }
     };
-
+  
     window.abrirModalCobro = function(metodo) {
       if (window.vsCartItems.length === 0) {
         alert('Agregue consumos antes de proceder al cobro');
@@ -356,14 +335,14 @@
       if (window.anvilProcesarCobro) {
         window.anvilProcesarCobro(metodo, window.vsCartItems);
       } else {
-        alert(`Procesando pago vía ${metodo.toUpperCase()} para La Terraza V&S...`);
+        alert(`Procesando pago vía ${metodo.toUpperCase()} para La Terraza V&amp;amp;amp;S...`);
       }
     };
-
+  
     function initImmediate() {
       window.cargarDatosMenu(window.vsMenuData, window.vsCategoriasData);
     }
-
+  
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', initImmediate);
     } else {
@@ -372,3 +351,4 @@
     setTimeout(initImmediate, 10);
     setTimeout(initImmediate, 100);
   </script>
+</anvil-form>
