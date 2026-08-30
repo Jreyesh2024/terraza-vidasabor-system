@@ -38,7 +38,7 @@
   </style>
 
   <div class="min-h-screen bg-[#090d16] text-slate-100 flex flex-col font-sans">
-    
+
     <!-- HEADER BAR / BRANDING V&S -->
     <header class="glass-nav sticky top-0 z-50 px-6 py-4 flex items-center justify-between">
       <div class="flex items-center gap-3">
@@ -73,10 +73,10 @@
 
     <!-- CONTENIDO PRINCIPAL DEL MENÚ DIGITAL -->
     <main class="flex-1 max-w-7xl w-full mx-auto p-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
-      
+
       <!-- SECCIÓN IZQUIERDA: CATÁLOGO Y PRODUCTOS -->
       <section class="lg:col-span-2 flex flex-col gap-6">
-        
+
         <!-- BUSCADOR & BARRA DE CATEGORÍAS -->
         <div class="flex flex-col sm:flex-row gap-4 justify-between items-center">
           <div class="relative w-full sm:w-80">
@@ -200,7 +200,7 @@
       const container = document.getElementById('categoriesChips');
       if (!container) return;
       container.innerHTML = `<button onclick="window.seleccionarCategoria('Todos')" class="cat-chip ${window.categoriaActual === 'Todos' ? 'active bg-emerald-500 text-white' : 'bg-slate-800/80 text-slate-400'} px-4 py-2 text-xs font-bold rounded-xl whitespace-nowrap transition">Todos</button>`;
-      
+
       categorias.forEach(cat => {
         const btn = document.createElement('button');
         const isActive = window.categoriaActual === cat.nombre;

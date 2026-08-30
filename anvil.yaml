@@ -1,12 +1,6 @@
 app_id: terraza_vidasabor_app
+metadata: {title: VidaSabor Terraza}
 name: La Terraza de Vida & Sabor
-startup: {module: POSMesero, type: form}
-startup_form: POSMesero
-runtime_options:
-  version: 2
-  client_version: '3'
-  server_version: python3-sandbox
-  server_spec: {}
 native_deps: |
   <script>
     if (!window.clickSilla) window.clickSilla = function(m, s) { if (window.handleSillaClick) window.handleSillaClick(m, s); };
@@ -17,9 +11,11 @@ native_deps: |
   </script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="_/theme/theme.css">
-forms:
-- name: Menu
-- name: POSMesero
-- name: MonitorCocina
-- name: MonitorFiscal
-- name: ClientesLealtad
+package_name: VidaSabor
+runtime_options:
+  client_version: '3'
+  server_spec: {}
+  server_version: python3-sandbox
+  version: 2
+startup: {module: POSMesero, type: form}
+startup_form: POSMesero
