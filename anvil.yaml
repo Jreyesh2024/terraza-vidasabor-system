@@ -1,7 +1,7 @@
 app_id: terraza_vidasabor_app
 name: La Terraza de Vida & Sabor
-startup: {type: form, module: Menu}
-startup_form: Menu
+startup: {type: form, module: POSMesero}
+startup_form: POSMesero
 runtime_options:
   version: 2
   client_version: '3'
