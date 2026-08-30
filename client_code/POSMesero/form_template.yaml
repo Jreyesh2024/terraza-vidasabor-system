@@ -1,3 +1,4 @@
-is_package: true
 container:
   type: HtmlTemplate
+components: []
+is_package: true
