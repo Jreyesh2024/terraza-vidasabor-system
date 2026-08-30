@@ -1,7 +1,11 @@
 unique_ids:
-  assets: {}
+  assets:
+    menu.html: OLOZBJ5CVBSEGP4AS2YOEITRCRQR7GNZ
   forms:
+    ClientesLealtad: TJ7J46735SCN3ZYXGLTYZTJRUVIJBQVS
     Menu: TTVWA4DDL3HAUME3Y5MGPAAURC7GDXSJ
+    MonitorCocina: EJQRYODPUJEJYGANPI2DQEYYL7NUFRNI
+    MonitorFiscal: JLDNEF6PQY6DLDPVHXKQEPKFXRDLOYKX
   modules: {}
   scripts: {}
   server_modules:
