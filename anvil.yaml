@@ -1,0 +1,8 @@
+app_id: terraza_vidasabor_app
+name: La Terraza de Vida & Sabor
+runtime_options:
+  version: 2
+  client_version: '3'
+  server_version: python3-sandbox
+startup: {type: form, name: Menu}
+startup_form: Menu
