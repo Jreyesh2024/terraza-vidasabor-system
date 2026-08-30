@@ -1,10 +1,246 @@
 <!-- ============================================================================
-  LA TERRAZA DE VIDA & SABOR (V&S) - PLANO GRÁFICO 2D DE LA PALAPA
-  Script colocado AL INICIO del documento para garantizar window.clickSilla
+  LA TERRAZA DE VIDA & SABOR (V&S) - PLANO GRÁFICO 2D (EVENT DELEGATION)
+  - Eliminados onclick inline string para cero errores en Anvil
+  - Manejador global document.addEventListener('click')
 ============================================================================ -->
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="_/theme/theme.css">
+
+<style>
+  html, body, .anvil-container {
+    background-color: #090d16 !important;
+    color: #f8fafc !important;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+</style>
+
+<div style="background-color: #090d16 !important; color: #f8fafc !important; font-family: 'Inter', system-ui, sans-serif !important; min-height: 100vh !important; padding: 20px !important; box-sizing: border-box !important; display: flex !important; flex-direction: column !important; gap: 20px !important;">
+  
+  <!-- HEADER BAR & AREA SWITCHER -->
+  <div style="display: flex !important; flex-wrap: wrap !important; justify-content: space-between !important; align-items: center !important; gap: 15px !important; padding-bottom: 15px !important; border-bottom: 1px solid #1e293b !important;">
+    <div style="display: flex !important; align-items: center !important; gap: 12px !important;">
+      <div style="width: 48px !important; height: 48px !important; border-radius: 16px !important; background: linear-gradient(135deg, #10b981, #0f766e) !important; display: flex !important; align-items: center !important; justify-content: center !important; font-size: 22px !important; font-weight: 900 !important; color: #ffffff !important; box-shadow: 0 0 20px rgba(16, 185, 129, 0.4) !important;">
+        V&S
+      </div>
+      <div>
+        <h1 style="font-size: 20px !important; font-weight: 800 !important; color: #ffffff !important; margin: 0 !important;">Plano Gráfico 2D • La Terraza de Vida & Sabor</h1>
+        <p style="font-size: 12px !important; font-weight: 600 !important; color: #34d399 !important; margin: 2px 0 0 0 !important;">Gestión Espacial de Mesas Circulares (Área Palapa 6.00m x 4.00m)</p>
+      </div>
+    </div>
+
+    <!-- AREA SELECTOR & MODULE SWITCHER -->
+    <div style="display: flex !important; gap: 8px !important; background: #0f172a !important; padding: 6px !important; border-radius: 16px !important; border: 1px solid #1e293b !important;">
+      <button id="btn-area-palapa" style="padding: 8px 16px !important; font-size: 12px !important; font-weight: 700 !important; border-radius: 12px !important; background-color: #059669 !important; color: #ffffff !important; border: none !important; cursor: pointer !important; display: flex !important; align-items: center !important; gap: 6px !important;">
+        <i class="fa-solid fa-umbrella-beach" style="color: #fcd34d !important;"></i> La Palapa (6x4m)
+      </button>
+      <button id="btn-nav-cocina" style="padding: 8px 16px !important; font-size: 12px !important; font-weight: 600 !important; border-radius: 12px !important; background: transparent !important; color: #cbd5e1 !important; border: none !important; cursor: pointer !important; display: flex !important; align-items: center !important; gap: 6px !important;">
+        <i class="fa-solid fa-fire" style="color: #f59e0b !important;"></i> Cocina KDS
+      </button>
+      <button id="btn-nav-fiscal" style="padding: 8px 16px !important; font-size: 12px !important; font-weight: 600 !important; border-radius: 12px !important; background: transparent !important; color: #cbd5e1 !important; border: none !important; cursor: pointer !important; display: flex !important; align-items: center !important; gap: 6px !important;">
+        <i class="fa-solid fa-chart-pie" style="color: #38bdf8 !important;"></i> Fiscal
+      </button>
+    </div>
+  </div>
+
+  <!-- ACTION INSTRUCTION BANNER -->
+  <div id="moveInstructionBanner" style="display: flex !important; background: #0f172a !important; border: 1px solid #1e293b !important; color: #cbd5e1 !important; padding: 12px 18px !important; border-radius: 14px !important; font-size: 12px !important; font-weight: 600 !important; justify-content: space-between !important; align-items: center !important;">
+    <div style="display: flex !important; align-items: center !important; gap: 10px !important;">
+      <i id="bannerIcon" class="fa-solid fa-hand-pointer" style="color: #38bdf8 !important; font-size: 16px !important;"></i>
+      <span id="bannerText">Haz clic en cualquier <b>Silla</b> para abrir su Comanda o haz clic en <b>Mover Comensal</b> para trasladar su cuenta a otra silla/mesa.</span>
+    </div>
+    <button id="btnCancelMove" style="display: none !important; padding: 4px 12px !important; background: #ef4444 !important; color: #ffffff !important; border-radius: 8px !important; border: none !important; font-weight: 800 !important; cursor: pointer !important;">
+      Cancelar Movimiento
+    </button>
+  </div>
+
+  <!-- MAIN CANVAS GRID -->
+  <div style="display: grid !important; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) !important; gap: 24px !important; flex: 1 !important;">
+    
+    <!-- LEFT PANEL: 2D FLOOR PLAN OF LA PALAPA -->
+    <div style="background: rgba(15, 23, 42, 0.95) !important; border: 1px solid #1e293b !important; border-radius: 20px !important; padding: 24px !important; display: flex !important; flex-direction: column !important; justify-content: space-between !important; min-height: 540px !important; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5) !important;">
+      
+      <!-- PARED POSTERIOR BARRA -->
+      <div style="background: rgba(30, 41, 59, 0.9) !important; border: 1px solid rgba(16, 185, 129, 0.3) !important; border-radius: 12px !important; padding: 12px 16px !important; display: flex !important; flex-wrap: wrap !important; justify-content: space-between !important; align-items: center !important; margin-bottom: 24px !important; gap: 10px !important;">
+        <div style="display: flex !important; align-items: center !important; gap: 8px !important; font-size: 12px !important; font-weight: 700 !important; color: #34d399 !important;">
+          <i class="fa-solid fa-mug-hot" style="color: #fbbf24 !important; font-size: 16px !important;"></i>
+          <span>Mueble de Servicio & Barra de Café (Pared Posterior 6.00m)</span>
+        </div>
+        <div style="display: flex !important; gap: 16px !important; font-size: 11px !important; color: #94a3b8 !important; font-weight: 600 !important;">
+          <span><i class="fa-solid fa-wine-glass" style="color: #c084fc !important; margin-right: 4px !important;"></i> Cristalería</span>
+          <span><i class="fa-solid fa-fire" style="color: #fbbf24 !important; margin-right: 4px !important;"></i> Espresso</span>
+          <span><i class="fa-solid fa-sink" style="color: #38bdf8 !important; margin-right: 4px !important;"></i> Insumos</span>
+        </div>
+      </div>
+
+      <!-- 3 CIRCULAR TABLES WITH 4 CHAIRS EACH -->
+      <div style="display: grid !important; grid-template-columns: repeat(3, 1fr) !important; gap: 20px !important; margin: auto 0 !important; padding: 20px 0 !important;">
+        
+        <!-- MESA 1 -->
+        <div style="display: flex !important; flex-direction: column !important; align-items: center !important; gap: 12px !important;">
+          <span style="font-size: 12px !important; font-weight: 900 !important; color: #cbd5e1 !important; text-transform: uppercase !important; letter-spacing: 1px !important;">Mesa 1 (Palapa)</span>
+          
+          <div class="table-box-220" style="position: relative !important; width: 220px !important; height: 220px !important; display: flex !important; align-items: center !important; justify-content: center !important; margin: 0 auto !important;">
+            <div id="table-circle-1" class="table-circle-fixed" style="width: 96px !important; height: 96px !important; border-radius: 50% !important; background: #064e3b !important; border: 4px solid #10b981 !important; box-shadow: 0 0 25px rgba(16, 185, 129, 0.4) !important; display: flex !important; flex-direction: column !important; align-items: center !important; justify-content: center !important; cursor: pointer !important; z-index: 10 !important;">
+              <span style="font-size: 18px !important; font-weight: 900 !important; color: #ffffff !important; margin: 0 !important; line-height: 1 !important;">M1</span>
+              <span id="table-status-1" style="font-size: 9px !important; font-weight: 800 !important; color: #6ee7b7 !important; text-transform: uppercase !important; margin-top: 2px !important;">Libre</span>
+            </div>
+
+            <div id="chair-1-1" class="chair-btn-fixed chair-pos-top chair-state-free">Silla 1</div>
+            <div id="chair-1-2" class="chair-btn-fixed chair-pos-right chair-state-free">Silla 2</div>
+            <div id="chair-1-3" class="chair-btn-fixed chair-pos-bottom chair-state-free">Silla 3</div>
+            <div id="chair-1-4" class="chair-btn-fixed chair-pos-left chair-state-free">Silla 4</div>
+          </div>
+
+          <span id="table-label-1" style="font-size: 12px !important; font-weight: 700 !important; color: #34d399 !important;">🟢 Disponible</span>
+        </div>
+
+        <!-- MESA 2 -->
+        <div style="display: flex !important; flex-direction: column !important; align-items: center !important; gap: 12px !important;">
+          <span style="font-size: 12px !important; font-weight: 900 !important; color: #cbd5e1 !important; text-transform: uppercase !important; letter-spacing: 1px !important;">Mesa 2 (Palapa)</span>
+          
+          <div class="table-box-220" style="position: relative !important; width: 220px !important; height: 220px !important; display: flex !important; align-items: center !important; justify-content: center !important; margin: 0 auto !important;">
+            <div id="table-circle-2" class="table-circle-fixed" style="width: 96px !important; height: 96px !important; border-radius: 50% !important; background: #064e3b !important; border: 4px solid #10b981 !important; box-shadow: 0 0 25px rgba(16, 185, 129, 0.4) !important; display: flex !important; flex-direction: column !important; align-items: center !important; justify-content: center !important; cursor: pointer !important; z-index: 10 !important;">
+              <span style="font-size: 18px !important; font-weight: 900 !important; color: #ffffff !important; margin: 0 !important; line-height: 1 !important;">M2</span>
+              <span id="table-status-2" style="font-size: 9px !important; font-weight: 800 !important; color: #6ee7b7 !important; text-transform: uppercase !important; margin-top: 2px !important;">Libre</span>
+            </div>
+
+            <div id="chair-2-1" class="chair-btn-fixed chair-pos-top chair-state-free">Silla 1</div>
+            <div id="chair-2-2" class="chair-btn-fixed chair-pos-right chair-state-free">Silla 2</div>
+            <div id="chair-2-3" class="chair-btn-fixed chair-pos-bottom chair-state-free">Silla 3</div>
+            <div id="chair-2-4" class="chair-btn-fixed chair-pos-left chair-state-free">Silla 4</div>
+          </div>
+
+          <span id="table-label-2" style="font-size: 12px !important; font-weight: 700 !important; color: #34d399 !important;">🟢 Disponible</span>
+        </div>
+
+        <!-- MESA 3 -->
+        <div style="display: flex !important; flex-direction: column !important; align-items: center !important; gap: 12px !important;">
+          <span style="font-size: 12px !important; font-weight: 900 !important; color: #fbbf24 !important; text-transform: uppercase !important; letter-spacing: 1px !important;">Mesa 3 (Palapa)</span>
+          
+          <div class="table-box-220" style="position: relative !important; width: 220px !important; height: 220px !important; display: flex !important; align-items: center !important; justify-content: center !important; margin: 0 auto !important;">
+            <div id="table-circle-3" class="table-circle-fixed" style="width: 96px !important; height: 96px !important; border-radius: 50% !important; background: #78350f !important; border: 4px solid #f59e0b !important; box-shadow: 0 0 25px rgba(245, 158, 11, 0.4) !important; display: flex !important; flex-direction: column !important; align-items: center !important; justify-content: center !important; cursor: pointer !important; z-index: 10 !important;">
+              <span style="font-size: 18px !important; font-weight: 900 !important; color: #fef3c7 !important; margin: 0 !important; line-height: 1 !important;">M3</span>
+              <span id="table-status-3" style="font-size: 9px !important; font-weight: 800 !important; color: #fde68a !important; text-transform: uppercase !important; margin-top: 2px !important;">2 Ocupadas</span>
+            </div>
+
+            <div id="chair-3-1" class="chair-btn-fixed chair-pos-top chair-state-busy">Silla 1</div>
+            <div id="chair-3-2" class="chair-btn-fixed chair-pos-right chair-state-busy">Silla 2</div>
+            <div id="chair-3-3" class="chair-btn-fixed chair-pos-bottom chair-state-free">Silla 3</div>
+            <div id="chair-3-4" class="chair-btn-fixed chair-pos-left chair-state-free">Silla 4</div>
+          </div>
+
+          <span id="table-label-3" style="font-size: 12px !important; font-weight: 700 !important; color: #fbbf24 !important;">🟡 Ocupada (2 Comensales)</span>
+        </div>
+
+      </div>
+
+      <!-- FOOTER INFO PASILLO -->
+      <div style="padding-top: 16px !important; border-top: 1px solid #1e293b !important; display: flex !important; justify-content: space-between !important; align-items: center !important; font-size: 12px !important; color: #94a3b8 !important; font-weight: 500 !important;">
+        <span><i class="fa-solid fa-door-open" style="color: #34d399 !important; margin-right: 6px !important;"></i> Entrada Frontal & Pasillos de Circulación</span>
+        <span style="color: #34d399 !important; font-weight: 700 !important;">Área 1: La Palapa (6.00m x 4.00m)</span>
+      </div>
+
+    </div>
+
+    <!-- RIGHT PANEL: WAITER MENU CATALOG -->
+    <div style="background: rgba(15, 23, 42, 0.95) !important; border: 1px solid #1e293b !important; border-radius: 20px !important; padding: 24px !important; display: flex !important; flex-direction: column !important; justify-content: space-between !important; gap: 16px !important; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5) !important;">
+      
+      <div style="display: flex !important; flex-direction: column !important; gap: 14px !important;">
+        <div style="display: flex !important; justify-content: space-between !important; align-items: center !important; padding-bottom: 12px !important; border-bottom: 1px solid #1e293b !important;">
+          <div>
+            <h2 style="font-size: 15px !important; font-weight: 800 !important; color: #ffffff !important; margin: 0 !important; display: flex !important; align-items: center !important; gap: 8px !important;">
+              <i class="fa-solid fa-utensils" style="color: #f59e0b !important;"></i> Catálogo Menú Gourmet
+            </h2>
+            <p style="font-size: 11px !important; color: #94a3b8 !important; margin: 2px 0 0 0 !important;">Marcado rápido de platillos & bebidas</p>
+          </div>
+          <span id="activeTargetBadge" style="padding: 6px 12px !important; background: rgba(5, 150, 105, 0.2) !important; color: #34d399 !important; border: 1px solid rgba(5, 150, 105, 0.4) !important; border-radius: 12px !important; font-size: 12px !important; font-weight: 900 !important;">
+            Mesa 3 • Silla 1
+          </span>
+        </div>
+
+        <!-- CATEGORY CHIPS -->
+        <div style="display: flex !important; gap: 8px !important; flex-wrap: wrap !important;" id="waiterCatChips">
+          <button data-cat="Todos" id="wchip-Todos" style="padding: 6px 14px !important; font-size: 11px !important; font-weight: 700 !important; border-radius: 10px !important; border: 1px solid #34d399 !important; background: #059669 !important; color: #ffffff !important; cursor: pointer !important;">Todos</button>
+          <button data-cat="Barra de Café & Infusiones" id="wchip-Cafe" style="padding: 6px 14px !important; font-size: 11px !important; font-weight: 700 !important; border-radius: 10px !important; border: 1px solid #334155 !important; background: #1e293b !important; color: #cbd5e1 !important; cursor: pointer !important;">☕ Café</button>
+          <button data-cat="Desayunos & Brunch Gourmet" id="wchip-Des" style="padding: 6px 14px !important; font-size: 11px !important; font-weight: 700 !important; border-radius: 10px !important; border: 1px solid #334155 !important; background: #1e293b !important; color: #cbd5e1 !important; cursor: pointer !important;">🍳 Desayunos</button>
+          <button data-cat="Especialidades Fuertes" id="wchip-Car" style="padding: 6px 14px !important; font-size: 11px !important; font-weight: 700 !important; border-radius: 10px !important; border: 1px solid #334155 !important; background: #1e293b !important; color: #cbd5e1 !important; cursor: pointer !important;">🥩 Carnes</button>
+          <button data-cat="Repostería & Postres de Autor" id="wchip-Pos" style="padding: 6px 14px !important; font-size: 11px !important; font-weight: 700 !important; border-radius: 10px !important; border: 1px solid #334155 !important; background: #1e293b !important; color: #cbd5e1 !important; cursor: pointer !important;">🍰 Postres</button>
+        </div>
+
+        <!-- MENU ITEMS GRID -->
+        <div id="waiterMenuGrid" style="display: grid !important; grid-template-columns: repeat(2, 1fr) !important; gap: 10px !important; max-height: 380px !important; overflow-y: auto !important; padding-right: 2px !important;">
+          <!-- Product cards rendered dynamically -->
+        </div>
+      </div>
+
+      <!-- FOOTER QUICK BUTTONS -->
+      <div style="display: flex !important; gap: 10px !important; padding-top: 12px !important; border-top: 1px solid #1e293b !important;">
+        <button id="btnVerComandaActiva" style="flex: 1 !important; padding: 12px !important; background: linear-gradient(135deg, #059669, #0d9488) !important; color: #ffffff !important; font-weight: 900 !important; font-size: 12px !important; border-radius: 12px !important; border: none !important; cursor: pointer !important; box-shadow: 0 10px 15px -3px rgba(5, 150, 105, 0.4) !important; display: flex !important; align-items: center !important; justify-content: center !important; gap: 8px !important;">
+          <i class="fa-solid fa-receipt"></i> Ver Comanda Activa
+        </button>
+        <button id="btnMoverComensalMain" style="flex: 1 !important; padding: 12px !important; background: #0284c7 !important; color: #ffffff !important; font-weight: 900 !important; font-size: 12px !important; border-radius: 12px !important; border: none !important; cursor: pointer !important; display: flex !important; align-items: center !important; justify-content: center !important; gap: 8px !important;">
+          <i class="fa-solid fa-arrow-right-arrow-left"></i> Mover Comensal
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- MODAL POPUP PARA COMANDA / TICKET POR SILLA -->
+<div id="modalComandaBackdrop" class="modal-backdrop-fixed" style="display: none !important;">
+  <div style="background: #0f172a !important; border: 1px solid #1e293b !important; border-radius: 20px !important; padding: 24px !important; width: 100% !important; max-width: 480px !important; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8) !important; display: flex !important; flex-direction: column !important; gap: 16px !important;">
+    
+    <!-- MODAL HEADER -->
+    <div style="display: flex !important; justify-content: space-between !important; align-items: center !important; padding-bottom: 12px !important; border-bottom: 1px solid #1e293b !important;">
+      <div>
+        <h2 id="modalTitle" style="font-size: 16px !important; font-weight: 900 !important; color: #ffffff !important; margin: 0 !important; display: flex !important; align-items: center !important; gap: 8px !important;">
+          <i class="fa-solid fa-receipt" style="color: #34d399 !important;"></i> Ticket Silla 1
+        </h2>
+        <p id="modalSubtitle" style="font-size: 11px !important; color: #94a3b8 !important; margin: 2px 0 0 0 !important;">Mesa 3 • Asignación Individual</p>
+      </div>
+      <button id="btnCloseModal" style="background: #1e293b !important; border: none !important; color: #94a3b8 !important; width: 32px !important; height: 32px !important; border-radius: 10px !important; font-weight: bold !important; cursor: pointer !important;">✕</button>
+    </div>
+
+    <!-- MODAL ITEMS CONTAINER -->
+    <div style="background: #020617 !important; padding: 14px !important; border-radius: 14px !important; border: 1px solid #1e293b !important; display: flex !important; flex-direction: column !important; gap: 10px !important;">
+      <div style="display: flex !important; justify-content: space-between !important; align-items: center !important; padding-bottom: 8px !important; border-bottom: 1px solid #1e293b !important;">
+        <span style="font-size: 12px !important; font-weight: 700 !important; color: #cbd5e1 !important;" id="modalItemsHeader">Consumos en Silla 1:</span>
+        <span style="padding: 2px 8px !important; border-radius: 6px !important; background: rgba(16, 185, 129, 0.2) !important; color: #34d399 !important; font-size: 10px !important; font-weight: 800 !important; text-transform: uppercase !important;">Activa</span>
+      </div>
+
+      <div id="modalItemsList" style="display: flex !important; flex-direction: column !important; gap: 8px !important; max-height: 220px !important; overflow-y: auto !important;">
+        <!-- Items rendered dynamically -->
+      </div>
+
+      <div style="padding-top: 10px !important; border-top: 1px solid #1e293b !important; display: flex !important; justify-content: space-between !important; font-weight: 900 !important; font-size: 15px !important; color: #ffffff !important;">
+        <span id="modalTotalLabel">Subtotal Silla:</span>
+        <span style="color: #34d399 !important;" id="modalTotalMonto">$148.00</span>
+      </div>
+    </div>
+
+    <!-- MODAL ACTIONS -->
+    <div style="display: flex !important; flex-direction: column !important; gap: 10px !important; padding-top: 8px !important;">
+      <div style="display: flex !important; gap: 10px !important;">
+        <button id="btnMoverDesdeModal" style="flex: 1 !important; padding: 10px !important; background: #0284c7 !important; color: #ffffff !important; font-weight: 800 !important; font-size: 11px !important; border-radius: 10px !important; border: none !important; cursor: pointer !important; display: flex !important; align-items: center !important; justify-content: center !important; gap: 6px !important;">
+          <i class="fa-solid fa-arrow-right-arrow-left"></i> Mover esta Cuenta
+        </button>
+        <button id="btnEnviarCocina" style="flex: 1 !important; padding: 10px !important; background: #f59e0b !important; color: #0f172a !important; font-weight: 900 !important; font-size: 11px !important; border-radius: 10px !important; border: none !important; cursor: pointer !important; display: flex !important; align-items: center !important; justify-content: center !important; gap: 6px !important;">
+          <i class="fa-solid fa-fire"></i> Enviar Cocina (KDS)
+        </button>
+      </div>
+      <button id="btnPrecuenta" style="width: 100% !important; padding: 10px !important; background: #1e293b !important; color: #cbd5e1 !important; font-weight: 700 !important; font-size: 11px !important; border-radius: 10px !important; border: 1px solid #334155 !important; cursor: pointer !important; display: flex !important; align-items: center !important; justify-content: center !important; gap: 6px !important;">
+        <i class="fa-solid fa-receipt" style="color: #38bdf8 !important;"></i> Imprimir Precuenta
+      </button>
+    </div>
+
+  </div>
+</div>
+
 <script>
-  // Declare window functions immediately at top of file
   (function() {
     window.catalogProducts = [
       { id: 1, categoria_nombre: "Barra de Café & Infusiones", nombre: "Capuchino Especial V&S", precio: 68.00, icono: "☕" },
@@ -40,29 +276,74 @@
       }
     };
 
-    window.clickSilla = function(mesaId, sillaNum) {
+    // Global Event Delegation for all Clicks
+    document.addEventListener('click', function(e) {
+      // 1. Chair clicked
+      const chairNode = e.target.closest('.chair-btn-fixed');
+      if (chairNode) {
+        const id = chairNode.id; // e.g. "chair-3-1"
+        const parts = id.split('-');
+        if (parts.length === 3) {
+          const mesaId = parseInt(parts[1]);
+          const sillaNum = parseInt(parts[2]);
+          handleSillaClick(mesaId, sillaNum);
+          return;
+        }
+      }
+
+      // 2. Table circle clicked
+      const tableNode = e.target.closest('.table-circle-fixed');
+      if (tableNode) {
+        const id = tableNode.id; // e.g. "table-circle-3"
+        const parts = id.split('-');
+        if (parts.length === 3) {
+          const mesaId = parseInt(parts[2]);
+          handleMesaClick(mesaId);
+          return;
+        }
+      }
+
+      // 3. Category chip clicked
+      const chipNode = e.target.closest('[data-cat]');
+      if (chipNode) {
+        const cat = chipNode.getAttribute('data-cat');
+        filtrarCategoria(cat);
+        return;
+      }
+
+      // 4. Action buttons
+      if (e.target.closest('#btnVerComandaActiva')) { abrirModalComandaActual(); return; }
+      if (e.target.closest('#btnMoverComensalMain')) { iniciarModoMover(); return; }
+      if (e.target.closest('#btnMoverDesdeModal')) { cerrarModalComanda(); iniciarModoMover(); return; }
+      if (e.target.closest('#btnCloseModal')) { cerrarModalComanda(); return; }
+      if (e.target.closest('#btnCancelMove')) { cancelarModoMover(); return; }
+      if (e.target.closest('#btnEnviarCocina')) { alert(`Comanda enviada a Cocina (KDS)`); cerrarModalComanda(); return; }
+      if (e.target.closest('#btnPrecuenta')) { alert(`Imprimiendo precuenta`); cerrarModalComanda(); return; }
+    });
+
+    function handleSillaClick(mesaId, sillaNum) {
       if (window.palapaState.modoMoverActivo) {
-        window.completarMovimiento(mesaId, sillaNum);
+        completarMovimiento(mesaId, sillaNum);
         return;
       }
       window.palapaState.mesaSeleccionadaId = mesaId;
       window.palapaState.sillaSeleccionadaNum = sillaNum;
-      window.renderStateUI();
-      window.abrirModalComandaActual();
-    };
+      renderStateUI();
+      abrirModalComandaActual();
+    }
 
-    window.clickMesa = function(mesaId) {
+    function handleMesaClick(mesaId) {
       if (window.palapaState.modoMoverActivo) {
-        alert("Selecciona la silla de destino a donde deseas mover la cuenta.");
+        alert("Selecciona una silla específica a donde deseas mover la cuenta.");
         return;
       }
       window.palapaState.mesaSeleccionadaId = mesaId;
       window.palapaState.sillaSeleccionadaNum = null;
-      window.renderStateUI();
-      window.abrirModalComandaActual();
-    };
+      renderStateUI();
+      abrirModalComandaActual();
+    }
 
-    window.iniciarModoMover = function() {
+    function iniciarModoMover() {
       const mesaId = window.palapaState.mesaSeleccionadaId;
       const sillaNum = window.palapaState.sillaSeleccionadaNum;
 
@@ -82,24 +363,18 @@
       window.palapaState.modoMoverActivo = true;
       window.palapaState.sillaOrigenMover = { mesaId, sillaNum };
 
-      const banner = document.getElementById('moveInstructionBanner');
-      const text = document.getElementById('bannerText');
+      const bannerText = document.getElementById('bannerText');
       const btnCancel = document.getElementById('btnCancelMove');
 
-      if (banner && text && btnCancel) {
-        text.innerHTML = `<b style="color: #38bdf8;">MOVIENDO COMENSAL:</b> Silla origen: <b>Mesa ${mesaId} Silla ${sillaNum}</b>. Haz clic en la <b>Silla Destino</b> a donde deseas transferir la cuenta.`;
+      if (bannerText && btnCancel) {
+        bannerText.innerHTML = `<b style="color: #38bdf8;">MOVIENDO COMENSAL:</b> Silla origen: <b>Mesa ${mesaId} Silla ${sillaNum}</b>. Haz clic en la <b>Silla Destino</b> a donde deseas transferir la cuenta.`;
         btnCancel.style.display = 'block';
       }
 
-      window.renderStateUI();
-    };
+      renderStateUI();
+    }
 
-    window.iniciarModoMoverDesdeModal = function() {
-      window.cerrarModalComanda();
-      window.iniciarModoMover();
-    };
-
-    window.cancelarModoMover = function() {
+    function cancelarModoMover() {
       window.palapaState.modoMoverActivo = false;
       window.palapaState.sillaOrigenMover = null;
 
@@ -111,15 +386,15 @@
         btnCancel.style.display = 'none';
       }
 
-      window.renderStateUI();
-    };
+      renderStateUI();
+    }
 
-    window.completarMovimiento = function(targetMesaId, targetSillaNum) {
+    function completarMovimiento(targetMesaId, targetSillaNum) {
       const origen = window.palapaState.sillaOrigenMover;
       if (!origen) return;
 
       if (origen.mesaId === targetMesaId && origen.sillaNum === targetSillaNum) {
-        window.cancelarModoMover();
+        cancelarModoMover();
         return;
       }
 
@@ -143,10 +418,10 @@
 
       window.palapaState.mesaSeleccionadaId = targetMesaId;
       window.palapaState.sillaSeleccionadaNum = targetSillaNum;
-      window.cancelarModoMover();
-    };
+      cancelarModoMover();
+    }
 
-    window.abrirModalComandaActual = function() {
+    function abrirModalComandaActual() {
       const mesaId = window.palapaState.mesaSeleccionadaId;
       const sillaNum = window.palapaState.sillaSeleccionadaNum;
 
@@ -234,12 +509,12 @@
       }
 
       modal.style.display = 'flex';
-    };
+    }
 
-    window.cerrarModalComanda = function() {
+    function cerrarModalComanda() {
       const modal = document.getElementById('modalComandaBackdrop');
       if (modal) modal.style.display = 'none';
-    };
+    }
 
     window.eliminarItemModal = function(key, idx) {
       if (window.palapaState.cuentas[key] && window.palapaState.cuentas[key].items) {
@@ -247,12 +522,12 @@
         if (window.palapaState.cuentas[key].items.length === 0) {
           delete window.palapaState.cuentas[key];
         }
-        window.renderStateUI();
-        window.abrirModalComandaActual();
+        renderStateUI();
+        abrirModalComandaActual();
       }
     };
 
-    window.renderStateUI = function() {
+    function renderStateUI() {
       const isMoveMode = window.palapaState.modoMoverActivo;
       const origen = window.palapaState.sillaOrigenMover;
 
@@ -313,10 +588,10 @@
         }
       }
 
-      window.renderWaiterMenuGrid();
-    };
+      renderWaiterMenuGrid();
+    }
 
-    window.renderWaiterMenuGrid = function() {
+    function renderWaiterMenuGrid() {
       const grid = document.getElementById('waiterMenuGrid');
       if (!grid) return;
       grid.innerHTML = '';
@@ -327,7 +602,7 @@
       filtrados.forEach(prod => {
         const card = document.createElement('div');
         card.style.cssText = 'background: #0f172a !important; border: 1px solid #1e293b !important; border-radius: 12px !important; padding: 12px !important; display: flex !important; justify-content: space-between !important; align-items: center !important; cursor: pointer !important;';
-        card.onclick = () => window.agregarPlatilloDirecto(prod);
+        card.onclick = () => agregarPlatilloDirecto(prod);
 
         card.innerHTML = `
           <div style="display: flex; align-items: center; gap: 8px;">
@@ -343,9 +618,9 @@
         `;
         grid.appendChild(card);
       });
-    };
+    }
 
-    window.agregarPlatilloDirecto = function(prod) {
+    function agregarPlatilloDirecto(prod) {
       const mesaId = window.palapaState.mesaSeleccionadaId;
       let sillaNum = window.palapaState.sillaSeleccionadaNum;
 
@@ -367,10 +642,10 @@
         items.push({ id: prod.id, nombre: prod.nombre, notas: '', precio: prod.precio, cantidad: 1 });
       }
 
-      window.renderStateUI();
-    };
+      renderStateUI();
+    }
 
-    window.filtrarCategoria = function(catNombre) {
+    function filtrarCategoria(catNombre) {
       window.palapaState.categoriaFiltro = catNombre;
       
       const chipKeys = ['Todos', 'Cafe', 'Des', 'Car', 'Pos'];
@@ -393,265 +668,9 @@
         }
       });
 
-      window.renderWaiterMenuGrid();
-    };
+      renderWaiterMenuGrid();
+    }
 
-    window.enviarCocinaKDS = function() {
-      alert(`Comanda de Mesa ${window.palapaState.mesaSeleccionadaId} enviada a Cocina (KDS)`);
-      window.cerrarModalComanda();
-    };
-
-    window.solicitarPrecuenta = function() {
-      alert(`Imprimiendo precuenta de Mesa ${window.palapaState.mesaSeleccionadaId}`);
-      window.cerrarModalComanda();
-    };
-
-    window.cambiarArea = function(area) {
-      if (area === 'palapa') {
-        document.getElementById('btn-area-palapa').style.background = "#059669";
-      } else {
-        alert('Cargando área: ' + area);
-      }
-    };
+    setTimeout(() => { renderStateUI(); }, 100);
   })();
 </script>
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<link rel="stylesheet" href="_/theme/theme.css">
-
-<style>
-  html, body, .anvil-container {
-    background-color: #090d16 !important;
-    color: #f8fafc !important;
-    font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
-    margin: 0 !important;
-    padding: 0 !important;
-  }
-</style>
-
-<div style="background-color: #090d16 !important; color: #f8fafc !important; font-family: 'Inter', system-ui, sans-serif !important; min-height: 100vh !important; padding: 20px !important; box-sizing: border-box !important; display: flex !important; flex-direction: column !important; gap: 20px !important;">
-  
-  <!-- HEADER BAR & AREA SWITCHER -->
-  <div style="display: flex !important; flex-wrap: wrap !important; justify-content: space-between !important; align-items: center !important; gap: 15px !important; padding-bottom: 15px !important; border-bottom: 1px solid #1e293b !important;">
-    <div style="display: flex !important; align-items: center !important; gap: 12px !important;">
-      <div style="width: 48px !important; height: 48px !important; border-radius: 16px !important; background: linear-gradient(135deg, #10b981, #0f766e) !important; display: flex !important; align-items: center !important; justify-content: center !important; font-size: 22px !important; font-weight: 900 !important; color: #ffffff !important; box-shadow: 0 0 20px rgba(16, 185, 129, 0.4) !important;">
-        V&S
-      </div>
-      <div>
-        <h1 style="font-size: 20px !important; font-weight: 800 !important; color: #ffffff !important; margin: 0 !important;">Plano Gráfico 2D • La Terraza de Vida & Sabor</h1>
-        <p style="font-size: 12px !important; font-weight: 600 !important; color: #34d399 !important; margin: 2px 0 0 0 !important;">Gestión Espacial de Mesas Circulares (Área Palapa 6.00m x 4.00m)</p>
-      </div>
-    </div>
-
-    <!-- AREA SELECTOR & MODULE SWITCHER -->
-    <div style="display: flex !important; gap: 8px !important; background: #0f172a !important; padding: 6px !important; border-radius: 16px !important; border: 1px solid #1e293b !important;">
-      <button onclick="window.cambiarArea('palapa')" id="btn-area-palapa" style="padding: 8px 16px !important; font-size: 12px !important; font-weight: 700 !important; border-radius: 12px !important; background-color: #059669 !important; color: #ffffff !important; border: none !important; cursor: pointer !important; display: flex !important; align-items: center !important; gap: 6px !important;">
-        <i class="fa-solid fa-umbrella-beach" style="color: #fcd34d !important;"></i> La Palapa (6x4m)
-      </button>
-      <button onclick="window.navMenu && window.navMenu('monitor_cocina')" style="padding: 8px 16px !important; font-size: 12px !important; font-weight: 600 !important; border-radius: 12px !important; background: transparent !important; color: #cbd5e1 !important; border: none !important; cursor: pointer !important; display: flex !important; align-items: center !important; gap: 6px !important;">
-        <i class="fa-solid fa-fire" style="color: #f59e0b !important;"></i> Cocina KDS
-      </button>
-      <button onclick="window.navMenu && window.navMenu('monitor_fiscal')" style="padding: 8px 16px !important; font-size: 12px !important; font-weight: 600 !important; border-radius: 12px !important; background: transparent !important; color: #cbd5e1 !important; border: none !important; cursor: pointer !important; display: flex !important; align-items: center !important; gap: 6px !important;">
-        <i class="fa-solid fa-chart-pie" style="color: #38bdf8 !important;"></i> Fiscal
-      </button>
-    </div>
-  </div>
-
-  <!-- ACTION INSTRUCTION BANNER -->
-  <div id="moveInstructionBanner" style="display: flex !important; background: #0f172a !important; border: 1px solid #1e293b !important; color: #cbd5e1 !important; padding: 12px 18px !important; border-radius: 14px !important; font-size: 12px !important; font-weight: 600 !important; justify-content: space-between !important; align-items: center !important;">
-    <div style="display: flex !important; align-items: center !important; gap: 10px !important;">
-      <i id="bannerIcon" class="fa-solid fa-hand-pointer" style="color: #38bdf8 !important; font-size: 16px !important;"></i>
-      <span id="bannerText">Haz clic en cualquier <b>Silla</b> para abrir su Comanda o haz clic en <b>Mover Comensal</b> para trasladar su cuenta a otra silla/mesa.</span>
-    </div>
-    <button id="btnCancelMove" onclick="window.cancelarModoMover()" style="display: none !important; padding: 4px 12px !important; background: #ef4444 !important; color: #ffffff !important; border-radius: 8px !important; border: none !important; font-weight: 800 !important; cursor: pointer !important;">
-      Cancelar Movimiento
-    </button>
-  </div>
-
-  <!-- MAIN CANVAS GRID -->
-  <div style="display: grid !important; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) !important; gap: 24px !important; flex: 1 !important;">
-    
-    <!-- LEFT PANEL: 2D FLOOR PLAN OF LA PALAPA -->
-    <div style="background: rgba(15, 23, 42, 0.95) !important; border: 1px solid #1e293b !important; border-radius: 20px !important; padding: 24px !important; display: flex !important; flex-direction: column !important; justify-content: space-between !important; min-height: 540px !important; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5) !important;">
-      
-      <!-- PARED POSTERIOR BARRA -->
-      <div style="background: rgba(30, 41, 59, 0.9) !important; border: 1px solid rgba(16, 185, 129, 0.3) !important; border-radius: 12px !important; padding: 12px 16px !important; display: flex !important; flex-wrap: wrap !important; justify-content: space-between !important; align-items: center !important; margin-bottom: 24px !important; gap: 10px !important;">
-        <div style="display: flex !important; align-items: center !important; gap: 8px !important; font-size: 12px !important; font-weight: 700 !important; color: #34d399 !important;">
-          <i class="fa-solid fa-mug-hot" style="color: #fbbf24 !important; font-size: 16px !important;"></i>
-          <span>Mueble de Servicio & Barra de Café (Pared Posterior 6.00m)</span>
-        </div>
-        <div style="display: flex !important; gap: 16px !important; font-size: 11px !important; color: #94a3b8 !important; font-weight: 600 !important;">
-          <span><i class="fa-solid fa-wine-glass" style="color: #c084fc !important; margin-right: 4px !important;"></i> Cristalería</span>
-          <span><i class="fa-solid fa-fire" style="color: #fbbf24 !important; margin-right: 4px !important;"></i> Espresso</span>
-          <span><i class="fa-solid fa-sink" style="color: #38bdf8 !important; margin-right: 4px !important;"></i> Insumos</span>
-        </div>
-      </div>
-
-      <!-- 3 CIRCULAR TABLES WITH 4 CHAIRS EACH -->
-      <div style="display: grid !important; grid-template-columns: repeat(3, 1fr) !important; gap: 20px !important; margin: auto 0 !important; padding: 20px 0 !important;">
-        
-        <!-- MESA 1 -->
-        <div style="display: flex !important; flex-direction: column !important; align-items: center !important; gap: 12px !important;">
-          <span style="font-size: 12px !important; font-weight: 900 !important; color: #cbd5e1 !important; text-transform: uppercase !important; letter-spacing: 1px !important;">Mesa 1 (Palapa)</span>
-          
-          <div class="table-box-220" style="position: relative !important; width: 220px !important; height: 220px !important; display: flex !important; align-items: center !important; justify-content: center !important; margin: 0 auto !important;">
-            <!-- Circle Table 1 -->
-            <div onclick="window.clickMesa(1)" id="table-circle-1" class="table-circle-fixed" style="width: 96px !important; height: 96px !important; border-radius: 50% !important; background: #064e3b !important; border: 4px solid #10b981 !important; box-shadow: 0 0 25px rgba(16, 185, 129, 0.4) !important; display: flex !important; flex-direction: column !important; align-items: center !important; justify-content: center !important; cursor: pointer !important; z-index: 10 !important;">
-              <span style="font-size: 18px !important; font-weight: 900 !important; color: #ffffff !important; margin: 0 !important; line-height: 1 !important;">M1</span>
-              <span id="table-status-1" style="font-size: 9px !important; font-weight: 800 !important; color: #6ee7b7 !important; text-transform: uppercase !important; margin-top: 2px !important;">Libre</span>
-            </div>
-
-            <!-- Chairs 1..4 around Mesa 1 -->
-            <div onclick="window.clickSilla(1, 1)" id="chair-1-1" class="chair-btn-fixed chair-pos-top chair-state-free">Silla 1</div>
-            <div onclick="window.clickSilla(1, 2)" id="chair-1-2" class="chair-btn-fixed chair-pos-right chair-state-free">Silla 2</div>
-            <div onclick="window.clickSilla(1, 3)" id="chair-1-3" class="chair-btn-fixed chair-pos-bottom chair-state-free">Silla 3</div>
-            <div onclick="window.clickSilla(1, 4)" id="chair-1-4" class="chair-btn-fixed chair-pos-left chair-state-free">Silla 4</div>
-          </div>
-
-          <span id="table-label-1" style="font-size: 12px !important; font-weight: 700 !important; color: #34d399 !important;">🟢 Disponible</span>
-        </div>
-
-        <!-- MESA 2 -->
-        <div style="display: flex !important; flex-direction: column !important; align-items: center !important; gap: 12px !important;">
-          <span style="font-size: 12px !important; font-weight: 900 !important; color: #cbd5e1 !important; text-transform: uppercase !important; letter-spacing: 1px !important;">Mesa 2 (Palapa)</span>
-          
-          <div class="table-box-220" style="position: relative !important; width: 220px !important; height: 220px !important; display: flex !important; align-items: center !important; justify-content: center !important; margin: 0 auto !important;">
-            <div onclick="window.clickMesa(2)" id="table-circle-2" class="table-circle-fixed" style="width: 96px !important; height: 96px !important; border-radius: 50% !important; background: #064e3b !important; border: 4px solid #10b981 !important; box-shadow: 0 0 25px rgba(16, 185, 129, 0.4) !important; display: flex !important; flex-direction: column !important; align-items: center !important; justify-content: center !important; cursor: pointer !important; z-index: 10 !important;">
-              <span style="font-size: 18px !important; font-weight: 900 !important; color: #ffffff !important; margin: 0 !important; line-height: 1 !important;">M2</span>
-              <span id="table-status-2" style="font-size: 9px !important; font-weight: 800 !important; color: #6ee7b7 !important; text-transform: uppercase !important; margin-top: 2px !important;">Libre</span>
-            </div>
-
-            <!-- Chairs 1..4 around Mesa 2 -->
-            <div onclick="window.clickSilla(2, 1)" id="chair-2-1" class="chair-btn-fixed chair-pos-top chair-state-free">Silla 1</div>
-            <div onclick="window.clickSilla(2, 2)" id="chair-2-2" class="chair-btn-fixed chair-pos-right chair-state-free">Silla 2</div>
-            <div onclick="window.clickSilla(2, 3)" id="chair-2-3" class="chair-btn-fixed chair-pos-bottom chair-state-free">Silla 3</div>
-            <div onclick="window.clickSilla(2, 4)" id="chair-2-4" class="chair-btn-fixed chair-pos-left chair-state-free">Silla 4</div>
-          </div>
-
-          <span id="table-label-2" style="font-size: 12px !important; font-weight: 700 !important; color: #34d399 !important;">🟢 Disponible</span>
-        </div>
-
-        <!-- MESA 3 -->
-        <div style="display: flex !important; flex-direction: column !important; align-items: center !important; gap: 12px !important;">
-          <span style="font-size: 12px !important; font-weight: 900 !important; color: #fbbf24 !important; text-transform: uppercase !important; letter-spacing: 1px !important;">Mesa 3 (Palapa)</span>
-          
-          <div class="table-box-220" style="position: relative !important; width: 220px !important; height: 220px !important; display: flex !important; align-items: center !important; justify-content: center !important; margin: 0 auto !important;">
-            <div onclick="window.clickMesa(3)" id="table-circle-3" class="table-circle-fixed" style="width: 96px !important; height: 96px !important; border-radius: 50% !important; background: #78350f !important; border: 4px solid #f59e0b !important; box-shadow: 0 0 25px rgba(245, 158, 11, 0.4) !important; display: flex !important; flex-direction: column !important; align-items: center !important; justify-content: center !important; cursor: pointer !important; z-index: 10 !important;">
-              <span style="font-size: 18px !important; font-weight: 900 !important; color: #fef3c7 !important; margin: 0 !important; line-height: 1 !important;">M3</span>
-              <span id="table-status-3" style="font-size: 9px !important; font-weight: 800 !important; color: #fde68a !important; text-transform: uppercase !important; margin-top: 2px !important;">2 Ocupadas</span>
-            </div>
-
-            <!-- Chairs 1..4 around Mesa 3 -->
-            <div onclick="window.clickSilla(3, 1)" id="chair-3-1" class="chair-btn-fixed chair-pos-top chair-state-busy">Silla 1</div>
-            <div onclick="window.clickSilla(3, 2)" id="chair-3-2" class="chair-btn-fixed chair-pos-right chair-state-busy">Silla 2</div>
-            <div onclick="window.clickSilla(3, 3)" id="chair-3-3" class="chair-btn-fixed chair-pos-bottom chair-state-free">Silla 3</div>
-            <div onclick="window.clickSilla(3, 4)" id="chair-3-4" class="chair-btn-fixed chair-pos-left chair-state-free">Silla 4</div>
-          </div>
-
-          <span id="table-label-3" style="font-size: 12px !important; font-weight: 700 !important; color: #fbbf24 !important;">🟡 Ocupada (2 Comensales)</span>
-        </div>
-
-      </div>
-
-      <!-- FOOTER INFO PASILLO -->
-      <div style="padding-top: 16px !important; border-top: 1px solid #1e293b !important; display: flex !important; justify-content: space-between !important; align-items: center !important; font-size: 12px !important; color: #94a3b8 !important; font-weight: 500 !important;">
-        <span><i class="fa-solid fa-door-open" style="color: #34d399 !important; margin-right: 6px !important;"></i> Entrada Frontal & Pasillos de Circulación</span>
-        <span style="color: #34d399 !important; font-weight: 700 !important;">Área 1: La Palapa (6.00m x 4.00m)</span>
-      </div>
-
-    </div>
-
-    <!-- RIGHT PANEL: WAITER MENU CATALOG -->
-    <div style="background: rgba(15, 23, 42, 0.95) !important; border: 1px solid #1e293b !important; border-radius: 20px !important; padding: 24px !important; display: flex !important; flex-direction: column !important; justify-content: space-between !important; gap: 16px !important; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5) !important;">
-      
-      <div style="display: flex !important; flex-direction: column !important; gap: 14px !important;">
-        <div style="display: flex !important; justify-content: space-between !important; align-items: center !important; padding-bottom: 12px !important; border-bottom: 1px solid #1e293b !important;">
-          <div>
-            <h2 style="font-size: 15px !important; font-weight: 800 !important; color: #ffffff !important; margin: 0 !important; display: flex !important; align-items: center !important; gap: 8px !important;">
-              <i class="fa-solid fa-utensils" style="color: #f59e0b !important;"></i> Catálogo Menú Gourmet
-            </h2>
-            <p style="font-size: 11px !important; color: #94a3b8 !important; margin: 2px 0 0 0 !important;">Marcado rápido de platillos & bebidas</p>
-          </div>
-          <span id="activeTargetBadge" style="padding: 6px 12px !important; background: rgba(5, 150, 105, 0.2) !important; color: #34d399 !important; border: 1px solid rgba(5, 150, 105, 0.4) !important; border-radius: 12px !important; font-size: 12px !important; font-weight: 900 !important;">
-            Mesa 3 • Silla 1
-          </span>
-        </div>
-
-        <!-- CATEGORY CHIPS -->
-        <div style="display: flex !important; gap: 8px !important; flex-wrap: wrap !important;" id="waiterCatChips">
-          <button onclick="window.filtrarCategoria('Todos')" id="wchip-Todos" style="padding: 6px 14px !important; font-size: 11px !important; font-weight: 700 !important; border-radius: 10px !important; border: 1px solid #34d399 !important; background: #059669 !important; color: #ffffff !important; cursor: pointer !important;">Todos</button>
-          <button onclick="window.filtrarCategoria('Barra de Café & Infusiones')" id="wchip-Cafe" style="padding: 6px 14px !important; font-size: 11px !important; font-weight: 700 !important; border-radius: 10px !important; border: 1px solid #334155 !important; background: #1e293b !important; color: #cbd5e1 !important; cursor: pointer !important;">☕ Café</button>
-          <button onclick="window.filtrarCategoria('Desayunos & Brunch Gourmet')" id="wchip-Des" style="padding: 6px 14px !important; font-size: 11px !important; font-weight: 700 !important; border-radius: 10px !important; border: 1px solid #334155 !important; background: #1e293b !important; color: #cbd5e1 !important; cursor: pointer !important;">🍳 Desayunos</button>
-          <button onclick="window.filtrarCategoria('Especialidades Fuertes')" id="wchip-Car" style="padding: 6px 14px !important; font-size: 11px !important; font-weight: 700 !important; border-radius: 10px !important; border: 1px solid #334155 !important; background: #1e293b !important; color: #cbd5e1 !important; cursor: pointer !important;">🥩 Carnes</button>
-          <button onclick="window.filtrarCategoria('Repostería & Postres de Autor')" id="wchip-Pos" style="padding: 6px 14px !important; font-size: 11px !important; font-weight: 700 !important; border-radius: 10px !important; border: 1px solid #334155 !important; background: #1e293b !important; color: #cbd5e1 !important; cursor: pointer !important;">🍰 Postres</button>
-        </div>
-
-        <!-- MENU ITEMS GRID -->
-        <div id="waiterMenuGrid" style="display: grid !important; grid-template-columns: repeat(2, 1fr) !important; gap: 10px !important; max-height: 380px !important; overflow-y: auto !important; padding-right: 2px !important;">
-          <!-- Product cards rendered dynamically -->
-        </div>
-      </div>
-
-      <!-- FOOTER QUICK BUTTONS -->
-      <div style="display: flex !important; gap: 10px !important; padding-top: 12px !important; border-top: 1px solid #1e293b !important;">
-        <button onclick="window.abrirModalComandaActual()" style="flex: 1 !important; padding: 12px !important; background: linear-gradient(135deg, #059669, #0d9488) !important; color: #ffffff !important; font-weight: 900 !important; font-size: 12px !important; border-radius: 12px !important; border: none !important; cursor: pointer !important; box-shadow: 0 10px 15px -3px rgba(5, 150, 105, 0.4) !important; display: flex !important; align-items: center !important; justify-content: center !important; gap: 8px !important;">
-          <i class="fa-solid fa-receipt"></i> Ver Comanda Activa
-        </button>
-        <button onclick="window.iniciarModoMover()" style="flex: 1 !important; padding: 12px !important; background: #0284c7 !important; color: #ffffff !important; font-weight: 900 !important; font-size: 12px !important; border-radius: 12px !important; border: none !important; cursor: pointer !important; display: flex !important; align-items: center !important; justify-content: center !important; gap: 8px !important;">
-          <i class="fa-solid fa-arrow-right-arrow-left"></i> Mover Comensal
-        </button>
-      </div>
-
-    </div>
-  </div>
-</div>
-
-<!-- MODAL POPUP PARA COMANDA / TICKET POR SILLA -->
-<div id="modalComandaBackdrop" class="modal-backdrop-fixed" style="display: none !important;">
-  <div style="background: #0f172a !important; border: 1px solid #1e293b !important; border-radius: 20px !important; padding: 24px !important; width: 100% !important; max-width: 480px !important; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8) !important; display: flex !important; flex-direction: column !important; gap: 16px !important;">
-    
-    <!-- MODAL HEADER -->
-    <div style="display: flex !important; justify-content: space-between !important; align-items: center !important; padding-bottom: 12px !important; border-bottom: 1px solid #1e293b !important;">
-      <div>
-        <h2 id="modalTitle" style="font-size: 16px !important; font-weight: 900 !important; color: #ffffff !important; margin: 0 !important; display: flex !important; align-items: center !important; gap: 8px !important;">
-          <i class="fa-solid fa-receipt" style="color: #34d399 !important;"></i> Ticket Silla 1
-        </h2>
-        <p id="modalSubtitle" style="font-size: 11px !important; color: #94a3b8 !important; margin: 2px 0 0 0 !important;">Mesa 3 • Asignación Individual</p>
-      </div>
-      <button onclick="window.cerrarModalComanda()" style="background: #1e293b !important; border: none !important; color: #94a3b8 !important; width: 32px !important; height: 32px !important; border-radius: 10px !important; font-weight: bold !important; cursor: pointer !important;">✕</button>
-    </div>
-
-    <!-- MODAL ITEMS CONTAINER -->
-    <div style="background: #020617 !important; padding: 14px !important; border-radius: 14px !important; border: 1px solid #1e293b !important; display: flex !important; flex-direction: column !important; gap: 10px !important;">
-      <div style="display: flex !important; justify-content: space-between !important; align-items: center !important; padding-bottom: 8px !important; border-bottom: 1px solid #1e293b !important;">
-        <span style="font-size: 12px !important; font-weight: 700 !important; color: #cbd5e1 !important;" id="modalItemsHeader">Consumos en Silla 1:</span>
-        <span style="padding: 2px 8px !important; border-radius: 6px !important; background: rgba(16, 185, 129, 0.2) !important; color: #34d399 !important; font-size: 10px !important; font-weight: 800 !important; text-transform: uppercase !important;">Activa</span>
-      </div>
-
-      <div id="modalItemsList" style="display: flex !important; flex-direction: column !important; gap: 8px !important; max-height: 220px !important; overflow-y: auto !important;">
-        <!-- Items rendered dynamically -->
-      </div>
-
-      <div style="padding-top: 10px !important; border-top: 1px solid #1e293b !important; display: flex !important; justify-content: space-between !important; font-weight: 900 !important; font-size: 15px !important; color: #ffffff !important;">
-        <span id="modalTotalLabel">Subtotal Silla:</span>
-        <span style="color: #34d399 !important;" id="modalTotalMonto">$148.00</span>
-      </div>
-    </div>
-
-    <!-- MODAL ACTIONS -->
-    <div style="display: flex !important; flex-direction: column !important; gap: 10px !important; padding-top: 8px !important;">
-      <div style="display: flex !important; gap: 10px !important;">
-        <button onclick="window.iniciarModoMoverDesdeModal()" style="flex: 1 !important; padding: 10px !important; background: #0284c7 !important; color: #ffffff !important; font-weight: 800 !important; font-size: 11px !important; border-radius: 10px !important; border: none !important; cursor: pointer !important; display: flex !important; align-items: center !important; justify-content: center !important; gap: 6px !important;">
-          <i class="fa-solid fa-arrow-right-arrow-left"></i> Mover esta Cuenta
-        </button>
-        <button onclick="window.enviarCocinaKDS()" style="flex: 1 !important; padding: 10px !important; background: #f59e0b !important; color: #0f172a !important; font-weight: 900 !important; font-size: 11px !important; border-radius: 10px !important; border: none !important; cursor: pointer !important; display: flex !important; align-items: center !important; justify-content: center !important; gap: 6px !important;">
-          <i class="fa-solid fa-fire"></i> Enviar Cocina (KDS)
-        </button>
-      </div>
-      <button onclick="window.solicitarPrecuenta()" style="width: 100% !important; padding: 10px !important; background: #1e293b !important; color: #cbd5e1 !important; font-weight: 700 !important; font-size: 11px !important; border-radius: 10px !important; border: 1px solid #334155 !important; cursor: pointer !important; display: flex !important; align-items: center !important; justify-content: center !important; gap: 6px !important;">
-        <i class="fa-solid fa-receipt" style="color: #38bdf8 !important;"></i> Imprimir Precuenta
-      </button>
-    </div>
-
-  </div>
-</div>
