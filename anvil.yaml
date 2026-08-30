@@ -1,8 +1,14 @@
 app_id: terraza_vidasabor_app
 name: La Terraza de Vida & Sabor
+startup: {module: POSMesero, type: form}
+startup_form: POSMesero
+runtime_options:
+  version: 2
+  client_version: '3'
+  server_version: python3-sandbox
+  server_spec: {}
 native_deps: |
   <script>
-    // Global fallback initialization for POS functions to prevent any "is not a function" errors
     if (!window.clickSilla) window.clickSilla = function(m, s) { if (window.handleSillaClick) window.handleSillaClick(m, s); };
     if (!window.clickMesa) window.clickMesa = function(m) { if (window.handleMesaClick) window.handleMesaClick(m); };
     if (!window.filtrarCategoria) window.filtrarCategoria = function(c) { if (window.handleFiltrarCategoria) window.handleFiltrarCategoria(c); };
@@ -10,11 +16,10 @@ native_deps: |
     if (!window.abrirModalComandaActual) window.abrirModalComandaActual = function() { if (window.handleAbrirModal) window.handleAbrirModal(); };
   </script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link rel="stylesheet" href="_/theme/theme.css">
-runtime_options:
-  client_version: '3'
-  server_spec: {}
-  server_version: python3-sandbox
-  version: 2
-startup: {module: Menu, type: form}
-startup_form: null
+  <link rel="stylesheet" href="_/	heme/theme.css">
+forms:
+- name: Menu
+- name: POSMesero
+- name: MonitorCocina
+- name: MonitorFiscal
+- name: ClientesLealtad
