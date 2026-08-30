@@ -67,7 +67,7 @@ Encapsulado en <anvil-form container=&quot;HtmlTemplate&quot;>
     <!-- CONTENIDO PRINCIPAL DEL MENÚ DIGITAL -->
     <main class=&quot;flex-1 max-w-7xl w-full mx-auto p-6 grid grid-cols-1 lg:grid-cols-3 gap-6&quot;>
 
-      <!-- SECCIÓN IZQUIERDA: CATÁLOGO Y PRODUCTOS (2 COLUMNAS EN DESKTOP) -->
+      <!-- SECCIÓN IZQUIERDA: CATÁLOGO Y PRODUCTOS -->
       <section class=&quot;lg:col-span-2 flex flex-col gap-6&quot;>
 
         <!-- BUSCADOR &amp; BARRA DE CATEGORÍAS -->
@@ -82,7 +82,6 @@ Encapsulado en <anvil-form container=&quot;HtmlTemplate&quot;>
             <button onclick=&quot;window.seleccionarCategoria('Todos')&quot; class=&quot;cat-chip active px-4 py-2 text-xs font-bold rounded-xl bg-emerald-500 text-white shadow-md shadow-emerald-500/20 whitespace-nowrap transition&quot;>
               Todos
             </button>
-            <!-- Renderizado dinámico desde JS/Anvil -->
           </div>
         </div>
 
@@ -124,15 +123,15 @@ Encapsulado en <anvil-form container=&quot;HtmlTemplate&quot;>
           <div class=&quot;space-y-2 text-xs&quot;>
             <div class=&quot;flex justify-between text-slate-400&quot;>
               <span>Subtotal:</span>
-              <span font-semibold text-slate-200 id=&quot;txtSubtotal&quot;>$0.00</span>
+              <span class=&quot;font-semibold text-slate-200&quot; id=&quot;txtSubtotal&quot;>$0.00</span>
             </div>
             <div class=&quot;flex justify-between text-slate-400&quot;>
               <span>IVA (16% Desglosado):</span>
-              <span font-semibold text-slate-200 id=&quot;txtIVA&quot;>$0.00</span>
+              <span class=&quot;font-semibold text-slate-200&quot; id=&quot;txtIVA&quot;>$0.00</span>
             </div>
             <div class=&quot;flex justify-between text-slate-400&quot;>
               <span>Propina Sugerida (10%):</span>
-              <span font-semibold text-slate-200 id=&quot;txtPropina&quot;>$0.00</span>
+              <span class=&quot;font-semibold text-slate-200&quot; id=&quot;txtPropina&quot;>$0.00</span>
             </div>
             <div class=&quot;flex justify-between text-base font-black text-white pt-2 border-t border-slate-800&quot;>
               <span>Total Mesa:</span>
@@ -157,20 +156,42 @@ Encapsulado en <anvil-form container=&quot;HtmlTemplate&quot;>
 
   </div>
 
-  <!-- PUENTE DE NAVEGACIÓN Y FUNCIONES JAVASCRIPT SEGURAS -->
   <script>
-    window.vsMenuData = [];
+    window.vsMenuData = [
+      {id: 1, categoria_nombre: &quot;Barra de Café &amp; Infusiones&quot;, nombre: &quot;Café Capuchino Especial V&amp;S&quot;, descripcion: &quot;Espresso doble con leche cremada artesanal y toque de canela&quot;, precio_unitario: 68.00, estacion_preparacion: &quot;barra_cafe&quot;, icono: &quot;☕&quot;},
+      {id: 2, categoria_nombre: &quot;Barra de Café &amp; Infusiones&quot;, nombre: &quot;Espresso Italiano Robusto&quot;, descripcion: &quot;Grano seleccionado 100% arábica tostado de la casa&quot;, precio_unitario: 48.00, estacion_preparacion: &quot;barra_cafe&quot;, icono: &quot;☕&quot;},
+      {id: 3, categoria_nombre: &quot;Barra de Café &amp; Infusiones&quot;, nombre: &quot;Latte Machiatto Vainilla Bourbon&quot;, descripcion: &quot;Espresso con leche de almendra y jarabe natural de vainilla bourbon&quot;, precio_unitario: 75.00, estacion_preparacion: &quot;barra_cafe&quot;, icono: &quot;🥛&quot;},
+      {id: 4, categoria_nombre: &quot;Desayunos &amp; Brunch Gourmet&quot;, nombre: &quot;Chilaquiles Verdes con Pollo y Queso Gouda&quot;, descripcion: &quot;Totopos artesanos en salsa de tomatillo con pollo deshebrado y gouda&quot;, precio_unitario: 148.00, estacion_preparacion: &quot;cocina&quot;, icono: &quot;🥘&quot;},
+      {id: 5, categoria_nombre: &quot;Desayunos &amp; Brunch Gourmet&quot;, nombre: &quot;Omelette Supremo La Terraza&quot;, descripcion: &quot;3 huevos orgánicos rellenos de portobello, espinacas baby y queso asadero&quot;, precio_unitario: 155.00, estacion_preparacion: &quot;cocina&quot;, icono: &quot;🍳&quot;},
+      {id: 6, categoria_nombre: &quot;Desayunos &amp; Brunch Gourmet&quot;, nombre: &quot;Molletes de Masa Madre con Chorizo&quot;, descripcion: &quot;Pan artesano de masa madre con frijol negro, gouda y chorizo&quot;, precio_unitario: 125.00, estacion_preparacion: &quot;cocina&quot;, icono: &quot;🥖&quot;},
+      {id: 7, categoria_nombre: &quot;Especialidades Fuertes&quot;, nombre: &quot;Rib Eye Grill V&amp;S (350g)&quot;, descripcion: &quot;Corte de alta calidad a las brasas servido con papas gajo y espárragos&quot;, precio_unitario: 385.00, estacion_preparacion: &quot;cocina&quot;, icono: &quot;🥩&quot;},
+      {id: 8, categoria_nombre: &quot;Especialidades Fuertes&quot;, nombre: &quot;Pasta Fettuccine con Camarones al Trufado&quot;, descripcion: &quot;Pasta fresca hecha en casa con camarones u-15 y crema suave de trufa&quot;, precio_unitario: 265.00, estacion_preparacion: &quot;cocina&quot;, icono: &quot;🍝&quot;},
+      {id: 9, categoria_nombre: &quot;Repostería &amp; Postres de Autor&quot;, nombre: &quot;Pastel Supremo de Chocolate Valrhona&quot;, descripcion: &quot;Rebanada caliente de pastel de chocolate amargo con helado de vainilla&quot;, precio_unitario: 105.00, estacion_preparacion: &quot;reposteria&quot;, icono: &quot;🍰&quot;},
+      {id: 10, categoria_nombre: &quot;Bebidas &amp; Coctelería de Autor&quot;, nombre: &quot;Limonada Botánica de Hierbabuena &amp; Jengibre&quot;, descripcion: &quot;Agua mineral infucionada con jengibre fresco, limón eufrata y hierbabuena&quot;, precio_unitario: 60.00, estacion_preparacion: &quot;barra_cafe&quot;, icono: &quot;🍋&quot;}
+    ];
+
+    window.vsCategoriasData = [
+      {id: 1, nombre: &quot;Barra de Café &amp; Infusiones&quot;, icono: &quot;☕&quot;},
+      {id: 2, nombre: &quot;Desayunos &amp; Brunch Gourmet&quot;, icono: &quot;🍳&quot;},
+      {id: 3, nombre: &quot;Entradas &amp; Tapas de la Terraza&quot;, icono: &quot;🥗&quot;},
+      {id: 4, nombre: &quot;Especialidades Fuertes&quot;, icono: &quot;🥩&quot;},
+      {id: 5, nombre: &quot;Repostería &amp; Postres de Autor&quot;, icono: &quot;🍰&quot;},
+      {id: 6, nombre: &quot;Bebidas &amp; Coctelería de Autor&quot;, icono: &quot;🍹&quot;}
+    ];
+
     window.vsCartItems = [];
-    window.categoriaActual = 'Todos';
+    window.categoriaActual = &quot;Todos&quot;;
 
     window.cargarDatosMenu = function(productos, categorias) {
-      window.vsMenuData = productos || [];
-      window.renderCategoriasChips(categorias || []);
+      if (productos &amp;&amp; productos.length > 0) window.vsMenuData = productos;
+      if (categorias &amp;&amp; categorias.length > 0) window.vsCategoriasData = categorias;
+      window.renderCategoriasChips(window.vsCategoriasData);
       window.renderProductos();
     };
 
     window.renderCategoriasChips = function(categorias) {
       const container = document.getElementById('categoriesChips');
+      if (!container) return;
       container.innerHTML = `<button onclick=&quot;window.seleccionarCategoria('Todos')&quot; class=&quot;cat-chip ${window.categoriaActual === 'Todos' ? 'active bg-emerald-500 text-white' : 'bg-slate-800/80 text-slate-400'} px-4 py-2 text-xs font-bold rounded-xl whitespace-nowrap transition&quot;>Todos</button>`;
 
       categorias.forEach(cat => {
@@ -196,10 +217,13 @@ Encapsulado en <anvil-form container=&quot;HtmlTemplate&quot;>
 
     window.renderProductos = function() {
       const container = document.getElementById('productsGridContainer');
-      const searchVal = (document.getElementById('searchInput').value || '').toLowerCase();
+      if (!container) return;
+      const searchInput = document.getElementById('searchInput');
+      const searchVal = searchInput ? (searchInput.value || '').toLowerCase() : '';
       container.innerHTML = '';
 
-      const filtrados = window.vsMenuData.filter(p => {
+      const list = window.vsMenuData || [];
+      const filtrados = list.filter(p => {
         const matchCat = window.categoriaActual === 'Todos' || p.categoria_nombre === window.categoriaActual;
         const matchSearch = p.nombre.toLowerCase().includes(searchVal) || (p.descripcion &amp;&amp; p.descripcion.toLowerCase().includes(searchVal));
         return matchCat &amp;&amp; matchSearch;
@@ -246,6 +270,7 @@ Encapsulado en <anvil-form container=&quot;HtmlTemplate&quot;>
 
     window.renderCarrito = function() {
       const container = document.getElementById('cartItemsList');
+      if (!container) return;
       container.innerHTML = '';
 
       let subtotal = 0;
@@ -277,10 +302,15 @@ Encapsulado en <anvil-form container=&quot;HtmlTemplate&quot;>
       const propina = subtotal * 0.10;
       const total = subtotal + propina;
 
-      document.getElementById('txtSubtotal').innerText = `$${subtotal.toFixed(2)}`;
-      document.getElementById('txtIVA').innerText = `$${iva.toFixed(2)}`;
-      document.getElementById('txtPropina').innerText = `$${propina.toFixed(2)}`;
-      document.getElementById('txtTotal').innerText = `$${total.toFixed(2)}`;
+      const txtSubtotal = document.getElementById('txtSubtotal');
+      const txtIVA = document.getElementById('txtIVA');
+      const txtPropina = document.getElementById('txtPropina');
+      const txtTotal = document.getElementById('txtTotal');
+
+      if (txtSubtotal) txtSubtotal.innerText = `$${subtotal.toFixed(2)}`;
+      if (txtIVA) txtIVA.innerText = `$${iva.toFixed(2)}`;
+      if (txtPropina) txtPropina.innerText = `$${propina.toFixed(2)}`;
+      if (txtTotal) txtTotal.innerText = `$${total.toFixed(2)}`;
     };
 
     window.quitarDelCarrito = function(index) {
@@ -307,5 +337,17 @@ Encapsulado en <anvil-form container=&quot;HtmlTemplate&quot;>
         alert(`Procesando pago vía ${metodo.toUpperCase()} para La Terraza V&amp;S...`);
       }
     };
+
+    function initImmediate() {
+      window.cargarDatosMenu(window.vsMenuData, window.vsCategoriasData);
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initImmediate);
+    } else {
+      initImmediate();
+    }
+    setTimeout(initImmediate, 10);
+    setTimeout(initImmediate, 100);
   </script>
 </anvil-form>"></anvil-form>
