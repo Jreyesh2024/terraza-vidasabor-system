@@ -6,7 +6,10 @@ class Menu(MenuTemplate):
   def __init__(self, **properties):
     self.init_components(**properties)
     self.inicializar_puente_javascript()
-    self.cargar_datos_menu()
+    try:
+      self.cargar_datos_menu()
+    except Exception as ex:
+      print("Menu init exception:", ex)
 
   def inicializar_puente_javascript(self):
     try:
@@ -23,10 +26,11 @@ class Menu(MenuTemplate):
       try:
         anvil.js.call_js("cargarDatosMenu", productos, categorias)
       except Exception as ex1:
-        print(f"call_js retry fallback: {ex1}")
-        func = getattr(anvil.js.window, "cargarDatosMenu", None)
-        if func:
-          func(productos, categorias)
+        print(f"call_js exception: {ex1}")
+        try:
+          anvil.js.window.cargarDatosMenu(productos, categorias)
+        except Exception as ex2:
+          print(f"window.cargarDatosMenu exception: {ex2}")
     except Exception as e:
       print(f"Error al cargar menú en Anvil Client: {e}")
 
@@ -35,11 +39,6 @@ class Menu(MenuTemplate):
 
   def procesar_cobro_comanda(self, metodo_pago, items_carrito):
     try:
-      resultado = anvil.server.call("procesar_cobro_terraza", metodo_pago, items_carrito)
-      if resultado.get("success"):
-        try:
-          anvil.js.call_js("alert", f"✅ Pago exitoso ({metodo_pago.upper()}). Folio Ticket: {resultado.get('folio')}")
-        except Exception:
-          pass
+      return anvil.server.call("procesar_cobro_terraza", metodo_pago, items_carrito)
     except Exception as e:
       print(f"Error en procesar_cobro_comanda: {e}")

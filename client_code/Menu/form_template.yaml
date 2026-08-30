@@ -189,12 +189,15 @@ container:
             window.vsCartItems = window.vsCartItems || [];
             window.categoriaActual = window.categoriaActual || "Todos";
       
-            window.cargarDatosMenu = function(productos, categorias) {
+            var fnCargar = function(productos, categorias) {
               if (productos && productos.length > 0) window.vsMenuData = productos;
               if (categorias && categorias.length > 0) window.vsCategoriasData = categorias;
               window.renderCategoriasChips(window.vsCategoriasData);
               window.renderProductos();
             };
+      
+            window.cargarDatosMenu = fnCargar;
+            try { Object.defineProperty(window, "cargarDatosMenu", { value: fnCargar, writable: true, configurable: true }); } catch(e){}
       
             window.renderCategoriasChips = function(categorias) {
               var container = document.getElementById('categoriesChips');
@@ -322,18 +325,20 @@ container:
               }
             };
       
-            function startUI() {
-              window.cargarDatosMenu(window.vsMenuData, window.vsCategoriasData);
+            function renderAllNow() {
+              var container = document.getElementById('productsGridContainer');
+              if (container && (container.children.length === 0 || container.innerHTML.indexOf('Cargando') >= 0)) {
+                window.cargarDatosMenu(window.vsMenuData, window.vsCategoriasData);
+              }
             }
       
-            if (document.readyState === 'loading') {
-              document.addEventListener('DOMContentLoaded', startUI);
-            } else {
-              startUI();
-            }
-            setTimeout(startUI, 10);
-            setTimeout(startUI, 100);
-            setTimeout(startUI, 500);
+            var timerCount = 0;
+            var timer = setInterval(function() {
+              renderAllNow();
+              timerCount++;
+              if (timerCount > 40) clearInterval(timer);
+            }, 50);
+      
           })();
         </script>
       </anvil-form>
