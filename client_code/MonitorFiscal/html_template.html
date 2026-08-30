@@ -1,0 +1,45 @@
+<anvil-form container="HtmlTemplate">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <div class="min-h-screen bg-[#090d16] text-slate-100 p-6 font-sans">
+    <div class="flex justify-between items-center pb-4 border-b border-slate-800 mb-6">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-sky-500 to-blue-700 flex items-center justify-center text-xl text-white font-black shadow-lg">
+          <i class="fa-solid fa-chart-pie"></i>
+        </div>
+        <div>
+          <h1 class="text-lg font-bold text-white">Monitor Fiscal & Financiero V&S</h1>
+          <p class="text-xs text-slate-400">Desglose bancarizado vs. efectivo e IVA (16%)</p>
+        </div>
+      </div>
+      <button onclick="window.navMenu('menu')" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-xs font-bold rounded-xl border border-slate-700 transition flex items-center gap-2">
+        <i class="fa-solid fa-arrow-left"></i> Volver al Menú
+      </button>
+    </div>
+
+    <!-- KPIS FISCALES -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+      <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-2xl">
+        <span class="text-xs text-slate-400 font-semibold block mb-1">Ingresos Bancarizados</span>
+        <span class="text-2xl font-black text-sky-400">,450.00</span>
+        <span class="text-[10px] text-slate-500 block mt-1">Santander & Mercado Pago</span>
+      </div>
+      <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-2xl">
+        <span class="text-xs text-slate-400 font-semibold block mb-1">Ingresos Efectivo</span>
+        <span class="text-2xl font-black text-emerald-400">,400.00</span>
+        <span class="text-[10px] text-slate-500 block mt-1">Caja General V&S</span>
+      </div>
+      <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-2xl">
+        <span class="text-xs text-slate-400 font-semibold block mb-1">IVA Generado (16%)</span>
+        <span class="text-2xl font-black text-amber-400">.00</span>
+        <span class="text-[10px] text-slate-500 block mt-1">Desglose contable</span>
+      </div>
+      <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-2xl">
+        <span class="text-xs text-slate-400 font-semibold block mb-1">Propinas Registradas</span>
+        <span class="text-2xl font-black text-purple-400">.00</span>
+        <span class="text-[10px] text-slate-500 block mt-1">No acumulable</span>
+      </div>
+    </div>
+  </div>
+</anvil-form>
