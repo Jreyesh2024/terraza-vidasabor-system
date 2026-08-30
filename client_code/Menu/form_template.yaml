@@ -12,35 +12,7 @@ container:
       
       <anvil-form container="HtmlTemplate">
         <!-- TAILWIND CSS CDN INJECTION & FONTS -->
-        <script src="https://cdn.tailwindcss.com">
-          window.seedFallbackCategorias = [
-            {id: 1, nombre: 'Barra de Café & Infusiones', icono: '☕'},
-            {id: 2, nombre: 'Desayunos & Brunch Gourmet', icono: '🍳'},
-            {id: 3, nombre: 'Entradas & Tapas de la Terraza', icono: '🥗'},
-            {id: 4, nombre: 'Especialidades Fuertes', icono: '🥩'},
-            {id: 5, nombre: 'Repostería & Postres de Autor', icono: '🍰'},
-            {id: 6, nombre: 'Bebidas & Coctelería de Autor', icono: '🍹'}
-          ];
-      
-          window.seedFallbackProductos = [
-            {id: 1, categoria_nombre: 'Barra de Café & Infusiones', nombre: 'Café Capuchino Especial V&S', descripcion: 'Espresso doble con leche cremada y toque de canela', precio_unitario: 68.00, estacion_preparacion: 'barra_cafe', icono: '☕'},
-            {id: 2, categoria_nombre: 'Barra de Café & Infusiones', nombre: 'Espresso Italiano Robusto', descripcion: 'Grano seleccionado 100% arábica tostado de la casa', precio_unitario: 48.00, estacion_preparacion: 'barra_cafe', icono: '☕'},
-            {id: 3, categoria_nombre: 'Desayunos & Brunch Gourmet', nombre: 'Chilaquiles Verdes con Pollo', descripcion: 'Totopos artesanos en salsa de tomatillo con queso gouda', precio_unitario: 148.00, estacion_preparacion: 'cocina', icono: '🥘'},
-            {id: 4, categoria_nombre: 'Desayunos & Brunch Gourmet', nombre: 'Omelette Supremo La Terraza', descripcion: '3 huevos orgánicos con portobello y espinacas baby', precio_unitario: 155.00, estacion_preparacion: 'cocina', icono: '🍳'},
-            {id: 5, categoria_nombre: 'Desayunos & Brunch Gourmet', nombre: 'Molletes de Masa Madre con Chorizo', descripcion: 'Frijol negro refrito, queso gouda y chorizo gratinado', precio_unitario: 125.00, estacion_preparacion: 'cocina', icono: '🥖'},
-            {id: 6, categoria_nombre: 'Especialidades Fuertes', nombre: 'Rib Eye Grill V&S (350g)', descripcion: 'A las brasas servido con papas gajo y espárragos', precio_unitario: 385.00, estacion_preparacion: 'cocina', icono: '🥩'},
-            {id: 7, categoria_nombre: 'Especialidades Fuertes', nombre: 'Pasta Fettuccine con Camarones al Trufado', descripcion: 'Pasta fresca hecha en casa con crema suave de trufa', precio_unitario: 265.00, estacion_preparacion: 'cocina', icono: '🍝'},
-            {id: 8, categoria_nombre: 'Repostería & Postres de Autor', nombre: 'Pastel Supremo de Chocolate Valrhona', descripcion: 'Chocolate amargo servido caliente con helado de vainilla', precio_unitario: 105.00, estacion_preparacion: 'reposteria', icono: '🍰'},
-            {id: 9, categoria_nombre: 'Bebidas & Coctelería de Autor', nombre: 'Limonada Botánica de Hierbabuena & Jengibre', descripcion: 'Agua mineral infundida con jengibre fresco y hierbabuena', precio_unitario: 60.00, estacion_preparacion: 'barra_cafe', icono: '🍋'}
-          ];
-      
-          setTimeout(function() {
-            if (!window.vsMenuData || window.vsMenuData.length === 0) {
-              window.cargarDatosMenu(window.seedFallbackProductos, window.seedFallbackCategorias);
-            }
-          }, 300);
-      
-        </script>
+        <script src="https://cdn.tailwindcss.com"></script>
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -99,7 +71,7 @@ container:
           <!-- CONTENIDO PRINCIPAL DEL MENÚ DIGITAL -->
           <main class="flex-1 max-w-7xl w-full mx-auto p-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
             
-            <!-- SECCIÓN IZQUIERDA: CATÁLOGO Y PRODUCTOS (2 COLUMNAS EN DESKTOP) -->
+            <!-- SECCIÓN IZQUIERDA: CATÁLOGO Y PRODUCTOS -->
             <section class="lg:col-span-2 flex flex-col gap-6">
               
               <!-- BUSCADOR & BARRA DE CATEGORÍAS -->
@@ -114,7 +86,6 @@ container:
                   <button onclick="window.seleccionarCategoria('Todos')" class="cat-chip active px-4 py-2 text-xs font-bold rounded-xl bg-emerald-500 text-white shadow-md shadow-emerald-500/20 whitespace-nowrap transition">
                     Todos
                   </button>
-                  <!-- Renderizado dinámico desde JS/Anvil -->
                 </div>
               </div>
       
@@ -156,15 +127,15 @@ container:
                 <div class="space-y-2 text-xs">
                   <div class="flex justify-between text-slate-400">
                     <span>Subtotal:</span>
-                    <span font-semibold text-slate-200 id="txtSubtotal">$0.00</span>
+                    <span class="font-semibold text-slate-200" id="txtSubtotal">$0.00</span>
                   </div>
                   <div class="flex justify-between text-slate-400">
                     <span>IVA (16% Desglosado):</span>
-                    <span font-semibold text-slate-200 id="txtIVA">$0.00</span>
+                    <span class="font-semibold text-slate-200" id="txtIVA">$0.00</span>
                   </div>
                   <div class="flex justify-between text-slate-400">
                     <span>Propina Sugerida (10%):</span>
-                    <span font-semibold text-slate-200 id="txtPropina">$0.00</span>
+                    <span class="font-semibold text-slate-200" id="txtPropina">$0.00</span>
                   </div>
                   <div class="flex justify-between text-base font-black text-white pt-2 border-t border-slate-800">
                     <span>Total Mesa:</span>
@@ -189,20 +160,42 @@ container:
       
         </div>
       
-        <!-- PUENTE DE NAVEGACIÓN Y FUNCIONES JAVASCRIPT SEGURAS -->
         <script>
-          window.vsMenuData = [];
+          window.vsMenuData = [
+            {id: 1, categoria_nombre: "Barra de Café & Infusiones", nombre: "Café Capuchino Especial V&S", descripcion: "Espresso doble con leche cremada artesanal y toque de canela", precio_unitario: 68.00, estacion_preparacion: "barra_cafe", icono: "☕"},
+            {id: 2, categoria_nombre: "Barra de Café & Infusiones", nombre: "Espresso Italiano Robusto", descripcion: "Grano seleccionado 100% arábica tostado de la casa", precio_unitario: 48.00, estacion_preparacion: "barra_cafe", icono: "☕"},
+            {id: 3, categoria_nombre: "Barra de Café & Infusiones", nombre: "Latte Machiatto Vainilla Bourbon", descripcion: "Espresso con leche de almendra y jarabe natural de vainilla bourbon", precio_unitario: 75.00, estacion_preparacion: "barra_cafe", icono: "🥛"},
+            {id: 4, categoria_nombre: "Desayunos & Brunch Gourmet", nombre: "Chilaquiles Verdes con Pollo y Queso Gouda", descripcion: "Totopos artesanos en salsa de tomatillo con pollo deshebrado y gouda", precio_unitario: 148.00, estacion_preparacion: "cocina", icono: "🥘"},
+            {id: 5, categoria_nombre: "Desayunos & Brunch Gourmet", nombre: "Omelette Supremo La Terraza", descripcion: "3 huevos orgánicos rellenos de portobello, espinacas baby y queso asadero", precio_unitario: 155.00, estacion_preparacion: "cocina", icono: "🍳"},
+            {id: 6, categoria_nombre: "Desayunos & Brunch Gourmet", nombre: "Molletes de Masa Madre con Chorizo", descripcion: "Pan artesano de masa madre con frijol negro, gouda y chorizo", precio_unitario: 125.00, estacion_preparacion: "cocina", icono: "🥖"},
+            {id: 7, categoria_nombre: "Especialidades Fuertes", nombre: "Rib Eye Grill V&S (350g)", descripcion: "Corte de alta calidad a las brasas servido con papas gajo y espárragos", precio_unitario: 385.00, estacion_preparacion: "cocina", icono: "🥩"},
+            {id: 8, categoria_nombre: "Especialidades Fuertes", nombre: "Pasta Fettuccine con Camarones al Trufado", descripcion: "Pasta fresca hecha en casa con camarones u-15 y crema suave de trufa", precio_unitario: 265.00, estacion_preparacion: "cocina", icono: "🍝"},
+            {id: 9, categoria_nombre: "Repostería & Postres de Autor", nombre: "Pastel Supremo de Chocolate Valrhona", descripcion: "Rebanada caliente de pastel de chocolate amargo con helado de vainilla", precio_unitario: 105.00, estacion_preparacion: "reposteria", icono: "🍰"},
+            {id: 10, categoria_nombre: "Bebidas & Coctelería de Autor", nombre: "Limonada Botánica de Hierbabuena & Jengibre", descripcion: "Agua mineral infucionada con jengibre fresco, limón eufrata y hierbabuena", precio_unitario: 60.00, estacion_preparacion: "barra_cafe", icono: "🍋"}
+          ];
+      
+          window.vsCategoriasData = [
+            {id: 1, nombre: "Barra de Café & Infusiones", icono: "☕"},
+            {id: 2, nombre: "Desayunos & Brunch Gourmet", icono: "🍳"},
+            {id: 3, nombre: "Entradas & Tapas de la Terraza", icono: "🥗"},
+            {id: 4, nombre: "Especialidades Fuertes", icono: "🥩"},
+            {id: 5, nombre: "Repostería & Postres de Autor", icono: "🍰"},
+            {id: 6, nombre: "Bebidas & Coctelería de Autor", icono: "🍹"}
+          ];
+      
           window.vsCartItems = [];
-          window.categoriaActual = 'Todos';
+          window.categoriaActual = "Todos";
       
           window.cargarDatosMenu = function(productos, categorias) {
-            window.vsMenuData = productos || [];
-            window.renderCategoriasChips(categorias || []);
+            if (productos && productos.length > 0) window.vsMenuData = productos;
+            if (categorias && categorias.length > 0) window.vsCategoriasData = categorias;
+            window.renderCategoriasChips(window.vsCategoriasData);
             window.renderProductos();
           };
       
           window.renderCategoriasChips = function(categorias) {
             const container = document.getElementById('categoriesChips');
+            if (!container) return;
             container.innerHTML = `<button onclick="window.seleccionarCategoria('Todos')" class="cat-chip ${window.categoriaActual === 'Todos' ? 'active bg-emerald-500 text-white' : 'bg-slate-800/80 text-slate-400'} px-4 py-2 text-xs font-bold rounded-xl whitespace-nowrap transition">Todos</button>`;
             
             categorias.forEach(cat => {
@@ -228,10 +221,13 @@ container:
       
           window.renderProductos = function() {
             const container = document.getElementById('productsGridContainer');
-            const searchVal = (document.getElementById('searchInput').value || '').toLowerCase();
+            if (!container) return;
+            const searchInput = document.getElementById('searchInput');
+            const searchVal = searchInput ? (searchInput.value || '').toLowerCase() : '';
             container.innerHTML = '';
       
-            const filtrados = window.vsMenuData.filter(p => {
+            const list = window.vsMenuData || [];
+            const filtrados = list.filter(p => {
               const matchCat = window.categoriaActual === 'Todos' || p.categoria_nombre === window.categoriaActual;
               const matchSearch = p.nombre.toLowerCase().includes(searchVal) || (p.descripcion && p.descripcion.toLowerCase().includes(searchVal));
               return matchCat && matchSearch;
@@ -278,6 +274,7 @@ container:
       
           window.renderCarrito = function() {
             const container = document.getElementById('cartItemsList');
+            if (!container) return;
             container.innerHTML = '';
       
             let subtotal = 0;
@@ -309,10 +306,15 @@ container:
             const propina = subtotal * 0.10;
             const total = subtotal + propina;
       
-            document.getElementById('txtSubtotal').innerText = `$${subtotal.toFixed(2)}`;
-            document.getElementById('txtIVA').innerText = `$${iva.toFixed(2)}`;
-            document.getElementById('txtPropina').innerText = `$${propina.toFixed(2)}`;
-            document.getElementById('txtTotal').innerText = `$${total.toFixed(2)}`;
+            const txtSubtotal = document.getElementById('txtSubtotal');
+            const txtIVA = document.getElementById('txtIVA');
+            const txtPropina = document.getElementById('txtPropina');
+            const txtTotal = document.getElementById('txtTotal');
+      
+            if (txtSubtotal) txtSubtotal.innerText = `$${subtotal.toFixed(2)}`;
+            if (txtIVA) txtIVA.innerText = `$${iva.toFixed(2)}`;
+            if (txtPropina) txtPropina.innerText = `$${propina.toFixed(2)}`;
+            if (txtTotal) txtTotal.innerText = `$${total.toFixed(2)}`;
           };
       
           window.quitarDelCarrito = function(index) {
@@ -339,34 +341,18 @@ container:
               alert(`Procesando pago vía ${metodo.toUpperCase()} para La Terraza V&S...`);
             }
           };
-        
-          window.seedFallbackCategorias = [
-            {id: 1, nombre: 'Barra de Café & Infusiones', icono: '☕'},
-            {id: 2, nombre: 'Desayunos & Brunch Gourmet', icono: '🍳'},
-            {id: 3, nombre: 'Entradas & Tapas de la Terraza', icono: '🥗'},
-            {id: 4, nombre: 'Especialidades Fuertes', icono: '🥩'},
-            {id: 5, nombre: 'Repostería & Postres de Autor', icono: '🍰'},
-            {id: 6, nombre: 'Bebidas & Coctelería de Autor', icono: '🍹'}
-          ];
       
-          window.seedFallbackProductos = [
-            {id: 1, categoria_nombre: 'Barra de Café & Infusiones', nombre: 'Café Capuchino Especial V&S', descripcion: 'Espresso doble con leche cremada y toque de canela', precio_unitario: 68.00, estacion_preparacion: 'barra_cafe', icono: '☕'},
-            {id: 2, categoria_nombre: 'Barra de Café & Infusiones', nombre: 'Espresso Italiano Robusto', descripcion: 'Grano seleccionado 100% arábica tostado de la casa', precio_unitario: 48.00, estacion_preparacion: 'barra_cafe', icono: '☕'},
-            {id: 3, categoria_nombre: 'Desayunos & Brunch Gourmet', nombre: 'Chilaquiles Verdes con Pollo', descripcion: 'Totopos artesanos en salsa de tomatillo con queso gouda', precio_unitario: 148.00, estacion_preparacion: 'cocina', icono: '🥘'},
-            {id: 4, categoria_nombre: 'Desayunos & Brunch Gourmet', nombre: 'Omelette Supremo La Terraza', descripcion: '3 huevos orgánicos con portobello y espinacas baby', precio_unitario: 155.00, estacion_preparacion: 'cocina', icono: '🍳'},
-            {id: 5, categoria_nombre: 'Desayunos & Brunch Gourmet', nombre: 'Molletes de Masa Madre con Chorizo', descripcion: 'Frijol negro refrito, queso gouda y chorizo gratinado', precio_unitario: 125.00, estacion_preparacion: 'cocina', icono: '🥖'},
-            {id: 6, categoria_nombre: 'Especialidades Fuertes', nombre: 'Rib Eye Grill V&S (350g)', descripcion: 'A las brasas servido con papas gajo y espárragos', precio_unitario: 385.00, estacion_preparacion: 'cocina', icono: '🥩'},
-            {id: 7, categoria_nombre: 'Especialidades Fuertes', nombre: 'Pasta Fettuccine con Camarones al Trufado', descripcion: 'Pasta fresca hecha en casa con crema suave de trufa', precio_unitario: 265.00, estacion_preparacion: 'cocina', icono: '🍝'},
-            {id: 8, categoria_nombre: 'Repostería & Postres de Autor', nombre: 'Pastel Supremo de Chocolate Valrhona', descripcion: 'Chocolate amargo servido caliente con helado de vainilla', precio_unitario: 105.00, estacion_preparacion: 'reposteria', icono: '🍰'},
-            {id: 9, categoria_nombre: 'Bebidas & Coctelería de Autor', nombre: 'Limonada Botánica de Hierbabuena & Jengibre', descripcion: 'Agua mineral infundida con jengibre fresco y hierbabuena', precio_unitario: 60.00, estacion_preparacion: 'barra_cafe', icono: '🍋'}
-          ];
+          function initImmediate() {
+            window.cargarDatosMenu(window.vsMenuData, window.vsCategoriasData);
+          }
       
-          setTimeout(function() {
-            if (!window.vsMenuData || window.vsMenuData.length === 0) {
-              window.cargarDatosMenu(window.seedFallbackProductos, window.seedFallbackCategorias);
-            }
-          }, 300);
-      
+          if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initImmediate);
+          } else {
+            initImmediate();
+          }
+          setTimeout(initImmediate, 10);
+          setTimeout(initImmediate, 100);
         </script>
       </anvil-form>
 components: []
