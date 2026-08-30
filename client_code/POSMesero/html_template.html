@@ -1,20 +1,114 @@
 <!-- ============================================================================
-  LA TERRAZA DE VIDA & SABOR (V&S) - PLANO GRÁFICO 2D (TOP-DOWN)
-  Área 1: La Palapa (6.00m x 4.00m) • 3 Mesas x 4 Sillas
-  Inline Styles Garantizados para Anvil
+  LA TERRAZA DE VIDA & SABOR (V&S) - POS CROQUIS CON DRAG & DROP Y CUENTAS POR SILLA
+  - Drag & Drop de comensales entre sillas (Mover/Transferir/Combinar Cuentas)
+  - Cada Silla es una Entidad Independiente con su propia cuenta
+  - La Mesa es un contenedor visual y de agrupación consolidada
+  - Panel Derecho es un espejo de la selección
 ============================================================================ -->
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+  html, body, .anvil-container {
+    background-color: #090d16 !important;
+    color: #f8fafc !important;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* Chair Node Styling */
+  .chair-node {
+    position: absolute;
+    z-index: 20;
+    padding: 6px 12px;
+    font-size: 11px;
+    font-weight: 800;
+    border-radius: 10px;
+    cursor: grab;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    white-space: nowrap;
+    user-select: none;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+  }
+
+  .chair-node:active {
+    cursor: grabbing;
+    opacity: 0.7;
+    transform: scale(1.08);
+  }
+
+  .chair-node.drag-over {
+    box-shadow: 0 0 0 4px #38bdf8, 0 0 20px rgba(56, 189, 248, 0.6) !important;
+    transform: scale(1.15) !important;
+  }
+
+  .chair-top { top: 4px; left: 50%; transform: translateX(-50%); }
+  .chair-right { right: 4px; top: 50%; transform: translateY(-50%); }
+  .chair-bottom { bottom: 4px; left: 50%; transform: translateX(-50%); }
+  .chair-left { left: 4px; top: 50%; transform: translateY(-50%); }
+
+  /* States */
+  .chair-free {
+    background-color: #059669;
+    color: #ffffff;
+    border: 1.5px solid #34d399;
+  }
+  .chair-free:hover {
+    background-color: #10b981;
+    box-shadow: 0 0 12px rgba(16, 185, 129, 0.5);
+  }
+
+  .chair-busy {
+    background-color: #d97706;
+    color: #0f172a;
+    border: 1.5px solid #fbbf24;
+  }
+  .chair-busy:hover {
+    background-color: #f59e0b;
+    box-shadow: 0 0 12px rgba(245, 158, 11, 0.5);
+  }
+
+  .chair-selected {
+    box-shadow: 0 0 0 3px #ffffff, 0 0 20px rgba(255, 255, 255, 0.8) !important;
+    transform: scale(1.1) !important;
+    z-index: 30 !important;
+  }
+
+  .table-circle {
+    width: 95px;
+    height: 95px;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    transition: all 0.2s ease;
+  }
+
+  .table-circle:hover {
+    transform: scale(1.05);
+  }
+
+  .table-selected {
+    box-shadow: 0 0 0 4px #38bdf8, 0 0 25px rgba(56, 189, 248, 0.6) !important;
+  }
+</style>
 
 <div style="background-color: #090d16; color: #f8fafc; font-family: 'Inter', system-ui, sans-serif; min-height: 100vh; padding: 20px; box-sizing: border-box; display: flex; flex-direction: column; gap: 20px;">
   
   <!-- HEADER BAR & AREA SWITCHER -->
   <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 15px; padding-bottom: 15px; border-bottom: 1px solid #1e293b;">
-    <div style="display: flex; items-center; gap: 12px;">
+    <div style="display: flex; align-items: center; gap: 12px;">
       <div style="width: 48px; height: 48px; border-radius: 16px; background: linear-gradient(135deg, #10b981, #0f766e); display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: 900; color: #ffffff; box-shadow: 0 0 20px rgba(16, 185, 129, 0.4);">
         V&S
       </div>
       <div>
-        <h1 style="font-size: 20px; font-weight: 800; color: #ffffff; margin: 0; tracking-wide: 0.5px;">Plano Gráfico 2D • La Terraza de Vida & Sabor</h1>
-        <p style="font-size: 12px; font-weight: 600; color: #34d399; margin: 2px 0 0 0;">Gestión Espacial de Mesas & Comandas por Silla (Área Palapa 6.00m x 4.00m)</p>
+        <h1 style="font-size: 20px; font-weight: 800; color: #ffffff; margin: 0;">Plano Gráfico 2D • La Terraza de Vida & Sabor</h1>
+        <p style="font-size: 12px; font-weight: 600; color: #34d399; margin: 2px 0 0 0;">Gestión Espacial por Silla con Drag & Drop (Área Palapa 6.00m x 4.00m)</p>
       </div>
     </div>
 
@@ -32,47 +126,51 @@
     </div>
   </div>
 
+  <!-- TOAST NOTIFICATION BANNER -->
+  <div id="toastNotification" style="display: none; background: #0284c7; color: #ffffff; padding: 10px 16px; border-radius: 12px; font-size: 12px; font-weight: 700; align-items: center; justify-content: space-between; box-shadow: 0 10px 15px -3px rgba(2, 132, 199, 0.4);">
+    <span id="toastText"><i class="fa-solid fa-circle-info mr-2"></i> Mensaje del sistema</span>
+    <button onclick="document.getElementById('toastNotification').style.display='none'" style="background: transparent; border: none; color: #ffffff; font-weight: bold; cursor: pointer;">✕</button>
+  </div>
+
   <!-- MAIN LAYOUT GRID -->
   <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px; flex: 1;">
     
-    <!-- LEFT PANEL: FLOOR PLAN OF LA PALAPA -->
-    <div style="grid-column: span 2 / span 2; background: rgba(15, 23, 42, 0.95); border: 1px solid #1e293b; border-radius: 20px; padding: 24px; display: flex; flex-direction: column; justify-content: space-between; min-height: 520px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);">
+    <!-- LEFT PANEL: FLOOR PLAN CANVAS (2D TOP-DOWN) -->
+    <div style="grid-column: span 2 / span 2; background: rgba(15, 23, 42, 0.95); border: 1px solid #1e293b; border-radius: 20px; padding: 24px; display: flex; flex-direction: column; justify-content: space-between; min-height: 540px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);">
       
-      <!-- PARED POSTERIOR BARRA -->
+      <!-- PARED POSTERIOR BARRA DE CAFÉ -->
       <div style="background: rgba(30, 41, 59, 0.9); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 12px; padding: 12px 16px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; margin-bottom: 24px; gap: 10px;">
         <div style="display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 700; color: #34d399;">
           <i class="fa-solid fa-mug-hot" style="color: #fbbf24; font-size: 16px;"></i>
           <span>Mueble de Servicio & Barra de Café (Pared Posterior 6.00m)</span>
         </div>
         <div style="display: flex; gap: 16px; font-size: 11px; color: #94a3b8; font-weight: 600;">
-          <span><i class="fa-solid fa-wine-glass" style="color: #c084fc; margin-right: 4px;"></i> Cristalería</span>
-          <span><i class="fa-solid fa-fire" style="color: #fbbf24; margin-right: 4px;"></i> Espresso</span>
-          <span><i class="fa-solid fa-sink" style="color: #38bdf8; margin-right: 4px;"></i> Insumos</span>
+          <span><i class="fa-solid fa-hand-pointer" style="color: #38bdf8; margin-right: 4px;"></i> Clic = Seleccionar</span>
+          <span><i class="fa-solid fa-up-down-left-right" style="color: #f59e0b; margin-right: 4px;"></i> Arrastrar = Mover Cuenta</span>
         </div>
       </div>
 
-      <!-- 3 TABLES GRAPHICAL CANVAS (2D TOP-DOWN) -->
+      <!-- 3 TABLES GRAPHICAL DISPLAY -->
       <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin: auto 0; padding: 20px 0;">
         
         <!-- MESA 1 -->
         <div style="display: flex; flex-direction: column; align-items: center; gap: 12px;">
           <span style="font-size: 12px; font-weight: 900; color: #cbd5e1; text-transform: uppercase; letter-spacing: 1px;">Mesa 1 (Palapa)</span>
           
-          <!-- Table Group 220x220 container -->
           <div style="position: relative; width: 220px; height: 220px; display: flex; align-items: center; justify-content: center;">
-            <!-- Table Circle -->
-            <div onclick="window.seleccionarMesaSilla(1, 1)" style="width: 95px; height: 95px; border-radius: 50%; background: #064e3b; border: 4px solid #10b981; box-shadow: 0 0 25px rgba(16, 185, 129, 0.4); display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; z-index: 10;">
-              <span style="font-size: 18px; font-weight: 900; color: #ffffff; margin: 0;">M1</span>
-              <span style="font-size: 9px; font-weight: 800; color: #6ee7b7; text-transform: uppercase; margin-top: 2px;">4 Sillas</span>
+            <div onclick="window.seleccionarMesa(1)" id="table-circle-1" class="table-circle" style="background: #064e3b; border: 4px solid #10b981; box-shadow: 0 0 20px rgba(16, 185, 129, 0.4);">
+              <span style="font-size: 18px; font-weight: 900; color: #ffffff;">M1</span>
+              <span id="table-status-1" style="font-size: 9px; font-weight: 800; color: #6ee7b7; text-transform: uppercase; margin-top: 2px;">Libre</span>
             </div>
-            <!-- Chairs -->
-            <button onclick="window.seleccionarMesaSilla(1, 1)" id="chair-1-1" style="position: absolute; top: 6px; left: 50%; transform: translateX(-50%); z-index: 20; padding: 6px 12px; font-size: 11px; font-weight: 800; border-radius: 8px; background-color: #059669; color: #ffffff; border: 1px solid #34d399; cursor: pointer; white-space: nowrap;">Silla 1</button>
-            <button onclick="window.seleccionarMesaSilla(1, 2)" id="chair-1-2" style="position: absolute; right: 6px; top: 50%; transform: translateY(-50%); z-index: 20; padding: 6px 10px; font-size: 11px; font-weight: 800; border-radius: 8px; background-color: #059669; color: #ffffff; border: 1px solid #34d399; cursor: pointer; white-space: nowrap;">Silla 2</button>
-            <button onclick="window.seleccionarMesaSilla(1, 3)" id="chair-1-3" style="position: absolute; bottom: 6px; left: 50%; transform: translateX(-50%); z-index: 20; padding: 6px 12px; font-size: 11px; font-weight: 800; border-radius: 8px; background-color: #059669; color: #ffffff; border: 1px solid #34d399; cursor: pointer; white-space: nowrap;">Silla 3</button>
-            <button onclick="window.seleccionarMesaSilla(1, 4)" id="chair-1-4" style="position: absolute; left: 6px; top: 50%; transform: translateY(-50%); z-index: 20; padding: 6px 10px; font-size: 11px; font-weight: 800; border-radius: 8px; background-color: #059669; color: #ffffff; border: 1px solid #34d399; cursor: pointer; white-space: nowrap;">Silla 4</button>
+
+            <!-- Chairs 1..4 for Mesa 1 -->
+            <div onclick="window.seleccionarSilla(1, 1)" draggable="true" ondragstart="window.handleDragStart(event, 1, 1)" ondragover="window.handleDragOver(event)" ondragleave="window.handleDragLeave(event)" ondrop="window.handleDrop(event, 1, 1)" id="chair-1-1" class="chair-node chair-top chair-free">Silla 1</div>
+            <div onclick="window.seleccionarSilla(1, 2)" draggable="true" ondragstart="window.handleDragStart(event, 1, 2)" ondragover="window.handleDragOver(event)" ondragleave="window.handleDragLeave(event)" ondrop="window.handleDrop(event, 1, 2)" id="chair-1-2" class="chair-node chair-right chair-free">Silla 2</div>
+            <div onclick="window.seleccionarSilla(1, 3)" draggable="true" ondragstart="window.handleDragStart(event, 1, 3)" ondragover="window.handleDragOver(event)" ondragleave="window.handleDragLeave(event)" ondrop="window.handleDrop(event, 1, 3)" id="chair-1-3" class="chair-node chair-bottom chair-free">Silla 3</div>
+            <div onclick="window.seleccionarSilla(1, 4)" draggable="true" ondragstart="window.handleDragStart(event, 1, 4)" ondragover="window.handleDragOver(event)" ondragleave="window.handleDragLeave(event)" ondrop="window.handleDrop(event, 1, 4)" id="chair-1-4" class="chair-node chair-left chair-free">Silla 4</div>
           </div>
 
-          <span style="font-size: 12px; font-weight: 700; color: #34d399;">🟢 Disponible</span>
+          <span id="table-label-1" style="font-size: 12px; font-weight: 700; color: #34d399;">🟢 Disponible</span>
         </div>
 
         <!-- MESA 2 -->
@@ -80,35 +178,39 @@
           <span style="font-size: 12px; font-weight: 900; color: #cbd5e1; text-transform: uppercase; letter-spacing: 1px;">Mesa 2 (Palapa)</span>
           
           <div style="position: relative; width: 220px; height: 220px; display: flex; align-items: center; justify-content: center;">
-            <div onclick="window.seleccionarMesaSilla(2, 1)" style="width: 95px; height: 95px; border-radius: 50%; background: #064e3b; border: 4px solid #10b981; box-shadow: 0 0 25px rgba(16, 185, 129, 0.4); display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; z-index: 10;">
-              <span style="font-size: 18px; font-weight: 900; color: #ffffff; margin: 0;">M2</span>
-              <span style="font-size: 9px; font-weight: 800; color: #6ee7b7; text-transform: uppercase; margin-top: 2px;">4 Sillas</span>
+            <div onclick="window.seleccionarMesa(2)" id="table-circle-2" class="table-circle" style="background: #064e3b; border: 4px solid #10b981; box-shadow: 0 0 20px rgba(16, 185, 129, 0.4);">
+              <span style="font-size: 18px; font-weight: 900; color: #ffffff;">M2</span>
+              <span id="table-status-2" style="font-size: 9px; font-weight: 800; color: #6ee7b7; text-transform: uppercase; margin-top: 2px;">Libre</span>
             </div>
-            <button onclick="window.seleccionarMesaSilla(2, 1)" id="chair-2-1" style="position: absolute; top: 6px; left: 50%; transform: translateX(-50%); z-index: 20; padding: 6px 12px; font-size: 11px; font-weight: 800; border-radius: 8px; background-color: #059669; color: #ffffff; border: 1px solid #34d399; cursor: pointer; white-space: nowrap;">Silla 1</button>
-            <button onclick="window.seleccionarMesaSilla(2, 2)" id="chair-2-2" style="position: absolute; right: 6px; top: 50%; transform: translateY(-50%); z-index: 20; padding: 6px 10px; font-size: 11px; font-weight: 800; border-radius: 8px; background-color: #059669; color: #ffffff; border: 1px solid #34d399; cursor: pointer; white-space: nowrap;">Silla 2</button>
-            <button onclick="window.seleccionarMesaSilla(2, 3)" id="chair-2-3" style="position: absolute; bottom: 6px; left: 50%; transform: translateX(-50%); z-index: 20; padding: 6px 12px; font-size: 11px; font-weight: 800; border-radius: 8px; background-color: #059669; color: #ffffff; border: 1px solid #34d399; cursor: pointer; white-space: nowrap;">Silla 3</button>
-            <button onclick="window.seleccionarMesaSilla(2, 4)" id="chair-2-4" style="position: absolute; left: 6px; top: 50%; transform: translateY(-50%); z-index: 20; padding: 6px 10px; font-size: 11px; font-weight: 800; border-radius: 8px; background-color: #059669; color: #ffffff; border: 1px solid #34d399; cursor: pointer; white-space: nowrap;">Silla 4</button>
+
+            <!-- Chairs 1..4 for Mesa 2 -->
+            <div onclick="window.seleccionarSilla(2, 1)" draggable="true" ondragstart="window.handleDragStart(event, 2, 1)" ondragover="window.handleDragOver(event)" ondragleave="window.handleDragLeave(event)" ondrop="window.handleDrop(event, 2, 1)" id="chair-2-1" class="chair-node chair-top chair-free">Silla 1</div>
+            <div onclick="window.seleccionarSilla(2, 2)" draggable="true" ondragstart="window.handleDragStart(event, 2, 2)" ondragover="window.handleDragOver(event)" ondragleave="window.handleDragLeave(event)" ondrop="window.handleDrop(event, 2, 2)" id="chair-2-2" class="chair-node chair-right chair-free">Silla 2</div>
+            <div onclick="window.seleccionarSilla(2, 3)" draggable="true" ondragstart="window.handleDragStart(event, 2, 3)" ondragover="window.handleDragOver(event)" ondragleave="window.handleDragLeave(event)" ondrop="window.handleDrop(event, 2, 3)" id="chair-2-3" class="chair-node chair-bottom chair-free">Silla 3</div>
+            <div onclick="window.seleccionarSilla(2, 4)" draggable="true" ondragstart="window.handleDragStart(event, 2, 4)" ondragover="window.handleDragOver(event)" ondragleave="window.handleDragLeave(event)" ondrop="window.handleDrop(event, 2, 4)" id="chair-2-4" class="chair-node chair-left chair-free">Silla 4</div>
           </div>
 
-          <span style="font-size: 12px; font-weight: 700; color: #34d399;">🟢 Disponible</span>
+          <span id="table-label-2" style="font-size: 12px; font-weight: 700; color: #34d399;">🟢 Disponible</span>
         </div>
 
-        <!-- MESA 3 (Ocupada) -->
+        <!-- MESA 3 -->
         <div style="display: flex; flex-direction: column; align-items: center; gap: 12px;">
           <span style="font-size: 12px; font-weight: 900; color: #fbbf24; text-transform: uppercase; letter-spacing: 1px;">Mesa 3 (Palapa)</span>
           
           <div style="position: relative; width: 220px; height: 220px; display: flex; align-items: center; justify-content: center;">
-            <div onclick="window.seleccionarMesaSilla(3, 1)" style="width: 95px; height: 95px; border-radius: 50%; background: #78350f; border: 4px solid #f59e0b; box-shadow: 0 0 25px rgba(245, 158, 11, 0.4); display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; z-index: 10;">
-              <span style="font-size: 18px; font-weight: 900; color: #fef3c7; margin: 0;">M3</span>
-              <span style="font-size: 9px; font-weight: 800; color: #fde68a; text-transform: uppercase; margin-top: 2px;">2 Ocupadas</span>
+            <div onclick="window.seleccionarMesa(3)" id="table-circle-3" class="table-circle" style="background: #78350f; border: 4px solid #f59e0b; box-shadow: 0 0 20px rgba(245, 158, 11, 0.4);">
+              <span style="font-size: 18px; font-weight: 900; color: #fef3c7;">M3</span>
+              <span id="table-status-3" style="font-size: 9px; font-weight: 800; color: #fde68a; text-transform: uppercase; margin-top: 2px;">2 Ocupadas</span>
             </div>
-            <button onclick="window.seleccionarMesaSilla(3, 1)" id="chair-3-1" style="position: absolute; top: 6px; left: 50%; transform: translateX(-50%); z-index: 20; padding: 6px 12px; font-size: 11px; font-weight: 800; border-radius: 8px; background-color: #d97706; color: #0f172a; border: 1px solid #fbbf24; cursor: pointer; white-space: nowrap;">Silla 1 (Activa)</button>
-            <button onclick="window.seleccionarMesaSilla(3, 2)" id="chair-3-2" style="position: absolute; right: 6px; top: 50%; transform: translateY(-50%); z-index: 20; padding: 6px 10px; font-size: 11px; font-weight: 800; border-radius: 8px; background-color: #d97706; color: #0f172a; border: 1px solid #fbbf24; cursor: pointer; white-space: nowrap;">Silla 2</button>
-            <button onclick="window.seleccionarMesaSilla(3, 3)" id="chair-3-3" style="position: absolute; bottom: 6px; left: 50%; transform: translateX(-50%); z-index: 20; padding: 6px 12px; font-size: 11px; font-weight: 800; border-radius: 8px; background-color: #334155; color: #94a3b8; border: 1px solid #475569; cursor: pointer; white-space: nowrap;">Silla 3</button>
-            <button onclick="window.seleccionarMesaSilla(3, 4)" id="chair-3-4" style="position: absolute; left: 6px; top: 50%; transform: translateY(-50%); z-index: 20; padding: 6px 10px; font-size: 11px; font-weight: 800; border-radius: 8px; background-color: #334155; color: #94a3b8; border: 1px solid #475569; cursor: pointer; white-space: nowrap;">Silla 4</button>
+
+            <!-- Chairs 1..4 for Mesa 3 -->
+            <div onclick="window.seleccionarSilla(3, 1)" draggable="true" ondragstart="window.handleDragStart(event, 3, 1)" ondragover="window.handleDragOver(event)" ondragleave="window.handleDragLeave(event)" ondrop="window.handleDrop(event, 3, 1)" id="chair-3-1" class="chair-node chair-top chair-busy chair-selected">Silla 1</div>
+            <div onclick="window.seleccionarSilla(3, 2)" draggable="true" ondragstart="window.handleDragStart(event, 3, 2)" ondragover="window.handleDragOver(event)" ondragleave="window.handleDragLeave(event)" ondrop="window.handleDrop(event, 3, 2)" id="chair-3-2" class="chair-node chair-right chair-busy">Silla 2</div>
+            <div onclick="window.seleccionarSilla(3, 3)" draggable="true" ondragstart="window.handleDragStart(event, 3, 3)" ondragover="window.handleDragOver(event)" ondragleave="window.handleDragLeave(event)" ondrop="window.handleDrop(event, 3, 3)" id="chair-3-3" class="chair-node chair-bottom chair-free">Silla 3</div>
+            <div onclick="window.seleccionarSilla(3, 4)" draggable="true" ondragstart="window.handleDragStart(event, 3, 4)" ondragover="window.handleDragOver(event)" ondragleave="window.handleDragLeave(event)" ondrop="window.handleDrop(event, 3, 4)" id="chair-3-4" class="chair-node chair-left chair-free">Silla 4</div>
           </div>
 
-          <span style="font-size: 12px; font-weight: 700; color: #fbbf24;">🟡 Ocupada (2 Comensales)</span>
+          <span id="table-label-3" style="font-size: 12px; font-weight: 700; color: #fbbf24;">🟡 Ocupada (2 Comensales)</span>
         </div>
 
       </div>
@@ -121,62 +223,51 @@
 
     </div>
 
-    <!-- RIGHT PANEL: LEVEL 2 COMMANDA BY CHAIR -->
+    <!-- RIGHT PANEL: SELECTION MIRROR & COMMANDA DETAIL -->
     <div style="background: rgba(15, 23, 42, 0.95); border: 1px solid #1e293b; border-radius: 20px; padding: 24px; display: flex; flex-direction: column; justify-content: space-between; gap: 20px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);">
       
       <div style="display: flex; flex-direction: column; gap: 16px;">
+        <!-- HEADER MIRROR OF SELECTION -->
         <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 12px; border-bottom: 1px solid #1e293b;">
           <div>
-            <h2 style="font-size: 15px; font-weight: 800; color: #ffffff; margin: 0; display: flex; align-items: center; gap: 8px;">
+            <h2 id="lblPanelTitulo" style="font-size: 15px; font-weight: 800; color: #ffffff; margin: 0; display: flex; align-items: center; gap: 8px;">
               <i class="fa-solid fa-clipboard-list" style="color: #34d399;"></i> Comanda por Comensal
             </h2>
-            <p style="font-size: 11px; color: #94a3b8; margin: 2px 0 0 0;">Nivel 2 • Asignación directa por silla</p>
+            <p id="lblPanelSubtitulo" style="font-size: 11px; color: #94a3b8; margin: 2px 0 0 0;">Cuenta Individual Silla 1</p>
           </div>
-          <span id="activeSeatBadge" style="padding: 6px 12px; background: rgba(245, 158, 11, 0.2); color: #fde68a; border: 1px solid rgba(245, 158, 11, 0.4); border-radius: 12px; font-size: 12px; font-weight: 900;">
+          <span id="lblSeleccionBadge" style="padding: 6px 12px; background: rgba(245, 158, 11, 0.2); color: #fde68a; border: 1px solid rgba(245, 158, 11, 0.4); border-radius: 12px; font-size: 12px; font-weight: 900;">
             Mesa 3 • Silla 1
           </span>
         </div>
 
-        <!-- CHAIR SELECTOR TABS -->
-        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;">
-          <button onclick="window.activarSilla(1)" id="tab-s1" style="padding: 10px; background: #f59e0b; color: #0f172a; font-weight: 900; font-size: 12px; border-radius: 12px; border: none; cursor: pointer; text-align: center;">Silla 1</button>
-          <button onclick="window.activarSilla(2)" id="tab-s2" style="padding: 10px; background: #1e293b; color: #cbd5e1; font-weight: 700; font-size: 12px; border-radius: 12px; border: none; cursor: pointer; text-align: center;">Silla 2</button>
-          <button onclick="window.activarSilla(3)" id="tab-s3" style="padding: 10px; background: #1e293b; color: #cbd5e1; font-weight: 700; font-size: 12px; border-radius: 12px; border: none; cursor: pointer; text-align: center;">Silla 3</button>
-          <button onclick="window.activarSilla(4)" id="tab-s4" style="padding: 10px; background: #1e293b; color: #cbd5e1; font-weight: 700; font-size: 12px; border-radius: 12px; border: none; cursor: pointer; text-align: center;">Silla 4</button>
-        </div>
-
-        <!-- CONSUMPTION ITEMS BOX -->
+        <!-- ITEMS DETAIL CONTAINER -->
         <div style="background: #020617; padding: 16px; border-radius: 14px; border: 1px solid #1e293b; display: flex; flex-direction: column; gap: 12px;">
           <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 8px; border-bottom: 1px solid #1e293b;">
-            <span style="font-size: 12px; font-weight: 700; color: #cbd5e1;">Platillos en <span style="color: #f59e0b; font-weight: 900;" id="lblSillaActiva">Silla 1</span>:</span>
-            <span style="padding: 2px 8px; border-radius: 6px; background: rgba(16, 185, 129, 0.2); color: #34d399; font-size: 10px; font-weight: 800; text-transform: uppercase;">En Preparación</span>
+            <span style="font-size: 12px; font-weight: 700; color: #cbd5e1;" id="lblItemsHeader">Consumos en Silla 1:</span>
+            <span id="lblItemsEstado" style="padding: 2px 8px; border-radius: 6px; background: rgba(16, 185, 129, 0.2); color: #34d399; font-size: 10px; font-weight: 800; text-transform: uppercase;">Activa</span>
           </div>
 
-          <div style="display: flex; justify-content: space-between; align-items: center; background: #0f172a; padding: 10px 12px; border-radius: 10px; border: 1px solid #1e293b;">
-            <div>
-              <span style="font-size: 12px; font-weight: 700; color: #ffffff; display: block;">1x Chilaquiles Verdes con Pollo</span>
-              <span style="font-size: 10px; color: #94a3b8; font-style: italic;">Sin cebolla • Salsa verde aparte</span>
-            </div>
-            <span style="font-size: 13px; font-weight: 900; color: #34d399; margin-left: 8px;">$148.00</span>
+          <div id="containerItemsList" style="display: flex; flex-direction: column; gap: 8px; max-height: 220px; overflow-y: auto;">
+            <!-- Items rendered dynamically -->
           </div>
 
           <div style="padding-top: 8px; border-top: 1px solid #1e293b; display: flex; justify-content: space-between; font-weight: 900; font-size: 14px; color: #ffffff;">
-            <span>Subtotal Silla:</span>
-            <span style="color: #34d399;">$148.00</span>
+            <span id="lblTotalLabel">Subtotal Silla:</span>
+            <span style="color: #34d399;" id="lblTotalMonto">$148.00</span>
           </div>
         </div>
       </div>
 
       <!-- ACTION BUTTONS -->
       <div style="display: flex; flex-direction: column; gap: 10px;">
-        <button onclick="window.abrirMenuGourmet()" style="width: 100%; padding: 12px; background: linear-gradient(135deg, #059669, #0d9488); color: #ffffff; font-weight: 800; font-size: 12px; border-radius: 12px; border: none; cursor: pointer; box-shadow: 0 10px 15px -3px rgba(5, 150, 105, 0.4); display: flex; align-items: center; justify-content: center; gap: 8px;">
-          <i class="fa-solid fa-plus-circle"></i> Agregar Platillo / Bebida a Silla
+        <button onclick="window.abrirMenuGourmet()" id="btnAgregarPlatillo" style="width: 100%; padding: 12px; background: linear-gradient(135deg, #059669, #0d9488); color: #ffffff; font-weight: 800; font-size: 12px; border-radius: 12px; border: none; cursor: pointer; box-shadow: 0 10px 15px -3px rgba(5, 150, 105, 0.4); display: flex; align-items: center; justify-content: center; gap: 8px;">
+          <i class="fa-solid fa-plus-circle"></i> Agregar Platillo / Bebida
         </button>
-        <button onclick="alert('Comanda enviada a Cocina (KDS)')" style="width: 100%; padding: 10px; background: #f59e0b; color: #0f172a; font-weight: 900; font-size: 12px; border-radius: 12px; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
+        <button onclick="window.enviarCocinaKDS()" id="btnEnviarCocina" style="width: 100%; padding: 10px; background: #f59e0b; color: #0f172a; font-weight: 900; font-size: 12px; border-radius: 12px; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
           <i class="fa-solid fa-fire"></i> Enviar Comanda a Cocina (KDS)
         </button>
-        <button onclick="alert('Solicitando Precuenta Separada')" style="width: 100%; padding: 10px; background: #1e293b; color: #cbd5e1; font-weight: 700; font-size: 12px; border-radius: 12px; border: 1px solid #334155; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
-          <i class="fa-solid fa-receipt" style="color: #38bdf8;"></i> Precuenta Separada por Silla
+        <button onclick="window.solicitarPrecuenta()" id="btnPrecuenta" style="width: 100%; padding: 10px; background: #1e293b; color: #cbd5e1; font-weight: 700; font-size: 12px; border-radius: 12px; border: 1px solid #334155; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
+          <i class="fa-solid fa-receipt" style="color: #38bdf8;"></i> Solicitar Precuenta
         </button>
       </div>
 
@@ -185,34 +276,282 @@
 </div>
 
 <script>
-  window.mesaSeleccionada = 3;
-  window.sillaSeleccionada = 1;
-
-  window.seleccionarMesaSilla = function(mesaNum, sillaNum) {
-    window.mesaSeleccionada = mesaNum;
-    window.sillaSeleccionada = sillaNum;
-    const badge = document.getElementById('activeSeatBadge');
-    if (badge) badge.innerText = 'Mesa ' + mesaNum + ' • Silla ' + sillaNum;
-    window.activarSilla(sillaNum);
+  // Global State for Cuentas per Chair in La Palapa
+  window.palapaState = {
+    mesaSeleccionadaId: 3,
+    sillaSeleccionadaNum: 1, // null if full table selected
+    cuentas: {
+      '3-1': {
+        estado: 'ocupada',
+        items: [
+          { id: 4, nombre: 'Chilaquiles Verdes con Pollo', notas: 'Sin cebolla • Salsa verde aparte', precio: 148.00, cantidad: 1 }
+        ]
+      },
+      '3-2': {
+        estado: 'ocupada',
+        items: [
+          { id: 1, nombre: 'Café Capuchino Especial V&S', notas: 'Con leche de almendras', precio: 68.00, cantidad: 1 }
+        ]
+      }
+    }
   };
 
-  window.activarSilla = function(num) {
-    window.sillaSeleccionada = num;
-    const lbl = document.getElementById('lblSillaActiva');
-    if (lbl) lbl.innerText = 'Silla ' + num;
-    for (let i = 1; i <= 4; i++) {
-      const tab = document.getElementById('tab-s' + i);
-      if (tab) {
-        if (i === num) {
-          tab.style.background = "#f59e0b";
-          tab.style.color = "#0f172a";
-          tab.style.fontWeight = "900";
-        } else {
-          tab.style.background = "#1e293b";
-          tab.style.color = "#cbd5e1";
-          tab.style.fontWeight = "700";
+  // Drag & Drop State
+  window.draggedSource = null; // { mesaId, sillaNum }
+
+  window.handleDragStart = function(event, mesaId, sillaNum) {
+    const key = `${mesaId}-${sillaNum}`;
+    const cuenta = window.palapaState.cuentas[key];
+    if (!cuenta || !cuenta.items || cuenta.items.length === 0) {
+      event.preventDefault(); // Don't drag empty chairs
+      return;
+    }
+    window.draggedSource = { mesaId, sillaNum };
+    event.dataTransfer.setData('text/plain', JSON.stringify(window.draggedSource));
+    event.dataTransfer.effectAllowed = 'move';
+  };
+
+  window.handleDragOver = function(event) {
+    event.preventDefault();
+    event.dataTransfer.dropEffect = 'move';
+    const target = event.currentTarget;
+    if (target && !target.classList.contains('drag-over')) {
+      target.classList.add('drag-over');
+    }
+  };
+
+  window.handleDragLeave = function(event) {
+    const target = event.currentTarget;
+    if (target) {
+      target.classList.remove('drag-over');
+    }
+  };
+
+  window.handleDrop = function(event, targetMesaId, targetSillaNum) {
+    event.preventDefault();
+    const target = event.currentTarget;
+    if (target) target.classList.remove('drag-over');
+
+    if (!window.draggedSource) return;
+
+    const sourceMesa = window.draggedSource.mesaId;
+    const sourceSilla = window.draggedSource.sillaNum;
+
+    if (sourceMesa === targetMesaId && sourceSilla === targetSillaNum) return; // Same chair
+
+    const sourceKey = `${sourceMesa}-${sourceSilla}`;
+    const targetKey = `${targetMesaId}-${targetSillaNum}`;
+
+    const sourceCuenta = window.palapaState.cuentas[sourceKey];
+    const targetCuenta = window.palapaState.cuentas[targetKey];
+
+    if (!sourceCuenta || !sourceCuenta.items || sourceCuenta.items.length === 0) return;
+
+    if (targetCuenta && targetCuenta.items && targetCuenta.items.length > 0) {
+      // Target is occupied -> Ask to merge
+      if (confirm(`¿Deseas combinar la cuenta de la Silla ${sourceSilla} con la Silla ${targetSillaNum} en Mesa ${targetMesaId}?`)) {
+        targetCuenta.items = targetCuenta.items.concat(sourceCuenta.items);
+        delete window.palapaState.cuentas[sourceKey];
+        window.showToast(`Cuentas combinadas exitosamente en Mesa ${targetMesaId} Silla ${targetSillaNum}`);
+      }
+    } else {
+      # Target is empty -> Transfer account complete
+      window.palapaState.cuentas[targetKey] = sourceCuenta;
+      delete window.palapaState.cuentas[sourceKey];
+      window.showToast(`Cuenta movida de Silla ${sourceSilla} a Silla ${targetSillaNum} (Mesa ${targetMesaId})`);
+    }
+
+    window.draggedSource = null;
+    window.seleccionarSilla(targetMesaId, targetSillaNum);
+    window.renderFloorplanState();
+  };
+
+  window.showToast = function(msg) {
+    const toast = document.getElementById('toastNotification');
+    const txt = document.getElementById('toastText');
+    if (toast && txt) {
+      txt.innerHTML = `<i class="fa-solid fa-circle-check mr-2"></i> ${msg}`;
+      toast.style.display = 'flex';
+      setTimeout(() => { toast.style.display = 'none'; }, 4000);
+    }
+  };
+
+  window.seleccionarSilla = function(mesaId, sillaNum) {
+    window.palapaState.mesaSeleccionadaId = mesaId;
+    window.palapaState.sillaSeleccionadaNum = sillaNum;
+    window.renderFloorplanState();
+    window.renderPanelMirror();
+  };
+
+  window.seleccionarMesa = function(mesaId) {
+    window.palapaState.mesaSeleccionadaId = mesaId;
+    window.palapaState.sillaSeleccionadaNum = null; // Full table
+    window.renderFloorplanState();
+    window.renderPanelMirror();
+  };
+
+  window.renderFloorplanState = function() {
+    // Render status for each mesa and chair
+    for (let m = 1; m <= 3; m++) {
+      let busyCount = 0;
+      for (let s = 1; s <= 4; s++) {
+        const key = `${m}-${s}`;
+        const chairEl = document.getElementById(`chair-${m}-${s}`);
+        const cuenta = window.palapaState.cuentas[key];
+        const isOccupied = (cuenta && cuenta.items && cuenta.items.length > 0);
+        
+        if (isOccupied) busyCount++;
+
+        if (chairEl) {
+          // Reset classes
+          chairEl.className = `chair-node chair-${s === 1 ? 'top' : s === 2 ? 'right' : s === 3 ? 'bottom' : 'left'}`;
+          
+          if (isOccupied) {
+            chairEl.classList.add('chair-busy');
+          } else {
+            chairEl.classList.add('chair-free');
+          }
+
+          // Is selected?
+          if (window.palapaState.mesaSeleccionadaId === m && window.palapaState.sillaSeleccionadaNum === s) {
+            chairEl.classList.add('chair-selected');
+          }
         }
       }
+
+      // Update table circle & label
+      const circle = document.getElementById(`table-circle-${m}`);
+      const statusText = document.getElementById(`table-status-${m}`);
+      const labelText = document.getElementById(`table-label-${m}`);
+
+      if (circle) {
+        if (window.palapaState.mesaSeleccionadaId === m && window.palapaState.sillaSeleccionadaNum === null) {
+          circle.classList.add('table-selected');
+        } else {
+          circle.classList.remove('table-selected');
+        }
+
+        if (busyCount > 0) {
+          circle.style.background = "#78350f";
+          circle.style.border = "4px solid #f59e0b";
+          if (statusText) statusText.innerText = `${busyCount} Ocupada${busyCount > 1 ? 's' : ''}`;
+          if (labelText) {
+            labelText.style.color = "#fbbf24";
+            labelText.innerText = `🟡 Ocupada (${busyCount} Comensales)`;
+          }
+        } else {
+          circle.style.background = "#064e3b";
+          circle.style.border = "4px solid #10b981";
+          if (statusText) statusText.innerText = `Libre`;
+          if (labelText) {
+            labelText.style.color = "#34d399";
+            labelText.innerText = `🟢 Disponible`;
+          }
+        }
+      }
+    }
+  };
+
+  window.renderPanelMirror = function() {
+    const mesaId = window.palapaState.mesaSeleccionadaId;
+    const sillaNum = window.palapaState.sillaSeleccionadaNum;
+    
+    const badge = document.getElementById('lblSeleccionBadge');
+    const title = document.getElementById('lblPanelTitulo');
+    const subtitle = document.getElementById('lblPanelSubtitulo');
+    const itemsHeader = document.getElementById('lblItemsHeader');
+    const container = document.getElementById('containerItemsList');
+    const totalLabel = document.getElementById('lblTotalLabel');
+    const totalMonto = document.getElementById('lblTotalMonto');
+
+    if (!container) return;
+    container.innerHTML = '';
+
+    if (sillaNum !== null) {
+      // SILLA INDIVIDUAL SELECTED
+      const key = `${mesaId}-${sillaNum}`;
+      const cuenta = window.palapaState.cuentas[key] || { items: [] };
+
+      if (badge) badge.innerText = `Mesa ${mesaId} • Silla ${sillaNum}`;
+      if (title) title.innerHTML = `<i class="fa-solid fa-chair" style="color: #f59e0b;"></i> Cuenta Silla ${sillaNum}`;
+      if (subtitle) subtitle.innerText = `Mesa ${mesaId} • Asignación individual`;
+      if (itemsHeader) itemsHeader.innerText = `Consumos en Silla ${sillaNum}:`;
+
+      let total = 0;
+      if (!cuenta.items || cuenta.items.length === 0) {
+        container.innerHTML = `<div style="text-align: center; padding: 20px; color: #64748b; font-size: 12px;">Silla vacía. Haz clic en "Agregar Platillo" para abrir la comanda.</div>`;
+      } else {
+        cuenta.items.forEach((item, idx) => {
+          const sub = item.precio * item.cantidad;
+          total += sub;
+          const row = document.createElement('div');
+          row.style.cssText = 'display: flex; justify-content: space-between; align-items: center; background: #0f172a; padding: 10px 12px; border-radius: 10px; border: 1px solid #1e293b;';
+          row.innerHTML = `
+            <div>
+              <span style="font-size: 12px; font-weight: 700; color: #ffffff; display: block;">${item.cantidad}x ${item.nombre}</span>
+              <span style="font-size: 10px; color: #94a3b8; font-style: italic;">${item.notas || ''}</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="font-size: 13px; font-weight: 900; color: #34d399;">$${sub.toFixed(2)}</span>
+              <button onclick="window.eliminarItemSilla('${key}', ${idx})" style="background: transparent; border: none; color: #f87171; cursor: pointer;"><i class="fa-solid fa-trash-can"></i></button>
+            </div>
+          `;
+          container.appendChild(row);
+        });
+      }
+
+      if (totalLabel) totalLabel.innerText = `Subtotal Silla ${sillaNum}:`;
+      if (totalMonto) totalMonto.innerText = `$${total.toFixed(2)}`;
+
+    } else {
+      // FULL TABLE SELECTED
+      if (badge) badge.innerText = `Mesa ${mesaId} (Completa)`;
+      if (title) title.innerHTML = `<i class="fa-solid fa-border-all" style="color: #38bdf8;"></i> Resumen Mesa ${mesaId}`;
+      if (subtitle) subtitle.innerText = `Acumulado consolidado de 4 Sillas`;
+      if (itemsHeader) itemsHeader.innerText = `Todos los consumos en Mesa ${mesaId}:`;
+
+      let totalMesa = 0;
+      let countItems = 0;
+
+      for (let s = 1; s <= 4; s++) {
+        const key = `${mesaId}-${s}`;
+        const cuenta = window.palapaState.cuentas[key];
+        if (cuenta && cuenta.items && cuenta.items.length > 0) {
+          cuenta.items.forEach(item => {
+            countItems++;
+            const sub = item.precio * item.cantidad;
+            totalMesa += sub;
+            const row = document.createElement('div');
+            row.style.cssText = 'display: flex; justify-content: space-between; align-items: center; background: #0f172a; padding: 10px 12px; border-radius: 10px; border: 1px solid #1e293b;';
+            row.innerHTML = `
+              <div>
+                <span style="font-size: 12px; font-weight: 700; color: #ffffff; display: block;">${item.cantidad}x ${item.nombre}</span>
+                <span style="font-size: 10px; color: #f59e0b; font-weight: bold;">Silla ${s}</span>
+              </div>
+              <span style="font-size: 13px; font-weight: 900; color: #34d399;">$${sub.toFixed(2)}</span>
+            `;
+            container.appendChild(row);
+          });
+        }
+      }
+
+      if (countItems === 0) {
+        container.innerHTML = `<div style="text-align: center; padding: 20px; color: #64748b; font-size: 12px;">No hay consumos registrados en ninguna silla de Mesa ${mesaId}.</div>`;
+      }
+
+      if (totalLabel) totalLabel.innerText = `Total Acumulado Mesa ${mesaId}:`;
+      if (totalMonto) totalMonto.innerText = `$${totalMesa.toFixed(2)}`;
+    }
+  };
+
+  window.eliminarItemSilla = function(key, idx) {
+    if (window.palapaState.cuentas[key] && window.palapaState.cuentas[key].items) {
+      window.palapaState.cuentas[key].items.splice(idx, 1);
+      if (window.palapaState.cuentas[key].items.length === 0) {
+        delete window.palapaState.cuentas[key];
+      }
+      window.renderFloorplanState();
+      window.renderPanelMirror();
     }
   };
 
@@ -220,8 +559,16 @@
     if (window.navMenu) {
       window.navMenu('menu');
     } else {
-      alert('Abriendo catálogo de menú gourmet');
+      alert(`Abriendo menú gourmet para Mesa ${window.palapaState.mesaSeleccionadaId} Silla ${window.palapaState.sillaSeleccionadaNum}`);
     }
+  };
+
+  window.enviarCocinaKDS = function() {
+    window.showToast(`Comanda enviada a Cocina (KDS) para Mesa ${window.palapaState.mesaSeleccionadaId}`);
+  };
+
+  window.solicitarPrecuenta = function() {
+    window.showToast(`Imprimiendo precuenta para Mesa ${window.palapaState.mesaSeleccionadaId}`);
   };
 
   window.cambiarArea = function(area) {
@@ -231,4 +578,10 @@
       alert('Cargando área: ' + area);
     }
   };
+
+  // Initial render
+  setTimeout(() => {
+    window.renderFloorplanState();
+    window.renderPanelMirror();
+  }, 100);
 </script>
