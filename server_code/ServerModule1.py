@@ -25,6 +25,15 @@ SEED_PRODUCTOS = [
     {"id": 9, "categoria_nombre": "Bebidas & Coctelería de Autor", "nombre": "Limonada Botánica de Hierbabuena & Jengibre", "descripcion": "Agua mineral infundida con jengibre fresco y hierbabuena", "precio_unitario": 60.00, "estacion_preparacion": "barra_cafe", "icono": "🍋"}
 ]
 
+SEED_MESAS = [
+    {"id": 1, "area_nombre": "Terraza Principal", "numero_mesa": 1, "nombre": "Mesa 1", "capacidad_sillas": 4, "estado": "disponible"},
+    {"id": 2, "area_nombre": "Terraza Principal", "numero_mesa": 2, "nombre": "Mesa 2", "capacidad_sillas": 4, "estado": "disponible"},
+    {"id": 3, "area_nombre": "Terraza Principal", "numero_mesa": 3, "nombre": "Mesa 3", "capacidad_sillas": 4, "estado": "ocupada"},
+    {"id": 4, "area_nombre": "Jardín Exterior", "numero_mesa": 4, "nombre": "Mesa 4", "capacidad_sillas": 4, "estado": "disponible"},
+    {"id": 5, "area_nombre": "Jardín Exterior", "numero_mesa": 5, "nombre": "Mesa 5", "capacidad_sillas": 6, "estado": "disponible"},
+    {"id": 6, "area_nombre": "Barra de Café", "numero_mesa": 6, "nombre": "Mesa 6", "capacidad_sillas": 2, "estado": "disponible"}
+]
+
 @anvil.server.callable
 def get_kpis_terraza():
     return {"ventas_dia": 4850.00, "mesas_activas": 3, "comandas_pendientes_cocina": 2}
@@ -48,6 +57,16 @@ def get_productos_terraza():
     except Exception as e:
         print('Uplink get_productos exception:', e)
     return SEED_PRODUCTOS
+
+@anvil.server.callable
+def get_mesas_terraza():
+    try:
+        res = anvil.server.call('uplink_get_mesas')
+        if res and len(res) > 0:
+            return res
+    except Exception as e:
+        print('Uplink get_mesas exception:', e)
+    return SEED_MESAS
 
 @anvil.server.callable
 def procesar_cobro_terraza(metodo_pago, items_carrito):

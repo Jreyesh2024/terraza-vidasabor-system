@@ -1,0 +1,264 @@
+<anvil-form container="HtmlTemplate">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <div class="min-h-screen bg-[#090d16] text-slate-100 p-4 md:p-6 font-sans">
+    <!-- TOP BAR NAV SWITCHER -->
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 pb-4 border-b border-slate-800 mb-6">
+      <div class="flex items-center gap-3">
+        <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-emerald-500 to-teal-700 flex items-center justify-center text-2xl text-white font-black shadow-lg shadow-emerald-500/20">
+          <i class="fa-solid fa-map-location-dot"></i>
+        </div>
+        <div>
+          <h1 class="text-xl font-extrabold text-white tracking-wide">Croquis POS Mesero & Comandas por Silla</h1>
+          <p class="text-xs text-emerald-400 font-medium">La Terraza de Vida & Sabor • Selección Visual de Mesas y Sillas (iPad / Tablet Staff)</p>
+        </div>
+      </div>
+      
+      <!-- MODE SWITCHER BUTTONS -->
+      <div class="flex flex-wrap gap-2 overflow-x-auto w-full md:w-auto">
+        <button onclick="window.navMenu && window.navMenu('menu')" class="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold rounded-xl border border-slate-700 transition flex items-center gap-1.5">
+          <i class="fa-solid fa-mobile-screen-button text-emerald-400"></i> Cliente QR
+        </button>
+        <button class="px-3.5 py-2 bg-emerald-600 text-white text-xs font-bold rounded-xl shadow-lg shadow-emerald-950/40 flex items-center gap-1.5 border border-emerald-500">
+          <i class="fa-solid fa-chair text-amber-300"></i> POS Croquis
+        </button>
+        <button onclick="window.navMenu && window.navMenu('monitor_cocina')" class="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold rounded-xl border border-slate-700 transition flex items-center gap-1.5">
+          <i class="fa-solid fa-fire text-amber-400"></i> Cocina KDS
+        </button>
+        <button onclick="window.navMenu && window.navMenu('monitor_fiscal')" class="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold rounded-xl border border-slate-700 transition flex items-center gap-1.5">
+          <i class="fa-solid fa-chart-pie text-sky-400"></i> Fiscal
+        </button>
+        <button onclick="window.navMenu && window.navMenu('clientes_lealtad')" class="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold rounded-xl border border-slate-700 transition flex items-center gap-1.5">
+          <i class="fa-solid fa-award text-purple-400"></i> Rewards
+        </button>
+      </div>
+    </div>
+
+    <!-- AREA FILTER TABS -->
+    <div class="flex gap-2 overflow-x-auto pb-4 mb-6 scrollbar-none">
+      <button onclick="filtrarArea('todas')" id="tab-todas" class="area-tab px-4 py-2 bg-emerald-600 text-white font-bold text-xs rounded-xl shadow-md flex items-center gap-2 transition">
+        <i class="fa-solid fa-layer-group"></i> Todas las Áreas
+      </button>
+      <button onclick="filtrarArea('Terraza Principal')" id="tab-terraza" class="area-tab px-4 py-2 bg-slate-900 hover:bg-slate-800 text-slate-300 font-semibold text-xs rounded-xl border border-slate-800 flex items-center gap-2 transition">
+        <i class="fa-solid fa-cloud-sun text-emerald-400"></i> Terraza Principal
+      </button>
+      <button onclick="filtrarArea('Jardín Exterior')" id="tab-jardin" class="area-tab px-4 py-2 bg-slate-900 hover:bg-slate-800 text-slate-300 font-semibold text-xs rounded-xl border border-slate-800 flex items-center gap-2 transition">
+        <i class="fa-solid fa-tree text-amber-400"></i> Jardín Exterior
+      </button>
+      <button onclick="filtrarArea('Barra de Café')" id="tab-barra" class="area-tab px-4 py-2 bg-slate-900 hover:bg-slate-800 text-slate-300 font-semibold text-xs rounded-xl border border-slate-800 flex items-center gap-2 transition">
+        <i class="fa-solid fa-mug-hot text-purple-400"></i> Barra de Café
+      </button>
+    </div>
+
+    <!-- MAIN GRID: MAP & CHAIR PANEL -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <!-- LEFT 2 COLS: GRAPHICAL TABLES LAYOUT -->
+      <div class="lg:col-span-2 space-y-6">
+        <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-6 shadow-xl backdrop-blur-xl space-y-6">
+          <div class="flex justify-between items-center pb-3 border-b border-slate-800">
+            <h2 class="text-sm font-extrabold text-white flex items-center gap-2">
+              <i class="fa-solid fa-border-all text-emerald-400"></i> Distribución de Mesas en Vivo
+            </h2>
+            <div class="flex gap-3 text-[11px] font-bold">
+              <span class="flex items-center gap-1.5 text-emerald-400"><span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span> Disponible</span>
+              <span class="flex items-center gap-1.5 text-amber-400"><span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span> Ocupada</span>
+              <span class="flex items-center gap-1.5 text-sky-400"><span class="w-2.5 h-2.5 rounded-full bg-sky-500"></span> Comanda</span>
+            </div>
+          </div>
+
+          <!-- MESAS CARDS CONTAINER -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-6" id="mesasGridContainer">
+            <!-- Mesa 1 -->
+            <div onclick="seleccionarMesa(1, 'Terraza Principal', 4, 'disponible')" class="mesa-card bg-slate-800/80 border-2 border-emerald-500/40 hover:border-emerald-400 p-5 rounded-2xl cursor-pointer transition shadow-lg space-y-4 relative overflow-hidden group">
+              <div class="flex justify-between items-center">
+                <div>
+                  <span class="text-xs text-emerald-400 font-bold uppercase tracking-wider">Mesa 1</span>
+                  <h3 class="text-base font-black text-white">Terraza Principal</h3>
+                </div>
+                <span class="px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-[10px] font-bold uppercase">Disponible</span>
+              </div>
+              <div class="flex justify-center items-center py-4 bg-slate-900/60 rounded-xl relative">
+                <!-- Table Circle Graphic -->
+                <div class="w-20 h-20 rounded-full border-4 border-emerald-500/60 bg-emerald-950/40 flex items-center justify-center text-white font-black text-lg shadow-inner">
+                  M1
+                </div>
+                <!-- 4 Chairs visual around table -->
+                <div class="absolute top-2 left-1/2 -translate-x-1/2 px-2 py-0.5 rounded bg-emerald-600/80 text-white text-[10px] font-bold">Silla 1</div>
+                <div class="absolute bottom-2 left-1/2 -translate-x-1/2 px-2 py-0.5 rounded bg-emerald-600/80 text-white text-[10px] font-bold">Silla 3</div>
+                <div class="absolute left-2 top-1/2 -translate-y-1/2 px-1.5 py-1 rounded bg-emerald-600/80 text-white text-[10px] font-bold">S2</div>
+                <div class="absolute right-2 top-1/2 -translate-y-1/2 px-1.5 py-1 rounded bg-emerald-600/80 text-white text-[10px] font-bold">S4</div>
+              </div>
+              <div class="text-center text-xs text-slate-400 font-medium group-hover:text-emerald-300 transition">
+                Capacidad: 4 Comensales • Toca para seleccionar sillas
+              </div>
+            </div>
+
+            <!-- Mesa 3 (Ocupada) -->
+            <div onclick="seleccionarMesa(3, 'Terraza Principal', 4, 'ocupada')" class="mesa-card bg-slate-800/80 border-2 border-amber-500/60 hover:border-amber-400 p-5 rounded-2xl cursor-pointer transition shadow-lg space-y-4 relative overflow-hidden group">
+              <div class="flex justify-between items-center">
+                <div>
+                  <span class="text-xs text-amber-400 font-bold uppercase tracking-wider">Mesa 3</span>
+                  <h3 class="text-base font-black text-white">Terraza Principal</h3>
+                </div>
+                <span class="px-2.5 py-1 rounded-lg bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[10px] font-bold uppercase">Ocupada (2)</span>
+              </div>
+              <div class="flex justify-center items-center py-4 bg-slate-900/60 rounded-xl relative">
+                <div class="w-20 h-20 rounded-full border-4 border-amber-500/80 bg-amber-950/50 flex items-center justify-center text-amber-300 font-black text-lg shadow-inner">
+                  M3
+                </div>
+                <div class="absolute top-2 left-1/2 -translate-x-1/2 px-2 py-0.5 rounded bg-amber-500 text-slate-950 font-bold text-[10px]">Silla 1</div>
+                <div class="absolute bottom-2 left-1/2 -translate-x-1/2 px-2 py-0.5 rounded bg-slate-700 text-slate-400 font-bold text-[10px]">Silla 3</div>
+                <div class="absolute left-2 top-1/2 -translate-y-1/2 px-1.5 py-1 rounded bg-amber-500 text-slate-950 font-bold text-[10px]">S2</div>
+                <div class="absolute right-2 top-1/2 -translate-y-1/2 px-1.5 py-1 rounded bg-slate-700 text-slate-400 font-bold text-[10px]">S4</div>
+              </div>
+              <div class="text-center text-xs text-amber-300/90 font-semibold">
+                2 Comensales sentados • Comanda en curso
+              </div>
+            </div>
+
+            <!-- Mesa 5 (Jardín Exterior) -->
+            <div onclick="seleccionarMesa(5, 'Jardín Exterior', 6, 'disponible')" class="mesa-card bg-slate-800/80 border-2 border-emerald-500/40 hover:border-emerald-400 p-5 rounded-2xl cursor-pointer transition shadow-lg space-y-4 relative overflow-hidden group">
+              <div class="flex justify-between items-center">
+                <div>
+                  <span class="text-xs text-emerald-400 font-bold uppercase tracking-wider">Mesa 5</span>
+                  <h3 class="text-base font-black text-white">Jardín Exterior</h3>
+                </div>
+                <span class="px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-[10px] font-bold uppercase">Disponible</span>
+              </div>
+              <div class="flex justify-center items-center py-4 bg-slate-900/60 rounded-xl relative">
+                <div class="w-24 h-16 rounded-2xl border-4 border-emerald-500/60 bg-emerald-950/40 flex items-center justify-center text-white font-black text-lg shadow-inner">
+                  M5
+                </div>
+              </div>
+              <div class="text-center text-xs text-slate-400 font-medium group-hover:text-emerald-300 transition">
+                Capacidad: 6 Comensales (Mesa Familiar)
+              </div>
+            </div>
+
+            <!-- Mesa 6 (Barra de Café) -->
+            <div onclick="seleccionarMesa(6, 'Barra de Café', 2, 'disponible')" class="mesa-card bg-slate-800/80 border-2 border-emerald-500/40 hover:border-emerald-400 p-5 rounded-2xl cursor-pointer transition shadow-lg space-y-4 relative overflow-hidden group">
+              <div class="flex justify-between items-center">
+                <div>
+                  <span class="text-xs text-purple-400 font-bold uppercase tracking-wider">Mesa 6 (Periquera)</span>
+                  <h3 class="text-base font-black text-white">Barra de Café</h3>
+                </div>
+                <span class="px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-[10px] font-bold uppercase">Disponible</span>
+              </div>
+              <div class="flex justify-center items-center py-4 bg-slate-900/60 rounded-xl relative">
+                <div class="w-16 h-16 rounded-xl border-4 border-purple-500/60 bg-purple-950/40 flex items-center justify-center text-purple-300 font-black text-lg shadow-inner">
+                  M6
+                </div>
+              </div>
+              <div class="text-center text-xs text-slate-400 font-medium group-hover:text-purple-300 transition">
+                Capacidad: 2 Periqueras
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT COL: SILLA SELECTOR & QUICK ORDER PANEL -->
+      <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-6 shadow-xl backdrop-blur-xl flex flex-col justify-between space-y-6">
+        <div class="space-y-4">
+          <div class="flex justify-between items-center pb-3 border-b border-slate-800">
+            <h2 class="text-sm font-extrabold text-white flex items-center gap-2">
+              <i class="fa-solid fa-chair text-amber-400"></i> Detalle por Silla / Comensal
+            </h2>
+            <span id="selectedMesaBadge" class="px-2.5 py-1 bg-amber-500/20 text-amber-300 border border-amber-500/40 rounded-lg text-xs font-bold">
+              Mesa 3 • Terraza
+            </span>
+          </div>
+
+          <!-- SILLAS TOGGLE BUTTONS -->
+          <div>
+            <label class="text-xs text-slate-400 font-bold block mb-2">Selecciona la Silla / Comensal:</label>
+            <div class="grid grid-cols-2 gap-2.5" id="sillasGridContainer">
+              <button onclick="toggleSilla(1)" id="silla-btn-1" class="silla-btn p-3 rounded-xl border-2 border-amber-500 bg-amber-500/20 text-amber-300 font-bold text-xs flex items-center justify-between transition">
+                <span><i class="fa-solid fa-user mr-1.5"></i> Silla 1</span>
+                <i class="fa-solid fa-circle-check text-amber-400 text-sm"></i>
+              </button>
+              <button onclick="toggleSilla(2)" id="silla-btn-2" class="silla-btn p-3 rounded-xl border-2 border-amber-500 bg-amber-500/20 text-amber-300 font-bold text-xs flex items-center justify-between transition">
+                <span><i class="fa-solid fa-user mr-1.5"></i> Silla 2</span>
+                <i class="fa-solid fa-circle-check text-amber-400 text-sm"></i>
+              </button>
+              <button onclick="toggleSilla(3)" id="silla-btn-3" class="silla-btn p-3 rounded-xl border border-slate-700 bg-slate-800/60 text-slate-400 font-semibold text-xs flex items-center justify-between hover:border-slate-600 transition">
+                <span><i class="fa-solid fa-user mr-1.5"></i> Silla 3</span>
+                <i class="fa-regular fa-circle text-slate-600 text-sm"></i>
+              </button>
+              <button onclick="toggleSilla(4)" id="silla-btn-4" class="silla-btn p-3 rounded-xl border border-slate-700 bg-slate-800/60 text-slate-400 font-semibold text-xs flex items-center justify-between hover:border-slate-600 transition">
+                <span><i class="fa-solid fa-user mr-1.5"></i> Silla 4</span>
+                <i class="fa-regular fa-circle text-slate-600 text-sm"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- SUMMARY OF CURRENT CHAIR ITEMS -->
+          <div class="bg-slate-950/60 border border-slate-800 rounded-xl p-4 space-y-3">
+            <span class="text-xs font-bold text-slate-300 block border-b border-slate-800 pb-2">
+              Items asignados a <span class="text-amber-400 font-black">Silla 1 & 2</span>:
+            </span>
+            <div class="space-y-2 text-xs font-medium text-slate-300">
+              <div class="flex justify-between items-center">
+                <span>1x Chilaquiles Verdes con Pollo (Silla 1)</span>
+                <span class="font-bold text-emerald-400">.00</span>
+              </div>
+              <div class="flex justify-between items-center">
+                <span>1x Capuchino Especial V&S (Silla 2)</span>
+                <span class="font-bold text-emerald-400">.00</span>
+              </div>
+            </div>
+            <div class="border-t border-slate-800 pt-2 flex justify-between font-black text-sm text-white">
+              <span>Total Comanda:</span>
+              <span class="text-emerald-400">.00</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ACTION LAUNCHERS -->
+        <div class="space-y-2.5 pt-4">
+          <button onclick="abrirMenuParaMesa()" class="w-full py-3 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-extrabold text-xs rounded-xl shadow-lg shadow-emerald-950/40 transition flex items-center justify-center gap-2">
+            <i class="fa-solid fa-cart-plus"></i> Levantar Comanda para Silla 1 & 2
+          </button>
+          <button onclick="alert('Comanda enviada a Cocina (KDS) para Mesa 3 - Sillas 1 y 2')" class="w-full py-3 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs rounded-xl shadow-lg shadow-amber-950/40 transition flex items-center justify-center gap-2">
+            <i class="fa-solid fa-paper-plane"></i> Enviar Comanda a Cocina (KDS)
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let mesaActual = 3;
+    let sillasSeleccionadas = [1, 2];
+
+    function seleccionarMesa(id, area, capacidad, estado) {
+      mesaActual = id;
+      document.getElementById('selectedMesaBadge').innerText = 'Mesa ' + id + ' • ' + area;
+    }
+
+    function toggleSilla(sillaNum) {
+      const idx = sillasSeleccionadas.indexOf(sillaNum);
+      if (idx > -1) {
+        sillasSeleccionadas.splice(idx, 1);
+      } else {
+        sillasSeleccionadas.push(sillaNum);
+      }
+    }
+
+    function abrirMenuParaMesa() {
+      if (window.navMenu) {
+        window.navMenu('menu');
+      }
+    }
+
+    function filtrarArea(area) {
+      document.querySelectorAll('.area-tab').forEach(el => {
+        el.className = 'area-tab px-4 py-2 bg-slate-900 hover:bg-slate-800 text-slate-300 font-semibold text-xs rounded-xl border border-slate-800 flex items-center gap-2 transition';
+      });
+      if (area === 'todas') {
+        document.getElementById('tab-todas').className = 'area-tab px-4 py-2 bg-emerald-600 text-white font-bold text-xs rounded-xl shadow-md flex items-center gap-2 transition';
+      }
+    }
+  </script>
+</anvil-form>

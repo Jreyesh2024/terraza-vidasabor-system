@@ -8,6 +8,8 @@ runtime_options:
   server_version: python3-sandbox
 forms:
 - name: Menu
+- name: POSMesero
 - name: MonitorCocina
 - name: MonitorFiscal
 - name: ClientesLealtad
+

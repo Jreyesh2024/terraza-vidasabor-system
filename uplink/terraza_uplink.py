@@ -135,6 +135,24 @@ def uplink_get_kds():
         print(f"Error en uplink_get_kds: {e}")
         return []
 
+@anvil.server.callable
+def uplink_get_mesas():
+    """Obtiene el listado de mesas con su estado y capacidad desde PostgreSQL"""
+    try:
+        conn = get_db_connection()
+        with conn.cursor() as cur:
+            cur.execute("""
+                SELECT * FROM mesas
+                ORDER BY area_nombre, numero_mesa;
+            """)
+            rows = cur.fetchall()
+        conn.close()
+        return [dict(r) for r in rows]
+    except Exception as e:
+        print(f"Error en uplink_get_mesas: {e}")
+        return []
+
+
 # ----------------------------------------------------
 # CONEXIÓN PRINCIPAL UPLINK DE ANVIL
 # ----------------------------------------------------

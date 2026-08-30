@@ -50,17 +50,23 @@
         </div>
       </div>
 
-      <!-- BOTONES DE ACCIÓN RÁPIDA DE SALA Y MÓDULOS -->
-      <div class="flex items-center gap-3">
-        <button onclick="window.navMenu('kds')" class="px-3 py-2 text-xs font-semibold rounded-xl glass-card text-emerald-400 border-emerald-500/30 hover:bg-emerald-500/10 transition">
-          <i class="fa-solid fa-fire mr-1"></i> Cocina (KDS)
+            <!-- BOTONES DE NAVEGACIÓN Y MÓDULOS DEL SISTEMA -->
+      <div class="flex flex-wrap items-center gap-2">
+        <button onclick="window.navMenu && window.navMenu('menu')" class="px-3 py-1.5 text-xs font-bold rounded-xl bg-emerald-600/30 border border-emerald-500/50 text-emerald-300 transition flex items-center gap-1.5">
+          <i class="fa-solid fa-mobile-screen-button text-emerald-400"></i> 📱 Cliente QR
         </button>
-        <button onclick="window.navMenu('fiscal')" class="px-3 py-2 text-xs font-semibold rounded-xl glass-card text-amber-400 border-amber-500/30 hover:bg-amber-500/10 transition">
-          <i class="fa-solid fa-chart-pie mr-1"></i> Monitor Fiscal
+        <button onclick="window.navMenu && window.navMenu('pos_mesero')" class="px-3 py-1.5 text-xs font-bold rounded-xl glass-card text-amber-300 border-amber-500/30 hover:bg-amber-500/10 transition flex items-center gap-1.5">
+          <i class="fa-solid fa-chair text-amber-400"></i> 📲 POS Croquis
         </button>
-        <div class="px-3 py-1.5 text-xs rounded-full bg-slate-800/80 border border-slate-700 text-slate-300 font-semibold">
-          <i class="fa-solid fa-chair text-emerald-400 mr-1"></i> Mesa 1 • Terraza Principal
-        </div>
+        <button onclick="window.navMenu && window.navMenu('monitor_cocina')" class="px-3 py-1.5 text-xs font-bold rounded-xl glass-card text-sky-300 border-sky-500/30 hover:bg-sky-500/10 transition flex items-center gap-1.5">
+          <i class="fa-solid fa-fire text-amber-400"></i> 👨‍🍳 Cocina KDS
+        </button>
+        <button onclick="window.navMenu && window.navMenu('monitor_fiscal')" class="px-3 py-1.5 text-xs font-bold rounded-xl glass-card text-slate-300 border-slate-700 hover:bg-slate-800 transition flex items-center gap-1.5">
+          <i class="fa-solid fa-chart-pie text-sky-400"></i> 🧾 Fiscal
+        </button>
+        <button onclick="window.navMenu && window.navMenu('clientes_lealtad')" class="px-3 py-1.5 text-xs font-bold rounded-xl glass-card text-purple-300 border-purple-500/30 hover:bg-purple-500/10 transition flex items-center gap-1.5">
+          <i class="fa-solid fa-award text-purple-400"></i> 💳 Rewards
+        </button>
       </div>
     </header>
 
