@@ -1,0 +1,40 @@
+/* LA TERRAZA DE VIDA & SABOR (V&S) - CORE THEME STYLES */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+
+html, body, .anvil-container, div[anvil-slot] {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
+  background-color: #090d16 !important;
+  color: #f8fafc !important;
+  margin: 0;
+  padding: 0;
+}
+
+.glass-card {
+  background: rgba(22, 30, 46, 0.85) !important;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+}
+
+.glass-nav {
+  background: rgba(15, 23, 42, 0.9) !important;
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.brand-glow {
+  box-shadow: 0 0 25px rgba(16, 185, 129, 0.4) !important;
+}
+
+/* Chair and Table Custom Styles */
+.chair-btn {
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.2s ease-in-out;
+}
+
+.chair-btn:hover {
+  transform: scale(1.1);
+}

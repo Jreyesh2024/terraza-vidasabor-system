@@ -7,32 +7,18 @@ runtime_options:
   client_version: '3'
   server_version: python3-sandbox
 native_deps: |
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="_/theme/theme.css">
   <style>
     body, .anvil-container, html {
       font-family: 'Inter', sans-serif;
       background-color: #090d16 !important;
       color: #f8fafc !important;
-      margin: 0;
-      padding: 0;
-    }
-    .glass-card {
-      background: rgba(22, 30, 46, 0.75) !important;
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 255, 255, 0.1) !important;
-    }
-    .glass-nav {
-      background: rgba(15, 23, 42, 0.85) !important;
-      backdrop-filter: blur(20px);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
-    }
-    .brand-glow {
-      box-shadow: 0 0 25px rgba(16, 185, 129, 0.3) !important;
     }
   </style>
 forms:
