@@ -1,11 +1,19 @@
 <anvil-form container="HtmlTemplate" prop:html="">
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<style>
-  body, html { background-color: #090d16 !important; color: #f8fafc !important; }
-  .glass-card { background: rgba(22, 30, 46, 0.85) !important; border: 1px solid rgba(255, 255, 255, 0.12) !important; }
-</style>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body,
+    html {
+      background-color: #090d16 !important;
+      color: #f8fafc !important;
+    }
+
+    .glass-card {
+      background: rgba(22, 30, 46, 0.85) !important;
+      border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    }
+  </style>
 
 
 
@@ -14,37 +22,43 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <style>
-    body, .anvil-container {
+    body,
+    .anvil-container {
       font-family: 'Inter', sans-serif;
       background-color: #090d16;
       color: #f8fafc;
     }
+
     .glass-card {
       background: rgba(22, 30, 46, 0.75);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
       border: 1px solid rgba(255, 255, 255, 0.1);
     }
+
     .glass-nav {
       background: rgba(15, 23, 42, 0.85);
       backdrop-filter: blur(20px);
       border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     }
+
     .brand-glow {
       box-shadow: 0 0 25px rgba(16, 185, 129, 0.3);
     }
   </style>
 
   <div class="min-h-screen bg-[#090d16] text-slate-100 flex flex-col font-sans">
-    
+
     <!-- HEADER BAR / BRANDING V&S -->
     <header class="glass-nav sticky top-0 z-50 px-6 py-4 flex items-center justify-between">
       <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-700 flex items-center justify-center font-black text-xl text-white shadow-lg brand-glow">
+        <div
+          class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-700 flex items-center justify-center font-black text-xl text-white shadow-lg brand-glow">
           V&S
         </div>
         <div>
@@ -53,21 +67,26 @@
         </div>
       </div>
 
-            <!-- BOTONES DE NAVEGACIÓN Y MÓDULOS DEL SISTEMA -->
+      <!-- BOTONES DE NAVEGACIÓN Y MÓDULOS DEL SISTEMA -->
       <div class="flex flex-wrap items-center gap-2">
-        <button onclick="window.navMenu && window.navMenu('menu')" class="px-3 py-1.5 text-xs font-bold rounded-xl bg-emerald-600/30 border border-emerald-500/50 text-emerald-300 transition flex items-center gap-1.5">
+        <button onclick="window.navMenu && window.navMenu('menu')"
+          class="px-3 py-1.5 text-xs font-bold rounded-xl bg-emerald-600/30 border border-emerald-500/50 text-emerald-300 transition flex items-center gap-1.5">
           <i class="fa-solid fa-mobile-screen-button text-emerald-400"></i> 📱 Cliente QR
         </button>
-        <button onclick="window.navMenu && window.navMenu('pos_mesero')" class="px-3 py-1.5 text-xs font-bold rounded-xl glass-card text-amber-300 border-amber-500/30 hover:bg-amber-500/10 transition flex items-center gap-1.5">
+        <button onclick="window.navMenu && window.navMenu('pos_mesero')"
+          class="px-3 py-1.5 text-xs font-bold rounded-xl glass-card text-amber-300 border-amber-500/30 hover:bg-amber-500/10 transition flex items-center gap-1.5">
           <i class="fa-solid fa-chair text-amber-400"></i> 📲 POS Croquis
         </button>
-        <button onclick="window.navMenu && window.navMenu('monitor_cocina')" class="px-3 py-1.5 text-xs font-bold rounded-xl glass-card text-sky-300 border-sky-500/30 hover:bg-sky-500/10 transition flex items-center gap-1.5">
+        <button onclick="window.navMenu && window.navMenu('monitor_cocina')"
+          class="px-3 py-1.5 text-xs font-bold rounded-xl glass-card text-sky-300 border-sky-500/30 hover:bg-sky-500/10 transition flex items-center gap-1.5">
           <i class="fa-solid fa-fire text-amber-400"></i> 👨‍🍳 Cocina KDS
         </button>
-        <button onclick="window.navMenu && window.navMenu('monitor_fiscal')" class="px-3 py-1.5 text-xs font-bold rounded-xl glass-card text-slate-300 border-slate-700 hover:bg-slate-800 transition flex items-center gap-1.5">
+        <button onclick="window.navMenu && window.navMenu('monitor_fiscal')"
+          class="px-3 py-1.5 text-xs font-bold rounded-xl glass-card text-slate-300 border-slate-700 hover:bg-slate-800 transition flex items-center gap-1.5">
           <i class="fa-solid fa-chart-pie text-sky-400"></i> 🧾 Fiscal
         </button>
-        <button onclick="window.navMenu && window.navMenu('clientes_lealtad')" class="px-3 py-1.5 text-xs font-bold rounded-xl glass-card text-purple-300 border-purple-500/30 hover:bg-purple-500/10 transition flex items-center gap-1.5">
+        <button onclick="window.navMenu && window.navMenu('clientes_lealtad')"
+          class="px-3 py-1.5 text-xs font-bold rounded-xl glass-card text-purple-300 border-purple-500/30 hover:bg-purple-500/10 transition flex items-center gap-1.5">
           <i class="fa-solid fa-award text-purple-400"></i> 💳 Rewards
         </button>
       </div>
@@ -75,20 +94,23 @@
 
     <!-- CONTENIDO PRINCIPAL DEL MENÚ DIGITAL -->
     <main class="flex-1 max-w-7xl w-full mx-auto p-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
-      
+
       <!-- SECCIÓN IZQUIERDA: CATÁLOGO Y PRODUCTOS -->
       <section class="lg:col-span-2 flex flex-col gap-6">
-        
+
         <!-- BUSCADOR & BARRA DE CATEGORÍAS -->
         <div class="flex flex-col sm:flex-row gap-4 justify-between items-center">
           <div class="relative w-full sm:w-80">
             <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3.5 text-slate-500 text-sm"></i>
-            <input type="text" id="searchInput" placeholder="Buscar platillos o bebidas..." oninput="window.filtrarProductos()" class="w-full pl-10 pr-4 py-2.5 bg-slate-900/80 border border-slate-700/80 rounded-xl text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-emerald-500 transition">
+            <input type="text" id="searchInput" placeholder="Buscar platillos o bebidas..."
+              oninput="window.filtrarProductos()"
+              class="w-full pl-10 pr-4 py-2.5 bg-slate-900/80 border border-slate-700/80 rounded-xl text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-emerald-500 transition">
           </div>
 
           <!-- CHIPS DE CATEGORÍAS -->
           <div class="flex gap-2 overflow-x-auto w-full sm:w-auto pb-1" id="categoriesChips">
-            <button onclick="window.seleccionarCategoria('Todos')" class="cat-chip active px-4 py-2 text-xs font-bold rounded-xl bg-emerald-500 text-white shadow-md shadow-emerald-500/20 whitespace-nowrap transition">
+            <button onclick="window.seleccionarCategoria('Todos')"
+              class="cat-chip active px-4 py-2 text-xs font-bold rounded-xl bg-emerald-500 text-white shadow-md shadow-emerald-500/20 whitespace-nowrap transition">
               Todos
             </button>
           </div>
@@ -114,7 +136,8 @@
               </h2>
               <p class="text-xs text-slate-400">Detalle de consumos en mesa</p>
             </div>
-            <span class="px-2.5 py-1 text-[10px] font-black rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 uppercase">
+            <span
+              class="px-2.5 py-1 text-[10px] font-black rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 uppercase">
               Abierta
             </span>
           </div>
@@ -150,10 +173,12 @@
 
           <!-- BOTONES DE COBRO MULTICANAL -->
           <div class="grid grid-cols-2 gap-2">
-            <button onclick="window.abrirModalCobro('santander')" class="py-3 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-100 text-xs font-bold border border-slate-700 transition flex items-center justify-center gap-1.5">
+            <button onclick="window.abrirModalCobro('santander')"
+              class="py-3 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-100 text-xs font-bold border border-slate-700 transition flex items-center justify-center gap-1.5">
               <i class="fa-solid fa-credit-card text-sky-400"></i> Santander
             </button>
-            <button onclick="window.abrirModalCobro('efectivo')" class="py-3 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold shadow-lg shadow-emerald-600/30 transition flex items-center justify-center gap-1.5">
+            <button onclick="window.abrirModalCobro('efectivo')"
+              class="py-3 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold shadow-lg shadow-emerald-600/30 transition flex items-center justify-center gap-1.5">
               <i class="fa-solid fa-money-bill-wave"></i> Cobrar / Ticket
             </button>
           </div>
@@ -167,42 +192,42 @@
 
   <script>
     window.vsMenuData = [
-      {id: 1, categoria_nombre: "Barra de Café & Infusiones", nombre: "Café Capuchino Especial V&S", descripcion: "Espresso doble con leche cremada artesanal y toque de canela", precio_unitario: 68.00, estacion_preparacion: "barra_cafe", icono: "☕"},
-      {id: 2, categoria_nombre: "Barra de Café & Infusiones", nombre: "Espresso Italiano Robusto", descripcion: "Grano seleccionado 100% arábica tostado de la casa", precio_unitario: 48.00, estacion_preparacion: "barra_cafe", icono: "☕"},
-      {id: 3, categoria_nombre: "Barra de Café & Infusiones", nombre: "Latte Machiatto Vainilla Bourbon", descripcion: "Espresso con leche de almendra y jarabe natural de vainilla bourbon", precio_unitario: 75.00, estacion_preparacion: "barra_cafe", icono: "🥛"},
-      {id: 4, categoria_nombre: "Desayunos & Brunch Gourmet", nombre: "Chilaquiles Verdes con Pollo y Queso Gouda", descripcion: "Totopos artesanos en salsa de tomatillo con pollo deshebrado y gouda", precio_unitario: 148.00, estacion_preparacion: "cocina", icono: "🥘"},
-      {id: 5, categoria_nombre: "Desayunos & Brunch Gourmet", nombre: "Omelette Supremo La Terraza", descripcion: "3 huevos orgánicos rellenos de portobello, espinacas baby y queso asadero", precio_unitario: 155.00, estacion_preparacion: "cocina", icono: "🍳"},
-      {id: 6, categoria_nombre: "Desayunos & Brunch Gourmet", nombre: "Molletes de Masa Madre con Chorizo", descripcion: "Pan artesano de masa madre con frijol negro, gouda y chorizo", precio_unitario: 125.00, estacion_preparacion: "cocina", icono: "🥖"},
-      {id: 7, categoria_nombre: "Especialidades Fuertes", nombre: "Rib Eye Grill V&S (350g)", descripcion: "Corte de alta calidad a las brasas servido con papas gajo y espárragos", precio_unitario: 385.00, estacion_preparacion: "cocina", icono: "🥩"},
-      {id: 8, categoria_nombre: "Especialidades Fuertes", nombre: "Pasta Fettuccine con Camarones al Trufado", descripcion: "Pasta fresca hecha en casa con camarones u-15 y crema suave de trufa", precio_unitario: 265.00, estacion_preparacion: "cocina", icono: "🍝"},
-      {id: 9, categoria_nombre: "Repostería & Postres de Autor", nombre: "Pastel Supremo de Chocolate Valrhona", descripcion: "Rebanada caliente de pastel de chocolate amargo con helado de vainilla", precio_unitario: 105.00, estacion_preparacion: "reposteria", icono: "🍰"},
-      {id: 10, categoria_nombre: "Bebidas & Coctelería de Autor", nombre: "Limonada Botánica de Hierbabuena & Jengibre", descripcion: "Agua mineral infucionada con jengibre fresco, limón eufrata y hierbabuena", precio_unitario: 60.00, estacion_preparacion: "barra_cafe", icono: "🍋"}
+      { id: 1, categoria_nombre: "Barra de Café & Infusiones", nombre: "Café Capuchino Especial V&S", descripcion: "Espresso doble con leche cremada artesanal y toque de canela", precio_unitario: 68.00, estacion_preparacion: "barra_cafe", icono: "☕" },
+      { id: 2, categoria_nombre: "Barra de Café & Infusiones", nombre: "Espresso Italiano Robusto", descripcion: "Grano seleccionado 100% arábica tostado de la casa", precio_unitario: 48.00, estacion_preparacion: "barra_cafe", icono: "☕" },
+      { id: 3, categoria_nombre: "Barra de Café & Infusiones", nombre: "Latte Machiatto Vainilla Bourbon", descripcion: "Espresso con leche de almendra y jarabe natural de vainilla bourbon", precio_unitario: 75.00, estacion_preparacion: "barra_cafe", icono: "🥛" },
+      { id: 4, categoria_nombre: "Desayunos & Brunch Gourmet", nombre: "Chilaquiles Verdes con Pollo y Queso Gouda", descripcion: "Totopos artesanos en salsa de tomatillo con pollo deshebrado y gouda", precio_unitario: 148.00, estacion_preparacion: "cocina", icono: "🥘" },
+      { id: 5, categoria_nombre: "Desayunos & Brunch Gourmet", nombre: "Omelette Supremo La Terraza", descripcion: "3 huevos orgánicos rellenos de portobello, espinacas baby y queso asadero", precio_unitario: 155.00, estacion_preparacion: "cocina", icono: "🍳" },
+      { id: 6, categoria_nombre: "Desayunos & Brunch Gourmet", nombre: "Molletes de Masa Madre con Chorizo", descripcion: "Pan artesano de masa madre con frijol negro, gouda y chorizo", precio_unitario: 125.00, estacion_preparacion: "cocina", icono: "🥖" },
+      { id: 7, categoria_nombre: "Especialidades Fuertes", nombre: "Rib Eye Grill V&S (350g)", descripcion: "Corte de alta calidad a las brasas servido con papas gajo y espárragos", precio_unitario: 385.00, estacion_preparacion: "cocina", icono: "🥩" },
+      { id: 8, categoria_nombre: "Especialidades Fuertes", nombre: "Pasta Fettuccine con Camarones al Trufado", descripcion: "Pasta fresca hecha en casa con camarones u-15 y crema suave de trufa", precio_unitario: 265.00, estacion_preparacion: "cocina", icono: "🍝" },
+      { id: 9, categoria_nombre: "Repostería & Postres de Autor", nombre: "Pastel Supremo de Chocolate Valrhona", descripcion: "Rebanada caliente de pastel de chocolate amargo con helado de vainilla", precio_unitario: 105.00, estacion_preparacion: "reposteria", icono: "🍰" },
+      { id: 10, categoria_nombre: "Bebidas & Coctelería de Autor", nombre: "Limonada Botánica de Hierbabuena & Jengibre", descripcion: "Agua mineral infucionada con jengibre fresco, limón eufrata y hierbabuena", precio_unitario: 60.00, estacion_preparacion: "barra_cafe", icono: "🍋" }
     ];
 
     window.vsCategoriasData = [
-      {id: 1, nombre: "Barra de Café & Infusiones", icono: "☕"},
-      {id: 2, nombre: "Desayunos & Brunch Gourmet", icono: "🍳"},
-      {id: 3, nombre: "Entradas & Tapas de la Terraza", icono: "🥗"},
-      {id: 4, nombre: "Especialidades Fuertes", icono: "🥩"},
-      {id: 5, nombre: "Repostería & Postres de Autor", icono: "🍰"},
-      {id: 6, nombre: "Bebidas & Coctelería de Autor", icono: "🍹"}
+      { id: 1, nombre: "Barra de Café & Infusiones", icono: "☕" },
+      { id: 2, nombre: "Desayunos & Brunch Gourmet", icono: "🍳" },
+      { id: 3, nombre: "Entradas & Tapas de la Terraza", icono: "🥗" },
+      { id: 4, nombre: "Especialidades Fuertes", icono: "🥩" },
+      { id: 5, nombre: "Repostería & Postres de Autor", icono: "🍰" },
+      { id: 6, nombre: "Bebidas & Coctelería de Autor", icono: "🍹" }
     ];
 
     window.vsCartItems = [];
     window.categoriaActual = "Todos";
 
-    window.cargarDatosMenu = function(productos, categorias) {
+    window.cargarDatosMenu = function (productos, categorias) {
       if (productos && productos.length > 0) window.vsMenuData = productos;
       if (categorias && categorias.length > 0) window.vsCategoriasData = categorias;
       window.renderCategoriasChips(window.vsCategoriasData);
       window.renderProductos();
     };
 
-    window.renderCategoriasChips = function(categorias) {
+    window.renderCategoriasChips = function (categorias) {
       const container = document.getElementById('categoriesChips');
       if (!container) return;
       container.innerHTML = `<button onclick="window.seleccionarCategoria('Todos')" class="cat-chip ${window.categoriaActual === 'Todos' ? 'active bg-emerald-500 text-white' : 'bg-slate-800/80 text-slate-400'} px-4 py-2 text-xs font-bold rounded-xl whitespace-nowrap transition">Todos</button>`;
-      
+
       categorias.forEach(cat => {
         const btn = document.createElement('button');
         const isActive = window.categoriaActual === cat.nombre;
@@ -213,18 +238,18 @@
       });
     };
 
-    window.seleccionarCategoria = function(catNombre) {
+    window.seleccionarCategoria = function (catNombre) {
       window.categoriaActual = catNombre;
       const chips = document.querySelectorAll('.cat-chip');
       chips.forEach(c => c.classList.remove('active', 'bg-emerald-500', 'text-white'));
       window.renderProductos();
     };
 
-    window.filtrarProductos = function() {
+    window.filtrarProductos = function () {
       window.renderProductos();
     };
 
-    window.renderProductos = function() {
+    window.renderProductos = function () {
       const container = document.getElementById('productsGridContainer');
       if (!container) return;
       const searchInput = document.getElementById('searchInput');
@@ -267,7 +292,7 @@
       });
     };
 
-    window.agregarAlCarrito = function(prod) {
+    window.agregarAlCarrito = function (prod) {
       const index = window.vsCartItems.findIndex(i => i.id === prod.id);
       if (index >= 0) {
         window.vsCartItems[index].cantidad += 1;
@@ -277,7 +302,7 @@
       window.renderCarrito();
     };
 
-    window.renderCarrito = function() {
+    window.renderCarrito = function () {
       const container = document.getElementById('cartItemsList');
       if (!container) return;
       container.innerHTML = '';
@@ -322,12 +347,12 @@
       if (txtTotal) txtTotal.innerText = `$${total.toFixed(2)}`;
     };
 
-    window.quitarDelCarrito = function(index) {
+    window.quitarDelCarrito = function (index) {
       window.vsCartItems.splice(index, 1);
       window.renderCarrito();
     };
 
-    window.navMenu = function(modulo) {
+    window.navMenu = function (modulo) {
       if (window.anvilAppNav) {
         window.anvilAppNav(modulo);
       } else {
@@ -335,7 +360,7 @@
       }
     };
 
-    window.abrirModalCobro = function(metodo) {
+    window.abrirModalCobro = function (metodo) {
       if (window.vsCartItems.length === 0) {
         alert('Agregue consumos antes de proceder al cobro');
         return;

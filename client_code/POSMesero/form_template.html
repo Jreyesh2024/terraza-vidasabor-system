@@ -9,6 +9,50 @@
     margin: 0 !important;
     padding: 0 !important;
   }
+
+  /* Drag & Drop Visual Styles */
+  .chair-btn-fixed[draggable="true"] {
+    cursor: grab !important;
+    user-select: none !important;
+  }
+  .chair-btn-fixed.chair-dragging {
+    opacity: 0.4 !important;
+    transform: scale(1.15) !important;
+    cursor: grabbing !important;
+    border: 2px dashed #38bdf8 !important;
+    box-shadow: 0 0 20px rgba(56, 189, 248, 0.9) !important;
+  }
+  .chair-btn-fixed.chair-drag-target-valid {
+    border: 2px solid #38bdf8 !important;
+    box-shadow: 0 0 20px #38bdf8, inset 0 0 10px rgba(56, 189, 248, 0.6) !important;
+    transform: scale(1.18) !important;
+    transition: transform 0.15s ease, box-shadow 0.15s ease !important;
+  }
+  .chair-btn-fixed.chair-drag-target-combine {
+    border: 2px solid #f59e0b !important;
+    box-shadow: 0 0 20px #f59e0b, inset 0 0 10px rgba(245, 158, 11, 0.6) !important;
+    transform: scale(1.18) !important;
+    transition: transform 0.15s ease, box-shadow 0.15s ease !important;
+  }
+
+  /* Mouse Drag Ghost Avatar */
+  #chairDragAvatar {
+    position: fixed !important;
+    z-index: 99999 !important;
+    pointer-events: none !important;
+    padding: 8px 14px !important;
+    background: #0284c7 !important;
+    color: #ffffff !important;
+    font-size: 12px !important;
+    font-weight: 800 !important;
+    border-radius: 12px !important;
+    border: 2px solid #38bdf8 !important;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.7), 0 0 20px rgba(56, 189, 248, 0.8) !important;
+    transform: translate(-50%, -50%) !important;
+    display: none;
+    align-items: center !important;
+    gap: 8px !important;
+  }
 </style>
 
 <div style="background-color: #090d16 !important; color: #f8fafc !important; font-family: 'Inter', system-ui, sans-serif !important; min-height: 100vh !important; padding: 20px !important; box-sizing: border-box !important; display: flex !important; flex-direction: column !important; gap: 20px !important;">
@@ -43,7 +87,7 @@
   <div id="moveInstructionBanner" style="display: flex !important; background: #0f172a !important; border: 1px solid #1e293b !important; color: #cbd5e1 !important; padding: 12px 18px !important; border-radius: 14px !important; font-size: 12px !important; font-weight: 600 !important; justify-content: space-between !important; align-items: center !important;">
     <div style="display: flex !important; align-items: center !important; gap: 10px !important;">
       <i id="bannerIcon" class="fa-solid fa-hand-pointer" style="color: #38bdf8 !important; font-size: 16px !important;"></i>
-      <span id="bannerText">Haz clic en cualquier <b>Silla</b> para abrir su Comanda o haz clic en <b>Mover Comensal</b> para trasladar su cuenta a otra silla/mesa.</span>
+      <span id="bannerText">Haz clic o <b>arrastra con el mouse</b> cualquier <b>Silla</b> para abrir su comanda o trasladarla a otra silla/mesa.</span>
     </div>
     <button id="btnCancelMove" style="display: none !important; padding: 4px 12px !important; background: #ef4444 !important; color: #ffffff !important; border-radius: 8px !important; border: none !important; font-weight: 800 !important; cursor: pointer !important;">
       Cancelar Movimiento
@@ -270,6 +314,149 @@
       }
     };
 
+    // Mouse Drag & Movement Gestures
+    let isMouseDown = false;
+    let isMouseDragging = false;
+    let dragSourceInfo = null;
+    let startX = 0, startY = 0;
+    let justFinishedDrag = false;
+
+    // Suppress click event if a drag just occurred
+    document.addEventListener('click', function(e) {
+      if (justFinishedDrag) {
+        e.stopImmediatePropagation();
+        e.preventDefault();
+        justFinishedDrag = false;
+        return false;
+      }
+    }, true);
+
+    document.addEventListener('mousedown', function(e) {
+      const chairNode = e.target.closest('.chair-btn-fixed');
+      if (!chairNode) return;
+
+      const parts = chairNode.id.split('-');
+      if (parts.length === 3) {
+        const mesaId = parseInt(parts[1]);
+        const sillaNum = parseInt(parts[2]);
+        const key = `${mesaId}-${sillaNum}`;
+        const cuenta = window.palapaState.cuentas[key];
+
+        if (cuenta && cuenta.items && cuenta.items.length > 0) {
+          isMouseDown = true;
+          isMouseDragging = false;
+          dragSourceInfo = { mesaId, sillaNum, chairNode, cuenta };
+          startX = e.clientX;
+          startY = e.clientY;
+        }
+      }
+    });
+
+    document.addEventListener('mousemove', function(e) {
+      if (!isMouseDown || !dragSourceInfo) return;
+
+      const dist = Math.hypot(e.clientX - startX, e.clientY - startY);
+      if (!isMouseDragging && dist > 5) {
+        isMouseDragging = true;
+        window.palapaState.modoMoverActivo = true;
+        window.palapaState.sillaOrigenMover = { mesaId: dragSourceInfo.mesaId, sillaNum: dragSourceInfo.sillaNum };
+
+        dragSourceInfo.chairNode.classList.add('chair-dragging');
+
+        let avatar = document.getElementById('chairDragAvatar');
+        if (!avatar) {
+          avatar = document.createElement('div');
+          avatar.id = 'chairDragAvatar';
+          document.body.appendChild(avatar);
+        }
+
+        let total = 0;
+        dragSourceInfo.cuenta.items.forEach(i => total += (i.precio * i.cantidad));
+        avatar.innerHTML = `<i class="fa-solid fa-chair" style="color: #38bdf8;"></i> M${dragSourceInfo.mesaId} Silla ${dragSourceInfo.sillaNum} • $${total.toFixed(2)}`;
+        avatar.style.display = 'flex';
+
+        const bannerText = document.getElementById('bannerText');
+        const btnCancel = document.getElementById('btnCancelMove');
+        if (bannerText && btnCancel) {
+          bannerText.innerHTML = `<b style="color: #38bdf8;">MOVIENDO CON MOUSE:</b> Arrastrando Mesa ${dragSourceInfo.mesaId} Silla ${dragSourceInfo.sillaNum}. Suelta sobre la silla destino.`;
+          btnCancel.style.display = 'block';
+        }
+      }
+
+      if (isMouseDragging) {
+        const avatar = document.getElementById('chairDragAvatar');
+        if (avatar) {
+          avatar.style.left = e.clientX + 'px';
+          avatar.style.top = e.clientY + 'px';
+        }
+
+        const elemBelow = document.elementFromPoint(e.clientX, e.clientY);
+        const targetChairNode = elemBelow ? elemBelow.closest('.chair-btn-fixed') : null;
+
+        document.querySelectorAll('.chair-drag-target-valid, .chair-drag-target-combine').forEach(el => {
+          if (el !== targetChairNode) el.classList.remove('chair-drag-target-valid', 'chair-drag-target-combine');
+        });
+
+        if (targetChairNode) {
+          const parts = targetChairNode.id.split('-');
+          if (parts.length === 3) {
+            const mesaId = parseInt(parts[1]);
+            const sillaNum = parseInt(parts[2]);
+
+            if (mesaId !== dragSourceInfo.mesaId || sillaNum !== dragSourceInfo.sillaNum) {
+              const key = `${mesaId}-${sillaNum}`;
+              const targetCuenta = window.palapaState.cuentas[key];
+              if (targetCuenta && targetCuenta.items && targetCuenta.items.length > 0) {
+                targetChairNode.classList.add('chair-drag-target-combine');
+              } else {
+                targetChairNode.classList.add('chair-drag-target-valid');
+              }
+            }
+          }
+        }
+      }
+    });
+
+    document.addEventListener('mouseup', function(e) {
+      if (isMouseDragging && dragSourceInfo) {
+        justFinishedDrag = true;
+
+        const elemBelow = document.elementFromPoint(e.clientX, e.clientY);
+        const targetChairNode = elemBelow ? elemBelow.closest('.chair-btn-fixed') : null;
+
+        if (targetChairNode) {
+          const parts = targetChairNode.id.split('-');
+          if (parts.length === 3) {
+            const targetMesaId = parseInt(parts[1]);
+            const targetSillaNum = parseInt(parts[2]);
+
+            completarMovimiento(targetMesaId, targetSillaNum);
+          }
+        } else {
+          cancelarModoMover();
+        }
+      }
+
+      isMouseDown = false;
+      isMouseDragging = false;
+      dragSourceInfo = null;
+
+      const avatar = document.getElementById('chairDragAvatar');
+      if (avatar) avatar.style.display = 'none';
+
+      document.querySelectorAll('.chair-btn-fixed').forEach(el => {
+        el.classList.remove('chair-dragging', 'chair-drag-target-valid', 'chair-drag-target-combine');
+      });
+    });
+
+    function limpiarDragState() {
+      const avatar = document.getElementById('chairDragAvatar');
+      if (avatar) avatar.style.display = 'none';
+      document.querySelectorAll('.chair-btn-fixed').forEach(el => {
+        el.classList.remove('chair-dragging', 'chair-drag-target-valid', 'chair-drag-target-combine');
+      });
+    }
+
     // Global Event Delegation for all Clicks
     document.addEventListener('click', function(e) {
       // 1. Chair clicked
@@ -371,12 +558,13 @@
     function cancelarModoMover() {
       window.palapaState.modoMoverActivo = false;
       window.palapaState.sillaOrigenMover = null;
+      limpiarDragState();
 
       const bannerText = document.getElementById('bannerText');
       const btnCancel = document.getElementById('btnCancelMove');
 
       if (bannerText && btnCancel) {
-        bannerText.innerHTML = `Haz clic en cualquier <b>Silla</b> para abrir su Comanda o haz clic en <b>Mover Comensal</b> para trasladar su cuenta a otra silla/mesa.`;
+        bannerText.innerHTML = `Haz clic o <b>arrastra con el mouse</b> cualquier <b>Silla</b> para abrir su comanda o trasladarla a otra silla/mesa.`;
         btnCancel.style.display = 'none';
       }
 
@@ -538,6 +726,14 @@
           if (chairEl) {
             const posClass = s === 1 ? 'chair-pos-top' : s === 2 ? 'chair-pos-right' : s === 3 ? 'chair-pos-bottom' : 'chair-pos-left';
             
+            if (isOccupied) {
+              chairEl.setAttribute('draggable', 'true');
+              chairEl.setAttribute('title', `Mesa ${m} Silla ${s} (Ocupada) • Arrastra con el mouse para mover o combinar`);
+            } else {
+              chairEl.setAttribute('draggable', 'false');
+              chairEl.setAttribute('title', `Mesa ${m} Silla ${s} (Disponible)`);
+            }
+
             if (isMoveMode && origen && origen.mesaId === m && origen.sillaNum === s) {
               chairEl.className = `chair-btn-fixed ${posClass} chair-moving-source`;
             } else if (isMoveMode) {
