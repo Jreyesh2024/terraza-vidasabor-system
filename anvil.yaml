@@ -1,13 +1,13 @@
 app_id: terraza_vidasabor_app
 name: La Terraza de Vida & Sabor
 runtime_options:
-  version: 2
   client_version: '3'
+  server_spec: {}
   server_version: python3-sandbox
-startup: {type: form, name: Menu}
-startup_form: Menu
-forms:
-- name: Menu
-- name: MonitorCocina
-- name: MonitorFiscal
-- name: ClientesLealtad
+  version: 2
+services:
+- client_config: {enable_v2: true}
+  server_config: {}
+  source: /runtime/services/tables.yml
+startup: {module: Menu, type: form}
+startup_form: null

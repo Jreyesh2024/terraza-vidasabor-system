@@ -1,51 +1,6 @@
-container:
-  type: HtmlTemplate
-  properties:
-    html: |
-      <anvil-form container="HtmlTemplate">
-        <script src="https://cdn.tailwindcss.com"></script>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-        
-        <div class="min-h-screen bg-[#090d16] text-slate-100 p-6 font-sans">
-          <div class="flex justify-between items-center pb-4 border-b border-slate-800 mb-6">
-            <div class="flex items-center gap-3">
-              <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 to-orange-700 flex items-center justify-center text-xl text-white font-black shadow-lg">
-                <i class="fa-solid fa-fire"></i>
-              </div>
-              <div>
-                <h1 class="text-lg font-bold text-white">Monitor de Cocina & Barra (KDS)</h1>
-                <p class="text-xs text-slate-400">La Terraza de Vida & Sabor • Comandas en tiempo real</p>
-              </div>
-            </div>
-            <button onclick="window.navMenu('menu')" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-xs font-bold rounded-xl border border-slate-700 transition flex items-center gap-2">
-              <i class="fa-solid fa-arrow-left"></i> Volver al Menú
-            </button>
-          </div>
-      
-          <!-- GRID DE COMANDAS EN COCINA -->
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="kdsGridContainer">
-            <div class="bg-slate-900/80 border border-slate-800 p-4 rounded-2xl space-y-4">
-              <div class="flex justify-between items-center pb-2 border-b border-slate-800">
-                <span class="font-black text-amber-400 text-sm">Mesa 1 • Terraza</span>
-                <span class="text-[10px] px-2 py-0.5 rounded bg-amber-500/20 text-amber-400 border border-amber-500/30 font-bold uppercase">En Preparación</span>
-              </div>
-              <div class="space-y-2 text-xs">
-                <div class="flex justify-between font-semibold text-slate-200">
-                  <span>1x Chilaquiles Verdes con Pollo</span>
-                  <span class="text-amber-400">Cocina</span>
-                </div>
-                <p class="text-[10px] text-slate-400 italic">Nota: Con extra salsa verde y sin cebolla</p>
-                <div class="flex justify-between font-semibold text-slate-200 pt-2 border-t border-slate-800/60">
-                  <span>1x Capuchino Especial V&S</span>
-                  <span class="text-sky-400">Barra</span>
-                </div>
-              </div>
-              <button class="w-full py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-xl shadow-md transition">
-                <i class="fa-solid fa-check mr-1"></i> Marcar Servido
-              </button>
-            </div>
-          </div>
-        </div>
-      </anvil-form>
 components: []
+container:
+  properties:
+    html: "<anvil-form container=\"HtmlTemplate\">\n  <script src=\"https://cdn.tailwindcss.com\"></script>\n  <link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css\">\n  \n  <div class=\"min-h-screen bg-[#090d16] text-slate-100 p-6 font-sans\">\n    <div class=\"flex justify-between items-center pb-4 border-b border-slate-800 mb-6\">\n      <div class=\"flex items-center gap-3\">\n        <div class=\"w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 to-orange-700 flex items-center justify-center text-xl text-white font-black shadow-lg\">\n          <i class=\"fa-solid fa-fire\"></i>\n        </div>\n        <div>\n          <h1 class=\"text-lg font-bold text-white\">Monitor de Cocina & Barra (KDS)</h1>\n          <p class=\"text-xs text-slate-400\">La Terraza de Vida & Sabor • Comandas en tiempo real</p>\n        </div>\n      </div>\n      <button onclick=\"window.navMenu('menu')\" class=\"px-4 py-2 bg-slate-800 hover:bg-slate-700 text-xs font-bold rounded-xl border border-slate-700 transition flex items-center gap-2\">\n        <i class=\"fa-solid fa-arrow-left\"></i> Volver al Menú\n      </button>\n    </div>\n\n    <!-- GRID DE COMANDAS EN COCINA -->\n    <div class=\"grid grid-cols-1 md:grid-cols-3 gap-6\" id=\"kdsGridContainer\">\n      <div class=\"bg-slate-900/80 border border-slate-800 p-4 rounded-2xl space-y-4\">\n        <div class=\"flex justify-between items-center pb-2 border-b border-slate-800\">\n          <span class=\"font-black text-amber-400 text-sm\">Mesa 1 • Terraza</span>\n          <span class=\"text-[10px] px-2 py-0.5 rounded bg-amber-500/20 text-amber-400 border border-amber-500/30 font-bold uppercase\">En Preparación</span>\n        </div>\n        <div class=\"space-y-2 text-xs\">\n          <div class=\"flex justify-between font-semibold text-slate-200\">\n            <span>1x Chilaquiles Verdes con Pollo</span>\n            <span class=\"text-amber-400\">Cocina</span>\n          </div>\n          <p class=\"text-[10px] text-slate-400 italic\">Nota: Con extra salsa verde y sin cebolla</p>\n          <div class=\"flex justify-between font-semibold text-slate-200 pt-2 border-t border-slate-800/60\">\n            <span>1x Capuchino Especial V&S</span>\n            <span class=\"text-sky-400\">Barra</span>\n          </div>\n        </div>\n        <button class=\"w-full py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-xl shadow-md transition\">\n          <i class=\"fa-solid fa-check mr-1\"></i> Marcar Servido\n        </button>\n      </div>\n    </div>\n  </div>\n</anvil-form>\n"
+  type: HtmlTemplate
 is_package: true
