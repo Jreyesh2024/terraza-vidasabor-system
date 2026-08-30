@@ -1,5 +1,4 @@
 from ._anvil_designer import MenuTemplate
-import anvil.server
 
 class Menu(MenuTemplate):
   def __init__(self, **properties):
@@ -9,7 +8,4 @@ class Menu(MenuTemplate):
     print(f"Navegando al módulo: {modulo_nombre}")
 
   def procesar_cobro_comanda(self, metodo_pago, items_carrito):
-    try:
-      return anvil.server.call("procesar_cobro_terraza", metodo_pago, items_carrito)
-    except Exception as e:
-      print(f"Error en procesar_cobro_comanda: {e}")
+    print(f"Procesando cobro: {metodo_pago}")
