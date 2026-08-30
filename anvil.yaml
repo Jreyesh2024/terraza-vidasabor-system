@@ -20,5 +20,5 @@ runtime_options:
   server_spec: {}
   server_version: python3-sandbox
   version: 2
-startup: {module: POSMesero, type: form}
-startup_form: POSMesero
+startup: {module: Menu, type: form}
+startup_form: null

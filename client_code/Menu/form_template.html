@@ -1,3 +1,315 @@
-<anvil-form container="HtmlTemplate" prop:html="<!--
+<anvil-form container="HtmlTemplate" prop:html="============================================================================
+LA TERRAZA DE VIDA &amp;amp; SABOR (V&amp;amp;S) - ANVIL CUSTOM HTML FORM
+Formulario: Menu.html
+Encapsulado en <anvil-form container=&amp;quot;HtmlTemplate&amp;quot;>
+  ============================================================================
+  -->
 
-</anvil-form>"></anvil-form>
+  <anvil-form container=&amp;quot;HtmlTemplate&amp;quot;>
+    <!-- TAILWIND CSS CDN INJECTION &amp;amp; FONTS -->
+    <script src=&amp;quot;https://cdn.tailwindcss.com&amp;quot;></script>
+    <link rel=&amp;quot;preconnect&amp;quot; href=&amp;quot;https://fonts.googleapis.com&amp;quot;>
+    <link rel=&amp;quot;preconnect&amp;quot; href=&amp;quot;https://fonts.gstatic.com&amp;quot; crossorigin>
+    <link href=&amp;quot;https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;amp;display=swap&amp;quot; rel=&amp;quot;stylesheet&amp;quot;>
+    <link rel=&amp;quot;stylesheet&amp;quot; href=&amp;quot;https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css&amp;quot;>
+
+    <style>
+      body, .anvil-container {
+        font-family: 'Inter', sans-serif;
+        background-color: #090d16;
+        color: #f8fafc;
+      }
+      .glass-card {
+        background: rgba(22, 30, 46, 0.75);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+      .glass-nav {
+        background: rgba(15, 23, 42, 0.85);
+        backdrop-filter: blur(20px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      }
+      .brand-glow {
+        box-shadow: 0 0 25px rgba(16, 185, 129, 0.3);
+      }
+    </style>
+
+    <div class=&amp;quot;min-h-screen bg-[#090d16] text-slate-100 flex flex-col font-sans&amp;quot;>
+
+      <!-- HEADER BAR / BRANDING V&amp;amp;S -->
+      <header class=&amp;quot;glass-nav sticky top-0 z-50 px-6 py-4 flex items-center justify-between&amp;quot;>
+        <div class=&amp;quot;flex items-center gap-3&amp;quot;>
+          <div class=&amp;quot;w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-700 flex items-center justify-center font-black text-xl text-white shadow-lg brand-glow&amp;quot;>
+            V&amp;amp;S
+          </div>
+          <div>
+            <h1 class=&amp;quot;text-lg font-bold tracking-tight text-white&amp;quot;>La Terraza de Vida &amp;amp; Sabor</h1>
+            <p class=&amp;quot;text-xs text-slate-400 font-medium&amp;quot;>Menú Digital &amp;amp; Comandas en Mesa</p>
+          </div>
+        </div>
+
+        <!-- BOTONES DE NAVEGACIÓN Y MÓDULOS DEL SISTEMA -->
+        <div class=&quot;flex flex-wrap items-center gap-2&quot;>
+          <button onclick=&quot;window.navMenu &amp;&amp; window.navMenu('menu')&quot; class=&quot;px-3 py-1.5 text-xs font-bold rounded-xl bg-emerald-600/30 border border-emerald-500/50 text-emerald-300 transition flex items-center gap-1.5&quot;>
+            <i class=&quot;fa-solid fa-mobile-screen-button text-emerald-400&quot;></i> 📱 Cliente QR
+          </button>
+          <button onclick=&quot;window.navMenu &amp;&amp; window.navMenu('pos_mesero')&quot; class=&quot;px-3 py-1.5 text-xs font-bold rounded-xl glass-card text-amber-300 border-amber-500/30 hover:bg-amber-500/10 transition flex items-center gap-1.5&quot;>
+            <i class=&quot;fa-solid fa-chair text-amber-400&quot;></i> 📲 POS Croquis
+          </button>
+          <button onclick=&quot;window.navMenu &amp;&amp; window.navMenu('monitor_cocina')&quot; class=&quot;px-3 py-1.5 text-xs font-bold rounded-xl glass-card text-sky-300 border-sky-500/30 hover:bg-sky-500/10 transition flex items-center gap-1.5&quot;>
+            <i class=&quot;fa-solid fa-fire text-amber-400&quot;></i> 👨‍🍳 Cocina KDS
+          </button>
+          <button onclick=&quot;window.navMenu &amp;&amp; window.navMenu('monitor_fiscal')&quot; class=&quot;px-3 py-1.5 text-xs font-bold rounded-xl glass-card text-slate-300 border-slate-700 hover:bg-slate-800 transition flex items-center gap-1.5&quot;>
+            <i class=&quot;fa-solid fa-chart-pie text-sky-400&quot;></i> 🧾 Fiscal
+          </button>
+          <button onclick=&quot;window.navMenu &amp;&amp; window.navMenu('clientes_lealtad')&quot; class=&quot;px-3 py-1.5 text-xs font-bold rounded-xl glass-card text-purple-300 border-purple-500/30 hover:bg-purple-500/10 transition flex items-center gap-1.5&quot;>
+            <i class=&quot;fa-solid fa-award text-purple-400&quot;></i> 💳 Rewards
+          </button>
+        </div>
+      </header>
+
+      <!-- CONTENIDO PRINCIPAL DEL MENÚ DIGITAL -->
+      <main class=&amp;quot;flex-1 max-w-7xl w-full mx-auto p-6 grid grid-cols-1 lg:grid-cols-3 gap-6&amp;quot;>
+
+        <!-- SECCIÓN IZQUIERDA: CATÁLOGO Y PRODUCTOS (2 COLUMNAS EN DESKTOP) -->
+        <section class=&amp;quot;lg:col-span-2 flex flex-col gap-6&amp;quot;>
+
+          <!-- BUSCADOR &amp;amp; BARRA DE CATEGORÍAS -->
+          <div class=&amp;quot;flex flex-col sm:flex-row gap-4 justify-between items-center&amp;quot;>
+            <div class=&amp;quot;relative w-full sm:w-80&amp;quot;>
+              <i class=&amp;quot;fa-solid fa-magnifying-glass absolute left-3.5 top-3.5 text-slate-500 text-sm&amp;quot;></i>
+              <input type=&amp;quot;text&amp;quot; id=&amp;quot;searchInput&amp;quot; placeholder=&amp;quot;Buscar platillos o bebidas...&amp;quot; oninput=&amp;quot;window.filtrarProductos()&amp;quot; class=&amp;quot;w-full pl-10 pr-4 py-2.5 bg-slate-900/80 border border-slate-700/80 rounded-xl text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-emerald-500 transition&amp;quot;>
+            </div>
+
+            <!-- CHIPS DE CATEGORÍAS -->
+            <div class=&amp;quot;flex gap-2 overflow-x-auto w-full sm:w-auto pb-1&amp;quot; id=&amp;quot;categoriesChips&amp;quot;>
+              <button onclick=&amp;quot;window.seleccionarCategoria('Todos')&amp;quot; class=&amp;quot;cat-chip active px-4 py-2 text-xs font-bold rounded-xl bg-emerald-500 text-white shadow-md shadow-emerald-500/20 whitespace-nowrap transition&amp;quot;>
+                Todos
+              </button>
+              <!-- Renderizado dinámico desde JS/Anvil -->
+            </div>
+          </div>
+
+          <!-- GRID DE TARJETAS DE PLATILLOS -->
+          <div class=&amp;quot;grid grid-cols-1 md:grid-cols-2 gap-4&amp;quot; id=&amp;quot;productsGridContainer&amp;quot;>
+            <div class=&amp;quot;text-center py-12 text-slate-500 col-span-2&amp;quot;>
+              <i class=&amp;quot;fa-solid fa-spinner animate-spin text-2xl text-emerald-500 mb-2&amp;quot;></i>
+              <p>Cargando menú de La Terraza V&amp;amp;S...</p>
+            </div>
+          </div>
+
+        </section>
+
+        <!-- SECCIÓN DERECHA: SIDEBAR DE COMANDA Y COBRO -->
+        <aside class=&amp;quot;glass-card rounded-2xl p-6 flex flex-col justify-between h-full border border-slate-800 shadow-2xl&amp;quot;>
+          <div>
+            <div class=&amp;quot;flex justify-between items-center pb-4 border-b border-slate-800 mb-4&amp;quot;>
+              <div>
+                <h2 class=&amp;quot;text-base font-bold text-white flex items-center gap-2&amp;quot;>
+                  <i class=&amp;quot;fa-solid fa-utensils text-emerald-400&amp;quot;></i> Comanda Activa
+                </h2>
+                <p class=&amp;quot;text-xs text-slate-400&amp;quot;>Detalle de consumos en mesa</p>
+              </div>
+              <span class=&amp;quot;px-2.5 py-1 text-[10px] font-black rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 uppercase&amp;quot;>
+                Abierta
+              </span>
+            </div>
+
+            <!-- LISTA DE ITEMS REGISTRADOS -->
+            <div class=&amp;quot;space-y-3 max-h-80 overflow-y-auto pr-1&amp;quot; id=&amp;quot;cartItemsList&amp;quot;>
+              <div class=&amp;quot;text-center py-8 text-slate-500 text-xs&amp;quot;>
+                No hay consumos agregados a esta comanda.
+              </div>
+            </div>
+          </div>
+
+          <!-- TOTALES Y ACCIONES DE COBRO -->
+          <div class=&amp;quot;pt-4 border-t border-slate-800 mt-6 space-y-4&amp;quot;>
+            <div class=&amp;quot;space-y-2 text-xs&amp;quot;>
+              <div class=&amp;quot;flex justify-between text-slate-400&amp;quot;>
+                <span>Subtotal:</span>
+                <span font-semibold text-slate-200 id=&amp;quot;txtSubtotal&amp;quot;>$0.00</span>
+              </div>
+              <div class=&amp;quot;flex justify-between text-slate-400&amp;quot;>
+                <span>IVA (16% Desglosado):</span>
+                <span font-semibold text-slate-200 id=&amp;quot;txtIVA&amp;quot;>$0.00</span>
+              </div>
+              <div class=&amp;quot;flex justify-between text-slate-400&amp;quot;>
+                <span>Propina Sugerida (10%):</span>
+                <span font-semibold text-slate-200 id=&amp;quot;txtPropina&amp;quot;>$0.00</span>
+              </div>
+              <div class=&amp;quot;flex justify-between text-base font-black text-white pt-2 border-t border-slate-800&amp;quot;>
+                <span>Total Mesa:</span>
+                <span class=&amp;quot;text-emerald-400&amp;quot; id=&amp;quot;txtTotal&amp;quot;>$0.00</span>
+              </div>
+            </div>
+
+            <!-- BOTONES DE COBRO MULTICANAL -->
+            <div class=&amp;quot;grid grid-cols-2 gap-2&amp;quot;>
+              <button onclick=&amp;quot;window.abrirModalCobro('santander')&amp;quot; class=&amp;quot;py-3 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-100 text-xs font-bold border border-slate-700 transition flex items-center justify-center gap-1.5&amp;quot;>
+                <i class=&amp;quot;fa-solid fa-credit-card text-sky-400&amp;quot;></i> Santander
+              </button>
+              <button onclick=&amp;quot;window.abrirModalCobro('efectivo')&amp;quot; class=&amp;quot;py-3 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold shadow-lg shadow-emerald-600/30 transition flex items-center justify-center gap-1.5&amp;quot;>
+                <i class=&amp;quot;fa-solid fa-money-bill-wave&amp;quot;></i> Cobrar / Ticket
+              </button>
+            </div>
+          </div>
+
+        </aside>
+
+      </main>
+
+    </div>
+
+    <!-- PUENTE DE NAVEGACIÓN Y FUNCIONES JAVASCRIPT SEGURAS -->
+    <script>
+      window.vsMenuData = [];
+      window.vsCartItems = [];
+      window.categoriaActual = 'Todos';
+
+      window.cargarDatosMenu = function(productos, categorias) {
+        window.vsMenuData = productos || [];
+        window.renderCategoriasChips(categorias || []);
+        window.renderProductos();
+      };
+
+      window.renderCategoriasChips = function(categorias) {
+        const container = document.getElementById('categoriesChips');
+        container.innerHTML = `<button onclick=&amp;quot;window.seleccionarCategoria('Todos')&amp;quot; class=&amp;quot;cat-chip ${window.categoriaActual === 'Todos' ? 'active bg-emerald-500 text-white' : 'bg-slate-800/80 text-slate-400'} px-4 py-2 text-xs font-bold rounded-xl whitespace-nowrap transition&amp;quot;>Todos</button>`;
+
+        categorias.forEach(cat => {
+          const btn = document.createElement('button');
+          const isActive = window.categoriaActual === cat.nombre;
+          btn.className = `cat-chip ${isActive ? 'active bg-emerald-500 text-white shadow-md shadow-emerald-500/20' : 'bg-slate-800/80 text-slate-400 hover:text-white'} px-4 py-2 text-xs font-bold rounded-xl whitespace-nowrap transition`;
+          btn.innerText = `${cat.icono || '🍽️'} ${cat.nombre}`;
+          btn.onclick = () => window.seleccionarCategoria(cat.nombre);
+          container.appendChild(btn);
+        });
+      };
+
+      window.seleccionarCategoria = function(catNombre) {
+        window.categoriaActual = catNombre;
+        const chips = document.querySelectorAll('.cat-chip');
+        chips.forEach(c => c.classList.remove('active', 'bg-emerald-500', 'text-white'));
+        window.renderProductos();
+      };
+
+      window.filtrarProductos = function() {
+        window.renderProductos();
+      };
+
+      window.renderProductos = function() {
+        const container = document.getElementById('productsGridContainer');
+        const searchVal = (document.getElementById('searchInput').value || '').toLowerCase();
+        container.innerHTML = '';
+
+        const filtrados = window.vsMenuData.filter(p => {
+          const matchCat = window.categoriaActual === 'Todos' || p.categoria_nombre === window.categoriaActual;
+          const matchSearch = p.nombre.toLowerCase().includes(searchVal) || (p.descripcion &amp;amp;&amp;amp; p.descripcion.toLowerCase().includes(searchVal));
+          return matchCat &amp;amp;&amp;amp; matchSearch;
+        });
+
+        if (filtrados.length === 0) {
+          container.innerHTML = `<div class=&amp;quot;text-center py-12 text-slate-500 text-sm col-span-2&amp;quot;>No se encontraron platillos o bebidas disponibles</div>`;
+          return;
+        }
+
+        filtrados.forEach(prod => {
+          const card = document.createElement('div');
+          card.className = 'glass-card p-4 rounded-2xl flex justify-between items-center hover:border-emerald-500/50 transition cursor-pointer group';
+          card.onclick = () => window.agregarAlCarrito(prod);
+
+          card.innerHTML = `
+          <div class=&amp;quot;flex items-center gap-3&amp;quot;>
+            <div class=&amp;quot;w-12 h-12 rounded-xl bg-slate-800 flex items-center justify-center text-2xl group-hover:scale-110 transition&amp;quot;>
+              ${prod.icono || '🍲'}
+            </div>
+            <div>
+              <h3 class=&amp;quot;text-sm font-bold text-white group-hover:text-emerald-400 transition&amp;quot;>${prod.nombre}</h3>
+              <p class=&amp;quot;text-xs text-slate-400 line-clamp-1&amp;quot;>${prod.descripcion || ''}</p>
+            </div>
+          </div>
+          <div class=&amp;quot;text-right&amp;quot;>
+            <span class=&amp;quot;text-sm font-black text-emerald-400 block&amp;quot;>$${Number(prod.precio_unitario).toFixed(2)}</span>
+            <span class=&amp;quot;text-[10px] text-slate-500 font-semibold uppercase&amp;quot;>${prod.estacion_preparacion || 'cocina'}</span>
+          </div>
+        `;
+          container.appendChild(card);
+        });
+      };
+
+      window.agregarAlCarrito = function(prod) {
+        const index = window.vsCartItems.findIndex(i => i.id === prod.id);
+        if (index >= 0) {
+          window.vsCartItems[index].cantidad += 1;
+        } else {
+          window.vsCartItems.push({ ...prod, cantidad: 1 });
+        }
+        window.renderCarrito();
+      };
+
+      window.renderCarrito = function() {
+        const container = document.getElementById('cartItemsList');
+        container.innerHTML = '';
+
+        let subtotal = 0;
+
+        if (window.vsCartItems.length === 0) {
+          container.innerHTML = `<div class=&amp;quot;text-center py-8 text-slate-500 text-xs&amp;quot;>No hay consumos agregados a esta comanda.</div>`;
+        } else {
+          window.vsCartItems.forEach((item, idx) => {
+            const itemSubtotal = item.precio_unitario * item.cantidad;
+            subtotal += itemSubtotal;
+
+            const row = document.createElement('div');
+            row.className = 'flex justify-between items-center bg-slate-900/60 p-2.5 rounded-xl border border-slate-800/80 text-xs';
+            row.innerHTML = `
+            <div>
+              <span class=&amp;quot;font-bold text-white&amp;quot;>${item.nombre} x${item.cantidad}</span>
+              <span class=&amp;quot;block text-[10px] text-slate-400&amp;quot;>$${Number(item.precio_unitario).toFixed(2)} c/u</span>
+            </div>
+            <div class=&amp;quot;flex items-center gap-2&amp;quot;>
+              <span class=&amp;quot;font-black text-slate-200&amp;quot;>$${itemSubtotal.toFixed(2)}</span>
+              <button onclick=&amp;quot;window.quitarDelCarrito(${idx})&amp;quot; class=&amp;quot;text-red-400 hover:text-red-300 text-xs ml-1&amp;quot;><i class=&amp;quot;fa-solid fa-trash&amp;quot;></i></button>
+            </div>
+          `;
+            container.appendChild(row);
+          });
+        }
+
+        const iva = subtotal * 0.16;
+        const propina = subtotal * 0.10;
+        const total = subtotal + propina;
+
+        document.getElementById('txtSubtotal').innerText = `$${subtotal.toFixed(2)}`;
+        document.getElementById('txtIVA').innerText = `$${iva.toFixed(2)}`;
+        document.getElementById('txtPropina').innerText = `$${propina.toFixed(2)}`;
+        document.getElementById('txtTotal').innerText = `$${total.toFixed(2)}`;
+      };
+
+      window.quitarDelCarrito = function(index) {
+        window.vsCartItems.splice(index, 1);
+        window.renderCarrito();
+      };
+
+      window.navMenu = function(modulo) {
+        if (window.anvilAppNav) {
+          window.anvilAppNav(modulo);
+        } else {
+          alert(`Navegación a módulo: ${modulo}`);
+        }
+      };
+
+      window.abrirModalCobro = function(metodo) {
+        if (window.vsCartItems.length === 0) {
+          alert('Agregue consumos antes de proceder al cobro');
+          return;
+        }
+        if (window.anvilProcesarCobro) {
+          window.anvilProcesarCobro(metodo, window.vsCartItems);
+        } else {
+          alert(`Procesando pago vía ${metodo.toUpperCase()} para La Terraza V&amp;amp;S...`);
+        }
+      };
+    </script>"></anvil-form>
