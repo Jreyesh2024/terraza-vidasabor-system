@@ -1,11 +1,5 @@
 app_id: terraza_vidasabor_app
 name: La Terraza de Vida & Sabor
-startup: {type: form, module: POSMesero}
-startup_form: POSMesero
-runtime_options:
-  version: 2
-  client_version: '3'
-  server_version: python3-sandbox
 native_deps: |
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
   <script src="https://cdn.tailwindcss.com"></script>
@@ -21,9 +15,10 @@ native_deps: |
       color: #f8fafc !important;
     }
   </style>
-forms:
-- name: Menu
-- name: POSMesero
-- name: MonitorCocina
-- name: MonitorFiscal
-- name: ClientesLealtad
+runtime_options:
+  client_version: '3'
+  server_spec: {}
+  server_version: python3-sandbox
+  version: 2
+startup: {module: POSMesero, type: form}
+startup_form: POSMesero
