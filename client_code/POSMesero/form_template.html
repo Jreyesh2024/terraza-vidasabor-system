@@ -1,3 +1,5 @@
+<anvil-form container="HtmlTemplate" prop:html="">
+
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <link rel="stylesheet" href="_/theme/theme.css">
 
@@ -10,53 +12,37 @@
     padding: 0 !important;
   }
 
-  /* Drag & Drop Visual Styles */
+  /* ── Drag & Drop Visual Styles (HTML5 native dragstart/dragover/drop) ── */
   .chair-btn-fixed[draggable="true"] {
     cursor: grab !important;
     user-select: none !important;
+    touch-action: none !important;
   }
   .chair-btn-fixed.chair-dragging {
-    opacity: 0.4 !important;
-    transform: scale(1.15) !important;
-    cursor: grabbing !important;
+    opacity: 0.35 !important;
+    transform: scale(1.12) !important;
     border: 2px dashed #38bdf8 !important;
-    box-shadow: 0 0 20px rgba(56, 189, 248, 0.9) !important;
+    box-shadow: 0 0 22px rgba(56, 189, 248, 0.85) !important;
+    cursor: grabbing !important;
   }
   .chair-btn-fixed.chair-drag-target-valid {
     border: 2px solid #38bdf8 !important;
-    box-shadow: 0 0 20px #38bdf8, inset 0 0 10px rgba(56, 189, 248, 0.6) !important;
-    transform: scale(1.18) !important;
-    transition: transform 0.15s ease, box-shadow 0.15s ease !important;
+    box-shadow: 0 0 22px #38bdf8, inset 0 0 12px rgba(56, 189, 248, 0.5) !important;
+    transform: scale(1.2) !important;
+    transition: transform 0.12s ease, box-shadow 0.12s ease !important;
+    background: rgba(56, 189, 248, 0.18) !important;
   }
   .chair-btn-fixed.chair-drag-target-combine {
     border: 2px solid #f59e0b !important;
-    box-shadow: 0 0 20px #f59e0b, inset 0 0 10px rgba(245, 158, 11, 0.6) !important;
-    transform: scale(1.18) !important;
-    transition: transform 0.15s ease, box-shadow 0.15s ease !important;
-  }
-
-  /* Mouse Drag Ghost Avatar */
-  #chairDragAvatar {
-    position: fixed !important;
-    z-index: 99999 !important;
-    pointer-events: none !important;
-    padding: 8px 14px !important;
-    background: #0284c7 !important;
-    color: #ffffff !important;
-    font-size: 12px !important;
-    font-weight: 800 !important;
-    border-radius: 12px !important;
-    border: 2px solid #38bdf8 !important;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.7), 0 0 20px rgba(56, 189, 248, 0.8) !important;
-    transform: translate(-50%, -50%) !important;
-    display: none;
-    align-items: center !important;
-    gap: 8px !important;
+    box-shadow: 0 0 22px #f59e0b, inset 0 0 12px rgba(245, 158, 11, 0.5) !important;
+    transform: scale(1.2) !important;
+    transition: transform 0.12s ease, box-shadow 0.12s ease !important;
+    background: rgba(245, 158, 11, 0.18) !important;
   }
 </style>
 
 <div style="background-color: #090d16 !important; color: #f8fafc !important; font-family: 'Inter', system-ui, sans-serif !important; min-height: 100vh !important; padding: 20px !important; box-sizing: border-box !important; display: flex !important; flex-direction: column !important; gap: 20px !important;">
-
+  
   <!-- HEADER BAR & AREA SWITCHER -->
   <div style="display: flex !important; flex-wrap: wrap !important; justify-content: space-between !important; align-items: center !important; gap: 15px !important; padding-bottom: 15px !important; border-bottom: 1px solid #1e293b !important;">
     <div style="display: flex !important; align-items: center !important; gap: 12px !important;">
@@ -96,10 +82,10 @@
 
   <!-- MAIN CANVAS GRID -->
   <div style="display: grid !important; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) !important; gap: 24px !important; flex: 1 !important;">
-
+    
     <!-- LEFT PANEL: 2D FLOOR PLAN OF LA PALAPA -->
     <div style="background: rgba(15, 23, 42, 0.95) !important; border: 1px solid #1e293b !important; border-radius: 20px !important; padding: 24px !important; display: flex !important; flex-direction: column !important; justify-content: space-between !important; min-height: 540px !important; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5) !important;">
-
+      
       <!-- PARED POSTERIOR BARRA -->
       <div style="background: rgba(30, 41, 59, 0.9) !important; border: 1px solid rgba(16, 185, 129, 0.3) !important; border-radius: 12px !important; padding: 12px 16px !important; display: flex !important; flex-wrap: wrap !important; justify-content: space-between !important; align-items: center !important; margin-bottom: 24px !important; gap: 10px !important;">
         <div style="display: flex !important; align-items: center !important; gap: 8px !important; font-size: 12px !important; font-weight: 700 !important; color: #34d399 !important;">
@@ -115,11 +101,11 @@
 
       <!-- 3 CIRCULAR TABLES WITH 4 CHAIRS EACH -->
       <div style="display: grid !important; grid-template-columns: repeat(3, 1fr) !important; gap: 20px !important; margin: auto 0 !important; padding: 20px 0 !important;">
-
+        
         <!-- MESA 1 -->
         <div style="display: flex !important; flex-direction: column !important; align-items: center !important; gap: 12px !important;">
           <span style="font-size: 12px !important; font-weight: 900 !important; color: #cbd5e1 !important; text-transform: uppercase !important; letter-spacing: 1px !important;">Mesa 1 (Palapa)</span>
-
+          
           <div class="table-box-220" style="position: relative !important; width: 220px !important; height: 220px !important; display: flex !important; align-items: center !important; justify-content: center !important; margin: 0 auto !important;">
             <div id="table-circle-1" class="table-circle-fixed" style="width: 96px !important; height: 96px !important; border-radius: 50% !important; background: #064e3b !important; border: 4px solid #10b981 !important; box-shadow: 0 0 25px rgba(16, 185, 129, 0.4) !important; display: flex !important; flex-direction: column !important; align-items: center !important; justify-content: center !important; cursor: pointer !important; z-index: 10 !important;">
               <span style="font-size: 18px !important; font-weight: 900 !important; color: #ffffff !important; margin: 0 !important; line-height: 1 !important;">M1</span>
@@ -138,7 +124,7 @@
         <!-- MESA 2 -->
         <div style="display: flex !important; flex-direction: column !important; align-items: center !important; gap: 12px !important;">
           <span style="font-size: 12px !important; font-weight: 900 !important; color: #cbd5e1 !important; text-transform: uppercase !important; letter-spacing: 1px !important;">Mesa 2 (Palapa)</span>
-
+          
           <div class="table-box-220" style="position: relative !important; width: 220px !important; height: 220px !important; display: flex !important; align-items: center !important; justify-content: center !important; margin: 0 auto !important;">
             <div id="table-circle-2" class="table-circle-fixed" style="width: 96px !important; height: 96px !important; border-radius: 50% !important; background: #064e3b !important; border: 4px solid #10b981 !important; box-shadow: 0 0 25px rgba(16, 185, 129, 0.4) !important; display: flex !important; flex-direction: column !important; align-items: center !important; justify-content: center !important; cursor: pointer !important; z-index: 10 !important;">
               <span style="font-size: 18px !important; font-weight: 900 !important; color: #ffffff !important; margin: 0 !important; line-height: 1 !important;">M2</span>
@@ -157,7 +143,7 @@
         <!-- MESA 3 -->
         <div style="display: flex !important; flex-direction: column !important; align-items: center !important; gap: 12px !important;">
           <span style="font-size: 12px !important; font-weight: 900 !important; color: #fbbf24 !important; text-transform: uppercase !important; letter-spacing: 1px !important;">Mesa 3 (Palapa)</span>
-
+          
           <div class="table-box-220" style="position: relative !important; width: 220px !important; height: 220px !important; display: flex !important; align-items: center !important; justify-content: center !important; margin: 0 auto !important;">
             <div id="table-circle-3" class="table-circle-fixed" style="width: 96px !important; height: 96px !important; border-radius: 50% !important; background: #78350f !important; border: 4px solid #f59e0b !important; box-shadow: 0 0 25px rgba(245, 158, 11, 0.4) !important; display: flex !important; flex-direction: column !important; align-items: center !important; justify-content: center !important; cursor: pointer !important; z-index: 10 !important;">
               <span style="font-size: 18px !important; font-weight: 900 !important; color: #fef3c7 !important; margin: 0 !important; line-height: 1 !important;">M3</span>
@@ -185,7 +171,7 @@
 
     <!-- RIGHT PANEL: WAITER MENU CATALOG -->
     <div style="background: rgba(15, 23, 42, 0.95) !important; border: 1px solid #1e293b !important; border-radius: 20px !important; padding: 24px !important; display: flex !important; flex-direction: column !important; justify-content: space-between !important; gap: 16px !important; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5) !important;">
-
+      
       <div style="display: flex !important; flex-direction: column !important; gap: 14px !important;">
         <div style="display: flex !important; justify-content: space-between !important; align-items: center !important; padding-bottom: 12px !important; border-bottom: 1px solid #1e293b !important;">
           <div>
@@ -231,7 +217,7 @@
 <!-- MODAL POPUP PARA COMANDA / TICKET POR SILLA -->
 <div id="modalComandaBackdrop" class="modal-backdrop-fixed" style="display: none !important;">
   <div style="background: #0f172a !important; border: 1px solid #1e293b !important; border-radius: 20px !important; padding: 24px !important; width: 100% !important; max-width: 480px !important; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8) !important; display: flex !important; flex-direction: column !important; gap: 16px !important;">
-
+    
     <!-- MODAL HEADER -->
     <div style="display: flex !important; justify-content: space-between !important; align-items: center !important; padding-bottom: 12px !important; border-bottom: 1px solid #1e293b !important;">
       <div>
@@ -314,147 +300,103 @@
       }
     };
 
-    // Mouse Drag & Movement Gestures
-    let isMouseDown = false;
-    let isMouseDragging = false;
-    let dragSourceInfo = null;
-    let startX = 0, startY = 0;
-    let justFinishedDrag = false;
-
-    // Suppress click event if a drag just occurred
-    document.addEventListener('click', function(e) {
-      if (justFinishedDrag) {
-        e.stopImmediatePropagation();
-        e.preventDefault();
-        justFinishedDrag = false;
-        return false;
-      }
-    }, true);
-
-    document.addEventListener('mousedown', function(e) {
-      const chairNode = e.target.closest('.chair-btn-fixed');
-      if (!chairNode) return;
-
-      const parts = chairNode.id.split('-');
-      if (parts.length === 3) {
-        const mesaId = parseInt(parts[1]);
-        const sillaNum = parseInt(parts[2]);
-        const key = `${mesaId}-${sillaNum}`;
-        const cuenta = window.palapaState.cuentas[key];
-
-        if (cuenta && cuenta.items && cuenta.items.length > 0) {
-          isMouseDown = true;
-          isMouseDragging = false;
-          dragSourceInfo = { mesaId, sillaNum, chairNode, cuenta };
-          startX = e.clientX;
-          startY = e.clientY;
-        }
-      }
-    });
-
-    document.addEventListener('mousemove', function(e) {
-      if (!isMouseDown || !dragSourceInfo) return;
-
-      const dist = Math.hypot(e.clientX - startX, e.clientY - startY);
-      if (!isMouseDragging && dist > 5) {
-        isMouseDragging = true;
-        window.palapaState.modoMoverActivo = true;
-        window.palapaState.sillaOrigenMover = { mesaId: dragSourceInfo.mesaId, sillaNum: dragSourceInfo.sillaNum };
-
-        dragSourceInfo.chairNode.classList.add('chair-dragging');
-
-        let avatar = document.getElementById('chairDragAvatar');
-        if (!avatar) {
-          avatar = document.createElement('div');
-          avatar.id = 'chairDragAvatar';
-          document.body.appendChild(avatar);
-        }
-
-        let total = 0;
-        dragSourceInfo.cuenta.items.forEach(i => total += (i.precio * i.cantidad));
-        avatar.innerHTML = `<i class="fa-solid fa-chair" style="color: #38bdf8;"></i> M${dragSourceInfo.mesaId} Silla ${dragSourceInfo.sillaNum} • $${total.toFixed(2)}`;
-        avatar.style.display = 'flex';
-
-        const bannerText = document.getElementById('bannerText');
-        const btnCancel = document.getElementById('btnCancelMove');
-        if (bannerText && btnCancel) {
-          bannerText.innerHTML = `<b style="color: #38bdf8;">MOVIENDO CON MOUSE:</b> Arrastrando Mesa ${dragSourceInfo.mesaId} Silla ${dragSourceInfo.sillaNum}. Suelta sobre la silla destino.`;
-          btnCancel.style.display = 'block';
-        }
-      }
-
-      if (isMouseDragging) {
-        const avatar = document.getElementById('chairDragAvatar');
-        if (avatar) {
-          avatar.style.left = e.clientX + 'px';
-          avatar.style.top = e.clientY + 'px';
-        }
-
-        const elemBelow = document.elementFromPoint(e.clientX, e.clientY);
-        const targetChairNode = elemBelow ? elemBelow.closest('.chair-btn-fixed') : null;
-
-        document.querySelectorAll('.chair-drag-target-valid, .chair-drag-target-combine').forEach(el => {
-          if (el !== targetChairNode) el.classList.remove('chair-drag-target-valid', 'chair-drag-target-combine');
-        });
-
-        if (targetChairNode) {
-          const parts = targetChairNode.id.split('-');
-          if (parts.length === 3) {
-            const mesaId = parseInt(parts[1]);
-            const sillaNum = parseInt(parts[2]);
-
-            if (mesaId !== dragSourceInfo.mesaId || sillaNum !== dragSourceInfo.sillaNum) {
-              const key = `${mesaId}-${sillaNum}`;
-              const targetCuenta = window.palapaState.cuentas[key];
-              if (targetCuenta && targetCuenta.items && targetCuenta.items.length > 0) {
-                targetChairNode.classList.add('chair-drag-target-combine');
-              } else {
-                targetChairNode.classList.add('chair-drag-target-valid');
-              }
-            }
-          }
-        }
-      }
-    });
-
-    document.addEventListener('mouseup', function(e) {
-      if (isMouseDragging && dragSourceInfo) {
-        justFinishedDrag = true;
-
-        const elemBelow = document.elementFromPoint(e.clientX, e.clientY);
-        const targetChairNode = elemBelow ? elemBelow.closest('.chair-btn-fixed') : null;
-
-        if (targetChairNode) {
-          const parts = targetChairNode.id.split('-');
-          if (parts.length === 3) {
-            const targetMesaId = parseInt(parts[1]);
-            const targetSillaNum = parseInt(parts[2]);
-
-            completarMovimiento(targetMesaId, targetSillaNum);
-          }
-        } else {
-          cancelarModoMover();
-        }
-      }
-
-      isMouseDown = false;
-      isMouseDragging = false;
-      dragSourceInfo = null;
-
-      const avatar = document.getElementById('chairDragAvatar');
-      if (avatar) avatar.style.display = 'none';
-
-      document.querySelectorAll('.chair-btn-fixed').forEach(el => {
-        el.classList.remove('chair-dragging', 'chair-drag-target-valid', 'chair-drag-target-combine');
-      });
-    });
+    // ── HTML5 Native Drag & Drop State ──
+    let _dragSrcMesa = null;
+    let _dragSrcSilla = null;
 
     function limpiarDragState() {
-      const avatar = document.getElementById('chairDragAvatar');
-      if (avatar) avatar.style.display = 'none';
       document.querySelectorAll('.chair-btn-fixed').forEach(el => {
         el.classList.remove('chair-dragging', 'chair-drag-target-valid', 'chair-drag-target-combine');
       });
+    }
+
+    // Called from renderStateUI after each chair element is created/updated
+    function attachDragListeners(chairEl, mesaId, sillaNum, isOccupied) {
+      // Remove previous listeners by cloning the node
+      const fresh = chairEl.cloneNode(true);
+      chairEl.parentNode.replaceChild(fresh, chairEl);
+      chairEl = fresh;
+
+      if (!isOccupied) {
+        // Drop target for empty chairs
+        chairEl.addEventListener('dragover', function(e) {
+          if (_dragSrcMesa === null) return;
+          e.preventDefault();
+          e.dataTransfer.dropEffect = 'move';
+          limpiarDragState();
+          this.classList.add('chair-drag-target-valid');
+        });
+        chairEl.addEventListener('dragleave', function() {
+          this.classList.remove('chair-drag-target-valid', 'chair-drag-target-combine');
+        });
+        chairEl.addEventListener('drop', function(e) {
+          e.preventDefault();
+          this.classList.remove('chair-drag-target-valid', 'chair-drag-target-combine');
+          if (_dragSrcMesa !== null) {
+            completarMovimiento(mesaId, sillaNum);
+          }
+        });
+      } else {
+        // SOURCE — occupied chairs can be dragged
+        chairEl.setAttribute('draggable', 'true');
+        chairEl.addEventListener('dragstart', function(e) {
+          _dragSrcMesa = mesaId;
+          _dragSrcSilla = sillaNum;
+          window.palapaState.modoMoverActivo = true;
+          window.palapaState.sillaOrigenMover = { mesaId, sillaNum };
+
+          // Ghost image label
+          const ghost = document.createElement('div');
+          ghost.style.cssText = 'position:fixed;top:-200px;left:-200px;padding:8px 14px;background:#0284c7;color:#fff;font-size:12px;font-weight:800;border-radius:12px;border:2px solid #38bdf8;white-space:nowrap;';
+          const cuenta = window.palapaState.cuentas[`${mesaId}-${sillaNum}`];
+          let total = 0;
+          if (cuenta && cuenta.items) cuenta.items.forEach(i => total += i.precio * i.cantidad);
+          ghost.textContent = `🪑 M${mesaId} Silla ${sillaNum}  •  $${total.toFixed(2)}`;
+          document.body.appendChild(ghost);
+          e.dataTransfer.setDragImage(ghost, 80, 20);
+          setTimeout(() => document.body.removeChild(ghost), 0);
+
+          e.dataTransfer.effectAllowed = 'move';
+          e.dataTransfer.setData('text/plain', `${mesaId}-${sillaNum}`);
+
+          // Visual feedback
+          setTimeout(() => this.classList.add('chair-dragging'), 0);
+
+          const bannerText = document.getElementById('bannerText');
+          const btnCancel  = document.getElementById('btnCancelMove');
+          if (bannerText) bannerText.innerHTML = `<b style="color:#38bdf8;">ARRASTRANDO:</b> Mesa ${mesaId} Silla ${sillaNum}. Suelta sobre la silla destino.`;
+          if (btnCancel)  btnCancel.style.display = 'block';
+        });
+
+        chairEl.addEventListener('dragend', function() {
+          this.classList.remove('chair-dragging');
+          limpiarDragState();
+          if (window.palapaState.modoMoverActivo) cancelarModoMover();
+        });
+
+        // Also accept drops ON occupied chairs (combine)
+        chairEl.addEventListener('dragover', function(e) {
+          if (_dragSrcMesa === null) return;
+          if (mesaId === _dragSrcMesa && sillaNum === _dragSrcSilla) return;
+          e.preventDefault();
+          e.dataTransfer.dropEffect = 'move';
+          limpiarDragState();
+          this.classList.remove('chair-drag-target-valid');
+          this.classList.add('chair-drag-target-combine');
+        });
+        chairEl.addEventListener('dragleave', function() {
+          this.classList.remove('chair-drag-target-valid', 'chair-drag-target-combine');
+        });
+        chairEl.addEventListener('drop', function(e) {
+          e.preventDefault();
+          this.classList.remove('chair-drag-target-valid', 'chair-drag-target-combine');
+          if (_dragSrcMesa !== null && !(mesaId === _dragSrcMesa && sillaNum === _dragSrcSilla)) {
+            completarMovimiento(mesaId, sillaNum);
+          }
+        });
+      }
+
+      return chairEl; // return refreshed node reference
     }
 
     // Global Event Delegation for all Clicks
@@ -558,6 +500,8 @@
     function cancelarModoMover() {
       window.palapaState.modoMoverActivo = false;
       window.palapaState.sillaOrigenMover = null;
+      _dragSrcMesa = null;
+      _dragSrcSilla = null;
       limpiarDragState();
 
       const bannerText = document.getElementById('bannerText');
@@ -717,7 +661,7 @@
         let busyCount = 0;
         for (let s = 1; s <= 4; s++) {
           const key = `${m}-${s}`;
-          const chairEl = document.getElementById(`chair-${m}-${s}`);
+          let chairEl = document.getElementById(`chair-${m}-${s}`);
           const cuenta = window.palapaState.cuentas[key];
           const isOccupied = (cuenta && cuenta.items && cuenta.items.length > 0);
 
@@ -726,21 +670,24 @@
           if (chairEl) {
             const posClass = s === 1 ? 'chair-pos-top' : s === 2 ? 'chair-pos-right' : s === 3 ? 'chair-pos-bottom' : 'chair-pos-left';
 
-            if (isOccupied) {
-              chairEl.setAttribute('draggable', 'true');
-              chairEl.setAttribute('title', `Mesa ${m} Silla ${s} (Ocupada) • Arrastra con el mouse para mover o combinar`);
+            // Determine desired class first
+            let desiredClass;
+            if (isMoveMode && origen && origen.mesaId === m && origen.sillaNum === s) {
+              desiredClass = `chair-btn-fixed ${posClass} chair-moving-source`;
+            } else if (isMoveMode) {
+              desiredClass = `chair-btn-fixed ${posClass} chair-moving-target ${isOccupied ? 'chair-state-busy' : 'chair-state-free'}`;
             } else {
-              chairEl.setAttribute('draggable', 'false');
-              chairEl.setAttribute('title', `Mesa ${m} Silla ${s} (Disponible)`);
+              desiredClass = `chair-btn-fixed ${posClass} ${isOccupied ? 'chair-state-busy' : 'chair-state-free'}`;
             }
 
-            if (isMoveMode && origen && origen.mesaId === m && origen.sillaNum === s) {
-              chairEl.className = `chair-btn-fixed ${posClass} chair-moving-source`;
-            } else if (isMoveMode) {
-              chairEl.className = `chair-btn-fixed ${posClass} chair-moving-target ${isOccupied ? 'chair-state-busy' : 'chair-state-free'}`;
-            } else {
-              chairEl.className = `chair-btn-fixed ${posClass} ${isOccupied ? 'chair-state-busy' : 'chair-state-free'}`;
-            }
+            // attachDragListeners clones the node to remove stale listeners; returns fresh node
+            const freshEl = attachDragListeners(chairEl, m, s, isOccupied);
+            // Apply class + attributes on the fresh (replaced) node
+            freshEl.className = desiredClass;
+            freshEl.setAttribute('draggable', isOccupied ? 'true' : 'false');
+            freshEl.setAttribute('title', isOccupied
+              ? `Mesa ${m} Silla ${s} (Ocupada) • Arrastra para mover`
+              : `Mesa ${m} Silla ${s} (Disponible)`);
           }
         }
 
@@ -837,7 +784,7 @@
 
     function filtrarCategoria(catNombre) {
       window.palapaState.categoriaFiltro = catNombre;
-
+      
       const chipKeys = ['Todos', 'Cafe', 'Des', 'Car', 'Pos'];
       chipKeys.forEach(k => {
         const el = document.getElementById(`wchip-${k}`);
@@ -864,3 +811,5 @@
     setTimeout(() => { renderStateUI(); }, 100);
   })();
 </script>
+
+</anvil-form>
