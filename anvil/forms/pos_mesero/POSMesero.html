@@ -300,103 +300,98 @@
       }
     };
 
-    // ── HTML5 Native Drag & Drop State ──
+    // ── HTML5 Native Drag & Drop (attached ONCE at startup) ──
     let _dragSrcMesa = null;
     let _dragSrcSilla = null;
 
     function limpiarDragState() {
-      document.querySelectorAll('.chair-btn-fixed').forEach(el => {
+      document.querySelectorAll('.chair-btn-fixed').forEach(function(el) {
         el.classList.remove('chair-dragging', 'chair-drag-target-valid', 'chair-drag-target-combine');
       });
     }
 
-    // Called from renderStateUI after each chair element is created/updated
-    function attachDragListeners(chairEl, mesaId, sillaNum, isOccupied) {
-      // Remove previous listeners by cloning the node
-      const fresh = chairEl.cloneNode(true);
-      chairEl.parentNode.replaceChild(fresh, chairEl);
-      chairEl = fresh;
+    function setupDragListeners() {
+      for (var m = 1; m <= 3; m++) {
+        for (var s = 1; s <= 4; s++) {
+          (function(mesaId, sillaNum) {
+            var el = document.getElementById('chair-' + mesaId + '-' + sillaNum);
+            if (!el) return;
 
-      if (!isOccupied) {
-        // Drop target for empty chairs
-        chairEl.addEventListener('dragover', function(e) {
-          if (_dragSrcMesa === null) return;
-          e.preventDefault();
-          e.dataTransfer.dropEffect = 'move';
-          limpiarDragState();
-          this.classList.add('chair-drag-target-valid');
-        });
-        chairEl.addEventListener('dragleave', function() {
-          this.classList.remove('chair-drag-target-valid', 'chair-drag-target-combine');
-        });
-        chairEl.addEventListener('drop', function(e) {
-          e.preventDefault();
-          this.classList.remove('chair-drag-target-valid', 'chair-drag-target-combine');
-          if (_dragSrcMesa !== null) {
-            completarMovimiento(mesaId, sillaNum);
-          }
-        });
-      } else {
-        // SOURCE — occupied chairs can be dragged
-        chairEl.setAttribute('draggable', 'true');
-        chairEl.addEventListener('dragstart', function(e) {
-          _dragSrcMesa = mesaId;
-          _dragSrcSilla = sillaNum;
-          window.palapaState.modoMoverActivo = true;
-          window.palapaState.sillaOrigenMover = { mesaId, sillaNum };
+            // dragstart — only fires if draggable="true" is set on the element
+            el.addEventListener('dragstart', function(e) {
+              var key = mesaId + '-' + sillaNum;
+              var cuenta = window.palapaState.cuentas[key];
+              if (!cuenta || !cuenta.items || cuenta.items.length === 0) {
+                e.preventDefault();
+                return;
+              }
+              _dragSrcMesa = mesaId;
+              _dragSrcSilla = sillaNum;
+              window.palapaState.modoMoverActivo = true;
+              window.palapaState.sillaOrigenMover = { mesaId: mesaId, sillaNum: sillaNum };
 
-          // Ghost image label
-          const ghost = document.createElement('div');
-          ghost.style.cssText = 'position:fixed;top:-200px;left:-200px;padding:8px 14px;background:#0284c7;color:#fff;font-size:12px;font-weight:800;border-radius:12px;border:2px solid #38bdf8;white-space:nowrap;';
-          const cuenta = window.palapaState.cuentas[`${mesaId}-${sillaNum}`];
-          let total = 0;
-          if (cuenta && cuenta.items) cuenta.items.forEach(i => total += i.precio * i.cantidad);
-          ghost.textContent = `🪑 M${mesaId} Silla ${sillaNum}  •  $${total.toFixed(2)}`;
-          document.body.appendChild(ghost);
-          e.dataTransfer.setDragImage(ghost, 80, 20);
-          setTimeout(() => document.body.removeChild(ghost), 0);
+              // Custom ghost drag image
+              var ghost = document.createElement('div');
+              ghost.style.cssText = 'position:fixed;top:-300px;left:-300px;padding:8px 16px;background:#0284c7;color:#fff;font-size:13px;font-weight:800;border-radius:12px;border:2px solid #38bdf8;white-space:nowrap;box-shadow:0 8px 24px rgba(0,0,0,0.6);';
+              var total = 0;
+              cuenta.items.forEach(function(i) { total += i.precio * i.cantidad; });
+              ghost.textContent = '\uD83E\uDE91 M' + mesaId + ' Silla ' + sillaNum + '  \u2022  $' + total.toFixed(2);
+              document.body.appendChild(ghost);
+              try { e.dataTransfer.setDragImage(ghost, 90, 22); } catch(err) {}
+              setTimeout(function() { if (ghost.parentNode) ghost.parentNode.removeChild(ghost); }, 0);
 
-          e.dataTransfer.effectAllowed = 'move';
-          e.dataTransfer.setData('text/plain', `${mesaId}-${sillaNum}`);
+              e.dataTransfer.effectAllowed = 'move';
+              try { e.dataTransfer.setData('text/plain', key); } catch(err) {}
 
-          // Visual feedback
-          setTimeout(() => this.classList.add('chair-dragging'), 0);
+              var self = this;
+              setTimeout(function() { self.classList.add('chair-dragging'); }, 0);
 
-          const bannerText = document.getElementById('bannerText');
-          const btnCancel  = document.getElementById('btnCancelMove');
-          if (bannerText) bannerText.innerHTML = `<b style="color:#38bdf8;">ARRASTRANDO:</b> Mesa ${mesaId} Silla ${sillaNum}. Suelta sobre la silla destino.`;
-          if (btnCancel)  btnCancel.style.display = 'block';
-        });
+              var bannerText = document.getElementById('bannerText');
+              var btnCancel  = document.getElementById('btnCancelMove');
+              if (bannerText) bannerText.innerHTML = '<b style="color:#38bdf8;">ARRASTRANDO:</b> Mesa ' + mesaId + ' Silla ' + sillaNum + '. Suelta sobre la silla destino.';
+              if (btnCancel)  btnCancel.style.display = 'block';
+            });
 
-        chairEl.addEventListener('dragend', function() {
-          this.classList.remove('chair-dragging');
-          limpiarDragState();
-          if (window.palapaState.modoMoverActivo) cancelarModoMover();
-        });
+            el.addEventListener('dragend', function() {
+              this.classList.remove('chair-dragging');
+              limpiarDragState();
+              _dragSrcMesa = null;
+              _dragSrcSilla = null;
+              if (window.palapaState.modoMoverActivo) cancelarModoMover();
+            });
 
-        // Also accept drops ON occupied chairs (combine)
-        chairEl.addEventListener('dragover', function(e) {
-          if (_dragSrcMesa === null) return;
-          if (mesaId === _dragSrcMesa && sillaNum === _dragSrcSilla) return;
-          e.preventDefault();
-          e.dataTransfer.dropEffect = 'move';
-          limpiarDragState();
-          this.classList.remove('chair-drag-target-valid');
-          this.classList.add('chair-drag-target-combine');
-        });
-        chairEl.addEventListener('dragleave', function() {
-          this.classList.remove('chair-drag-target-valid', 'chair-drag-target-combine');
-        });
-        chairEl.addEventListener('drop', function(e) {
-          e.preventDefault();
-          this.classList.remove('chair-drag-target-valid', 'chair-drag-target-combine');
-          if (_dragSrcMesa !== null && !(mesaId === _dragSrcMesa && sillaNum === _dragSrcSilla)) {
-            completarMovimiento(mesaId, sillaNum);
-          }
-        });
+            el.addEventListener('dragover', function(e) {
+              if (_dragSrcMesa === null) return;
+              if (mesaId === _dragSrcMesa && sillaNum === _dragSrcSilla) return;
+              e.preventDefault();
+              e.dataTransfer.dropEffect = 'move';
+              limpiarDragState();
+              var key = mesaId + '-' + sillaNum;
+              var tgt = window.palapaState.cuentas[key];
+              var tgtBusy = tgt && tgt.items && tgt.items.length > 0;
+              this.classList.add(tgtBusy ? 'chair-drag-target-combine' : 'chair-drag-target-valid');
+            });
+
+            el.addEventListener('dragleave', function(e) {
+              // Only remove highlight if we actually left this element
+              if (!this.contains(e.relatedTarget)) {
+                this.classList.remove('chair-drag-target-valid', 'chair-drag-target-combine');
+              }
+            });
+
+            el.addEventListener('drop', function(e) {
+              e.preventDefault();
+              this.classList.remove('chair-drag-target-valid', 'chair-drag-target-combine');
+              if (_dragSrcMesa !== null && !(mesaId === _dragSrcMesa && sillaNum === _dragSrcSilla)) {
+                completarMovimiento(mesaId, sillaNum);
+              }
+              _dragSrcMesa = null;
+              _dragSrcSilla = null;
+            });
+
+          })(m, s);
+        }
       }
-
-      return chairEl; // return refreshed node reference
     }
 
     // Global Event Delegation for all Clicks
@@ -670,24 +665,19 @@
           if (chairEl) {
             const posClass = s === 1 ? 'chair-pos-top' : s === 2 ? 'chair-pos-right' : s === 3 ? 'chair-pos-bottom' : 'chair-pos-left';
 
-            // Determine desired class first
-            let desiredClass;
-            if (isMoveMode && origen && origen.mesaId === m && origen.sillaNum === s) {
-              desiredClass = `chair-btn-fixed ${posClass} chair-moving-source`;
-            } else if (isMoveMode) {
-              desiredClass = `chair-btn-fixed ${posClass} chair-moving-target ${isOccupied ? 'chair-state-busy' : 'chair-state-free'}`;
-            } else {
-              desiredClass = `chair-btn-fixed ${posClass} ${isOccupied ? 'chair-state-busy' : 'chair-state-free'}`;
-            }
-
-            // attachDragListeners clones the node to remove stale listeners; returns fresh node
-            const freshEl = attachDragListeners(chairEl, m, s, isOccupied);
-            // Apply class + attributes on the fresh (replaced) node
-            freshEl.className = desiredClass;
-            freshEl.setAttribute('draggable', isOccupied ? 'true' : 'false');
-            freshEl.setAttribute('title', isOccupied
+            // Update draggable attribute based on current occupied state
+            chairEl.setAttribute('draggable', isOccupied ? 'true' : 'false');
+            chairEl.setAttribute('title', isOccupied
               ? `Mesa ${m} Silla ${s} (Ocupada) • Arrastra para mover`
               : `Mesa ${m} Silla ${s} (Disponible)`);
+
+            if (isMoveMode && origen && origen.mesaId === m && origen.sillaNum === s) {
+              chairEl.className = `chair-btn-fixed ${posClass} chair-moving-source`;
+            } else if (isMoveMode) {
+              chairEl.className = `chair-btn-fixed ${posClass} chair-moving-target ${isOccupied ? 'chair-state-busy' : 'chair-state-free'}`;
+            } else {
+              chairEl.className = `chair-btn-fixed ${posClass} ${isOccupied ? 'chair-state-busy' : 'chair-state-free'}`;
+            }
           }
         }
 
@@ -808,7 +798,7 @@
       renderWaiterMenuGrid();
     }
 
-    setTimeout(() => { renderStateUI(); }, 100);
+    setTimeout(function() { renderStateUI(); setupDragListeners(); }, 150);
   })();
 </script>
 
