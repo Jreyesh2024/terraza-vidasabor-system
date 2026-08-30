@@ -1,6 +1,6 @@
 from ._anvil_designer import MenuTemplate
+import anvil
 import anvil.server
-import anvil.open_form
 
 class Menu(MenuTemplate):
   def __init__(self, **properties):
