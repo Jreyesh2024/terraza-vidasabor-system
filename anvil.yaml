@@ -16,7 +16,7 @@ native_deps: |
     if (!window.abrirModalComandaActual) window.abrirModalComandaActual = function() { if (window.handleAbrirModal) window.handleAbrirModal(); };
   </script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link rel="stylesheet" href="_/	heme/theme.css">
+  <link rel="stylesheet" href="_/theme/theme.css">
 forms:
 - name: Menu
 - name: POSMesero
