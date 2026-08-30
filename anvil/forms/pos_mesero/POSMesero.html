@@ -1,13 +1,128 @@
-<!-- ============================================================================
-  LA TERRAZA DE VIDA & SABOR (V&S) - PLANO GRÁFICO 2D (TOP-DOWN)
-  Área 1: La Palapa (6.00m x 4.00m) • 3 Mesas x 4 Sillas
-============================================================================ -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-<div class="min-h-screen bg-[#090d16] text-slate-100 p-4 md:p-6 font-sans flex flex-col">
-  <!-- HEADER & AREA SELECTOR -->
-  <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 pb-4 border-b border-slate-800 mb-4">
+<style>
+  html, body, .anvil-container {
+    background-color: #090d16 !important;
+    color: #f8fafc !important;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
+    margin: 0;
+    padding: 0;
+  }
+
+  .floorplan-container {
+    background: rgba(15, 23, 42, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 1rem;
+    padding: 1.5rem;
+  }
+
+  /* Fixed 220x220 Table Group Box to prevent any chair overlap */
+  .table-group {
+    position: relative;
+    width: 220px;
+    height: 220px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .table-circle {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .table-circle:hover {
+    transform: scale(1.05);
+  }
+
+  .table-circle-green {
+    background: #064e3b;
+    border: 4px solid #10b981;
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+  }
+
+  .table-circle-amber {
+    background: #78350f;
+    border: 4px solid #f59e0b;
+    box-shadow: 0 0 20px rgba(245, 158, 11, 0.3);
+  }
+
+  /* Chair Nodes Explicit Absolute Positions */
+  .chair-node {
+    position: absolute;
+    z-index: 20;
+    padding: 6px 12px;
+    font-size: 11px;
+    font-weight: 800;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+  }
+
+  .chair-node:hover {
+    transform: scale(1.1);
+  }
+
+  .chair-top {
+    top: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .chair-right {
+    right: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .chair-bottom {
+    bottom: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .chair-left {
+    left: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .chair-available {
+    background-color: #059669;
+    color: #ffffff;
+    border: 1px solid #34d399;
+  }
+
+  .chair-occupied {
+    background-color: #d97706;
+    color: #0f172a;
+    border: 1px solid #fbbf24;
+  }
+
+  .chair-idle {
+    background-color: #334155;
+    color: #94a3b8;
+    border: 1px solid #475569;
+  }
+</style>
+
+<div class="min-h-screen bg-[#090d16] text-slate-100 p-4 md:p-6 font-sans flex flex-col gap-6">
+  
+  <!-- TOP BRANDING & NAV SWITCHER -->
+  <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 pb-4 border-b border-slate-800">
     <div class="flex items-center gap-3">
-      <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-emerald-500 to-teal-700 flex items-center justify-center text-2xl text-white font-black shadow-lg brand-glow">
+      <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-emerald-500 to-teal-700 flex items-center justify-center text-2xl text-white font-black shadow-lg" style="box-shadow: 0 0 20px rgba(16,185,129,0.3);">
         V&S
       </div>
       <div>
@@ -16,175 +131,133 @@
       </div>
     </div>
 
-    <!-- AREA SELECTION TABS (PALAPA / CHIMENEA / PATIO CENTRAL) -->
-    <div class="flex gap-2 bg-slate-900/90 p-1.5 rounded-2xl border border-slate-800 overflow-x-auto w-full md:w-auto">
-      <button onclick="window.cambiarArea('palapa')" id="btn-area-palapa" class="px-4 py-2 text-xs font-bold rounded-xl bg-emerald-600 text-white shadow-lg transition flex items-center gap-2 whitespace-nowrap">
+    <!-- AREA TABS -->
+    <div class="flex gap-2 bg-slate-900 p-1.5 rounded-2xl border border-slate-800">
+      <button onclick="window.cambiarArea('palapa')" id="btn-area-palapa" class="px-4 py-2 text-xs font-bold rounded-xl bg-emerald-600 text-white shadow-lg flex items-center gap-2">
         <i class="fa-solid fa-umbrella-beach text-amber-300"></i> La Palapa (6x4m)
       </button>
-      <button onclick="window.cambiarArea('chimenea')" id="btn-area-chimenea" class="px-4 py-2 text-xs font-semibold rounded-xl text-slate-400 hover:text-white transition flex items-center gap-2 whitespace-nowrap">
+      <button onclick="window.cambiarArea('chimenea')" id="btn-area-chimenea" class="px-4 py-2 text-xs font-semibold rounded-xl text-slate-400 hover:text-white flex items-center gap-2">
         <i class="fa-solid fa-fire-burner text-amber-500"></i> La Chimenea
       </button>
-      <button onclick="window.cambiarArea('patio')" id="btn-area-patio" class="px-4 py-2 text-xs font-semibold rounded-xl text-slate-400 hover:text-white transition flex items-center gap-2 whitespace-nowrap">
+      <button onclick="window.cambiarArea('patio')" id="btn-area-patio" class="px-4 py-2 text-xs font-semibold rounded-xl text-slate-400 hover:text-white flex items-center gap-2">
         <i class="fa-solid fa-tree text-emerald-400"></i> Patio Central
       </button>
     </div>
   </div>
 
-  <!-- MAIN CANVAS: 2D TOP-DOWN LAYOUT OF LA PALAPA -->
-  <div class="flex-1 grid grid-cols-1 lg:grid-cols-3 gap-6">
+  <!-- MAIN CANVAS GRID -->
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
     
-    <!-- LEFT 2 COLS: TOP-DOWN GRAPHICAL FLOOR PLAN OF LA PALAPA -->
-    <div class="lg:col-span-2 bg-slate-900/80 border border-slate-800 rounded-2xl p-6 shadow-2xl backdrop-blur-xl flex flex-col justify-between relative overflow-hidden min-h-[520px]">
+    <!-- LEFT 2 COLS: FLOOR PLAN -->
+    <div class="lg:col-span-2 floorplan-container flex flex-col justify-between min-h-[500px]">
       
-      <!-- TOP SERVICE BAR (MUEBLE DE SERVICIO / BARRA DE CAFÉ - PARED POSTERIOR 6m) -->
-      <div class="w-full bg-slate-800/90 border border-emerald-500/30 rounded-xl p-3 flex flex-wrap justify-between items-center mb-6 shadow-inner gap-2">
+      <!-- PARED POSTERIOR BARRA -->
+      <div class="w-full bg-slate-800/90 border border-emerald-500/30 rounded-xl p-3 flex justify-between items-center mb-6">
         <div class="flex items-center gap-2 text-xs font-bold text-emerald-400">
           <i class="fa-solid fa-mug-hot text-amber-400 text-base"></i>
           <span>Mueble de Servicio & Barra de Café (Pared Posterior 6.00m)</span>
         </div>
-        <div class="flex gap-3 text-[11px] text-slate-400 font-medium">
+        <div class="flex gap-4 text-[11px] text-slate-400 font-medium">
           <span><i class="fa-solid fa-wine-glass text-purple-400 mr-1"></i> Cristalería</span>
           <span><i class="fa-solid fa-fire text-amber-400 mr-1"></i> Espresso</span>
           <span><i class="fa-solid fa-sink text-sky-400 mr-1"></i> Insumos</span>
         </div>
       </div>
 
-      <!-- 3 CIRCULAR TABLES WITH 4 CHAIRS EACH DRAWN AT SCALE -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 my-auto py-4" id="palapaTablesContainer">
+      <!-- 3 TABLES GRAPHICAL DISPLAY -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 my-auto py-6">
         
-        <!-- MESA 1 (4 Sillas) -->
-        <div class="flex flex-col items-center space-y-3">
+        <!-- MESA 1 -->
+        <div class="flex flex-col items-center gap-3">
           <span class="text-xs font-black text-slate-300 uppercase tracking-wider">Mesa 1 (Palapa)</span>
-          <!-- Interactive Table Container -->
-          <div class="relative w-44 h-44 flex items-center justify-center">
-            <!-- Round Table Body -->
-            <div onclick="window.seleccionarMesaSilla(1, 1)" class="w-24 h-24 rounded-full bg-slate-800 border-4 border-emerald-500 shadow-xl shadow-emerald-950/50 flex flex-col items-center justify-center cursor-pointer hover:scale-105 transition group z-10">
-              <span class="text-sm font-black text-white group-hover:text-emerald-300">M1</span>
-              <span class="text-[9px] font-bold text-emerald-400 uppercase">4 Sillas</span>
+          <div class="table-group">
+            <div onclick="window.seleccionarMesaSilla(1, 1)" class="table-circle table-circle-green">
+              <span class="text-base font-black text-white">M1</span>
+              <span class="text-[9px] font-bold text-emerald-300 uppercase">4 Sillas</span>
             </div>
-            <!-- Chair 1 (Top) -->
-            <button onclick="window.seleccionarMesaSilla(1, 1)" id="chair-1-1" class="chair-btn absolute top-0 left-1/2 -translate-x-1/2 px-3 py-1 bg-emerald-600/90 text-white font-black text-[10px] rounded-lg border border-emerald-400 shadow-md hover:scale-110 transition z-20">
-              Silla 1
-            </button>
-            <!-- Chair 2 (Right) -->
-            <button onclick="window.seleccionarMesaSilla(1, 2)" id="chair-1-2" class="chair-btn absolute right-0 top-1/2 -translate-y-1/2 px-2.5 py-1 bg-emerald-600/90 text-white font-black text-[10px] rounded-lg border border-emerald-400 shadow-md hover:scale-110 transition z-20">
-              S2
-            </button>
-            <!-- Chair 3 (Bottom) -->
-            <button onclick="window.seleccionarMesaSilla(1, 3)" id="chair-1-3" class="chair-btn absolute bottom-0 left-1/2 -translate-x-1/2 px-3 py-1 bg-emerald-600/90 text-white font-black text-[10px] rounded-lg border border-emerald-400 shadow-md hover:scale-110 transition z-20">
-              Silla 3
-            </button>
-            <!-- Chair 4 (Left) -->
-            <button onclick="window.seleccionarMesaSilla(1, 4)" id="chair-1-4" class="chair-btn absolute left-0 top-1/2 -translate-y-1/2 px-2.5 py-1 bg-emerald-600/90 text-white font-black text-[10px] rounded-lg border border-emerald-400 shadow-md hover:scale-110 transition z-20">
-              S4
-            </button>
+            <button onclick="window.seleccionarMesaSilla(1, 1)" id="chair-1-1" class="chair-node chair-top chair-available">Silla 1</button>
+            <button onclick="window.seleccionarMesaSilla(1, 2)" id="chair-1-2" class="chair-node chair-right chair-available">Silla 2</button>
+            <button onclick="window.seleccionarMesaSilla(1, 3)" id="chair-1-3" class="chair-node chair-bottom chair-available">Silla 3</button>
+            <button onclick="window.seleccionarMesaSilla(1, 4)" id="chair-1-4" class="chair-node chair-left chair-available">Silla 4</button>
           </div>
-          <span class="text-[11px] text-emerald-400 font-semibold">🟢 Disponible</span>
+          <span class="text-xs text-emerald-400 font-bold">🟢 Disponible</span>
         </div>
 
-        <!-- MESA 2 (4 Sillas) -->
-        <div class="flex flex-col items-center space-y-3">
+        <!-- MESA 2 -->
+        <div class="flex flex-col items-center gap-3">
           <span class="text-xs font-black text-slate-300 uppercase tracking-wider">Mesa 2 (Palapa)</span>
-          <div class="relative w-44 h-44 flex items-center justify-center">
-            <div onclick="window.seleccionarMesaSilla(2, 1)" class="w-24 h-24 rounded-full bg-slate-800 border-4 border-emerald-500 shadow-xl shadow-emerald-950/50 flex flex-col items-center justify-center cursor-pointer hover:scale-105 transition group z-10">
-              <span class="text-sm font-black text-white group-hover:text-emerald-300">M2</span>
-              <span class="text-[9px] font-bold text-emerald-400 uppercase">4 Sillas</span>
+          <div class="table-group">
+            <div onclick="window.seleccionarMesaSilla(2, 1)" class="table-circle table-circle-green">
+              <span class="text-base font-black text-white">M2</span>
+              <span class="text-[9px] font-bold text-emerald-300 uppercase">4 Sillas</span>
             </div>
-            <button onclick="window.seleccionarMesaSilla(2, 1)" id="chair-2-1" class="chair-btn absolute top-0 left-1/2 -translate-x-1/2 px-3 py-1 bg-emerald-600/90 text-white font-black text-[10px] rounded-lg border border-emerald-400 shadow-md hover:scale-110 transition z-20">
-              Silla 1
-            </button>
-            <button onclick="window.seleccionarMesaSilla(2, 2)" id="chair-2-2" class="chair-btn absolute right-0 top-1/2 -translate-y-1/2 px-2.5 py-1 bg-emerald-600/90 text-white font-black text-[10px] rounded-lg border border-emerald-400 shadow-md hover:scale-110 transition z-20">
-              S2
-            </button>
-            <button onclick="window.seleccionarMesaSilla(2, 3)" id="chair-2-3" class="chair-btn absolute bottom-0 left-1/2 -translate-x-1/2 px-3 py-1 bg-emerald-600/90 text-white font-black text-[10px] rounded-lg border border-emerald-400 shadow-md hover:scale-110 transition z-20">
-              Silla 3
-            </button>
-            <button onclick="window.seleccionarMesaSilla(2, 4)" id="chair-2-4" class="chair-btn absolute left-0 top-1/2 -translate-y-1/2 px-2.5 py-1 bg-emerald-600/90 text-white font-black text-[10px] rounded-lg border border-emerald-400 shadow-md hover:scale-110 transition z-20">
-              S4
-            </button>
+            <button onclick="window.seleccionarMesaSilla(2, 1)" id="chair-2-1" class="chair-node chair-top chair-available">Silla 1</button>
+            <button onclick="window.seleccionarMesaSilla(2, 2)" id="chair-2-2" class="chair-node chair-right chair-available">Silla 2</button>
+            <button onclick="window.seleccionarMesaSilla(2, 3)" id="chair-2-3" class="chair-node chair-bottom chair-available">Silla 3</button>
+            <button onclick="window.seleccionarMesaSilla(2, 4)" id="chair-2-4" class="chair-node chair-left chair-available">Silla 4</button>
           </div>
-          <span class="text-[11px] text-emerald-400 font-semibold">🟢 Disponible</span>
+          <span class="text-xs text-emerald-400 font-bold">🟢 Disponible</span>
         </div>
 
-        <!-- MESA 3 (4 Sillas - Ocupada) -->
-        <div class="flex flex-col items-center space-y-3">
+        <!-- MESA 3 (Ocupada) -->
+        <div class="flex flex-col items-center gap-3">
           <span class="text-xs font-black text-amber-400 uppercase tracking-wider">Mesa 3 (Palapa)</span>
-          <div class="relative w-44 h-44 flex items-center justify-center">
-            <div onclick="window.seleccionarMesaSilla(3, 1)" class="w-24 h-24 rounded-full bg-slate-800 border-4 border-amber-500 shadow-xl shadow-amber-950/50 flex flex-col items-center justify-center cursor-pointer hover:scale-105 transition group z-10">
-              <span class="text-sm font-black text-amber-300">M3</span>
-              <span class="text-[9px] font-bold text-amber-400 uppercase">2 Ocupadas</span>
+          <div class="table-group">
+            <div onclick="window.seleccionarMesaSilla(3, 1)" class="table-circle table-circle-amber">
+              <span class="text-base font-black text-amber-200">M3</span>
+              <span class="text-[9px] font-bold text-amber-300 uppercase">2 Ocupadas</span>
             </div>
-            <!-- Chair 1 (Ocupada) -->
-            <button onclick="window.seleccionarMesaSilla(3, 1)" id="chair-3-1" class="chair-btn absolute top-0 left-1/2 -translate-x-1/2 px-3 py-1 bg-amber-500 text-slate-950 font-black text-[10px] rounded-lg border border-amber-400 shadow-md hover:scale-110 transition z-20">
-              Silla 1 (Activa)
-            </button>
-            <!-- Chair 2 (Ocupada) -->
-            <button onclick="window.seleccionarMesaSilla(3, 2)" id="chair-3-2" class="chair-btn absolute right-0 top-1/2 -translate-y-1/2 px-2.5 py-1 bg-amber-500 text-slate-950 font-black text-[10px] rounded-lg border border-amber-400 shadow-md hover:scale-110 transition z-20">
-              S2
-            </button>
-            <!-- Chair 3 (Libre) -->
-            <button onclick="window.seleccionarMesaSilla(3, 3)" id="chair-3-3" class="chair-btn absolute bottom-0 left-1/2 -translate-x-1/2 px-3 py-1 bg-slate-700 text-slate-400 font-bold text-[10px] rounded-lg border border-slate-600 shadow-md hover:scale-110 transition z-20">
-              Silla 3
-            </button>
-            <!-- Chair 4 (Libre) -->
-            <button onclick="window.seleccionarMesaSilla(3, 4)" id="chair-3-4" class="chair-btn absolute left-0 top-1/2 -translate-y-1/2 px-2.5 py-1 bg-slate-700 text-slate-400 font-bold text-[10px] rounded-lg border border-slate-600 shadow-md hover:scale-110 transition z-20">
-              S4
-            </button>
+            <button onclick="window.seleccionarMesaSilla(3, 1)" id="chair-3-1" class="chair-node chair-top chair-occupied">Silla 1 (Activa)</button>
+            <button onclick="window.seleccionarMesaSilla(3, 2)" id="chair-3-2" class="chair-node chair-right chair-occupied">Silla 2</button>
+            <button onclick="window.seleccionarMesaSilla(3, 3)" id="chair-3-3" class="chair-node chair-bottom chair-idle">Silla 3</button>
+            <button onclick="window.seleccionarMesaSilla(3, 4)" id="chair-3-4" class="chair-node chair-left chair-idle">Silla 4</button>
           </div>
-          <span class="text-[11px] text-amber-400 font-semibold">🟡 Ocupada (2 Comensales)</span>
+          <span class="text-xs text-amber-400 font-bold">🟡 Ocupada (2 Comensales)</span>
         </div>
 
       </div>
 
-      <!-- FOOTER INFO & FLOW CIRCULATION PASILLO -->
-      <div class="w-full pt-4 border-t border-slate-800 flex flex-wrap justify-between items-center text-xs text-slate-400 font-medium gap-2">
+      <!-- FOOTER INFO -->
+      <div class="w-full pt-4 border-t border-slate-800 flex justify-between items-center text-xs text-slate-400">
         <span><i class="fa-solid fa-door-open text-emerald-400 mr-1"></i> Entrada Frontal & Pasillos de Circulación</span>
         <span class="text-emerald-400 font-bold">Área 1: La Palapa (6.00m x 4.00m)</span>
       </div>
+
     </div>
 
-    <!-- RIGHT COL: SECONDARY LEVEL ORDER TAKING & CHAIR COMMANDAS -->
-    <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-6 shadow-2xl backdrop-blur-xl flex flex-col justify-between space-y-6">
+    <!-- RIGHT COL: ORDER TAKING FOR SELECTED CHAIR -->
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl flex flex-col justify-between gap-6">
       
-      <!-- LEVEL 2 HEADER: SELECTED TABLE & CHAIR -->
       <div class="space-y-4">
         <div class="flex justify-between items-center pb-3 border-b border-slate-800">
           <div>
-            <h2 class="text-sm font-extrabold text-white flex items-center gap-2">
+            <h2 class="text-base font-extrabold text-white flex items-center gap-2">
               <i class="fa-solid fa-clipboard-list text-emerald-400"></i> Comanda por Comensal
             </h2>
-            <p class="text-[11px] text-slate-400">Nivel 2 • Asignación directa por silla</p>
+            <p class="text-xs text-slate-400">Nivel 2 • Asignación directa por silla</p>
           </div>
-          <span id="activeSeatBadge" class="px-3 py-1 bg-amber-500/20 text-amber-300 border border-amber-500/40 rounded-lg text-xs font-black">
+          <span id="activeSeatBadge" class="px-3 py-1.5 bg-amber-500/20 text-amber-300 border border-amber-500/40 rounded-xl text-xs font-black">
             Mesa 3 • Silla 1
           </span>
         </div>
 
-        <!-- CHAIR SELECTOR TABS -->
-        <div class="flex gap-1.5 overflow-x-auto pb-1" id="chairSelectorTabs">
-          <button onclick="window.activarSilla(1)" id="tab-s1" class="flex-1 py-2 px-2 bg-amber-500 text-slate-950 font-black text-xs rounded-xl shadow-md transition text-center">
-            Silla 1
-          </button>
-          <button onclick="window.activarSilla(2)" id="tab-s2" class="flex-1 py-2 px-2 bg-slate-800 text-slate-300 font-bold text-xs rounded-xl hover:bg-slate-700 transition text-center">
-            Silla 2
-          </button>
-          <button onclick="window.activarSilla(3)" id="tab-s3" class="flex-1 py-2 px-2 bg-slate-800 text-slate-300 font-bold text-xs rounded-xl hover:bg-slate-700 transition text-center">
-            Silla 3
-          </button>
-          <button onclick="window.activarSilla(4)" id="tab-s4" class="flex-1 py-2 px-2 bg-slate-800 text-slate-300 font-bold text-xs rounded-xl hover:bg-slate-700 transition text-center">
-            Silla 4
-          </button>
+        <!-- CHAIR TABS -->
+        <div class="grid grid-cols-4 gap-2">
+          <button onclick="window.activarSilla(1)" id="tab-s1" class="py-2.5 bg-amber-500 text-slate-950 font-black text-xs rounded-xl shadow transition text-center">Silla 1</button>
+          <button onclick="window.activarSilla(2)" id="tab-s2" class="py-2.5 bg-slate-800 text-slate-300 font-bold text-xs rounded-xl hover:bg-slate-700 transition text-center">Silla 2</button>
+          <button onclick="window.activarSilla(3)" id="tab-s3" class="py-2.5 bg-slate-800 text-slate-300 font-bold text-xs rounded-xl hover:bg-slate-700 transition text-center">Silla 3</button>
+          <button onclick="window.activarSilla(4)" id="tab-s4" class="py-2.5 bg-slate-800 text-slate-300 font-bold text-xs rounded-xl hover:bg-slate-700 transition text-center">Silla 4</button>
         </div>
 
-        <!-- CURRENT CONSUMPTIONS PER CHAIR -->
-        <div class="bg-slate-950/80 border border-slate-800/80 rounded-xl p-4 space-y-3">
-          <div class="flex justify-between items-center border-b border-slate-800 pb-2">
+        <!-- CHAIR ITEMS DETAIL -->
+        <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-3">
+          <div class="flex justify-between items-center pb-2 border-b border-slate-800">
             <span class="text-xs font-bold text-slate-300">Platillos en <span class="text-amber-400 font-black" id="lblSillaActiva">Silla 1</span>:</span>
             <span class="text-[10px] px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 font-bold uppercase">En Preparación</span>
           </div>
 
-          <div class="space-y-2 text-xs font-medium text-slate-200 max-h-48 overflow-y-auto" id="listItemsSilla">
-            <div class="flex justify-between items-center bg-slate-900/60 p-2 rounded-lg border border-slate-800">
+          <div class="space-y-2 text-xs text-slate-200">
+            <div class="flex justify-between items-center bg-slate-900 p-2.5 rounded-lg border border-slate-800">
               <div>
                 <span class="font-bold text-white block">1x Chilaquiles Verdes con Pollo</span>
                 <span class="text-[10px] text-slate-400 italic">Sin cebolla • Salsa verde aparte</span>
@@ -193,22 +266,22 @@
             </div>
           </div>
 
-          <div class="border-t border-slate-800 pt-2 flex justify-between font-black text-sm text-white">
+          <div class="pt-2 border-t border-slate-800 flex justify-between font-black text-sm text-white">
             <span>Subtotal Silla:</span>
-            <span class="text-emerald-400" id="lblSubtotalSilla">$148.00</span>
+            <span class="text-emerald-400">$148.00</span>
           </div>
         </div>
       </div>
 
-      <!-- LEVEL 2 ACTIONS: ADD DISHES / SEND TO KDS / BILL -->
-      <div class="space-y-2.5 pt-2">
-        <button onclick="window.abrirMenuGourmet()" class="w-full py-3 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-extrabold text-xs rounded-xl shadow-lg shadow-emerald-950/40 transition flex items-center justify-center gap-2">
-          <i class="fa-solid fa-plus-circle"></i> Agregar Platillo / Bebida a Silla 1
+      <!-- ACTIONS -->
+      <div class="space-y-2.5">
+        <button onclick="window.abrirMenuGourmet()" class="w-full py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-xs rounded-xl shadow-lg transition flex items-center justify-center gap-2">
+          <i class="fa-solid fa-plus-circle"></i> Agregar Platillo / Bebida a Silla
         </button>
-        <button onclick="alert('Comanda de Mesa 3 Silla 1 enviada a Cocina (KDS)')" class="w-full py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs rounded-xl shadow-md transition flex items-center justify-center gap-2">
+        <button onclick="alert('Comanda enviada a Cocina (KDS)')" class="w-full py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs rounded-xl shadow transition flex items-center justify-center gap-2">
           <i class="fa-solid fa-fire"></i> Enviar Comanda a Cocina (KDS)
         </button>
-        <button onclick="alert('Solicitando Precuenta para Mesa 3 Silla 1 ($148.00)')" class="w-full py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs rounded-xl border border-slate-700 transition flex items-center justify-center gap-2">
+        <button onclick="alert('Solicitando Precuenta Separada')" class="w-full py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs rounded-xl border border-slate-700 transition flex items-center justify-center gap-2">
           <i class="fa-solid fa-receipt text-sky-400"></i> Precuenta Separada por Silla
         </button>
       </div>
@@ -237,9 +310,9 @@
       const tab = document.getElementById('tab-s' + i);
       if (tab) {
         if (i === num) {
-          tab.className = "flex-1 py-2 px-2 bg-amber-500 text-slate-950 font-black text-xs rounded-xl shadow-md transition text-center";
+          tab.className = "py-2.5 bg-amber-500 text-slate-950 font-black text-xs rounded-xl shadow transition text-center";
         } else {
-          tab.className = "flex-1 py-2 px-2 bg-slate-800 text-slate-300 font-bold text-xs rounded-xl hover:bg-slate-700 transition text-center";
+          tab.className = "py-2.5 bg-slate-800 text-slate-300 font-bold text-xs rounded-xl hover:bg-slate-700 transition text-center";
         }
       }
     }
@@ -249,17 +322,15 @@
     if (window.navMenu) {
       window.navMenu('menu');
     } else {
-      alert('Abriendo catálogo de menú gourmet para Mesa ' + window.mesaSeleccionada + ' Silla ' + window.sillaSeleccionada);
+      alert('Abriendo catálogo de menú gourmet');
     }
   };
 
   window.cambiarArea = function(area) {
     if (area === 'palapa') {
-      document.getElementById('btn-area-palapa').className = "px-4 py-2 text-xs font-bold rounded-xl bg-emerald-600 text-white shadow-lg transition flex items-center gap-2 whitespace-nowrap";
-      document.getElementById('btn-area-chimenea').className = "px-4 py-2 text-xs font-semibold rounded-xl text-slate-400 hover:text-white transition flex items-center gap-2 whitespace-nowrap";
-      document.getElementById('btn-area-patio').className = "px-4 py-2 text-xs font-semibold rounded-xl text-slate-400 hover:text-white transition flex items-center gap-2 whitespace-nowrap";
+      document.getElementById('btn-area-palapa').className = "px-4 py-2 text-xs font-bold rounded-xl bg-emerald-600 text-white shadow-lg flex items-center gap-2";
     } else {
-      alert('Cargando croquis de área: ' + area);
+      alert('Cargando área: ' + area);
     }
   };
 </script>
