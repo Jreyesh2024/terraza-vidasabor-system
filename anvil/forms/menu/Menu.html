@@ -157,197 +157,179 @@
   </div>
 
   <script>
-    window.vsMenuData = [
-      {id: 1, categoria_nombre: "Barra de Café & Infusiones", nombre: "Café Capuchino Especial V&S", descripcion: "Espresso doble con leche cremada artesanal y toque de canela", precio_unitario: 68.00, estacion_preparacion: "barra_cafe", icono: "☕"},
-      {id: 2, categoria_nombre: "Barra de Café & Infusiones", nombre: "Espresso Italiano Robusto", descripcion: "Grano seleccionado 100% arábica tostado de la casa", precio_unitario: 48.00, estacion_preparacion: "barra_cafe", icono: "☕"},
-      {id: 3, categoria_nombre: "Barra de Café & Infusiones", nombre: "Latte Machiatto Vainilla Bourbon", descripcion: "Espresso con leche de almendra y jarabe natural de vainilla bourbon", precio_unitario: 75.00, estacion_preparacion: "barra_cafe", icono: "🥛"},
-      {id: 4, categoria_nombre: "Desayunos & Brunch Gourmet", nombre: "Chilaquiles Verdes con Pollo y Queso Gouda", descripcion: "Totopos artesanos en salsa de tomatillo con pollo deshebrado y gouda", precio_unitario: 148.00, estacion_preparacion: "cocina", icono: "🥘"},
-      {id: 5, categoria_nombre: "Desayunos & Brunch Gourmet", nombre: "Omelette Supremo La Terraza", descripcion: "3 huevos orgánicos rellenos de portobello, espinacas baby y queso asadero", precio_unitario: 155.00, estacion_preparacion: "cocina", icono: "🍳"},
-      {id: 6, categoria_nombre: "Desayunos & Brunch Gourmet", nombre: "Molletes de Masa Madre con Chorizo", descripcion: "Pan artesano de masa madre con frijol negro, gouda y chorizo", precio_unitario: 125.00, estacion_preparacion: "cocina", icono: "🥖"},
-      {id: 7, categoria_nombre: "Especialidades Fuertes", nombre: "Rib Eye Grill V&S (350g)", descripcion: "Corte de alta calidad a las brasas servido con papas gajo y espárragos", precio_unitario: 385.00, estacion_preparacion: "cocina", icono: "🥩"},
-      {id: 8, categoria_nombre: "Especialidades Fuertes", nombre: "Pasta Fettuccine con Camarones al Trufado", descripcion: "Pasta fresca hecha en casa con camarones u-15 y crema suave de trufa", precio_unitario: 265.00, estacion_preparacion: "cocina", icono: "🍝"},
-      {id: 9, categoria_nombre: "Repostería & Postres de Autor", nombre: "Pastel Supremo de Chocolate Valrhona", descripcion: "Rebanada caliente de pastel de chocolate amargo con helado de vainilla", precio_unitario: 105.00, estacion_preparacion: "reposteria", icono: "🍰"},
-      {id: 10, categoria_nombre: "Bebidas & Coctelería de Autor", nombre: "Limonada Botánica de Hierbabuena & Jengibre", descripcion: "Agua mineral infucionada con jengibre fresco, limón eufrata y hierbabuena", precio_unitario: 60.00, estacion_preparacion: "barra_cafe", icono: "🍋"}
-    ];
+    (function() {
+      var seedProductos = [
+        {id: 1, categoria_nombre: "Barra de Café & Infusiones", nombre: "Café Capuchino Especial V&S", descripcion: "Espresso doble con leche cremada artesanal y toque de canela", precio_unitario: 68.00, estacion_preparacion: "barra_cafe", icono: "☕"},
+        {id: 2, categoria_nombre: "Barra de Café & Infusiones", nombre: "Espresso Italiano Robusto", descripcion: "Grano seleccionado 100% arábica tostado de la casa", precio_unitario: 48.00, estacion_preparacion: "barra_cafe", icono: "☕"},
+        {id: 3, categoria_nombre: "Barra de Café & Infusiones", nombre: "Latte Machiatto Vainilla Bourbon", descripcion: "Espresso con leche de almendra y jarabe natural de vainilla bourbon", precio_unitario: 75.00, estacion_preparacion: "barra_cafe", icono: "🥛"},
+        {id: 4, categoria_nombre: "Desayunos & Brunch Gourmet", nombre: "Chilaquiles Verdes con Pollo y Queso Gouda", descripcion: "Totopos artesanos en salsa de tomatillo con pollo deshebrado y gouda", precio_unitario: 148.00, estacion_preparacion: "cocina", icono: "🥘"},
+        {id: 5, categoria_nombre: "Desayunos & Brunch Gourmet", nombre: "Omelette Supremo La Terraza", descripcion: "3 huevos orgánicos rellenos de portobello, espinacas baby y queso asadero", precio_unitario: 155.00, estacion_preparacion: "cocina", icono: "🍳"},
+        {id: 6, categoria_nombre: "Desayunos & Brunch Gourmet", nombre: "Molletes de Masa Madre con Chorizo", descripcion: "Pan artesano de masa madre con frijol negro, gouda y chorizo", precio_unitario: 125.00, estacion_preparacion: "cocina", icono: "🥖"},
+        {id: 7, categoria_nombre: "Especialidades Fuertes", nombre: "Rib Eye Grill V&S (350g)", descripcion: "Corte de alta calidad a las brasas servido con papas gajo y espárragos", precio_unitario: 385.00, estacion_preparacion: "cocina", icono: "🥩"},
+        {id: 8, categoria_nombre: "Especialidades Fuertes", nombre: "Pasta Fettuccine con Camarones al Trufado", descripcion: "Pasta fresca hecha en casa con camarones u-15 y crema suave de trufa", precio_unitario: 265.00, estacion_preparacion: "cocina", icono: "🍝"},
+        {id: 9, categoria_nombre: "Repostería & Postres de Autor", nombre: "Pastel Supremo de Chocolate Valrhona", descripcion: "Rebanada caliente de pastel de chocolate amargo con helado de vainilla", precio_unitario: 105.00, estacion_preparacion: "reposteria", icono: "🍰"},
+        {id: 10, categoria_nombre: "Bebidas & Coctelería de Autor", nombre: "Limonada Botánica de Hierbabuena & Jengibre", descripcion: "Agua mineral infucionada con jengibre fresco, limón eufrata y hierbabuena", precio_unitario: 60.00, estacion_preparacion: "barra_cafe", icono: "🍋"}
+      ];
 
-    window.vsCategoriasData = [
-      {id: 1, nombre: "Barra de Café & Infusiones", icono: "☕"},
-      {id: 2, nombre: "Desayunos & Brunch Gourmet", icono: "🍳"},
-      {id: 3, nombre: "Entradas & Tapas de la Terraza", icono: "🥗"},
-      {id: 4, nombre: "Especialidades Fuertes", icono: "🥩"},
-      {id: 5, nombre: "Repostería & Postres de Autor", icono: "🍰"},
-      {id: 6, nombre: "Bebidas & Coctelería de Autor", icono: "🍹"}
-    ];
+      var seedCategorias = [
+        {id: 1, nombre: "Barra de Café & Infusiones", icono: "☕"},
+        {id: 2, nombre: "Desayunos & Brunch Gourmet", icono: "🍳"},
+        {id: 3, nombre: "Entradas & Tapas de la Terraza", icono: "🥗"},
+        {id: 4, nombre: "Especialidades Fuertes", icono: "🥩"},
+        {id: 5, nombre: "Repostería & Postres de Autor", icono: "🍰"},
+        {id: 6, nombre: "Bebidas & Coctelería de Autor", icono: "🍹"}
+      ];
 
-    window.vsCartItems = [];
-    window.categoriaActual = "Todos";
+      window.vsMenuData = seedProductos;
+      window.vsCategoriasData = seedCategorias;
+      window.vsCartItems = window.vsCartItems || [];
+      window.categoriaActual = window.categoriaActual || "Todos";
 
-    window.cargarDatosMenu = function(productos, categorias) {
-      if (productos && productos.length > 0) window.vsMenuData = productos;
-      if (categorias && categorias.length > 0) window.vsCategoriasData = categorias;
-      window.renderCategoriasChips(window.vsCategoriasData);
-      window.renderProductos();
-    };
+      window.cargarDatosMenu = function(productos, categorias) {
+        if (productos && productos.length > 0) window.vsMenuData = productos;
+        if (categorias && categorias.length > 0) window.vsCategoriasData = categorias;
+        window.renderCategoriasChips(window.vsCategoriasData);
+        window.renderProductos();
+      };
 
-    window.renderCategoriasChips = function(categorias) {
-      const container = document.getElementById('categoriesChips');
-      if (!container) return;
-      container.innerHTML = `<button onclick="window.seleccionarCategoria('Todos')" class="cat-chip ${window.categoriaActual === 'Todos' ? 'active bg-emerald-500 text-white' : 'bg-slate-800/80 text-slate-400'} px-4 py-2 text-xs font-bold rounded-xl whitespace-nowrap transition">Todos</button>`;
-      
-      categorias.forEach(cat => {
-        const btn = document.createElement('button');
-        const isActive = window.categoriaActual === cat.nombre;
-        btn.className = `cat-chip ${isActive ? 'active bg-emerald-500 text-white shadow-md shadow-emerald-500/20' : 'bg-slate-800/80 text-slate-400 hover:text-white'} px-4 py-2 text-xs font-bold rounded-xl whitespace-nowrap transition`;
-        btn.innerText = `${cat.icono || '🍽️'} ${cat.nombre}`;
-        btn.onclick = () => window.seleccionarCategoria(cat.nombre);
-        container.appendChild(btn);
-      });
-    };
-
-    window.seleccionarCategoria = function(catNombre) {
-      window.categoriaActual = catNombre;
-      const chips = document.querySelectorAll('.cat-chip');
-      chips.forEach(c => c.classList.remove('active', 'bg-emerald-500', 'text-white'));
-      window.renderProductos();
-    };
-
-    window.filtrarProductos = function() {
-      window.renderProductos();
-    };
-
-    window.renderProductos = function() {
-      const container = document.getElementById('productsGridContainer');
-      if (!container) return;
-      const searchInput = document.getElementById('searchInput');
-      const searchVal = searchInput ? (searchInput.value || '').toLowerCase() : '';
-      container.innerHTML = '';
-
-      const list = window.vsMenuData || [];
-      const filtrados = list.filter(p => {
-        const matchCat = window.categoriaActual === 'Todos' || p.categoria_nombre === window.categoriaActual;
-        const matchSearch = p.nombre.toLowerCase().includes(searchVal) || (p.descripcion && p.descripcion.toLowerCase().includes(searchVal));
-        return matchCat && matchSearch;
-      });
-
-      if (filtrados.length === 0) {
-        container.innerHTML = `<div class="text-center py-12 text-slate-500 text-sm col-span-2">No se encontraron platillos o bebidas disponibles</div>`;
-        return;
-      }
-
-      filtrados.forEach(prod => {
-        const card = document.createElement('div');
-        card.className = 'glass-card p-4 rounded-2xl flex justify-between items-center hover:border-emerald-500/50 transition cursor-pointer group';
-        card.onclick = () => window.agregarAlCarrito(prod);
-
-        card.innerHTML = `
-          <div class="flex items-center gap-3">
-            <div class="w-12 h-12 rounded-xl bg-slate-800 flex items-center justify-center text-2xl group-hover:scale-110 transition">
-              ${prod.icono || '🍲'}
-            </div>
-            <div>
-              <h3 class="text-sm font-bold text-white group-hover:text-emerald-400 transition">${prod.nombre}</h3>
-              <p class="text-xs text-slate-400 line-clamp-1">${prod.descripcion || ''}</p>
-            </div>
-          </div>
-          <div class="text-right">
-            <span class="text-sm font-black text-emerald-400 block">$${Number(prod.precio_unitario).toFixed(2)}</span>
-            <span class="text-[10px] text-slate-500 font-semibold uppercase">${prod.estacion_preparacion || 'cocina'}</span>
-          </div>
-        `;
-        container.appendChild(card);
-      });
-    };
-
-    window.agregarAlCarrito = function(prod) {
-      const index = window.vsCartItems.findIndex(i => i.id === prod.id);
-      if (index >= 0) {
-        window.vsCartItems[index].cantidad += 1;
-      } else {
-        window.vsCartItems.push({ ...prod, cantidad: 1 });
-      }
-      window.renderCarrito();
-    };
-
-    window.renderCarrito = function() {
-      const container = document.getElementById('cartItemsList');
-      if (!container) return;
-      container.innerHTML = '';
-
-      let subtotal = 0;
-
-      if (window.vsCartItems.length === 0) {
-        container.innerHTML = `<div class="text-center py-8 text-slate-500 text-xs">No hay consumos agregados a esta comanda.</div>`;
-      } else {
-        window.vsCartItems.forEach((item, idx) => {
-          const itemSubtotal = item.precio_unitario * item.cantidad;
-          subtotal += itemSubtotal;
-
-          const row = document.createElement('div');
-          row.className = 'flex justify-between items-center bg-slate-900/60 p-2.5 rounded-xl border border-slate-800/80 text-xs';
-          row.innerHTML = `
-            <div>
-              <span class="font-bold text-white">${item.nombre} x${item.cantidad}</span>
-              <span class="block text-[10px] text-slate-400">$${Number(item.precio_unitario).toFixed(2)} c/u</span>
-            </div>
-            <div class="flex items-center gap-2">
-              <span class="font-black text-slate-200">$${itemSubtotal.toFixed(2)}</span>
-              <button onclick="window.quitarDelCarrito(${idx})" class="text-red-400 hover:text-red-300 text-xs ml-1"><i class="fa-solid fa-trash"></i></button>
-            </div>
-          `;
-          container.appendChild(row);
+      window.renderCategoriasChips = function(categorias) {
+        var container = document.getElementById('categoriesChips');
+        if (!container) return;
+        container.innerHTML = '<button onclick="window.seleccionarCategoria('Todos')" class="cat-chip ' + (window.categoriaActual === 'Todos' ? 'active bg-emerald-500 text-white' : 'bg-slate-800/80 text-slate-400') + ' px-4 py-2 text-xs font-bold rounded-xl whitespace-nowrap transition">Todos</button>';
+        
+        (categorias || []).forEach(function(cat) {
+          var btn = document.createElement('button');
+          var isActive = window.categoriaActual === cat.nombre;
+          btn.className = 'cat-chip ' + (isActive ? 'active bg-emerald-500 text-white shadow-md shadow-emerald-500/20' : 'bg-slate-800/80 text-slate-400 hover:text-white') + ' px-4 py-2 text-xs font-bold rounded-xl whitespace-nowrap transition';
+          btn.innerText = (cat.icono || '🍽️') + ' ' + cat.nombre;
+          btn.onclick = function() { window.seleccionarCategoria(cat.nombre); };
+          container.appendChild(btn);
         });
+      };
+
+      window.seleccionarCategoria = function(catNombre) {
+        window.categoriaActual = catNombre;
+        var chips = document.querySelectorAll('.cat-chip');
+        chips.forEach(function(c) { c.classList.remove('active', 'bg-emerald-500', 'text-white'); });
+        window.renderProductos();
+      };
+
+      window.filtrarProductos = function() {
+        window.renderProductos();
+      };
+
+      window.renderProductos = function() {
+        var container = document.getElementById('productsGridContainer');
+        if (!container) return;
+        var searchInput = document.getElementById('searchInput');
+        var searchVal = searchInput ? (searchInput.value || '').toLowerCase() : '';
+        container.innerHTML = '';
+
+        var list = window.vsMenuData || seedProductos;
+        var filtrados = list.filter(function(p) {
+          var matchCat = window.categoriaActual === 'Todos' || p.categoria_nombre === window.categoriaActual;
+          var matchSearch = p.nombre.toLowerCase().indexOf(searchVal) >= 0 || (p.descripcion && p.descripcion.toLowerCase().indexOf(searchVal) >= 0);
+          return matchCat && matchSearch;
+        });
+
+        if (filtrados.length === 0) {
+          container.innerHTML = '<div class="text-center py-12 text-slate-500 text-sm col-span-2">No se encontraron platillos o bebidas disponibles</div>';
+          return;
+        }
+
+        filtrados.forEach(function(prod) {
+          var card = document.createElement('div');
+          card.className = 'glass-card p-4 rounded-2xl flex justify-between items-center hover:border-emerald-500/50 transition cursor-pointer group';
+          card.onclick = function() { window.agregarAlCarrito(prod); };
+
+          card.innerHTML = '            <div class="flex items-center gap-3">              <div class="w-12 h-12 rounded-xl bg-slate-800 flex items-center justify-center text-2xl group-hover:scale-110 transition">                ' + (prod.icono || '🍲') + '              </div>              <div>                <h3 class="text-sm font-bold text-white group-hover:text-emerald-400 transition">' + prod.nombre + '</h3>                <p class="text-xs text-slate-400 line-clamp-1">' + (prod.descripcion || '') + '</p>              </div>            </div>            <div class="text-right">              <span class="text-sm font-black text-emerald-400 block">$' + Number(prod.precio_unitario).toFixed(2) + '</span>              <span class="text-[10px] text-slate-500 font-semibold uppercase">' + (prod.estacion_preparacion || 'cocina') + '</span>            </div>          ';
+          container.appendChild(card);
+        });
+      };
+
+      window.agregarAlCarrito = function(prod) {
+        var index = window.vsCartItems.findIndex(function(i) { return i.id === prod.id; });
+        if (index >= 0) {
+          window.vsCartItems[index].cantidad += 1;
+        } else {
+          window.vsCartItems.push(Object.assign({}, prod, { cantidad: 1 }));
+        }
+        window.renderCarrito();
+      };
+
+      window.renderCarrito = function() {
+        var container = document.getElementById('cartItemsList');
+        if (!container) return;
+        container.innerHTML = '';
+
+        var subtotal = 0;
+
+        if (window.vsCartItems.length === 0) {
+          container.innerHTML = '<div class="text-center py-8 text-slate-500 text-xs">No hay consumos agregados a esta comanda.</div>';
+        } else {
+          window.vsCartItems.forEach(function(item, idx) {
+            var itemSubtotal = item.precio_unitario * item.cantidad;
+            subtotal += itemSubtotal;
+
+            var row = document.createElement('div');
+            row.className = 'flex justify-between items-center bg-slate-900/60 p-2.5 rounded-xl border border-slate-800/80 text-xs';
+            row.innerHTML = '              <div>                <span class="font-bold text-white">' + item.nombre + ' x' + item.cantidad + '</span>                <span class="block text-[10px] text-slate-400">$' + Number(item.precio_unitario).toFixed(2) + ' c/u</span>              </div>              <div class="flex items-center gap-2">                <span class="font-black text-slate-200">$' + itemSubtotal.toFixed(2) + '</span>                <button onclick="window.quitarDelCarrito(' + idx + ')" class="text-red-400 hover:text-red-300 text-xs ml-1"><i class="fa-solid fa-trash"></i></button>              </div>            ';
+            container.appendChild(row);
+          });
+        }
+
+        var iva = subtotal * 0.16;
+        var propina = subtotal * 0.10;
+        var total = subtotal + propina;
+
+        var txtSubtotal = document.getElementById('txtSubtotal');
+        var txtIVA = document.getElementById('txtIVA');
+        var txtPropina = document.getElementById('txtPropina');
+        var txtTotal = document.getElementById('txtTotal');
+
+        if (txtSubtotal) txtSubtotal.innerText = '$' + subtotal.toFixed(2);
+        if (txtIVA) txtIVA.innerText = '$' + iva.toFixed(2);
+        if (txtPropina) txtPropina.innerText = '$' + propina.toFixed(2);
+        if (txtTotal) txtTotal.innerText = '$' + total.toFixed(2);
+      };
+
+      window.quitarDelCarrito = function(index) {
+        window.vsCartItems.splice(index, 1);
+        window.renderCarrito();
+      };
+
+      window.navMenu = function(modulo) {
+        if (window.anvilAppNav) {
+          window.anvilAppNav(modulo);
+        } else {
+          alert('Navegación a módulo: ' + modulo);
+        }
+      };
+
+      window.abrirModalCobro = function(metodo) {
+        if (window.vsCartItems.length === 0) {
+          alert('Agregue consumos antes de proceder al cobro');
+          return;
+        }
+        if (window.anvilProcesarCobro) {
+          window.anvilProcesarCobro(metodo, window.vsCartItems);
+        } else {
+          alert('Procesando pago vía ' + metodo.toUpperCase() + ' para La Terraza V&S...');
+        }
+      };
+
+      function startUI() {
+        window.cargarDatosMenu(window.vsMenuData, window.vsCategoriasData);
       }
 
-      const iva = subtotal * 0.16;
-      const propina = subtotal * 0.10;
-      const total = subtotal + propina;
-
-      const txtSubtotal = document.getElementById('txtSubtotal');
-      const txtIVA = document.getElementById('txtIVA');
-      const txtPropina = document.getElementById('txtPropina');
-      const txtTotal = document.getElementById('txtTotal');
-
-      if (txtSubtotal) txtSubtotal.innerText = `$${subtotal.toFixed(2)}`;
-      if (txtIVA) txtIVA.innerText = `$${iva.toFixed(2)}`;
-      if (txtPropina) txtPropina.innerText = `$${propina.toFixed(2)}`;
-      if (txtTotal) txtTotal.innerText = `$${total.toFixed(2)}`;
-    };
-
-    window.quitarDelCarrito = function(index) {
-      window.vsCartItems.splice(index, 1);
-      window.renderCarrito();
-    };
-
-    window.navMenu = function(modulo) {
-      if (window.anvilAppNav) {
-        window.anvilAppNav(modulo);
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', startUI);
       } else {
-        alert(`Navegación a módulo: ${modulo}`);
+        startUI();
       }
-    };
-
-    window.abrirModalCobro = function(metodo) {
-      if (window.vsCartItems.length === 0) {
-        alert('Agregue consumos antes de proceder al cobro');
-        return;
-      }
-      if (window.anvilProcesarCobro) {
-        window.anvilProcesarCobro(metodo, window.vsCartItems);
-      } else {
-        alert(`Procesando pago vía ${metodo.toUpperCase()} para La Terraza V&S...`);
-      }
-    };
-
-    function initImmediate() {
-      window.cargarDatosMenu(window.vsMenuData, window.vsCategoriasData);
-    }
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initImmediate);
-    } else {
-      initImmediate();
-    }
-    setTimeout(initImmediate, 10);
-    setTimeout(initImmediate, 100);
+      setTimeout(startUI, 10);
+      setTimeout(startUI, 100);
+      setTimeout(startUI, 500);
+    })();
   </script>
 </anvil-form>
