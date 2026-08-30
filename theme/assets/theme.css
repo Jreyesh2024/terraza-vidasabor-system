@@ -1,40 +1,117 @@
-/* LA TERRAZA DE VIDA & SABOR (V&S) - CORE THEME STYLES */
+/* LA TERRAZA DE VIDA & SABOR (V&S) - IMMUTABLE CORE THEME STYLES */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
-@import url('https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css');
-@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
 
 html, body, .anvil-container, div[anvil-slot] {
   font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
   background-color: #090d16 !important;
   color: #f8fafc !important;
-  margin: 0;
-  padding: 0;
+  margin: 0 !important;
+  padding: 0 !important;
 }
 
-.glass-card {
-  background: rgba(22, 30, 46, 0.85) !important;
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+/* Immutable Table Circle CSS */
+.table-circle-fixed {
+  width: 96px !important;
+  height: 96px !important;
+  border-radius: 50% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+  z-index: 10 !important;
+  transition: all 0.2s ease !important;
 }
 
-.glass-nav {
-  background: rgba(15, 23, 42, 0.9) !important;
-  backdrop-filter: blur(20px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+/* Immutable Table Box Container */
+.table-box-220 {
+  position: relative !important;
+  width: 220px !important;
+  height: 220px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin: 0 auto !important;
 }
 
-.brand-glow {
-  box-shadow: 0 0 25px rgba(16, 185, 129, 0.4) !important;
+/* Immutable Chair Nodes Positions */
+.chair-pos-top {
+  position: absolute !important;
+  top: 4px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  z-index: 20 !important;
 }
 
-/* Chair and Table Custom Styles */
-.chair-btn {
-  cursor: pointer;
-  user-select: none;
-  transition: all 0.2s ease-in-out;
+.chair-pos-right {
+  position: absolute !important;
+  right: 4px !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  z-index: 20 !important;
 }
 
-.chair-btn:hover {
-  transform: scale(1.1);
+.chair-pos-bottom {
+  position: absolute !important;
+  bottom: 4px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  z-index: 20 !important;
+}
+
+.chair-pos-left {
+  position: absolute !important;
+  left: 4px !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  z-index: 20 !important;
+}
+
+/* Immutable Chair Base Button */
+.chair-btn-fixed {
+  padding: 6px 14px !important;
+  font-size: 11px !important;
+  font-weight: 800 !important;
+  border-radius: 8px !important;
+  cursor: pointer !important;
+  white-space: nowrap !important;
+  user-select: none !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4) !important;
+}
+
+/* Chair States */
+.chair-state-free {
+  background-color: #059669 !important;
+  color: #ffffff !important;
+  border: 1.5px solid #34d399 !important;
+}
+
+.chair-state-busy {
+  background-color: #d97706 !important;
+  color: #0f172a !important;
+  border: 1.5px solid #fbbf24 !important;
+}
+
+.chair-moving-source {
+  background-color: #0284c7 !important;
+  color: #ffffff !important;
+  border: 2px solid #38bdf8 !important;
+  box-shadow: 0 0 20px rgba(56, 189, 248, 0.9) !important;
+}
+
+.chair-moving-target {
+  border: 2px dashed #38bdf8 !important;
+  box-shadow: 0 0 15px rgba(56, 189, 248, 0.6) !important;
+}
+
+.modal-backdrop-fixed {
+  position: fixed !important;
+  top: 0 !important; left: 0 !important; right: 0 !important; bottom: 0 !important;
+  background: rgba(2, 6, 23, 0.85) !important;
+  backdrop-filter: blur(8px) !important;
+  z-index: 100 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 20px !important;
 }
