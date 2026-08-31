@@ -7,7 +7,7 @@
       background-color: #090d16 !important;
       color: #f8fafc !important;
     }
-  
+
     .glass-card {
       background: rgba(22, 30, 46, 0.85) !important;
       border: 1px solid rgba(255, 255, 255, 0.12) !important;
@@ -26,26 +26,26 @@
       background-color: #090d16;
       color: #f8fafc;
     }
-  
+
     .glass-card {
       background: rgba(22, 30, 46, 0.75);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
       border: 1px solid rgba(255, 255, 255, 0.1);
     }
-  
+
     .glass-nav {
       background: rgba(15, 23, 42, 0.85);
       backdrop-filter: blur(20px);
       border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     }
-  
+
     .brand-glow {
       box-shadow: 0 0 25px rgba(16, 185, 129, 0.3);
     }
   </style>
   <div class="min-h-screen bg-[#090d16] text-slate-100 flex flex-col font-sans">
-  
+
     <!-- HEADER BAR / BRANDING V&S -->
     <header class="glass-nav sticky top-0 z-50 px-6 py-4 flex items-center justify-between">
       <div class="flex items-center gap-3">
@@ -57,7 +57,7 @@
           <p class="text-xs text-slate-400 font-medium">Menú Digital &amp; Comandas en Mesa</p>
         </div>
       </div>
-  
+
       <!-- BOTONES DE NAVEGACIÓN Y MÓDULOS DEL SISTEMA -->
       <div class="flex flex-wrap items-center gap-2">
         <button onclick="window.navMenu &amp;&amp; window.navMenu('menu')" class="px-3 py-1.5 text-xs font-bold rounded-xl bg-emerald-600/30 border border-emerald-500/50 text-emerald-300 transition flex items-center gap-1.5">
@@ -77,7 +77,7 @@
         </button>
       </div>
     </header>
-  
+
     <!-- BARRA DE UBICACIÓN QR Y SELECTOR DE SILLA (SIMULACIÓN DE ESCANEO QR) -->
     <div class="bg-slate-900/90 border-b border-slate-800 px-6 py-2.5 flex flex-wrap justify-between items-center gap-3">
       <div class="flex items-center gap-2 text-xs">
@@ -90,8 +90,8 @@
         <span class="text-xs text-slate-400 font-medium">Simular escaneo QR en:</span>
         <div class="bg-slate-800 text-slate-200 text-xs font-bold px-3 py-1.5 rounded-xl border border-slate-700 focus:outline-none focus:border-emerald-500 cursor-pointer">
           <select id="selSimularQr" onchange="window.cambiarSimulacionQr(this.value)" class="bg-slate-800 text-slate-200 text-xs font-bold px-3 py-1.5 rounded-xl border border-slate-700 focus:outline-none focus:border-emerald-500 cursor-pointer">
-            
-            
+
+
           </select>
           <optgroup label="Mesa 2 (Familia 2 adultos + 2 niños)">
             <option value="2-1" selected>Mesa 2 · Silla 1 (Papá - $445.00)</option>
@@ -106,20 +106,20 @@
         </div>
       </div>
     </div>
-  
+
     <!-- CONTENIDO PRINCIPAL DEL MENÚ DIGITAL -->
     <main class="flex-1 max-w-7xl w-full mx-auto p-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
-  
+
       <!-- SECCIÓN IZQUIERDA: CATÁLOGO Y PRODUCTOS -->
       <section class="lg:col-span-2 flex flex-col gap-6">
-  
+
         <!-- BUSCADOR & BARRA DE CATEGORÍAS -->
         <div class="flex flex-col sm:flex-row gap-4 justify-between items-center">
           <div class="relative w-full sm:w-80">
             <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3.5 text-slate-500 text-sm"></i>
             <input type="text" id="searchInput" placeholder="Buscar platillos o bebidas..." oninput="window.filtrarProductos()" class="w-full pl-10 pr-4 py-2.5 bg-slate-900/80 border border-slate-700/80 rounded-xl text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-emerald-500 transition" />
           </div>
-  
+
           <!-- CHIPS DE CATEGORÍAS -->
           <div id="categoriesChips" class="flex gap-2 overflow-x-auto w-full sm:w-auto pb-1">
             <button onclick="window.seleccionarCategoria('Todos')" class="cat-chip active px-4 py-2 text-xs font-bold rounded-xl bg-emerald-500 text-white shadow-md shadow-emerald-500/20 whitespace-nowrap transition">
@@ -127,7 +127,7 @@
             </button>
           </div>
         </div>
-  
+
         <!-- GRID DE TARJETAS DE PLATILLOS -->
         <div id="productsGridContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div class="text-center py-12 text-slate-500 col-span-2">
@@ -135,9 +135,9 @@
             <p>Cargando menú de La Terraza V&amp;S...</p>
           </div>
         </div>
-  
+
       </section>
-  
+
       <!-- SECCIÓN DERECHA: SIDEBAR DE COMANDA Y COBRO AGRUPADO -->
       <aside class="glass-card rounded-2xl p-6 flex flex-col justify-between h-full border border-slate-800 shadow-2xl gap-4">
         <div>
@@ -152,14 +152,14 @@
               Activa
             </span>
           </div>
-  
+
           <!-- LISTA DE ITEMS REGISTRADOS DE MI SILLA -->
           <div id="cartItemsList" class="space-y-2.5 max-h-56 overflow-y-auto pr-1">
             <div class="text-center py-6 text-slate-500 text-xs">
               No hay consumos agregados a esta silla.
             </div>
           </div>
-  
+
           <!-- SECCIÓN: PAGAR POR ACOMPAÑANTES / NIÑOS EN MI MESA -->
           <div class="mt-4 pt-3 border-t border-slate-800/80">
             <div class="flex justify-between items-center mb-2">
@@ -168,13 +168,13 @@
               </span>
               <button onclick="window.seleccionarTodosAcompanantes()" class="text-[10px] text-emerald-400 hover:underline font-semibold">Toda Mesa</button>
             </div>
-  
+
             <div id="listaAcompanantesMesa" class="space-y-1.5 max-h-36 overflow-y-auto pr-1 text-xs">
               <!-- Checklist populated dynamically -->
             </div>
           </div>
         </div>
-  
+
         <!-- TOTALES Y ACCIONES DE COBRO CONSOLIDADAS -->
         <div class="pt-3 border-t border-slate-800 space-y-3">
           <div class="space-y-1.5 text-xs">
@@ -195,7 +195,7 @@
               <span id="txtTotal" class="text-emerald-400 text-lg font-black">$0.00</span>
             </div>
           </div>
-  
+
           <!-- BOTONES DE COBRO MULTICANAL -->
           <div class="grid grid-cols-2 gap-2">
             <button onclick="window.abrirModalCobroCliente('santander')" class="py-3 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-100 text-xs font-bold border border-slate-700 transition flex items-center justify-center gap-1.5 cursor-pointer">
@@ -206,11 +206,11 @@
             </button>
           </div>
         </div>
-  
+
       </aside>
-  
+
     </main>
-  
+
     <!-- MODAL DE COBRO Y PRECUENTA DIGITAL CLIENTE QR -->
     <div id="modalCobroCliente" onclick="if(event.target === this) window.cerrarModalCobroCliente();" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden items-center justify-center p-4">
       <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-md p-6 shadow-2xl flex flex-col gap-4 text-slate-100">
@@ -223,7 +223,7 @@
           </div>
           <button onclick="window.cerrarModalCobroCliente();" class="text-slate-400 hover:text-white text-lg cursor-pointer">✕</button>
         </div>
-  
+
         <!-- SELECTOR DE ALCANCE DEL PAGO -->
         <div class="bg-slate-950/80 p-3 rounded-xl border border-slate-800/80 space-y-2">
           <span class="text-xs font-bold text-slate-300 block"><i class="fa-solid fa-hand-holding-dollar text-emerald-400 mr-1"></i> ¿Qué deseas pagar?</span>
@@ -233,12 +233,12 @@
             <button type="button" onclick="window.setModoPagoCliente('toda_mesa')" id="btnModoTodaMesa" class="p-2 rounded-lg font-bold border text-center transition bg-slate-800 text-slate-300 border-slate-700 cursor-pointer">Toda la Mesa</button>
           </div>
         </div>
-  
+
         <!-- DESGLOSE DE CUENTAS INCLUIDAS -->
         <div id="modalCobroDetalleTramos" class="space-y-2 max-h-56 overflow-y-auto pr-1 text-xs">
           <!-- Generado dinámicamente -->
         </div>
-  
+
         <!-- TOTALES -->
         <div class="pt-3 border-t border-slate-800 space-y-1.5 text-xs">
           <div class="flex justify-between text-slate-400"><span>Subtotal Neto:</span><span id="modalSubtotal" class="text-slate-200 font-bold">$0.00</span></div>
@@ -249,7 +249,7 @@
             <span id="modalTotal" class="text-emerald-400 text-lg font-black">$0.00</span>
           </div>
         </div>
-  
+
         <!-- BOTONES DE PROCESAR PAGO -->
         <div class="grid grid-cols-2 gap-2 pt-2">
           <button onclick="window.ejecutarPagoFinal('santander')" class="py-3 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-sky-400 text-xs font-bold border border-slate-700 flex items-center justify-center gap-1.5 cursor-pointer">
@@ -261,7 +261,7 @@
         </div>
       </div>
     </div>
-  
+
   </div>
   <script>
     window.vsMenuData = [
@@ -276,7 +276,7 @@
       { id: 9, categoria_nombre: "Repostería &amp;amp;amp; Postres de Autor", nombre: "Pastel Supremo de Chocolate Valrhona", descripcion: "Rebanada caliente de pastel de chocolate amargo con helado de vainilla", precio_unitario: 105.00, estacion_preparacion: "reposteria", icono: "🍰" },
       { id: 10, categoria_nombre: "Bebidas &amp;amp;amp; Coctelería de Autor", nombre: "Limonada Botánica de Hierbabuena &amp;amp;amp; Jengibre", descripcion: "Agua mineral infucionada con jengibre fresco, limón eufrata y hierbabuena", precio_unitario: 60.00, estacion_preparacion: "barra_cafe", icono: "🍋" }
     ];
-  
+
     window.vsCategoriasData = [
       { id: 1, nombre: "Barra de Café &amp;amp;amp; Infusiones", icono: "☕" },
       { id: 2, nombre: "Desayunos &amp;amp;amp; Brunch Gourmet", icono: "🍳" },
@@ -285,12 +285,12 @@
       { id: 5, nombre: "Repostería &amp;amp;amp; Postres de Autor", icono: "🍰" },
       { id: 6, nombre: "Bebidas &amp;amp;amp; Coctelería de Autor", icono: "🍹" }
     ];
-  
+
     window.categoriaActual = "Todos";
     window.simMesaId = 2;
     window.simSillaNum = 1;
     window.sillasAcompanantesSeleccionadas = [3, 4]; // Por defecto, Papá (Silla 1) incluye a los niños (3 y 4)
-  
+
     function getStorageCuentas() {
       try {
         var raw = localStorage.getItem('palapa_cuentas_v1');
@@ -298,60 +298,60 @@
       } catch(e) {}
       return {};
     }
-  
+
     function saveStorageCuentas(cuentas) {
       try {
         localStorage.setItem('palapa_cuentas_v1', JSON.stringify(cuentas));
       } catch(e) {}
     }
-  
+
     window.cambiarSimulacionQr = function(keyStr) {
       var parts = keyStr.split('-');
       window.simMesaId = parseInt(parts[0]);
       window.simSillaNum = parseInt(parts[1]);
-  
+
       // Si es Mesa 2 Silla 1 (Papá), sugerir niños seleccionados (3 y 4)
       if (window.simMesaId === 2 &amp;amp;amp;&amp;amp;amp; window.simSillaNum === 1) {
         window.sillasAcompanantesSeleccionadas = [3, 4];
       } else {
         window.sillasAcompanantesSeleccionadas = [];
       }
-  
+
       window.sincronizarCuentaDesdeStorage();
     };
-  
+
     window.sincronizarCuentaDesdeStorage = function() {
       var cuentas = getStorageCuentas();
       var key = window.simMesaId + '-' + window.simSillaNum;
       var cuentaActual = cuentas[key];
-  
+
       var qrId = (cuentaActual &amp;amp;amp;&amp;amp;amp; cuentaActual.qrId) ? cuentaActual.qrId : ('PV-0' + window.simMesaId + window.simSillaNum);
       var comensalNom = (cuentaActual &amp;amp;amp;&amp;amp;amp; cuentaActual.comensalNombre) ? cuentaActual.comensalNombre : ('Comensal Silla ' + window.simSillaNum);
-  
+
       var lblQr = document.getElementById('lblQrActivo');
       var lblUbicacion = document.getElementById('lblUbicacionActiva');
       var txtTitulo = document.getElementById('txtTituloComanda');
       var txtSub = document.getElementById('txtSubComanda');
-  
+
       if (lblQr) lblQr.innerText = qrId;
       if (lblUbicacion) lblUbicacion.innerText = `Mesa ${window.simMesaId} • Silla ${window.simSillaNum} (${comensalNom})`;
       if (txtTitulo) txtTitulo.innerText = `Mi Comanda (Silla ${window.simSillaNum})`;
       if (txtSub) txtSub.innerText = `Mesa ${window.simMesaId} • Portavasos #${qrId}`;
-  
+
       window.renderCarrito();
       window.renderAcompanantesMesa();
     };
-  
+
     window.renderCarrito = function () {
       const container = document.getElementById('cartItemsList');
       if (!container) return;
       container.innerHTML = '';
-  
+
       var cuentas = getStorageCuentas();
       var key = window.simMesaId + '-' + window.simSillaNum;
       var cuentaActual = cuentas[key] || { items: [] };
       var items = cuentaActual.items || [];
-  
+
       if (items.length === 0) {
         container.innerHTML = `&amp;amp;lt;div class="text-center py-6 text-slate-500 text-xs"&amp;amp;gt;No hay consumos registrados en tu silla.&amp;amp;lt;/div&amp;amp;gt;`;
       } else {
@@ -369,19 +369,19 @@
           container.appendChild(row);
         });
       }
-  
+
       window.recalcularTotalesCompletos();
     };
-  
+
     window.renderAcompanantesMesa = function() {
       const container = document.getElementById('listaAcompanantesMesa');
       if (!container) return;
       container.innerHTML = '';
-  
+
       var cuentas = getStorageCuentas();
       var mesaId = window.simMesaId;
       var miSilla = window.simSillaNum;
-  
+
       var otrasSillas = [];
       for (var s = 1; s &amp;amp;lt;= 4; s++) {
         if (s !== miSilla) {
@@ -394,12 +394,12 @@
           }
         }
       }
-  
+
       if (otrasSillas.length === 0) {
         container.innerHTML = '&amp;amp;lt;div class="text-slate-500 text-[11px] py-1 italic"&amp;amp;gt;No hay otros comensales con cuenta en esta mesa.&amp;amp;lt;/div&amp;amp;gt;';
         return;
       }
-  
+
       otrasSillas.forEach(obj =&amp;amp;gt; {
         var s = obj.sillaNum;
         var isChecked = window.sillasAcompanantesSeleccionadas.indexOf(s) !== -1;
@@ -418,7 +418,7 @@
         container.appendChild(row);
       });
     };
-  
+
     window.toggleAcompanante = function(sillaNum) {
       var idx = window.sillasAcompanantesSeleccionadas.indexOf(sillaNum);
       if (idx === -1) {
@@ -429,7 +429,7 @@
       window.renderAcompanantesMesa();
       window.recalcularTotalesCompletos();
     };
-  
+
     window.seleccionarTodosAcompanantes = function() {
       var cuentas = getStorageCuentas();
       var mesaId = window.simMesaId;
@@ -443,18 +443,18 @@
       window.renderAcompanantesMesa();
       window.recalcularTotalesCompletos();
     };
-  
+
     window.recalcularTotalesCompletos = function() {
       var cuentas = getStorageCuentas();
       var mesaId = window.simMesaId;
       var miSilla = window.simSillaNum;
-  
+
       var subtotalPropio = 0;
       var cPropia = cuentas[mesaId + '-' + miSilla];
       if (cPropia &amp;amp;amp;&amp;amp;amp; cPropia.items) {
         cPropia.items.forEach(function(i) { subtotalPropio += (i.precio * i.cantidad); });
       }
-  
+
       var subtotalAcompanantes = 0;
       window.sillasAcompanantesSeleccionadas.forEach(function(sNum) {
         var cAcomp = cuentas[mesaId + '-' + sNum];
@@ -462,19 +462,19 @@
           cAcomp.items.forEach(function(i) { subtotalAcompanantes += (i.precio * i.cantidad); });
         }
       });
-  
+
       var subtotalNeto = subtotalPropio + subtotalAcompanantes;
       var iva = subtotalNeto * 0.16;
       var propina = subtotalNeto * 0.10;
       var total = subtotalNeto + iva;
-  
+
       var txtSubtotal = document.getElementById('txtSubtotal');
       var txtIVA = document.getElementById('txtIVA');
       var txtPropina = document.getElementById('txtPropina');
       var txtTotal = document.getElementById('txtTotal');
       var txtBtnPagar = document.getElementById('txtBtnPagarMonto');
       var lblSubtotalDetalle = document.getElementById('lblSubtotalDetalle');
-  
+
       if (lblSubtotalDetalle) {
         if (window.sillasAcompanantesSeleccionadas.length &amp;amp;gt; 0) {
           lblSubtotalDetalle.innerText = `Subtotal (Silla ${miSilla} + ${window.sillasAcompanantesSeleccionadas.length} Acompañantes):`;
@@ -482,14 +482,14 @@
           lblSubtotalDetalle.innerText = `Subtotal (Solo Silla ${miSilla}):`;
         }
       }
-  
+
       if (txtSubtotal) txtSubtotal.innerText = `$${subtotalNeto.toFixed(2)}`;
       if (txtIVA) txtIVA.innerText = `$${iva.toFixed(2)}`;
       if (txtPropina) txtPropina.innerText = `$${propina.toFixed(2)}`;
       if (txtTotal) txtTotal.innerText = `$${total.toFixed(2)}`;
       if (txtBtnPagar) txtBtnPagar.innerText = `$${total.toFixed(2)}`;
     };
-  
+
     window.agregarAlCarrito = function (prod) {
       var cuentas = getStorageCuentas();
       var key = window.simMesaId + '-' + window.simSillaNum;
@@ -502,7 +502,7 @@
           historialUbicaciones: [{ mesaId: window.simMesaId, sillaNum: window.simSillaNum, hora: (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }]
         };
       }
-  
+
       var items = cuentas[key].items;
       var existing = items.find(i =&amp;amp;gt; i.id === prod.id);
       if (existing) {
@@ -518,13 +518,13 @@
           hora: (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
         });
       }
-  
+
       saveStorageCuentas(cuentas);
       window.sincronizarCuentaDesdeStorage();
     };
-  
+
     window.modoPagoCliente = 'incluir_ninos'; // 'solo_yo' | 'incluir_ninos' | 'toda_mesa'
-  
+
     window.abrirModalCobroCliente = function(metodo) {
       const modal = document.getElementById('modalCobroCliente');
       if (!modal) return;
@@ -532,7 +532,7 @@
       modal.classList.remove('hidden');
       modal.style.display = 'flex';
     };
-  
+
     window.cerrarModalCobroCliente = function() {
       const modal = document.getElementById('modalCobroCliente');
       if (modal) {
@@ -540,19 +540,19 @@
         modal.style.display = 'none';
       }
     };
-  
+
     window.setModoPagoCliente = function(modo) {
       window.modoPagoCliente = modo;
       var btnSolo = document.getElementById('btnModoSoloYo');
       var btnNinos = document.getElementById('btnModoNinos');
       var btnToda = document.getElementById('btnModoTodaMesa');
-  
+
       [btnSolo, btnNinos, btnToda].forEach(b =&amp;amp;gt; {
         if (b) {
           b.className = 'p-2 rounded-lg font-bold border text-center transition bg-slate-800 text-slate-300 border-slate-700 cursor-pointer';
         }
       });
-  
+
       if (modo === 'solo_yo' &amp;amp;amp;&amp;amp;amp; btnSolo) {
         btnSolo.className = 'p-2 rounded-lg font-bold border text-center transition bg-emerald-600/30 text-emerald-300 border-emerald-500/50 cursor-pointer';
       } else if (modo === 'incluir_ninos' &amp;amp;amp;&amp;amp;amp; btnNinos) {
@@ -560,10 +560,10 @@
       } else if (modo === 'toda_mesa' &amp;amp;amp;&amp;amp;amp; btnToda) {
         btnToda.className = 'p-2 rounded-lg font-bold border text-center transition bg-emerald-600/30 text-emerald-300 border-emerald-500/50 cursor-pointer';
       }
-  
+
       window.renderModalCobroDetalle();
     };
-  
+
     window.renderModalCobroDetalle = function() {
       var cuentas = getStorageCuentas();
       var mesaId = window.simMesaId;
@@ -574,10 +574,10 @@
       var propinaEl = document.getElementById('modalPropina');
       var totalEl = document.getElementById('modalTotal');
       var subtituloEl = document.getElementById('modalCobroSubtitulo');
-  
+
       if (!container) return;
       container.innerHTML = '';
-  
+
       var sillasAIncluir = [];
       if (window.modoPagoCliente === 'solo_yo') {
         sillasAIncluir = [miSilla];
@@ -590,29 +590,29 @@
           }
         }
       }
-  
+
       // Eliminar duplicados
       sillasAIncluir = sillasAIncluir.filter((v, i, a) =&amp;amp;gt; a.indexOf(v) === i).sort();
-  
+
       if (subtituloEl) {
         subtituloEl.innerText = `Mesa ${mesaId} • ${sillasAIncluir.length} Cuenta${sillasAIncluir.length &amp;amp;gt; 1 ? 's' : ''} Seleccionada${sillasAIncluir.length &amp;amp;gt; 1 ? 's' : ''}`;
       }
-  
+
       var totalNeto = 0;
-  
+
       sillasAIncluir.forEach(sNum =&amp;amp;gt; {
         var c = cuentas[mesaId + '-' + sNum];
         if (!c || !c.items || c.items.length === 0) return;
-  
+
         var subSilla = 0;
         var block = document.createElement('div');
         block.className = 'p-2.5 rounded-xl bg-slate-950/60 border border-slate-800/80 mb-2';
-  
+
         var h = document.createElement('div');
         h.className = 'flex justify-between items-center font-bold text-emerald-400 mb-1';
         h.innerHTML = `&amp;amp;lt;span&amp;amp;gt;Silla ${sNum} ${c.comensalNombre ? '• ' + c.comensalNombre : ''}&amp;amp;lt;/span&amp;amp;gt;&amp;amp;lt;span class="text-[10px] text-slate-500"&amp;amp;gt;QR: #${c.qrId || 'PV-0'+mesaId+sNum}&amp;amp;lt;/span&amp;amp;gt;`;
         block.appendChild(h);
-  
+
         c.items.forEach(it =&amp;amp;gt; {
           var itTotal = it.precio * it.cantidad;
           subSilla += itTotal;
@@ -622,30 +622,30 @@
           row.innerHTML = `&amp;amp;lt;span&amp;amp;gt;${it.cantidad}x ${it.nombre}&amp;amp;lt;/span&amp;amp;gt;&amp;amp;lt;span&amp;amp;gt;$${itTotal.toFixed(2)}&amp;amp;lt;/span&amp;amp;gt;`;
           block.appendChild(row);
         });
-  
+
         var subRow = document.createElement('div');
         subRow.className = 'flex justify-between text-slate-400 font-bold pt-1 mt-1 border-t border-slate-900 text-[11px]';
         subRow.innerHTML = `&amp;amp;lt;span&amp;amp;gt;Subtotal Silla ${sNum}:&amp;amp;lt;/span&amp;amp;gt;&amp;amp;lt;span class="text-amber-400"&amp;amp;gt;$${subSilla.toFixed(2)}&amp;amp;lt;/span&amp;amp;gt;`;
         block.appendChild(subRow);
-  
+
         container.appendChild(block);
       });
-  
+
       var iva = totalNeto * 0.16;
       var propina = totalNeto * 0.10;
       var granTotal = totalNeto + iva;
-  
+
       if (subtotalEl) subtotalEl.innerText = `$${totalNeto.toFixed(2)}`;
       if (ivaEl) ivaEl.innerText = `$${iva.toFixed(2)}`;
       if (propinaEl) propinaEl.innerText = `$${propina.toFixed(2)}`;
       if (totalEl) totalEl.innerText = `$${granTotal.toFixed(2)}`;
     };
-  
+
     window.ejecutarPagoFinal = function(metodo) {
       var cuentas = getStorageCuentas();
       var mesaId = window.simMesaId;
       var miSilla = window.simSillaNum;
-  
+
       var sillasAIncluir = [];
       if (window.modoPagoCliente === 'solo_yo') {
         sillasAIncluir = [miSilla];
@@ -658,11 +658,11 @@
           }
         }
       }
-  
+
       sillasAIncluir = sillasAIncluir.filter((v, i, a) =&amp;amp;gt; a.indexOf(v) === i);
       var totalText = document.getElementById('modalTotal') ? document.getElementById('modalTotal').innerText : '$0.00';
       var sillasStr = sillasAIncluir.map(function(s) { return 'Silla ' + s; }).join(', ');
-  
+
       if (confirm(`¿Confirmar liquidación vía ${metodo.toUpperCase()} para Mesa ${mesaId} (${sillasStr}) por ${totalText}?`)) {
         sillasAIncluir.forEach(function(sNum) {
           delete cuentas[mesaId + '-' + sNum];
@@ -673,7 +673,7 @@
         window.sincronizarCuentaDesdeStorage();
       }
     };
-  
+
     window.cargarDatosMenu = function (productos, categorias) {
       if (productos &amp;amp;amp;&amp;amp;amp; productos.length &amp;amp;gt; 0) window.vsMenuData = productos;
       if (categorias &amp;amp;amp;&amp;amp;amp; categorias.length &amp;amp;gt; 0) window.vsCategoriasData = categorias;
@@ -681,12 +681,12 @@
       window.renderProductos();
       window.sincronizarCuentaDesdeStorage();
     };
-  
+
     window.renderCategoriasChips = function (categorias) {
       const container = document.getElementById('categoriesChips');
       if (!container) return;
       container.innerHTML = `&amp;amp;lt;button onclick="window.seleccionarCategoria('Todos')" class="cat-chip ${window.categoriaActual === 'Todos' ? 'active bg-emerald-500 text-white' : 'bg-slate-800/80 text-slate-400'} px-4 py-2 text-xs font-bold rounded-xl whitespace-nowrap transition"&amp;amp;gt;Todos&amp;amp;lt;/button&amp;amp;gt;`;
-  
+
       categorias.forEach(cat =&amp;amp;gt; {
         const btn = document.createElement('button');
         const isActive = window.categoriaActual === cat.nombre;
@@ -696,42 +696,42 @@
         container.appendChild(btn);
       });
     };
-  
+
     window.seleccionarCategoria = function (catNombre) {
       window.categoriaActual = catNombre;
       const chips = document.querySelectorAll('.cat-chip');
       chips.forEach(c =&amp;amp;gt; c.classList.remove('active', 'bg-emerald-500', 'text-white'));
       window.renderProductos();
     };
-  
+
     window.filtrarProductos = function () {
       window.renderProductos();
     };
-  
+
     window.renderProductos = function () {
       const container = document.getElementById('productsGridContainer');
       if (!container) return;
       const searchInput = document.getElementById('searchInput');
       const searchVal = searchInput ? (searchInput.value || '').toLowerCase() : '';
       container.innerHTML = '';
-  
+
       const list = window.vsMenuData || [];
       const filtrados = list.filter(p =&amp;amp;gt; {
         const matchCat = window.categoriaActual === 'Todos' || p.categoria_nombre === window.categoriaActual;
         const matchSearch = p.nombre.toLowerCase().includes(searchVal) || (p.descripcion &amp;amp;amp;&amp;amp;amp; p.descripcion.toLowerCase().includes(searchVal));
         return matchCat &amp;amp;amp;&amp;amp;amp; matchSearch;
       });
-  
+
       if (filtrados.length === 0) {
         container.innerHTML = `&amp;amp;lt;div class="text-center py-12 text-slate-500 text-sm col-span-2"&amp;amp;gt;No se encontraron platillos o bebidas disponibles&amp;amp;lt;/div&amp;amp;gt;`;
         return;
       }
-  
+
       filtrados.forEach(prod =&amp;amp;gt; {
         const card = document.createElement('div');
         card.className = 'glass-card p-4 rounded-2xl flex justify-between items-center hover:border-emerald-500/50 transition cursor-pointer group';
         card.onclick = () =&amp;amp;gt; window.agregarAlCarrito(prod);
-  
+
         card.innerHTML = `
           &amp;amp;lt;div class="flex items-center gap-3"&amp;amp;gt;
             &amp;amp;lt;div class="w-12 h-12 rounded-xl bg-slate-800 flex items-center justify-center text-2xl group-hover:scale-110 transition"&amp;amp;gt;
@@ -750,7 +750,7 @@
         container.appendChild(card);
       });
     };
-  
+
     window.navMenu = function (modulo) {
       if (window.anvilAppNav) {
         window.anvilAppNav(modulo);
@@ -758,11 +758,11 @@
         alert(`Navegación a módulo: ${modulo}`);
       }
     };
-  
+
     function initImmediate() {
       window.cargarDatosMenu(window.vsMenuData, window.vsCategoriasData);
     }
-  
+
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', initImmediate);
     } else {

@@ -539,8 +539,42 @@
           style=&quot;font-size: 11px !important; color: #94a3b8 !important; margin: 2px 0 0 0 !important;&quot;>Mesa 3 •
           Asignación Individual</p>
       </div>
-      <button id=&quot;btnCloseModal&quot; onclick=&quot;window.cerrarModalComanda();&quot;
-        style=&quot;background: #1e293b !important; border: none !important; color: #94a3b8 !important; width: 32px !important; height: 32px !important; border-radius: 10px !important; font-weight: bold !important; cursor: pointer !important;&quot;>✕</button>
+      <div style=&quot;display: flex !important; align-items: center !important; gap: 8px !important;&quot;>
+        <button id=&quot;btnVerTodaMesaHeader&quot; onclick=&quot;window.verTodaLaMesaEnColumnas();&quot;
+          style=&quot;display: none !important; padding: 6px 12px !important; background: rgba(56, 189, 248, 0.15) !important; color: #38bdf8 !important; border: 1px solid rgba(56, 189, 248, 0.3) !important; border-radius: 8px !important; font-size: 11px !important; font-weight: 800 !important; cursor: pointer !important; align-items: center !important; gap: 4px !important;&quot;>
+          <i class=&quot;fa-solid fa-users&quot;></i> Ver Toda la Mesa
+        </button>
+        <button id=&quot;btnCloseModal&quot; onclick=&quot;window.cerrarModalComanda();&quot;
+          style=&quot;background: #1e293b !important; border: none !important; color: #94a3b8 !important; width: 32px !important; height: 32px !important; border-radius: 10px !important; font-weight: bold !important; cursor: pointer !important;&quot;>✕</button>
+      </div>
+    </div>
+
+    <!-- BARRA DE SELECCIÓN DE PAGO AGRUPADO / MULTI-SILLA (VISTA DE MESA COMPLETA) -->
+    <div id=&quot;comandaMultiSillaSelectorBar&quot;
+      style=&quot;display: none !important; background: #020617 !important; border: 1px solid #1e293b !important; border-radius: 12px !important; padding: 10px 14px !important; justify-content: space-between !important; align-items: center !important; gap: 10px !important; flex-wrap: wrap !important;&quot;>
+      <div style=&quot;display: flex !important; align-items: center !important; gap: 8px !important;&quot;>
+        <span style=&quot;font-size: 12px !important; font-weight: 800 !important; color: #f8fafc !important;&quot;>
+          <i class=&quot;fa-solid fa-users&quot; style=&quot;color: #10b981;&quot;></i> ¿Quiénes pagan juntos en esta comanda?
+        </span>
+      </div>
+      <div style=&quot;display: flex !important; gap: 6px !important; flex-wrap: wrap !important;&quot;>
+        <button type=&quot;button&quot; onclick=&quot;window.comandaSetPreset('todas')&quot;
+          style=&quot;padding: 4px 10px !important; font-size: 11px !important; font-weight: 800 !important; background: #059669 !important; color: #ffffff !important; border: none !important; border-radius: 6px !important; cursor: pointer !important;&quot;>
+          Toda la Mesa
+        </button>
+        <button type=&quot;button&quot; onclick=&quot;window.comandaSetPreset('papa_ninos')&quot;
+          style=&quot;padding: 4px 10px !important; font-size: 11px !important; font-weight: 800 !important; background: rgba(16, 185, 129, 0.2) !important; color: #34d399 !important; border: 1px solid rgba(16, 185, 129, 0.4) !important; border-radius: 6px !important; cursor: pointer !important;&quot;>
+          Papá + Niños (Sillas 1, 3, 4)
+        </button>
+        <button type=&quot;button&quot; onclick=&quot;window.comandaSetPreset('solo_s1')&quot;
+          style=&quot;padding: 4px 10px !important; font-size: 11px !important; font-weight: 800 !important; background: #1e293b !important; color: #cbd5e1 !important; border: 1px solid #334155 !important; border-radius: 6px !important; cursor: pointer !important;&quot;>
+          Solo Silla 1
+        </button>
+        <button type=&quot;button&quot; onclick=&quot;window.comandaSetPreset('solo_s2')&quot;
+          style=&quot;padding: 4px 10px !important; font-size: 11px !important; font-weight: 800 !important; background: #1e293b !important; color: #cbd5e1 !important; border: 1px solid #334155 !important; border-radius: 6px !important; cursor: pointer !important;&quot;>
+          Solo Silla 2 (Mamá)
+        </button>
+      </div>
     </div>
 
     <!-- MODAL ITEMS CONTAINER -->
@@ -550,20 +584,26 @@
         style=&quot;display: flex !important; justify-content: space-between !important; align-items: center !important; padding-bottom: 8px !important; border-bottom: 1px solid #1e293b !important;&quot;>
         <span style=&quot;font-size: 12px !important; font-weight: 700 !important; color: #cbd5e1 !important;&quot;
           id=&quot;modalItemsHeader&quot;>Consumos en Silla 1:</span>
-        <span
+        <span id=&quot;modalEstadoBadge&quot;
           style=&quot;padding: 2px 8px !important; border-radius: 6px !important; background: rgba(16, 185, 129, 0.2) !important; color: #34d399 !important; font-size: 10px !important; font-weight: 800 !important; text-transform: uppercase !important;&quot;>Activa</span>
       </div>
 
       <div id=&quot;modalItemsList&quot;
-        style=&quot;display: flex !important; flex-direction: column !important; gap: 8px !important; max-height: 220px !important; overflow-y: auto !important;&quot;>
+        style=&quot;display: flex !important; flex-direction: column !important; gap: 8px !important; max-height: 380px !important; overflow-y: auto !important;&quot;>
         <!-- Items rendered dynamically -->
+      </div>
+
+      <!-- AVISO DE SILLAS PENDIENTES -->
+      <div id=&quot;modalPendientesAlert&quot;
+        style=&quot;display: none !important; background: rgba(245, 158, 11, 0.15) !important; border: 1px solid rgba(245, 158, 11, 0.3) !important; border-radius: 10px !important; padding: 8px 12px !important; font-size: 11px !important; color: #fbbf24 !important;&quot;>
+        <i class=&quot;fa-solid fa-circle-info&quot;></i> <span id=&quot;txtPendientesMensaje&quot;>Quedarán activas en la mesa otras sillas.</span>
       </div>
 
       <!-- DESGLOSE FISCAL Y TOTALES CONSOLIDADOS -->
       <div id=&quot;modalTotalsBreakdown&quot;
         style=&quot;padding-top: 10px !important; border-top: 1px solid #1e293b !important; display: flex !important; flex-direction: column !important; gap: 4px !important; font-size: 11px !important;&quot;>
         <div style=&quot;display: flex !important; justify-content: space-between !important; color: #94a3b8 !important;&quot;>
-          <span>Subtotal Neto Consumos:</span>
+          <span id=&quot;lblSubtotalModal&quot;>Subtotal Neto Consumos:</span>
           <span style=&quot;color: #cbd5e1 !important; font-weight: 700;&quot; id=&quot;modalSubtotalMonto&quot;>$0.00</span>
         </div>
         <div style=&quot;display: flex !important; justify-content: space-between !important; color: #94a3b8 !important;&quot;>
@@ -586,6 +626,10 @@
     <div
       style=&quot;display: flex !important; flex-direction: column !important; gap: 10px !important; padding-top: 8px !important;&quot;>
       <div style=&quot;display: flex !important; gap: 10px !important;&quot;>
+        <button id=&quot;btnCobrarModalDirecto&quot; onclick=&quot;window.cobrarSeleccionadasDesdeComanda();&quot;
+          style=&quot;display: none !important; flex: 1.4 !important; padding: 12px !important; background: linear-gradient(135deg, #059669, #10b981) !important; color: #ffffff !important; font-weight: 900 !important; font-size: 12px !important; border-radius: 10px !important; border: none !important; cursor: pointer !important; align-items: center !important; justify-content: center !important; gap: 6px !important; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4) !important;&quot;>
+          <i class=&quot;fa-solid fa-credit-card&quot;></i> Cobrar y Liquidar (<span id=&quot;txtBtnCobrarModal&quot;>$0.00</span>)
+        </button>
         <button id=&quot;btnMoverDesdeModal&quot;
           style=&quot;flex: 1 !important; padding: 10px !important; background: #0284c7 !important; color: #ffffff !important; font-weight: 800 !important; font-size: 11px !important; border-radius: 10px !important; border: none !important; cursor: pointer !important; display: flex !important; align-items: center !important; justify-content: center !important; gap: 6px !important;&quot;>
           <i class=&quot;fa-solid fa-arrow-right-arrow-left&quot;></i> Mover esta Cuenta
@@ -598,7 +642,7 @@
       <div style=&quot;display: flex !important; gap: 10px !important;&quot;>
         <button id=&quot;btnPrecuenta&quot; onclick=&quot;window.abrirPrecuenta();&quot;
           style=&quot;flex: 1 !important; padding: 10px !important; background: #1e293b !important; color: #cbd5e1 !important; font-weight: 700 !important; font-size: 11px !important; border-radius: 10px !important; border: 1px solid #334155 !important; cursor: pointer !important; display: flex !important; align-items: center !important; justify-content: center !important; gap: 6px !important;&quot;>
-          <i class=&quot;fa-solid fa-receipt&quot; style=&quot;color: #38bdf8 !important;&quot;></i> Imprimir Precuenta
+          <i class=&quot;fa-solid fa-receipt&quot; style=&quot;color: #38bdf8 !important;&quot;></i> Precuenta Térmica
         </button>
         <button id=&quot;btnLiberarSilla&quot; onclick=&quot;window.liberarSillaActual();&quot;
           style=&quot;padding: 10px 14px !important; background: rgba(220, 38, 38, 0.2) !important; color: #f87171 !important; font-weight: 800 !important; font-size: 11px !important; border-radius: 10px !important; border: 1px solid rgba(239, 68, 68, 0.4) !important; cursor: pointer !important; display: flex !important; align-items: center !important; justify-content: center !important; gap: 6px !important;&quot;>
@@ -1027,274 +1071,274 @@
       // ── Highlight silla destino detectada ──
       document.querySelectorAll('.chair-btn-fixed').forEach(function (c) {
         c.classList.remove('chair-drag-target-valid', 'chair-drag-target-combine');
-          });
+      });
 
-          var target = _resolveTargetChair(e.clientX, e.clientY, _ms.srcMesa, _ms.srcSilla);
-          if (target &amp;&amp; target.el) {
-          var tgt = window.palapaState.cuentas[target.mesaId + '-' + target.sillaNum];
-          var busy = tgt &amp;&amp; tgt.items &amp;&amp; tgt.items.length > 0;
-          target.el.classList.add(busy ? 'chair-drag-target-combine' : 'chair-drag-target-valid');
-          }
-          }
+      var target = _resolveTargetChair(e.clientX, e.clientY, _ms.srcMesa, _ms.srcSilla);
+      if (target &amp;&amp; target.el) {
+        var tgt = window.palapaState.cuentas[target.mesaId + '-' + target.sillaNum];
+        var busy = tgt &amp;&amp; tgt.items &amp;&amp; tgt.items.length > 0;
+        target.el.classList.add(busy ? 'chair-drag-target-combine' : 'chair-drag-target-valid');
+      }
+    }
 
-          function _chairMouseup(e) {
-          document.removeEventListener('mousemove', _chairMousemove);
-          document.removeEventListener('mouseup', _chairMouseup);
+    function _chairMouseup(e) {
+      document.removeEventListener('mousemove', _chairMousemove);
+      document.removeEventListener('mouseup', _chairMouseup);
 
-          var wasRealDrag = _ms.dragging;
-          var srcM = _ms.srcMesa;
-          var srcS = _ms.srcSilla;
+      var wasRealDrag = _ms.dragging;
+      var srcM = _ms.srcMesa;
+      var srcS = _ms.srcSilla;
 
-          _limpiarDragVisual();
-          _ms.active = false;
-          _ms.dragging = false;
-          _ms.srcMesa = null;
-          _ms.srcSilla = null;
+      _limpiarDragVisual();
+      _ms.active = false;
+      _ms.dragging = false;
+      _ms.srcMesa = null;
+      _ms.srcSilla = null;
 
-          if (!wasRealDrag) {
-          return;
-          }
+      if (!wasRealDrag) {
+        return;
+      }
 
-          // ── Es un drag real: bloquear el click post-mouseup ──
-          _wasDrag = true;
-          setTimeout(function () { _wasDrag = false; }, 80);
+      // ── Es un drag real: bloquear el click post-mouseup ──
+      _wasDrag = true;
+      setTimeout(function () { _wasDrag = false; }, 80);
 
-          // Resolver la silla destino
-          var target = _resolveTargetChair(e.clientX, e.clientY, srcM, srcS);
-          if (target) {
-          completarMovimiento(target.mesaId, target.sillaNum, srcM, srcS);
-          } else {
-          cancelarModoMover();
-          showDragToast('\u26a0 Suelta sobre una silla o mesa para mover la cuenta', 'warn');
-          }
-          }
+      // Resolver la silla destino
+      var target = _resolveTargetChair(e.clientX, e.clientY, srcM, srcS);
+      if (target) {
+        completarMovimiento(target.mesaId, target.sillaNum, srcM, srcS);
+      } else {
+        cancelarModoMover();
+        showDragToast('\u26a0 Suelta sobre una silla o mesa para mover la cuenta', 'warn');
+      }
+    }
 
-          function setupDragListeners() {
-          // Asignar mousedown a TODAS las sillas (no solo ocupadas).
-          // _chairMousedown ya verifica si tiene cuenta antes de activar.
-          for (var m = 1; m <= 3; m++) {
-          for (var s = 1; s <= 4; s++) {
+    function setupDragListeners() {
+      // Asignar mousedown a TODAS las sillas (no solo ocupadas).
+      // _chairMousedown ya verifica si tiene cuenta antes de activar.
+      for (var m = 1; m <= 3; m++) {
+        for (var s = 1; s <= 4; s++) {
           (function (mesaId, sillaNum) {
-          var el = document.getElementById('chair-' + mesaId + '-' + sillaNum);
-          if (!el) return;
-          el.addEventListener('mousedown', function (e) {
-          _chairMousedown(e, mesaId, sillaNum);
-          });
+            var el = document.getElementById('chair-' + mesaId + '-' + sillaNum);
+            if (!el) return;
+            el.addEventListener('mousedown', function (e) {
+              _chairMousedown(e, mesaId, sillaNum);
+            });
           })(m, s);
-          }
-          }
-          }
+        }
+      }
+    }
 
-          // Global Event Delegation for all Clicks
-          document.addEventListener('click', function (e) {
-          // Ignorar click que el browser dispara tras un drag con mouse
-          if (_wasDrag) return;
-          // 1. Chair clicked
-          const chairNode = e.target.closest('.chair-btn-fixed');
-          if (chairNode) {
-          const id = chairNode.id; // e.g. &quot;chair-3-1&quot;
-          const parts = id.split('-');
-          if (parts.length === 3) {
+    // Global Event Delegation for all Clicks
+    document.addEventListener('click', function (e) {
+      // Ignorar click que el browser dispara tras un drag con mouse
+      if (_wasDrag) return;
+      // 1. Chair clicked
+      const chairNode = e.target.closest('.chair-btn-fixed');
+      if (chairNode) {
+        const id = chairNode.id; // e.g. &quot;chair-3-1&quot;
+        const parts = id.split('-');
+        if (parts.length === 3) {
           const mesaId = parseInt(parts[1]);
           const sillaNum = parseInt(parts[2]);
           handleSillaClick(mesaId, sillaNum);
           return;
-          }
-          }
+        }
+      }
 
-          // 2. Table circle clicked
-          const tableNode = e.target.closest('.table-circle-fixed');
-          if (tableNode) {
-          const id = tableNode.id; // e.g. &quot;table-circle-3&quot;
-          const parts = id.split('-');
-          if (parts.length === 3) {
+      // 2. Table circle clicked
+      const tableNode = e.target.closest('.table-circle-fixed');
+      if (tableNode) {
+        const id = tableNode.id; // e.g. &quot;table-circle-3&quot;
+        const parts = id.split('-');
+        if (parts.length === 3) {
           const mesaId = parseInt(parts[2]);
           handleMesaClick(mesaId);
           return;
-          }
-          }
+        }
+      }
 
-          // 3. Category chip clicked
-          const chipNode = e.target.closest('[data-cat]');
-          if (chipNode) {
-          const cat = chipNode.getAttribute('data-cat');
-          filtrarCategoria(cat);
-          return;
-          }
+      // 3. Category chip clicked
+      const chipNode = e.target.closest('[data-cat]');
+      if (chipNode) {
+        const cat = chipNode.getAttribute('data-cat');
+        filtrarCategoria(cat);
+        return;
+      }
 
-          // 4. Action buttons
-          if (e.target.closest('#btnResetDemo')) { resetDemoState(); return; }
-          if (e.target.closest('#btnVerComandaActiva')) { abrirModalComandaActual(); return; }
-          if (e.target.closest('#btnMoverComensalMain')) { iniciarModoMover(); return; }
-          if (e.target.closest('#btnMoverDesdeModal')) { cerrarModalComanda(); iniciarModoMover(); return; }
-          if (e.target.closest('#btnCloseModal') || e.target.closest('#btnCerrarModalBottom')) { cerrarModalComanda(); return; }
-          if (e.target.closest('#btnCancelMove')) { cancelarModoMover(); return; }
-          if (e.target.closest('#btnEnviarCocina')) { alert(`Comanda enviada a Cocina (KDS)`); cerrarModalComanda(); return; }
-          if (e.target.closest('#btnPrecuenta')) { alert(`Imprimiendo precuenta`); cerrarModalComanda(); return; }
+      // 4. Action buttons
+      if (e.target.closest('#btnResetDemo')) { resetDemoState(); return; }
+      if (e.target.closest('#btnVerComandaActiva')) { abrirModalComandaActual(); return; }
+      if (e.target.closest('#btnMoverComensalMain')) { iniciarModoMover(); return; }
+      if (e.target.closest('#btnMoverDesdeModal')) { cerrarModalComanda(); iniciarModoMover(); return; }
+      if (e.target.closest('#btnCloseModal') || e.target.closest('#btnCerrarModalBottom')) { cerrarModalComanda(); return; }
+      if (e.target.closest('#btnCancelMove')) { cancelarModoMover(); return; }
+      if (e.target.closest('#btnEnviarCocina')) { alert(`Comanda enviada a Cocina (KDS)`); cerrarModalComanda(); return; }
+      if (e.target.closest('#btnPrecuenta')) { alert(`Imprimiendo precuenta`); cerrarModalComanda(); return; }
 
-          // 5. Click outside modal content (on backdrop) closes modal
-          if (e.target.id === 'modalComandaBackdrop') {
-          cerrarModalComanda();
-          return;
-          }
-          });
+      // 5. Click outside modal content (on backdrop) closes modal
+      if (e.target.id === 'modalComandaBackdrop') {
+        cerrarModalComanda();
+        return;
+      }
+    });
 
-          // Escape key closes modals and cancels move mode
-          document.addEventListener('keydown', function (e) {
-          if (e.key === 'Escape') {
-          cerrarModalComanda();
-          cancelarModoMover();
-          var cb = document.getElementById('combineConfirmBackdrop');
-          if (cb) cb.classList.remove('show');
-          }
-          });
+    // Escape key closes modals and cancels move mode
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') {
+        cerrarModalComanda();
+        cancelarModoMover();
+        var cb = document.getElementById('combineConfirmBackdrop');
+        if (cb) cb.classList.remove('show');
+      }
+    });
 
-          function handleSillaClick(mesaId, sillaNum) {
-          if (window.palapaState.modoMoverActivo) {
-          completarMovimiento(mesaId, sillaNum);
-          return;
-          }
+    function handleSillaClick(mesaId, sillaNum) {
+      if (window.palapaState.modoMoverActivo) {
+        completarMovimiento(mesaId, sillaNum);
+        return;
+      }
 
-          const key = `${mesaId}-${sillaNum}`;
+      const key = `${mesaId}-${sillaNum}`;
 
-          // Si la silla no tiene cuenta, el mesero la registra de inmediato como OCUPADA (comensal presencial ubicado)
-          if (!window.palapaState.cuentas[key]) {
-          const nowStr = (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-          window.palapaState.cuentas[key] = {
+      // Si la silla no tiene cuenta, el mesero la registra de inmediato como OCUPADA (comensal presencial ubicado)
+      if (!window.palapaState.cuentas[key]) {
+        const nowStr = (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        window.palapaState.cuentas[key] = {
           estado: 'ocupada',
           qrId: 'PV-0' + mesaId + sillaNum,
           comensalNombre: 'Comensal Silla ' + sillaNum,
           items: [],
           historialUbicaciones: [
-        { mesaId: mesaId, sillaNum: sillaNum, hora: nowStr }
+            { mesaId: mesaId, sillaNum: sillaNum, hora: nowStr }
           ],
           creadoPor: 'mesero_presencial',
           horaLlegada: nowStr
-          };
-          saveStateToStorage();
-          showDragToast('🪑 Comensal ubicado en Mesa ' + mesaId + ' Silla ' + sillaNum + ' (Silla ocupada)', 'ok');
-          }
+        };
+        saveStateToStorage();
+        showDragToast('🪑 Comensal ubicado en Mesa ' + mesaId + ' Silla ' + sillaNum + ' (Silla ocupada)', 'ok');
+      }
 
-          window.palapaState.mesaSeleccionadaId = mesaId;
-          window.palapaState.sillaSeleccionadaNum = sillaNum;
-          renderStateUI();
-          abrirModalComandaActual();
-          }
+      window.palapaState.mesaSeleccionadaId = mesaId;
+      window.palapaState.sillaSeleccionadaNum = sillaNum;
+      renderStateUI();
+      abrirModalComandaActual();
+    }
 
-          function handleMesaClick(mesaId) {
-          if (window.palapaState.modoMoverActivo) {
-          alert(&quot;Selecciona una silla específica a donde deseas mover la cuenta.&quot;);
-          return;
-          }
-          window.palapaState.mesaSeleccionadaId = mesaId;
-          window.palapaState.sillaSeleccionadaNum = null;
-          renderStateUI();
-          abrirModalComandaActual();
-          }
+    function handleMesaClick(mesaId) {
+      if (window.palapaState.modoMoverActivo) {
+        alert(&quot;Selecciona una silla específica a donde deseas mover la cuenta.&quot;);
+        return;
+      }
+      window.palapaState.mesaSeleccionadaId = mesaId;
+      window.palapaState.sillaSeleccionadaNum = null;
+      renderStateUI();
+      abrirModalComandaActual();
+    }
 
-          function iniciarModoMover() {
-          const mesaId = window.palapaState.mesaSeleccionadaId;
-          const sillaNum = window.palapaState.sillaSeleccionadaNum;
+    function iniciarModoMover() {
+      const mesaId = window.palapaState.mesaSeleccionadaId;
+      const sillaNum = window.palapaState.sillaSeleccionadaNum;
 
-          if (sillaNum === null) {
-          showDragToast(&quot;Por favor selecciona una silla específica para mover.&quot;, &quot;warn&quot;);
-          return;
-          }
+      if (sillaNum === null) {
+        showDragToast(&quot;Por favor selecciona una silla específica para mover.&quot;, &quot;warn&quot;);
+        return;
+      }
 
-          const key = `${mesaId}-${sillaNum}`;
-          const cuenta = window.palapaState.cuentas[key];
-          const isOccupied = !!(cuenta &amp;&amp; (cuenta.estado === 'ocupada' || (cuenta.items &amp;&amp; cuenta.items.length > 0)));
+      const key = `${mesaId}-${sillaNum}`;
+      const cuenta = window.palapaState.cuentas[key];
+      const isOccupied = !!(cuenta &amp;&amp; (cuenta.estado === 'ocupada' || (cuenta.items &amp;&amp; cuenta.items.length > 0)));
 
-          if (!isOccupied) {
-          showDragToast(`⚠ La Silla ${sillaNum} de Mesa ${mesaId} está disponible. Selecciona una silla ocupada para mover.`, &quot;warn&quot;);
-          return;
-          }
+      if (!isOccupied) {
+        showDragToast(`⚠ La Silla ${sillaNum} de Mesa ${mesaId} está disponible. Selecciona una silla ocupada para mover.`, &quot;warn&quot;);
+        return;
+      }
 
-          window.palapaState.modoMoverActivo = true;
-          window.palapaState.sillaOrigenMover = { mesaId, sillaNum };
+      window.palapaState.modoMoverActivo = true;
+      window.palapaState.sillaOrigenMover = { mesaId, sillaNum };
 
-          const bannerText = document.getElementById('bannerText');
-          const btnCancel = document.getElementById('btnCancelMove');
+      const bannerText = document.getElementById('bannerText');
+      const btnCancel = document.getElementById('btnCancelMove');
 
-          if (bannerText &amp;&amp; btnCancel) {
-          bannerText.innerHTML = `<b style=&quot;color: #38bdf8;&quot;>MOVIENDO COMENSAL:</b> Silla origen: <b>Mesa ${mesaId} Silla ${sillaNum}</b>. Haz clic en la <b>Silla Destino</b> a donde deseas transferir la cuenta.`;
-          btnCancel.style.display = 'block';
-          }
+      if (bannerText &amp;&amp; btnCancel) {
+        bannerText.innerHTML = `<b style=&quot;color: #38bdf8;&quot;>MOVIENDO COMENSAL:</b> Silla origen: <b>Mesa ${mesaId} Silla ${sillaNum}</b>. Haz clic en la <b>Silla Destino</b> a donde deseas transferir la cuenta.`;
+        btnCancel.style.display = 'block';
+      }
 
-          renderStateUI();
-          }
+      renderStateUI();
+    }
 
-          function limpiarDragState() {
-          _limpiarDragVisual();
-          }
+    function limpiarDragState() {
+      _limpiarDragVisual();
+    }
 
-          function cancelarModoMover() {
-          window.palapaState.modoMoverActivo = false;
-          window.palapaState.sillaOrigenMover = null;
-          if (typeof _ms !== 'undefined') {
-          _ms.active   = false;
-          _ms.dragging = false;
-          _ms.srcMesa  = null;
-          _ms.srcSilla = null;
-          }
-          _limpiarDragVisual();
+    function cancelarModoMover() {
+      window.palapaState.modoMoverActivo = false;
+      window.palapaState.sillaOrigenMover = null;
+      if (typeof _ms !== 'undefined') {
+        _ms.active   = false;
+        _ms.dragging = false;
+        _ms.srcMesa  = null;
+        _ms.srcSilla = null;
+      }
+      _limpiarDragVisual();
 
-          const bannerText = document.getElementById('bannerText');
-          const btnCancel = document.getElementById('btnCancelMove');
+      const bannerText = document.getElementById('bannerText');
+      const btnCancel = document.getElementById('btnCancelMove');
 
-          if (bannerText &amp;&amp; btnCancel) {
-          bannerText.innerHTML = `Haz clic o <b>arrastra con el mouse</b> cualquier <b>Silla</b> para abrir su comanda o trasladarla a otra silla/mesa.`;
-          btnCancel.style.display = 'none';
-          }
+      if (bannerText &amp;&amp; btnCancel) {
+        bannerText.innerHTML = `Haz clic o <b>arrastra con el mouse</b> cualquier <b>Silla</b> para abrir su comanda o trasladarla a otra silla/mesa.`;
+        btnCancel.style.display = 'none';
+      }
 
-          renderStateUI();
-          }
+      renderStateUI();
+    }
 
-          function completarMovimiento(targetMesaId, targetSillaNum, overrideSrcMesa, overrideSrcSilla) {
-          // Soporte dual: modo click (sillaOrigenMover) y drag &amp; drop (override params)
-          var srcMesa = overrideSrcMesa !== undefined ? overrideSrcMesa : (window.palapaState.sillaOrigenMover ? window.palapaState.sillaOrigenMover.mesaId : null);
-          var srcSilla = overrideSrcSilla !== undefined ? overrideSrcSilla : (window.palapaState.sillaOrigenMover ? window.palapaState.sillaOrigenMover.sillaNum : null);
+    function completarMovimiento(targetMesaId, targetSillaNum, overrideSrcMesa, overrideSrcSilla) {
+      // Soporte dual: modo click (sillaOrigenMover) y drag &amp; drop (override params)
+      var srcMesa = overrideSrcMesa !== undefined ? overrideSrcMesa : (window.palapaState.sillaOrigenMover ? window.palapaState.sillaOrigenMover.mesaId : null);
+      var srcSilla = overrideSrcSilla !== undefined ? overrideSrcSilla : (window.palapaState.sillaOrigenMover ? window.palapaState.sillaOrigenMover.sillaNum : null);
 
-          if (srcMesa === null || srcSilla === null) return;
-          if (srcMesa === targetMesaId &amp;&amp; srcSilla === targetSillaNum) {
-          cancelarModoMover(); return;
-          }
+      if (srcMesa === null || srcSilla === null) return;
+      if (srcMesa === targetMesaId &amp;&amp; srcSilla === targetSillaNum) {
+        cancelarModoMover(); return;
+      }
 
-          // Sincronizar estado por si viene de drag (sillaOrigenMover puede ser null)
-          if (!window.palapaState.sillaOrigenMover) {
-          window.palapaState.sillaOrigenMover = { mesaId: srcMesa, sillaNum: srcSilla };
-          }
+      // Sincronizar estado por si viene de drag (sillaOrigenMover puede ser null)
+      if (!window.palapaState.sillaOrigenMover) {
+        window.palapaState.sillaOrigenMover = { mesaId: srcMesa, sillaNum: srcSilla };
+      }
 
-          var sourceKey = srcMesa + '-' + srcSilla;
-          var targetKey = targetMesaId + '-' + targetSillaNum;
-          var sourceCuenta = window.palapaState.cuentas[sourceKey];
-          var targetCuenta = window.palapaState.cuentas[targetKey];
-          var isSourceOccupied = !!(sourceCuenta &amp;&amp; (sourceCuenta.estado === 'ocupada' || (sourceCuenta.items &amp;&amp; sourceCuenta.items.length > 0)));
+      var sourceKey = srcMesa + '-' + srcSilla;
+      var targetKey = targetMesaId + '-' + targetSillaNum;
+      var sourceCuenta = window.palapaState.cuentas[sourceKey];
+      var targetCuenta = window.palapaState.cuentas[targetKey];
+      var isSourceOccupied = !!(sourceCuenta &amp;&amp; (sourceCuenta.estado === 'ocupada' || (sourceCuenta.items &amp;&amp; sourceCuenta.items.length > 0)));
 
-          if (!isSourceOccupied) {
-          showDragToast('⚠ La silla origen ya no está ocupada', 'warn');
-          cancelarModoMover(); return;
-          }
+      if (!isSourceOccupied) {
+        showDragToast('⚠ La silla origen ya no está ocupada', 'warn');
+        cancelarModoMover(); return;
+      }
 
-          var nowStr = (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-          if (sourceCuenta.items) {
-          sourceCuenta.items.forEach(function (i) {
+      var nowStr = (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      if (sourceCuenta.items) {
+        sourceCuenta.items.forEach(function (i) {
           if (i.mesaId === undefined) { i.mesaId = srcMesa; i.sillaNum = srcSilla; }
-          });
-          }
-          sourceCuenta.historialUbicaciones = sourceCuenta.historialUbicaciones || [{ mesaId: srcMesa, sillaNum: srcSilla, hora: nowStr }];
-          var yaExiste = sourceCuenta.historialUbicaciones.some(function (u) { return u.mesaId === targetMesaId &amp;&amp; u.sillaNum === targetSillaNum; });
-          if (!yaExiste) {
-          sourceCuenta.historialUbicaciones.push({ mesaId: targetMesaId, sillaNum: targetSillaNum, hora: nowStr });
-          }
+        });
+      }
+      sourceCuenta.historialUbicaciones = sourceCuenta.historialUbicaciones || [{ mesaId: srcMesa, sillaNum: srcSilla, hora: nowStr }];
+      var yaExiste = sourceCuenta.historialUbicaciones.some(function (u) { return u.mesaId === targetMesaId &amp;&amp; u.sillaNum === targetSillaNum; });
+      if (!yaExiste) {
+        sourceCuenta.historialUbicaciones.push({ mesaId: targetMesaId, sillaNum: targetSillaNum, hora: nowStr });
+      }
 
-          var isTargetOccupied = !!(targetCuenta &amp;&amp; (targetCuenta.estado === 'ocupada' || (targetCuenta.items &amp;&amp; targetCuenta.items.length > 0)));
-          var targetHasItems = targetCuenta &amp;&amp; targetCuenta.items &amp;&amp; targetCuenta.items.length > 0;
-          var sourceHasItems = sourceCuenta.items &amp;&amp; sourceCuenta.items.length > 0;
+      var isTargetOccupied = !!(targetCuenta &amp;&amp; (targetCuenta.estado === 'ocupada' || (targetCuenta.items &amp;&amp; targetCuenta.items.length > 0)));
+      var targetHasItems = targetCuenta &amp;&amp; targetCuenta.items &amp;&amp; targetCuenta.items.length > 0;
+      var sourceHasItems = sourceCuenta.items &amp;&amp; sourceCuenta.items.length > 0;
 
-          if (isTargetOccupied &amp;&amp; (targetHasItems || sourceHasItems)) {
-          // Silla destino ocupada y con consumos — pedir confirmación sin alert()
-          showCombineConfirm(srcMesa, srcSilla, targetMesaId, targetSillaNum, function () {
+      if (isTargetOccupied &amp;&amp; (targetHasItems || sourceHasItems)) {
+        // Silla destino ocupada y con consumos — pedir confirmación sin alert()
+        showCombineConfirm(srcMesa, srcSilla, targetMesaId, targetSillaNum, function () {
           // onYes: combinar
           targetCuenta.items = (targetCuenta.items || []).concat(sourceCuenta.items || []);
           delete window.palapaState.cuentas[sourceKey];
@@ -1303,86 +1347,95 @@
           saveStateToStorage();
           cancelarModoMover();
           showDragToast('✅ Cuentas combinadas en Mesa ' + targetMesaId + ' Silla ' + targetSillaNum, 'ok');
-          });
-          } else {
-          // Silla destino libre o sin consumos — mover comensal/cuenta
-          if (targetCuenta &amp;&amp; targetCuenta.items &amp;&amp; targetCuenta.items.length > 0) {
+        });
+      } else {
+        // Silla destino libre o sin consumos — mover comensal/cuenta
+        if (targetCuenta &amp;&amp; targetCuenta.items &amp;&amp; targetCuenta.items.length > 0) {
           // Destino tiene items, origen estaba vacía
-          } else {
+        } else {
           window.palapaState.cuentas[targetKey] = sourceCuenta;
-          }
-          delete window.palapaState.cuentas[sourceKey];
-          window.palapaState.mesaSeleccionadaId = targetMesaId;
-          window.palapaState.sillaSeleccionadaNum = targetSillaNum;
-          saveStateToStorage();
-          cancelarModoMover();
-          showDragToast('✅ Comensal trasladado → Mesa ' + targetMesaId + ' Silla ' + targetSillaNum, 'ok');
-          }
-          }
+        }
+        delete window.palapaState.cuentas[sourceKey];
+        window.palapaState.mesaSeleccionadaId = targetMesaId;
+        window.palapaState.sillaSeleccionadaNum = targetSillaNum;
+        saveStateToStorage();
+        cancelarModoMover();
+        showDragToast('✅ Comensal trasladado → Mesa ' + targetMesaId + ' Silla ' + targetSillaNum, 'ok');
+      }
+    }
 
-          function abrirModalComandaActual() {
-          const mesaId = window.palapaState.mesaSeleccionadaId;
-          const sillaNum = window.palapaState.sillaSeleccionadaNum;
+    function abrirModalComandaActual() {
+      const mesaId = window.palapaState.mesaSeleccionadaId;
+      const sillaNum = window.palapaState.sillaSeleccionadaNum;
 
-          const modal = document.getElementById('modalComandaBackdrop');
-          const title = document.getElementById('modalTitle');
-          const subtitle = document.getElementById('modalSubtitle');
-          const header = document.getElementById('modalItemsHeader');
-          const container = document.getElementById('modalItemsList');
-          const subtotalMontoEl = document.getElementById('modalSubtotalMonto');
-          const ivaMontoEl = document.getElementById('modalIvaMonto');
-          const propinaMontoEl = document.getElementById('modalPropinaMonto');
-          const totalMontoEl = document.getElementById('modalTotalMonto');
-          const totalLabelEl = document.getElementById('modalTotalLabel');
+      const modal = document.getElementById('modalComandaBackdrop');
+      const modalCard = document.getElementById('modalComandaCard');
+      const title = document.getElementById('modalTitle');
+      const subtitle = document.getElementById('modalSubtitle');
+      const header = document.getElementById('modalItemsHeader');
+      const container = document.getElementById('modalItemsList');
+      const subtotalMontoEl = document.getElementById('modalSubtotalMonto');
+      const ivaMontoEl = document.getElementById('modalIvaMonto');
+      const propinaMontoEl = document.getElementById('modalPropinaMonto');
+      const totalMontoEl = document.getElementById('modalTotalMonto');
+      const totalLabelEl = document.getElementById('modalTotalLabel');
+      const btnVerTodaMesa = document.getElementById('btnVerTodaMesaHeader');
+      const btnMover = document.getElementById('btnMoverDesdeModal');
+      const btnLiberar = document.getElementById('btnLiberarSilla');
 
-          if (!container || !modal) return;
-          container.innerHTML = '';
+      if (!container || !modal) return;
+      container.innerHTML = '';
 
-          if (sillaNum !== null) {
-          const key = `${mesaId}-${sillaNum}`;
-          const cuenta = window.palapaState.cuentas[key] || { items: [] };
-          const qrId = cuenta.qrId || ('PV-0' + mesaId + sillaNum);
+      if (sillaNum !== null) {
+        if (modalCard) modalCard.style.maxWidth = '640px';
+        if (btnVerTodaMesa) btnVerTodaMesa.style.display = 'inline-flex';
+        if (btnMover) btnMover.style.display = 'flex';
+        if (btnLiberar) btnLiberar.style.display = 'flex';
 
-          if (title) title.innerHTML = `<i class=&quot;fa-solid fa-receipt&quot; style=&quot;color: #34d399;&quot;></i> Ticket Silla ${sillaNum} <span style=&quot;font-size: 11px; background: #1e293b; color: #38bdf8; padding: 2px 8px; border-radius: 6px; border: 1px solid #334155; margin-left: 6px;&quot;>🏷️ QR ${qrId}</span>`;
-          if (subtitle) subtitle.innerText = `Mesa ${mesaId} • Ubicación Actual • ${cuenta.creadoPor === 'mesero_presencial' ? 'Comensal Ubicado Presencialmente' : 'Registro QR'}`;
-          if (header) header.innerText = `Detalle de Consumos por Ubicación:`;
+        const key = `${mesaId}-${sillaNum}`;
+        const cuenta = window.palapaState.cuentas[key] || { items: [] };
+        const qrId = cuenta.qrId || ('PV-0' + mesaId + sillaNum);
 
-          if (!cuenta.items || cuenta.items.length === 0) {
+        if (title) title.innerHTML = `<i class=&quot;fa-solid fa-receipt&quot; style=&quot;color: #34d399;&quot;></i> Ticket Silla ${sillaNum} <span style=&quot;font-size: 11px; background: #1e293b; color: #38bdf8; padding: 2px 8px; border-radius: 6px; border: 1px solid #334155; margin-left: 6px;&quot;>🏷️ QR ${qrId}</span>`;
+        if (subtitle) subtitle.innerText = `Mesa ${mesaId} • Ubicación Actual • ${cuenta.creadoPor === 'mesero_presencial' ? 'Comensal Ubicado Presencialmente' : 'Registro QR'}`;
+        if (header) header.innerText = `Detalle de Consumos por Ubicación:`;
+
+        if (!cuenta.items || cuenta.items.length === 0) {
           container.innerHTML = `
-          <div style=&quot;background: rgba(15, 23, 42, 0.8) !important; border: 1px dashed #059669 !important; border-radius: 14px !important; padding: 18px !important; text-align: center !important; display: flex !important; flex-direction: column !important; align-items: center !important; gap: 8px !important;&quot;>
-          <div style=&quot;width: 42px !important; height: 42px !important; border-radius: 50% !important; background: rgba(16, 185, 129, 0.15) !important; border: 2px solid #10b981 !important; display: flex !important; align-items: center !important; justify-content: center !important; font-size: 18px !important; color: #34d399 !important;&quot;>
-          <i class=&quot;fa-solid fa-user-check&quot;></i>
-          </div>
-          <div>
-          <div style=&quot;font-size: 13px !important; font-weight: 800 !important; color: #ffffff !important;&quot;>Comensal Ubicado en Silla ${sillaNum}</div>
-          <div style=&quot;font-size: 11px !important; color: #94a3b8 !important; margin-top: 3px !important;&quot;>La silla está registrada como <b style=&quot;color: #fbbf24;&quot;>OCUPADA</b> (ubicación presencial).</div>
-          </div>
-          <div style=&quot;font-size: 11px !important; color: #34d399 !important; font-weight: 700 !important; background: rgba(5, 150, 105, 0.15) !important; padding: 4px 12px !important; border-radius: 20px !important; border: 1px solid rgba(52, 211, 153, 0.3) !important; margin-top: 4px !important;&quot;>
-          👉 Selecciona platillos del catálogo a la derecha para iniciar la orden
-          </div>
-          </div>
+            <div style=&quot;background: rgba(15, 23, 42, 0.8) !important; border: 1px dashed #059669 !important; border-radius: 14px !important; padding: 18px !important; text-align: center !important; display: flex !important; flex-direction: column !important; align-items: center !important; gap: 8px !important;&quot;>
+              <div style=&quot;width: 42px !important; height: 42px !important; border-radius: 50% !important; background: rgba(16, 185, 129, 0.15) !important; border: 2px solid #10b981 !important; display: flex !important; align-items: center !important; justify-content: center !important; font-size: 18px !important; color: #34d399 !important;&quot;>
+                <i class=&quot;fa-solid fa-user-check&quot;></i>
+              </div>
+              <div>
+                <div style=&quot;font-size: 13px !important; font-weight: 800 !important; color: #ffffff !important;&quot;>Comensal Ubicado en Silla ${sillaNum}</div>
+                <div style=&quot;font-size: 11px !important; color: #94a3b8 !important; margin-top: 3px !important;&quot;>La silla está registrada como <b style=&quot;color: #fbbf24;&quot;>OCUPADA</b> (ubicación presencial).</div>
+              </div>
+              <div style=&quot;font-size: 11px !important; color: #34d399 !important; font-weight: 700 !important; background: rgba(5, 150, 105, 0.15) !important; padding: 4px 12px !important; border-radius: 20px !important; border: 1px solid rgba(52, 211, 153, 0.3) !important; margin-top: 4px !important;&quot;>
+                👉 Selecciona platillos del catálogo a la derecha para iniciar la orden
+              </div>
+            </div>
           `;
           if (subtotalMontoEl) subtotalMontoEl.innerText = '$0.00';
           if (ivaMontoEl) ivaMontoEl.innerText = '$0.00';
           if (propinaMontoEl) propinaMontoEl.innerText = '$0.00';
           if (totalMontoEl) totalMontoEl.innerText = '$0.00';
-          } else {
+        } else {
           // Agrupar consumos por Tramo / Ubicación donde se ordenaron
           var tramosMap = {};
           cuenta.items.forEach((it, idx) => {
-          var tMesa = it.mesaId !== undefined ? it.mesaId : mesaId;
-          var tSilla = it.sillaNum !== undefined ? it.sillaNum : sillaNum;
-          var tKey = tMesa + '-' + tSilla;
-          if (!tramosMap[tKey]) {
-          tramosMap[tKey] = {
-          mesaId: tMesa,
-          sillaNum: tSilla,
-          items: [],
-          subtotal: 0
-          };
-          }
-          tramosMap[tKey].items.push({ item: it, originalIdx: idx });
-          tramosMap[tKey].subtotal += (it.precio * it.cantidad);
+            var tMesa = it.mesaId !== undefined ? it.mesaId : mesaId;
+            var tSilla = it.sillaNum !== undefined ? it.sillaNum : sillaNum;
+            var tKey = tMesa + '-' + tSilla;
+            if (!tramosMap[tKey]) {
+              tramosMap[tKey] = {
+                mesaId: tMesa,
+                sillaNum: tSilla,
+                items: [],
+                subtotal: 0
+              };
+            }
+            tramosMap[tKey].items.push({ item: it, originalIdx: idx });
+            tramosMap[tKey].subtotal += (it.precio * it.cantidad);
           });
 
           var tramoKeys = Object.keys(tramosMap);
@@ -1390,65 +1443,65 @@
 
           // Configurar contenedor en 2 columnas verticales si hay más de 1 tramo
           if (tramoKeys.length > 1) {
-          container.style.cssText = 'display: grid !important; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)) !important; gap: 12px !important; max-height: 280px !important; overflow-y: auto !important;';
+            container.style.cssText = 'display: grid !important; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)) !important; gap: 12px !important; max-height: 280px !important; overflow-y: auto !important;';
           } else {
-          container.style.cssText = 'display: flex !important; flex-direction: column !important; gap: 8px !important; max-height: 260px !important; overflow-y: auto !important;';
+            container.style.cssText = 'display: flex !important; flex-direction: column !important; gap: 8px !important; max-height: 260px !important; overflow-y: auto !important;';
           }
 
           tramoKeys.forEach((tKey, tIdx) => {
-          var tramo = tramosMap[tKey];
-          totalNeto += tramo.subtotal;
-          var isCurrent = (tramo.mesaId === mesaId &amp;&amp; tramo.sillaNum === sillaNum);
+            var tramo = tramosMap[tKey];
+            totalNeto += tramo.subtotal;
+            var isCurrent = (tramo.mesaId === mesaId &amp;&amp; tramo.sillaNum === sillaNum);
 
-          var tramoCard = document.createElement('div');
-          tramoCard.style.cssText = 'background: #020617 !important; border: 1px solid ' + (isCurrent ? '#059669' : '#334155') + ' !important; border-radius: 14px !important; padding: 12px !important; display: flex !important; flex-direction: column !important; justify-content: space-between !important; gap: 8px !important; box-shadow: inset 0 0 15px rgba(0,0,0,0.5) !important;';
+            var tramoCard = document.createElement('div');
+            tramoCard.style.cssText = 'background: #020617 !important; border: 1px solid ' + (isCurrent ? '#059669' : '#334155') + ' !important; border-radius: 14px !important; padding: 12px !important; display: flex !important; flex-direction: column !important; justify-content: space-between !important; gap: 8px !important; box-shadow: inset 0 0 15px rgba(0,0,0,0.5) !important;';
 
-          var tramoHeader = document.createElement('div');
-          tramoHeader.style.cssText = 'display: flex !important; justify-content: space-between !important; align-items: center !important; padding-bottom: 8px !important; border-bottom: 1px dashed ' + (isCurrent ? '#059669' : '#475569') + ' !important; font-size: 11px !important;';
-          tramoHeader.innerHTML = `
-          <div style=&quot;display: flex; flex-direction: column; gap: 2px;&quot;>
-          <span style=&quot;font-weight: 900; color: ${isCurrent ? '#34d399' : '#fbbf24'}; font-size: 12px;&quot;>
-          <i class=&quot;fa-solid fa-receipt&quot; style=&quot;margin-right: 4px;&quot;></i> Ticket Tramo ${tIdx + 1}
-          </span>
-          <span style=&quot;font-size: 10px; color: #94a3b8; font-weight: bold;&quot;>Mesa ${tramo.mesaId} • Silla ${tramo.sillaNum}</span>
-          </div>
-          <span style=&quot;background: ${isCurrent ? 'rgba(16,185,129,0.2)' : 'rgba(245,158,11,0.2)'}; color: ${isCurrent ? '#34d399' : '#fbbf24'}; font-size: 9px; font-weight: 800; padding: 2px 6px; border-radius: 6px; text-transform: uppercase;&quot;>
-          ${isCurrent ? 'Actual' : 'Histórico'}
-          </span>
-          `;
-          tramoCard.appendChild(tramoHeader);
+            var tramoHeader = document.createElement('div');
+            tramoHeader.style.cssText = 'display: flex !important; justify-content: space-between !important; align-items: center !important; padding-bottom: 8px !important; border-bottom: 1px dashed ' + (isCurrent ? '#059669' : '#475569') + ' !important; font-size: 11px !important;';
+            tramoHeader.innerHTML = `
+              <div style=&quot;display: flex; flex-direction: column; gap: 2px;&quot;>
+                <span style=&quot;font-weight: 900; color: ${isCurrent ? '#34d399' : '#fbbf24'}; font-size: 12px;&quot;>
+                  <i class=&quot;fa-solid fa-receipt&quot; style=&quot;margin-right: 4px;&quot;></i> Ticket Tramo ${tIdx + 1}
+                </span>
+                <span style=&quot;font-size: 10px; color: #94a3b8; font-weight: bold;&quot;>Mesa ${tramo.mesaId} • Silla ${tramo.sillaNum}</span>
+              </div>
+              <span style=&quot;background: ${isCurrent ? 'rgba(16,185,129,0.2)' : 'rgba(245,158,11,0.2)'}; color: ${isCurrent ? '#34d399' : '#fbbf24'}; font-size: 9px; font-weight: 800; padding: 2px 6px; border-radius: 6px; text-transform: uppercase;&quot;>
+                ${isCurrent ? 'Actual' : 'Histórico'}
+              </span>
+            `;
+            tramoCard.appendChild(tramoHeader);
 
-          var itemsWrapper = document.createElement('div');
-          itemsWrapper.style.cssText = 'display: flex !important; flex-direction: column !important; gap: 6px !important; flex: 1 !important;';
+            var itemsWrapper = document.createElement('div');
+            itemsWrapper.style.cssText = 'display: flex !important; flex-direction: column !important; gap: 6px !important; flex: 1 !important;';
 
-          tramo.items.forEach(obj => {
-          var it = obj.item;
-          var sub = it.precio * it.cantidad;
-          var row = document.createElement('div');
-          row.style.cssText = 'display: flex !important; justify-content: space-between !important; align-items: center !important; background: #0f172a !important; padding: 6px 8px !important; border-radius: 8px !important; border: 1px solid #1e293b !important; font-size: 11px !important;';
-          row.innerHTML = `
-          <div style=&quot;flex: 1; padding-right: 6px;&quot;>
-          <span style=&quot;font-weight: 700; color: #ffffff; display: block; line-height: 1.2;&quot;>${it.cantidad}x ${it.nombre}</span>
-          <span style=&quot;font-size: 9px; color: #94a3b8; font-style: italic;&quot;>${it.notas ? it.notas + ' • ' : ''}${it.hora || ''}</span>
-          </div>
-          <div style=&quot;display: flex; align-items: center; gap: 6px;&quot;>
-          <span style=&quot;font-weight: 900; color: #34d399; font-size: 11px;&quot;>$${sub.toFixed(2)}</span>
-          <button onclick=&quot;window.eliminarItemModal('${key}', ${obj.originalIdx})&quot; style=&quot;background: transparent; border: none; color: #f87171; cursor: pointer; padding: 2px;&quot;><i class=&quot;fa-solid fa-trash-can&quot; style=&quot;font-size: 10px;&quot;></i></button>
-          </div>
-          `;
-          itemsWrapper.appendChild(row);
-          });
-          tramoCard.appendChild(itemsWrapper);
+            tramo.items.forEach(obj => {
+              var it = obj.item;
+              var sub = it.precio * it.cantidad;
+              var row = document.createElement('div');
+              row.style.cssText = 'display: flex !important; justify-content: space-between !important; align-items: center !important; background: #0f172a !important; padding: 6px 8px !important; border-radius: 8px !important; border: 1px solid #1e293b !important; font-size: 11px !important;';
+              row.innerHTML = `
+                <div style=&quot;flex: 1; padding-right: 6px;&quot;>
+                  <span style=&quot;font-weight: 700; color: #ffffff; display: block; line-height: 1.2;&quot;>${it.cantidad}x ${it.nombre}</span>
+                  <span style=&quot;font-size: 9px; color: #94a3b8; font-style: italic;&quot;>${it.notas ? it.notas + ' • ' : ''}${it.hora || ''}</span>
+                </div>
+                <div style=&quot;display: flex; align-items: center; gap: 6px;&quot;>
+                  <span style=&quot;font-weight: 900; color: #34d399; font-size: 11px;&quot;>$${sub.toFixed(2)}</span>
+                  <button onclick=&quot;window.eliminarItemModal('${key}', ${obj.originalIdx})&quot; style=&quot;background: transparent; border: none; color: #f87171; cursor: pointer; padding: 2px;&quot;><i class=&quot;fa-solid fa-trash-can&quot; style=&quot;font-size: 10px;&quot;></i></button>
+                </div>
+              `;
+              itemsWrapper.appendChild(row);
+            });
+            tramoCard.appendChild(itemsWrapper);
 
-          var tramoFooter = document.createElement('div');
-          tramoFooter.style.cssText = 'display: flex !important; justify-content: space-between !important; align-items: center !important; padding-top: 6px !important; border-top: 1px dashed #334155 !important; font-size: 11px !important; margin-top: 4px !important;';
-          tramoFooter.innerHTML = `
-          <span style=&quot;color: #94a3b8; font-weight: 600;&quot;>Subtotal Tramo ${tIdx + 1}:</span>
-          <span style=&quot;color: #ffffff; font-weight: 900;&quot;>$${tramo.subtotal.toFixed(2)}</span>
-          `;
-          tramoCard.appendChild(tramoFooter);
+            var tramoFooter = document.createElement('div');
+            tramoFooter.style.cssText = 'display: flex !important; justify-content: space-between !important; align-items: center !important; padding-top: 6px !important; border-top: 1px dashed #334155 !important; font-size: 11px !important; margin-top: 4px !important;';
+            tramoFooter.innerHTML = `
+              <span style=&quot;color: #94a3b8; font-weight: 600;&quot;>Subtotal Tramo ${tIdx + 1}:</span>
+              <span style=&quot;color: #ffffff; font-weight: 900;&quot;>$${tramo.subtotal.toFixed(2)}</span>
+            `;
+            tramoCard.appendChild(tramoFooter);
 
-          container.appendChild(tramoCard);
+            container.appendChild(tramoCard);
           });
 
           // Cálculos fiscales y consolidados
@@ -1461,218 +1514,417 @@
           if (propinaMontoEl) propinaMontoEl.innerText = `$${propinaVal.toFixed(2)}`;
           if (totalMontoEl) totalMontoEl.innerText = `$${totalFinal.toFixed(2)}`;
           if (totalLabelEl) totalLabelEl.innerText = `Total a Pagar:`;
-          }
+        }
 
-          } else {
-          if (title) title.innerHTML = `<i class=&quot;fa-solid fa-border-all&quot; style=&quot;color: #38bdf8;&quot;></i> Resumen Mesa ${mesaId}`;
-          if (subtitle) subtitle.innerText = `Acumulado consolidado de 4 Sillas`;
-          if (header) header.innerText = `Todos los consumos en Mesa ${mesaId}:`;
+      } else {
+        // VISTA EN COLUMNAS POR COMENSAL DE TODA LA MESA
+        if (modalCard) modalCard.style.maxWidth = '1040px';
+        if (btnVerTodaMesa) btnVerTodaMesa.style.display = 'none';
+        if (btnMover) btnMover.style.display = 'none';
+        if (btnLiberar) btnLiberar.style.display = 'none';
+        const selectorBar = document.getElementById('comandaMultiSillaSelectorBar');
+        const btnCobrarDirecto = document.getElementById('btnCobrarModalDirecto');
+        if (selectorBar) selectorBar.style.display = 'flex';
+        if (btnCobrarDirecto) btnCobrarDirecto.style.display = 'flex';
 
-          let totalMesa = 0;
-          let countItems = 0;
-
-          for (let s = 1; s <= 4; s++) {
+        var sillasOcupadas = [];
+        for (let s = 1; s <= 4; s++) {
           const key = `${mesaId}-${s}`;
           const cuenta = window.palapaState.cuentas[key];
-          if (cuenta &amp;&amp; cuenta.items &amp;&amp; cuenta.items.length > 0) {
-          cuenta.items.forEach(item => {
-          countItems++;
-          const sub = item.precio * item.cantidad;
-          totalMesa += sub;
-          const row = document.createElement('div');
-          row.style.cssText = 'display: flex !important; justify-content: space-between !important; align-items: center !important; background: #0f172a !important; padding: 10px 12px !important; border-radius: 10px !important; border: 1px solid #1e293b !important;';
-          row.innerHTML = `
-          <div>
-          <span style=&quot;font-size: 12px; font-weight: 700; color: #ffffff; display: block;&quot;>${item.cantidad}x ${item.nombre}</span>
-          <span style=&quot;font-size: 10px; color: #f59e0b; font-weight: bold;&quot;>Silla ${s}</span>
-          </div>
-          <span style=&quot;font-size: 13px; font-weight: 900; color: #34d399;&quot;>$${sub.toFixed(2)}</span>
-          `;
-          container.appendChild(row);
+          if (cuenta &amp;&amp; (cuenta.estado === 'ocupada' || (cuenta.items &amp;&amp; cuenta.items.length > 0))) {
+            var subChair = 0;
+            if (cuenta.items) {
+              cuenta.items.forEach(it => { subChair += (it.precio * it.cantidad); });
+            }
+            sillasOcupadas.push({ sillaNum: s, cuenta: cuenta, subtotal: subChair });
+          }
+        }
+
+        // Inicializar selección si no existe o cambió de mesa
+        if (!window.palapaState.sillasSeleccionadasCobro || window.palapaState.sillasSeleccionadasCobroMesa !== mesaId) {
+          window.palapaState.sillasSeleccionadasCobroMesa = mesaId;
+          // Por defecto sugerir todas las sillas ocupadas
+          window.palapaState.sillasSeleccionadasCobro = sillasOcupadas.map(o => o.sillaNum);
+        }
+
+        if (title) title.innerHTML = `<i class=&quot;fa-solid fa-users-viewfinder&quot; style=&quot;color: #38bdf8;&quot;></i> Comanda Mesa ${mesaId} (${sillasOcupadas.length} Comensales)`;
+        if (subtitle) subtitle.innerText = `Selecciona en cada columna qué comensales pagan juntos • Desglose individual de tickets`;
+        if (header) header.innerText = `Tickets por Comensal en Mesa ${mesaId}:`;
+
+        renderColumnasMesaComanda(mesaId, sillasOcupadas);
+        recalcularTotalesComandaMesa(mesaId, sillasOcupadas);
+      }
+
+      if (modal) {
+        modal.classList.add('show');
+        modal.style.setProperty('display', 'flex', 'important');
+      }
+    }
+
+    function renderColumnasMesaComanda(mesaId, sillasOcupadas) {
+      const container = document.getElementById('modalItemsList');
+      if (!container) return;
+      container.innerHTML = '';
+      container.style.cssText = 'display: grid !important; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)) !important; gap: 12px !important; max-height: 380px !important; overflow-y: auto !important;';
+
+      if (sillasOcupadas.length === 0) {
+        container.innerHTML = `<div style=&quot;grid-column: 1 / -1; text-align: center; padding: 30px; color: #64748b; font-size: 13px;&quot;>No hay comensales ni consumos activos en la Mesa ${mesaId}.</div>`;
+        return;
+      }
+
+      sillasOcupadas.forEach(obj => {
+        var s = obj.sillaNum;
+        var c = obj.cuenta;
+        var qrId = c.qrId || ('PV-0' + mesaId + s);
+        var nom = c.comensalNombre || ('Comensal Silla ' + s);
+        var isSelected = (window.palapaState.sillasSeleccionadasCobro.indexOf(s) !== -1);
+
+        var colCard = document.createElement('div');
+        colCard.style.cssText = 'background: ' + (isSelected ? '#06281e' : '#0f172a') + ' !important; border: ' + (isSelected ? '2px solid #10b981' : '1px solid #334155') + ' !important; border-radius: 14px !important; padding: 12px !important; display: flex !important; flex-direction: column !important; justify-content: space-between !important; gap: 8px !important; box-shadow: ' + (isSelected ? '0 0 15px rgba(16,185,129,0.25)' : '0 4px 6px -1px rgba(0,0,0,0.5)') + ' !important; transition: all 0.2s ease !important;';
+
+        var colHeader = document.createElement('div');
+        colHeader.style.cssText = 'display: flex !important; justify-content: space-between !important; align-items: center !important; padding-bottom: 8px !important; border-bottom: 1px solid #1e293b !important;';
+        colHeader.innerHTML = `
+          <label style=&quot;display: flex !important; align-items: center !important; gap: 6px !important; cursor: pointer !important; user-select: none !important;&quot;>
+            <input type=&quot;checkbox&quot; ${isSelected ? 'checked' : ''} onchange=&quot;window.toggleComandaColumna(${s})&quot; style=&quot;accent-color: #10b981 !important; width: 16px !important; height: 16px !important; cursor: pointer !important;&quot;>
+            <span style=&quot;font-weight: 900 !important; font-size: 11px !important; color: ${isSelected ? '#34d399' : '#94a3b8'} !important;&quot;>
+              ${isSelected ? '✓ INCLUIDO' : 'PAGO APARTE'}
+            </span>
+          </label>
+          <span style=&quot;background: ${isSelected ? 'rgba(16, 185, 129, 0.2)' : '#1e293b'} !important; color: ${isSelected ? '#34d399' : '#64748b'} !important; font-size: 9px !important; font-weight: 800 !important; padding: 2px 6px !important; border-radius: 6px !important;&quot;>SILLA ${s}</span>
+        `;
+        colCard.appendChild(colHeader);
+
+        var colInfo = document.createElement('div');
+        colInfo.style.cssText = 'display: flex; flex-direction: column; gap: 1px; margin-top: 2px;';
+        colInfo.innerHTML = `
+          <span style=&quot;font-weight: 800; color: #ffffff; font-size: 12px;&quot;>${nom}</span>
+          <span style=&quot;font-size: 10px; color: #94a3b8;&quot;>Portavasos #${qrId}</span>
+        `;
+        colCard.appendChild(colInfo);
+
+        var itemsWrapper = document.createElement('div');
+        itemsWrapper.style.cssText = 'display: flex !important; flex-direction: column !important; gap: 5px !important; flex: 1 !important; max-height: 160px !important; overflow-y: auto !important; margin: 4px 0 !important;';
+
+        if (!c.items || c.items.length === 0) {
+          itemsWrapper.innerHTML = `<div style=&quot;text-align:center; color:#64748b; font-size:10px; padding:12px 0;&quot;>Silla ocupada sin consumos</div>`;
+        } else {
+          c.items.forEach(it => {
+            var itSub = it.precio * it.cantidad;
+            var row = document.createElement('div');
+            row.style.cssText = 'display: flex !important; justify-content: space-between !important; align-items: center !important; background: #020617 !important; padding: 5px 8px !important; border-radius: 8px !important; border: 1px solid #1e293b !important; font-size: 11px !important;';
+            row.innerHTML = `
+              <div style=&quot;flex: 1; padding-right: 4px;&quot;>
+                <span style=&quot;font-weight: 700; color: #ffffff; display: block; line-height: 1.2;&quot;>${it.cantidad}x ${it.nombre}</span>
+                <span style=&quot;font-size: 9px; color: #94a3b8; font-style: italic;&quot;>${it.notas || ''}</span>
+              </div>
+              <span style=&quot;font-weight: 900; color: #34d399; font-size: 11px;&quot;>$${itSub.toFixed(2)}</span>
+            `;
+            itemsWrapper.appendChild(row);
           });
-          }
-          }
+        }
+        colCard.appendChild(itemsWrapper);
 
-          if (countItems === 0) {
-          container.innerHTML = `<div style=&quot;text-align: center; padding: 20px; color: #64748b; font-size: 12px;&quot;>No hay consumos en ninguna silla de la Mesa ${mesaId}.</div>`;
-          }
+        var colFooter = document.createElement('div');
+        colFooter.style.cssText = 'border-top: 1px dashed #334155 !important; padding-top: 6px !important; display: flex !important; flex-direction: column !important; gap: 6px !important;';
+        colFooter.innerHTML = `
+          <div style=&quot;display: flex !important; justify-content: space-between !important; font-weight: 900 !important; font-size: 12px !important;&quot;>
+            <span style=&quot;color: #94a3b8; font-weight: 600;&quot;>Subtotal:</span>
+            <span style=&quot;color: #fbbf24;&quot;>$${obj.subtotal.toFixed(2)}</span>
+          </div>
+          <button onclick=&quot;window.seleccionarSillaDesdeMesa(${s});&quot; style=&quot;width: 100% !important; padding: 5px !important; background: #1e293b !important; color: #38bdf8 !important; border: 1px solid #334155 !important; border-radius: 6px !important; font-size: 10px !important; font-weight: bold !important; cursor: pointer !important; display: flex !important; align-items: center !important; justify-content: center !important; gap: 4px !important;&quot;>
+            <i class=&quot;fa-solid fa-pen-to-square&quot;></i> Ver / Editar Silla ${s}
+          </button>
+        `;
+        colCard.appendChild(colFooter);
 
-          var ivaValMesa = totalMesa * 0.16;
-          var propinaValMesa = totalMesa * 0.10;
-          var totalFinalMesa = totalMesa + ivaValMesa;
+        container.appendChild(colCard);
+      });
+    }
 
-          if (subtotalMontoEl) subtotalMontoEl.innerText = `$${totalMesa.toFixed(2)}`;
-          if (ivaMontoEl) ivaMontoEl.innerText = `$${ivaValMesa.toFixed(2)}`;
-          if (propinaMontoEl) propinaMontoEl.innerText = `$${propinaValMesa.toFixed(2)}`;
-          if (totalMontoEl) totalMontoEl.innerText = `$${totalFinalMesa.toFixed(2)}`;
-          if (totalLabelEl) totalLabelEl.innerText = `Total Acumulado Mesa ${mesaId}:`;
-          }
+    function recalcularTotalesComandaMesa(mesaId, sillasOcupadas) {
+      const subtotalMontoEl = document.getElementById('modalSubtotalMonto');
+      const ivaMontoEl = document.getElementById('modalIvaMonto');
+      const propinaMontoEl = document.getElementById('modalPropinaMonto');
+      const totalMontoEl = document.getElementById('modalTotalMonto');
+      const totalLabelEl = document.getElementById('modalTotalLabel');
+      const lblSubtotal = document.getElementById('lblSubtotalModal');
+      const txtBtnCobrar = document.getElementById('txtBtnCobrarModal');
+      const alertPendientes = document.getElementById('modalPendientesAlert');
+      const txtPendientes = document.getElementById('txtPendientesMensaje');
 
-          if (modal) {
-          modal.classList.add('show');
-          modal.style.setProperty('display', 'flex', 'important');
-          }
-          }
+      var seleccionadas = window.palapaState.sillasSeleccionadasCobro || [];
+      var totalNeto = 0;
+      var totalPendiente = 0;
+      var sillasPendientesNombres = [];
 
-          var _precuentaMesaId = 2;
-          var _precuentaSillasSeleccionadas = [];
+      sillasOcupadas.forEach(obj => {
+        if (seleccionadas.indexOf(obj.sillaNum) !== -1) {
+          totalNeto += obj.subtotal;
+        } else {
+          totalPendiente += obj.subtotal;
+          sillasPendientesNombres.push(`Silla ${obj.sillaNum} (${obj.cuenta.comensalNombre || 'Comensal'})`);
+        }
+      });
 
-          function abrirPrecuenta() {
-          const mesaId = window.palapaState.mesaSeleccionadaId;
-          const sillaNum = window.palapaState.sillaSeleccionadaNum;
-          const modalP = document.getElementById('modalPrecuentaBackdrop');
-          const fechaEl = document.getElementById('precuentaFecha');
-          const checklistContainer = document.getElementById('precuentaSillasChecklist');
+      var iva = totalNeto * 0.16;
+      var propina = totalNeto * 0.10;
+      var granTotal = totalNeto + iva;
 
-          if (!modalP) return;
-          _precuentaMesaId = mesaId;
+      if (lblSubtotal) {
+        lblSubtotal.innerText = `Subtotal (${seleccionadas.length} Silla${seleccionadas.length !== 1 ? 's' : ''} Seleccionada${seleccionadas.length !== 1 ? 's' : ''}):`;
+      }
+      if (totalLabelEl) {
+        if (seleccionadas.length === sillasOcupadas.length) {
+          totalLabelEl.innerText = `Total a Pagar (Toda la Mesa):`;
+        } else {
+          totalLabelEl.innerText = `Total a Pagar (${seleccionadas.map(s => 'Silla ' + s).join(', ')}):`;
+        }
+      }
 
-          if (fechaEl) fechaEl.innerText = 'Fecha: ' + (new Date()).toLocaleDateString() + ' ' + (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      if (subtotalMontoEl) subtotalMontoEl.innerText = `$${totalNeto.toFixed(2)}`;
+      if (ivaMontoEl) ivaMontoEl.innerText = `$${iva.toFixed(2)}`;
+      if (propinaMontoEl) propinaMontoEl.innerText = `$${propina.toFixed(2)}`;
+      if (totalMontoEl) totalMontoEl.innerText = `$${granTotal.toFixed(2)}`;
+      if (txtBtnCobrar) txtBtnCobrar.innerText = `$${granTotal.toFixed(2)}`;
 
-          // Encontrar todas las sillas ocupadas de esta mesa
-          var sillasOcupadas = [];
-          for (var s = 1; s <= 4; s++) {
-          var k = mesaId + '-' + s;
-          var c = window.palapaState.cuentas[k];
-          if (c &amp;&amp; (c.estado === 'ocupada' || (c.items &amp;&amp; c.items.length > 0))) {
+      if (alertPendientes &amp;&amp; txtPendientes) {
+        if (sillasPendientesNombres.length > 0 &amp;&amp; totalNeto > 0) {
+          alertPendientes.style.display = 'block';
+          txtPendientes.innerHTML = `<b>Quedará pendiente en la mesa:</b> ${sillasPendientesNombres.join(', ')} por <b>$${(totalPendiente * 1.16).toFixed(2)}</b> (no se cobrará en este ticket).`;
+        } else {
+          alertPendientes.style.display = 'none';
+        }
+      }
+    }
+
+    window.toggleComandaColumna = function(sillaNum) {
+      var sel = window.palapaState.sillasSeleccionadasCobro || [];
+      var idx = sel.indexOf(sillaNum);
+      if (idx === -1) {
+        sel.push(sillaNum);
+      } else {
+        sel.splice(idx, 1);
+      }
+      window.palapaState.sillasSeleccionadasCobro = sel;
+      abrirModalComandaActual();
+    };
+
+    window.comandaSetPreset = function(preset) {
+      var mesaId = window.palapaState.mesaSeleccionadaId;
+      var sel = [];
+      if (preset === 'todas') {
+        for (var s = 1; s <= 4; s++) {
+          if (window.palapaState.cuentas[mesaId + '-' + s]) sel.push(s);
+        }
+      } else if (preset === 'papa_ninos') {
+        // En Mesa 2: Papá (1) + Niño 1 (3) + Niño 2 (4)
+        [1, 3, 4].forEach(function(s) {
+          if (window.palapaState.cuentas[mesaId + '-' + s]) sel.push(s);
+        });
+      } else if (preset === 'solo_s1') {
+        if (window.palapaState.cuentas[mesaId + '-1']) sel = [1];
+      } else if (preset === 'solo_s2') {
+        if (window.palapaState.cuentas[mesaId + '-2']) sel = [2];
+      }
+      window.palapaState.sillasSeleccionadasCobro = sel;
+      abrirModalComandaActual();
+    };
+
+    window.cobrarSeleccionadasDesdeComanda = function() {
+      var mesaId = window.palapaState.mesaSeleccionadaId;
+      var sel = window.palapaState.sillasSeleccionadasCobro || [];
+      if (sel.length === 0) {
+        showDragToast('⚠ Selecciona al menos una silla para cobrar.', 'warn');
+        return;
+      }
+
+      var totalText = document.getElementById('modalTotalMonto') ? document.getElementById('modalTotalMonto').innerText : '$0.00';
+      var sillasStr = sel.map(s => 'Silla ' + s).join(', ');
+
+      if (confirm(`¿Confirmar cobro y liquidación de ${sillasStr} de Mesa ${mesaId} por un total de ${totalText}?\n\nLas sillas seleccionadas quedarán liberadas y las restantes continuarán activas en la mesa.`)) {
+        sel.forEach(sNum => {
+          delete window.palapaState.cuentas[mesaId + '-' + sNum];
+        });
+        window.palapaState.sillasSeleccionadasCobro = [];
+        saveStateToStorage();
+        renderStateUI();
+        cerrarModalComanda();
+        showDragToast(`💳 ¡Cobro exitoso de Mesa ${mesaId} (${sillasStr})! Sillas liberadas.`, 'ok');
+      }
+    };
+
+    window.seleccionarSillaDesdeMesa = function(sillaNum) {
+      window.palapaState.sillaSeleccionadaNum = sillaNum;
+      renderStateUI();
+      abrirModalComandaActual();
+    };
+
+    window.verTodaLaMesaEnColumnas = function() {
+      window.palapaState.sillaSeleccionadaNum = null;
+      renderStateUI();
+      abrirModalComandaActual();
+    };
+
+    var _precuentaMesaId = 2;
+    var _precuentaSillasSeleccionadas = [];
+
+    function abrirPrecuenta() {
+      const mesaId = window.palapaState.mesaSeleccionadaId;
+      const sillaNum = window.palapaState.sillaSeleccionadaNum;
+      const modalP = document.getElementById('modalPrecuentaBackdrop');
+      const fechaEl = document.getElementById('precuentaFecha');
+      const checklistContainer = document.getElementById('precuentaSillasChecklist');
+
+      if (!modalP) return;
+      _precuentaMesaId = mesaId;
+
+      if (fechaEl) fechaEl.innerText = 'Fecha: ' + (new Date()).toLocaleDateString() + ' ' + (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+      // Encontrar todas las sillas ocupadas de esta mesa
+      var sillasOcupadas = [];
+      for (var s = 1; s <= 4; s++) {
+        var k = mesaId + '-' + s;
+        var c = window.palapaState.cuentas[k];
+        if (c &amp;&amp; (c.estado === 'ocupada' || (c.items &amp;&amp; c.items.length > 0))) {
           var tot = 0;
           if (c.items) c.items.forEach(function(it) { tot += it.precio * it.cantidad; });
           sillasOcupadas.push({ sillaNum: s, cuenta: c, total: tot });
-          }
-          }
+        }
+      }
 
-          // Si se abrió desde una silla específica, seleccionar inicialmente esa silla; si es mesa completa, seleccionar todas
-          if (sillaNum !== null) {
-          _precuentaSillasSeleccionadas = [sillaNum];
-          } else {
-          _precuentaSillasSeleccionadas = sillasOcupadas.map(function(o) { return o.sillaNum; });
-          }
+      // Si se abrió desde una silla específica, seleccionar inicialmente esa silla; si es mesa completa, seleccionar todas
+      if (sillaNum !== null) {
+        _precuentaSillasSeleccionadas = [sillaNum];
+      } else {
+        _precuentaSillasSeleccionadas = sillasOcupadas.map(function(o) { return o.sillaNum; });
+      }
 
-          // Renderizar checklist
-          if (checklistContainer) {
-          checklistContainer.innerHTML = '';
-          if (sillasOcupadas.length === 0) {
+      // Renderizar checklist
+      if (checklistContainer) {
+        checklistContainer.innerHTML = '';
+        if (sillasOcupadas.length === 0) {
           checklistContainer.innerHTML = '<div style=&quot;grid-column: span 2; color: #94a3b8; font-size: 11px;&quot;>No hay sillas con consumos en esta mesa.</div>';
-          } else {
+        } else {
           sillasOcupadas.forEach(function(obj) {
-          var s = obj.sillaNum;
-          var isChecked = _precuentaSillasSeleccionadas.indexOf(s) !== -1;
-          var lbl = document.createElement('label');
-          lbl.style.cssText = 'display: flex !important; align-items: center !important; gap: 6px !important; background: ' + (isChecked ? '#ecfdf5' : '#ffffff') + ' !important; padding: 6px 8px !important; border-radius: 8px !important; border: 1px solid ' + (isChecked ? '#10b981' : '#cbd5e1') + ' !important; cursor: pointer !important; user-select: none !important;';
-          lbl.innerHTML = `
-          <input type=&quot;checkbox&quot; value=&quot;${s}&quot; ${isChecked ? 'checked' : ''} onchange=&quot;window.togglePrecuentaSilla(${s})&quot; style=&quot;accent-color: #059669 !important; width: 14px !important; height: 14px !important;&quot;>
-          <div style=&quot;display: flex; flex-direction: column; line-height: 1.1;&quot;>
-          <span style=&quot;font-weight: 800; font-size: 11px; color: #0f172a;&quot;>Silla ${s} <span style=&quot;font-weight: normal; color: #64748b; font-size: 9px;&quot;>${obj.cuenta.comensalNombre ? '• ' + obj.cuenta.comensalNombre : ''}</span></span>
-          <span style=&quot;font-weight: 900; color: #059669; font-size: 10px;&quot;>$${obj.total.toFixed(2)}</span>
-          </div>
-          `;
-          checklistContainer.appendChild(lbl);
+            var s = obj.sillaNum;
+            var isChecked = _precuentaSillasSeleccionadas.indexOf(s) !== -1;
+            var lbl = document.createElement('label');
+            lbl.style.cssText = 'display: flex !important; align-items: center !important; gap: 6px !important; background: ' + (isChecked ? '#ecfdf5' : '#ffffff') + ' !important; padding: 6px 8px !important; border-radius: 8px !important; border: 1px solid ' + (isChecked ? '#10b981' : '#cbd5e1') + ' !important; cursor: pointer !important; user-select: none !important;';
+            lbl.innerHTML = `
+              <input type=&quot;checkbox&quot; value=&quot;${s}&quot; ${isChecked ? 'checked' : ''} onchange=&quot;window.togglePrecuentaSilla(${s})&quot; style=&quot;accent-color: #059669 !important; width: 14px !important; height: 14px !important;&quot;>
+              <div style=&quot;display: flex; flex-direction: column; line-height: 1.1;&quot;>
+                <span style=&quot;font-weight: 800; font-size: 11px; color: #0f172a;&quot;>Silla ${s} <span style=&quot;font-weight: normal; color: #64748b; font-size: 9px;&quot;>${obj.cuenta.comensalNombre ? '• ' + obj.cuenta.comensalNombre : ''}</span></span>
+                <span style=&quot;font-weight: 900; color: #059669; font-size: 10px;&quot;>$${obj.total.toFixed(2)}</span>
+              </div>
+            `;
+            checklistContainer.appendChild(lbl);
           });
-          }
-          }
+        }
+      }
 
-          recalcularPrecuenta();
-          modalP.classList.add('show');
-          modalP.style.setProperty('display', 'flex', 'important');
-          }
+      recalcularPrecuenta();
+      modalP.classList.add('show');
+      modalP.style.setProperty('display', 'flex', 'important');
+    }
 
-          window.togglePrecuentaSilla = function(sillaNum) {
-          var idx = _precuentaSillasSeleccionadas.indexOf(sillaNum);
-          if (idx === -1) {
-          _precuentaSillasSeleccionadas.push(sillaNum);
-          } else {
-          _precuentaSillasSeleccionadas.splice(idx, 1);
-          }
-          actualizarChecklistVisual();
-          recalcularPrecuenta();
-          };
+    window.togglePrecuentaSilla = function(sillaNum) {
+      var idx = _precuentaSillasSeleccionadas.indexOf(sillaNum);
+      if (idx === -1) {
+        _precuentaSillasSeleccionadas.push(sillaNum);
+      } else {
+        _precuentaSillasSeleccionadas.splice(idx, 1);
+      }
+      actualizarChecklistVisual();
+      recalcularPrecuenta();
+    };
 
-          window.precuentaSelectPreset = function(preset) {
-          var mesaId = _precuentaMesaId;
-          if (preset === 'solo_esta') {
-          var sSel = window.palapaState.sillaSeleccionadaNum || 1;
-          _precuentaSillasSeleccionadas = [sSel];
-          } else if (preset === 'papa_ninos') {
-          // En Mesa 2 (Familia): Papá (1) + Niño 1 (3) + Niño 2 (4)
-          _precuentaSillasSeleccionadas = [1, 3, 4].filter(function(s) {
+    window.precuentaSelectPreset = function(preset) {
+      var mesaId = _precuentaMesaId;
+      if (preset === 'solo_esta') {
+        var sSel = window.palapaState.sillaSeleccionadaNum || 1;
+        _precuentaSillasSeleccionadas = [sSel];
+      } else if (preset === 'papa_ninos') {
+        // En Mesa 2 (Familia): Papá (1) + Niño 1 (3) + Niño 2 (4)
+        _precuentaSillasSeleccionadas = [1, 3, 4].filter(function(s) {
           return window.palapaState.cuentas[mesaId + '-' + s] !== undefined;
-          });
-          } else if (preset === 'todas') {
-          _precuentaSillasSeleccionadas = [];
-          for (var s = 1; s <= 4; s++) {
+        });
+      } else if (preset === 'todas') {
+        _precuentaSillasSeleccionadas = [];
+        for (var s = 1; s <= 4; s++) {
           if (window.palapaState.cuentas[mesaId + '-' + s]) {
-          _precuentaSillasSeleccionadas.push(s);
+            _precuentaSillasSeleccionadas.push(s);
           }
-          }
-          }
-          actualizarChecklistVisual();
-          recalcularPrecuenta();
-          };
+        }
+      }
+      actualizarChecklistVisual();
+      recalcularPrecuenta();
+    };
 
-          function actualizarChecklistVisual() {
-          var checklistContainer = document.getElementById('precuentaSillasChecklist');
-          if (!checklistContainer) return;
-          var inputs = checklistContainer.querySelectorAll('input[type=&quot;checkbox&quot;]');
-          inputs.forEach(function(inp) {
-          var sVal = parseInt(inp.value);
-          var isChecked = _precuentaSillasSeleccionadas.indexOf(sVal) !== -1;
-          inp.checked = isChecked;
-          var parentLbl = inp.closest('label');
-          if (parentLbl) {
+    function actualizarChecklistVisual() {
+      var checklistContainer = document.getElementById('precuentaSillasChecklist');
+      if (!checklistContainer) return;
+      var inputs = checklistContainer.querySelectorAll('input[type=&quot;checkbox&quot;]');
+      inputs.forEach(function(inp) {
+        var sVal = parseInt(inp.value);
+        var isChecked = _precuentaSillasSeleccionadas.indexOf(sVal) !== -1;
+        inp.checked = isChecked;
+        var parentLbl = inp.closest('label');
+        if (parentLbl) {
           parentLbl.style.background = isChecked ? '#ecfdf5' : '#ffffff';
           parentLbl.style.borderColor = isChecked ? '#10b981' : '#cbd5e1';
-          }
-          });
-          }
+        }
+      });
+    }
 
-          function recalcularPrecuenta() {
-          const mesaId = _precuentaMesaId;
-          const listContainer = document.getElementById('precuentaTramosList');
-          const subtotalEl = document.getElementById('precuentaSubtotal');
-          const ivaEl = document.getElementById('precuentaIva');
-          const propinaEl = document.getElementById('precuentaPropina');
-          const totalEl = document.getElementById('precuentaTotal');
-          const headerTag = document.getElementById('precuentaHeaderTag');
-          const btnCobrarMonto = document.getElementById('btnCobrarMonto');
+    function recalcularPrecuenta() {
+      const mesaId = _precuentaMesaId;
+      const listContainer = document.getElementById('precuentaTramosList');
+      const subtotalEl = document.getElementById('precuentaSubtotal');
+      const ivaEl = document.getElementById('precuentaIva');
+      const propinaEl = document.getElementById('precuentaPropina');
+      const totalEl = document.getElementById('precuentaTotal');
+      const headerTag = document.getElementById('precuentaHeaderTag');
+      const btnCobrarMonto = document.getElementById('btnCobrarMonto');
 
-          if (!listContainer) return;
-          listContainer.innerHTML = '';
+      if (!listContainer) return;
+      listContainer.innerHTML = '';
 
-          var sillasList = _precuentaSillasSeleccionadas.slice().sort();
+      var sillasList = _precuentaSillasSeleccionadas.slice().sort();
 
-          if (sillasList.length === 0) {
-          if (headerTag) headerTag.innerHTML = `MESA ${mesaId} • NINGUNA SILLA SELECCIONADA`;
-          listContainer.innerHTML = `<div style=&quot;text-align:center; padding: 15px; color:#94a3b8; font-size:11px;&quot;>Marca al menos una silla para ver su precuenta.</div>`;
-          if (subtotalEl) subtotalEl.innerText = '$0.00';
-          if (ivaEl) ivaEl.innerText = '$0.00';
-          if (propinaEl) propinaEl.innerText = '$0.00';
-          if (totalEl) totalEl.innerText = '$0.00';
-          if (btnCobrarMonto) btnCobrarMonto.innerText = '$0.00';
-          return;
-          }
+      if (sillasList.length === 0) {
+        if (headerTag) headerTag.innerHTML = `MESA ${mesaId} • NINGUNA SILLA SELECCIONADA`;
+        listContainer.innerHTML = `<div style=&quot;text-align:center; padding: 15px; color:#94a3b8; font-size:11px;&quot;>Marca al menos una silla para ver su precuenta.</div>`;
+        if (subtotalEl) subtotalEl.innerText = '$0.00';
+        if (ivaEl) ivaEl.innerText = '$0.00';
+        if (propinaEl) propinaEl.innerText = '$0.00';
+        if (totalEl) totalEl.innerText = '$0.00';
+        if (btnCobrarMonto) btnCobrarMonto.innerText = '$0.00';
+        return;
+      }
 
-          var sillasStr = sillasList.map(function(s) { return 'Silla ' + s; }).join(', ');
-          if (headerTag) {
-          headerTag.innerHTML = `MESA ${mesaId} • ${sillasStr.toUpperCase()} <br><span style=&quot;font-size:10px;color:#475569;&quot;>CUENTA AGRUPADA (${sillasList.length} COMENSAL${sillasList.length > 1 ? 'ES' : ''})</span>`;
-          }
+      var sillasStr = sillasList.map(function(s) { return 'Silla ' + s; }).join(', ');
+      if (headerTag) {
+        headerTag.innerHTML = `MESA ${mesaId} • ${sillasStr.toUpperCase()} <br><span style=&quot;font-size:10px;color:#475569;&quot;>CUENTA AGRUPADA (${sillasList.length} COMENSAL${sillasList.length > 1 ? 'ES' : ''})</span>`;
+      }
 
-          var totalNeto = 0;
+      var totalNeto = 0;
 
-          sillasList.forEach(function(sNum) {
-          var k = mesaId + '-' + sNum;
-          var cuenta = window.palapaState.cuentas[k];
-          if (!cuenta || !cuenta.items || cuenta.items.length === 0) return;
+      sillasList.forEach(function(sNum) {
+        var k = mesaId + '-' + sNum;
+        var cuenta = window.palapaState.cuentas[k];
+        if (!cuenta || !cuenta.items || cuenta.items.length === 0) return;
 
-          var chairBlock = document.createElement('div');
-          chairBlock.style.cssText = 'border-bottom: 1px dashed #cbd5e1 !important; padding-bottom: 6px !important; margin-bottom: 4px !important;';
+        var chairBlock = document.createElement('div');
+        chairBlock.style.cssText = 'border-bottom: 1px dashed #cbd5e1 !important; padding-bottom: 6px !important; margin-bottom: 4px !important;';
 
-          var chairHeader = document.createElement('div');
-          chairHeader.style.cssText = 'display: flex !important; justify-content: space-between !important; font-weight: 900 !important; color: #047857 !important; margin-bottom: 4px !important; font-size: 11px !important;';
-          chairHeader.innerHTML = `<span>SILLA ${sNum} ${cuenta.comensalNombre ? '· ' + cuenta.comensalNombre.toUpperCase() : ''}</span><span style=&quot;font-size: 9px; color: #64748b;&quot;>QR: #${cuenta.qrId || 'PV-0'+mesaId+sNum}</span>`;
-          chairBlock.appendChild(chairHeader);
+        var chairHeader = document.createElement('div');
+        chairHeader.style.cssText = 'display: flex !important; justify-content: space-between !important; font-weight: 900 !important; color: #047857 !important; margin-bottom: 4px !important; font-size: 11px !important;';
+        chairHeader.innerHTML = `<span>SILLA ${sNum} ${cuenta.comensalNombre ? '· ' + cuenta.comensalNombre.toUpperCase() : ''}</span><span style=&quot;font-size: 9px; color: #64748b;&quot;>QR: #${cuenta.qrId || 'PV-0'+mesaId+sNum}</span>`;
+        chairBlock.appendChild(chairHeader);
 
-          var subChair = 0;
-          cuenta.items.forEach(function(it) {
+        var subChair = 0;
+        cuenta.items.forEach(function(it) {
           var row = document.createElement('div');
           var itTotal = it.precio * it.cantidad;
           subChair += itTotal;
@@ -1680,120 +1932,120 @@
           row.style.cssText = 'display: flex !important; justify-content: space-between !important; margin-bottom: 2px !important; font-size: 11px !important;';
           row.innerHTML = `<span>${it.cantidad}x ${it.nombre}</span><span>$${itTotal.toFixed(2)}</span>`;
           chairBlock.appendChild(row);
-          });
+        });
 
-          var subChairRow = document.createElement('div');
-          subChairRow.style.cssText = 'display: flex !important; justify-content: space-between !important; font-weight: bold !important; color: #475569 !important; margin-top: 3px !important; font-size: 10px !important;';
-          subChairRow.innerHTML = `<span>SUBTOTAL SILLA ${sNum}:</span><span>$${subChair.toFixed(2)}</span>`;
-          chairBlock.appendChild(subChairRow);
+        var subChairRow = document.createElement('div');
+        subChairRow.style.cssText = 'display: flex !important; justify-content: space-between !important; font-weight: bold !important; color: #475569 !important; margin-top: 3px !important; font-size: 10px !important;';
+        subChairRow.innerHTML = `<span>SUBTOTAL SILLA ${sNum}:</span><span>$${subChair.toFixed(2)}</span>`;
+        chairBlock.appendChild(subChairRow);
 
-          listContainer.appendChild(chairBlock);
-          });
+        listContainer.appendChild(chairBlock);
+      });
 
-          var ivaVal = totalNeto * 0.16;
-          var propinaVal = totalNeto * 0.10;
-          var granTotal = totalNeto + ivaVal;
+      var ivaVal = totalNeto * 0.16;
+      var propinaVal = totalNeto * 0.10;
+      var granTotal = totalNeto + ivaVal;
 
-          if (subtotalEl) subtotalEl.innerText = `$${totalNeto.toFixed(2)}`;
-          if (ivaEl) ivaEl.innerText = `$${ivaVal.toFixed(2)}`;
-          if (propinaEl) propinaEl.innerText = `$${propinaVal.toFixed(2)}`;
-          if (totalEl) totalEl.innerText = `$${granTotal.toFixed(2)}`;
-          if (btnCobrarMonto) btnCobrarMonto.innerText = `$${granTotal.toFixed(2)}`;
-          }
+      if (subtotalEl) subtotalEl.innerText = `$${totalNeto.toFixed(2)}`;
+      if (ivaEl) ivaEl.innerText = `$${ivaVal.toFixed(2)}`;
+      if (propinaEl) propinaEl.innerText = `$${propinaVal.toFixed(2)}`;
+      if (totalEl) totalEl.innerText = `$${granTotal.toFixed(2)}`;
+      if (btnCobrarMonto) btnCobrarMonto.innerText = `$${granTotal.toFixed(2)}`;
+    }
 
-          window.cobrarSillasPrecuenta = function() {
-          var mesaId = _precuentaMesaId;
-          var sillasList = _precuentaSillasSeleccionadas.slice();
-          if (sillasList.length === 0) {
-          showDragToast('⚠ Selecciona al menos una silla para cobrar', 'warn');
-          return;
-          }
+    window.cobrarSillasPrecuenta = function() {
+      var mesaId = _precuentaMesaId;
+      var sillasList = _precuentaSillasSeleccionadas.slice();
+      if (sillasList.length === 0) {
+        showDragToast('⚠ Selecciona al menos una silla para cobrar', 'warn');
+        return;
+      }
 
-          var totalText = document.getElementById('precuentaTotal') ? document.getElementById('precuentaTotal').innerText : '$0.00';
-          var sillasStr = sillasList.map(function(s) { return 'Silla ' + s; }).join(', ');
+      var totalText = document.getElementById('precuentaTotal') ? document.getElementById('precuentaTotal').innerText : '$0.00';
+      var sillasStr = sillasList.map(function(s) { return 'Silla ' + s; }).join(', ');
 
-          if (confirm(`¿Confirmar cobro de ${sillasStr} de Mesa ${mesaId} por un total de ${totalText}?\n\nLas sillas seleccionadas serán liquidadas y quedarán libres.`)) {
-          sillasList.forEach(function(sNum) {
+      if (confirm(`¿Confirmar cobro de ${sillasStr} de Mesa ${mesaId} por un total de ${totalText}?\n\nLas sillas seleccionadas serán liquidadas y quedarán libres.`)) {
+        sillasList.forEach(function(sNum) {
           var k = mesaId + '-' + sNum;
           delete window.palapaState.cuentas[k];
-          });
-          saveStateToStorage();
-          renderStateUI();
-          cerrarPrecuenta();
-          cerrarModalComanda();
-          showDragToast(`💳 ¡Pago completado para Mesa ${mesaId} (${sillasStr})! Sillas liberadas.`, 'ok');
-          }
-          };
+        });
+        saveStateToStorage();
+        renderStateUI();
+        cerrarPrecuenta();
+        cerrarModalComanda();
+        showDragToast(`💳 ¡Pago completado para Mesa ${mesaId} (${sillasStr})! Sillas liberadas.`, 'ok');
+      }
+    };
 
-          function cerrarPrecuenta() {
-          const modalP = document.getElementById('modalPrecuentaBackdrop');
-          if (modalP) {
-          modalP.classList.remove('show');
-          modalP.style.setProperty('display', 'none', 'important');
-          }
-          }
+    function cerrarPrecuenta() {
+      const modalP = document.getElementById('modalPrecuentaBackdrop');
+      if (modalP) {
+        modalP.classList.remove('show');
+        modalP.style.setProperty('display', 'none', 'important');
+      }
+    }
 
-          window.abrirPrecuenta = function () {
-          abrirPrecuenta();
-          };
-          window.cerrarPrecuenta = function () {
-          cerrarPrecuenta();
-          };
+    window.abrirPrecuenta = function () {
+      abrirPrecuenta();
+    };
+    window.cerrarPrecuenta = function () {
+      cerrarPrecuenta();
+    };
 
-          function cerrarModalComanda() {
-          const modal = document.getElementById('modalComandaBackdrop');
-          if (modal) {
-          modal.classList.remove('show');
-          modal.style.setProperty('display', 'none', 'important');
-          }
-          }
+    function cerrarModalComanda() {
+      const modal = document.getElementById('modalComandaBackdrop');
+      if (modal) {
+        modal.classList.remove('show');
+        modal.style.setProperty('display', 'none', 'important');
+      }
+    }
 
-          window.cerrarModalComanda = function () {
-          cerrarModalComanda();
-          };
-          window.abrirModalComandaActual = function () {
-          abrirModalComandaActual();
-          };
+    window.cerrarModalComanda = function () {
+      cerrarModalComanda();
+    };
+    window.abrirModalComandaActual = function () {
+      abrirModalComandaActual();
+    };
 
-          window.liberarSillaActual = function () {
-          const mesaId = window.palapaState.mesaSeleccionadaId;
-          const sillaNum = window.palapaState.sillaSeleccionadaNum;
-          if (sillaNum === null) return;
-          const key = `${mesaId}-${sillaNum}`;
-          const cuenta = window.palapaState.cuentas[key];
-          if (cuenta) {
-          if (cuenta.items &amp;&amp; cuenta.items.length > 0) {
+    window.liberarSillaActual = function () {
+      const mesaId = window.palapaState.mesaSeleccionadaId;
+      const sillaNum = window.palapaState.sillaSeleccionadaNum;
+      if (sillaNum === null) return;
+      const key = `${mesaId}-${sillaNum}`;
+      const cuenta = window.palapaState.cuentas[key];
+      if (cuenta) {
+        if (cuenta.items &amp;&amp; cuenta.items.length > 0) {
           if (!confirm(`La Silla ${sillaNum} de Mesa ${mesaId} tiene ${cuenta.items.length} consumos registrados. ¿Deseas liberar la silla y eliminar la cuenta?`)) {
-          return;
+            return;
           }
-          }
+        }
+        delete window.palapaState.cuentas[key];
+        saveStateToStorage();
+        renderStateUI();
+        cerrarModalComanda();
+        showDragToast(`🟢 Silla ${sillaNum} de Mesa ${mesaId} liberada y disponible`, 'ok');
+      }
+    };
+
+    window.eliminarItemModal = function (key, idx) {
+      if (window.palapaState.cuentas[key] &amp;&amp; window.palapaState.cuentas[key].items) {
+        window.palapaState.cuentas[key].items.splice(idx, 1);
+        if (window.palapaState.cuentas[key].items.length === 0) {
           delete window.palapaState.cuentas[key];
-          saveStateToStorage();
-          renderStateUI();
-          cerrarModalComanda();
-          showDragToast(`🟢 Silla ${sillaNum} de Mesa ${mesaId} liberada y disponible`, 'ok');
-          }
-          };
+        }
+        saveStateToStorage();
+        renderStateUI();
+        abrirModalComandaActual();
+      }
+    };
 
-          window.eliminarItemModal = function (key, idx) {
-          if (window.palapaState.cuentas[key] &amp;&amp; window.palapaState.cuentas[key].items) {
-          window.palapaState.cuentas[key].items.splice(idx, 1);
-          if (window.palapaState.cuentas[key].items.length === 0) {
-          delete window.palapaState.cuentas[key];
-          }
-          saveStateToStorage();
-          renderStateUI();
-          abrirModalComandaActual();
-          }
-          };
+    function renderStateUI() {
+      const isMoveMode = window.palapaState.modoMoverActivo;
+      const origen = window.palapaState.sillaOrigenMover;
 
-          function renderStateUI() {
-          const isMoveMode = window.palapaState.modoMoverActivo;
-          const origen = window.palapaState.sillaOrigenMover;
-
-          for (let m = 1; m <= 3; m++) {
-          let busyCount = 0;
-          for (let s = 1; s <= 4; s++) {
+      for (let m = 1; m <= 3; m++) {
+        let busyCount = 0;
+        for (let s = 1; s <= 4; s++) {
           const key = `${m}-${s}`;
           let chairEl = document.getElementById(`chair-${m}-${s}`);
           const cuenta = window.palapaState.cuentas[key];
@@ -1802,121 +2054,121 @@
           if (isOccupied) busyCount++;
 
           if (chairEl) {
-          const posClass = s === 1 ? 'chair-pos-top' : s === 2 ? 'chair-pos-right' : s === 3 ? 'chair-pos-bottom' : 'chair-pos-left';
+            const posClass = s === 1 ? 'chair-pos-top' : s === 2 ? 'chair-pos-right' : s === 3 ? 'chair-pos-bottom' : 'chair-pos-left';
 
-          // Update draggable attribute based on current occupied state
-          chairEl.setAttribute('draggable', isOccupied ? 'true' : 'false');
-          const numItems = (cuenta &amp;&amp; cuenta.items) ? cuenta.items.length : 0;
-          chairEl.setAttribute('title', isOccupied
-          ? `Mesa ${m} Silla ${s} (Ocupada${numItems > 0 ? ' · ' + numItems + ' consumos' : ' · Sin consumos'}) • Arrastra para mover`
-          : `Mesa ${m} Silla ${s} (Disponible) • Haz clic para ubicar comensal`);
+            // Update draggable attribute based on current occupied state
+            chairEl.setAttribute('draggable', isOccupied ? 'true' : 'false');
+            const numItems = (cuenta &amp;&amp; cuenta.items) ? cuenta.items.length : 0;
+            chairEl.setAttribute('title', isOccupied
+              ? `Mesa ${m} Silla ${s} (Ocupada${numItems > 0 ? ' · ' + numItems + ' consumos' : ' · Sin consumos'}) • Arrastra para mover`
+              : `Mesa ${m} Silla ${s} (Disponible) • Haz clic para ubicar comensal`);
 
-          if (isMoveMode &amp;&amp; origen &amp;&amp; origen.mesaId === m &amp;&amp; origen.sillaNum === s) {
-          chairEl.className = `chair-btn-fixed ${posClass} chair-moving-source`;
-          } else if (isMoveMode) {
-          chairEl.className = `chair-btn-fixed ${posClass} chair-moving-target ${isOccupied ? 'chair-state-busy' : 'chair-state-free'}`;
-          } else {
-          chairEl.className = `chair-btn-fixed ${posClass} ${isOccupied ? 'chair-state-busy' : 'chair-state-free'}`;
+            if (isMoveMode &amp;&amp; origen &amp;&amp; origen.mesaId === m &amp;&amp; origen.sillaNum === s) {
+              chairEl.className = `chair-btn-fixed ${posClass} chair-moving-source`;
+            } else if (isMoveMode) {
+              chairEl.className = `chair-btn-fixed ${posClass} chair-moving-target ${isOccupied ? 'chair-state-busy' : 'chair-state-free'}`;
+            } else {
+              chairEl.className = `chair-btn-fixed ${posClass} ${isOccupied ? 'chair-state-busy' : 'chair-state-free'}`;
+            }
           }
-          }
-          }
+        }
 
-          const circle = document.getElementById(`table-circle-${m}`);
-          const statusText = document.getElementById(`table-status-${m}`);
-          const labelText = document.getElementById(`table-label-${m}`);
+        const circle = document.getElementById(`table-circle-${m}`);
+        const statusText = document.getElementById(`table-status-${m}`);
+        const labelText = document.getElementById(`table-label-${m}`);
 
-          if (circle) {
+        if (circle) {
           if (busyCount > 0) {
-          circle.style.background = &quot;#78350f&quot;;
-          circle.style.border = &quot;4px solid #f59e0b&quot;;
-          if (statusText) statusText.innerText = `${busyCount} Ocupada${busyCount > 1 ? 's' : ''}`;
-          if (labelText) {
-          labelText.style.color = &quot;#fbbf24&quot;;
-          labelText.innerText = `🟡 Ocupada (${busyCount} Comensal${busyCount > 1 ? 'es' : ''})`;
-          }
+            circle.style.background = &quot;#78350f&quot;;
+            circle.style.border = &quot;4px solid #f59e0b&quot;;
+            if (statusText) statusText.innerText = `${busyCount} Ocupada${busyCount > 1 ? 's' : ''}`;
+            if (labelText) {
+              labelText.style.color = &quot;#fbbf24&quot;;
+              labelText.innerText = `🟡 Ocupada (${busyCount} Comensal${busyCount > 1 ? 'es' : ''})`;
+            }
           } else {
-          circle.style.background = &quot;#064e3b&quot;;
-          circle.style.border = &quot;4px solid #10b981&quot;;
-          if (statusText) statusText.innerText = `Libre`;
-          if (labelText) {
-          labelText.style.color = &quot;#34d399&quot;;
-          labelText.innerText = `🟢 Disponible`;
+            circle.style.background = &quot;#064e3b&quot;;
+            circle.style.border = &quot;4px solid #10b981&quot;;
+            if (statusText) statusText.innerText = `Libre`;
+            if (labelText) {
+              labelText.style.color = &quot;#34d399&quot;;
+              labelText.innerText = `🟢 Disponible`;
+            }
           }
-          }
-          }
-          }
+        }
+      }
 
-          const badge = document.getElementById('activeTargetBadge');
-          if (badge) {
-          if (window.palapaState.sillaSeleccionadaNum !== null) {
+      const badge = document.getElementById('activeTargetBadge');
+      if (badge) {
+        if (window.palapaState.sillaSeleccionadaNum !== null) {
           const selKey = `${window.palapaState.mesaSeleccionadaId}-${window.palapaState.sillaSeleccionadaNum}`;
           const selCuenta = window.palapaState.cuentas[selKey];
           const isSelOcc = !!(selCuenta &amp;&amp; (selCuenta.estado === 'ocupada' || (selCuenta.items &amp;&amp; selCuenta.items.length > 0)));
           badge.innerText = `Mesa ${window.palapaState.mesaSeleccionadaId} • Silla ${window.palapaState.sillaSeleccionadaNum} (${isSelOcc ? 'Ocupada' : 'Disponible'})`;
-          } else {
+        } else {
           badge.innerText = `Mesa ${window.palapaState.mesaSeleccionadaId} (Completa)`;
-          }
-          }
+        }
+      }
 
-          renderWaiterMenuGrid();
-          }
+      renderWaiterMenuGrid();
+    }
 
-          function renderWaiterMenuGrid() {
-          const grid = document.getElementById('waiterMenuGrid');
-          if (!grid) return;
-          grid.innerHTML = '';
+    function renderWaiterMenuGrid() {
+      const grid = document.getElementById('waiterMenuGrid');
+      if (!grid) return;
+      grid.innerHTML = '';
 
-          const catFiltro = window.palapaState.categoriaFiltro || 'Todos';
-          const filtrados = window.catalogProducts.filter(p => catFiltro === 'Todos' || p.categoria_nombre === catFiltro);
+      const catFiltro = window.palapaState.categoriaFiltro || 'Todos';
+      const filtrados = window.catalogProducts.filter(p => catFiltro === 'Todos' || p.categoria_nombre === catFiltro);
 
-          filtrados.forEach(prod => {
-          const card = document.createElement('div');
-          card.style.cssText = 'background: #0f172a !important; border: 1px solid #1e293b !important; border-radius: 12px !important; padding: 12px !important; display: flex !important; justify-content: space-between !important; align-items: center !important; cursor: pointer !important;';
-          card.onclick = () => agregarPlatilloDirecto(prod);
+      filtrados.forEach(prod => {
+        const card = document.createElement('div');
+        card.style.cssText = 'background: #0f172a !important; border: 1px solid #1e293b !important; border-radius: 12px !important; padding: 12px !important; display: flex !important; justify-content: space-between !important; align-items: center !important; cursor: pointer !important;';
+        card.onclick = () => agregarPlatilloDirecto(prod);
 
-          card.innerHTML = `
+        card.innerHTML = `
           <div style=&quot;display: flex; align-items: center; gap: 8px;&quot;>
-          <span style=&quot;font-size: 20px;&quot;>${prod.icono}</span>
-          <div>
-          <span style=&quot;font-size: 11px; font-weight: 700; color: #ffffff; display: block; line-height: 1.2;&quot;>${prod.nombre}</span>
-          <span style=&quot;font-size: 11px; font-weight: 900; color: #34d399;&quot;>$${prod.precio.toFixed(2)}</span>
-          </div>
+            <span style=&quot;font-size: 20px;&quot;>${prod.icono}</span>
+            <div>
+              <span style=&quot;font-size: 11px; font-weight: 700; color: #ffffff; display: block; line-height: 1.2;&quot;>${prod.nombre}</span>
+              <span style=&quot;font-size: 11px; font-weight: 900; color: #34d399;&quot;>$${prod.precio.toFixed(2)}</span>
+            </div>
           </div>
           <button style=&quot;padding: 6px 12px; background: #059669; color: #ffffff; font-size: 11px; font-weight: 900; border-radius: 8px; border: none; cursor: pointer;&quot;>
-          + Agregar
+            + Agregar
           </button>
-          `;
-          grid.appendChild(card);
-          });
-          }
+        `;
+        grid.appendChild(card);
+      });
+    }
 
-          function agregarPlatilloDirecto(prod) {
-          const mesaId = window.palapaState.mesaSeleccionadaId;
-          let sillaNum = window.palapaState.sillaSeleccionadaNum;
+    function agregarPlatilloDirecto(prod) {
+      const mesaId = window.palapaState.mesaSeleccionadaId;
+      let sillaNum = window.palapaState.sillaSeleccionadaNum;
 
-          if (sillaNum === null) {
-          sillaNum = 1;
-          window.palapaState.sillaSeleccionadaNum = 1;
-          }
+      if (sillaNum === null) {
+        sillaNum = 1;
+        window.palapaState.sillaSeleccionadaNum = 1;
+      }
 
-          const key = `${mesaId}-${sillaNum}`;
-          if (!window.palapaState.cuentas[key]) {
-          window.palapaState.cuentas[key] = {
+      const key = `${mesaId}-${sillaNum}`;
+      if (!window.palapaState.cuentas[key]) {
+        window.palapaState.cuentas[key] = {
           estado: 'ocupada',
           qrId: 'PV-0' + mesaId + sillaNum,
           comensalNombre: 'Comensal Silla ' + sillaNum,
           items: [],
           historialUbicaciones: [{ mesaId: mesaId, sillaNum: sillaNum, hora: (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }]
-          };
-          }
+        };
+      }
 
-          const nowStr = (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-          const items = window.palapaState.cuentas[key].items;
-          const existing = items.find(i => i.id === prod.id &amp;&amp; i.mesaId === mesaId &amp;&amp; i.sillaNum === sillaNum);
-          if (existing) {
-          existing.cantidad += 1;
-          } else {
-          items.push({
+      const nowStr = (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      const items = window.palapaState.cuentas[key].items;
+      const existing = items.find(i => i.id === prod.id &amp;&amp; i.mesaId === mesaId &amp;&amp; i.sillaNum === sillaNum);
+      if (existing) {
+        existing.cantidad += 1;
+      } else {
+        items.push({
           id: prod.id,
           nombre: prod.nombre,
           notas: '',
@@ -1925,40 +2177,40 @@
           mesaId: mesaId,
           sillaNum: sillaNum,
           hora: nowStr
-          });
-          }
+        });
+      }
 
-          saveStateToStorage();
-          renderStateUI();
-          showDragToast(`➕ ${prod.nombre} agregado a Mesa ${mesaId} Silla ${sillaNum}`, 'ok');
-          }
+      saveStateToStorage();
+      renderStateUI();
+      showDragToast(`➕ ${prod.nombre} agregado a Mesa ${mesaId} Silla ${sillaNum}`, 'ok');
+    }
 
-          function filtrarCategoria(catNombre) {
-          window.palapaState.categoriaFiltro = catNombre;
+    function filtrarCategoria(catNombre) {
+      window.palapaState.categoriaFiltro = catNombre;
 
-          const chipKeys = ['Todos', 'Cafe', 'Des', 'Car', 'Pos'];
-          chipKeys.forEach(k => {
-          const el = document.getElementById(`wchip-${k}`);
-          if (el) {
+      const chipKeys = ['Todos', 'Cafe', 'Des', 'Car', 'Pos'];
+      chipKeys.forEach(k => {
+        const el = document.getElementById(`wchip-${k}`);
+        if (el) {
           if ((k === 'Todos' &amp;&amp; catNombre === 'Todos') ||
-          (k === 'Cafe' &amp;&amp; catNombre === 'Barra de Café &amp; Infusiones') ||
-          (k === 'Des' &amp;&amp; catNombre === 'Desayunos &amp; Brunch Gourmet') ||
-          (k === 'Car' &amp;&amp; catNombre === 'Especialidades Fuertes') ||
-          (k === 'Pos' &amp;&amp; catNombre === 'Repostería &amp; Postres de Autor')) {
-          el.style.background = &quot;#059669&quot;;
-          el.style.color = &quot;#ffffff&quot;;
-          el.style.border = &quot;1px solid #34d399&quot;;
+            (k === 'Cafe' &amp;&amp; catNombre === 'Barra de Café &amp; Infusiones') ||
+            (k === 'Des' &amp;&amp; catNombre === 'Desayunos &amp; Brunch Gourmet') ||
+            (k === 'Car' &amp;&amp; catNombre === 'Especialidades Fuertes') ||
+            (k === 'Pos' &amp;&amp; catNombre === 'Repostería &amp; Postres de Autor')) {
+            el.style.background = &quot;#059669&quot;;
+            el.style.color = &quot;#ffffff&quot;;
+            el.style.border = &quot;1px solid #34d399&quot;;
           } else {
-          el.style.background = &quot;#1e293b&quot;;
-          el.style.color = &quot;#cbd5e1&quot;;
-          el.style.border = &quot;1px solid #334155&quot;;
+            el.style.background = &quot;#1e293b&quot;;
+            el.style.color = &quot;#cbd5e1&quot;;
+            el.style.border = &quot;1px solid #334155&quot;;
           }
-          }
-          });
+        }
+      });
 
-          renderWaiterMenuGrid();
-          }
+      renderWaiterMenuGrid();
+    }
 
-          setTimeout(function () { renderStateUI(); setupDragListeners(); }, 150);
-          })();
-          </script>"></anvil-form>
+    setTimeout(function () { renderStateUI(); setupDragListeners(); }, 150);
+  })();
+</script>"></anvil-form>
