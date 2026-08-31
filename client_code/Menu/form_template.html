@@ -212,13 +212,13 @@
 
           <!-- BOTONES DE COBRO MULTICANAL -->
           <div class="grid grid-cols-2 gap-2">
-            <button onclick="window.abrirModalCobro('santander')"
+            <button onclick="window.abrirModalCobroCliente('santander')"
               class="py-3 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-100 text-xs font-bold border border-slate-700 transition flex items-center justify-center gap-1.5 cursor-pointer">
               <i class="fa-solid fa-credit-card text-sky-400"></i> Santander
             </button>
-            <button onclick="window.abrirModalCobro('tarjeta')"
+            <button onclick="window.abrirModalCobroCliente('tarjeta')"
               class="py-3 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold shadow-lg shadow-emerald-600/30 transition flex items-center justify-center gap-1.5 cursor-pointer">
-              <i class="fa-solid fa-check-double"></i> Pagar (<span id="txtBtnPagarMonto">$0.00</span>)
+              <i class="fa-solid fa-check-double"></i> Pagar / Ticket (<span id="txtBtnPagarMonto">$0.00</span>)
             </button>
           </div>
         </div>
@@ -226,6 +226,57 @@
       </aside>
 
     </main>
+
+    <!-- MODAL DE COBRO Y PRECUENTA DIGITAL CLIENTE QR -->
+    <div id="modalCobroCliente" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden items-center justify-center p-4" onclick="if(event.target === this) window.cerrarModalCobroCliente();">
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-md p-6 shadow-2xl flex flex-col gap-4 text-slate-100">
+        <div class="flex justify-between items-start border-b border-slate-800 pb-3">
+          <div>
+            <h3 class="text-base font-bold text-white flex items-center gap-2">
+              <i class="fa-solid fa-receipt text-emerald-400"></i> Precuenta y Pago Digital
+            </h3>
+            <p class="text-xs text-slate-400" id="modalCobroSubtitulo">Mesa 2 • Portavasos #PV-021</p>
+          </div>
+          <button onclick="window.cerrarModalCobroCliente();" class="text-slate-400 hover:text-white text-lg cursor-pointer">✕</button>
+        </div>
+
+        <!-- SELECTOR DE ALCANCE DEL PAGO -->
+        <div class="bg-slate-950/80 p-3 rounded-xl border border-slate-800/80 space-y-2">
+          <span class="text-xs font-bold text-slate-300 block"><i class="fa-solid fa-hand-holding-dollar text-emerald-400 mr-1"></i> ¿Qué deseas pagar?</span>
+          <div class="grid grid-cols-3 gap-1.5 text-[11px]">
+            <button type="button" onclick="window.setModoPagoCliente('solo_yo')" id="btnModoSoloYo" class="p-2 rounded-lg font-bold border text-center transition bg-slate-800 text-slate-300 border-slate-700 cursor-pointer">Solo Mi Silla</button>
+            <button type="button" onclick="window.setModoPagoCliente('incluir_ninos')" id="btnModoNinos" class="p-2 rounded-lg font-bold border text-center transition bg-emerald-600/30 text-emerald-300 border-emerald-500/50 cursor-pointer">Acompañantes</button>
+            <button type="button" onclick="window.setModoPagoCliente('toda_mesa')" id="btnModoTodaMesa" class="p-2 rounded-lg font-bold border text-center transition bg-slate-800 text-slate-300 border-slate-700 cursor-pointer">Toda la Mesa</button>
+          </div>
+        </div>
+
+        <!-- DESGLOSE DE CUENTAS INCLUIDAS -->
+        <div id="modalCobroDetalleTramos" class="space-y-2 max-h-56 overflow-y-auto pr-1 text-xs">
+          <!-- Generado dinámicamente -->
+        </div>
+
+        <!-- TOTALES -->
+        <div class="pt-3 border-t border-slate-800 space-y-1.5 text-xs">
+          <div class="flex justify-between text-slate-400"><span>Subtotal Neto:</span><span id="modalSubtotal" class="text-slate-200 font-bold">$0.00</span></div>
+          <div class="flex justify-between text-slate-400"><span>IVA 16% Trasladado:</span><span id="modalIVA" class="text-slate-200 font-bold">$0.00</span></div>
+          <div class="flex justify-between text-slate-400"><span>Propina Sugerida (10%):</span><span id="modalPropina" class="text-slate-200 font-bold">$0.00</span></div>
+          <div class="flex justify-between text-base font-black text-white pt-2 border-t border-slate-800">
+            <span>Total Final a Liquidar:</span>
+            <span id="modalTotal" class="text-emerald-400 text-lg font-black">$0.00</span>
+          </div>
+        </div>
+
+        <!-- BOTONES DE PROCESAR PAGO -->
+        <div class="grid grid-cols-2 gap-2 pt-2">
+          <button onclick="window.ejecutarPagoFinal('santander')" class="py-3 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-sky-400 text-xs font-bold border border-slate-700 flex items-center justify-center gap-1.5 cursor-pointer">
+            <i class="fa-solid fa-credit-card"></i> Pagar Santander
+          </button>
+          <button onclick="window.ejecutarPagoFinal('tarjeta')" class="py-3 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold shadow-lg shadow-emerald-600/30 flex items-center justify-center gap-1.5 cursor-pointer">
+            <i class="fa-solid fa-check-circle"></i> Confirmar Pago
+          </button>
+        </div>
+      </div>
+    </div>
 
   </div>
 
@@ -489,21 +540,153 @@
       window.sincronizarCuentaDesdeStorage();
     };
 
-    window.abrirModalCobro = function (metodo) {
+    window.modoPagoCliente = 'incluir_ninos'; // 'solo_yo' | 'incluir_ninos' | 'toda_mesa'
+
+    window.abrirModalCobroCliente = function(metodo) {
+      const modal = document.getElementById('modalCobroCliente');
+      if (!modal) return;
+      window.renderModalCobroDetalle();
+      modal.classList.remove('hidden');
+      modal.style.display = 'flex';
+    };
+
+    window.cerrarModalCobroCliente = function() {
+      const modal = document.getElementById('modalCobroCliente');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.style.display = 'none';
+      }
+    };
+
+    window.setModoPagoCliente = function(modo) {
+      window.modoPagoCliente = modo;
+      var btnSolo = document.getElementById('btnModoSoloYo');
+      var btnNinos = document.getElementById('btnModoNinos');
+      var btnToda = document.getElementById('btnModoTodaMesa');
+
+      [btnSolo, btnNinos, btnToda].forEach(b => {
+        if (b) {
+          b.className = 'p-2 rounded-lg font-bold border text-center transition bg-slate-800 text-slate-300 border-slate-700 cursor-pointer';
+        }
+      });
+
+      if (modo === 'solo_yo' && btnSolo) {
+        btnSolo.className = 'p-2 rounded-lg font-bold border text-center transition bg-emerald-600/30 text-emerald-300 border-emerald-500/50 cursor-pointer';
+      } else if (modo === 'incluir_ninos' && btnNinos) {
+        btnNinos.className = 'p-2 rounded-lg font-bold border text-center transition bg-emerald-600/30 text-emerald-300 border-emerald-500/50 cursor-pointer';
+      } else if (modo === 'toda_mesa' && btnToda) {
+        btnToda.className = 'p-2 rounded-lg font-bold border text-center transition bg-emerald-600/30 text-emerald-300 border-emerald-500/50 cursor-pointer';
+      }
+
+      window.renderModalCobroDetalle();
+    };
+
+    window.renderModalCobroDetalle = function() {
+      var cuentas = getStorageCuentas();
+      var mesaId = window.simMesaId;
+      var miSilla = window.simSillaNum;
+      var container = document.getElementById('modalCobroDetalleTramos');
+      var subtotalEl = document.getElementById('modalSubtotal');
+      var ivaEl = document.getElementById('modalIVA');
+      var propinaEl = document.getElementById('modalPropina');
+      var totalEl = document.getElementById('modalTotal');
+      var subtituloEl = document.getElementById('modalCobroSubtitulo');
+
+      if (!container) return;
+      container.innerHTML = '';
+
+      var sillasAIncluir = [];
+      if (window.modoPagoCliente === 'solo_yo') {
+        sillasAIncluir = [miSilla];
+      } else if (window.modoPagoCliente === 'incluir_ninos') {
+        sillasAIncluir = [miSilla].concat(window.sillasAcompanantesSeleccionadas);
+      } else if (window.modoPagoCliente === 'toda_mesa') {
+        for (var s = 1; s <= 4; s++) {
+          if (cuentas[mesaId + '-' + s]) {
+            sillasAIncluir.push(s);
+          }
+        }
+      }
+
+      // Eliminar duplicados
+      sillasAIncluir = sillasAIncluir.filter((v, i, a) => a.indexOf(v) === i).sort();
+
+      if (subtituloEl) {
+        subtituloEl.innerText = `Mesa ${mesaId} • ${sillasAIncluir.length} Cuenta${sillasAIncluir.length > 1 ? 's' : ''} Seleccionada${sillasAIncluir.length > 1 ? 's' : ''}`;
+      }
+
+      var totalNeto = 0;
+
+      sillasAIncluir.forEach(sNum => {
+        var c = cuentas[mesaId + '-' + sNum];
+        if (!c || !c.items || c.items.length === 0) return;
+
+        var subSilla = 0;
+        var block = document.createElement('div');
+        block.className = 'p-2.5 rounded-xl bg-slate-950/60 border border-slate-800/80 mb-2';
+
+        var h = document.createElement('div');
+        h.className = 'flex justify-between items-center font-bold text-emerald-400 mb-1';
+        h.innerHTML = `<span>Silla ${sNum} ${c.comensalNombre ? '• ' + c.comensalNombre : ''}</span><span class="text-[10px] text-slate-500">QR: #${c.qrId || 'PV-0'+mesaId+sNum}</span>`;
+        block.appendChild(h);
+
+        c.items.forEach(it => {
+          var itTotal = it.precio * it.cantidad;
+          subSilla += itTotal;
+          totalNeto += itTotal;
+          var row = document.createElement('div');
+          row.className = 'flex justify-between text-slate-300 py-0.5';
+          row.innerHTML = `<span>${it.cantidad}x ${it.nombre}</span><span>$${itTotal.toFixed(2)}</span>`;
+          block.appendChild(row);
+        });
+
+        var subRow = document.createElement('div');
+        subRow.className = 'flex justify-between text-slate-400 font-bold pt-1 mt-1 border-t border-slate-900 text-[11px]';
+        subRow.innerHTML = `<span>Subtotal Silla ${sNum}:</span><span class="text-amber-400">$${subSilla.toFixed(2)}</span>`;
+        block.appendChild(subRow);
+
+        container.appendChild(block);
+      });
+
+      var iva = totalNeto * 0.16;
+      var propina = totalNeto * 0.10;
+      var granTotal = totalNeto + iva;
+
+      if (subtotalEl) subtotalEl.innerText = `$${totalNeto.toFixed(2)}`;
+      if (ivaEl) ivaEl.innerText = `$${iva.toFixed(2)}`;
+      if (propinaEl) propinaEl.innerText = `$${propina.toFixed(2)}`;
+      if (totalEl) totalEl.innerText = `$${granTotal.toFixed(2)}`;
+    };
+
+    window.ejecutarPagoFinal = function(metodo) {
       var cuentas = getStorageCuentas();
       var mesaId = window.simMesaId;
       var miSilla = window.simSillaNum;
 
-      var sillasALiquidar = [miSilla].concat(window.sillasAcompanantesSeleccionadas);
-      var totalText = document.getElementById('txtTotal') ? document.getElementById('txtTotal').innerText : '$0.00';
-      var sillasStr = sillasALiquidar.map(function(s) { return 'Silla ' + s; }).join(', ');
+      var sillasAIncluir = [];
+      if (window.modoPagoCliente === 'solo_yo') {
+        sillasAIncluir = [miSilla];
+      } else if (window.modoPagoCliente === 'incluir_ninos') {
+        sillasAIncluir = [miSilla].concat(window.sillasAcompanantesSeleccionadas);
+      } else if (window.modoPagoCliente === 'toda_mesa') {
+        for (var s = 1; s <= 4; s++) {
+          if (cuentas[mesaId + '-' + s]) {
+            sillasAIncluir.push(s);
+          }
+        }
+      }
 
-      if (confirm(`¿Confirmar pago vía ${metodo.toUpperCase()} para Mesa ${mesaId} (${sillasStr}) por un total de ${totalText}?\n\nLas sillas seleccionadas quedarán liquidadas en el sistema.`)) {
-        sillasALiquidar.forEach(function(sNum) {
+      sillasAIncluir = sillasAIncluir.filter((v, i, a) => a.indexOf(v) === i);
+      var totalText = document.getElementById('modalTotal') ? document.getElementById('modalTotal').innerText : '$0.00';
+      var sillasStr = sillasAIncluir.map(function(s) { return 'Silla ' + s; }).join(', ');
+
+      if (confirm(`¿Confirmar liquidación vía ${metodo.toUpperCase()} para Mesa ${mesaId} (${sillasStr}) por ${totalText}?`)) {
+        sillasAIncluir.forEach(function(sNum) {
           delete cuentas[mesaId + '-' + sNum];
         });
         saveStorageCuentas(cuentas);
-        alert(`✅ ¡Pago exitoso vía ${metodo.toUpperCase()}!\nSe han liquidado las cuentas de Mesa ${mesaId} (${sillasStr}).`);
+        window.cerrarModalCobroCliente();
+        alert(`🎉 ¡Pago completado con éxito vía ${metodo.toUpperCase()}!\nSe han liberado las cuentas de Mesa ${mesaId} (${sillasStr}).`);
         window.sincronizarCuentaDesdeStorage();
       }
     };
