@@ -190,6 +190,22 @@
     display: flex !important;
   }
 
+  /* ── Modal Pasarela de Cobro y Liquidación Multi-Método ── */
+  #modalPasarelaCobroBackdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.85);
+    z-index: 9998;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(6px);
+  }
+
+  #modalPasarelaCobroBackdrop.show {
+    display: flex !important;
+  }
+
   #combineConfirmBox {
     background: #0f172a;
     border: 1px solid #334155;
@@ -712,6 +728,225 @@
         ✕ Cerrar
       </button>
     </div>
+  </div>
+</div>
+
+<!-- MODAL PASARELA DE COBRO Y LIQUIDACIÓN MULTI-MÉTODO (MERCADO PAGO POINT, SANTANDER, EFECTIVO, QR, MIXTO) -->
+<div id="modalPasarelaCobroBackdrop" onclick="if (event.target === this) window.cerrarModalPasarelaCobro();">
+  <div id="modalPasarelaCobroCard"
+    style="background: #090d16 !important; border: 1px solid #1e293b !important; border-radius: 20px !important; width: 100% !important; max-width: 580px !important; max-height: 90vh !important; overflow-y: auto !important; box-shadow: 0 25px 50px rgba(0,0,0,0.9) !important; color: #f8fafc !important; padding: 22px !important; display: flex !important; flex-direction: column !important; gap: 14px !important; animation: slideUp 0.25s ease-out !important;">
+    
+    <!-- Header -->
+    <div style="display: flex !important; justify-content: space-between !important; align-items: flex-start !important; border-bottom: 1px solid #1e293b !important; padding-bottom: 12px !important;">
+      <div>
+        <h3 style="font-size: 16px !important; font-weight: 900 !important; margin: 0 !important; color: #34d399 !important; display: flex !important; align-items: center !important; gap: 8px !important;">
+          <i class="fa-solid fa-cash-register"></i> Pasarela de Cobro y Liquidación
+        </h3>
+        <p style="font-size: 11px !important; color: #94a3b8 !important; margin: 3px 0 0 0 !important;" id="lblPasarelaSubtitulo">
+          Mesa 2 • Sillas 1, 3, 4
+        </p>
+      </div>
+      <button onclick="window.cerrarModalPasarelaCobro();"
+        style="background: #1e293b !important; border: none !important; color: #94a3b8 !important; width: 30px !important; height: 30px !important; border-radius: 8px !important; font-weight: bold !important; cursor: pointer !important;">✕</button>
+    </div>
+
+    <!-- Resumen de Consumo -->
+    <div style="background: #020617 !important; border: 1px solid #1e293b !important; border-radius: 12px !important; padding: 12px !important; display: grid !important; grid-template-columns: repeat(3, 1fr) !important; gap: 8px !important; text-align: center !important;">
+      <div>
+        <span style="font-size: 10px !important; color: #94a3b8 !important; display: block !important;">Consumo Neto</span>
+        <span id="pasarelaMontoConsumo" style="font-size: 13px !important; font-weight: 800 !important; color: #f8fafc !important;">$0.00</span>
+      </div>
+      <div>
+        <span style="font-size: 10px !important; color: #94a3b8 !important; display: block !important;">IVA 16% Trasladado</span>
+        <span id="pasarelaMontoIva" style="font-size: 13px !important; font-weight: 800 !important; color: #cbd5e1 !important;">$0.00</span>
+      </div>
+      <div>
+        <span style="font-size: 10px !important; color: #34d399 !important; display: block !important; font-weight: bold !important;">Subtotal con IVA</span>
+        <span id="pasarelaMontoSubtotalIva" style="font-size: 14px !important; font-weight: 900 !important; color: #34d399 !important;">$0.00</span>
+      </div>
+    </div>
+
+    <!-- Sección de Propinas -->
+    <div style="background: #0f172a !important; border: 1px solid #1e293b !important; border-radius: 12px !important; padding: 12px !important; display: flex !important; flex-direction: column !important; gap: 8px !important;">
+      <div style="display: flex !important; justify-content: space-between !important; align-items: center !important;">
+        <span style="font-size: 11px !important; font-weight: 800 !important; color: #fbbf24 !important;">
+          <i class="fa-solid fa-hand-holding-dollar"></i> Propina del Servicio:
+        </span>
+        <span id="pasarelaPropinaMontoCalculado" style="font-size: 12px !important; font-weight: 900 !important; color: #fbbf24 !important;">$0.00</span>
+      </div>
+      
+      <div style="display: grid !important; grid-template-columns: repeat(5, 1fr) !important; gap: 6px !important;">
+        <button type="button" class="btn-tip-pct" onclick="window.setPasarelaTipPct(0)" id="btnTipPct0" style="padding: 6px !important; border-radius: 6px !important; font-size: 10px !important; font-weight: 800 !important; cursor: pointer !important; background: #1e293b !important; color: #94a3b8 !important; border: 1px solid #334155 !important;">0%</button>
+        <button type="button" class="btn-tip-pct" onclick="window.setPasarelaTipPct(10)" id="btnTipPct10" style="padding: 6px !important; border-radius: 6px !important; font-size: 10px !important; font-weight: 800 !important; cursor: pointer !important; background: #064e3b !important; color: #34d399 !important; border: 1px solid #10b981 !important;">10%</button>
+        <button type="button" class="btn-tip-pct" onclick="window.setPasarelaTipPct(15)" id="btnTipPct15" style="padding: 6px !important; border-radius: 6px !important; font-size: 10px !important; font-weight: 800 !important; cursor: pointer !important; background: #1e293b !important; color: #94a3b8 !important; border: 1px solid #334155 !important;">15%</button>
+        <button type="button" class="btn-tip-pct" onclick="window.setPasarelaTipPct(20)" id="btnTipPct20" style="padding: 6px !important; border-radius: 6px !important; font-size: 10px !important; font-weight: 800 !important; cursor: pointer !important; background: #1e293b !important; color: #94a3b8 !important; border: 1px solid #334155 !important;">20%</button>
+        <button type="button" class="btn-tip-pct" onclick="window.setPasarelaTipPct('libre')" id="btnTipPctLibre" style="padding: 6px !important; border-radius: 6px !important; font-size: 10px !important; font-weight: 800 !important; cursor: pointer !important; background: #1e293b !important; color: #94a3b8 !important; border: 1px solid #334155 !important;">Libre</button>
+      </div>
+
+      <div id="boxTipLibreInput" style="display: none !important; align-items: center !important; gap: 8px !important; margin-top: 4px !important;">
+        <span style="font-size: 11px !important; color: #94a3b8 !important;">Monto Libre: $</span>
+        <input type="number" id="inputTipLibre" min="0" step="1" placeholder="0.00" oninput="window.updatePasarelaBalance();" style="flex: 1 !important; padding: 6px 10px !important; background: #020617 !important; border: 1px solid #334155 !important; color: #ffffff !important; border-radius: 6px !important; font-size: 12px !important; font-weight: bold !important;">
+      </div>
+
+      <!-- Destino de la Propina -->
+      <div style="display: flex !important; gap: 12px !important; align-items: center !important; padding-top: 6px !important; border-top: 1px dashed #334155 !important; font-size: 11px !important;">
+        <span style="color: #94a3b8 !important;">Destino de la propina:</span>
+        <label style="display: flex !important; align-items: center !important; gap: 4px !important; cursor: pointer !important; color: #cbd5e1 !important;">
+          <input type="radio" name="pasarelaTipDestino" value="INCLUIDA_TARJETA" checked onchange="window.updatePasarelaBalance();" style="accent-color: #10b981;"> En Tarjeta / Terminal
+        </label>
+        <label style="display: flex !important; align-items: center !important; gap: 4px !important; cursor: pointer !important; color: #cbd5e1 !important;">
+          <input type="radio" name="pasarelaTipDestino" value="EFECTIVO_MESERO" onchange="window.updatePasarelaBalance();" style="accent-color: #10b981;"> En Efectivo al Mesero
+        </label>
+      </div>
+    </div>
+
+    <!-- Pestañas de Métodos de Pago -->
+    <div style="display: flex !important; flex-direction: column !important; gap: 8px !important;">
+      <span style="font-size: 11px !important; font-weight: 800 !important; color: #f8fafc !important;">
+        <i class="fa-solid fa-wallet" style="color: #38bdf8;"></i> Selecciona el Método de Pago:
+      </span>
+      <div style="display: grid !important; grid-template-columns: repeat(5, 1fr) !important; gap: 6px !important;">
+        <button type="button" onclick="window.selectPasarelaMetodo('MERCADOPAGO')" id="btnTabMP" class="btn-pasarela-tab" style="padding: 8px 4px !important; border-radius: 8px !important; font-size: 10px !important; font-weight: 800 !important; cursor: pointer !important; background: #064e3b !important; color: #34d399 !important; border: 2px solid #10b981 !important; display: flex !important; flex-direction: column !important; align-items: center !important; gap: 3px !important;">
+          <i class="fa-solid fa-mobile-screen" style="font-size: 14px;"></i> Terminal MP
+        </button>
+        <button type="button" onclick="window.selectPasarelaMetodo('TERMINAL_SANTANDER')" id="btnTabSantander" class="btn-pasarela-tab" style="padding: 8px 4px !important; border-radius: 8px !important; font-size: 10px !important; font-weight: 800 !important; cursor: pointer !important; background: #1e293b !important; color: #94a3b8 !important; border: 1px solid #334155 !important; display: flex !important; flex-direction: column !important; align-items: center !important; gap: 3px !important;">
+          <i class="fa-solid fa-credit-card" style="font-size: 14px;"></i> Santander
+        </button>
+        <button type="button" onclick="window.selectPasarelaMetodo('CASH')" id="btnTabCash" class="btn-pasarela-tab" style="padding: 8px 4px !important; border-radius: 8px !important; font-size: 10px !important; font-weight: 800 !important; cursor: pointer !important; background: #1e293b !important; color: #94a3b8 !important; border: 1px solid #334155 !important; display: flex !important; flex-direction: column !important; align-items: center !important; gap: 3px !important;">
+          <i class="fa-solid fa-money-bill-wave" style="font-size: 14px;"></i> Efectivo
+        </button>
+        <button type="button" onclick="window.selectPasarelaMetodo('QR_LINK')" id="btnTabQR" class="btn-pasarela-tab" style="padding: 8px 4px !important; border-radius: 8px !important; font-size: 10px !important; font-weight: 800 !important; cursor: pointer !important; background: #1e293b !important; color: #94a3b8 !important; border: 1px solid #334155 !important; display: flex !important; flex-direction: column !important; align-items: center !important; gap: 3px !important;">
+          <i class="fa-solid fa-qrcode" style="font-size: 14px;"></i> QR / Link
+        </button>
+        <button type="button" onclick="window.selectPasarelaMetodo('MIXTO')" id="btnTabMixto" class="btn-pasarela-tab" style="padding: 8px 4px !important; border-radius: 8px !important; font-size: 10px !important; font-weight: 800 !important; cursor: pointer !important; background: #1e293b !important; color: #94a3b8 !important; border: 1px solid #334155 !important; display: flex !important; flex-direction: column !important; align-items: center !important; gap: 3px !important;">
+          <i class="fa-solid fa-layer-group" style="font-size: 14px;"></i> Mixto
+        </button>
+      </div>
+    </div>
+
+    <!-- Contenido Dinámico según Método -->
+    <!-- 1. MERCADO PAGO POINT SMART -->
+    <div id="panelMetodoMP" class="panel-pasarela-metodo" style="background: #020617 !important; border: 1px solid #059669 !important; border-radius: 14px !important; padding: 14px !important; display: flex !important; flex-direction: column !important; gap: 10px !important;">
+      <div style="display: flex !important; justify-content: space-between !important; align-items: center !important;">
+        <div style="display: flex !important; align-items: center !important; gap: 8px !important;">
+          <div style="width: 32px !important; height: 32px !important; border-radius: 8px !important; background: rgba(0, 158, 227, 0.15) !important; border: 1px solid #009ee3 !important; display: flex !important; align-items: center !important; justify-content: center !important; color: #009ee3 !important;">
+            <i class="fa-solid fa-mobile-retro"></i>
+          </div>
+          <div>
+            <span style="font-size: 12px !important; font-weight: 900 !important; color: #ffffff !important; display: block !important;">Mercado Pago Point Smart 2</span>
+            <span style="font-size: 10px !important; color: #94a3b8 !important;">Terminal N950 • Disparo automático vía Orders API</span>
+          </div>
+        </div>
+        <span class="badge-status-terminal" style="font-size: 10px !important; font-weight: 800 !important; color: #34d399 !important; background: rgba(16, 185, 129, 0.15) !important; padding: 3px 8px !important; border-radius: 12px !important; border: 1px solid rgba(16, 185, 129, 0.3) !important;">
+          🟢 Conectada
+        </span>
+      </div>
+
+      <div style="background: rgba(15, 23, 42, 0.9) !important; border-radius: 10px !important; padding: 12px !important; text-align: center !important; display: flex !important; flex-direction: column !important; align-items: center !important; gap: 6px !important;">
+        <span style="font-size: 11px !important; color: #94a3b8 !important;">Monto enviado a la pantalla de la terminal Point:</span>
+        <span id="pasarelaMontoTerminalMP" style="font-size: 24px !important; font-weight: 900 !important; color: #38bdf8 !important;">$0.00</span>
+        <span style="font-size: 10px !important; color: #34d399 !important;"><i class="fa-solid fa-spinner fa-spin"></i> Esperando aproximación / inserción de tarjeta en Point Smart...</span>
+      </div>
+    </div>
+
+    <!-- 2. SANTANDER MANUAL -->
+    <div id="panelMetodoSantander" class="panel-pasarela-metodo" style="display: none !important; background: #020617 !important; border: 1px solid #334155 !important; border-radius: 14px !important; padding: 14px !important; flex-direction: column !important; gap: 10px !important;">
+      <div style="display: flex !important; justify-content: space-between !important; align-items: center !important;">
+        <div style="display: flex !important; align-items: center !important; gap: 8px !important;">
+          <div style="width: 32px !important; height: 32px !important; border-radius: 8px !important; background: rgba(225, 6, 0, 0.15) !important; border: 1px solid #e10600 !important; display: flex !important; align-items: center !important; justify-content: center !important; color: #e10600 !important;">
+            <i class="fa-solid fa-credit-card"></i>
+          </div>
+          <div>
+            <span style="font-size: 12px !important; font-weight: 900 !important; color: #ffffff !important; display: block !important;">Terminal Bancaria Santander</span>
+            <span style="font-size: 10px !important; color: #94a3b8 !important;">Captura manual del voucher / autorización</span>
+          </div>
+        </div>
+      </div>
+      <div style="display: flex !important; gap: 10px !important; align-items: center !important;">
+        <div style="flex: 1 !important;">
+          <label style="font-size: 10px !important; color: #94a3b8 !important; display: block !important; margin-bottom: 3px !important;">No. Autorización / Voucher (opcional):</label>
+          <input type="text" id="inputSantanderAuth" placeholder="Ej. 984521" style="width: 100% !important; padding: 8px 10px !important; background: #0f172a !important; border: 1px solid #334155 !important; color: #ffffff !important; border-radius: 8px !important; font-size: 12px !important;">
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. EFECTIVO -->
+    <div id="panelMetodoCash" class="panel-pasarela-metodo" style="display: none !important; background: #020617 !important; border: 1px solid #334155 !important; border-radius: 14px !important; padding: 14px !important; flex-direction: column !important; gap: 10px !important;">
+      <div style="display: flex !important; justify-content: space-between !important; align-items: center !important;">
+        <span style="font-size: 12px !important; font-weight: 900 !important; color: #ffffff !important;">
+          <i class="fa-solid fa-money-bill-wave" style="color: #10b981;"></i> Cobro en Efectivo
+        </span>
+        <div style="display: flex !important; gap: 4px !important;">
+          <button type="button" onclick="window.setCashExacto()" style="padding: 3px 8px !important; font-size: 10px !important; font-weight: bold !important; background: #1e293b !important; color: #38bdf8 !important; border: 1px solid #334155 !important; border-radius: 6px !important; cursor: pointer !important;">Monto Exacto</button>
+          <button type="button" onclick="window.setCashBillete(200)" style="padding: 3px 6px !important; font-size: 10px !important; font-weight: bold !important; background: #1e293b !important; color: #cbd5e1 !important; border: 1px solid #334155 !important; border-radius: 6px !important; cursor: pointer !important;">$200</button>
+          <button type="button" onclick="window.setCashBillete(500)" style="padding: 3px 6px !important; font-size: 10px !important; font-weight: bold !important; background: #1e293b !important; color: #cbd5e1 !important; border: 1px solid #334155 !important; border-radius: 6px !important; cursor: pointer !important;">$500</button>
+          <button type="button" onclick="window.setCashBillete(1000)" style="padding: 3px 6px !important; font-size: 10px !important; font-weight: bold !important; background: #1e293b !important; color: #cbd5e1 !important; border: 1px solid #334155 !important; border-radius: 6px !important; cursor: pointer !important;">$1000</button>
+        </div>
+      </div>
+      <div style="display: grid !important; grid-template-columns: 1fr 1fr !important; gap: 10px !important; align-items: center !important;">
+        <div>
+          <label style="font-size: 10px !important; color: #94a3b8 !important; display: block !important; margin-bottom: 3px !important;">Efectivo Recibido ($):</label>
+          <input type="number" id="inputCashRecibido" min="0" step="1" placeholder="0.00" oninput="window.updatePasarelaBalance();" style="width: 100% !important; padding: 8px 10px !important; background: #0f172a !important; border: 1px solid #334155 !important; color: #34d399 !important; border-radius: 8px !important; font-size: 16px !important; font-weight: 900 !important;">
+        </div>
+        <div style="background: #0f172a !important; border: 1px solid #1e293b !important; border-radius: 8px !important; padding: 8px 10px !important; text-align: center !important;">
+          <span style="font-size: 10px !important; color: #94a3b8 !important; display: block !important;">Cambio a Entregar:</span>
+          <span id="pasarelaCashCambio" style="font-size: 18px !important; font-weight: 900 !important; color: #fbbf24 !important;">$0.00</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. QR / LINK DIGITAL -->
+    <div id="panelMetodoQR" class="panel-pasarela-metodo" style="display: none !important; background: #020617 !important; border: 1px solid #334155 !important; border-radius: 14px !important; padding: 14px !important; flex-direction: column !important; gap: 10px !important; text-align: center !important;">
+      <span style="font-size: 12px !important; font-weight: 900 !important; color: #38bdf8 !important;">
+        <i class="fa-solid fa-qrcode"></i> Cobro con QR Dinámico en Portavasos / Móvil
+      </span>
+      <div style="background: #ffffff !important; color: #000000 !important; width: 130px !important; height: 130px !important; margin: 0 auto !important; border-radius: 10px !important; display: flex !important; flex-direction: column !important; align-items: center !important; justify-content: center !important; font-family: monospace !important; font-size: 11px !important; font-weight: bold !important; border: 4px solid #ffffff !important; box-shadow: 0 0 15px rgba(56,189,248,0.3) !important;">
+        <i class="fa-solid fa-qrcode" style="font-size: 70px; color: #0f172a;"></i>
+        <span style="font-size: 9px; color: #475569; margin-top: 4px;" id="lblQrDinamicoCodigo">QR: #PV-021</span>
+      </div>
+      <p style="font-size: 11px !important; color: #94a3b8 !important; margin: 0 !important;">El cliente puede escanear este código con su cámara o pagar directo en su teléfono.</p>
+    </div>
+
+    <!-- 5. PAGO MIXTO (Múltiples Filas) -->
+    <div id="panelMetodoMixto" class="panel-pasarela-metodo" style="display: none !important; background: #020617 !important; border: 1px solid #334155 !important; border-radius: 14px !important; padding: 14px !important; flex-direction: column !important; gap: 8px !important;">
+      <div style="display: flex !important; justify-content: space-between !important; align-items: center !important;">
+        <span style="font-size: 12px !important; font-weight: 900 !important; color: #ffffff !important;">
+          <i class="fa-solid fa-layer-group" style="color: #a7f3d0;"></i> Pagos Divididos / Múltiples Métodos
+        </span>
+        <button type="button" onclick="window.addPasarelaPagoRow()" style="padding: 4px 8px !important; font-size: 10px !important; font-weight: bold !important; background: #059669 !important; color: #ffffff !important; border: none !important; border-radius: 6px !important; cursor: pointer !important;">
+          + Agregar Método
+        </button>
+      </div>
+      <div id="pasarelaMixtoRows" style="display: flex !important; flex-direction: column !important; gap: 6px !important;">
+        <!-- Dynamic rows populated here -->
+      </div>
+    </div>
+
+    <!-- Resumen de Balance Final -->
+    <div style="background: #020617 !important; border: 1px solid #1e293b !important; border-radius: 12px !important; padding: 12px 14px !important; display: flex !important; justify-content: space-between !important; align-items: center !important;">
+      <div>
+        <span style="font-size: 10px !important; color: #94a3b8 !important; display: block !important;">Gran Total a Liquidar:</span>
+        <span id="pasarelaGranTotalLiquidar" style="font-size: 18px !important; font-weight: 900 !important; color: #34d399 !important;">$0.00</span>
+      </div>
+      <div style="text-align: right !important;">
+        <span id="pasarelaBalanceStatusBadge" style="font-size: 11px !important; font-weight: 900 !important; padding: 4px 10px !important; border-radius: 20px !important; background: rgba(16,185,129,0.2) !important; color: #34d399 !important; border: 1px solid rgba(16,185,129,0.4) !important;">
+          LISTO PARA COBRAR
+        </span>
+      </div>
+    </div>
+
+    <!-- Botones de Acción -->
+    <div style="display: flex !important; gap: 8px !important;">
+      <button onclick="window.ejecutarLiquidacionPasarela();" id="btnPasarelaConfirmarCobro"
+        style="flex: 1.5 !important; padding: 12px !important; background: linear-gradient(135deg, #059669, #10b981) !important; color: #ffffff !important; border: none !important; border-radius: 10px !important; font-size: 12px !important; font-weight: 900 !important; cursor: pointer !important; display: flex !important; align-items: center !important; justify-content: center !important; gap: 6px !important; box-shadow: 0 4px 12px rgba(16,185,129,0.4) !important;">
+        <i class="fa-solid fa-check-circle"></i> Confirmar Pago y Liberar Sillas
+      </button>
+      <button onclick="window.cerrarModalPasarelaCobro();"
+        style="flex: 0.8 !important; padding: 12px !important; background: #1e293b !important; color: #cbd5e1 !important; border: 1px solid #334155 !important; border-radius: 10px !important; font-size: 12px !important; font-weight: 700 !important; cursor: pointer !important;">
+        Cancelar
+      </button>
+    </div>
+
   </div>
 </div>
 
@@ -1808,39 +2043,387 @@
       var sel = window.palapaState.sillasSeleccionadasCobro || [];
 
       if (sillaNum === null) {
-        // Liquidación Total de toda la Mesa
-        var totalText = document.getElementById('modalTotalMonto') ? document.getElementById('modalTotalMonto').innerText : '$0.00';
-        if (confirm(`¿Confirmar cobro y liquidación TOTAL de Mesa ${mesaId} por un total de ${totalText}?\n\nTodas las sillas de la mesa quedarán liberadas.`)) {
-          for (var s = 1; s <= 10; s++) {
-            delete window.palapaState.cuentas[mesaId + '-' + s];
+        // En panorama general, cobrar todas las sillas con consumo de la mesa
+        var allChairs = [];
+        for (var s = 1; s <= 10; s++) {
+          if (window.palapaState.cuentas[mesaId + '-' + s]) {
+            allChairs.push(s);
           }
-          window.palapaState.sillasSeleccionadasCobro = [];
-          saveStateToStorage();
-          renderStateUI();
-          cerrarModalComanda();
-          showDragToast(`💳 ¡Mesa ${mesaId} liquidada en su totalidad (${totalText})! Sillas liberadas.`, 'ok');
         }
+        if (allChairs.length === 0) {
+          showDragToast('⚠ No hay comensales con consumo en esta mesa.', 'warn');
+          return;
+        }
+        window.abrirModalPasarelaCobro(mesaId, allChairs);
         return;
       }
 
       if (sel.length === 0) {
-        showDragToast('⚠ Selecciona al menos una silla para cobrar.', 'warn');
+        sel = [sillaNum];
+      }
+
+      window.abrirModalPasarelaCobro(mesaId, sel);
+    };
+
+    // ══════════════════════ PASARELA DE COBRO Y LIQUIDACIÓN MULTI-MÉTODO ══════════════════════
+    var pasarelaState = {
+      mesaId: null,
+      sillas: [],
+      consumoNeto: 0,
+      iva: 0,
+      subtotalConIva: 0,
+      tipPct: 10,
+      tipMonto: 0,
+      tipDestino: 'INCLUIDA_TARJETA', // 'INCLUIDA_TARJETA' | 'EFECTIVO_MESERO'
+      metodoSeleccionado: 'MERCADOPAGO', // 'MERCADOPAGO' | 'TERMINAL_SANTANDER' | 'CASH' | 'QR_LINK' | 'MIXTO'
+      granTotal: 0,
+      mixtoRows: []
+    };
+
+    window.abrirModalPasarelaCobro = function(mesaId, sillasArray) {
+      if (!mesaId) mesaId = window.palapaState.mesaSeleccionadaId;
+      if (!sillasArray || sillasArray.length === 0) {
+        sillasArray = (window.palapaState.sillasSeleccionadasCobro && window.palapaState.sillasSeleccionadasCobro.length > 0)
+          ? window.palapaState.sillasSeleccionadasCobro.slice()
+          : (window.palapaState.sillaSeleccionadaNum !== null ? [window.palapaState.sillaSeleccionadaNum] : []);
+      }
+
+      if (sillasArray.length === 0) {
+        for (var s = 1; s <= 10; s++) {
+          if (window.palapaState.cuentas[mesaId + '-' + s]) {
+            sillasArray.push(s);
+          }
+        }
+      }
+
+      if (sillasArray.length === 0) {
+        showDragToast('⚠ No hay sillas con consumo para cobrar en esta mesa.', 'warn');
         return;
       }
 
-      var totalText = document.getElementById('modalTotalMonto') ? document.getElementById('modalTotalMonto').innerText : '$0.00';
-      var sillasStr = sel.map(s => 'Silla ' + s).join(', ');
+      // Calcular consumo de las sillas seleccionadas
+      var consumoNeto = 0;
+      sillasArray.forEach(function(s) {
+        var c = window.palapaState.cuentas[mesaId + '-' + s];
+        if (c && c.items) {
+          c.items.forEach(function(it) {
+            consumoNeto += (it.precio || 0) * (it.cantidad || 1);
+          });
+        }
+      });
 
-      if (confirm(`¿Confirmar cobro y liquidación de ${sillasStr} de Mesa ${mesaId} por un total de ${totalText}?\n\nLas sillas seleccionadas quedarán liberadas y las restantes continuarán activas en la mesa.`)) {
-        sel.forEach(sNum => {
-          delete window.palapaState.cuentas[mesaId + '-' + sNum];
-        });
-        window.palapaState.sillasSeleccionadasCobro = [];
-        saveStateToStorage();
-        renderStateUI();
-        cerrarModalComanda();
-        showDragToast(`💳 ¡Cobro exitoso de Mesa ${mesaId} (${sillasStr})! Sillas liberadas.`, 'ok');
+      var iva = consumoNeto * 0.16;
+      var subtotalConIva = consumoNeto + iva;
+
+      pasarelaState.mesaId = mesaId;
+      pasarelaState.sillas = sillasArray;
+      pasarelaState.consumoNeto = consumoNeto;
+      pasarelaState.iva = iva;
+      pasarelaState.subtotalConIva = subtotalConIva;
+      pasarelaState.tipPct = 10;
+      pasarelaState.tipDestino = 'INCLUIDA_TARJETA';
+      pasarelaState.metodoSeleccionado = 'MERCADOPAGO';
+      pasarelaState.mixtoRows = [
+        { id: 'mx_1', metodo: 'CASH', monto: Math.round(subtotalConIva / 2) },
+        { id: 'mx_2', metodo: 'MERCADOPAGO', monto: Number((subtotalConIva - Math.round(subtotalConIva / 2)).toFixed(2)) }
+      ];
+
+      // Update Subtitle
+      var lblSub = document.getElementById('lblPasarelaSubtitulo');
+      if (lblSub) {
+        var sillasStr = sillasArray.map(function(s) { return 'Silla ' + s; }).join(', ');
+        lblSub.innerText = `Mesa ${mesaId} • ${sillasStr}`;
       }
+
+      // Update Amounts
+      var elConsumo = document.getElementById('pasarelaMontoConsumo');
+      var elIva = document.getElementById('pasarelaMontoIva');
+      var elSubIva = document.getElementById('pasarelaMontoSubtotalIva');
+      if (elConsumo) elConsumo.innerText = `$${consumoNeto.toFixed(2)}`;
+      if (elIva) elIva.innerText = `$${iva.toFixed(2)}`;
+      if (elSubIva) elSubIva.innerText = `$${subtotalConIva.toFixed(2)}`;
+
+      var lblQr = document.getElementById('lblQrDinamicoCodigo');
+      if (lblQr) {
+        lblQr.innerText = `QR: #PV-0${mesaId}${sillasArray[0] || '1'}`;
+      }
+
+      window.setPasarelaTipPct(10);
+      window.selectPasarelaMetodo('MERCADOPAGO');
+
+      // Cerrar otros modales
+      cerrarModalComanda();
+      if (typeof window.cerrarPrecuenta === 'function') window.cerrarPrecuenta();
+
+      var modalP = document.getElementById('modalPasarelaCobroBackdrop');
+      if (modalP) {
+        modalP.classList.add('show');
+        modalP.style.setProperty('display', 'flex', 'important');
+      }
+    };
+
+    window.cerrarModalPasarelaCobro = function() {
+      var modalP = document.getElementById('modalPasarelaCobroBackdrop');
+      if (modalP) {
+        modalP.classList.remove('show');
+        modalP.style.setProperty('display', 'none', 'important');
+      }
+    };
+
+    window.setPasarelaTipPct = function(pct) {
+      pasarelaState.tipPct = pct;
+      var chips = [0, 10, 15, 20, 'libre'];
+      chips.forEach(function(c) {
+        var btn = document.getElementById('btnTipPct' + (c === 'libre' ? 'Libre' : c));
+        if (btn) {
+          if (c === pct) {
+            btn.style.background = '#064e3b';
+            btn.style.color = '#34d399';
+            btn.style.border = '1px solid #10b981';
+          } else {
+            btn.style.background = '#1e293b';
+            btn.style.color = '#94a3b8';
+            btn.style.border = '1px solid #334155';
+          }
+        }
+      });
+
+      var boxLibre = document.getElementById('boxTipLibreInput');
+      if (boxLibre) {
+        boxLibre.style.setProperty('display', pct === 'libre' ? 'flex' : 'none', 'important');
+      }
+
+      window.updatePasarelaBalance();
+    };
+
+    window.selectPasarelaMetodo = function(metodo) {
+      pasarelaState.metodoSeleccionado = metodo;
+
+      var tabs = [
+        { id: 'btnTabMP', metodo: 'MERCADOPAGO' },
+        { id: 'btnTabSantander', metodo: 'TERMINAL_SANTANDER' },
+        { id: 'btnTabCash', metodo: 'CASH' },
+        { id: 'btnTabQR', metodo: 'QR_LINK' },
+        { id: 'btnTabMixto', metodo: 'MIXTO' }
+      ];
+
+      tabs.forEach(function(t) {
+        var el = document.getElementById(t.id);
+        if (el) {
+          if (t.metodo === metodo) {
+            el.style.background = '#064e3b';
+            el.style.color = '#34d399';
+            el.style.border = '2px solid #10b981';
+          } else {
+            el.style.background = '#1e293b';
+            el.style.color = '#94a3b8';
+            el.style.border = '1px solid #334155';
+          }
+        }
+      });
+
+      var panels = {
+        'MERCADOPAGO': 'panelMetodoMP',
+        'TERMINAL_SANTANDER': 'panelMetodoSantander',
+        'CASH': 'panelMetodoCash',
+        'QR_LINK': 'panelMetodoQR',
+        'MIXTO': 'panelMetodoMixto'
+      };
+
+      Object.keys(panels).forEach(function(k) {
+        var p = document.getElementById(panels[k]);
+        if (p) {
+          if (k === metodo) {
+            p.style.setProperty('display', 'flex', 'important');
+          } else {
+            p.style.setProperty('display', 'none', 'important');
+          }
+        }
+      });
+
+      if (metodo === 'CASH') {
+        window.setCashExacto();
+      } else if (metodo === 'MIXTO') {
+        window.renderPasarelaMixtoRows();
+      }
+
+      window.updatePasarelaBalance();
+    };
+
+    window.updatePasarelaBalance = function() {
+      // Calcular propina
+      var tip = 0;
+      if (pasarelaState.tipPct === 'libre') {
+        var inpLibre = document.getElementById('inputTipLibre');
+        tip = inpLibre ? (parseFloat(inpLibre.value) || 0) : 0;
+      } else {
+        tip = pasarelaState.consumoNeto * (pasarelaState.tipPct / 100);
+      }
+      pasarelaState.tipMonto = tip;
+
+      var elTipCalculado = document.getElementById('pasarelaPropinaMontoCalculado');
+      if (elTipCalculado) elTipCalculado.innerText = `$${tip.toFixed(2)}`;
+
+      // Radio destino propina
+      var rTarjeta = document.querySelector('input[name="pasarelaTipDestino"]:checked');
+      pasarelaState.tipDestino = rTarjeta ? rTarjeta.value : 'INCLUIDA_TARJETA';
+
+      var granTotal = pasarelaState.subtotalConIva;
+      if (pasarelaState.tipDestino === 'INCLUIDA_TARJETA') {
+        granTotal += tip;
+      }
+      pasarelaState.granTotal = granTotal;
+
+      var elGranTotal = document.getElementById('pasarelaGranTotalLiquidar');
+      if (elGranTotal) elGranTotal.innerText = `$${granTotal.toFixed(2)}`;
+
+      // Terminal MP
+      var elTerminalMP = document.getElementById('pasarelaMontoTerminalMP');
+      if (elTerminalMP) elTerminalMP.innerText = `$${granTotal.toFixed(2)}`;
+
+      // Efectivo cambio
+      if (pasarelaState.metodoSeleccionado === 'CASH') {
+        var inputCash = document.getElementById('inputCashRecibido');
+        var recibido = inputCash ? (parseFloat(inputCash.value) || 0) : 0;
+        var cambio = Math.max(0, recibido - granTotal);
+        var elCambio = document.getElementById('pasarelaCashCambio');
+        if (elCambio) elCambio.innerText = `$${cambio.toFixed(2)}`;
+      }
+
+      // Balance status badge
+      var elBadge = document.getElementById('pasarelaBalanceStatusBadge');
+      var btnConfirmar = document.getElementById('btnPasarelaConfirmarCobro');
+
+      if (pasarelaState.metodoSeleccionado === 'MIXTO') {
+        var sumaMixto = pasarelaState.mixtoRows.reduce(function(sum, r) { return sum + (r.monto || 0); }, 0);
+        var diff = Math.abs(sumaMixto - granTotal);
+        if (diff < 0.05) {
+          if (elBadge) {
+            elBadge.innerText = '✓ BALANCEADO (100%)';
+            elBadge.style.background = 'rgba(16,185,129,0.2)';
+            elBadge.style.color = '#34d399';
+            elBadge.style.border = '1px solid rgba(16,185,129,0.4)';
+          }
+          if (btnConfirmar) { btnConfirmar.disabled = false; btnConfirmar.style.opacity = '1'; }
+        } else if (sumaMixto < granTotal) {
+          if (elBadge) {
+            elBadge.innerText = `FALTAN $${(granTotal - sumaMixto).toFixed(2)}`;
+            elBadge.style.background = 'rgba(239,68,68,0.2)';
+            elBadge.style.color = '#f87171';
+            elBadge.style.border = '1px solid rgba(239,68,68,0.4)';
+          }
+          if (btnConfirmar) { btnConfirmar.disabled = true; btnConfirmar.style.opacity = '0.5'; }
+        } else {
+          if (elBadge) {
+            elBadge.innerText = `EXCEDE POR $${(sumaMixto - granTotal).toFixed(2)}`;
+            elBadge.style.background = 'rgba(245,158,11,0.2)';
+            elBadge.style.color = '#fbbf24';
+            elBadge.style.border = '1px solid rgba(245,158,11,0.4)';
+          }
+          if (btnConfirmar) { btnConfirmar.disabled = true; btnConfirmar.style.opacity = '0.5'; }
+        }
+      } else {
+        if (elBadge) {
+          elBadge.innerText = 'LISTO PARA COBRAR';
+          elBadge.style.background = 'rgba(16,185,129,0.2)';
+          elBadge.style.color = '#34d399';
+          elBadge.style.border = '1px solid rgba(16,185,129,0.4)';
+        }
+        if (btnConfirmar) { btnConfirmar.disabled = false; btnConfirmar.style.opacity = '1'; }
+      }
+    };
+
+    window.setCashExacto = function() {
+      var inp = document.getElementById('inputCashRecibido');
+      if (inp) {
+        inp.value = Math.ceil(pasarelaState.granTotal);
+        window.updatePasarelaBalance();
+      }
+    };
+
+    window.setCashBillete = function(billete) {
+      var inp = document.getElementById('inputCashRecibido');
+      if (inp) {
+        inp.value = billete;
+        window.updatePasarelaBalance();
+      }
+    };
+
+    var pasarelaMixtoRowIdCounter = 10;
+    window.addPasarelaPagoRow = function() {
+      var rowId = 'mx_' + (++pasarelaMixtoRowIdCounter);
+      pasarelaState.mixtoRows.push({ id: rowId, metodo: 'MERCADOPAGO', monto: 0 });
+      window.renderPasarelaMixtoRows();
+      window.updatePasarelaBalance();
+    };
+
+    window.removePasarelaPagoRow = function(rowId) {
+      pasarelaState.mixtoRows = pasarelaState.mixtoRows.filter(function(r) { return r.id !== rowId; });
+      window.renderPasarelaMixtoRows();
+      window.updatePasarelaBalance();
+    };
+
+    window.renderPasarelaMixtoRows = function() {
+      var wrap = document.getElementById('pasarelaMixtoRows');
+      if (!wrap) return;
+      wrap.innerHTML = '';
+
+      pasarelaState.mixtoRows.forEach(function(r, idx) {
+        var div = document.createElement('div');
+        div.style.cssText = 'display: flex !important; gap: 6px !important; align-items: center !important; background: #0f172a !important; padding: 6px 8px !important; border-radius: 8px !important; border: 1px solid #1e293b !important; font-size: 11px !important;';
+
+        div.innerHTML = `
+          <span style="font-weight: bold; color: #94a3b8; width: 16px;">${idx + 1}.</span>
+          <select onchange="window.onPasarelaMixtoRowChange('${r.id}', 'metodo', this.value)" style="flex: 1.2; padding: 6px; background: #020617; color: #ffffff; border: 1px solid #334155; border-radius: 6px; font-size: 11px; font-weight: bold;">
+            <option value="MERCADOPAGO" ${r.metodo === 'MERCADOPAGO' ? 'selected' : ''}>Terminal MP</option>
+            <option value="TERMINAL_SANTANDER" ${r.metodo === 'TERMINAL_SANTANDER' ? 'selected' : ''}>Santander Manual</option>
+            <option value="CASH" ${r.metodo === 'CASH' ? 'selected' : ''}>Efectivo</option>
+            <option value="QR_LINK" ${r.metodo === 'QR_LINK' ? 'selected' : ''}>QR / Link</option>
+          </select>
+          <input type="number" step="0.5" min="0" value="${r.monto || 0}" oninput="window.onPasarelaMixtoRowChange('${r.id}', 'monto', parseFloat(this.value) || 0)" style="flex: 1; padding: 6px; background: #020617; color: #34d399; border: 1px solid #334155; border-radius: 6px; font-size: 12px; font-weight: 900; text-align: right;">
+          <button type="button" onclick="window.removePasarelaPagoRow('${r.id}')" style="background: rgba(239, 68, 68, 0.2); border: 1px solid rgba(239, 68, 68, 0.4); color: #f87171; border-radius: 6px; padding: 4px 8px; font-weight: bold; cursor: pointer;">✕</button>
+        `;
+        wrap.appendChild(div);
+      });
+    };
+
+    window.onPasarelaMixtoRowChange = function(rowId, field, val) {
+      var r = pasarelaState.mixtoRows.find(function(item) { return item.id === rowId; });
+      if (r) {
+        r[field] = val;
+        window.updatePasarelaBalance();
+      }
+    };
+
+    window.ejecutarLiquidacionPasarela = function() {
+      var mesaId = pasarelaState.mesaId;
+      var sillas = pasarelaState.sillas;
+      var granTotal = pasarelaState.granTotal;
+      var metodo = pasarelaState.metodoSeleccionado;
+
+      if (!mesaId || !sillas || sillas.length === 0) return;
+
+      var metodoLabels = {
+        'MERCADOPAGO': 'Terminal MP (Point Smart)',
+        'TERMINAL_SANTANDER': 'Santander Manual',
+        'CASH': 'Efectivo',
+        'QR_LINK': 'QR / Link Digital',
+        'MIXTO': 'Pago Mixto'
+      };
+      var metodoNombre = metodoLabels[metodo] || metodo;
+      var sillasStr = sillas.map(function(s) { return 'Silla ' + s; }).join(', ');
+
+      // Liberar sillas en memoria y guardar historial
+      sillas.forEach(function(sNum) {
+        delete window.palapaState.cuentas[mesaId + '-' + sNum];
+      });
+
+      window.palapaState.sillasSeleccionadasCobro = [];
+      saveStateToStorage();
+      renderStateUI();
+      window.cerrarModalPasarelaCobro();
+
+      showDragToast(`💳 ¡Liquidación exitosa de Mesa ${mesaId} (${sillasStr}) por $${granTotal.toFixed(2)} vía ${metodoNombre}! Sillas liberadas.`, 'ok');
     };
 
     window.enviarCocinaActual = function() {
@@ -2076,20 +2659,7 @@
         return;
       }
 
-      var totalText = document.getElementById('precuentaTotal') ? document.getElementById('precuentaTotal').innerText : '$0.00';
-      var sillasStr = sillasList.map(function(s) { return 'Silla ' + s; }).join(', ');
-
-      if (confirm(`¿Confirmar cobro de ${sillasStr} de Mesa ${mesaId} por un total de ${totalText}?\n\nLas sillas seleccionadas serán liquidadas y quedarán libres.`)) {
-        sillasList.forEach(function(sNum) {
-          var k = mesaId + '-' + sNum;
-          delete window.palapaState.cuentas[k];
-        });
-        saveStateToStorage();
-        renderStateUI();
-        cerrarPrecuenta();
-        cerrarModalComanda();
-        showDragToast(`💳 ¡Pago completado para Mesa ${mesaId} (${sillasStr})! Sillas liberadas.`, 'ok');
-      }
+      window.abrirModalPasarelaCobro(mesaId, sillasList);
     };
 
     function cerrarPrecuenta() {

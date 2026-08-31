@@ -267,12 +267,15 @@
         </div>
 
         <!-- BOTONES DE PROCESAR PAGO -->
-        <div class="grid grid-cols-2 gap-2 pt-2">
-          <button onclick="window.ejecutarPagoFinal('santander')" class="py-3 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-sky-400 text-xs font-bold border border-slate-700 flex items-center justify-center gap-1.5 cursor-pointer">
-            <i class="fa-solid fa-credit-card"></i> Pagar Santander
+        <div class="grid grid-cols-3 gap-1.5 pt-2">
+          <button onclick="window.ejecutarPagoFinal('mercadopago')" class="py-2.5 px-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-[11px] font-bold shadow-lg shadow-emerald-600/30 flex flex-col items-center justify-center gap-1 cursor-pointer">
+            <i class="fa-solid fa-mobile-screen"></i> Mercado Pago
           </button>
-          <button onclick="window.ejecutarPagoFinal('tarjeta')" class="py-3 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold shadow-lg shadow-emerald-600/30 flex items-center justify-center gap-1.5 cursor-pointer">
-            <i class="fa-solid fa-check-circle"></i> Confirmar Pago
+          <button onclick="window.ejecutarPagoFinal('santander')" class="py-2.5 px-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-sky-400 text-[11px] font-bold border border-slate-700 flex flex-col items-center justify-center gap-1 cursor-pointer">
+            <i class="fa-solid fa-credit-card"></i> Santander
+          </button>
+          <button onclick="window.ejecutarPagoFinal('efectivo')" class="py-2.5 px-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-amber-300 text-[11px] font-bold border border-slate-700 flex flex-col items-center justify-center gap-1 cursor-pointer">
+            <i class="fa-solid fa-money-bill-wave"></i> Efectivo
           </button>
         </div>
       </div>
