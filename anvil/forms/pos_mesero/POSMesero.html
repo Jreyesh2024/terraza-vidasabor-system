@@ -1420,77 +1420,139 @@
 
       // 3. Renderizar Header y Selector de Sillas de la Mesa
       if (sillaNum !== null) {
+        // MODO COBRO / TICKET POR COMENSAL ESPECÍFICO
         const key = `${mesaId}-${sillaNum}`;
         const cuenta = window.palapaState.cuentas[key] || { items: [] };
         const qrId = cuenta.qrId || ('PV-0' + mesaId + sillaNum);
         if (title) title.innerHTML = `<i class="fa-solid fa-receipt" style="color: #34d399;"></i> Ticket Silla ${sillaNum} <span style="font-size: 11px; background: #1e293b; color: #38bdf8; padding: 2px 8px; border-radius: 6px; border: 1px solid #334155; margin-left: 6px;">🏷️ QR ${qrId}</span>`;
         if (subtitle) subtitle.innerText = `Mesa ${mesaId} • ${cuenta.creadoPor === 'mesero_presencial' ? 'Comensal Ubicado Presencialmente' : 'Registro QR'}`;
         if (btnVerTodaMesa) btnVerTodaMesa.style.display = 'inline-flex';
+
+        // 4. Renderizar Chips de Sillas Faltantes para Anexar (SOLO en modo silla específica)
+        if (boxAdicionarSillas && chipsContainer) {
+          var sillasDisponiblesParaAnexar = sillasOcupadas.filter(o => o.sillaNum !== sillaNum);
+
+          if (sillasDisponiblesParaAnexar.length > 0) {
+            boxAdicionarSillas.style.display = 'flex';
+            chipsContainer.innerHTML = '';
+
+            var lblSelector = boxAdicionarSillas.querySelector('span');
+            if (lblSelector) {
+              lblSelector.innerHTML = `<i class="fa-solid fa-user-plus" style="color: #38bdf8;"></i> ¿Esta cuenta (Silla ${sillaNum}) paga por otras sillas de la mesa?`;
+            }
+
+            var btnSoloEsta = document.getElementById('btnComandaSoloEsta');
+            if (btnSoloEsta) {
+              btnSoloEsta.innerText = `Solo Silla ${sillaNum}`;
+            }
+
+            sillasDisponiblesParaAnexar.forEach(obj => {
+              var s = obj.sillaNum;
+              var isSel = (seleccionadas.indexOf(s) !== -1);
+
+              var chip = document.createElement('button');
+              chip.type = 'button';
+              chip.onclick = function() { window.toggleSillaAdicional(s); };
+              chip.style.cssText = `padding: 6px 12px !important; font-size: 11px !important; font-weight: 800 !important; border-radius: 8px !important; cursor: pointer !important; transition: all 0.2s ease !important; display: flex !important; align-items: center !important; gap: 6px !important; ${
+                isSel
+                  ? 'background: #064e3b !important; color: #34d399 !important; border: 2px solid #10b981 !important; box-shadow: 0 0 10px rgba(16, 185, 129, 0.3) !important;'
+                  : 'background: #1e293b !important; color: #cbd5e1 !important; border: 1px solid #334155 !important;'
+              }`;
+              chip.innerHTML = isSel
+                ? `<i class="fa-solid fa-check"></i> Silla ${s} • $${obj.subtotal.toFixed(2)} <span style="font-size: 10px; color: #f87171; margin-left: 4px; font-weight: 900;" title="Quitar">✕</span>`
+                : `<i class="fa-solid fa-plus" style="color: #38bdf8;"></i> Silla ${s} • $${obj.subtotal.toFixed(2)}`;
+              chipsContainer.appendChild(chip);
+            });
+          } else {
+            boxAdicionarSillas.style.display = 'none';
+          }
+        }
       } else {
-        if (title) title.innerHTML = `<i class="fa-solid fa-users-viewfinder" style="color: #38bdf8;"></i> Comanda Mesa ${mesaId} (${sillasOcupadas.length} Sillas Activas)`;
-        if (subtitle) subtitle.innerText = `Mesa ${mesaId} • Selección flexible de sillas a cobrar juntas`;
+        // MODO PANORAMA GENERAL DE LA MESA (SUPERVISIÓN PURAMENTE INFORMATIVA)
+        if (title) title.innerHTML = `<i class="fa-solid fa-table-cells" style="color: #38bdf8;"></i> Panorama General • Mesa ${mesaId} (${sillasOcupadas.length} Comensales)`;
+        if (subtitle) subtitle.innerText = `Vista informativa de supervisión y consumos por silla (haz clic en una silla para cobrarla)`;
         if (btnVerTodaMesa) btnVerTodaMesa.style.display = 'none';
+
+        // Ocultar caja de anexión en vista general para evitar confusiones
+        if (boxAdicionarSillas) boxAdicionarSillas.style.display = 'none';
       }
 
       if (modalCard) {
         modalCard.style.maxWidth = (seleccionadas.length > 1 || sillaNum === null) ? '960px' : '640px';
       }
 
-      // 4. Renderizar Chips de Sillas Faltantes en boxAdicionarSillasAComanda
-      if (boxAdicionarSillas && chipsContainer) {
-        // Si estamos viendo una silla específica (ej. Silla 3), solo mostramos las OTRAS sillas de la mesa para anexar
-        var sillasDisponiblesParaAnexar = (sillaNum !== null)
-          ? sillasOcupadas.filter(o => o.sillaNum !== sillaNum)
-          : sillasOcupadas;
-
-        if (sillasDisponiblesParaAnexar.length > 0) {
-          boxAdicionarSillas.style.display = 'flex';
-          chipsContainer.innerHTML = '';
-
-          var lblSelector = boxAdicionarSillas.querySelector('span');
-          if (lblSelector) {
-            lblSelector.innerHTML = (sillaNum !== null)
-              ? `<i class="fa-solid fa-user-plus" style="color: #38bdf8;"></i> ¿Esta cuenta (Silla ${sillaNum}) paga por otras sillas de la mesa?`
-              : `<i class="fa-solid fa-layer-group" style="color: #10b981;"></i> Sillas de la mesa a incluir en este cobro:`;
-          }
-
-          var btnSoloEsta = document.getElementById('btnComandaSoloEsta');
-          if (btnSoloEsta && sillaNum !== null) {
-            btnSoloEsta.innerText = `Solo Silla ${sillaNum}`;
-          }
-
-          sillasDisponiblesParaAnexar.forEach(obj => {
-            var s = obj.sillaNum;
-            var isSel = (seleccionadas.indexOf(s) !== -1);
-
-            var chip = document.createElement('button');
-            chip.type = 'button';
-            chip.onclick = function() { window.toggleSillaAdicional(s); };
-            chip.style.cssText = `padding: 6px 12px !important; font-size: 11px !important; font-weight: 800 !important; border-radius: 8px !important; cursor: pointer !important; transition: all 0.2s ease !important; display: flex !important; align-items: center !important; gap: 6px !important; ${
-              isSel
-                ? 'background: #064e3b !important; color: #34d399 !important; border: 2px solid #10b981 !important; box-shadow: 0 0 10px rgba(16, 185, 129, 0.3) !important;'
-                : 'background: #1e293b !important; color: #cbd5e1 !important; border: 1px solid #334155 !important;'
-            }`;
-            chip.innerHTML = isSel
-              ? `<i class="fa-solid fa-check"></i> Silla ${s} • $${obj.subtotal.toFixed(2)} <span style="font-size: 10px; color: #f87171; margin-left: 4px; font-weight: 900;" title="Quitar">✕</span>`
-              : `<i class="fa-solid fa-plus" style="color: #38bdf8;"></i> Silla ${s} • $${obj.subtotal.toFixed(2)}`;
-            chipsContainer.appendChild(chip);
-          });
+      // 5. Renderizar Consumos
+      if (header) {
+        if (sillaNum === null) {
+          header.innerHTML = `<i class="fa-solid fa-list-check" style="color: #38bdf8;"></i> Desglose Individual de Consumos por Silla:`;
         } else {
-          boxAdicionarSillas.style.display = 'none';
+          header.innerText = (seleccionadas.length > 1)
+            ? `Consumos Consolidados (${seleccionadas.length} Sillas: ${seleccionadas.map(s => 'Silla ' + s).join(' + ')}):`
+            : `Consumos en Silla ${sillaNum}:`;
         }
       }
 
-      // 5. Renderizar Consumos de las Sillas Seleccionadas
-      if (header) {
-        header.innerText = (seleccionadas.length > 1)
-          ? `Consumos Consolidados (${seleccionadas.length} Sillas: ${seleccionadas.map(s => 'Silla ' + s).join(' + ')}):`
-          : `Consumos en Silla ${seleccionadas[0] || (sillaNum || 1)}:`;
-      }
+      if (sillaNum === null) {
+        // PANORAMA GENERAL: Tarjetas informativas de todas las sillas de la mesa
+        container.style.cssText = 'display: grid !important; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)) !important; gap: 12px !important; max-height: 340px !important; overflow-y: auto !important;';
 
-      if (seleccionadas.length === 0) {
-        container.innerHTML = `<div style="text-align: center; padding: 25px; color: #64748b; font-size: 12px;">Ninguna silla seleccionada. Haz clic en las sillas arriba para incluirlas en el cobro.</div>`;
-      } else if (seleccionadas.length === 1 && sillaNum !== null && seleccionadas[0] === sillaNum) {
+        if (sillasOcupadas.length === 0) {
+          container.innerHTML = `<div style="text-align: center; grid-column: 1/-1; padding: 25px; color: #64748b; font-size: 12px;">No hay comensales sentados en esta mesa actualmente.</div>`;
+        } else {
+          sillasOcupadas.forEach(obj => {
+            var s = obj.sillaNum;
+            var c = obj.cuenta;
+            var qrId = c.qrId || ('PV-0' + mesaId + s);
+            var sub = obj.subtotal;
+
+            var card = document.createElement('div');
+            card.style.cssText = 'background: #0f172a !important; border: 1px solid #334155 !important; border-radius: 12px !important; padding: 12px !important; display: flex !important; flex-direction: column !important; justify-content: space-between !important; gap: 8px !important;';
+
+            var cardHeader = document.createElement('div');
+            cardHeader.style.cssText = 'display: flex !important; justify-content: space-between !important; align-items: center !important; padding-bottom: 6px !important; border-bottom: 1px solid #1e293b !important; font-size: 11px !important;';
+            cardHeader.innerHTML = `
+              <div>
+                <span style="font-weight: 900; color: #38bdf8; font-size: 12px; display: block;">
+                  <i class="fa-solid fa-user"></i> Silla ${s} (${c.comensalNombre || 'Comensal'})
+                </span>
+                <span style="font-size: 10px; color: #64748b;">Portavasos #${qrId}</span>
+              </div>
+              <span style="font-weight: 900; color: #fbbf24; font-size: 13px;">$${sub.toFixed(2)}</span>
+            `;
+            card.appendChild(cardHeader);
+
+            var itemsWrap = document.createElement('div');
+            itemsWrap.style.cssText = 'display: flex !important; flex-direction: column !important; gap: 4px !important; flex: 1 !important; max-height: 120px !important; overflow-y: auto !important;';
+
+            if (!c.items || c.items.length === 0) {
+              itemsWrap.innerHTML = `<div style="text-align: center; color: #64748b; font-size: 10px; padding: 10px 0;">Sin consumos registrados</div>`;
+            } else {
+              c.items.forEach((it) => {
+                var itSub = it.precio * it.cantidad;
+                var row = document.createElement('div');
+                row.style.cssText = 'display: flex !important; justify-content: space-between !important; align-items: center !important; background: #020617 !important; padding: 4px 6px !important; border-radius: 6px !important; font-size: 10px !important;';
+                row.innerHTML = `
+                  <div style="flex: 1; padding-right: 4px;">
+                    <span style="font-weight: 700; color: #ffffff;">${it.cantidad}x ${it.nombre}</span>
+                  </div>
+                  <span style="font-weight: 900; color: #34d399;">$${itSub.toFixed(2)}</span>
+                `;
+                itemsWrap.appendChild(row);
+              });
+            }
+            card.appendChild(itemsWrap);
+
+            var btnCard = document.createElement('button');
+            btnCard.type = 'button';
+            btnCard.onclick = function() { window.seleccionarSillaDesdeMesa(s); };
+            btnCard.style.cssText = 'width: 100% !important; padding: 8px !important; background: rgba(56, 189, 248, 0.15) !important; color: #38bdf8 !important; border: 1px solid rgba(56, 189, 248, 0.3) !important; border-radius: 8px !important; font-size: 11px !important; font-weight: 800 !important; cursor: pointer !important; display: flex !important; align-items: center !important; justify-content: center !important; gap: 6px !important; transition: all 0.2s ease !important;';
+            btnCard.innerHTML = `<i class="fa-solid fa-receipt"></i> Atender / Cobrar Silla ${s}`;
+            card.appendChild(btnCard);
+
+            container.appendChild(card);
+          });
+        }
+      } else if (seleccionadas.length === 1 && seleccionadas[0] === sillaNum) {
         // Vista detallada individual de la silla titular
         container.style.cssText = 'display: flex !important; flex-direction: column !important; gap: 8px !important; max-height: 320px !important; overflow-y: auto !important;';
         const key = `${mesaId}-${sillaNum}`;
@@ -1530,7 +1592,7 @@
           });
         }
       } else {
-        // Vista multitarjeta de las sillas seleccionadas (Titular + Anexadas)
+        // Vista multitarjeta cuando se anexan sillas a la silla titular
         container.style.cssText = 'display: grid !important; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)) !important; gap: 12px !important; max-height: 340px !important; overflow-y: auto !important;';
 
         seleccionadas.forEach(s => {
@@ -1565,7 +1627,7 @@
           if (!c.items || c.items.length === 0) {
             itemsWrap.innerHTML = `<div style="text-align: center; color: #64748b; font-size: 10px; padding: 10px 0;">Sin consumos</div>`;
           } else {
-            c.items.forEach((it, idx) => {
+            c.items.forEach((it) => {
               var itSub = it.precio * it.cantidad;
               var row = document.createElement('div');
               row.style.cssText = 'display: flex !important; justify-content: space-between !important; align-items: center !important; background: #020617 !important; padding: 4px 6px !important; border-radius: 6px !important; font-size: 10px !important;';
@@ -1588,24 +1650,35 @@
       var totalPendiente = 0;
       var sillasPendientes = [];
 
-      sillasOcupadas.forEach(obj => {
-        if (seleccionadas.indexOf(obj.sillaNum) !== -1) {
+      if (sillaNum === null) {
+        // En panorama general, el total es el acumulado de toda la mesa
+        sillasOcupadas.forEach(obj => {
           totalNeto += obj.subtotal;
-        } else {
-          totalPendiente += obj.subtotal;
-          sillasPendientes.push(`Silla ${obj.sillaNum}`);
-        }
-      });
+        });
+      } else {
+        sillasOcupadas.forEach(obj => {
+          if (seleccionadas.indexOf(obj.sillaNum) !== -1) {
+            totalNeto += obj.subtotal;
+          } else {
+            totalPendiente += obj.subtotal;
+            sillasPendientes.push(`Silla ${obj.sillaNum}`);
+          }
+        });
+      }
 
       var iva = totalNeto * 0.16;
       var propina = totalNeto * 0.10;
       var granTotal = totalNeto + iva;
 
       if (lblSubtotal) {
-        lblSubtotal.innerText = `Subtotal (${seleccionadas.length} Silla${seleccionadas.length !== 1 ? 's' : ''}):`;
+        lblSubtotal.innerText = (sillaNum === null)
+          ? `Subtotal Acumulado (Toda la Mesa):`
+          : `Subtotal (${seleccionadas.length} Silla${seleccionadas.length !== 1 ? 's' : ''}):`;
       }
       if (totalLabelEl) {
-        if (seleccionadas.length === sillasOcupadas.length && sillasOcupadas.length > 0) {
+        if (sillaNum === null) {
+          totalLabelEl.innerText = `Total Acumulado de la Mesa:`;
+        } else if (seleccionadas.length === sillasOcupadas.length && sillasOcupadas.length > 0) {
           totalLabelEl.innerText = `Total a Pagar (Toda la Mesa):`;
         } else {
           totalLabelEl.innerText = `Total a Pagar (Silla${seleccionadas.length > 1 ? 's ' : ' '}${seleccionadas.join(', ')}):`;
@@ -1618,9 +1691,9 @@
       if (totalMontoEl) totalMontoEl.innerText = `$${granTotal.toFixed(2)}`;
       if (txtBtnCobrar) txtBtnCobrar.innerText = `$${granTotal.toFixed(2)}`;
 
-      // 7. Alerta de sillas pendientes no incluidas en este cobro
+      // 7. Alerta de sillas pendientes no incluidas en este cobro (solo en modo cobro específico)
       if (alertPendientes && txtPendientes) {
-        if (sillasPendientes.length > 0 && totalNeto > 0) {
+        if (sillaNum !== null && sillasPendientes.length > 0 && totalNeto > 0) {
           alertPendientes.style.display = 'block';
           txtPendientes.innerHTML = `<b>Quedará pendiente en la mesa:</b> ${sillasPendientes.join(', ')} por <b>$${(totalPendiente * 1.16).toFixed(2)}</b> (no se cobrará en este ticket).`;
         } else {
@@ -1629,7 +1702,16 @@
       }
 
       // 8. Botones de acción
-      if (btnCobrarDirecto) btnCobrarDirecto.style.display = (totalNeto > 0) ? 'flex' : 'none';
+      if (btnCobrarDirecto) {
+        btnCobrarDirecto.style.display = (totalNeto > 0) ? 'flex' : 'none';
+        var btnCobrarSpan = btnCobrarDirecto.querySelector('span:first-child') || btnCobrarDirecto;
+        if (sillaNum === null) {
+          btnCobrarDirecto.innerHTML = `<i class="fa-solid fa-credit-card"></i> Cobrar Toda la Mesa (<span id="txtBtnCobrarMonto">$${granTotal.toFixed(2)}</span>)`;
+        } else {
+          var labelCobro = (seleccionadas.length > 1) ? `Sillas ${seleccionadas.join(', ')}` : `Silla ${sillaNum}`;
+          btnCobrarDirecto.innerHTML = `<i class="fa-solid fa-credit-card"></i> Cobrar y Liquidar ${labelCobro} (<span id="txtBtnCobrarMonto">$${granTotal.toFixed(2)}</span>)`;
+        }
+      }
       if (btnMover) btnMover.style.display = (seleccionadas.length === 1 && sillaNum !== null) ? 'flex' : 'none';
       if (btnLiberar) btnLiberar.style.display = (seleccionadas.length === 1 && sillaNum !== null) ? 'flex' : 'none';
 
@@ -1683,7 +1765,25 @@
 
     window.cobrarSeleccionadasDesdeComanda = function() {
       var mesaId = window.palapaState.mesaSeleccionadaId;
+      var sillaNum = window.palapaState.sillaSeleccionadaNum;
       var sel = window.palapaState.sillasSeleccionadasCobro || [];
+
+      if (sillaNum === null) {
+        // Liquidación Total de toda la Mesa
+        var totalText = document.getElementById('modalTotalMonto') ? document.getElementById('modalTotalMonto').innerText : '$0.00';
+        if (confirm(`¿Confirmar cobro y liquidación TOTAL de Mesa ${mesaId} por un total de ${totalText}?\n\nTodas las sillas de la mesa quedarán liberadas.`)) {
+          for (var s = 1; s <= 10; s++) {
+            delete window.palapaState.cuentas[mesaId + '-' + s];
+          }
+          window.palapaState.sillasSeleccionadasCobro = [];
+          saveStateToStorage();
+          renderStateUI();
+          cerrarModalComanda();
+          showDragToast(`💳 ¡Mesa ${mesaId} liquidada en su totalidad (${totalText})! Sillas liberadas.`, 'ok');
+        }
+        return;
+      }
+
       if (sel.length === 0) {
         showDragToast('⚠ Selecciona al menos una silla para cobrar.', 'warn');
         return;
