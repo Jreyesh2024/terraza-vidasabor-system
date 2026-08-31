@@ -1,4 +1,5 @@
 <anvil-form container="HtmlTemplate" prop:html="">
+<anvil-form container="HtmlTemplate" prop:html="">
 
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -400,7 +401,7 @@
       var miSilla = window.simSillaNum;
 
       var otrasSillas = [];
-      for (var s = 1; s <= 4; s++) {
+      for (var s = 1; s <= 10; s++) {
         if (s !== miSilla) {
           var k = mesaId + '-' + s;
           var c = cuentas[k];
@@ -452,7 +453,7 @@
       var mesaId = window.simMesaId;
       var miSilla = window.simSillaNum;
       window.sillasAcompanantesSeleccionadas = [];
-      for (var s = 1; s <= 4; s++) {
+      for (var s = 1; s <= 10; s++) {
         if (s !== miSilla && cuentas[mesaId + '-' + s]) {
           window.sillasAcompanantesSeleccionadas.push(s);
         }
@@ -601,7 +602,7 @@
       } else if (window.modoPagoCliente === 'incluir_ninos') {
         sillasAIncluir = [miSilla].concat(window.sillasAcompanantesSeleccionadas);
       } else if (window.modoPagoCliente === 'toda_mesa') {
-        for (var s = 1; s <= 4; s++) {
+        for (var s = 1; s <= 10; s++) {
           if (cuentas[mesaId + '-' + s]) {
             sillasAIncluir.push(s);
           }
@@ -669,7 +670,7 @@
       } else if (window.modoPagoCliente === 'incluir_ninos') {
         sillasAIncluir = [miSilla].concat(window.sillasAcompanantesSeleccionadas);
       } else if (window.modoPagoCliente === 'toda_mesa') {
-        for (var s = 1; s <= 4; s++) {
+        for (var s = 1; s <= 10; s++) {
           if (cuentas[mesaId + '-' + s]) {
             sillasAIncluir.push(s);
           }
@@ -789,4 +790,5 @@
     setTimeout(initImmediate, 100);
   </script>
 
+</anvil-form>
 </anvil-form>
