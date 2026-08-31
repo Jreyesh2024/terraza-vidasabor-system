@@ -383,7 +383,7 @@
       var miSilla = window.simSillaNum;
 
       var otrasSillas = [];
-      for (var s = 1; s &amp;amp;lt;= 4; s++) {
+      for (var s = 1; s &amp;amp;lt;= 10; s++) {
         if (s !== miSilla) {
           var k = mesaId + '-' + s;
           var c = cuentas[k];
@@ -435,7 +435,7 @@
       var mesaId = window.simMesaId;
       var miSilla = window.simSillaNum;
       window.sillasAcompanantesSeleccionadas = [];
-      for (var s = 1; s &amp;amp;lt;= 4; s++) {
+      for (var s = 1; s &amp;amp;lt;= 10; s++) {
         if (s !== miSilla &amp;amp;amp;&amp;amp;amp; cuentas[mesaId + '-' + s]) {
           window.sillasAcompanantesSeleccionadas.push(s);
         }
@@ -584,7 +584,7 @@
       } else if (window.modoPagoCliente === 'incluir_ninos') {
         sillasAIncluir = [miSilla].concat(window.sillasAcompanantesSeleccionadas);
       } else if (window.modoPagoCliente === 'toda_mesa') {
-        for (var s = 1; s &amp;amp;lt;= 4; s++) {
+        for (var s = 1; s &amp;amp;lt;= 10; s++) {
           if (cuentas[mesaId + '-' + s]) {
             sillasAIncluir.push(s);
           }
@@ -652,7 +652,7 @@
       } else if (window.modoPagoCliente === 'incluir_ninos') {
         sillasAIncluir = [miSilla].concat(window.sillasAcompanantesSeleccionadas);
       } else if (window.modoPagoCliente === 'toda_mesa') {
-        for (var s = 1; s &amp;amp;lt;= 4; s++) {
+        for (var s = 1; s &amp;amp;lt;= 10; s++) {
           if (cuentas[mesaId + '-' + s]) {
             sillasAIncluir.push(s);
           }
