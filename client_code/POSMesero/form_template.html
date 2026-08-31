@@ -173,6 +173,22 @@
     display: flex !important;
   }
 
+  /* ── Modal Precuenta Térmica Formal ── */
+  #modalPrecuentaBackdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 9995;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(5px);
+  }
+
+  #modalPrecuentaBackdrop.show {
+    display: flex !important;
+  }
+
   #combineConfirmBox {
     background: #0f172a;
     border: 1px solid #334155;
@@ -508,8 +524,8 @@
 
 <!-- MODAL POPUP PARA COMANDA / TICKET POR SILLA -->
 <div id=&quot;modalComandaBackdrop&quot; onclick=&quot;if (event.target === this) window.cerrarModalComanda();&quot;>
-  <div
-    style=&quot;background: #0f172a !important; border: 1px solid #1e293b !important; border-radius: 20px !important; padding: 24px !important; width: 100% !important; max-width: 480px !important; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8) !important; display: flex !important; flex-direction: column !important; gap: 16px !important;&quot;>
+  <div id=&quot;modalComandaCard&quot;
+    style=&quot;background: #0f172a !important; border: 1px solid #1e293b !important; border-radius: 20px !important; padding: 24px !important; width: 100% !important; max-width: 640px !important; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8) !important; display: flex !important; flex-direction: column !important; gap: 16px !important;&quot;>
 
     <!-- MODAL HEADER -->
     <div
@@ -543,10 +559,26 @@
         <!-- Items rendered dynamically -->
       </div>
 
-      <div
-        style=&quot;padding-top: 10px !important; border-top: 1px solid #1e293b !important; display: flex !important; justify-content: space-between !important; font-weight: 900 !important; font-size: 15px !important; color: #ffffff !important;&quot;>
-        <span id=&quot;modalTotalLabel&quot;>Subtotal Silla:</span>
-        <span style=&quot;color: #34d399 !important;&quot; id=&quot;modalTotalMonto&quot;>$148.00</span>
+      <!-- DESGLOSE FISCAL Y TOTALES CONSOLIDADOS -->
+      <div id=&quot;modalTotalsBreakdown&quot;
+        style=&quot;padding-top: 10px !important; border-top: 1px solid #1e293b !important; display: flex !important; flex-direction: column !important; gap: 4px !important; font-size: 11px !important;&quot;>
+        <div style=&quot;display: flex !important; justify-content: space-between !important; color: #94a3b8 !important;&quot;>
+          <span>Subtotal Neto Consumos:</span>
+          <span style=&quot;color: #cbd5e1 !important; font-weight: 700;&quot; id=&quot;modalSubtotalMonto&quot;>$0.00</span>
+        </div>
+        <div style=&quot;display: flex !important; justify-content: space-between !important; color: #94a3b8 !important;&quot;>
+          <span>IVA (16% Desglosado):</span>
+          <span style=&quot;color: #cbd5e1 !important; font-weight: 700;&quot; id=&quot;modalIvaMonto&quot;>$0.00</span>
+        </div>
+        <div style=&quot;display: flex !important; justify-content: space-between !important; color: #94a3b8 !important;&quot;>
+          <span>Propina Sugerida (10%):</span>
+          <span style=&quot;color: #cbd5e1 !important; font-weight: 700;&quot; id=&quot;modalPropinaMonto&quot;>$0.00</span>
+        </div>
+        <div
+          style=&quot;display: flex !important; justify-content: space-between !important; font-weight: 900 !important; font-size: 15px !important; color: #ffffff !important; padding-top: 6px !important; border-top: 1px dashed #334155 !important;&quot;>
+          <span id=&quot;modalTotalLabel&quot;>Total a Pagar:</span>
+          <span style=&quot;color: #34d399 !important;&quot; id=&quot;modalTotalMonto&quot;>$0.00</span>
+        </div>
       </div>
     </div>
 
@@ -564,7 +596,7 @@
         </button>
       </div>
       <div style=&quot;display: flex !important; gap: 10px !important;&quot;>
-        <button id=&quot;btnPrecuenta&quot;
+        <button id=&quot;btnPrecuenta&quot; onclick=&quot;window.abrirPrecuenta();&quot;
           style=&quot;flex: 1 !important; padding: 10px !important; background: #1e293b !important; color: #cbd5e1 !important; font-weight: 700 !important; font-size: 11px !important; border-radius: 10px !important; border: 1px solid #334155 !important; cursor: pointer !important; display: flex !important; align-items: center !important; justify-content: center !important; gap: 6px !important;&quot;>
           <i class=&quot;fa-solid fa-receipt&quot; style=&quot;color: #38bdf8 !important;&quot;></i> Imprimir Precuenta
         </button>
@@ -575,6 +607,48 @@
       </div>
     </div>
 
+  </div>
+</div>
+
+<!-- MODAL PRECUENTA TÉRMICA FORMAL CON DESGLOSE POR TRAMOS -->
+<div id=&quot;modalPrecuentaBackdrop&quot; onclick=&quot;if (event.target === this) window.cerrarPrecuenta();&quot;>
+  <div
+    style=&quot;background: #ffffff !important; color: #0f172a !important; border-radius: 18px !important; padding: 24px !important; width: 100% !important; max-width: 420px !important; box-shadow: 0 25px 50px rgba(0,0,0,0.85) !important; font-family: 'Courier New', Courier, monospace !important; display: flex !important; flex-direction: column !important; gap: 12px !important;&quot;>
+    <div style=&quot;text-align: center !important; border-bottom: 1px dashed #94a3b8 !important; padding-bottom: 10px !important;&quot;>
+      <h3 style=&quot;font-size: 16px !important; font-weight: 900 !important; margin: 0 !important; text-transform: uppercase !important; color: #0f172a !important;&quot;>LA TERRAZA DE VIDA &amp; SABOR</h3>
+      <p style=&quot;font-size: 11px !important; color: #475569 !important; margin: 2px 0 0 0 !important;&quot;>Palapa &amp; Terraza Gourmet • RFC: VYS190820-ABC</p>
+      <p style=&quot;font-size: 11px !important; color: #475569 !important; margin: 2px 0 0 0 !important;&quot; id=&quot;precuentaFecha&quot;>Fecha: 30/08/2026</p>
+      <div style=&quot;margin-top: 6px !important; font-size: 12px !important; font-weight: bold !important; color: #0f766e !important;&quot; id=&quot;precuentaHeaderTag&quot;>PRECUENTA DE CONSUMO</div>
+    </div>
+
+    <!-- Tramos list for precuenta -->
+    <div id=&quot;precuentaTramosList&quot; style=&quot;display: flex !important; flex-direction: column !important; gap: 10px !important; max-height: 260px !important; overflow-y: auto !important; font-size: 11px !important;&quot;>
+      <!-- Content populated dynamically -->
+    </div>
+
+    <div style=&quot;border-top: 1px dashed #94a3b8 !important; padding-top: 8px !important; font-size: 11px !important; display: flex !important; flex-direction: column !important; gap: 3px !important;&quot;>
+      <div style=&quot;display: flex !important; justify-content: space-between !important;&quot;><span>SUBTOTAL:</span><span id=&quot;precuentaSubtotal&quot; style=&quot;font-weight: bold;&quot;>$0.00</span></div>
+      <div style=&quot;display: flex !important; justify-content: space-between !important;&quot;><span>IVA 16% TRASLADADO:</span><span id=&quot;precuentaIva&quot; style=&quot;font-weight: bold;&quot;>$0.00</span></div>
+      <div style=&quot;display: flex !important; justify-content: space-between !important;&quot;><span>PROPINA SUG. 10%:</span><span id=&quot;precuentaPropina&quot; style=&quot;font-weight: bold;&quot;>$0.00</span></div>
+      <div style=&quot;display: flex !important; justify-content: space-between !important; font-size: 15px !important; font-weight: 900 !important; border-top: 1px solid #0f172a !important; padding-top: 6px !important; margin-top: 4px !important;&quot;>
+        <span>TOTAL:</span>
+        <span id=&quot;precuentaTotal&quot; style=&quot;color: #047857; font-weight: 900;&quot;>$0.00</span>
+      </div>
+    </div>
+
+    <div style=&quot;text-align: center !important; font-size: 10px !important; color: #64748b !important; border-top: 1px dashed #cbd5e1 !important; padding-top: 8px !important;&quot;>
+      <p style=&quot;margin: 0 !important;&quot;>¡Gracias por su preferencia!</p>
+      <p style=&quot;margin: 2px 0 0 0 !important;&quot;>Comanda con Portavasos QR Registrado</p>
+    </div>
+
+    <div style=&quot;display: flex !important; gap: 8px !important; margin-top: 4px !important;&quot;>
+      <button onclick=&quot;window.print();&quot; style=&quot;flex: 1 !important; padding: 10px !important; background: #0f172a !important; color: #ffffff !important; border: none !important; border-radius: 8px !important; font-size: 12px !important; font-weight: bold !important; cursor: pointer !important;&quot;>
+        🖨️ Imprimir
+      </button>
+      <button onclick=&quot;window.cerrarPrecuenta();&quot; style=&quot;flex: 1 !important; padding: 10px !important; background: #e2e8f0 !important; color: #334155 !important; border: none !important; border-radius: 8px !important; font-size: 12px !important; font-weight: bold !important; cursor: pointer !important;&quot;>
+        ✕ Cerrar
+      </button>
+    </div>
   </div>
 </div>
 
@@ -595,14 +669,24 @@
     var DEFAULT_CUENTAS = {
       '3-1': {
         estado: 'ocupada',
+        qrId: 'PV-031',
+        comensalNombre: 'Comensal Portavasos #31',
         items: [
-          { id: 4, nombre: 'Chilaquiles Verdes Pollo', notas: 'Sin cebolla • Salsa aparte', precio: 148.00, cantidad: 1 }
+          { id: 4, nombre: 'Chilaquiles Verdes Pollo', notas: 'Sin cebolla • Salsa aparte', precio: 148.00, cantidad: 1, mesaId: 3, sillaNum: 1, hora: '12:15 PM' }
+        ],
+        historialUbicaciones: [
+          { mesaId: 3, sillaNum: 1, hora: '12:10 PM' }
         ]
       },
       '3-2': {
         estado: 'ocupada',
+        qrId: 'PV-032',
+        comensalNombre: 'Comensal Portavasos #32',
         items: [
-          { id: 1, nombre: 'Capuchino Especial V&amp;S', notas: 'Leche de almendras', precio: 68.00, cantidad: 1 }
+          { id: 1, nombre: 'Capuchino Especial V&amp;S', notas: 'Leche de almendras', precio: 68.00, cantidad: 1, mesaId: 3, sillaNum: 2, hora: '12:20 PM' }
+        ],
+        historialUbicaciones: [
+          { mesaId: 3, sillaNum: 2, hora: '12:20 PM' }
         ]
       }
     };
@@ -969,422 +1053,627 @@
       if (e.target.closest('#btnEnviarCocina')) { alert(`Comanda enviada a Cocina (KDS)`); cerrarModalComanda(); return; }
       if (e.target.closest('#btnPrecuenta')) { alert(`Imprimiendo precuenta`); cerrarModalComanda(); return; }
 
-      // 5. Click outside modal content (on backdrop) closes modal
-      if (e.target.id === 'modalComandaBackdrop') {
-        cerrarModalComanda();
-        return;
-      }
-    });
+                                                     // 5. Click outside modal content (on backdrop) closes modal
+                                                     if (e.target.id === 'modalComandaBackdrop') {
+                                                     cerrarModalComanda();
+                                                     return;
+                                                     }
+                                                     });
 
-    // Escape key closes modals and cancels move mode
-    document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape') {
-        cerrarModalComanda();
-        cancelarModoMover();
-        var cb = document.getElementById('combineConfirmBackdrop');
-        if (cb) cb.classList.remove('show');
-      }
-    });
+                                                     // Escape key closes modals and cancels move mode
+                                                     document.addEventListener('keydown', function (e) {
+                                                     if (e.key === 'Escape') {
+                                                     cerrarModalComanda();
+                                                     cancelarModoMover();
+                                                     var cb = document.getElementById('combineConfirmBackdrop');
+                                                     if (cb) cb.classList.remove('show');
+                                                     }
+                                                     });
 
-    function handleSillaClick(mesaId, sillaNum) {
-      if (window.palapaState.modoMoverActivo) {
-        completarMovimiento(mesaId, sillaNum);
-        return;
-      }
-      window.palapaState.mesaSeleccionadaId = mesaId;
-      window.palapaState.sillaSeleccionadaNum = sillaNum;
-      renderStateUI();
-      abrirModalComandaActual();
-    }
+                                                     function handleSillaClick(mesaId, sillaNum) {
+                                                     if (window.palapaState.modoMoverActivo) {
+                                                     completarMovimiento(mesaId, sillaNum);
+                                                     return;
+                                                     }
+                                                     window.palapaState.mesaSeleccionadaId = mesaId;
+                                                     window.palapaState.sillaSeleccionadaNum = sillaNum;
+                                                     renderStateUI();
+                                                     abrirModalComandaActual();
+                                                     }
 
-    function handleMesaClick(mesaId) {
-      if (window.palapaState.modoMoverActivo) {
-        alert(&quot;Selecciona una silla específica a donde deseas mover la cuenta.&quot;);
-        return;
-      }
-      window.palapaState.mesaSeleccionadaId = mesaId;
-      window.palapaState.sillaSeleccionadaNum = null;
-      renderStateUI();
-      abrirModalComandaActual();
-    }
+                                                     function handleMesaClick(mesaId) {
+                                                     if (window.palapaState.modoMoverActivo) {
+                                                     alert(&quot;Selecciona una silla específica a donde deseas mover la cuenta.&quot;);
+                                                     return;
+                                                     }
+                                                     window.palapaState.mesaSeleccionadaId = mesaId;
+                                                     window.palapaState.sillaSeleccionadaNum = null;
+                                                     renderStateUI();
+                                                     abrirModalComandaActual();
+                                                     }
 
-    function iniciarModoMover() {
-      const mesaId = window.palapaState.mesaSeleccionadaId;
-      const sillaNum = window.palapaState.sillaSeleccionadaNum;
+                                                     function iniciarModoMover() {
+                                                     const mesaId = window.palapaState.mesaSeleccionadaId;
+                                                     const sillaNum = window.palapaState.sillaSeleccionadaNum;
 
-      if (sillaNum === null) {
-        alert(&quot;Por favor selecciona una silla específica para mover.&quot;);
-        return;
-      }
+                                                     if (sillaNum === null) {
+                                                     alert(&quot;Por favor selecciona una silla específica para mover.&quot;);
+                                                     return;
+                                                     }
 
-      const key = `${mesaId}-${sillaNum}`;
-      const cuenta = window.palapaState.cuentas[key];
+                                                     const key = `${mesaId}-${sillaNum}`;
+                                                     const cuenta = window.palapaState.cuentas[key];
 
-      if (!cuenta || !cuenta.items || cuenta.items.length === 0) {
-        alert(`La Silla ${sillaNum} de Mesa ${mesaId} está vacía. Selecciona una silla ocupada para mover.`);
-        return;
-      }
+                                                     if (!cuenta || !cuenta.items || cuenta.items.length === 0) {
+                                                     alert(`La Silla ${sillaNum} de Mesa ${mesaId} está vacía. Selecciona una silla ocupada para mover.`);
+                                                     return;
+                                                     }
 
-      window.palapaState.modoMoverActivo = true;
-      window.palapaState.sillaOrigenMover = { mesaId, sillaNum };
+                                                     window.palapaState.modoMoverActivo = true;
+                                                     window.palapaState.sillaOrigenMover = { mesaId, sillaNum };
 
-      const bannerText = document.getElementById('bannerText');
-      const btnCancel = document.getElementById('btnCancelMove');
+                                                     const bannerText = document.getElementById('bannerText');
+                                                     const btnCancel = document.getElementById('btnCancelMove');
 
-      if (bannerText &amp;&amp; btnCancel) {
-        bannerText.innerHTML = `<b style=&quot;color: #38bdf8;&quot;>MOVIENDO COMENSAL:</b> Silla origen: <b>Mesa ${mesaId} Silla ${sillaNum}</b>. Haz clic en la <b>Silla Destino</b> a donde deseas transferir la cuenta.`;
-        btnCancel.style.display = 'block';
-      }
+                                                     if (bannerText &amp;&amp; btnCancel) {
+                                                     bannerText.innerHTML = `<b style=&quot;color: #38bdf8;&quot;>MOVIENDO COMENSAL:</b> Silla origen: <b>Mesa ${mesaId} Silla ${sillaNum}</b>. Haz clic en la <b>Silla Destino</b> a donde deseas transferir la cuenta.`;
+                                                     btnCancel.style.display = 'block';
+                                                     }
 
-      renderStateUI();
-    }
+                                                     renderStateUI();
+                                                     }
 
-    function limpiarDragState() {
-      _limpiarDragVisual();
-    }
+                                                     function limpiarDragState() {
+                                                     _limpiarDragVisual();
+                                                     }
 
-    function cancelarModoMover() {
-      window.palapaState.modoMoverActivo = false;
-      window.palapaState.sillaOrigenMover = null;
-      if (typeof _ms !== 'undefined') {
-        _ms.active   = false;
-        _ms.dragging = false;
-        _ms.srcMesa  = null;
-        _ms.srcSilla = null;
-      }
-      _limpiarDragVisual();
+                                                     function cancelarModoMover() {
+                                                     window.palapaState.modoMoverActivo = false;
+                                                     window.palapaState.sillaOrigenMover = null;
+                                                     if (typeof _ms !== 'undefined') {
+                                                     _ms.active   = false;
+                                                     _ms.dragging = false;
+                                                     _ms.srcMesa  = null;
+                                                     _ms.srcSilla = null;
+                                                     }
+                                                     _limpiarDragVisual();
 
-      const bannerText = document.getElementById('bannerText');
-      const btnCancel = document.getElementById('btnCancelMove');
+                                                     const bannerText = document.getElementById('bannerText');
+                                                     const btnCancel = document.getElementById('btnCancelMove');
 
-      if (bannerText &amp;&amp; btnCancel) {
-        bannerText.innerHTML = `Haz clic o <b>arrastra con el mouse</b> cualquier <b>Silla</b> para abrir su comanda o trasladarla a otra silla/mesa.`;
-        btnCancel.style.display = 'none';
-      }
+                                                     if (bannerText &amp;&amp; btnCancel) {
+                                                     bannerText.innerHTML = `Haz clic o <b>arrastra con el mouse</b> cualquier <b>Silla</b> para abrir su comanda o trasladarla a otra silla/mesa.`;
+                                                     btnCancel.style.display = 'none';
+                                                     }
 
-      renderStateUI();
-    }
+                                                     renderStateUI();
+                                                     }
 
-    function completarMovimiento(targetMesaId, targetSillaNum, overrideSrcMesa, overrideSrcSilla) {
-      // Soporte dual: modo click (sillaOrigenMover) y drag &amp; drop (override params)
-      var srcMesa = overrideSrcMesa !== undefined ? overrideSrcMesa : (window.palapaState.sillaOrigenMover ? window.palapaState.sillaOrigenMover.mesaId : null);
-      var srcSilla = overrideSrcSilla !== undefined ? overrideSrcSilla : (window.palapaState.sillaOrigenMover ? window.palapaState.sillaOrigenMover.sillaNum : null);
+                                                     function completarMovimiento(targetMesaId, targetSillaNum, overrideSrcMesa, overrideSrcSilla) {
+                                                     // Soporte dual: modo click (sillaOrigenMover) y drag &amp; drop (override params)
+                                                     var srcMesa = overrideSrcMesa !== undefined ? overrideSrcMesa : (window.palapaState.sillaOrigenMover ? window.palapaState.sillaOrigenMover.mesaId : null);
+                                                     var srcSilla = overrideSrcSilla !== undefined ? overrideSrcSilla : (window.palapaState.sillaOrigenMover ? window.palapaState.sillaOrigenMover.sillaNum : null);
 
-      if (srcMesa === null || srcSilla === null) return;
-      if (srcMesa === targetMesaId &amp;&amp; srcSilla === targetSillaNum) {
-        cancelarModoMover(); return;
-      }
+                                                     if (srcMesa === null || srcSilla === null) return;
+                                                     if (srcMesa === targetMesaId &amp;&amp; srcSilla === targetSillaNum) {
+                                                     cancelarModoMover(); return;
+                                                     }
 
-      // Sincronizar estado por si viene de drag (sillaOrigenMover puede ser null)
-      if (!window.palapaState.sillaOrigenMover) {
-        window.palapaState.sillaOrigenMover = { mesaId: srcMesa, sillaNum: srcSilla };
-      }
+                                                     // Sincronizar estado por si viene de drag (sillaOrigenMover puede ser null)
+                                                     if (!window.palapaState.sillaOrigenMover) {
+                                                     window.palapaState.sillaOrigenMover = { mesaId: srcMesa, sillaNum: srcSilla };
+                                                     }
 
-      var sourceKey = srcMesa + '-' + srcSilla;
-      var targetKey = targetMesaId + '-' + targetSillaNum;
-      var sourceCuenta = window.palapaState.cuentas[sourceKey];
-      var targetCuenta = window.palapaState.cuentas[targetKey];
+                                                     var sourceKey = srcMesa + '-' + srcSilla;
+                                                     var targetKey = targetMesaId + '-' + targetSillaNum;
+                                                     var sourceCuenta = window.palapaState.cuentas[sourceKey];
+                                                     var targetCuenta = window.palapaState.cuentas[targetKey];
 
-      if (!sourceCuenta || !sourceCuenta.items || sourceCuenta.items.length === 0) {
-        showDragToast('⚠ La silla origen ya no tiene consumos', 'warn');
-        cancelarModoMover(); return;
-      }
+                                                     if (!sourceCuenta || !sourceCuenta.items || sourceCuenta.items.length === 0) {
+                                                     showDragToast('⚠ La silla origen ya no tiene consumos', 'warn');
+                                                     cancelarModoMover(); return;
+                                                     }
 
-      if (targetCuenta &amp;&amp; targetCuenta.items &amp;&amp; targetCuenta.items.length > 0) {
-        // Silla destino ocupada — pedir confirmación sin alert()
-        showCombineConfirm(srcMesa, srcSilla, targetMesaId, targetSillaNum, function () {
-          // onYes: combinar
-          targetCuenta.items = targetCuenta.items.concat(sourceCuenta.items);
-          delete window.palapaState.cuentas[sourceKey];
-          window.palapaState.mesaSeleccionadaId = targetMesaId;
-          window.palapaState.sillaSeleccionadaNum = targetSillaNum;
-          saveStateToStorage();
-          cancelarModoMover();
-          showDragToast('✅ Cuentas combinadas en Mesa ' + targetMesaId + ' Silla ' + targetSillaNum, 'ok');
-        });
-      } else {
-        // Silla destino libre — mover directo
-        window.palapaState.cuentas[targetKey] = sourceCuenta;
-        delete window.palapaState.cuentas[sourceKey];
-        window.palapaState.mesaSeleccionadaId = targetMesaId;
-        window.palapaState.sillaSeleccionadaNum = targetSillaNum;
-        saveStateToStorage();
-        cancelarModoMover();
-        showDragToast('✅ Cuenta movida → Mesa ' + targetMesaId + ' Silla ' + targetSillaNum, 'ok');
-      }
-    }
+                                                     var nowStr = (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                                                     if (sourceCuenta.items) {
+                                                     sourceCuenta.items.forEach(function (i) {
+                                                     if (i.mesaId === undefined) { i.mesaId = srcMesa; i.sillaNum = srcSilla; }
+                                                     });
+                                                     }
+                                                     sourceCuenta.historialUbicaciones = sourceCuenta.historialUbicaciones || [{ mesaId: srcMesa, sillaNum: srcSilla, hora: nowStr }];
+                                                     var yaExiste = sourceCuenta.historialUbicaciones.some(function (u) { return u.mesaId === targetMesaId &amp;&amp; u.sillaNum === targetSillaNum; });
+                                                     if (!yaExiste) {
+                                                     sourceCuenta.historialUbicaciones.push({ mesaId: targetMesaId, sillaNum: targetSillaNum, hora: nowStr });
+                                                     }
 
-    function abrirModalComandaActual() {
-      const mesaId = window.palapaState.mesaSeleccionadaId;
-      const sillaNum = window.palapaState.sillaSeleccionadaNum;
+                                                     if (targetCuenta &amp;&amp; targetCuenta.items &amp;&amp; targetCuenta.items.length > 0) {
+                                                     // Silla destino ocupada — pedir confirmación sin alert()
+                                                     showCombineConfirm(srcMesa, srcSilla, targetMesaId, targetSillaNum, function () {
+                                                     // onYes: combinar
+                                                     targetCuenta.items = targetCuenta.items.concat(sourceCuenta.items);
+                                                     delete window.palapaState.cuentas[sourceKey];
+                                                     window.palapaState.mesaSeleccionadaId = targetMesaId;
+                                                     window.palapaState.sillaSeleccionadaNum = targetSillaNum;
+                                                     saveStateToStorage();
+                                                     cancelarModoMover();
+                                                     showDragToast('✅ Cuentas combinadas en Mesa ' + targetMesaId + ' Silla ' + targetSillaNum, 'ok');
+                                                     });
+                                                     } else {
+                                                     // Silla destino libre — mover directo
+                                                     window.palapaState.cuentas[targetKey] = sourceCuenta;
+                                                     delete window.palapaState.cuentas[sourceKey];
+                                                     window.palapaState.mesaSeleccionadaId = targetMesaId;
+                                                     window.palapaState.sillaSeleccionadaNum = targetSillaNum;
+                                                     saveStateToStorage();
+                                                     cancelarModoMover();
+                                                     showDragToast('✅ Cuenta movida → Mesa ' + targetMesaId + ' Silla ' + targetSillaNum, 'ok');
+                                                     }
+                                                     }
 
-      const modal = document.getElementById('modalComandaBackdrop');
-      const title = document.getElementById('modalTitle');
-      const subtitle = document.getElementById('modalSubtitle');
-      const header = document.getElementById('modalItemsHeader');
-      const container = document.getElementById('modalItemsList');
-      const totalLabel = document.getElementById('modalTotalLabel');
-      const totalMonto = document.getElementById('modalTotalMonto');
+                                                     function abrirModalComandaActual() {
+                                                     const mesaId = window.palapaState.mesaSeleccionadaId;
+                                                     const sillaNum = window.palapaState.sillaSeleccionadaNum;
 
-      if (!container || !modal) return;
-      container.innerHTML = '';
+                                                     const modal = document.getElementById('modalComandaBackdrop');
+                                                     const title = document.getElementById('modalTitle');
+                                                     const subtitle = document.getElementById('modalSubtitle');
+                                                     const header = document.getElementById('modalItemsHeader');
+                                                     const container = document.getElementById('modalItemsList');
+                                                     const subtotalMontoEl = document.getElementById('modalSubtotalMonto');
+                                                     const ivaMontoEl = document.getElementById('modalIvaMonto');
+                                                     const propinaMontoEl = document.getElementById('modalPropinaMonto');
+                                                     const totalMontoEl = document.getElementById('modalTotalMonto');
+                                                     const totalLabelEl = document.getElementById('modalTotalLabel');
 
-      if (sillaNum !== null) {
-        const key = `${mesaId}-${sillaNum}`;
-        const cuenta = window.palapaState.cuentas[key] || { items: [] };
+                                                     if (!container || !modal) return;
+                                                     container.innerHTML = '';
 
-        if (title) title.innerHTML = `<i class=&quot;fa-solid fa-receipt&quot; style=&quot;color: #34d399;&quot;></i> Ticket Silla ${sillaNum}`;
-        if (subtitle) subtitle.innerText = `Mesa ${mesaId} • Asignación Individual`;
-        if (header) header.innerText = `Consumos en Silla ${sillaNum}:`;
+                                                     if (sillaNum !== null) {
+                                                     const key = `${mesaId}-${sillaNum}`;
+                                                     const cuenta = window.palapaState.cuentas[key] || { items: [] };
+                                                     const qrId = cuenta.qrId || ('PV-' + mesaId + sillaNum);
 
-        let total = 0;
-        if (!cuenta.items || cuenta.items.length === 0) {
-          container.innerHTML = `<div style=&quot;text-align: center; padding: 20px; color: #64748b; font-size: 12px;&quot;>Silla vacía. Marca platillos desde el catálogo del panel derecho para iniciar la orden.</div>`;
-        } else {
-          cuenta.items.forEach((item, idx) => {
-            const sub = item.precio * item.cantidad;
-            total += sub;
-            const row = document.createElement('div');
-            row.style.cssText = 'display: flex !important; justify-content: space-between !important; align-items: center !important; background: #0f172a !important; padding: 10px 12px !important; border-radius: 10px !important; border: 1px solid #1e293b !important;';
-            row.innerHTML = `
-              <div>
-                <span style=&quot;font-size: 12px; font-weight: 700; color: #ffffff; display: block;&quot;>${item.cantidad}x ${item.nombre}</span>
-                <span style=&quot;font-size: 10px; color: #94a3b8; font-style: italic;&quot;>${item.notas || ''}</span>
-              </div>
-              <div style=&quot;display: flex; align-items: center; gap: 8px;&quot;>
-                <span style=&quot;font-size: 13px; font-weight: 900; color: #34d399;&quot;>$${sub.toFixed(2)}</span>
-                <button onclick=&quot;window.eliminarItemModal('${key}', ${idx})&quot; style=&quot;background: transparent; border: none; color: #f87171; cursor: pointer;&quot;><i class=&quot;fa-solid fa-trash-can&quot;></i></button>
-              </div>
-            `;
-            container.appendChild(row);
-          });
-        }
+                                                     if (title) title.innerHTML = `<i class=&quot;fa-solid fa-receipt&quot; style=&quot;color: #34d399;&quot;></i> Ticket Silla ${sillaNum} <span style=&quot;font-size: 11px; background: #1e293b; color: #38bdf8; padding: 2px 8px; border-radius: 6px; border: 1px solid #334155; margin-left: 6px;&quot;>🏷️ QR ${qrId}</span>`;
+                                                     if (subtitle) subtitle.innerText = `Mesa ${mesaId} • Ubicación Actual`;
+                                                     if (header) header.innerText = `Detalle de Consumos por Ubicación:`;
 
-        if (totalLabel) totalLabel.innerText = `Subtotal Silla ${sillaNum}:`;
-        if (totalMonto) totalMonto.innerText = `$${total.toFixed(2)}`;
+                                                     if (!cuenta.items || cuenta.items.length === 0) {
+                                                     container.innerHTML = `<div style=&quot;text-align: center; padding: 20px; color: #64748b; font-size: 12px;&quot;>Silla vacía. Marca platillos desde el catálogo del panel derecho para iniciar la orden.</div>`;
+                                                     if (subtotalMontoEl) subtotalMontoEl.innerText = '$0.00';
+                                                     if (ivaMontoEl) ivaMontoEl.innerText = '$0.00';
+                                                     if (propinaMontoEl) propinaMontoEl.innerText = '$0.00';
+                                                     if (totalMontoEl) totalMontoEl.innerText = '$0.00';
+                                                     } else {
+                                                     // Agrupar consumos por Tramo / Ubicación donde se ordenaron
+                                                     var tramosMap = {};
+                                                     cuenta.items.forEach((it, idx) => {
+                                                     var tMesa = it.mesaId !== undefined ? it.mesaId : mesaId;
+                                                     var tSilla = it.sillaNum !== undefined ? it.sillaNum : sillaNum;
+                                                     var tKey = tMesa + '-' + tSilla;
+                                                     if (!tramosMap[tKey]) {
+                                                     tramosMap[tKey] = {
+                                                     mesaId: tMesa,
+                                                     sillaNum: tSilla,
+                                                     items: [],
+                                                     subtotal: 0
+                                                     };
+                                                     }
+                                                     tramosMap[tKey].items.push({ item: it, originalIdx: idx });
+                                                     tramosMap[tKey].subtotal += (it.precio * it.cantidad);
+                                                     });
 
-      } else {
-        if (title) title.innerHTML = `<i class=&quot;fa-solid fa-border-all&quot; style=&quot;color: #38bdf8;&quot;></i> Resumen Mesa ${mesaId}`;
-        if (subtitle) subtitle.innerText = `Acumulado consolidado de 4 Sillas`;
-        if (header) header.innerText = `Todos los consumos en Mesa ${mesaId}:`;
+                                                     var tramoKeys = Object.keys(tramosMap);
+                                                     var totalNeto = 0;
 
-        let totalMesa = 0;
-        let countItems = 0;
+                                                     // Configurar contenedor en 2 columnas verticales si hay más de 1 tramo
+                                                     if (tramoKeys.length > 1) {
+                                                     container.style.cssText = 'display: grid !important; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)) !important; gap: 12px !important; max-height: 280px !important; overflow-y: auto !important;';
+                                                     } else {
+                                                     container.style.cssText = 'display: flex !important; flex-direction: column !important; gap: 8px !important; max-height: 260px !important; overflow-y: auto !important;';
+                                                     }
 
-        for (let s = 1; s <= 4; s++) {
-          const key = `${mesaId}-${s}`;
-          const cuenta = window.palapaState.cuentas[key];
-          if (cuenta &amp;&amp; cuenta.items &amp;&amp; cuenta.items.length > 0) {
-            cuenta.items.forEach(item => {
-              countItems++;
-              const sub = item.precio * item.cantidad;
-              totalMesa += sub;
-              const row = document.createElement('div');
-              row.style.cssText = 'display: flex !important; justify-content: space-between !important; align-items: center !important; background: #0f172a !important; padding: 10px 12px !important; border-radius: 10px !important; border: 1px solid #1e293b !important;';
-              row.innerHTML = `
-                <div>
-                  <span style=&quot;font-size: 12px; font-weight: 700; color: #ffffff; display: block;&quot;>${item.cantidad}x ${item.nombre}</span>
-                  <span style=&quot;font-size: 10px; color: #f59e0b; font-weight: bold;&quot;>Silla ${s}</span>
-                </div>
-                <span style=&quot;font-size: 13px; font-weight: 900; color: #34d399;&quot;>$${sub.toFixed(2)}</span>
-              `;
-              container.appendChild(row);
-            });
-          }
-        }
+                                                     tramoKeys.forEach((tKey, tIdx) => {
+                                                     var tramo = tramosMap[tKey];
+                                                     totalNeto += tramo.subtotal;
+                                                     var isCurrent = (tramo.mesaId === mesaId &amp;&amp; tramo.sillaNum === sillaNum);
 
-        if (countItems === 0) {
-          container.innerHTML = `<div style=&quot;text-align: center; padding: 20px; color: #64748b; font-size: 12px;&quot;>No hay consumos en ninguna silla de la Mesa ${mesaId}.</div>`;
-        }
+                                                     var tramoCard = document.createElement('div');
+                                                     tramoCard.style.cssText = 'background: #020617 !important; border: 1px solid ' + (isCurrent ? '#059669' : '#334155') + ' !important; border-radius: 14px !important; padding: 12px !important; display: flex !important; flex-direction: column !important; justify-content: space-between !important; gap: 8px !important; box-shadow: inset 0 0 15px rgba(0,0,0,0.5) !important;';
 
-        if (totalLabel) totalLabel.innerText = `Total Acumulado Mesa ${mesaId}:`;
-        if (totalMonto) totalMonto.innerText = `$${totalMesa.toFixed(2)}`;
-      }
+                                                     var tramoHeader = document.createElement('div');
+                                                     tramoHeader.style.cssText = 'display: flex !important; justify-content: space-between !important; align-items: center !important; padding-bottom: 8px !important; border-bottom: 1px dashed ' + (isCurrent ? '#059669' : '#475569') + ' !important; font-size: 11px !important;';
+                                                     tramoHeader.innerHTML = `
+                                                     <div style=&quot;display: flex; flex-direction: column; gap: 2px;&quot;>
+                                                     <span style=&quot;font-weight: 900; color: ${isCurrent ? '#34d399' : '#fbbf24'}; font-size: 12px;&quot;>
+                                                     <i class=&quot;fa-solid fa-receipt&quot; style=&quot;margin-right: 4px;&quot;></i> Ticket Tramo ${tIdx + 1}
+                                                     </span>
+                                                     <span style=&quot;font-size: 10px; color: #94a3b8; font-weight: bold;&quot;>Mesa ${tramo.mesaId} • Silla ${tramo.sillaNum}</span>
+                                                     </div>
+                                                     <span style=&quot;background: ${isCurrent ? 'rgba(16,185,129,0.2)' : 'rgba(245,158,11,0.2)'}; color: ${isCurrent ? '#34d399' : '#fbbf24'}; font-size: 9px; font-weight: 800; padding: 2px 6px; border-radius: 6px; text-transform: uppercase;&quot;>
+                                                     ${isCurrent ? 'Actual' : 'Histórico'}
+                                                     </span>
+                                                     `;
+                                                     tramoCard.appendChild(tramoHeader);
 
-      if (modal) {
-        modal.classList.add('show');
-          modal.style.setProperty('display', 'flex', 'important');
-          }
-          }
+                                                     var itemsWrapper = document.createElement('div');
+                                                     itemsWrapper.style.cssText = 'display: flex !important; flex-direction: column !important; gap: 6px !important; flex: 1 !important;';
 
-          function cerrarModalComanda() {
-          const modal = document.getElementById('modalComandaBackdrop');
-          if (modal) {
-          modal.classList.remove('show');
-          modal.style.setProperty('display', 'none', 'important');
-          }
-          }
+                                                     tramo.items.forEach(obj => {
+                                                     var it = obj.item;
+                                                     var sub = it.precio * it.cantidad;
+                                                     var row = document.createElement('div');
+                                                     row.style.cssText = 'display: flex !important; justify-content: space-between !important; align-items: center !important; background: #0f172a !important; padding: 6px 8px !important; border-radius: 8px !important; border: 1px solid #1e293b !important; font-size: 11px !important;';
+                                                     row.innerHTML = `
+                                                     <div style=&quot;flex: 1; padding-right: 6px;&quot;>
+                                                     <span style=&quot;font-weight: 700; color: #ffffff; display: block; line-height: 1.2;&quot;>${it.cantidad}x ${it.nombre}</span>
+                                                     <span style=&quot;font-size: 9px; color: #94a3b8; font-style: italic;&quot;>${it.notas ? it.notas + ' • ' : ''}${it.hora || ''}</span>
+                                                     </div>
+                                                     <div style=&quot;display: flex; align-items: center; gap: 6px;&quot;>
+                                                     <span style=&quot;font-weight: 900; color: #34d399; font-size: 11px;&quot;>$${sub.toFixed(2)}</span>
+                                                     <button onclick=&quot;window.eliminarItemModal('${key}', ${obj.originalIdx})&quot; style=&quot;background: transparent; border: none; color: #f87171; cursor: pointer; padding: 2px;&quot;><i class=&quot;fa-solid fa-trash-can&quot; style=&quot;font-size: 10px;&quot;></i></button>
+                                                     </div>
+                                                     `;
+                                                     itemsWrapper.appendChild(row);
+                                                     });
+                                                     tramoCard.appendChild(itemsWrapper);
 
-          window.cerrarModalComanda = function () {
-          cerrarModalComanda();
-          };
-          window.abrirModalComandaActual = function () {
-          abrirModalComandaActual();
-          };
+                                                     var tramoFooter = document.createElement('div');
+                                                     tramoFooter.style.cssText = 'display: flex !important; justify-content: space-between !important; align-items: center !important; padding-top: 6px !important; border-top: 1px dashed #334155 !important; font-size: 11px !important; margin-top: 4px !important;';
+                                                     tramoFooter.innerHTML = `
+                                                     <span style=&quot;color: #94a3b8; font-weight: 600;&quot;>Subtotal Tramo ${tIdx + 1}:</span>
+                                                     <span style=&quot;color: #ffffff; font-weight: 900;&quot;>$${tramo.subtotal.toFixed(2)}</span>
+                                                     `;
+                                                     tramoCard.appendChild(tramoFooter);
 
-          window.eliminarItemModal = function (key, idx) {
-          if (window.palapaState.cuentas[key] &amp;&amp; window.palapaState.cuentas[key].items) {
-          window.palapaState.cuentas[key].items.splice(idx, 1);
-          if (window.palapaState.cuentas[key].items.length === 0) {
-          delete window.palapaState.cuentas[key];
-          }
-          saveStateToStorage();
-          renderStateUI();
-          abrirModalComandaActual();
-          }
-          };
+                                                     container.appendChild(tramoCard);
+                                                     });
 
-          function renderStateUI() {
-          const isMoveMode = window.palapaState.modoMoverActivo;
-          const origen = window.palapaState.sillaOrigenMover;
+                                                     // Cálculos fiscales y consolidados
+                                                     var ivaVal = totalNeto * 0.16;
+                                                     var propinaVal = totalNeto * 0.10;
+                                                     var totalFinal = totalNeto + ivaVal;
 
-          for (let m = 1; m <= 3; m++) {
-          let busyCount = 0;
-          for (let s = 1; s <= 4; s++) {
-          const key = `${m}-${s}`;
-          let chairEl = document.getElementById(`chair-${m}-${s}`);
-          const cuenta = window.palapaState.cuentas[key];
-          const isOccupied = (cuenta &amp;&amp; cuenta.items &amp;&amp; cuenta.items.length > 0);
+                                                     if (subtotalMontoEl) subtotalMontoEl.innerText = `$${totalNeto.toFixed(2)}`;
+                                                     if (ivaMontoEl) ivaMontoEl.innerText = `$${ivaVal.toFixed(2)}`;
+                                                     if (propinaMontoEl) propinaMontoEl.innerText = `$${propinaVal.toFixed(2)}`;
+                                                     if (totalMontoEl) totalMontoEl.innerText = `$${totalFinal.toFixed(2)}`;
+                                                     if (totalLabelEl) totalLabelEl.innerText = `Total a Pagar:`;
+                                                     }
 
-          if (isOccupied) busyCount++;
+                                                     } else {
+                                                     if (title) title.innerHTML = `<i class=&quot;fa-solid fa-border-all&quot; style=&quot;color: #38bdf8;&quot;></i> Resumen Mesa ${mesaId}`;
+                                                     if (subtitle) subtitle.innerText = `Acumulado consolidado de 4 Sillas`;
+                                                     if (header) header.innerText = `Todos los consumos en Mesa ${mesaId}:`;
 
-          if (chairEl) {
-          const posClass = s === 1 ? 'chair-pos-top' : s === 2 ? 'chair-pos-right' : s === 3 ? 'chair-pos-bottom' : 'chair-pos-left';
+                                                     let totalMesa = 0;
+                                                     let countItems = 0;
 
-          // Update draggable attribute based on current occupied state
-          chairEl.setAttribute('draggable', isOccupied ? 'true' : 'false');
-          chairEl.setAttribute('title', isOccupied
-          ? `Mesa ${m} Silla ${s} (Ocupada) • Arrastra para mover`
-          : `Mesa ${m} Silla ${s} (Disponible)`);
+                                                     for (let s = 1; s <= 4; s++) {
+                                                     const key = `${mesaId}-${s}`;
+                                                     const cuenta = window.palapaState.cuentas[key];
+                                                     if (cuenta &amp;&amp; cuenta.items &amp;&amp; cuenta.items.length > 0) {
+                                                     cuenta.items.forEach(item => {
+                                                     countItems++;
+                                                     const sub = item.precio * item.cantidad;
+                                                     totalMesa += sub;
+                                                     const row = document.createElement('div');
+                                                     row.style.cssText = 'display: flex !important; justify-content: space-between !important; align-items: center !important; background: #0f172a !important; padding: 10px 12px !important; border-radius: 10px !important; border: 1px solid #1e293b !important;';
+                                                     row.innerHTML = `
+                                                     <div>
+                                                     <span style=&quot;font-size: 12px; font-weight: 700; color: #ffffff; display: block;&quot;>${item.cantidad}x ${item.nombre}</span>
+                                                     <span style=&quot;font-size: 10px; color: #f59e0b; font-weight: bold;&quot;>Silla ${s}</span>
+                                                     </div>
+                                                     <span style=&quot;font-size: 13px; font-weight: 900; color: #34d399;&quot;>$${sub.toFixed(2)}</span>
+                                                     `;
+                                                     container.appendChild(row);
+                                                     });
+                                                     }
+                                                     }
 
-          if (isMoveMode &amp;&amp; origen &amp;&amp; origen.mesaId === m &amp;&amp; origen.sillaNum === s) {
-          chairEl.className = `chair-btn-fixed ${posClass} chair-moving-source`;
-          } else if (isMoveMode) {
-          chairEl.className = `chair-btn-fixed ${posClass} chair-moving-target ${isOccupied ? 'chair-state-busy' : 'chair-state-free'}`;
-          } else {
-          chairEl.className = `chair-btn-fixed ${posClass} ${isOccupied ? 'chair-state-busy' : 'chair-state-free'}`;
-          }
-          }
-          }
+                                                     if (countItems === 0) {
+                                                     container.innerHTML = `<div style=&quot;text-align: center; padding: 20px; color: #64748b; font-size: 12px;&quot;>No hay consumos en ninguna silla de la Mesa ${mesaId}.</div>`;
+                                                     }
 
-          const circle = document.getElementById(`table-circle-${m}`);
-          const statusText = document.getElementById(`table-status-${m}`);
-          const labelText = document.getElementById(`table-label-${m}`);
+                                                     var ivaValMesa = totalMesa * 0.16;
+                                                     var propinaValMesa = totalMesa * 0.10;
+                                                     var totalFinalMesa = totalMesa + ivaValMesa;
 
-          if (circle) {
-          if (busyCount > 0) {
-          circle.style.background = &quot;#78350f&quot;;
-          circle.style.border = &quot;4px solid #f59e0b&quot;;
-          if (statusText) statusText.innerText = `${busyCount} Ocupada${busyCount > 1 ? 's' : ''}`;
-          if (labelText) {
-          labelText.style.color = &quot;#fbbf24&quot;;
-          labelText.innerText = `🟡 Ocupada (${busyCount} Comensales)`;
-          }
-          } else {
-          circle.style.background = &quot;#064e3b&quot;;
-          circle.style.border = &quot;4px solid #10b981&quot;;
-          if (statusText) statusText.innerText = `Libre`;
-          if (labelText) {
-          labelText.style.color = &quot;#34d399&quot;;
-          labelText.innerText = `🟢 Disponible`;
-          }
-          }
-          }
-          }
+                                                     if (subtotalMontoEl) subtotalMontoEl.innerText = `$${totalMesa.toFixed(2)}`;
+                                                     if (ivaMontoEl) ivaMontoEl.innerText = `$${ivaValMesa.toFixed(2)}`;
+                                                     if (propinaMontoEl) propinaMontoEl.innerText = `$${propinaValMesa.toFixed(2)}`;
+                                                     if (totalMontoEl) totalMontoEl.innerText = `$${totalFinalMesa.toFixed(2)}`;
+                                                     if (totalLabelEl) totalLabelEl.innerText = `Total Acumulado Mesa ${mesaId}:`;
+                                                     }
 
-          const badge = document.getElementById('activeTargetBadge');
-          if (badge) {
-          if (window.palapaState.sillaSeleccionadaNum !== null) {
-          badge.innerText = `Mesa ${window.palapaState.mesaSeleccionadaId} • Silla ${window.palapaState.sillaSeleccionadaNum}`;
-          } else {
-          badge.innerText = `Mesa ${window.palapaState.mesaSeleccionadaId} (Completa)`;
-          }
-          }
+                                                     if (modal) {
+                                                     modal.classList.add('show');
+                                                     modal.style.setProperty('display', 'flex', 'important');
+                                                     }
+                                                     }
 
-          renderWaiterMenuGrid();
-          }
+                                                     function abrirPrecuenta() {
+                                                     const mesaId = window.palapaState.mesaSeleccionadaId;
+                                                     const sillaNum = window.palapaState.sillaSeleccionadaNum;
+                                                     const modalP = document.getElementById('modalPrecuentaBackdrop');
+                                                     const listContainer = document.getElementById('precuentaTramosList');
+                                                     const subtotalEl = document.getElementById('precuentaSubtotal');
+                                                     const ivaEl = document.getElementById('precuentaIva');
+                                                     const propinaEl = document.getElementById('precuentaPropina');
+                                                     const totalEl = document.getElementById('precuentaTotal');
+                                                     const headerTag = document.getElementById('precuentaHeaderTag');
+                                                     const fechaEl = document.getElementById('precuentaFecha');
 
-          function renderWaiterMenuGrid() {
-          const grid = document.getElementById('waiterMenuGrid');
-          if (!grid) return;
-          grid.innerHTML = '';
+                                                     if (!modalP || !listContainer) return;
+                                                     listContainer.innerHTML = '';
 
-          const catFiltro = window.palapaState.categoriaFiltro || 'Todos';
-          const filtrados = window.catalogProducts.filter(p => catFiltro === 'Todos' || p.categoria_nombre === catFiltro);
+                                                     if (fechaEl) fechaEl.innerText = 'Fecha: ' + (new Date()).toLocaleDateString() + ' ' + (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
-          filtrados.forEach(prod => {
-          const card = document.createElement('div');
-          card.style.cssText = 'background: #0f172a !important; border: 1px solid #1e293b !important; border-radius: 12px !important; padding: 12px !important; display: flex !important; justify-content: space-between !important; align-items: center !important; cursor: pointer !important;';
-          card.onclick = () => agregarPlatilloDirecto(prod);
+                                                     if (sillaNum !== null) {
+                                                     const key = `${mesaId}-${sillaNum}`;
+                                                     const cuenta = window.palapaState.cuentas[key] || { items: [] };
+                                                     const qrId = cuenta.qrId || ('PV-' + mesaId + sillaNum);
+                                                     if (headerTag) headerTag.innerHTML = `MESA ${mesaId} • SILLA ${sillaNum} <br><span style=&quot;font-size:10px;color:#475569;&quot;>PORTAVASOS QR: #${qrId}</span>`;
 
-          card.innerHTML = `
-          <div style=&quot;display: flex; align-items: center; gap: 8px;&quot;>
-          <span style=&quot;font-size: 20px;&quot;>${prod.icono}</span>
-          <div>
-          <span style=&quot;font-size: 11px; font-weight: 700; color: #ffffff; display: block; line-height: 1.2;&quot;>${prod.nombre}</span>
-          <span style=&quot;font-size: 11px; font-weight: 900; color: #34d399;&quot;>$${prod.precio.toFixed(2)}</span>
-          </div>
-          </div>
-          <button style=&quot;padding: 6px 12px; background: #059669; color: #ffffff; font-size: 11px; font-weight: 900; border-radius: 8px; border: none; cursor: pointer;&quot;>
-          + Agregar
-          </button>
-          `;
-          grid.appendChild(card);
-          });
-          }
+                                                     var tramosMap = {};
+                                                     cuenta.items.forEach(it => {
+                                                     var tMesa = it.mesaId !== undefined ? it.mesaId : mesaId;
+                                                     var tSilla = it.sillaNum !== undefined ? it.sillaNum : sillaNum;
+                                                     var tKey = tMesa + '-' + tSilla;
+                                                     if (!tramosMap[tKey]) tramosMap[tKey] = { mesaId: tMesa, sillaNum: tSilla, items: [], subtotal: 0 };
+                                                     tramosMap[tKey].items.push(it);
+                                                     tramosMap[tKey].subtotal += (it.precio * it.cantidad);
+                                                     });
 
-          function agregarPlatilloDirecto(prod) {
-          const mesaId = window.palapaState.mesaSeleccionadaId;
-          let sillaNum = window.palapaState.sillaSeleccionadaNum;
+                                                     var tramoKeys = Object.keys(tramosMap);
+                                                     var totalNeto = 0;
 
-          if (sillaNum === null) {
-          sillaNum = 1;
-          window.palapaState.sillaSeleccionadaNum = 1;
-          }
+                                                     tramoKeys.forEach((tKey, idx) => {
+                                                     var tramo = tramosMap[tKey];
+                                                     totalNeto += tramo.subtotal;
+                                                     var block = document.createElement('div');
+                                                     block.style.cssText = 'border-bottom: 1px solid #e2e8f0 !important; padding-bottom: 6px !important;';
+                                                     var h = document.createElement('div');
+                                                     h.style.cssText = 'font-weight: 900 !important; color: #047857 !important; margin-bottom: 4px !important;';
+                                                     h.innerText = `--- TRAMO ${idx + 1}: MESA ${tramo.mesaId} SILLA ${tramo.sillaNum} ---`;
+                                                     block.appendChild(h);
 
-          const key = `${mesaId}-${sillaNum}`;
-          if (!window.palapaState.cuentas[key]) {
-          window.palapaState.cuentas[key] = { estado: 'ocupada', items: [] };
-          }
+                                                     tramo.items.forEach(it => {
+                                                     var row = document.createElement('div');
+                                                     row.style.cssText = 'display: flex !important; justify-content: space-between !important; margin-bottom: 2px !important;';
+                                                     row.innerHTML = `<span>${it.cantidad}x ${it.nombre}</span><span>$${(it.precio * it.cantidad).toFixed(2)}</span>`;
+                                                     block.appendChild(row);
+                                                     });
 
-          const items = window.palapaState.cuentas[key].items;
-          const existing = items.find(i => i.id === prod.id);
-          if (existing) {
-          existing.cantidad += 1;
-          } else {
-          items.push({ id: prod.id, nombre: prod.nombre, notas: '', precio: prod.precio, cantidad: 1 });
-          }
+                                                     var subRow = document.createElement('div');
+                                                     subRow.style.cssText = 'display: flex !important; justify-content: space-between !important; font-weight: bold !important; color: #475569 !important; margin-top: 4px !important; font-size: 10px !important;';
+                                                     subRow.innerHTML = `<span>SUBTOTAL TRAMO ${idx + 1}:</span><span>$${tramo.subtotal.toFixed(2)}</span>`;
+                                                     block.appendChild(subRow);
 
-          saveStateToStorage();
-          renderStateUI();
-          }
+                                                     listContainer.appendChild(block);
+                                                     });
 
-          function filtrarCategoria(catNombre) {
-          window.palapaState.categoriaFiltro = catNombre;
+                                                     var ivaVal = totalNeto * 0.16;
+                                                     var propinaVal = totalNeto * 0.10;
+                                                     var granTotal = totalNeto + ivaVal;
 
-          const chipKeys = ['Todos', 'Cafe', 'Des', 'Car', 'Pos'];
-          chipKeys.forEach(k => {
-          const el = document.getElementById(`wchip-${k}`);
-          if (el) {
-          if ((k === 'Todos' &amp;&amp; catNombre === 'Todos') ||
-          (k === 'Cafe' &amp;&amp; catNombre === 'Barra de Café &amp; Infusiones') ||
-          (k === 'Des' &amp;&amp; catNombre === 'Desayunos &amp; Brunch Gourmet') ||
-          (k === 'Car' &amp;&amp; catNombre === 'Especialidades Fuertes') ||
-          (k === 'Pos' &amp;&amp; catNombre === 'Repostería &amp; Postres de Autor')) {
-          el.style.background = &quot;#059669&quot;;
-          el.style.color = &quot;#ffffff&quot;;
-          el.style.border = &quot;1px solid #34d399&quot;;
-          } else {
-          el.style.background = &quot;#1e293b&quot;;
-          el.style.color = &quot;#cbd5e1&quot;;
-          el.style.border = &quot;1px solid #334155&quot;;
-          }
-          }
-          });
+                                                     if (subtotalEl) subtotalEl.innerText = `$${totalNeto.toFixed(2)}`;
+                                                     if (ivaEl) ivaEl.innerText = `$${ivaVal.toFixed(2)}`;
+                                                     if (propinaEl) propinaEl.innerText = `$${propinaVal.toFixed(2)}`;
+                                                     if (totalEl) totalEl.innerText = `$${granTotal.toFixed(2)}`;
+                                                     }
 
-          renderWaiterMenuGrid();
-          }
+                                                     modalP.classList.add('show');
+                                                     modalP.style.setProperty('display', 'flex', 'important');
+                                                     }
 
-          setTimeout(function () { renderStateUI(); setupDragListeners(); }, 150);
-          })();
-          </script>"></anvil-form>
+                                                     function cerrarPrecuenta() {
+                                                     const modalP = document.getElementById('modalPrecuentaBackdrop');
+                                                     if (modalP) {
+                                                     modalP.classList.remove('show');
+                                                     modalP.style.setProperty('display', 'none', 'important');
+                                                     }
+                                                     }
+
+                                                     window.abrirPrecuenta = function () {
+                                                     abrirPrecuenta();
+                                                     };
+                                                     window.cerrarPrecuenta = function () {
+                                                     cerrarPrecuenta();
+                                                     };
+
+                                                     function cerrarModalComanda() {
+                                                     const modal = document.getElementById('modalComandaBackdrop');
+                                                     if (modal) {
+                                                     modal.classList.remove('show');
+                                                     modal.style.setProperty('display', 'none', 'important');
+                                                     }
+                                                     }
+
+                                                     window.cerrarModalComanda = function () {
+                                                     cerrarModalComanda();
+                                                     };
+                                                     window.abrirModalComandaActual = function () {
+                                                     abrirModalComandaActual();
+                                                     };
+
+                                                     window.eliminarItemModal = function (key, idx) {
+                                                     if (window.palapaState.cuentas[key] &amp;&amp; window.palapaState.cuentas[key].items) {
+                                                     window.palapaState.cuentas[key].items.splice(idx, 1);
+                                                     if (window.palapaState.cuentas[key].items.length === 0) {
+                                                     delete window.palapaState.cuentas[key];
+                                                     }
+                                                     saveStateToStorage();
+                                                     renderStateUI();
+                                                     abrirModalComandaActual();
+                                                     }
+                                                     };
+
+                                                     function renderStateUI() {
+                                                     const isMoveMode = window.palapaState.modoMoverActivo;
+                                                     const origen = window.palapaState.sillaOrigenMover;
+
+                                                     for (let m = 1; m <= 3; m++) {
+                                                     let busyCount = 0;
+                                                     for (let s = 1; s <= 4; s++) {
+                                                     const key = `${m}-${s}`;
+                                                     let chairEl = document.getElementById(`chair-${m}-${s}`);
+                                                     const cuenta = window.palapaState.cuentas[key];
+                                                     const isOccupied = (cuenta &amp;&amp; cuenta.items &amp;&amp; cuenta.items.length > 0);
+
+                                                     if (isOccupied) busyCount++;
+
+                                                     if (chairEl) {
+                                                     const posClass = s === 1 ? 'chair-pos-top' : s === 2 ? 'chair-pos-right' : s === 3 ? 'chair-pos-bottom' : 'chair-pos-left';
+
+                                                     // Update draggable attribute based on current occupied state
+                                                     chairEl.setAttribute('draggable', isOccupied ? 'true' : 'false');
+                                                     chairEl.setAttribute('title', isOccupied
+                                                     ? `Mesa ${m} Silla ${s} (Ocupada) • Arrastra para mover`
+                                                     : `Mesa ${m} Silla ${s} (Disponible)`);
+
+                                                     if (isMoveMode &amp;&amp; origen &amp;&amp; origen.mesaId === m &amp;&amp; origen.sillaNum === s) {
+                                                     chairEl.className = `chair-btn-fixed ${posClass} chair-moving-source`;
+                                                     } else if (isMoveMode) {
+                                                     chairEl.className = `chair-btn-fixed ${posClass} chair-moving-target ${isOccupied ? 'chair-state-busy' : 'chair-state-free'}`;
+                                                     } else {
+                                                     chairEl.className = `chair-btn-fixed ${posClass} ${isOccupied ? 'chair-state-busy' : 'chair-state-free'}`;
+                                                     }
+                                                     }
+                                                     }
+
+                                                     const circle = document.getElementById(`table-circle-${m}`);
+                                                     const statusText = document.getElementById(`table-status-${m}`);
+                                                     const labelText = document.getElementById(`table-label-${m}`);
+
+                                                     if (circle) {
+                                                     if (busyCount > 0) {
+                                                     circle.style.background = &quot;#78350f&quot;;
+                                                     circle.style.border = &quot;4px solid #f59e0b&quot;;
+                                                     if (statusText) statusText.innerText = `${busyCount} Ocupada${busyCount > 1 ? 's' : ''}`;
+                                                     if (labelText) {
+                                                     labelText.style.color = &quot;#fbbf24&quot;;
+                                                     labelText.innerText = `🟡 Ocupada (${busyCount} Comensales)`;
+                                                     }
+                                                     } else {
+                                                     circle.style.background = &quot;#064e3b&quot;;
+                                                     circle.style.border = &quot;4px solid #10b981&quot;;
+                                                     if (statusText) statusText.innerText = `Libre`;
+                                                     if (labelText) {
+                                                     labelText.style.color = &quot;#34d399&quot;;
+                                                     labelText.innerText = `🟢 Disponible`;
+                                                     }
+                                                     }
+                                                     }
+                                                     }
+
+                                                     const badge = document.getElementById('activeTargetBadge');
+                                                     if (badge) {
+                                                     if (window.palapaState.sillaSeleccionadaNum !== null) {
+                                                     badge.innerText = `Mesa ${window.palapaState.mesaSeleccionadaId} • Silla ${window.palapaState.sillaSeleccionadaNum}`;
+                                                     } else {
+                                                     badge.innerText = `Mesa ${window.palapaState.mesaSeleccionadaId} (Completa)`;
+                                                     }
+                                                     }
+
+                                                     renderWaiterMenuGrid();
+                                                     }
+
+                                                     function renderWaiterMenuGrid() {
+                                                     const grid = document.getElementById('waiterMenuGrid');
+                                                     if (!grid) return;
+                                                     grid.innerHTML = '';
+
+                                                     const catFiltro = window.palapaState.categoriaFiltro || 'Todos';
+                                                     const filtrados = window.catalogProducts.filter(p => catFiltro === 'Todos' || p.categoria_nombre === catFiltro);
+
+                                                     filtrados.forEach(prod => {
+                                                     const card = document.createElement('div');
+                                                     card.style.cssText = 'background: #0f172a !important; border: 1px solid #1e293b !important; border-radius: 12px !important; padding: 12px !important; display: flex !important; justify-content: space-between !important; align-items: center !important; cursor: pointer !important;';
+                                                     card.onclick = () => agregarPlatilloDirecto(prod);
+
+                                                     card.innerHTML = `
+                                                     <div style=&quot;display: flex; align-items: center; gap: 8px;&quot;>
+                                                     <span style=&quot;font-size: 20px;&quot;>${prod.icono}</span>
+                                                     <div>
+                                                     <span style=&quot;font-size: 11px; font-weight: 700; color: #ffffff; display: block; line-height: 1.2;&quot;>${prod.nombre}</span>
+                                                     <span style=&quot;font-size: 11px; font-weight: 900; color: #34d399;&quot;>$${prod.precio.toFixed(2)}</span>
+                                                     </div>
+                                                     </div>
+                                                     <button style=&quot;padding: 6px 12px; background: #059669; color: #ffffff; font-size: 11px; font-weight: 900; border-radius: 8px; border: none; cursor: pointer;&quot;>
+                                                     + Agregar
+                                                     </button>
+                                                     `;
+                                                     grid.appendChild(card);
+                                                     });
+                                                     }
+
+                                                     function agregarPlatilloDirecto(prod) {
+                                                     const mesaId = window.palapaState.mesaSeleccionadaId;
+                                                     let sillaNum = window.palapaState.sillaSeleccionadaNum;
+
+                                                     if (sillaNum === null) {
+                                                     sillaNum = 1;
+                                                     window.palapaState.sillaSeleccionadaNum = 1;
+                                                     }
+
+                                                     const key = `${mesaId}-${sillaNum}`;
+                                                     if (!window.palapaState.cuentas[key]) {
+                                                     window.palapaState.cuentas[key] = {
+                                                     estado: 'ocupada',
+                                                     qrId: 'PV-' + mesaId + sillaNum,
+                                                     items: [],
+                                                     historialUbicaciones: [{ mesaId: mesaId, sillaNum: sillaNum, hora: (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }]
+                                                     };
+                                                     }
+
+                                                     const nowStr = (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                                                     const items = window.palapaState.cuentas[key].items;
+                                                     const existing = items.find(i => i.id === prod.id &amp;&amp; i.mesaId === mesaId &amp;&amp; i.sillaNum === sillaNum);
+                                                     if (existing) {
+                                                     existing.cantidad += 1;
+                                                     } else {
+                                                     items.push({
+                                                     id: prod.id,
+                                                     nombre: prod.nombre,
+                                                     notas: '',
+                                                     precio: prod.precio,
+                                                     cantidad: 1,
+                                                     mesaId: mesaId,
+                                                     sillaNum: sillaNum,
+                                                     hora: nowStr
+                                                     });
+                                                     }
+
+                                                     saveStateToStorage();
+                                                     renderStateUI();
+                                                     }
+
+                                                     function filtrarCategoria(catNombre) {
+                                                     window.palapaState.categoriaFiltro = catNombre;
+
+                                                     const chipKeys = ['Todos', 'Cafe', 'Des', 'Car', 'Pos'];
+                                                     chipKeys.forEach(k => {
+                                                     const el = document.getElementById(`wchip-${k}`);
+                                                     if (el) {
+                                                     if ((k === 'Todos' &amp;&amp; catNombre === 'Todos') ||
+                                                     (k === 'Cafe' &amp;&amp; catNombre === 'Barra de Café &amp; Infusiones') ||
+                                                     (k === 'Des' &amp;&amp; catNombre === 'Desayunos &amp; Brunch Gourmet') ||
+                                                     (k === 'Car' &amp;&amp; catNombre === 'Especialidades Fuertes') ||
+                                                     (k === 'Pos' &amp;&amp; catNombre === 'Repostería &amp; Postres de Autor')) {
+                                                     el.style.background = &quot;#059669&quot;;
+                                                     el.style.color = &quot;#ffffff&quot;;
+                                                     el.style.border = &quot;1px solid #34d399&quot;;
+                                                     } else {
+                                                     el.style.background = &quot;#1e293b&quot;;
+                                                     el.style.color = &quot;#cbd5e1&quot;;
+                                                     el.style.border = &quot;1px solid #334155&quot;;
+                                                     }
+                                                     }
+                                                     });
+
+                                                     renderWaiterMenuGrid();
+                                                     }
+
+                                                     setTimeout(function () { renderStateUI(); setupDragListeners(); }, 150);
+                                                     })();
+                                                     </script>"></anvil-form>
