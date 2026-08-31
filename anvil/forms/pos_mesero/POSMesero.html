@@ -625,6 +625,23 @@
       <div style="margin-top: 6px !important; font-size: 12px !important; font-weight: bold !important; color: #0f766e !important;" id="precuentaHeaderTag">PRECUENTA DE CONSUMO</div>
     </div>
 
+    <!-- SELECTOR DE SILLAS DE LA MESA PARA PRECUENTA / COBRO -->
+    <div id="precuentaSillasSelectorBox" style="background: #f8fafc !important; border: 1px solid #e2e8f0 !important; border-radius: 12px !important; padding: 10px 12px !important; display: flex !important; flex-direction: column !important; gap: 8px !important;">
+      <div style="display: flex !important; justify-content: space-between !important; align-items: center !important;">
+        <span style="font-size: 11px !important; font-weight: 800 !important; color: #0f172a !important;">
+          <i class="fa-solid fa-users-viewfinder" style="color: #059669;"></i> Seleccionar Sillas a Pagar / Imprimir:
+        </span>
+        <div style="display: flex !important; gap: 4px !important;">
+          <button type="button" onclick="window.precuentaSelectPreset('solo_esta')" style="padding: 2px 6px !important; font-size: 9px !important; font-weight: bold !important; background: #e2e8f0 !important; color: #334155 !important; border: none !important; border-radius: 4px !important; cursor: pointer !important;">Solo Actual</button>
+          <button type="button" onclick="window.precuentaSelectPreset('papa_ninos')" style="padding: 2px 6px !important; font-size: 9px !important; font-weight: bold !important; background: #dcfce7 !important; color: #166534 !important; border: none !important; border-radius: 4px !important; cursor: pointer !important;">Papá + Niños</button>
+          <button type="button" onclick="window.precuentaSelectPreset('todas')" style="padding: 2px 6px !important; font-size: 9px !important; font-weight: bold !important; background: #059669 !important; color: #ffffff !important; border: none !important; border-radius: 4px !important; cursor: pointer !important;">Toda Mesa</button>
+        </div>
+      </div>
+      <div id="precuentaSillasChecklist" style="display: grid !important; grid-template-columns: repeat(2, 1fr) !important; gap: 6px !important; font-size: 11px !important;">
+        <!-- Checklist populated dynamically -->
+      </div>
+    </div>
+
     <!-- Tramos list for precuenta -->
     <div id="precuentaTramosList" style="display: flex !important; flex-direction: column !important; gap: 10px !important; max-height: 260px !important; overflow-y: auto !important; font-size: 11px !important;">
       <!-- Content populated dynamically -->
@@ -646,10 +663,13 @@
     </div>
 
     <div style="display: flex !important; gap: 8px !important; margin-top: 4px !important;">
+      <button onclick="window.cobrarSillasPrecuenta();" style="flex: 1.4 !important; padding: 10px !important; background: #059669 !important; color: #ffffff !important; border: none !important; border-radius: 8px !important; font-size: 12px !important; font-weight: 900 !important; cursor: pointer !important; display: flex !important; align-items: center !important; justify-content: center !important; gap: 6px !important;">
+        💳 Cobrar (<span id="btnCobrarMonto">$0.00</span>)
+      </button>
       <button onclick="window.print();" style="flex: 1 !important; padding: 10px !important; background: #0f172a !important; color: #ffffff !important; border: none !important; border-radius: 8px !important; font-size: 12px !important; font-weight: bold !important; cursor: pointer !important;">
         🖨️ Imprimir
       </button>
-      <button onclick="window.cerrarPrecuenta();" style="flex: 1 !important; padding: 10px !important; background: #e2e8f0 !important; color: #334155 !important; border: none !important; border-radius: 8px !important; font-size: 12px !important; font-weight: bold !important; cursor: pointer !important;">
+      <button onclick="window.cerrarPrecuenta();" style="flex: 0.8 !important; padding: 10px !important; background: #e2e8f0 !important; color: #334155 !important; border: none !important; border-radius: 8px !important; font-size: 12px !important; font-weight: bold !important; cursor: pointer !important;">
         ✕ Cerrar
       </button>
     </div>
@@ -671,10 +691,11 @@
     ];
 
     var DEFAULT_CUENTAS = {
+      // MESA 3: 2 comensales
       '3-1': {
         estado: 'ocupada',
         qrId: 'PV-031',
-        comensalNombre: 'Comensal Portavasos #31',
+        comensalNombre: 'Comensal 1 (Adulto)',
         items: [
           { id: 4, nombre: 'Chilaquiles Verdes Pollo', notas: 'Sin cebolla • Salsa aparte', precio: 148.00, cantidad: 1, mesaId: 3, sillaNum: 1, hora: '12:15 PM' }
         ],
@@ -685,12 +706,61 @@
       '3-2': {
         estado: 'ocupada',
         qrId: 'PV-032',
-        comensalNombre: 'Comensal Portavasos #32',
+        comensalNombre: 'Comensal 2 (Adulto)',
         items: [
           { id: 1, nombre: 'Capuchino Especial V&S', notas: 'Leche de almendras', precio: 68.00, cantidad: 1, mesaId: 3, sillaNum: 2, hora: '12:20 PM' }
         ],
         historialUbicaciones: [
           { mesaId: 3, sillaNum: 2, hora: '12:20 PM' }
+        ]
+      },
+
+      // MESA 2: Familia (2 Adultos + 2 Niños)
+      '2-1': {
+        estado: 'ocupada',
+        qrId: 'PV-021',
+        comensalNombre: 'Adulto 1 (Papá)',
+        items: [
+          { id: 7, nombre: 'Rib Eye Grill V&S', notas: 'Término medio • Papas gajo', precio: 385.00, cantidad: 1, mesaId: 2, sillaNum: 1, hora: '12:40 PM' },
+          { id: 10, nombre: 'Limonada Botánica', notas: 'Con hierbabuena', precio: 60.00, cantidad: 1, mesaId: 2, sillaNum: 1, hora: '12:42 PM' }
+        ],
+        historialUbicaciones: [
+          { mesaId: 2, sillaNum: 1, hora: '12:35 PM' }
+        ]
+      },
+      '2-2': {
+        estado: 'ocupada',
+        qrId: 'PV-022',
+        comensalNombre: 'Adulto 2 (Mamá)',
+        items: [
+          { id: 8, nombre: 'Pasta Fettuccine Trufado', notas: 'Poco queso', precio: 265.00, cantidad: 1, mesaId: 2, sillaNum: 2, hora: '12:41 PM' },
+          { id: 10, nombre: 'Limonada Botánica', notas: 'Sin hielo', precio: 60.00, cantidad: 1, mesaId: 2, sillaNum: 2, hora: '12:43 PM' }
+        ],
+        historialUbicaciones: [
+          { mesaId: 2, sillaNum: 2, hora: '12:35 PM' }
+        ]
+      },
+      '2-3': {
+        estado: 'ocupada',
+        qrId: 'PV-023',
+        comensalNombre: 'Niño 1',
+        items: [
+          { id: 6, nombre: 'Molletes Masa Madre', notas: 'Bien doraditos', precio: 125.00, cantidad: 1, mesaId: 2, sillaNum: 3, hora: '12:42 PM' },
+          { id: 10, nombre: 'Limonada Botánica', notas: 'Poco dulce', precio: 60.00, cantidad: 1, mesaId: 2, sillaNum: 3, hora: '12:44 PM' }
+        ],
+        historialUbicaciones: [
+          { mesaId: 2, sillaNum: 3, hora: '12:35 PM' }
+        ]
+      },
+      '2-4': {
+        estado: 'ocupada',
+        qrId: 'PV-024',
+        comensalNombre: 'Niño 2',
+        items: [
+          { id: 9, nombre: 'Pastel Chocolate Valrhona', notas: 'Con helado de vainilla', precio: 105.00, cantidad: 1, mesaId: 2, sillaNum: 4, hora: '12:45 PM' }
+        ],
+        historialUbicaciones: [
+          { mesaId: 2, sillaNum: 4, hora: '12:35 PM' }
         ]
       }
     };
@@ -707,6 +777,10 @@
         if (saved) {
           var parsed = JSON.parse(saved);
           if (parsed && typeof parsed === 'object' && Object.keys(parsed).length > 0) {
+            // Asegurar que las mesas de demo existan si no están presentes
+            if (!parsed['2-1'] || !parsed['3-1']) {
+              parsed = Object.assign({}, DEFAULT_CUENTAS, parsed);
+            }
             return parsed;
           }
         }
@@ -715,7 +789,7 @@
     }
 
     window.palapaState = {
-      mesaSeleccionadaId: 3,
+      mesaSeleccionadaId: 2,
       sillaSeleccionadaNum: 1,
       categoriaFiltro: "Todos",
       modoMoverActivo: false,
@@ -725,13 +799,13 @@
 
     function resetDemoState() {
       window.palapaState.cuentas = JSON.parse(JSON.stringify(DEFAULT_CUENTAS));
-      window.palapaState.mesaSeleccionadaId = 3;
+      window.palapaState.mesaSeleccionadaId = 2;
       window.palapaState.sillaSeleccionadaNum = 1;
       saveStateToStorage();
       cancelarModoMover();
       cerrarModalComanda();
       renderStateUI();
-      showDragToast('🔄 Estado reiniciado a demo inicial (Mesa 3 S1 y S2)', 'ok');
+      showDragToast('🔄 Estado reiniciado a demo (Mesa 3: 2 comensales, Mesa 2: Familia 2 adultos + 2 niños)', 'ok');
     }
 
     // ── Toast de notificación (reemplaza alert()) ──
@@ -1440,80 +1514,216 @@
       }
     }
 
+    var _precuentaMesaId = 2;
+    var _precuentaSillasSeleccionadas = [];
+
     function abrirPrecuenta() {
       const mesaId = window.palapaState.mesaSeleccionadaId;
       const sillaNum = window.palapaState.sillaSeleccionadaNum;
       const modalP = document.getElementById('modalPrecuentaBackdrop');
+      const fechaEl = document.getElementById('precuentaFecha');
+      const checklistContainer = document.getElementById('precuentaSillasChecklist');
+
+      if (!modalP) return;
+      _precuentaMesaId = mesaId;
+
+      if (fechaEl) fechaEl.innerText = 'Fecha: ' + (new Date()).toLocaleDateString() + ' ' + (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+      // Encontrar todas las sillas ocupadas de esta mesa
+      var sillasOcupadas = [];
+      for (var s = 1; s <= 4; s++) {
+        var k = mesaId + '-' + s;
+        var c = window.palapaState.cuentas[k];
+        if (c && (c.estado === 'ocupada' || (c.items && c.items.length > 0))) {
+          var tot = 0;
+          if (c.items) c.items.forEach(function(it) { tot += it.precio * it.cantidad; });
+          sillasOcupadas.push({ sillaNum: s, cuenta: c, total: tot });
+        }
+      }
+
+      // Si se abrió desde una silla específica, seleccionar inicialmente esa silla; si es mesa completa, seleccionar todas
+      if (sillaNum !== null) {
+        _precuentaSillasSeleccionadas = [sillaNum];
+      } else {
+        _precuentaSillasSeleccionadas = sillasOcupadas.map(function(o) { return o.sillaNum; });
+      }
+
+      // Renderizar checklist
+      if (checklistContainer) {
+        checklistContainer.innerHTML = '';
+        if (sillasOcupadas.length === 0) {
+          checklistContainer.innerHTML = '<div style="grid-column: span 2; color: #94a3b8; font-size: 11px;">No hay sillas con consumos en esta mesa.</div>';
+        } else {
+          sillasOcupadas.forEach(function(obj) {
+            var s = obj.sillaNum;
+            var isChecked = _precuentaSillasSeleccionadas.indexOf(s) !== -1;
+            var lbl = document.createElement('label');
+            lbl.style.cssText = 'display: flex !important; align-items: center !important; gap: 6px !important; background: ' + (isChecked ? '#ecfdf5' : '#ffffff') + ' !important; padding: 6px 8px !important; border-radius: 8px !important; border: 1px solid ' + (isChecked ? '#10b981' : '#cbd5e1') + ' !important; cursor: pointer !important; user-select: none !important;';
+            lbl.innerHTML = `
+              <input type="checkbox" value="${s}" ${isChecked ? 'checked' : ''} onchange="window.togglePrecuentaSilla(${s})" style="accent-color: #059669 !important; width: 14px !important; height: 14px !important;">
+              <div style="display: flex; flex-direction: column; line-height: 1.1;">
+                <span style="font-weight: 800; font-size: 11px; color: #0f172a;">Silla ${s} <span style="font-weight: normal; color: #64748b; font-size: 9px;">${obj.cuenta.comensalNombre ? '• ' + obj.cuenta.comensalNombre : ''}</span></span>
+                <span style="font-weight: 900; color: #059669; font-size: 10px;">$${obj.total.toFixed(2)}</span>
+              </div>
+            `;
+            checklistContainer.appendChild(lbl);
+          });
+        }
+      }
+
+      recalcularPrecuenta();
+      modalP.classList.add('show');
+      modalP.style.setProperty('display', 'flex', 'important');
+    }
+
+    window.togglePrecuentaSilla = function(sillaNum) {
+      var idx = _precuentaSillasSeleccionadas.indexOf(sillaNum);
+      if (idx === -1) {
+        _precuentaSillasSeleccionadas.push(sillaNum);
+      } else {
+        _precuentaSillasSeleccionadas.splice(idx, 1);
+      }
+      actualizarChecklistVisual();
+      recalcularPrecuenta();
+    };
+
+    window.precuentaSelectPreset = function(preset) {
+      var mesaId = _precuentaMesaId;
+      if (preset === 'solo_esta') {
+        var sSel = window.palapaState.sillaSeleccionadaNum || 1;
+        _precuentaSillasSeleccionadas = [sSel];
+      } else if (preset === 'papa_ninos') {
+        // En Mesa 2 (Familia): Papá (1) + Niño 1 (3) + Niño 2 (4)
+        _precuentaSillasSeleccionadas = [1, 3, 4].filter(function(s) {
+          return window.palapaState.cuentas[mesaId + '-' + s] !== undefined;
+        });
+      } else if (preset === 'todas') {
+        _precuentaSillasSeleccionadas = [];
+        for (var s = 1; s <= 4; s++) {
+          if (window.palapaState.cuentas[mesaId + '-' + s]) {
+            _precuentaSillasSeleccionadas.push(s);
+          }
+        }
+      }
+      actualizarChecklistVisual();
+      recalcularPrecuenta();
+    };
+
+    function actualizarChecklistVisual() {
+      var checklistContainer = document.getElementById('precuentaSillasChecklist');
+      if (!checklistContainer) return;
+      var inputs = checklistContainer.querySelectorAll('input[type="checkbox"]');
+      inputs.forEach(function(inp) {
+        var sVal = parseInt(inp.value);
+        var isChecked = _precuentaSillasSeleccionadas.indexOf(sVal) !== -1;
+        inp.checked = isChecked;
+        var parentLbl = inp.closest('label');
+        if (parentLbl) {
+          parentLbl.style.background = isChecked ? '#ecfdf5' : '#ffffff';
+          parentLbl.style.borderColor = isChecked ? '#10b981' : '#cbd5e1';
+        }
+      });
+    }
+
+    function recalcularPrecuenta() {
+      const mesaId = _precuentaMesaId;
       const listContainer = document.getElementById('precuentaTramosList');
       const subtotalEl = document.getElementById('precuentaSubtotal');
       const ivaEl = document.getElementById('precuentaIva');
       const propinaEl = document.getElementById('precuentaPropina');
       const totalEl = document.getElementById('precuentaTotal');
       const headerTag = document.getElementById('precuentaHeaderTag');
-      const fechaEl = document.getElementById('precuentaFecha');
+      const btnCobrarMonto = document.getElementById('btnCobrarMonto');
 
-      if (!modalP || !listContainer) return;
+      if (!listContainer) return;
       listContainer.innerHTML = '';
 
-      if (fechaEl) fechaEl.innerText = 'Fecha: ' + (new Date()).toLocaleDateString() + ' ' + (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      var sillasList = _precuentaSillasSeleccionadas.slice().sort();
 
-      if (sillaNum !== null) {
-        const key = `${mesaId}-${sillaNum}`;
-        const cuenta = window.palapaState.cuentas[key] || { items: [] };
-        const qrId = cuenta.qrId || ('PV-' + mesaId + sillaNum);
-        if (headerTag) headerTag.innerHTML = `MESA ${mesaId} • SILLA ${sillaNum} <br><span style="font-size:10px;color:#475569;">PORTAVASOS QR: #${qrId}</span>`;
-
-        var tramosMap = {};
-        cuenta.items.forEach(it => {
-          var tMesa = it.mesaId !== undefined ? it.mesaId : mesaId;
-          var tSilla = it.sillaNum !== undefined ? it.sillaNum : sillaNum;
-          var tKey = tMesa + '-' + tSilla;
-          if (!tramosMap[tKey]) tramosMap[tKey] = { mesaId: tMesa, sillaNum: tSilla, items: [], subtotal: 0 };
-          tramosMap[tKey].items.push(it);
-          tramosMap[tKey].subtotal += (it.precio * it.cantidad);
-        });
-
-        var tramoKeys = Object.keys(tramosMap);
-        var totalNeto = 0;
-
-        tramoKeys.forEach((tKey, idx) => {
-          var tramo = tramosMap[tKey];
-          totalNeto += tramo.subtotal;
-          var block = document.createElement('div');
-          block.style.cssText = 'border-bottom: 1px solid #e2e8f0 !important; padding-bottom: 6px !important;';
-          var h = document.createElement('div');
-          h.style.cssText = 'font-weight: 900 !important; color: #047857 !important; margin-bottom: 4px !important;';
-          h.innerText = `--- TRAMO ${idx + 1}: MESA ${tramo.mesaId} SILLA ${tramo.sillaNum} ---`;
-          block.appendChild(h);
-
-          tramo.items.forEach(it => {
-            var row = document.createElement('div');
-            row.style.cssText = 'display: flex !important; justify-content: space-between !important; margin-bottom: 2px !important;';
-            row.innerHTML = `<span>${it.cantidad}x ${it.nombre}</span><span>$${(it.precio * it.cantidad).toFixed(2)}</span>`;
-            block.appendChild(row);
-          });
-
-          var subRow = document.createElement('div');
-          subRow.style.cssText = 'display: flex !important; justify-content: space-between !important; font-weight: bold !important; color: #475569 !important; margin-top: 4px !important; font-size: 10px !important;';
-          subRow.innerHTML = `<span>SUBTOTAL TRAMO ${idx + 1}:</span><span>$${tramo.subtotal.toFixed(2)}</span>`;
-          block.appendChild(subRow);
-
-          listContainer.appendChild(block);
-        });
-
-        var ivaVal = totalNeto * 0.16;
-        var propinaVal = totalNeto * 0.10;
-        var granTotal = totalNeto + ivaVal;
-
-        if (subtotalEl) subtotalEl.innerText = `$${totalNeto.toFixed(2)}`;
-        if (ivaEl) ivaEl.innerText = `$${ivaVal.toFixed(2)}`;
-        if (propinaEl) propinaEl.innerText = `$${propinaVal.toFixed(2)}`;
-        if (totalEl) totalEl.innerText = `$${granTotal.toFixed(2)}`;
+      if (sillasList.length === 0) {
+        if (headerTag) headerTag.innerHTML = `MESA ${mesaId} • NINGUNA SILLA SELECCIONADA`;
+        listContainer.innerHTML = `<div style="text-align:center; padding: 15px; color:#94a3b8; font-size:11px;">Marca al menos una silla para ver su precuenta.</div>`;
+        if (subtotalEl) subtotalEl.innerText = '$0.00';
+        if (ivaEl) ivaEl.innerText = '$0.00';
+        if (propinaEl) propinaEl.innerText = '$0.00';
+        if (totalEl) totalEl.innerText = '$0.00';
+        if (btnCobrarMonto) btnCobrarMonto.innerText = '$0.00';
+        return;
       }
 
-      modalP.classList.add('show');
-      modalP.style.setProperty('display', 'flex', 'important');
+      var sillasStr = sillasList.map(function(s) { return 'Silla ' + s; }).join(', ');
+      if (headerTag) {
+        headerTag.innerHTML = `MESA ${mesaId} • ${sillasStr.toUpperCase()} <br><span style="font-size:10px;color:#475569;">CUENTA AGRUPADA (${sillasList.length} COMENSAL${sillasList.length > 1 ? 'ES' : ''})</span>`;
+      }
+
+      var totalNeto = 0;
+
+      sillasList.forEach(function(sNum) {
+        var k = mesaId + '-' + sNum;
+        var cuenta = window.palapaState.cuentas[k];
+        if (!cuenta || !cuenta.items || cuenta.items.length === 0) return;
+
+        var chairBlock = document.createElement('div');
+        chairBlock.style.cssText = 'border-bottom: 1px dashed #cbd5e1 !important; padding-bottom: 6px !important; margin-bottom: 4px !important;';
+
+        var chairHeader = document.createElement('div');
+        chairHeader.style.cssText = 'display: flex !important; justify-content: space-between !important; font-weight: 900 !important; color: #047857 !important; margin-bottom: 4px !important; font-size: 11px !important;';
+        chairHeader.innerHTML = `<span>SILLA ${sNum} ${cuenta.comensalNombre ? '· ' + cuenta.comensalNombre.toUpperCase() : ''}</span><span style="font-size: 9px; color: #64748b;">QR: #${cuenta.qrId || 'PV-0'+mesaId+sNum}</span>`;
+        chairBlock.appendChild(chairHeader);
+
+        var subChair = 0;
+        cuenta.items.forEach(function(it) {
+          var row = document.createElement('div');
+          var itTotal = it.precio * it.cantidad;
+          subChair += itTotal;
+          totalNeto += itTotal;
+          row.style.cssText = 'display: flex !important; justify-content: space-between !important; margin-bottom: 2px !important; font-size: 11px !important;';
+          row.innerHTML = `<span>${it.cantidad}x ${it.nombre}</span><span>$${itTotal.toFixed(2)}</span>`;
+          chairBlock.appendChild(row);
+        });
+
+        var subChairRow = document.createElement('div');
+        subChairRow.style.cssText = 'display: flex !important; justify-content: space-between !important; font-weight: bold !important; color: #475569 !important; margin-top: 3px !important; font-size: 10px !important;';
+        subChairRow.innerHTML = `<span>SUBTOTAL SILLA ${sNum}:</span><span>$${subChair.toFixed(2)}</span>`;
+        chairBlock.appendChild(subChairRow);
+
+        listContainer.appendChild(chairBlock);
+      });
+
+      var ivaVal = totalNeto * 0.16;
+      var propinaVal = totalNeto * 0.10;
+      var granTotal = totalNeto + ivaVal;
+
+      if (subtotalEl) subtotalEl.innerText = `$${totalNeto.toFixed(2)}`;
+      if (ivaEl) ivaEl.innerText = `$${ivaVal.toFixed(2)}`;
+      if (propinaEl) propinaEl.innerText = `$${propinaVal.toFixed(2)}`;
+      if (totalEl) totalEl.innerText = `$${granTotal.toFixed(2)}`;
+      if (btnCobrarMonto) btnCobrarMonto.innerText = `$${granTotal.toFixed(2)}`;
     }
+
+    window.cobrarSillasPrecuenta = function() {
+      var mesaId = _precuentaMesaId;
+      var sillasList = _precuentaSillasSeleccionadas.slice();
+      if (sillasList.length === 0) {
+        showDragToast('⚠ Selecciona al menos una silla para cobrar', 'warn');
+        return;
+      }
+
+      var totalText = document.getElementById('precuentaTotal') ? document.getElementById('precuentaTotal').innerText : '$0.00';
+      var sillasStr = sillasList.map(function(s) { return 'Silla ' + s; }).join(', ');
+
+      if (confirm(`¿Confirmar cobro de ${sillasStr} de Mesa ${mesaId} por un total de ${totalText}?\n\nLas sillas seleccionadas serán liquidadas y quedarán libres.`)) {
+        sillasList.forEach(function(sNum) {
+          var k = mesaId + '-' + sNum;
+          delete window.palapaState.cuentas[k];
+        });
+        saveStateToStorage();
+        renderStateUI();
+        cerrarPrecuenta();
+        cerrarModalComanda();
+        showDragToast(`💳 ¡Pago completado para Mesa ${mesaId} (${sillasStr})! Sillas liberadas.`, 'ok');
+      }
+    };
 
     function cerrarPrecuenta() {
       const modalP = document.getElementById('modalPrecuentaBackdrop');

@@ -92,6 +92,31 @@
       </div>
     </header>
 
+    <!-- BARRA DE UBICACIÓN QR Y SELECTOR DE SILLA (SIMULACIÓN DE ESCANEO QR) -->
+    <div class="bg-slate-900/90 border-b border-slate-800 px-6 py-2.5 flex flex-wrap justify-between items-center gap-3">
+      <div class="flex items-center gap-2 text-xs">
+        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-500/30">
+          <i class="fa-solid fa-qrcode text-emerald-400"></i> Portavasos QR: <span id="lblQrActivo">PV-021</span>
+        </span>
+        <span class="text-slate-300 font-semibold" id="lblUbicacionActiva">Mesa 2 • Silla 1 (Adulto 1 / Papá)</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="text-xs text-slate-400 font-medium">Simular escaneo QR en:</span>
+        <select id="selSimularQr" onchange="window.cambiarSimulacionQr(this.value)" class="bg-slate-800 text-slate-200 text-xs font-bold px-3 py-1.5 rounded-xl border border-slate-700 focus:outline-none focus:border-emerald-500 cursor-pointer">
+          <optgroup label="Mesa 2 (Familia 2 adultos + 2 niños)">
+            <option value="2-1" selected>Mesa 2 · Silla 1 (Papá - $445.00)</option>
+            <option value="2-2">Mesa 2 · Silla 2 (Mamá - $325.00)</option>
+            <option value="2-3">Mesa 2 · Silla 3 (Niño 1 - $185.00)</option>
+            <option value="2-4">Mesa 2 · Silla 4 (Niño 2 - $105.00)</option>
+          </optgroup>
+          <optgroup label="Mesa 3 (2 Comensales)">
+            <option value="3-1">Mesa 3 · Silla 1 (Adulto 1 - $148.00)</option>
+            <option value="3-2">Mesa 3 · Silla 2 (Adulto 2 - $68.00)</option>
+          </optgroup>
+        </select>
+      </div>
+    </div>
+
     <!-- CONTENIDO PRINCIPAL DEL MENÚ DIGITAL -->
     <main class="flex-1 max-w-7xl w-full mx-auto p-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
 
@@ -126,39 +151,53 @@
 
       </section>
 
-      <!-- SECCIÓN DERECHA: SIDEBAR DE COMANDA Y COBRO -->
-      <aside class="glass-card rounded-2xl p-6 flex flex-col justify-between h-full border border-slate-800 shadow-2xl">
+      <!-- SECCIÓN DERECHA: SIDEBAR DE COMANDA Y COBRO AGRUPADO -->
+      <aside class="glass-card rounded-2xl p-6 flex flex-col justify-between h-full border border-slate-800 shadow-2xl gap-4">
         <div>
-          <div class="flex justify-between items-center pb-4 border-b border-slate-800 mb-4">
+          <div class="flex justify-between items-center pb-3 border-b border-slate-800 mb-3">
             <div>
               <h2 class="text-base font-bold text-white flex items-center gap-2">
-                <i class="fa-solid fa-utensils text-emerald-400"></i> Comanda Activa
+                <i class="fa-solid fa-receipt text-emerald-400"></i> <span id="txtTituloComanda">Mi Comanda (Silla 1)</span>
               </h2>
-              <p class="text-xs text-slate-400">Detalle de consumos en mesa</p>
+              <p class="text-xs text-slate-400" id="txtSubComanda">Mesa 2 • Portavasos #PV-021</p>
             </div>
             <span
               class="px-2.5 py-1 text-[10px] font-black rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 uppercase">
-              Abierta
+              Activa
             </span>
           </div>
 
-          <!-- LISTA DE ITEMS REGISTRADOS -->
-          <div class="space-y-3 max-h-80 overflow-y-auto pr-1" id="cartItemsList">
-            <div class="text-center py-8 text-slate-500 text-xs">
-              No hay consumos agregados a esta comanda.
+          <!-- LISTA DE ITEMS REGISTRADOS DE MI SILLA -->
+          <div class="space-y-2.5 max-h-56 overflow-y-auto pr-1" id="cartItemsList">
+            <div class="text-center py-6 text-slate-500 text-xs">
+              No hay consumos agregados a esta silla.
+            </div>
+          </div>
+
+          <!-- SECCIÓN: PAGAR POR ACOMPAÑANTES / NIÑOS EN MI MESA -->
+          <div class="mt-4 pt-3 border-t border-slate-800/80">
+            <div class="flex justify-between items-center mb-2">
+              <span class="text-xs font-bold text-slate-200 flex items-center gap-1.5">
+                <i class="fa-solid fa-users text-amber-400"></i> Pagar por otros en mi mesa:
+              </span>
+              <button onclick="window.seleccionarTodosAcompanantes()" class="text-[10px] text-emerald-400 hover:underline font-semibold">Toda Mesa</button>
+            </div>
+
+            <div id="listaAcompanantesMesa" class="space-y-1.5 max-h-36 overflow-y-auto pr-1 text-xs">
+              <!-- Checklist populated dynamically -->
             </div>
           </div>
         </div>
 
-        <!-- TOTALES Y ACCIONES DE COBRO -->
-        <div class="pt-4 border-t border-slate-800 mt-6 space-y-4">
-          <div class="space-y-2 text-xs">
+        <!-- TOTALES Y ACCIONES DE COBRO CONSOLIDADAS -->
+        <div class="pt-3 border-t border-slate-800 space-y-3">
+          <div class="space-y-1.5 text-xs">
             <div class="flex justify-between text-slate-400">
-              <span>Subtotal:</span>
+              <span id="lblSubtotalDetalle">Subtotal (Mi Silla + Acompañantes):</span>
               <span class="font-semibold text-slate-200" id="txtSubtotal">$0.00</span>
             </div>
             <div class="flex justify-between text-slate-400">
-              <span>IVA (16% Desglosado):</span>
+              <span>IVA 16% Trasladado:</span>
               <span class="font-semibold text-slate-200" id="txtIVA">$0.00</span>
             </div>
             <div class="flex justify-between text-slate-400">
@@ -166,20 +205,20 @@
               <span class="font-semibold text-slate-200" id="txtPropina">$0.00</span>
             </div>
             <div class="flex justify-between text-base font-black text-white pt-2 border-t border-slate-800">
-              <span>Total Mesa:</span>
-              <span class="text-emerald-400" id="txtTotal">$0.00</span>
+              <span id="lblTotalCobro">Total a Pagar:</span>
+              <span class="text-emerald-400 text-lg font-black" id="txtTotal">$0.00</span>
             </div>
           </div>
 
           <!-- BOTONES DE COBRO MULTICANAL -->
           <div class="grid grid-cols-2 gap-2">
             <button onclick="window.abrirModalCobro('santander')"
-              class="py-3 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-100 text-xs font-bold border border-slate-700 transition flex items-center justify-center gap-1.5">
+              class="py-3 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-100 text-xs font-bold border border-slate-700 transition flex items-center justify-center gap-1.5 cursor-pointer">
               <i class="fa-solid fa-credit-card text-sky-400"></i> Santander
             </button>
-            <button onclick="window.abrirModalCobro('efectivo')"
-              class="py-3 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold shadow-lg shadow-emerald-600/30 transition flex items-center justify-center gap-1.5">
-              <i class="fa-solid fa-money-bill-wave"></i> Cobrar / Ticket
+            <button onclick="window.abrirModalCobro('tarjeta')"
+              class="py-3 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold shadow-lg shadow-emerald-600/30 transition flex items-center justify-center gap-1.5 cursor-pointer">
+              <i class="fa-solid fa-check-double"></i> Pagar (<span id="txtBtnPagarMonto">$0.00</span>)
             </button>
           </div>
         </div>
@@ -213,14 +252,268 @@
       { id: 6, nombre: "Bebidas & Coctelería de Autor", icono: "🍹" }
     ];
 
-    window.vsCartItems = [];
     window.categoriaActual = "Todos";
+    window.simMesaId = 2;
+    window.simSillaNum = 1;
+    window.sillasAcompanantesSeleccionadas = [3, 4]; // Por defecto, Papá (Silla 1) incluye a los niños (3 y 4)
+
+    function getStorageCuentas() {
+      try {
+        var raw = localStorage.getItem('palapa_cuentas_v1');
+        if (raw) return JSON.parse(raw);
+      } catch(e) {}
+      return {};
+    }
+
+    function saveStorageCuentas(cuentas) {
+      try {
+        localStorage.setItem('palapa_cuentas_v1', JSON.stringify(cuentas));
+      } catch(e) {}
+    }
+
+    window.cambiarSimulacionQr = function(keyStr) {
+      var parts = keyStr.split('-');
+      window.simMesaId = parseInt(parts[0]);
+      window.simSillaNum = parseInt(parts[1]);
+
+      // Si es Mesa 2 Silla 1 (Papá), sugerir niños seleccionados (3 y 4)
+      if (window.simMesaId === 2 && window.simSillaNum === 1) {
+        window.sillasAcompanantesSeleccionadas = [3, 4];
+      } else {
+        window.sillasAcompanantesSeleccionadas = [];
+      }
+
+      window.sincronizarCuentaDesdeStorage();
+    };
+
+    window.sincronizarCuentaDesdeStorage = function() {
+      var cuentas = getStorageCuentas();
+      var key = window.simMesaId + '-' + window.simSillaNum;
+      var cuentaActual = cuentas[key];
+
+      var qrId = (cuentaActual && cuentaActual.qrId) ? cuentaActual.qrId : ('PV-0' + window.simMesaId + window.simSillaNum);
+      var comensalNom = (cuentaActual && cuentaActual.comensalNombre) ? cuentaActual.comensalNombre : ('Comensal Silla ' + window.simSillaNum);
+
+      var lblQr = document.getElementById('lblQrActivo');
+      var lblUbicacion = document.getElementById('lblUbicacionActiva');
+      var txtTitulo = document.getElementById('txtTituloComanda');
+      var txtSub = document.getElementById('txtSubComanda');
+
+      if (lblQr) lblQr.innerText = qrId;
+      if (lblUbicacion) lblUbicacion.innerText = `Mesa ${window.simMesaId} • Silla ${window.simSillaNum} (${comensalNom})`;
+      if (txtTitulo) txtTitulo.innerText = `Mi Comanda (Silla ${window.simSillaNum})`;
+      if (txtSub) txtSub.innerText = `Mesa ${window.simMesaId} • Portavasos #${qrId}`;
+
+      window.renderCarrito();
+      window.renderAcompanantesMesa();
+    };
+
+    window.renderCarrito = function () {
+      const container = document.getElementById('cartItemsList');
+      if (!container) return;
+      container.innerHTML = '';
+
+      var cuentas = getStorageCuentas();
+      var key = window.simMesaId + '-' + window.simSillaNum;
+      var cuentaActual = cuentas[key] || { items: [] };
+      var items = cuentaActual.items || [];
+
+      if (items.length === 0) {
+        container.innerHTML = `<div class="text-center py-6 text-slate-500 text-xs">No hay consumos registrados en tu silla.</div>`;
+      } else {
+        items.forEach((item, idx) => {
+          const itemSubtotal = item.precio * item.cantidad;
+          const row = document.createElement('div');
+          row.className = 'flex justify-between items-center bg-slate-900/80 p-2.5 rounded-xl border border-slate-800 text-xs';
+          row.innerHTML = `
+            <div>
+              <span class="font-bold text-white">${item.nombre} x${item.cantidad}</span>
+              <span class="block text-[10px] text-slate-400">${item.notas ? item.notas + ' • ' : ''}$${Number(item.precio).toFixed(2)} c/u</span>
+            </div>
+            <span class="font-black text-emerald-400">$${itemSubtotal.toFixed(2)}</span>
+          `;
+          container.appendChild(row);
+        });
+      }
+
+      window.recalcularTotalesCompletos();
+    };
+
+    window.renderAcompanantesMesa = function() {
+      const container = document.getElementById('listaAcompanantesMesa');
+      if (!container) return;
+      container.innerHTML = '';
+
+      var cuentas = getStorageCuentas();
+      var mesaId = window.simMesaId;
+      var miSilla = window.simSillaNum;
+
+      var otrasSillas = [];
+      for (var s = 1; s <= 4; s++) {
+        if (s !== miSilla) {
+          var k = mesaId + '-' + s;
+          var c = cuentas[k];
+          if (c && c.items && c.items.length > 0) {
+            var tot = 0;
+            c.items.forEach(function(i) { tot += i.precio * i.cantidad; });
+            otrasSillas.push({ sillaNum: s, cuenta: c, total: tot });
+          }
+        }
+      }
+
+      if (otrasSillas.length === 0) {
+        container.innerHTML = '<div class="text-slate-500 text-[11px] py-1 italic">No hay otros comensales con cuenta en esta mesa.</div>';
+        return;
+      }
+
+      otrasSillas.forEach(obj => {
+        var s = obj.sillaNum;
+        var isChecked = window.sillasAcompanantesSeleccionadas.indexOf(s) !== -1;
+        var row = document.createElement('label');
+        row.className = `flex items-center justify-between p-2 rounded-xl border cursor-pointer transition select-none ${isChecked ? 'bg-emerald-950/40 border-emerald-500/50' : 'bg-slate-900/60 border-slate-800 hover:border-slate-700'}`;
+        row.innerHTML = `
+          <div class="flex items-center gap-2">
+            <input type="checkbox" value="${s}" ${isChecked ? 'checked' : ''} onchange="window.toggleAcompanante(${s})" class="accent-emerald-500 rounded">
+            <div>
+              <span class="font-bold text-slate-100 block">Silla ${s} <span class="text-slate-400 font-normal">(${obj.cuenta.comensalNombre || 'Comensal'})</span></span>
+              <span class="text-[10px] text-slate-400">${obj.cuenta.items.length} consumos</span>
+            </div>
+          </div>
+          <span class="font-bold text-amber-400">$${obj.total.toFixed(2)}</span>
+        `;
+        container.appendChild(row);
+      });
+    };
+
+    window.toggleAcompanante = function(sillaNum) {
+      var idx = window.sillasAcompanantesSeleccionadas.indexOf(sillaNum);
+      if (idx === -1) {
+        window.sillasAcompanantesSeleccionadas.push(sillaNum);
+      } else {
+        window.sillasAcompanantesSeleccionadas.splice(idx, 1);
+      }
+      window.renderAcompanantesMesa();
+      window.recalcularTotalesCompletos();
+    };
+
+    window.seleccionarTodosAcompanantes = function() {
+      var cuentas = getStorageCuentas();
+      var mesaId = window.simMesaId;
+      var miSilla = window.simSillaNum;
+      window.sillasAcompanantesSeleccionadas = [];
+      for (var s = 1; s <= 4; s++) {
+        if (s !== miSilla && cuentas[mesaId + '-' + s]) {
+          window.sillasAcompanantesSeleccionadas.push(s);
+        }
+      }
+      window.renderAcompanantesMesa();
+      window.recalcularTotalesCompletos();
+    };
+
+    window.recalcularTotalesCompletos = function() {
+      var cuentas = getStorageCuentas();
+      var mesaId = window.simMesaId;
+      var miSilla = window.simSillaNum;
+
+      var subtotalPropio = 0;
+      var cPropia = cuentas[mesaId + '-' + miSilla];
+      if (cPropia && cPropia.items) {
+        cPropia.items.forEach(function(i) { subtotalPropio += (i.precio * i.cantidad); });
+      }
+
+      var subtotalAcompanantes = 0;
+      window.sillasAcompanantesSeleccionadas.forEach(function(sNum) {
+        var cAcomp = cuentas[mesaId + '-' + sNum];
+        if (cAcomp && cAcomp.items) {
+          cAcomp.items.forEach(function(i) { subtotalAcompanantes += (i.precio * i.cantidad); });
+        }
+      });
+
+      var subtotalNeto = subtotalPropio + subtotalAcompanantes;
+      var iva = subtotalNeto * 0.16;
+      var propina = subtotalNeto * 0.10;
+      var total = subtotalNeto + iva;
+
+      var txtSubtotal = document.getElementById('txtSubtotal');
+      var txtIVA = document.getElementById('txtIVA');
+      var txtPropina = document.getElementById('txtPropina');
+      var txtTotal = document.getElementById('txtTotal');
+      var txtBtnPagar = document.getElementById('txtBtnPagarMonto');
+      var lblSubtotalDetalle = document.getElementById('lblSubtotalDetalle');
+
+      if (lblSubtotalDetalle) {
+        if (window.sillasAcompanantesSeleccionadas.length > 0) {
+          lblSubtotalDetalle.innerText = `Subtotal (Silla ${miSilla} + ${window.sillasAcompanantesSeleccionadas.length} Acompañantes):`;
+        } else {
+          lblSubtotalDetalle.innerText = `Subtotal (Solo Silla ${miSilla}):`;
+        }
+      }
+
+      if (txtSubtotal) txtSubtotal.innerText = `$${subtotalNeto.toFixed(2)}`;
+      if (txtIVA) txtIVA.innerText = `$${iva.toFixed(2)}`;
+      if (txtPropina) txtPropina.innerText = `$${propina.toFixed(2)}`;
+      if (txtTotal) txtTotal.innerText = `$${total.toFixed(2)}`;
+      if (txtBtnPagar) txtBtnPagar.innerText = `$${total.toFixed(2)}`;
+    };
+
+    window.agregarAlCarrito = function (prod) {
+      var cuentas = getStorageCuentas();
+      var key = window.simMesaId + '-' + window.simSillaNum;
+      if (!cuentas[key]) {
+        cuentas[key] = {
+          estado: 'ocupada',
+          qrId: 'PV-0' + window.simMesaId + window.simSillaNum,
+          comensalNombre: 'Comensal Silla ' + window.simSillaNum,
+          items: [],
+          historialUbicaciones: [{ mesaId: window.simMesaId, sillaNum: window.simSillaNum, hora: (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }]
+        };
+      }
+
+      var items = cuentas[key].items;
+      var existing = items.find(i => i.id === prod.id);
+      if (existing) {
+        existing.cantidad += 1;
+      } else {
+        items.push({
+          id: prod.id,
+          nombre: prod.nombre,
+          precio: prod.precio_unitario,
+          cantidad: 1,
+          mesaId: window.simMesaId,
+          sillaNum: window.simSillaNum,
+          hora: (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        });
+      }
+
+      saveStorageCuentas(cuentas);
+      window.sincronizarCuentaDesdeStorage();
+    };
+
+    window.abrirModalCobro = function (metodo) {
+      var cuentas = getStorageCuentas();
+      var mesaId = window.simMesaId;
+      var miSilla = window.simSillaNum;
+
+      var sillasALiquidar = [miSilla].concat(window.sillasAcompanantesSeleccionadas);
+      var totalText = document.getElementById('txtTotal') ? document.getElementById('txtTotal').innerText : '$0.00';
+      var sillasStr = sillasALiquidar.map(function(s) { return 'Silla ' + s; }).join(', ');
+
+      if (confirm(`¿Confirmar pago vía ${metodo.toUpperCase()} para Mesa ${mesaId} (${sillasStr}) por un total de ${totalText}?\n\nLas sillas seleccionadas quedarán liquidadas en el sistema.`)) {
+        sillasALiquidar.forEach(function(sNum) {
+          delete cuentas[mesaId + '-' + sNum];
+        });
+        saveStorageCuentas(cuentas);
+        alert(`✅ ¡Pago exitoso vía ${metodo.toUpperCase()}!\nSe han liquidado las cuentas de Mesa ${mesaId} (${sillasStr}).`);
+        window.sincronizarCuentaDesdeStorage();
+      }
+    };
 
     window.cargarDatosMenu = function (productos, categorias) {
       if (productos && productos.length > 0) window.vsMenuData = productos;
       if (categorias && categorias.length > 0) window.vsCategoriasData = categorias;
       window.renderCategoriasChips(window.vsCategoriasData);
       window.renderProductos();
+      window.sincronizarCuentaDesdeStorage();
     };
 
     window.renderCategoriasChips = function (categorias) {
@@ -292,83 +585,11 @@
       });
     };
 
-    window.agregarAlCarrito = function (prod) {
-      const index = window.vsCartItems.findIndex(i => i.id === prod.id);
-      if (index >= 0) {
-        window.vsCartItems[index].cantidad += 1;
-      } else {
-        window.vsCartItems.push({ ...prod, cantidad: 1 });
-      }
-      window.renderCarrito();
-    };
-
-    window.renderCarrito = function () {
-      const container = document.getElementById('cartItemsList');
-      if (!container) return;
-      container.innerHTML = '';
-
-      let subtotal = 0;
-
-      if (window.vsCartItems.length === 0) {
-        container.innerHTML = `<div class="text-center py-8 text-slate-500 text-xs">No hay consumos agregados a esta comanda.</div>`;
-      } else {
-        window.vsCartItems.forEach((item, idx) => {
-          const itemSubtotal = item.precio_unitario * item.cantidad;
-          subtotal += itemSubtotal;
-
-          const row = document.createElement('div');
-          row.className = 'flex justify-between items-center bg-slate-900/60 p-2.5 rounded-xl border border-slate-800/80 text-xs';
-          row.innerHTML = `
-            <div>
-              <span class="font-bold text-white">${item.nombre} x${item.cantidad}</span>
-              <span class="block text-[10px] text-slate-400">$${Number(item.precio_unitario).toFixed(2)} c/u</span>
-            </div>
-            <div class="flex items-center gap-2">
-              <span class="font-black text-slate-200">$${itemSubtotal.toFixed(2)}</span>
-              <button onclick="window.quitarDelCarrito(${idx})" class="text-red-400 hover:text-red-300 text-xs ml-1"><i class="fa-solid fa-trash"></i></button>
-            </div>
-          `;
-          container.appendChild(row);
-        });
-      }
-
-      const iva = subtotal * 0.16;
-      const propina = subtotal * 0.10;
-      const total = subtotal + propina;
-
-      const txtSubtotal = document.getElementById('txtSubtotal');
-      const txtIVA = document.getElementById('txtIVA');
-      const txtPropina = document.getElementById('txtPropina');
-      const txtTotal = document.getElementById('txtTotal');
-
-      if (txtSubtotal) txtSubtotal.innerText = `$${subtotal.toFixed(2)}`;
-      if (txtIVA) txtIVA.innerText = `$${iva.toFixed(2)}`;
-      if (txtPropina) txtPropina.innerText = `$${propina.toFixed(2)}`;
-      if (txtTotal) txtTotal.innerText = `$${total.toFixed(2)}`;
-    };
-
-    window.quitarDelCarrito = function (index) {
-      window.vsCartItems.splice(index, 1);
-      window.renderCarrito();
-    };
-
     window.navMenu = function (modulo) {
       if (window.anvilAppNav) {
         window.anvilAppNav(modulo);
       } else {
         alert(`Navegación a módulo: ${modulo}`);
-      }
-    };
-
-    window.abrirModalCobro = function (metodo) {
-      if (window.vsCartItems.length === 0) {
-        alert('Agregue consumos antes de proceder al cobro');
-        return;
-      }
-      if (window.anvilProcesarCobro) {
-        window.anvilProcesarCobro(metodo, window.vsCartItems);
-      } else {
-        alert(`Procesando pago vía ${metodo.toUpperCase()} para La Terraza V&S...`);
       }
     };
 
