@@ -1684,7 +1684,7 @@
       }
 
       if (subtotalMontoEl) subtotalMontoEl.innerText = `$${totalNeto.toFixed(2)}`;
-      if (ivaMontoEl) ivaMontoEl.innerText = `$${ivaValMesa = iva.toFixed(2), '$' + iva.toFixed(2)}`;
+      if (ivaMontoEl) ivaMontoEl.innerText = `$${iva.toFixed(2)}`;
       if (propinaMontoEl) propinaMontoEl.innerText = `$${propina.toFixed(2)}`;
       if (totalMontoEl) totalMontoEl.innerText = `$${granTotal.toFixed(2)}`;
       if (txtBtnCobrar) txtBtnCobrar.innerText = `$${granTotal.toFixed(2)}`;
@@ -1754,24 +1754,6 @@
         showDragToast(`💳 ¡Cobro exitoso de Mesa ${mesaId} (${sillasStr})! Sillas liberadas.`, 'ok');
       }
     };
-
-    window.seleccionarSillaDesdeMesa = function(sillaNum) {
-      window.palapaState.sillaSeleccionadaNum = sillaNum;
-      renderStateUI();
-      abrirModalComandaActual();
-    };
-
-    window.verTodaLaMesaEnColumnas = function() {
-      window.palapaState.sillaSeleccionadaNum = null;
-      renderStateUI();
-      abrirModalComandaActual();
-    };
-
-      if (modal) {
-        modal.classList.add('show');
-        modal.style.setProperty('display', 'flex', 'important');
-      }
-    }
 
     window.seleccionarSillaDesdeMesa = function(sillaNum) {
       window.palapaState.sillaSeleccionadaNum = sillaNum;
