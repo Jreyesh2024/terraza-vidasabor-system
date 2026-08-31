@@ -1411,6 +1411,11 @@
         }
       }
 
+      // Si estamos en una silla titular, esa silla SIEMPRE es fija e inamovible de su ticket
+      if (sillaNum !== null && window.palapaState.sillasSeleccionadasCobro.indexOf(sillaNum) === -1) {
+        window.palapaState.sillasSeleccionadasCobro.unshift(sillaNum);
+      }
+
       var seleccionadas = window.palapaState.sillasSeleccionadasCobro || [];
 
       // 3. Renderizar Header y Selector de Sillas de la Mesa
@@ -1635,16 +1640,25 @@
     }
 
     window.toggleSillaAdicional = function(sillaNum) {
+      var titular = window.palapaState.sillaSeleccionadaNum;
+      // Si la silla es la titular, NUNCA se deselecciona ni se quita de su propia comanda
+      if (titular !== null && sillaNum === titular) {
+        return;
+      }
+
       var sel = window.palapaState.sillasSeleccionadasCobro || [];
       var idx = sel.indexOf(sillaNum);
       if (idx === -1) {
         sel.push(sillaNum);
       } else {
-        // Evitar desmarcar si es la única seleccionada
-        if (sel.length > 1) {
-          sel.splice(idx, 1);
-        }
+        sel.splice(idx, 1);
       }
+
+      // Asegurar que la silla titular siempre permanezca en la lista
+      if (titular !== null && sel.indexOf(titular) === -1) {
+        sel.unshift(titular);
+      }
+
       window.palapaState.sillasSeleccionadasCobro = sel;
       abrirModalComandaActual();
     };
