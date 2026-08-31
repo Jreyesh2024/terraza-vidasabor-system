@@ -629,8 +629,8 @@
           style=&quot;flex: 1 !important; padding: 10px !important; background: #0284c7 !important; color: #ffffff !important; font-weight: 800 !important; font-size: 11px !important; border-radius: 10px !important; border: none !important; cursor: pointer !important; display: flex !important; align-items: center !important; justify-content: center !important; gap: 6px !important;&quot;>
           <i class=&quot;fa-solid fa-arrow-right-arrow-left&quot;></i> Mover esta Cuenta
         </button>
-        <button id=&quot;btnEnviarCocina&quot;
-          style=&quot;flex: 1 !important; padding: 10px !important; background: #f59e0b !important; color: #0f172a !important; font-weight: 900 !important; font-size: 11px !important; border-radius: 10px !important; border: none !important; cursor: pointer !important; display: flex !important; align-items: center !important; justify-content: center !important; gap: 6px !important;&quot;>
+        <button id=&quot;btnEnviarCocina&quot; onclick=&quot;window.enviarCocinaActual();&quot;
+          style=&quot;flex: 1 !important; padding: 10px !important; background: #f59e0b !important; color: #0f172a !important; font-weight: 900 !important; font-size: 11px !important; border-radius: 10px !important; border: none !important; cursor: pointer !important; display: flex !important; align-items: center !important; justify-content: center !important; gap: 6px !important; transition: all 0.2s ease !important;&quot;>
           <i class=&quot;fa-solid fa-fire&quot;></i> Enviar Cocina (KDS)
         </button>
       </div>
@@ -735,7 +735,7 @@
         qrId: 'PV-031',
         comensalNombre: 'Comensal Silla 1',
         items: [
-          { id: 4, nombre: 'Chilaquiles Verdes Pollo', notas: 'Sin cebolla • Salsa aparte', precio: 148.00, cantidad: 1, mesaId: 3, sillaNum: 1, hora: '12:15 PM' }
+          { id: 4, nombre: 'Chilaquiles Verdes Pollo', notas: 'Sin cebolla • Salsa aparte', precio: 148.00, cantidad: 1, mesaId: 3, sillaNum: 1, hora: '12:15 PM', enviadoCocina: true }
         ],
         historialUbicaciones: [
           { mesaId: 3, sillaNum: 1, hora: '12:10 PM' }
@@ -746,7 +746,7 @@
         qrId: 'PV-032',
         comensalNombre: 'Comensal Silla 2',
         items: [
-          { id: 1, nombre: 'Capuchino Especial V&amp;S', notas: 'Leche de almendras', precio: 68.00, cantidad: 1, mesaId: 3, sillaNum: 2, hora: '12:20 PM' }
+          { id: 1, nombre: 'Capuchino Especial V&amp;S', notas: 'Leche de almendras', precio: 68.00, cantidad: 1, mesaId: 3, sillaNum: 2, hora: '12:20 PM', enviadoCocina: true }
         ],
         historialUbicaciones: [
           { mesaId: 3, sillaNum: 2, hora: '12:20 PM' }
@@ -759,8 +759,8 @@
         qrId: 'PV-021',
         comensalNombre: 'Comensal Silla 1',
         items: [
-          { id: 7, nombre: 'Rib Eye Grill V&amp;S', notas: 'Término medio • Papas gajo', precio: 385.00, cantidad: 1, mesaId: 2, sillaNum: 1, hora: '12:40 PM' },
-          { id: 10, nombre: 'Limonada Botánica', notas: 'Con hierbabuena', precio: 60.00, cantidad: 1, mesaId: 2, sillaNum: 1, hora: '12:42 PM' }
+          { id: 7, nombre: 'Rib Eye Grill V&amp;S', notas: 'Término medio • Papas gajo', precio: 385.00, cantidad: 1, mesaId: 2, sillaNum: 1, hora: '12:40 PM', enviadoCocina: true },
+          { id: 10, nombre: 'Limonada Botánica', notas: 'Con hierbabuena', precio: 60.00, cantidad: 1, mesaId: 2, sillaNum: 1, hora: '12:42 PM', enviadoCocina: true }
         ],
         historialUbicaciones: [
           { mesaId: 2, sillaNum: 1, hora: '12:35 PM' }
@@ -771,1493 +771,1567 @@
         qrId: 'PV-022',
         comensalNombre: 'Comensal Silla 2',
         items: [
-          { id: 8, nombre: 'Pasta Fettuccine Trufado', notas: 'Poco queso', precio: 265.00, cantidad: 1, mesaId: 2, sillaNum: 2, hora: '12:41 PM' },
-          { id: 10, nombre: 'Limonada Botánica', notas: 'Sin hielo', precio: 60.00, cantidad: 1, mesaId: 2, sillaNum: 2, hora: '12:43 PM' }
-        ],
-        historialUbicaciones: [
-          { mesaId: 2, sillaNum: 2, hora: '12:35 PM' }
-        ]
-      },
-      '2-3': {
-        estado: 'ocupada',
-        qrId: 'PV-023',
-        comensalNombre: 'Comensal Silla 3',
-        items: [
-          { id: 6, nombre: 'Molletes Masa Madre', notas: 'Bien doraditos', precio: 125.00, cantidad: 1, mesaId: 2, sillaNum: 3, hora: '12:42 PM' },
-          { id: 10, nombre: 'Limonada Botánica', notas: 'Poco dulce', precio: 60.00, cantidad: 1, mesaId: 2, sillaNum: 3, hora: '12:44 PM' }
-        ],
-        historialUbicaciones: [
-          { mesaId: 2, sillaNum: 3, hora: '12:35 PM' }
-        ]
-      },
-      '2-4': {
-        estado: 'ocupada',
-        qrId: 'PV-024',
-        comensalNombre: 'Comensal Silla 4',
-        items: [
-          { id: 9, nombre: 'Pastel Chocolate Valrhona', notas: 'Con helado de vainilla', precio: 105.00, cantidad: 1, mesaId: 2, sillaNum: 4, hora: '12:45 PM' }
-        ],
-        historialUbicaciones: [
-          { mesaId: 2, sillaNum: 4, hora: '12:35 PM' }
-        ]
-      }
-    };
+          { id: 8, nombre: 'Pasta Fettuccine Trufado', notas: 'Poco queso', precio: 265.00, cantidad: 1, mesaId: 2, sillaNum: 2, hora: '12:41 PM', enviadoCocina: true },
+            { id: 10, nombre: 'Limonada Botánica', notas: 'Sin hielo', precio: 60.00, cantidad: 1, mesaId: 2, sillaNum: 2, hora: '12:43 PM', enviadoCocina: true }
+            ],
+            historialUbicaciones: [
+            { mesaId: 2, sillaNum: 2, hora: '12:35 PM' }
+            ]
+            },
+            '2-3': {
+            estado: 'ocupada',
+            qrId: 'PV-023',
+            comensalNombre: 'Comensal Silla 3',
+            items: [
+            { id: 6, nombre: 'Molletes Masa Madre', notas: 'Bien doraditos', precio: 125.00, cantidad: 1, mesaId: 2, sillaNum: 3, hora: '12:42 PM', enviadoCocina: true },
+            { id: 10, nombre: 'Limonada Botánica', notas: 'Poco dulce', precio: 60.00, cantidad: 1, mesaId: 2, sillaNum: 3, hora: '12:44 PM', enviadoCocina: true }
+            ],
+            historialUbicaciones: [
+            { mesaId: 2, sillaNum: 3, hora: '12:35 PM' }
+            ]
+            },
+            '2-4': {
+            estado: 'ocupada',
+            qrId: 'PV-024',
+            comensalNombre: 'Comensal Silla 4',
+            items: [
+            { id: 9, nombre: 'Pastel Chocolate Valrhona', notas: 'Con helado de vainilla', precio: 105.00, cantidad: 1, mesaId: 2, sillaNum: 4, hora: '12:45 PM', enviadoCocina: true }
+            ],
+            historialUbicaciones: [
+            { mesaId: 2, sillaNum: 4, hora: '12:35 PM' }
+            ]
+            }
+            };
 
-    function saveStateToStorage() {
-      try {
-        localStorage.setItem('palapa_cuentas_v1', JSON.stringify(window.palapaState.cuentas));
-      } catch (e) {}
-    }
+            function saveStateToStorage() {
+            try {
+            localStorage.setItem('palapa_cuentas_v1', JSON.stringify(window.palapaState.cuentas));
+            } catch (e) {}
+            }
 
-    function loadStateFromStorage() {
-      try {
-        var saved = localStorage.getItem('palapa_cuentas_v1');
-        if (saved) {
-          var parsed = JSON.parse(saved);
-          if (parsed &amp;&amp; typeof parsed === 'object' &amp;&amp; Object.keys(parsed).length > 0) {
+            function loadStateFromStorage() {
+            try {
+            var saved = localStorage.getItem('palapa_cuentas_v1');
+            if (saved) {
+            var parsed = JSON.parse(saved);
+            if (parsed &amp;&amp; typeof parsed === 'object' &amp;&amp; Object.keys(parsed).length > 0) {
             // Asegurar que las mesas de demo existan si no están presentes
             if (!parsed['2-1'] || !parsed['3-1']) {
-              parsed = Object.assign({}, DEFAULT_CUENTAS, parsed);
+            parsed = Object.assign({}, DEFAULT_CUENTAS, parsed);
             }
             return parsed;
-          }
-        }
-      } catch (e) {}
-      return JSON.parse(JSON.stringify(DEFAULT_CUENTAS));
-    }
-
-    window.palapaState = {
-      mesaSeleccionadaId: 2,
-      sillaSeleccionadaNum: 1,
-      categoriaFiltro: &quot;Todos&quot;,
-      modoMoverActivo: false,
-      sillaOrigenMover: null,
-      cuentas: loadStateFromStorage()
-    };
-
-    function resetDemoState() {
-      window.palapaState.cuentas = JSON.parse(JSON.stringify(DEFAULT_CUENTAS));
-      window.palapaState.mesaSeleccionadaId = 2;
-      window.palapaState.sillaSeleccionadaNum = 1;
-      saveStateToStorage();
-      cancelarModoMover();
-      cerrarModalComanda();
-      renderStateUI();
-      showDragToast('🔄 Estado reiniciado a demo (Mesa 3: 2 comensales, Mesa 2: Familia 2 adultos + 2 niños)', 'ok');
-    }
-
-    // ── Toast de notificación (reemplaza alert()) ──
-    var _toastTimer = null;
-    function showDragToast(msg, tipo) {
-      // tipo: 'ok' | 'warn' | 'err'
-      var t = document.getElementById('dragToast');
-      if (!t) return;
-      t.textContent = msg;
-      t.className = 'show toast-' + (tipo || 'ok');
-      if (_toastTimer) clearTimeout(_toastTimer);
-      _toastTimer = setTimeout(function () {
-        t.className = t.className.replace(' show', '').replace('show', '');
-      }, 3200);
-    }
-
-    // ── Mini-modal confirmación (reemplaza confirm()) ──
-    var _combineCallback = null;
-    function showCombineConfirm(srcMesa, srcSilla, tgtMesa, tgtSilla, onYes) {
-      var backdrop = document.getElementById('combineConfirmBackdrop');
-      var title = document.getElementById('combineConfirmTitle');
-      var msg = document.getElementById('combineConfirmMsg');
-      var detail = document.getElementById('combineConfirmDetail');
-      if (!backdrop) { onYes(); return; }
-
-      if (title) title.textContent = 'Combinar Cuentas';
-      if (msg) msg.textContent = 'Ambas sillas ya tienen consumos.';
-      if (detail) detail.innerHTML =
-        '<b style=&quot;color:#f59e0b;&quot;>Origen:</b> Mesa ' + srcMesa + ' Silla ' + srcSilla +
-        '<br><b style=&quot;color:#38bdf8;&quot;>Destino:</b> Mesa ' + tgtMesa + ' Silla ' + tgtSilla +
-        '<br><span style=&quot;color:#64748b;font-size:11px;&quot;>Los consumos del origen se agregarán a la silla destino.</span>';
-
-        _combineCallback = onYes;
-        backdrop.classList.add('show');
-
-        document.getElementById('combineConfirmYes').onclick = function () {
-        backdrop.classList.remove('show');
-        if (_combineCallback) _combineCallback();
-        _combineCallback = null;
-        };
-        document.getElementById('combineConfirmNo').onclick = function () {
-        backdrop.classList.remove('show');
-        _combineCallback = null;
-        cancelarModoMover();
-        };
-        }
-
-        // ════════════════════════════════════════════════════════════
-        //  DRAG DE SILLAS — patrón mousedown/mousemove/mouseup
-        //  Igual al resize de VidaSpa: eventos en document para que
-        //  z-index y pointer-events de elementos hijos NO interfieran.
-        //  document.elementFromPoint() en mouseup detecta la silla destino.
-        // ════════════════════════════════════════════════════════════
-
-        var _ms = {
-        active: false,   // mousedown activo esperando movimiento
-        dragging: false,   // ya pasó el umbral → modo drag visual
-        srcMesa: null,
-        srcSilla: null,
-        startX: 0,
-        startY: 0,
-        ghost: null
-        };
-        var _wasDrag = false; // bloquea el click que dispara el browser post-mouseup
-        var DRAG_THRESHOLD = 6; // píxeles mínimos para activar drag
-
-        function _limpiarDragVisual() {
-        document.querySelectorAll('.chair-btn-fixed').forEach(function (c) {
-        c.classList.remove('chair-dragging', 'chair-drag-target-valid', 'chair-drag-target-combine');
-        });
-        if (_ms.ghost &amp;&amp; _ms.ghost.parentNode) {
-        _ms.ghost.parentNode.removeChild(_ms.ghost);
-        }
-        _ms.ghost = null;
-        }
-
-        function getClosestChair(mesaId, clientX, clientY, srcM, srcS) {
-        var minDist = Infinity;
-        var closest = null;
-        for (var s = 1; s <= 4; s++) {
-        if (mesaId === srcM &amp;&amp; s === srcS) continue;
-        var el = document.getElementById('chair-' + mesaId + '-' + s);
-        if (!el) continue;
-        var rect = el.getBoundingClientRect();
-        var cx = rect.left + rect.width / 2;
-        var cy = rect.top + rect.height / 2;
-        var dist = Math.hypot(clientX - cx, clientY - cy);
-        if (dist < minDist) { minDist = dist; closest = { mesa: mesaId, silla: s }; }
-        }
-        return closest;
-        }
-
-        function _resolveTargetChair(clientX, clientY, srcM, srcS) {
-        var elem = document.elementFromPoint(clientX, clientY);
-
-        // 1. Direct hit on chair
-        if (elem) {
-        var chairEl = elem.closest ? elem.closest('.chair-btn-fixed') : null;
-        if (chairEl) {
-        var p = chairEl.id.split('-');
-        var tM = parseInt(p[1]);
-        var tS = parseInt(p[2]);
-        if (!(tM === srcM &amp;&amp; tS === srcS)) {
-        return { mesaId: tM, sillaNum: tS, el: chairEl };
-        }
-        }
-
-        // 2. Hit on table box or table circle
-        var tableBox = elem.closest ? elem.closest('.table-box-220') : null;
-        var tableCircle = elem.closest ? elem.closest('.table-circle-fixed') : null;
-        var mesaId = null;
-        if (tableBox &amp;&amp; tableBox.id) {
-        mesaId = parseInt(tableBox.id.replace('table-box-', ''));
-        } else if (tableCircle &amp;&amp; tableCircle.id) {
-        mesaId = parseInt(tableCircle.id.replace('table-circle-', ''));
-        }
-
-        if (mesaId) {
-        var closest = getClosestChair(mesaId, clientX, clientY, srcM, srcS);
-        if (closest) {
-        var cel = document.getElementById('chair-' + closest.mesa + '-' + closest.silla);
-        return { mesaId: closest.mesa, sillaNum: closest.silla, el: cel };
-        }
-        }
-        }
-
-        // 3. Proximity fallback: find closest chair within 150px
-        var globalMinDist = Infinity;
-        var globalClosest = null;
-        for (var m = 1; m <= 3; m++) {
-        for (var s = 1; s <= 4; s++) {
-        if (m === srcM &amp;&amp; s === srcS) continue;
-        var cel = document.getElementById('chair-' + m + '-' + s);
-        if (!cel) continue;
-        var rect = cel.getBoundingClientRect();
-        var cx = rect.left + rect.width / 2;
-        var cy = rect.top + rect.height / 2;
-        var dist = Math.hypot(clientX - cx, clientY - cy);
-        if (dist < globalMinDist &amp;&amp; dist < 150) {
-        globalMinDist = dist;
-        globalClosest = { mesaId: m, sillaNum: s, el: cel };
-        }
-        }
-        }
-
-        return globalClosest;
-        }
-
-        function _chairMousedown(e, mesaId, sillaNum) {
-        // Solo button izquierdo y solo sillas con cuenta u ocupadas
-        if (e.button !== 0) return;
-        var key = mesaId + '-' + sillaNum;
-        var cuenta = window.palapaState.cuentas[key];
-        var isOccupied = !!(cuenta &amp;&amp; (cuenta.estado === 'ocupada' || (cuenta.items &amp;&amp; cuenta.items.length > 0)));
-        if (!cuenta || !isOccupied) return;
-
-        _ms.active = true;
-        _ms.dragging = false;
-        _ms.srcMesa = mesaId;
-        _ms.srcSilla = sillaNum;
-        _ms.startX = e.clientX;
-        _ms.startY = e.clientY;
-
-        document.addEventListener('mousemove', _chairMousemove);
-        document.addEventListener('mouseup', _chairMouseup);
-        }
-
-        function _chairMousemove(e) {
-        if (!_ms.active) return;
-
-        var dx = Math.abs(e.clientX - _ms.startX);
-        var dy = Math.abs(e.clientY - _ms.startY);
-
-        // ── Activar modo drag si pasó el umbral ──
-        if (!_ms.dragging &amp;&amp; (dx > DRAG_THRESHOLD || dy > DRAG_THRESHOLD)) {
-        _ms.dragging = true;
-        cerrarModalComanda();
-        window.palapaState.modoMoverActivo = true;
-        window.palapaState.sillaOrigenMover = { mesaId: _ms.srcMesa, sillaNum: _ms.srcSilla };
-
-        // Marcar silla origen
-        var srcEl = document.getElementById('chair-' + _ms.srcMesa + '-' + _ms.srcSilla);
-        if (srcEl) srcEl.classList.add('chair-dragging');
-
-        // Ghost que sigue al cursor (pointer-events:none → no bloquea elementFromPoint)
-        var ghost = document.createElement('div');
-        ghost.style.cssText = [
-        'position:fixed', 'z-index:99999', 'pointer-events:none',
-        'padding:8px 18px', 'background:#0f172a', 'color:#38bdf8',
-        'font-size:13px', 'font-weight:800', 'border-radius:12px',
-        'border:2px solid #38bdf8', 'white-space:nowrap',
-        'box-shadow:0 8px 28px rgba(0,0,0,0.85)',
-        'transform:translate(-50%,-130%)',
-        'left:' + e.clientX + 'px', 'top:' + e.clientY + 'px'
-        ].join(';') + ';';
-        var key = _ms.srcMesa + '-' + _ms.srcSilla;
-        var cuenta = window.palapaState.cuentas[key] || { items: [] };
-        var total = 0;
-        cuenta.items.forEach(function (i) { total += i.precio * i.cantidad; });
-        ghost.textContent = '\uD83E\uDE91 M' + _ms.srcMesa + ' \u00b7 S' + _ms.srcSilla + '  $' + total.toFixed(2);
-        document.body.appendChild(ghost);
-        _ms.ghost = ghost;
-
-        // Banner
-        var bt = document.getElementById('bannerText');
-        var bc = document.getElementById('btnCancelMove');
-        if (bt) bt.innerHTML = '\uD83E\uDE91 <b style=&quot;color:#38bdf8;&quot;>ARRASTRANDO</b> Mesa ' + _ms.srcMesa + ' Silla ' + _ms.srcSilla + ' \u2014 Suelta sobre la silla destino (misma o diferente mesa).';
-        if (bc) bc.style.setProperty('display', 'block', 'important');
-        }
-
-        if (!_ms.dragging) return;
-
-        // ── Mover ghost ──
-        if (_ms.ghost) {
-        _ms.ghost.style.left = e.clientX + 'px';
-        _ms.ghost.style.top = e.clientY + 'px';
-        }
-
-        // ── Highlight silla destino detectada ──
-        document.querySelectorAll('.chair-btn-fixed').forEach(function (c) {
-        c.classList.remove('chair-drag-target-valid', 'chair-drag-target-combine');
-        });
-
-        var target = _resolveTargetChair(e.clientX, e.clientY, _ms.srcMesa, _ms.srcSilla);
-        if (target &amp;&amp; target.el) {
-        var tgt = window.palapaState.cuentas[target.mesaId + '-' + target.sillaNum];
-        var busy = tgt &amp;&amp; tgt.items &amp;&amp; tgt.items.length > 0;
-        target.el.classList.add(busy ? 'chair-drag-target-combine' : 'chair-drag-target-valid');
-        }
-        }
-
-        function _chairMouseup(e) {
-        document.removeEventListener('mousemove', _chairMousemove);
-        document.removeEventListener('mouseup', _chairMouseup);
-
-        var wasRealDrag = _ms.dragging;
-        var srcM = _ms.srcMesa;
-        var srcS = _ms.srcSilla;
-
-        _limpiarDragVisual();
-        _ms.active = false;
-        _ms.dragging = false;
-        _ms.srcMesa = null;
-        _ms.srcSilla = null;
-
-        if (!wasRealDrag) {
-        return;
-        }
-
-        // ── Es un drag real: bloquear el click post-mouseup ──
-        _wasDrag = true;
-        setTimeout(function () { _wasDrag = false; }, 80);
-
-        // Resolver la silla destino
-        var target = _resolveTargetChair(e.clientX, e.clientY, srcM, srcS);
-        if (target) {
-        completarMovimiento(target.mesaId, target.sillaNum, srcM, srcS);
-        } else {
-        cancelarModoMover();
-        showDragToast('\u26a0 Suelta sobre una silla o mesa para mover la cuenta', 'warn');
-        }
-        }
-
-        function setupDragListeners() {
-        // Asignar mousedown a TODAS las sillas (no solo ocupadas).
-        // _chairMousedown ya verifica si tiene cuenta antes de activar.
-        for (var m = 1; m <= 3; m++) {
-        for (var s = 1; s <= 4; s++) {
-        (function (mesaId, sillaNum) {
-        var el = document.getElementById('chair-' + mesaId + '-' + sillaNum);
-        if (!el) return;
-        el.addEventListener('mousedown', function (e) {
-        _chairMousedown(e, mesaId, sillaNum);
-        });
-        })(m, s);
-        }
-        }
-        }
-
-        // Global Event Delegation for all Clicks
-        document.addEventListener('click', function (e) {
-        // Ignorar click que el browser dispara tras un drag con mouse
-        if (_wasDrag) return;
-        // 1. Chair clicked
-        const chairNode = e.target.closest('.chair-btn-fixed');
-        if (chairNode) {
-        const id = chairNode.id; // e.g. &quot;chair-3-1&quot;
-        const parts = id.split('-');
-        if (parts.length === 3) {
-        const mesaId = parseInt(parts[1]);
-        const sillaNum = parseInt(parts[2]);
-        handleSillaClick(mesaId, sillaNum);
-        return;
-        }
-        }
-
-        // 2. Table circle clicked
-        const tableNode = e.target.closest('.table-circle-fixed');
-        if (tableNode) {
-        const id = tableNode.id; // e.g. &quot;table-circle-3&quot;
-        const parts = id.split('-');
-        if (parts.length === 3) {
-        const mesaId = parseInt(parts[2]);
-        handleMesaClick(mesaId);
-        return;
-        }
-        }
-
-        // 3. Category chip clicked
-        const chipNode = e.target.closest('[data-cat]');
-        if (chipNode) {
-        const cat = chipNode.getAttribute('data-cat');
-        filtrarCategoria(cat);
-        return;
-        }
-
-        // 4. Action buttons
-        if (e.target.closest('#btnResetDemo')) { resetDemoState(); return; }
-        if (e.target.closest('#btnVerComandaActiva')) { abrirModalComandaActual(); return; }
-        if (e.target.closest('#btnMoverComensalMain')) { iniciarModoMover(); return; }
-        if (e.target.closest('#btnMoverDesdeModal')) { cerrarModalComanda(); iniciarModoMover(); return; }
-        if (e.target.closest('#btnCloseModal') || e.target.closest('#btnCerrarModalBottom')) { cerrarModalComanda(); return; }
-        if (e.target.closest('#btnCancelMove')) { cancelarModoMover(); return; }
-        if (e.target.closest('#btnEnviarCocina')) { alert(`Comanda enviada a Cocina (KDS)`); cerrarModalComanda(); return; }
-        if (e.target.closest('#btnPrecuenta')) { alert(`Imprimiendo precuenta`); cerrarModalComanda(); return; }
-
-        // 5. Click outside modal content (on backdrop) closes modal
-        if (e.target.id === 'modalComandaBackdrop') {
-        cerrarModalComanda();
-        return;
-        }
-        });
-
-        // Escape key closes modals and cancels move mode
-        document.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape') {
-        cerrarModalComanda();
-        cancelarModoMover();
-        var cb = document.getElementById('combineConfirmBackdrop');
-        if (cb) cb.classList.remove('show');
-        }
-        });
-
-        function handleSillaClick(mesaId, sillaNum) {
-        if (window.palapaState.modoMoverActivo) {
-        completarMovimiento(mesaId, sillaNum);
-        return;
-        }
-
-        const key = `${mesaId}-${sillaNum}`;
-
-        // Si la silla no tiene cuenta, el mesero la registra de inmediato como OCUPADA (comensal presencial ubicado)
-        if (!window.palapaState.cuentas[key]) {
-        const nowStr = (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        window.palapaState.cuentas[key] = {
-        estado: 'ocupada',
-        qrId: 'PV-0' + mesaId + sillaNum,
-        comensalNombre: 'Comensal Silla ' + sillaNum,
-        items: [],
-        historialUbicaciones: [
-      { mesaId: mesaId, sillaNum: sillaNum, hora: nowStr }
-        ],
-        creadoPor: 'mesero_presencial',
-        horaLlegada: nowStr
-        };
-        saveStateToStorage();
-        showDragToast('🪑 Comensal ubicado en Mesa ' + mesaId + ' Silla ' + sillaNum + ' (Silla ocupada)', 'ok');
-        }
-
-        window.palapaState.mesaSeleccionadaId = mesaId;
-        window.palapaState.sillaSeleccionadaNum = sillaNum;
-        renderStateUI();
-        abrirModalComandaActual();
-        }
-
-        function handleMesaClick(mesaId) {
-        if (window.palapaState.modoMoverActivo) {
-        alert(&quot;Selecciona una silla específica a donde deseas mover la cuenta.&quot;);
-        return;
-        }
-        window.palapaState.mesaSeleccionadaId = mesaId;
-        window.palapaState.sillaSeleccionadaNum = null;
-        renderStateUI();
-        abrirModalComandaActual();
-        }
-
-        function iniciarModoMover() {
-        const mesaId = window.palapaState.mesaSeleccionadaId;
-        const sillaNum = window.palapaState.sillaSeleccionadaNum;
-
-        if (sillaNum === null) {
-        showDragToast(&quot;Por favor selecciona una silla específica para mover.&quot;, &quot;warn&quot;);
-        return;
-        }
-
-        const key = `${mesaId}-${sillaNum}`;
-        const cuenta = window.palapaState.cuentas[key];
-        const isOccupied = !!(cuenta &amp;&amp; (cuenta.estado === 'ocupada' || (cuenta.items &amp;&amp; cuenta.items.length > 0)));
-
-        if (!isOccupied) {
-        showDragToast(`⚠ La Silla ${sillaNum} de Mesa ${mesaId} está disponible. Selecciona una silla ocupada para mover.`, &quot;warn&quot;);
-        return;
-        }
-
-        window.palapaState.modoMoverActivo = true;
-        window.palapaState.sillaOrigenMover = { mesaId, sillaNum };
-
-        const bannerText = document.getElementById('bannerText');
-        const btnCancel = document.getElementById('btnCancelMove');
-
-        if (bannerText &amp;&amp; btnCancel) {
-        bannerText.innerHTML = `<b style=&quot;color: #38bdf8;&quot;>MOVIENDO COMENSAL:</b> Silla origen: <b>Mesa ${mesaId} Silla ${sillaNum}</b>. Haz clic en la <b>Silla Destino</b> a donde deseas transferir la cuenta.`;
-        btnCancel.style.display = 'block';
-        }
-
-        renderStateUI();
-        }
-
-        function limpiarDragState() {
-        _limpiarDragVisual();
-        }
-
-        function cancelarModoMover() {
-        window.palapaState.modoMoverActivo = false;
-        window.palapaState.sillaOrigenMover = null;
-        if (typeof _ms !== 'undefined') {
-        _ms.active   = false;
-        _ms.dragging = false;
-        _ms.srcMesa  = null;
-        _ms.srcSilla = null;
-        }
-        _limpiarDragVisual();
-
-        const bannerText = document.getElementById('bannerText');
-        const btnCancel = document.getElementById('btnCancelMove');
-
-        if (bannerText &amp;&amp; btnCancel) {
-        bannerText.innerHTML = `Haz clic o <b>arrastra con el mouse</b> cualquier <b>Silla</b> para abrir su comanda o trasladarla a otra silla/mesa.`;
-        btnCancel.style.display = 'none';
-        }
-
-        renderStateUI();
-        }
-
-        function completarMovimiento(targetMesaId, targetSillaNum, overrideSrcMesa, overrideSrcSilla) {
-        // Soporte dual: modo click (sillaOrigenMover) y drag &amp; drop (override params)
-        var srcMesa = overrideSrcMesa !== undefined ? overrideSrcMesa : (window.palapaState.sillaOrigenMover ? window.palapaState.sillaOrigenMover.mesaId : null);
-        var srcSilla = overrideSrcSilla !== undefined ? overrideSrcSilla : (window.palapaState.sillaOrigenMover ? window.palapaState.sillaOrigenMover.sillaNum : null);
-
-        if (srcMesa === null || srcSilla === null) return;
-        if (srcMesa === targetMesaId &amp;&amp; srcSilla === targetSillaNum) {
-        cancelarModoMover(); return;
-        }
-
-        // Sincronizar estado por si viene de drag (sillaOrigenMover puede ser null)
-        if (!window.palapaState.sillaOrigenMover) {
-        window.palapaState.sillaOrigenMover = { mesaId: srcMesa, sillaNum: srcSilla };
-        }
-
-        var sourceKey = srcMesa + '-' + srcSilla;
-        var targetKey = targetMesaId + '-' + targetSillaNum;
-        var sourceCuenta = window.palapaState.cuentas[sourceKey];
-        var targetCuenta = window.palapaState.cuentas[targetKey];
-        var isSourceOccupied = !!(sourceCuenta &amp;&amp; (sourceCuenta.estado === 'ocupada' || (sourceCuenta.items &amp;&amp; sourceCuenta.items.length > 0)));
-
-        if (!isSourceOccupied) {
-        showDragToast('⚠ La silla origen ya no está ocupada', 'warn');
-        cancelarModoMover(); return;
-        }
-
-        var nowStr = (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        if (sourceCuenta.items) {
-        sourceCuenta.items.forEach(function (i) {
-        if (i.mesaId === undefined) { i.mesaId = srcMesa; i.sillaNum = srcSilla; }
-        });
-        }
-        sourceCuenta.historialUbicaciones = sourceCuenta.historialUbicaciones || [{ mesaId: srcMesa, sillaNum: srcSilla, hora: nowStr }];
-        var yaExiste = sourceCuenta.historialUbicaciones.some(function (u) { return u.mesaId === targetMesaId &amp;&amp; u.sillaNum === targetSillaNum; });
-        if (!yaExiste) {
-        sourceCuenta.historialUbicaciones.push({ mesaId: targetMesaId, sillaNum: targetSillaNum, hora: nowStr });
-        }
-
-        var isTargetOccupied = !!(targetCuenta &amp;&amp; (targetCuenta.estado === 'ocupada' || (targetCuenta.items &amp;&amp; targetCuenta.items.length > 0)));
-        var targetHasItems = targetCuenta &amp;&amp; targetCuenta.items &amp;&amp; targetCuenta.items.length > 0;
-        var sourceHasItems = sourceCuenta.items &amp;&amp; sourceCuenta.items.length > 0;
-
-        if (isTargetOccupied &amp;&amp; (targetHasItems || sourceHasItems)) {
-        // Silla destino ocupada y con consumos — pedir confirmación sin alert()
-        showCombineConfirm(srcMesa, srcSilla, targetMesaId, targetSillaNum, function () {
-        // onYes: combinar
-        targetCuenta.items = (targetCuenta.items || []).concat(sourceCuenta.items || []);
-        delete window.palapaState.cuentas[sourceKey];
-        window.palapaState.mesaSeleccionadaId = targetMesaId;
-        window.palapaState.sillaSeleccionadaNum = targetSillaNum;
-        saveStateToStorage();
-        cancelarModoMover();
-        showDragToast('✅ Cuentas combinadas en Mesa ' + targetMesaId + ' Silla ' + targetSillaNum, 'ok');
-        });
-        } else {
-        // Silla destino libre o sin consumos — mover comensal/cuenta
-        if (targetCuenta &amp;&amp; targetCuenta.items &amp;&amp; targetCuenta.items.length > 0) {
-        // Destino tiene items, origen estaba vacía
-        } else {
-        window.palapaState.cuentas[targetKey] = sourceCuenta;
-        }
-        delete window.palapaState.cuentas[sourceKey];
-        window.palapaState.mesaSeleccionadaId = targetMesaId;
-        window.palapaState.sillaSeleccionadaNum = targetSillaNum;
-        saveStateToStorage();
-        cancelarModoMover();
-        showDragToast('✅ Comensal trasladado → Mesa ' + targetMesaId + ' Silla ' + targetSillaNum, 'ok');
-        }
-        }
-
-        function abrirModalComandaActual() {
-        const mesaId = window.palapaState.mesaSeleccionadaId;
-        const sillaNum = window.palapaState.sillaSeleccionadaNum;
-
-        const modal = document.getElementById('modalComandaBackdrop');
-        const modalCard = document.getElementById('modalComandaCard');
-        const title = document.getElementById('modalTitle');
-        const subtitle = document.getElementById('modalSubtitle');
-        const header = document.getElementById('modalItemsHeader');
-        const container = document.getElementById('modalItemsList');
-        const subtotalMontoEl = document.getElementById('modalSubtotalMonto');
-        const ivaMontoEl = document.getElementById('modalIvaMonto');
-        const propinaMontoEl = document.getElementById('modalPropinaMonto');
-        const totalMontoEl = document.getElementById('modalTotalMonto');
-        const totalLabelEl = document.getElementById('modalTotalLabel');
-        const lblSubtotal = document.getElementById('lblSubtotalModal');
-        const btnCobrarDirecto = document.getElementById('btnCobrarModalDirecto');
-        const txtBtnCobrar = document.getElementById('txtBtnCobrarModal');
-        const btnVerTodaMesa = document.getElementById('btnVerTodaMesaHeader');
-        const btnMover = document.getElementById('btnMoverDesdeModal');
-        const btnLiberar = document.getElementById('btnLiberarSilla');
-        const boxAdicionarSillas = document.getElementById('boxAdicionarSillasAComanda');
-        const chipsContainer = document.getElementById('comandaSillasChipsContainer');
-        const alertPendientes = document.getElementById('modalPendientesAlert');
-        const txtPendientes = document.getElementById('txtPendientesMensaje');
-
-        if (!container || !modal) return;
-        container.innerHTML = '';
-
-        // 1. Recopilar todas las sillas ocupadas de la mesa
-        var sillasOcupadas = [];
-        for (let s = 1; s <= 10; s++) {
-        const key = `${mesaId}-${s}`;
-        const cuenta = window.palapaState.cuentas[key];
-        if (cuenta &amp;&amp; (cuenta.estado === 'ocupada' || (cuenta.items &amp;&amp; cuenta.items.length > 0))) {
-        var subChair = 0;
-        if (cuenta.items) {
-        cuenta.items.forEach(it => { subChair += (it.precio * it.cantidad); });
-        }
-        sillasOcupadas.push({ sillaNum: s, cuenta: cuenta, subtotal: subChair });
-        }
-        }
-
-        // 2. Gestionar sillas seleccionadas para cobro
-        if (!window.palapaState.sillasSeleccionadasCobro || window.palapaState.sillasSeleccionadasCobroMesa !== mesaId) {
-        window.palapaState.sillasSeleccionadasCobroMesa = mesaId;
-        if (sillaNum !== null) {
-        window.palapaState.sillasSeleccionadasCobro = [sillaNum];
-        } else {
-        window.palapaState.sillasSeleccionadasCobro = sillasOcupadas.map(o => o.sillaNum);
-        }
-        }
-
-        // Si estamos en una silla titular, esa silla SIEMPRE es fija e inamovible de su ticket
-        if (sillaNum !== null &amp;&amp; window.palapaState.sillasSeleccionadasCobro.indexOf(sillaNum) === -1) {
-        window.palapaState.sillasSeleccionadasCobro.unshift(sillaNum);
-        }
-
-        var seleccionadas = window.palapaState.sillasSeleccionadasCobro || [];
-
-        // 3. Renderizar Header y Selector de Sillas de la Mesa
-        if (sillaNum !== null) {
-        // MODO COBRO / TICKET POR COMENSAL ESPECÍFICO
-        const key = `${mesaId}-${sillaNum}`;
-        const cuenta = window.palapaState.cuentas[key] || { items: [] };
-        const qrId = cuenta.qrId || ('PV-0' + mesaId + sillaNum);
-        if (title) title.innerHTML = `<i class=&quot;fa-solid fa-receipt&quot; style=&quot;color: #34d399;&quot;></i> Ticket Silla ${sillaNum} <span style=&quot;font-size: 11px; background: #1e293b; color: #38bdf8; padding: 2px 8px; border-radius: 6px; border: 1px solid #334155; margin-left: 6px;&quot;>🏷️ QR ${qrId}</span>`;
-        if (subtitle) subtitle.innerText = `Mesa ${mesaId} • ${cuenta.creadoPor === 'mesero_presencial' ? 'Comensal Ubicado Presencialmente' : 'Registro QR'}`;
-        if (btnVerTodaMesa) btnVerTodaMesa.style.display = 'inline-flex';
-
-        // 4. Renderizar Chips de Sillas Faltantes para Anexar (SOLO en modo silla específica)
-        if (boxAdicionarSillas &amp;&amp; chipsContainer) {
-        var sillasDisponiblesParaAnexar = sillasOcupadas.filter(o => o.sillaNum !== sillaNum);
-
-        if (sillasDisponiblesParaAnexar.length > 0) {
-        boxAdicionarSillas.style.display = 'flex';
-        chipsContainer.innerHTML = '';
-
-        var lblSelector = boxAdicionarSillas.querySelector('span');
-        if (lblSelector) {
-        lblSelector.innerHTML = `<i class=&quot;fa-solid fa-user-plus&quot; style=&quot;color: #38bdf8;&quot;></i> ¿Esta cuenta (Silla ${sillaNum}) paga por otras sillas de la mesa?`;
-        }
-
-        var btnSoloEsta = document.getElementById('btnComandaSoloEsta');
-        if (btnSoloEsta) {
-        btnSoloEsta.innerText = `Solo Silla ${sillaNum}`;
-        }
-
-        sillasDisponiblesParaAnexar.forEach(obj => {
-        var s = obj.sillaNum;
-        var isSel = (seleccionadas.indexOf(s) !== -1);
-
-        var chip = document.createElement('button');
-        chip.type = 'button';
-        chip.onclick = function() { window.toggleSillaAdicional(s); };
-        chip.style.cssText = `padding: 6px 12px !important; font-size: 11px !important; font-weight: 800 !important; border-radius: 8px !important; cursor: pointer !important; transition: all 0.2s ease !important; display: flex !important; align-items: center !important; gap: 6px !important; ${
-        isSel
-        ? 'background: #064e3b !important; color: #34d399 !important; border: 2px solid #10b981 !important; box-shadow: 0 0 10px rgba(16, 185, 129, 0.3) !important;'
-        : 'background: #1e293b !important; color: #cbd5e1 !important; border: 1px solid #334155 !important;'
-        }`;
-        chip.innerHTML = isSel
-        ? `<i class=&quot;fa-solid fa-check&quot;></i> Silla ${s} • $${obj.subtotal.toFixed(2)} <span style=&quot;font-size: 10px; color: #f87171; margin-left: 4px; font-weight: 900;&quot; title=&quot;Quitar&quot;>✕</span>`
-        : `<i class=&quot;fa-solid fa-plus&quot; style=&quot;color: #38bdf8;&quot;></i> Silla ${s} • $${obj.subtotal.toFixed(2)}`;
-        chipsContainer.appendChild(chip);
-        });
-        } else {
-        boxAdicionarSillas.style.display = 'none';
-        }
-        }
-        } else {
-        // MODO PANORAMA GENERAL DE LA MESA (SUPERVISIÓN PURAMENTE INFORMATIVA)
-        if (title) title.innerHTML = `<i class=&quot;fa-solid fa-table-cells&quot; style=&quot;color: #38bdf8;&quot;></i> Panorama General • Mesa ${mesaId} (${sillasOcupadas.length} Comensales)`;
-        if (subtitle) subtitle.innerText = `Vista informativa de supervisión y consumos por silla (haz clic en una silla para cobrarla)`;
-        if (btnVerTodaMesa) btnVerTodaMesa.style.display = 'none';
-
-        // Ocultar caja de anexión en vista general para evitar confusiones
-        if (boxAdicionarSillas) boxAdicionarSillas.style.display = 'none';
-        }
-
-        if (modalCard) {
-        modalCard.style.maxWidth = (seleccionadas.length > 1 || sillaNum === null) ? '960px' : '640px';
-        }
-
-        // 5. Renderizar Consumos
-        if (header) {
-        if (sillaNum === null) {
-        header.innerHTML = `<i class=&quot;fa-solid fa-list-check&quot; style=&quot;color: #38bdf8;&quot;></i> Desglose Individual de Consumos por Silla:`;
-        } else {
-        header.innerText = (seleccionadas.length > 1)
-        ? `Consumos Consolidados (${seleccionadas.length} Sillas: ${seleccionadas.map(s => 'Silla ' + s).join(' + ')}):`
-        : `Consumos en Silla ${sillaNum}:`;
-        }
-        }
-
-        if (sillaNum === null) {
-        // PANORAMA GENERAL: Tarjetas informativas de todas las sillas de la mesa
-        container.style.cssText = 'display: grid !important; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)) !important; gap: 12px !important; max-height: 340px !important; overflow-y: auto !important;';
-
-        if (sillasOcupadas.length === 0) {
-        container.innerHTML = `<div style=&quot;text-align: center; grid-column: 1/-1; padding: 25px; color: #64748b; font-size: 12px;&quot;>No hay comensales sentados en esta mesa actualmente.</div>`;
-        } else {
-        sillasOcupadas.forEach(obj => {
-        var s = obj.sillaNum;
-        var c = obj.cuenta;
-        var qrId = c.qrId || ('PV-0' + mesaId + s);
-        var sub = obj.subtotal;
-
-        var card = document.createElement('div');
-        card.style.cssText = 'background: #0f172a !important; border: 1px solid #334155 !important; border-radius: 12px !important; padding: 12px !important; display: flex !important; flex-direction: column !important; justify-content: space-between !important; gap: 8px !important;';
-
-        var cardHeader = document.createElement('div');
-        cardHeader.style.cssText = 'display: flex !important; justify-content: space-between !important; align-items: center !important; padding-bottom: 6px !important; border-bottom: 1px solid #1e293b !important; font-size: 11px !important;';
-        cardHeader.innerHTML = `
-        <div>
-        <span style=&quot;font-weight: 900; color: #38bdf8; font-size: 12px; display: block;&quot;>
-        <i class=&quot;fa-solid fa-user&quot;></i> Silla ${s} (${c.comensalNombre || 'Comensal'})
-        </span>
-        <span style=&quot;font-size: 10px; color: #64748b;&quot;>Portavasos #${qrId}</span>
-        </div>
-        <span style=&quot;font-weight: 900; color: #fbbf24; font-size: 13px;&quot;>$${sub.toFixed(2)}</span>
-        `;
-        card.appendChild(cardHeader);
-
-        var itemsWrap = document.createElement('div');
-        itemsWrap.style.cssText = 'display: flex !important; flex-direction: column !important; gap: 4px !important; flex: 1 !important; max-height: 120px !important; overflow-y: auto !important;';
-
-        if (!c.items || c.items.length === 0) {
-        itemsWrap.innerHTML = `<div style=&quot;text-align: center; color: #64748b; font-size: 10px; padding: 10px 0;&quot;>Sin consumos registrados</div>`;
-        } else {
-        c.items.forEach((it) => {
-        var itSub = it.precio * it.cantidad;
-        var row = document.createElement('div');
-        row.style.cssText = 'display: flex !important; justify-content: space-between !important; align-items: center !important; background: #020617 !important; padding: 4px 6px !important; border-radius: 6px !important; font-size: 10px !important;';
-        row.innerHTML = `
-        <div style=&quot;flex: 1; padding-right: 4px;&quot;>
-        <span style=&quot;font-weight: 700; color: #ffffff;&quot;>${it.cantidad}x ${it.nombre}</span>
-        </div>
-        <span style=&quot;font-weight: 900; color: #34d399;&quot;>$${itSub.toFixed(2)}</span>
-        `;
-        itemsWrap.appendChild(row);
-        });
-        }
-        card.appendChild(itemsWrap);
-
-        var btnCard = document.createElement('button');
-        btnCard.type = 'button';
-        btnCard.onclick = function() { window.seleccionarSillaDesdeMesa(s); };
-        btnCard.style.cssText = 'width: 100% !important; padding: 8px !important; background: rgba(56, 189, 248, 0.15) !important; color: #38bdf8 !important; border: 1px solid rgba(56, 189, 248, 0.3) !important; border-radius: 8px !important; font-size: 11px !important; font-weight: 800 !important; cursor: pointer !important; display: flex !important; align-items: center !important; justify-content: center !important; gap: 6px !important; transition: all 0.2s ease !important;';
-        btnCard.innerHTML = `<i class=&quot;fa-solid fa-receipt&quot;></i> Atender / Cobrar Silla ${s}`;
-        card.appendChild(btnCard);
-
-        container.appendChild(card);
-        });
-        }
-        } else if (seleccionadas.length === 1 &amp;&amp; seleccionadas[0] === sillaNum) {
-        // Vista detallada individual de la silla titular
-        container.style.cssText = 'display: flex !important; flex-direction: column !important; gap: 8px !important; max-height: 320px !important; overflow-y: auto !important;';
-        const key = `${mesaId}-${sillaNum}`;
-        const cuenta = window.palapaState.cuentas[key] || { items: [] };
-
-        if (!cuenta.items || cuenta.items.length === 0) {
-        container.innerHTML = `
-        <div style=&quot;background: rgba(15, 23, 42, 0.8) !important; border: 1px dashed #059669 !important; border-radius: 14px !important; padding: 18px !important; text-align: center !important; display: flex !important; flex-direction: column !important; align-items: center !important; gap: 8px !important;&quot;>
-        <div style=&quot;width: 42px !important; height: 42px !important; border-radius: 50% !important; background: rgba(16, 185, 129, 0.15) !important; border: 2px solid #10b981 !important; display: flex !important; align-items: center !important; justify-content: center !important; font-size: 18px !important; color: #34d399 !important;&quot;>
-        <i class=&quot;fa-solid fa-user-check&quot;></i>
-        </div>
-        <div>
-        <div style=&quot;font-size: 13px !important; font-weight: 800 !important; color: #ffffff !important;&quot;>Comensal Ubicado en Silla ${sillaNum}</div>
-        <div style=&quot;font-size: 11px !important; color: #94a3b8 !important; margin-top: 3px !important;&quot;>La silla está registrada como <b style=&quot;color: #fbbf24;&quot;>OCUPADA</b> (ubicación presencial).</div>
-        </div>
-        <div style=&quot;font-size: 11px !important; color: #34d399 !important; font-weight: 700 !important; background: rgba(5, 150, 105, 0.15) !important; padding: 4px 12px !important; border-radius: 20px !important; border: 1px solid rgba(52, 211, 153, 0.3) !important; margin-top: 4px !important;&quot;>
-        👉 Selecciona platillos del catálogo a la derecha para iniciar la orden
-        </div>
-        </div>
-        `;
-        } else {
-        cuenta.items.forEach((it, idx) => {
-        var itSub = it.precio * it.cantidad;
-        var row = document.createElement('div');
-        row.style.cssText = 'display: flex !important; justify-content: space-between !important; align-items: center !important; background: #0f172a !important; padding: 8px 12px !important; border-radius: 10px !important; border: 1px solid #1e293b !important; font-size: 12px !important;';
-        row.innerHTML = `
-        <div style=&quot;flex: 1; padding-right: 8px;&quot;>
-        <span style=&quot;font-weight: 700; color: #ffffff; display: block;&quot;>${it.cantidad}x ${it.nombre}</span>
-        <span style=&quot;font-size: 10px; color: #94a3b8; font-style: italic;&quot;>${it.notas ? it.notas + ' • ' : ''}${it.hora || ''}</span>
-        </div>
-        <div style=&quot;display: flex; align-items: center; gap: 8px;&quot;>
-        <span style=&quot;font-weight: 900; color: #34d399; font-size: 12px;&quot;>$${itSub.toFixed(2)}</span>
-        <button onclick=&quot;window.eliminarItemModal('${key}', ${idx})&quot; style=&quot;background: transparent; border: none; color: #f87171; cursor: pointer; padding: 2px;&quot;><i class=&quot;fa-solid fa-trash-can&quot; style=&quot;font-size: 11px;&quot;></i></button>
-        </div>
-        `;
-        container.appendChild(row);
-        });
-        }
-        } else {
-        // Vista multitarjeta cuando se anexan sillas a la silla titular
-        container.style.cssText = 'display: grid !important; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)) !important; gap: 12px !important; max-height: 340px !important; overflow-y: auto !important;';
-
-        seleccionadas.forEach(s => {
-        var chairObj = sillasOcupadas.find(o => o.sillaNum === s);
-        var c = chairObj ? chairObj.cuenta : (window.palapaState.cuentas[`${mesaId}-${s}`] || { items: [] });
-        var sub = chairObj ? chairObj.subtotal : 0;
-        var qrId = c.qrId || ('PV-0' + mesaId + s);
-        var isTitular = (sillaNum !== null &amp;&amp; s === sillaNum);
-
-        var card = document.createElement('div');
-        card.style.cssText = 'background: ' + (isTitular ? '#042f2e' : '#0b2921') + ' !important; border: 2px solid ' + (isTitular ? '#059669' : '#10b981') + ' !important; border-radius: 12px !important; padding: 10px 12px !important; display: flex !important; flex-direction: column !important; justify-content: space-between !important; gap: 8px !important; box-shadow: 0 0 12px rgba(16,185,129,0.2) !important;';
-
-        var cardHeader = document.createElement('div');
-        cardHeader.style.cssText = 'display: flex !important; justify-content: space-between !important; align-items: center !important; padding-bottom: 6px !important; border-bottom: 1px dashed #10b981 !important; font-size: 11px !important;';
-        cardHeader.innerHTML = `
-        <div>
-        <span style=&quot;font-weight: 900; color: ${isTitular ? '#34d399' : '#a7f3d0'}; font-size: 12px; display: block;&quot;>
-        <i class=&quot;fa-solid fa-receipt&quot;></i> Silla ${s} ${isTitular ? '(Titular)' : '(Anexada)'}
-        </span>
-        <span style=&quot;font-size: 10px; color: #94a3b8;&quot;>Portavasos #${qrId}</span>
-        </div>
-        <div style=&quot;display: flex; align-items: center; gap: 6px;&quot;>
-        <span style=&quot;font-weight: 900; color: #fbbf24; font-size: 12px;&quot;>$${sub.toFixed(2)}</span>
-        ${!isTitular ? `<button onclick=&quot;window.toggleSillaAdicional(${s})&quot; style=&quot;background: rgba(239, 68, 68, 0.2); border: 1px solid rgba(239, 68, 68, 0.4); color: #f87171; border-radius: 4px; padding: 2px 6px; font-size: 10px; font-weight: bold; cursor: pointer;&quot; title=&quot;Quitar de este cobro&quot;>✕</button>` : ''}
-        </div>
-        `;
-        card.appendChild(cardHeader);
-
-        var itemsWrap = document.createElement('div');
-        itemsWrap.style.cssText = 'display: flex !important; flex-direction: column !important; gap: 4px !important; flex: 1 !important; max-height: 140px !important; overflow-y: auto !important;';
-
-        if (!c.items || c.items.length === 0) {
-        itemsWrap.innerHTML = `<div style=&quot;text-align: center; color: #64748b; font-size: 10px; padding: 10px 0;&quot;>Sin consumos</div>`;
-        } else {
-        c.items.forEach((it) => {
-        var itSub = it.precio * it.cantidad;
-        var row = document.createElement('div');
-        row.style.cssText = 'display: flex !important; justify-content: space-between !important; align-items: center !important; background: #020617 !important; padding: 4px 6px !important; border-radius: 6px !important; font-size: 10px !important;';
-        row.innerHTML = `
-        <div style=&quot;flex: 1; padding-right: 4px;&quot;>
-        <span style=&quot;font-weight: 700; color: #ffffff;&quot;>${it.cantidad}x ${it.nombre}</span>
-        </div>
-        <span style=&quot;font-weight: 900; color: #34d399;&quot;>$${itSub.toFixed(2)}</span>
-        `;
-        itemsWrap.appendChild(row);
-        });
-        }
-        card.appendChild(itemsWrap);
-        container.appendChild(card);
-        });
-        }
-
-        // 6. Cálculo de Totales Consolidados
-        var totalNeto = 0;
-        var totalPendiente = 0;
-        var sillasPendientes = [];
-
-        if (sillaNum === null) {
-        // En panorama general, el total es el acumulado de toda la mesa
-        sillasOcupadas.forEach(obj => {
-        totalNeto += obj.subtotal;
-        });
-        } else {
-        sillasOcupadas.forEach(obj => {
-        if (seleccionadas.indexOf(obj.sillaNum) !== -1) {
-        totalNeto += obj.subtotal;
-        } else {
-        totalPendiente += obj.subtotal;
-        sillasPendientes.push(`Silla ${obj.sillaNum}`);
-        }
-        });
-        }
-
-        var iva = totalNeto * 0.16;
-        var propina = totalNeto * 0.10;
-        var granTotal = totalNeto + iva;
-
-        if (lblSubtotal) {
-        lblSubtotal.innerText = (sillaNum === null)
-        ? `Subtotal Acumulado (Toda la Mesa):`
-        : `Subtotal (${seleccionadas.length} Silla${seleccionadas.length !== 1 ? 's' : ''}):`;
-        }
-        if (totalLabelEl) {
-        if (sillaNum === null) {
-        totalLabelEl.innerText = `Total Acumulado de la Mesa:`;
-        } else if (seleccionadas.length === sillasOcupadas.length &amp;&amp; sillasOcupadas.length > 0) {
-        totalLabelEl.innerText = `Total a Pagar (Toda la Mesa):`;
-        } else {
-        totalLabelEl.innerText = `Total a Pagar (Silla${seleccionadas.length > 1 ? 's ' : ' '}${seleccionadas.join(', ')}):`;
-        }
-        }
-
-        if (subtotalMontoEl) subtotalMontoEl.innerText = `$${totalNeto.toFixed(2)}`;
-        if (ivaMontoEl) ivaMontoEl.innerText = `$${iva.toFixed(2)}`;
-        if (propinaMontoEl) propinaMontoEl.innerText = `$${propina.toFixed(2)}`;
-        if (totalMontoEl) totalMontoEl.innerText = `$${granTotal.toFixed(2)}`;
-        if (txtBtnCobrar) txtBtnCobrar.innerText = `$${granTotal.toFixed(2)}`;
-
-        // 7. Alerta de sillas pendientes no incluidas en este cobro (solo en modo cobro específico)
-        if (alertPendientes &amp;&amp; txtPendientes) {
-        if (sillaNum !== null &amp;&amp; sillasPendientes.length > 0 &amp;&amp; totalNeto > 0) {
-        alertPendientes.style.display = 'block';
-        txtPendientes.innerHTML = `<b>Quedará pendiente en la mesa:</b> ${sillasPendientes.join(', ')} por <b>$${(totalPendiente * 1.16).toFixed(2)}</b> (no se cobrará en este ticket).`;
-        } else {
-        alertPendientes.style.display = 'none';
-        }
-        }
-
-        // 8. Botones de acción
-        if (btnCobrarDirecto) {
-        btnCobrarDirecto.style.display = (totalNeto > 0) ? 'flex' : 'none';
-        var btnCobrarSpan = btnCobrarDirecto.querySelector('span:first-child') || btnCobrarDirecto;
-        if (sillaNum === null) {
-        btnCobrarDirecto.innerHTML = `<i class=&quot;fa-solid fa-credit-card&quot;></i> Cobrar Toda la Mesa (<span id=&quot;txtBtnCobrarMonto&quot;>$${granTotal.toFixed(2)}</span>)`;
-        } else {
-        var labelCobro = (seleccionadas.length > 1) ? `Sillas ${seleccionadas.join(', ')}` : `Silla ${sillaNum}`;
-        btnCobrarDirecto.innerHTML = `<i class=&quot;fa-solid fa-credit-card&quot;></i> Cobrar y Liquidar ${labelCobro} (<span id=&quot;txtBtnCobrarMonto&quot;>$${granTotal.toFixed(2)}</span>)`;
-        }
-        }
-        if (btnMover) btnMover.style.display = (seleccionadas.length === 1 &amp;&amp; sillaNum !== null) ? 'flex' : 'none';
-        if (btnLiberar) btnLiberar.style.display = (seleccionadas.length === 1 &amp;&amp; sillaNum !== null) ? 'flex' : 'none';
-
-        if (modal) {
-        modal.classList.add('show');
-        modal.style.setProperty('display', 'flex', 'important');
-        }
-        }
-
-        window.toggleSillaAdicional = function(sillaNum) {
-        var titular = window.palapaState.sillaSeleccionadaNum;
-        // Si la silla es la titular, NUNCA se deselecciona ni se quita de su propia comanda
-        if (titular !== null &amp;&amp; sillaNum === titular) {
-        return;
-        }
-
-        var sel = window.palapaState.sillasSeleccionadasCobro || [];
-        var idx = sel.indexOf(sillaNum);
-        if (idx === -1) {
-        sel.push(sillaNum);
-        } else {
-        sel.splice(idx, 1);
-        }
-
-        // Asegurar que la silla titular siempre permanezca en la lista
-        if (titular !== null &amp;&amp; sel.indexOf(titular) === -1) {
-        sel.unshift(titular);
-        }
-
-        window.palapaState.sillasSeleccionadasCobro = sel;
-        abrirModalComandaActual();
-        };
-
-        window.comandaToggleTodaLaMesa = function() {
-        var mesaId = window.palapaState.mesaSeleccionadaId;
-        var allChairs = [];
-        for (var s = 1; s <= 10; s++) {
-        if (window.palapaState.cuentas[`${mesaId}-${s}`]) {
-        allChairs.push(s);
-        }
-        }
-        window.palapaState.sillasSeleccionadasCobro = allChairs;
-        abrirModalComandaActual();
-        };
-
-        window.comandaSoloEstaSilla = function() {
-        var current = window.palapaState.sillaSeleccionadaNum || 1;
-        window.palapaState.sillasSeleccionadasCobro = [current];
-        abrirModalComandaActual();
-        };
-
-        window.cobrarSeleccionadasDesdeComanda = function() {
-        var mesaId = window.palapaState.mesaSeleccionadaId;
-        var sillaNum = window.palapaState.sillaSeleccionadaNum;
-        var sel = window.palapaState.sillasSeleccionadasCobro || [];
-
-        if (sillaNum === null) {
-        // Liquidación Total de toda la Mesa
-        var totalText = document.getElementById('modalTotalMonto') ? document.getElementById('modalTotalMonto').innerText : '$0.00';
-        if (confirm(`¿Confirmar cobro y liquidación TOTAL de Mesa ${mesaId} por un total de ${totalText}?\n\nTodas las sillas de la mesa quedarán liberadas.`)) {
-        for (var s = 1; s <= 10; s++) {
-        delete window.palapaState.cuentas[mesaId + '-' + s];
-        }
-        window.palapaState.sillasSeleccionadasCobro = [];
-        saveStateToStorage();
-        renderStateUI();
-        cerrarModalComanda();
-        showDragToast(`💳 ¡Mesa ${mesaId} liquidada en su totalidad (${totalText})! Sillas liberadas.`, 'ok');
-        }
-        return;
-        }
-
-        if (sel.length === 0) {
-        showDragToast('⚠ Selecciona al menos una silla para cobrar.', 'warn');
-        return;
-        }
-
-        var totalText = document.getElementById('modalTotalMonto') ? document.getElementById('modalTotalMonto').innerText : '$0.00';
-        var sillasStr = sel.map(s => 'Silla ' + s).join(', ');
-
-        if (confirm(`¿Confirmar cobro y liquidación de ${sillasStr} de Mesa ${mesaId} por un total de ${totalText}?\n\nLas sillas seleccionadas quedarán liberadas y las restantes continuarán activas en la mesa.`)) {
-        sel.forEach(sNum => {
-        delete window.palapaState.cuentas[mesaId + '-' + sNum];
-        });
-        window.palapaState.sillasSeleccionadasCobro = [];
-        saveStateToStorage();
-        renderStateUI();
-        cerrarModalComanda();
-        showDragToast(`💳 ¡Cobro exitoso de Mesa ${mesaId} (${sillasStr})! Sillas liberadas.`, 'ok');
-        }
-        };
-
-        window.seleccionarSillaDesdeMesa = function(sillaNum) {
-        window.palapaState.sillaSeleccionadaNum = sillaNum;
-        window.palapaState.sillasSeleccionadasCobro = [sillaNum];
-        renderStateUI();
-        abrirModalComandaActual();
-        };
-
-        window.verTodaLaMesaEnColumnas = function() {
-        window.palapaState.sillaSeleccionadaNum = null;
-        window.palapaState.sillasSeleccionadasCobro = [];
-        renderStateUI();
-        abrirModalComandaActual();
-        };
-
-        var _precuentaMesaId = 2;
-        var _precuentaSillasSeleccionadas = [];
-
-        function abrirPrecuenta() {
-        const mesaId = window.palapaState.mesaSeleccionadaId;
-        const sillaNum = window.palapaState.sillaSeleccionadaNum;
-        const modalP = document.getElementById('modalPrecuentaBackdrop');
-        const fechaEl = document.getElementById('precuentaFecha');
-        const checklistContainer = document.getElementById('precuentaSillasChecklist');
-
-        if (!modalP) return;
-        _precuentaMesaId = mesaId;
-
-        if (fechaEl) fechaEl.innerText = 'Fecha: ' + (new Date()).toLocaleDateString() + ' ' + (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-
-        // Encontrar todas las sillas ocupadas de esta mesa
-        var sillasOcupadas = [];
-        for (var s = 1; s <= 4; s++) {
-        var k = mesaId + '-' + s;
-        var c = window.palapaState.cuentas[k];
-        if (c &amp;&amp; (c.estado === 'ocupada' || (c.items &amp;&amp; c.items.length > 0))) {
-        var tot = 0;
-        if (c.items) c.items.forEach(function(it) { tot += it.precio * it.cantidad; });
-        sillasOcupadas.push({ sillaNum: s, cuenta: c, total: tot });
-        }
-        }
-
-        // Si se abrió desde una silla específica, seleccionar inicialmente esa silla; si es mesa completa, seleccionar todas
-        if (sillaNum !== null) {
-        _precuentaSillasSeleccionadas = [sillaNum];
-        } else {
-        _precuentaSillasSeleccionadas = sillasOcupadas.map(function(o) { return o.sillaNum; });
-        }
-
-        // Renderizar checklist
-        if (checklistContainer) {
-        checklistContainer.innerHTML = '';
-        if (sillasOcupadas.length === 0) {
-        checklistContainer.innerHTML = '<div style=&quot;grid-column: span 2; color: #94a3b8; font-size: 11px;&quot;>No hay sillas con consumos en esta mesa.</div>';
-        } else {
-        sillasOcupadas.forEach(function(obj) {
-        var s = obj.sillaNum;
-        var isChecked = _precuentaSillasSeleccionadas.indexOf(s) !== -1;
-        var lbl = document.createElement('label');
-        lbl.style.cssText = 'display: flex !important; align-items: center !important; gap: 6px !important; background: ' + (isChecked ? '#ecfdf5' : '#ffffff') + ' !important; padding: 6px 8px !important; border-radius: 8px !important; border: 1px solid ' + (isChecked ? '#10b981' : '#cbd5e1') + ' !important; cursor: pointer !important; user-select: none !important;';
-        lbl.innerHTML = `
-        <input type=&quot;checkbox&quot; value=&quot;${s}&quot; ${isChecked ? 'checked' : ''} onchange=&quot;window.togglePrecuentaSilla(${s})&quot; style=&quot;accent-color: #059669 !important; width: 14px !important; height: 14px !important;&quot;>
-        <div style=&quot;display: flex; flex-direction: column; line-height: 1.1;&quot;>
-        <span style=&quot;font-weight: 800; font-size: 11px; color: #0f172a;&quot;>Silla ${s} <span style=&quot;font-weight: normal; color: #64748b; font-size: 9px;&quot;>${obj.cuenta.comensalNombre ? '• ' + obj.cuenta.comensalNombre : ''}</span></span>
-        <span style=&quot;font-weight: 900; color: #059669; font-size: 10px;&quot;>$${obj.total.toFixed(2)}</span>
-        </div>
-        `;
-        checklistContainer.appendChild(lbl);
-        });
-        }
-        }
-
-        recalcularPrecuenta();
-        modalP.classList.add('show');
-        modalP.style.setProperty('display', 'flex', 'important');
-        }
-
-        window.togglePrecuentaSilla = function(sillaNum) {
-        var idx = _precuentaSillasSeleccionadas.indexOf(sillaNum);
-        if (idx === -1) {
-        _precuentaSillasSeleccionadas.push(sillaNum);
-        } else {
-        _precuentaSillasSeleccionadas.splice(idx, 1);
-        }
-        actualizarChecklistVisual();
-        recalcularPrecuenta();
-        };
-
-        window.precuentaSelectPreset = function(preset) {
-        var mesaId = _precuentaMesaId;
-        if (preset === 'solo_esta') {
-        var sSel = window.palapaState.sillaSeleccionadaNum || 1;
-        _precuentaSillasSeleccionadas = [sSel];
-        } else if (preset === 'todas') {
-        _precuentaSillasSeleccionadas = [];
-        for (var s = 1; s <= 10; s++) {
-        if (window.palapaState.cuentas[mesaId + '-' + s]) {
-        _precuentaSillasSeleccionadas.push(s);
-        }
-        }
-        }
-        actualizarChecklistVisual();
-        recalcularPrecuenta();
-        };
-
-        function actualizarChecklistVisual() {
-        var checklistContainer = document.getElementById('precuentaSillasChecklist');
-        if (!checklistContainer) return;
-        var inputs = checklistContainer.querySelectorAll('input[type=&quot;checkbox&quot;]');
-        inputs.forEach(function(inp) {
-        var sVal = parseInt(inp.value);
-        var isChecked = _precuentaSillasSeleccionadas.indexOf(sVal) !== -1;
-        inp.checked = isChecked;
-        var parentLbl = inp.closest('label');
-        if (parentLbl) {
-        parentLbl.style.background = isChecked ? '#ecfdf5' : '#ffffff';
-        parentLbl.style.borderColor = isChecked ? '#10b981' : '#cbd5e1';
-        }
-        });
-        }
-
-        function recalcularPrecuenta() {
-        const mesaId = _precuentaMesaId;
-        const listContainer = document.getElementById('precuentaTramosList');
-        const subtotalEl = document.getElementById('precuentaSubtotal');
-        const ivaEl = document.getElementById('precuentaIva');
-        const propinaEl = document.getElementById('precuentaPropina');
-        const totalEl = document.getElementById('precuentaTotal');
-        const headerTag = document.getElementById('precuentaHeaderTag');
-        const btnCobrarMonto = document.getElementById('btnCobrarMonto');
-
-        if (!listContainer) return;
-        listContainer.innerHTML = '';
-
-        var sillasList = _precuentaSillasSeleccionadas.slice().sort();
-
-        if (sillasList.length === 0) {
-        if (headerTag) headerTag.innerHTML = `MESA ${mesaId} • NINGUNA SILLA SELECCIONADA`;
-        listContainer.innerHTML = `<div style=&quot;text-align:center; padding: 15px; color:#94a3b8; font-size:11px;&quot;>Marca al menos una silla para ver su precuenta.</div>`;
-        if (subtotalEl) subtotalEl.innerText = '$0.00';
-        if (ivaEl) ivaEl.innerText = '$0.00';
-        if (propinaEl) propinaEl.innerText = '$0.00';
-        if (totalEl) totalEl.innerText = '$0.00';
-        if (btnCobrarMonto) btnCobrarMonto.innerText = '$0.00';
-        return;
-        }
-
-        var sillasStr = sillasList.map(function(s) { return 'Silla ' + s; }).join(', ');
-        if (headerTag) {
-        headerTag.innerHTML = `MESA ${mesaId} • ${sillasStr.toUpperCase()} <br><span style=&quot;font-size:10px;color:#475569;&quot;>CUENTA AGRUPADA (${sillasList.length} COMENSAL${sillasList.length > 1 ? 'ES' : ''})</span>`;
-        }
-
-        var totalNeto = 0;
-
-        sillasList.forEach(function(sNum) {
-        var k = mesaId + '-' + sNum;
-        var cuenta = window.palapaState.cuentas[k];
-        if (!cuenta || !cuenta.items || cuenta.items.length === 0) return;
-
-        var chairBlock = document.createElement('div');
-        chairBlock.style.cssText = 'border-bottom: 1px dashed #cbd5e1 !important; padding-bottom: 6px !important; margin-bottom: 4px !important;';
-
-        var chairHeader = document.createElement('div');
-        chairHeader.style.cssText = 'display: flex !important; justify-content: space-between !important; font-weight: 900 !important; color: #047857 !important; margin-bottom: 4px !important; font-size: 11px !important;';
-        chairHeader.innerHTML = `<span>SILLA ${sNum} ${cuenta.comensalNombre ? '· ' + cuenta.comensalNombre.toUpperCase() : ''}</span><span style=&quot;font-size: 9px; color: #64748b;&quot;>QR: #${cuenta.qrId || 'PV-0'+mesaId+sNum}</span>`;
-        chairBlock.appendChild(chairHeader);
-
-        var subChair = 0;
-        cuenta.items.forEach(function(it) {
-        var row = document.createElement('div');
-        var itTotal = it.precio * it.cantidad;
-        subChair += itTotal;
-        totalNeto += itTotal;
-        row.style.cssText = 'display: flex !important; justify-content: space-between !important; margin-bottom: 2px !important; font-size: 11px !important;';
-        row.innerHTML = `<span>${it.cantidad}x ${it.nombre}</span><span>$${itTotal.toFixed(2)}</span>`;
-        chairBlock.appendChild(row);
-        });
-
-        var subChairRow = document.createElement('div');
-        subChairRow.style.cssText = 'display: flex !important; justify-content: space-between !important; font-weight: bold !important; color: #475569 !important; margin-top: 3px !important; font-size: 10px !important;';
-        subChairRow.innerHTML = `<span>SUBTOTAL SILLA ${sNum}:</span><span>$${subChair.toFixed(2)}</span>`;
-        chairBlock.appendChild(subChairRow);
-
-        listContainer.appendChild(chairBlock);
-        });
-
-        var ivaVal = totalNeto * 0.16;
-        var propinaVal = totalNeto * 0.10;
-        var granTotal = totalNeto + ivaVal;
-
-        if (subtotalEl) subtotalEl.innerText = `$${totalNeto.toFixed(2)}`;
-        if (ivaEl) ivaEl.innerText = `$${ivaVal.toFixed(2)}`;
-        if (propinaEl) propinaEl.innerText = `$${propinaVal.toFixed(2)}`;
-        if (totalEl) totalEl.innerText = `$${granTotal.toFixed(2)}`;
-        if (btnCobrarMonto) btnCobrarMonto.innerText = `$${granTotal.toFixed(2)}`;
-        }
-
-        window.cobrarSillasPrecuenta = function() {
-        var mesaId = _precuentaMesaId;
-        var sillasList = _precuentaSillasSeleccionadas.slice();
-        if (sillasList.length === 0) {
-        showDragToast('⚠ Selecciona al menos una silla para cobrar', 'warn');
-        return;
-        }
-
-        var totalText = document.getElementById('precuentaTotal') ? document.getElementById('precuentaTotal').innerText : '$0.00';
-        var sillasStr = sillasList.map(function(s) { return 'Silla ' + s; }).join(', ');
-
-        if (confirm(`¿Confirmar cobro de ${sillasStr} de Mesa ${mesaId} por un total de ${totalText}?\n\nLas sillas seleccionadas serán liquidadas y quedarán libres.`)) {
-        sillasList.forEach(function(sNum) {
-        var k = mesaId + '-' + sNum;
-        delete window.palapaState.cuentas[k];
-        });
-        saveStateToStorage();
-        renderStateUI();
-        cerrarPrecuenta();
-        cerrarModalComanda();
-        showDragToast(`💳 ¡Pago completado para Mesa ${mesaId} (${sillasStr})! Sillas liberadas.`, 'ok');
-        }
-        };
-
-        function cerrarPrecuenta() {
-        const modalP = document.getElementById('modalPrecuentaBackdrop');
-        if (modalP) {
-        modalP.classList.remove('show');
-        modalP.style.setProperty('display', 'none', 'important');
-        }
-        }
-
-        window.abrirPrecuenta = function () {
-        abrirPrecuenta();
-        };
-        window.cerrarPrecuenta = function () {
-        cerrarPrecuenta();
-        };
-
-        function cerrarModalComanda() {
-        const modal = document.getElementById('modalComandaBackdrop');
-        if (modal) {
-        modal.classList.remove('show');
-        modal.style.setProperty('display', 'none', 'important');
-        }
-        }
-
-        window.cerrarModalComanda = function () {
-        cerrarModalComanda();
-        };
-        window.abrirModalComandaActual = function () {
-        abrirModalComandaActual();
-        };
-
-        window.liberarSillaActual = function () {
-        const mesaId = window.palapaState.mesaSeleccionadaId;
-        const sillaNum = window.palapaState.sillaSeleccionadaNum;
-        if (sillaNum === null) return;
-        const key = `${mesaId}-${sillaNum}`;
-        const cuenta = window.palapaState.cuentas[key];
-        if (cuenta) {
-        if (cuenta.items &amp;&amp; cuenta.items.length > 0) {
-        if (!confirm(`La Silla ${sillaNum} de Mesa ${mesaId} tiene ${cuenta.items.length} consumos registrados. ¿Deseas liberar la silla y eliminar la cuenta?`)) {
-        return;
-        }
-        }
-        delete window.palapaState.cuentas[key];
-        saveStateToStorage();
-        renderStateUI();
-        cerrarModalComanda();
-        showDragToast(`🟢 Silla ${sillaNum} de Mesa ${mesaId} liberada y disponible`, 'ok');
-        }
-        };
-
-        window.eliminarItemModal = function (key, idx) {
-        if (window.palapaState.cuentas[key] &amp;&amp; window.palapaState.cuentas[key].items) {
-        window.palapaState.cuentas[key].items.splice(idx, 1);
-        if (window.palapaState.cuentas[key].items.length === 0) {
-        delete window.palapaState.cuentas[key];
-        }
-        saveStateToStorage();
-        renderStateUI();
-        abrirModalComandaActual();
-        }
-        };
-
-        function renderStateUI() {
-        const isMoveMode = window.palapaState.modoMoverActivo;
-        const origen = window.palapaState.sillaOrigenMover;
-
-        for (let m = 1; m <= 3; m++) {
-        let busyCount = 0;
-        for (let s = 1; s <= 4; s++) {
-        const key = `${m}-${s}`;
-        let chairEl = document.getElementById(`chair-${m}-${s}`);
-        const cuenta = window.palapaState.cuentas[key];
-        const isOccupied = !!(cuenta &amp;&amp; (cuenta.estado === 'ocupada' || (cuenta.items &amp;&amp; cuenta.items.length > 0)));
-
-        if (isOccupied) busyCount++;
-
-        if (chairEl) {
-        const posClass = s === 1 ? 'chair-pos-top' : s === 2 ? 'chair-pos-right' : s === 3 ? 'chair-pos-bottom' : 'chair-pos-left';
-
-        // Update draggable attribute based on current occupied state
-        chairEl.setAttribute('draggable', isOccupied ? 'true' : 'false');
-        const numItems = (cuenta &amp;&amp; cuenta.items) ? cuenta.items.length : 0;
-        chairEl.setAttribute('title', isOccupied
-        ? `Mesa ${m} Silla ${s} (Ocupada${numItems > 0 ? ' · ' + numItems + ' consumos' : ' · Sin consumos'}) • Arrastra para mover`
-        : `Mesa ${m} Silla ${s} (Disponible) • Haz clic para ubicar comensal`);
-
-        if (isMoveMode &amp;&amp; origen &amp;&amp; origen.mesaId === m &amp;&amp; origen.sillaNum === s) {
-        chairEl.className = `chair-btn-fixed ${posClass} chair-moving-source`;
-        } else if (isMoveMode) {
-        chairEl.className = `chair-btn-fixed ${posClass} chair-moving-target ${isOccupied ? 'chair-state-busy' : 'chair-state-free'}`;
-        } else {
-        chairEl.className = `chair-btn-fixed ${posClass} ${isOccupied ? 'chair-state-busy' : 'chair-state-free'}`;
-        }
-        }
-        }
-
-        const circle = document.getElementById(`table-circle-${m}`);
-        const statusText = document.getElementById(`table-status-${m}`);
-        const labelText = document.getElementById(`table-label-${m}`);
-
-        if (circle) {
-        if (busyCount > 0) {
-        circle.style.background = &quot;#78350f&quot;;
-        circle.style.border = &quot;4px solid #f59e0b&quot;;
-        if (statusText) statusText.innerText = `${busyCount} Ocupada${busyCount > 1 ? 's' : ''}`;
-        if (labelText) {
-        labelText.style.color = &quot;#fbbf24&quot;;
-        labelText.innerText = `🟡 Ocupada (${busyCount} Comensal${busyCount > 1 ? 'es' : ''})`;
-        }
-        } else {
-        circle.style.background = &quot;#064e3b&quot;;
-        circle.style.border = &quot;4px solid #10b981&quot;;
-        if (statusText) statusText.innerText = `Libre`;
-        if (labelText) {
-        labelText.style.color = &quot;#34d399&quot;;
-        labelText.innerText = `🟢 Disponible`;
-        }
-        }
-        }
-        }
-
-        const badge = document.getElementById('activeTargetBadge');
-        if (badge) {
-        if (window.palapaState.sillaSeleccionadaNum !== null) {
-        const selKey = `${window.palapaState.mesaSeleccionadaId}-${window.palapaState.sillaSeleccionadaNum}`;
-        const selCuenta = window.palapaState.cuentas[selKey];
-        const isSelOcc = !!(selCuenta &amp;&amp; (selCuenta.estado === 'ocupada' || (selCuenta.items &amp;&amp; selCuenta.items.length > 0)));
-        badge.innerText = `Mesa ${window.palapaState.mesaSeleccionadaId} • Silla ${window.palapaState.sillaSeleccionadaNum} (${isSelOcc ? 'Ocupada' : 'Disponible'})`;
-        } else {
-        badge.innerText = `Mesa ${window.palapaState.mesaSeleccionadaId} (Completa)`;
-        }
-        }
-
-        renderWaiterMenuGrid();
-        }
-
-        function renderWaiterMenuGrid() {
-        const grid = document.getElementById('waiterMenuGrid');
-        if (!grid) return;
-        grid.innerHTML = '';
-
-        const catFiltro = window.palapaState.categoriaFiltro || 'Todos';
-        const filtrados = window.catalogProducts.filter(p => catFiltro === 'Todos' || p.categoria_nombre === catFiltro);
-
-        filtrados.forEach(prod => {
-        const card = document.createElement('div');
-        card.style.cssText = 'background: #0f172a !important; border: 1px solid #1e293b !important; border-radius: 12px !important; padding: 12px !important; display: flex !important; justify-content: space-between !important; align-items: center !important; cursor: pointer !important;';
-        card.onclick = () => agregarPlatilloDirecto(prod);
-
-        card.innerHTML = `
-        <div style=&quot;display: flex; align-items: center; gap: 8px;&quot;>
-        <span style=&quot;font-size: 20px;&quot;>${prod.icono}</span>
-        <div>
-        <span style=&quot;font-size: 11px; font-weight: 700; color: #ffffff; display: block; line-height: 1.2;&quot;>${prod.nombre}</span>
-        <span style=&quot;font-size: 11px; font-weight: 900; color: #34d399;&quot;>$${prod.precio.toFixed(2)}</span>
-        </div>
-        </div>
-        <button style=&quot;padding: 6px 12px; background: #059669; color: #ffffff; font-size: 11px; font-weight: 900; border-radius: 8px; border: none; cursor: pointer;&quot;>
-        + Agregar
-        </button>
-        `;
-        grid.appendChild(card);
-        });
-        }
-
-        function agregarPlatilloDirecto(prod) {
-        const mesaId = window.palapaState.mesaSeleccionadaId;
-        let sillaNum = window.palapaState.sillaSeleccionadaNum;
-
-        if (sillaNum === null) {
-        sillaNum = 1;
-        window.palapaState.sillaSeleccionadaNum = 1;
-        }
-
-        const key = `${mesaId}-${sillaNum}`;
-        if (!window.palapaState.cuentas[key]) {
-        window.palapaState.cuentas[key] = {
-        estado: 'ocupada',
-        qrId: 'PV-0' + mesaId + sillaNum,
-        comensalNombre: 'Comensal Silla ' + sillaNum,
-        items: [],
-        historialUbicaciones: [{ mesaId: mesaId, sillaNum: sillaNum, hora: (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }]
-        };
-        }
-
-        const nowStr = (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        const items = window.palapaState.cuentas[key].items;
-        const existing = items.find(i => i.id === prod.id &amp;&amp; i.mesaId === mesaId &amp;&amp; i.sillaNum === sillaNum);
-        if (existing) {
-        existing.cantidad += 1;
-        } else {
-        items.push({
-        id: prod.id,
-        nombre: prod.nombre,
-        notas: '',
-        precio: prod.precio,
-        cantidad: 1,
-        mesaId: mesaId,
-        sillaNum: sillaNum,
-        hora: nowStr
-        });
-        }
-
-        saveStateToStorage();
-        renderStateUI();
-        showDragToast(`➕ ${prod.nombre} agregado a Mesa ${mesaId} Silla ${sillaNum}`, 'ok');
-        }
-
-        function filtrarCategoria(catNombre) {
-        window.palapaState.categoriaFiltro = catNombre;
-
-        const chipKeys = ['Todos', 'Cafe', 'Des', 'Car', 'Pos'];
-        chipKeys.forEach(k => {
-        const el = document.getElementById(`wchip-${k}`);
-        if (el) {
-        if ((k === 'Todos' &amp;&amp; catNombre === 'Todos') ||
-        (k === 'Cafe' &amp;&amp; catNombre === 'Barra de Café &amp; Infusiones') ||
-        (k === 'Des' &amp;&amp; catNombre === 'Desayunos &amp; Brunch Gourmet') ||
-        (k === 'Car' &amp;&amp; catNombre === 'Especialidades Fuertes') ||
-        (k === 'Pos' &amp;&amp; catNombre === 'Repostería &amp; Postres de Autor')) {
-        el.style.background = &quot;#059669&quot;;
-        el.style.color = &quot;#ffffff&quot;;
-        el.style.border = &quot;1px solid #34d399&quot;;
-        } else {
-        el.style.background = &quot;#1e293b&quot;;
-        el.style.color = &quot;#cbd5e1&quot;;
-        el.style.border = &quot;1px solid #334155&quot;;
-        }
-        }
-        });
-
-        renderWaiterMenuGrid();
-        }
-
-        setTimeout(function () { renderStateUI(); setupDragListeners(); }, 150);
-        })();
-        </script>"></anvil-form>
+            }
+            }
+            } catch (e) {}
+            return JSON.parse(JSON.stringify(DEFAULT_CUENTAS));
+            }
+
+            window.palapaState = {
+            mesaSeleccionadaId: 2,
+            sillaSeleccionadaNum: 1,
+            categoriaFiltro: &quot;Todos&quot;,
+            modoMoverActivo: false,
+            sillaOrigenMover: null,
+            cuentas: loadStateFromStorage()
+            };
+
+            function resetDemoState() {
+            window.palapaState.cuentas = JSON.parse(JSON.stringify(DEFAULT_CUENTAS));
+            window.palapaState.mesaSeleccionadaId = 2;
+            window.palapaState.sillaSeleccionadaNum = 1;
+            saveStateToStorage();
+            cancelarModoMover();
+            cerrarModalComanda();
+            renderStateUI();
+            showDragToast('🔄 Estado reiniciado a demo (Mesa 3: 2 comensales, Mesa 2: Familia 2 adultos + 2 niños)', 'ok');
+            }
+
+            // ── Toast de notificación (reemplaza alert()) ──
+            var _toastTimer = null;
+            function showDragToast(msg, tipo) {
+            // tipo: 'ok' | 'warn' | 'err'
+            var t = document.getElementById('dragToast');
+            if (!t) return;
+            t.textContent = msg;
+            t.className = 'show toast-' + (tipo || 'ok');
+            if (_toastTimer) clearTimeout(_toastTimer);
+            _toastTimer = setTimeout(function () {
+            t.className = t.className.replace(' show', '').replace('show', '');
+            }, 3200);
+            }
+
+            // ── Mini-modal confirmación (reemplaza confirm()) ──
+            var _combineCallback = null;
+            function showCombineConfirm(srcMesa, srcSilla, tgtMesa, tgtSilla, onYes) {
+            var backdrop = document.getElementById('combineConfirmBackdrop');
+            var title = document.getElementById('combineConfirmTitle');
+            var msg = document.getElementById('combineConfirmMsg');
+            var detail = document.getElementById('combineConfirmDetail');
+            if (!backdrop) { onYes(); return; }
+
+            if (title) title.textContent = 'Combinar Cuentas';
+            if (msg) msg.textContent = 'Ambas sillas ya tienen consumos.';
+            if (detail) detail.innerHTML =
+            '<b style=&quot;color:#f59e0b;&quot;>Origen:</b> Mesa ' + srcMesa + ' Silla ' + srcSilla +
+            '<br><b style=&quot;color:#38bdf8;&quot;>Destino:</b> Mesa ' + tgtMesa + ' Silla ' + tgtSilla +
+            '<br><span style=&quot;color:#64748b;font-size:11px;&quot;>Los consumos del origen se agregarán a la silla destino.</span>';
+
+            _combineCallback = onYes;
+            backdrop.classList.add('show');
+
+            document.getElementById('combineConfirmYes').onclick = function () {
+            backdrop.classList.remove('show');
+            if (_combineCallback) _combineCallback();
+            _combineCallback = null;
+            };
+            document.getElementById('combineConfirmNo').onclick = function () {
+            backdrop.classList.remove('show');
+            _combineCallback = null;
+            cancelarModoMover();
+            };
+            }
+
+            // ════════════════════════════════════════════════════════════
+            //  DRAG DE SILLAS — patrón mousedown/mousemove/mouseup
+            //  Igual al resize de VidaSpa: eventos en document para que
+            //  z-index y pointer-events de elementos hijos NO interfieran.
+            //  document.elementFromPoint() en mouseup detecta la silla destino.
+            // ════════════════════════════════════════════════════════════
+
+            var _ms = {
+            active: false,   // mousedown activo esperando movimiento
+            dragging: false,   // ya pasó el umbral → modo drag visual
+            srcMesa: null,
+            srcSilla: null,
+            startX: 0,
+            startY: 0,
+            ghost: null
+            };
+            var _wasDrag = false; // bloquea el click que dispara el browser post-mouseup
+            var DRAG_THRESHOLD = 6; // píxeles mínimos para activar drag
+
+            function _limpiarDragVisual() {
+            document.querySelectorAll('.chair-btn-fixed').forEach(function (c) {
+            c.classList.remove('chair-dragging', 'chair-drag-target-valid', 'chair-drag-target-combine');
+            });
+            if (_ms.ghost &amp;&amp; _ms.ghost.parentNode) {
+            _ms.ghost.parentNode.removeChild(_ms.ghost);
+            }
+            _ms.ghost = null;
+            }
+
+            function getClosestChair(mesaId, clientX, clientY, srcM, srcS) {
+            var minDist = Infinity;
+            var closest = null;
+            for (var s = 1; s <= 4; s++) {
+            if (mesaId === srcM &amp;&amp; s === srcS) continue;
+            var el = document.getElementById('chair-' + mesaId + '-' + s);
+            if (!el) continue;
+            var rect = el.getBoundingClientRect();
+            var cx = rect.left + rect.width / 2;
+            var cy = rect.top + rect.height / 2;
+            var dist = Math.hypot(clientX - cx, clientY - cy);
+            if (dist < minDist) { minDist = dist; closest = { mesa: mesaId, silla: s }; }
+            }
+            return closest;
+            }
+
+            function _resolveTargetChair(clientX, clientY, srcM, srcS) {
+            var elem = document.elementFromPoint(clientX, clientY);
+
+            // 1. Direct hit on chair
+            if (elem) {
+            var chairEl = elem.closest ? elem.closest('.chair-btn-fixed') : null;
+            if (chairEl) {
+            var p = chairEl.id.split('-');
+            var tM = parseInt(p[1]);
+            var tS = parseInt(p[2]);
+            if (!(tM === srcM &amp;&amp; tS === srcS)) {
+            return { mesaId: tM, sillaNum: tS, el: chairEl };
+            }
+            }
+
+            // 2. Hit on table box or table circle
+            var tableBox = elem.closest ? elem.closest('.table-box-220') : null;
+            var tableCircle = elem.closest ? elem.closest('.table-circle-fixed') : null;
+            var mesaId = null;
+            if (tableBox &amp;&amp; tableBox.id) {
+            mesaId = parseInt(tableBox.id.replace('table-box-', ''));
+            } else if (tableCircle &amp;&amp; tableCircle.id) {
+            mesaId = parseInt(tableCircle.id.replace('table-circle-', ''));
+            }
+
+            if (mesaId) {
+            var closest = getClosestChair(mesaId, clientX, clientY, srcM, srcS);
+            if (closest) {
+            var cel = document.getElementById('chair-' + closest.mesa + '-' + closest.silla);
+            return { mesaId: closest.mesa, sillaNum: closest.silla, el: cel };
+            }
+            }
+            }
+
+            // 3. Proximity fallback: find closest chair within 150px
+            var globalMinDist = Infinity;
+            var globalClosest = null;
+            for (var m = 1; m <= 3; m++) {
+            for (var s = 1; s <= 4; s++) {
+            if (m === srcM &amp;&amp; s === srcS) continue;
+            var cel = document.getElementById('chair-' + m + '-' + s);
+            if (!cel) continue;
+            var rect = cel.getBoundingClientRect();
+            var cx = rect.left + rect.width / 2;
+            var cy = rect.top + rect.height / 2;
+            var dist = Math.hypot(clientX - cx, clientY - cy);
+            if (dist < globalMinDist &amp;&amp; dist < 150) {
+            globalMinDist = dist;
+            globalClosest = { mesaId: m, sillaNum: s, el: cel };
+            }
+            }
+            }
+
+            return globalClosest;
+            }
+
+            function _chairMousedown(e, mesaId, sillaNum) {
+            // Solo button izquierdo y solo sillas con cuenta u ocupadas
+            if (e.button !== 0) return;
+            var key = mesaId + '-' + sillaNum;
+            var cuenta = window.palapaState.cuentas[key];
+            var isOccupied = !!(cuenta &amp;&amp; (cuenta.estado === 'ocupada' || (cuenta.items &amp;&amp; cuenta.items.length > 0)));
+            if (!cuenta || !isOccupied) return;
+
+            _ms.active = true;
+            _ms.dragging = false;
+            _ms.srcMesa = mesaId;
+            _ms.srcSilla = sillaNum;
+            _ms.startX = e.clientX;
+            _ms.startY = e.clientY;
+
+            document.addEventListener('mousemove', _chairMousemove);
+            document.addEventListener('mouseup', _chairMouseup);
+            }
+
+            function _chairMousemove(e) {
+            if (!_ms.active) return;
+
+            var dx = Math.abs(e.clientX - _ms.startX);
+            var dy = Math.abs(e.clientY - _ms.startY);
+
+            // ── Activar modo drag si pasó el umbral ──
+            if (!_ms.dragging &amp;&amp; (dx > DRAG_THRESHOLD || dy > DRAG_THRESHOLD)) {
+            _ms.dragging = true;
+            cerrarModalComanda();
+            window.palapaState.modoMoverActivo = true;
+            window.palapaState.sillaOrigenMover = { mesaId: _ms.srcMesa, sillaNum: _ms.srcSilla };
+
+            // Marcar silla origen
+            var srcEl = document.getElementById('chair-' + _ms.srcMesa + '-' + _ms.srcSilla);
+            if (srcEl) srcEl.classList.add('chair-dragging');
+
+            // Ghost que sigue al cursor (pointer-events:none → no bloquea elementFromPoint)
+            var ghost = document.createElement('div');
+            ghost.style.cssText = [
+            'position:fixed', 'z-index:99999', 'pointer-events:none',
+            'padding:8px 18px', 'background:#0f172a', 'color:#38bdf8',
+            'font-size:13px', 'font-weight:800', 'border-radius:12px',
+            'border:2px solid #38bdf8', 'white-space:nowrap',
+            'box-shadow:0 8px 28px rgba(0,0,0,0.85)',
+            'transform:translate(-50%,-130%)',
+            'left:' + e.clientX + 'px', 'top:' + e.clientY + 'px'
+            ].join(';') + ';';
+            var key = _ms.srcMesa + '-' + _ms.srcSilla;
+            var cuenta = window.palapaState.cuentas[key] || { items: [] };
+            var total = 0;
+            cuenta.items.forEach(function (i) { total += i.precio * i.cantidad; });
+            ghost.textContent = '\uD83E\uDE91 M' + _ms.srcMesa + ' \u00b7 S' + _ms.srcSilla + '  $' + total.toFixed(2);
+            document.body.appendChild(ghost);
+            _ms.ghost = ghost;
+
+            // Banner
+            var bt = document.getElementById('bannerText');
+            var bc = document.getElementById('btnCancelMove');
+            if (bt) bt.innerHTML = '\uD83E\uDE91 <b style=&quot;color:#38bdf8;&quot;>ARRASTRANDO</b> Mesa ' + _ms.srcMesa + ' Silla ' + _ms.srcSilla + ' \u2014 Suelta sobre la silla destino (misma o diferente mesa).';
+            if (bc) bc.style.setProperty('display', 'block', 'important');
+            }
+
+            if (!_ms.dragging) return;
+
+            // ── Mover ghost ──
+            if (_ms.ghost) {
+            _ms.ghost.style.left = e.clientX + 'px';
+            _ms.ghost.style.top = e.clientY + 'px';
+            }
+
+            // ── Highlight silla destino detectada ──
+            document.querySelectorAll('.chair-btn-fixed').forEach(function (c) {
+            c.classList.remove('chair-drag-target-valid', 'chair-drag-target-combine');
+            });
+
+            var target = _resolveTargetChair(e.clientX, e.clientY, _ms.srcMesa, _ms.srcSilla);
+            if (target &amp;&amp; target.el) {
+            var tgt = window.palapaState.cuentas[target.mesaId + '-' + target.sillaNum];
+            var busy = tgt &amp;&amp; tgt.items &amp;&amp; tgt.items.length > 0;
+            target.el.classList.add(busy ? 'chair-drag-target-combine' : 'chair-drag-target-valid');
+            }
+            }
+
+            function _chairMouseup(e) {
+            document.removeEventListener('mousemove', _chairMousemove);
+            document.removeEventListener('mouseup', _chairMouseup);
+
+            var wasRealDrag = _ms.dragging;
+            var srcM = _ms.srcMesa;
+            var srcS = _ms.srcSilla;
+
+            _limpiarDragVisual();
+            _ms.active = false;
+            _ms.dragging = false;
+            _ms.srcMesa = null;
+            _ms.srcSilla = null;
+
+            if (!wasRealDrag) {
+            return;
+            }
+
+            // ── Es un drag real: bloquear el click post-mouseup ──
+            _wasDrag = true;
+            setTimeout(function () { _wasDrag = false; }, 80);
+
+            // Resolver la silla destino
+            var target = _resolveTargetChair(e.clientX, e.clientY, srcM, srcS);
+            if (target) {
+            completarMovimiento(target.mesaId, target.sillaNum, srcM, srcS);
+            } else {
+            cancelarModoMover();
+            showDragToast('\u26a0 Suelta sobre una silla o mesa para mover la cuenta', 'warn');
+            }
+            }
+
+            function setupDragListeners() {
+            // Asignar mousedown a TODAS las sillas (no solo ocupadas).
+            // _chairMousedown ya verifica si tiene cuenta antes de activar.
+            for (var m = 1; m <= 3; m++) {
+            for (var s = 1; s <= 4; s++) {
+            (function (mesaId, sillaNum) {
+            var el = document.getElementById('chair-' + mesaId + '-' + sillaNum);
+            if (!el) return;
+            el.addEventListener('mousedown', function (e) {
+            _chairMousedown(e, mesaId, sillaNum);
+            });
+            })(m, s);
+            }
+            }
+            }
+
+            // Global Event Delegation for all Clicks
+            document.addEventListener('click', function (e) {
+            // Ignorar click que el browser dispara tras un drag con mouse
+            if (_wasDrag) return;
+            // 1. Chair clicked
+            const chairNode = e.target.closest('.chair-btn-fixed');
+            if (chairNode) {
+            const id = chairNode.id; // e.g. &quot;chair-3-1&quot;
+            const parts = id.split('-');
+            if (parts.length === 3) {
+            const mesaId = parseInt(parts[1]);
+            const sillaNum = parseInt(parts[2]);
+            handleSillaClick(mesaId, sillaNum);
+            return;
+            }
+            }
+
+            // 2. Table circle clicked
+            const tableNode = e.target.closest('.table-circle-fixed');
+            if (tableNode) {
+            const id = tableNode.id; // e.g. &quot;table-circle-3&quot;
+            const parts = id.split('-');
+            if (parts.length === 3) {
+            const mesaId = parseInt(parts[2]);
+            handleMesaClick(mesaId);
+            return;
+            }
+            }
+
+            // 3. Category chip clicked
+            const chipNode = e.target.closest('[data-cat]');
+            if (chipNode) {
+            const cat = chipNode.getAttribute('data-cat');
+            filtrarCategoria(cat);
+            return;
+            }
+
+            // 4. Action buttons
+            if (e.target.closest('#btnResetDemo')) { resetDemoState(); return; }
+            if (e.target.closest('#btnVerComandaActiva')) { abrirModalComandaActual(); return; }
+            if (e.target.closest('#btnMoverComensalMain')) { iniciarModoMover(); return; }
+            if (e.target.closest('#btnMoverDesdeModal')) { cerrarModalComanda(); iniciarModoMover(); return; }
+            if (e.target.closest('#btnCloseModal') || e.target.closest('#btnCerrarModalBottom')) { cerrarModalComanda(); return; }
+            if (e.target.closest('#btnCancelMove')) { cancelarModoMover(); return; }
+            if (e.target.closest('#btnPrecuenta')) { abrirPrecuenta(); return; }
+
+            // 5. Click outside modal content (on backdrop) closes modal
+            if (e.target.id === 'modalComandaBackdrop') {
+            cerrarModalComanda();
+            return;
+            }
+            });
+
+            // Escape key closes modals and cancels move mode
+            document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') {
+            cerrarModalComanda();
+            cancelarModoMover();
+            var cb = document.getElementById('combineConfirmBackdrop');
+            if (cb) cb.classList.remove('show');
+            }
+            });
+
+            function handleSillaClick(mesaId, sillaNum) {
+            if (window.palapaState.modoMoverActivo) {
+            completarMovimiento(mesaId, sillaNum);
+            return;
+            }
+
+            const key = `${mesaId}-${sillaNum}`;
+
+            // Si la silla no tiene cuenta, el mesero la registra de inmediato como OCUPADA (comensal presencial ubicado)
+            if (!window.palapaState.cuentas[key]) {
+            const nowStr = (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            window.palapaState.cuentas[key] = {
+            estado: 'ocupada',
+            qrId: 'PV-0' + mesaId + sillaNum,
+            comensalNombre: 'Comensal Silla ' + sillaNum,
+            items: [],
+            historialUbicaciones: [
+            { mesaId: mesaId, sillaNum: sillaNum, hora: nowStr }
+            ],
+            creadoPor: 'mesero_presencial',
+            horaLlegada: nowStr
+            };
+            saveStateToStorage();
+            showDragToast('🪑 Comensal ubicado en Mesa ' + mesaId + ' Silla ' + sillaNum + ' (Silla ocupada)', 'ok');
+            }
+
+            window.palapaState.mesaSeleccionadaId = mesaId;
+            window.palapaState.sillaSeleccionadaNum = sillaNum;
+            renderStateUI();
+            abrirModalComandaActual();
+            }
+
+            function handleMesaClick(mesaId) {
+            if (window.palapaState.modoMoverActivo) {
+            alert(&quot;Selecciona una silla específica a donde deseas mover la cuenta.&quot;);
+            return;
+            }
+            window.palapaState.mesaSeleccionadaId = mesaId;
+            window.palapaState.sillaSeleccionadaNum = null;
+            renderStateUI();
+            abrirModalComandaActual();
+            }
+
+            function iniciarModoMover() {
+            const mesaId = window.palapaState.mesaSeleccionadaId;
+            const sillaNum = window.palapaState.sillaSeleccionadaNum;
+
+            if (sillaNum === null) {
+            showDragToast(&quot;Por favor selecciona una silla específica para mover.&quot;, &quot;warn&quot;);
+            return;
+            }
+
+            const key = `${mesaId}-${sillaNum}`;
+            const cuenta = window.palapaState.cuentas[key];
+            const isOccupied = !!(cuenta &amp;&amp; (cuenta.estado === 'ocupada' || (cuenta.items &amp;&amp; cuenta.items.length > 0)));
+
+            if (!isOccupied) {
+            showDragToast(`⚠ La Silla ${sillaNum} de Mesa ${mesaId} está disponible. Selecciona una silla ocupada para mover.`, &quot;warn&quot;);
+            return;
+            }
+
+            window.palapaState.modoMoverActivo = true;
+            window.palapaState.sillaOrigenMover = { mesaId, sillaNum };
+
+            const bannerText = document.getElementById('bannerText');
+            const btnCancel = document.getElementById('btnCancelMove');
+
+            if (bannerText &amp;&amp; btnCancel) {
+            bannerText.innerHTML = `<b style=&quot;color: #38bdf8;&quot;>MOVIENDO COMENSAL:</b> Silla origen: <b>Mesa ${mesaId} Silla ${sillaNum}</b>. Haz clic en la <b>Silla Destino</b> a donde deseas transferir la cuenta.`;
+            btnCancel.style.display = 'block';
+            }
+
+            renderStateUI();
+            }
+
+            function limpiarDragState() {
+            _limpiarDragVisual();
+            }
+
+            function cancelarModoMover() {
+            window.palapaState.modoMoverActivo = false;
+            window.palapaState.sillaOrigenMover = null;
+            if (typeof _ms !== 'undefined') {
+            _ms.active   = false;
+            _ms.dragging = false;
+            _ms.srcMesa  = null;
+            _ms.srcSilla = null;
+            }
+            _limpiarDragVisual();
+
+            const bannerText = document.getElementById('bannerText');
+            const btnCancel = document.getElementById('btnCancelMove');
+
+            if (bannerText &amp;&amp; btnCancel) {
+            bannerText.innerHTML = `Haz clic o <b>arrastra con el mouse</b> cualquier <b>Silla</b> para abrir su comanda o trasladarla a otra silla/mesa.`;
+            btnCancel.style.display = 'none';
+            }
+
+            renderStateUI();
+            }
+
+            function completarMovimiento(targetMesaId, targetSillaNum, overrideSrcMesa, overrideSrcSilla) {
+            // Soporte dual: modo click (sillaOrigenMover) y drag &amp; drop (override params)
+            var srcMesa = overrideSrcMesa !== undefined ? overrideSrcMesa : (window.palapaState.sillaOrigenMover ? window.palapaState.sillaOrigenMover.mesaId : null);
+            var srcSilla = overrideSrcSilla !== undefined ? overrideSrcSilla : (window.palapaState.sillaOrigenMover ? window.palapaState.sillaOrigenMover.sillaNum : null);
+
+            if (srcMesa === null || srcSilla === null) return;
+            if (srcMesa === targetMesaId &amp;&amp; srcSilla === targetSillaNum) {
+            cancelarModoMover(); return;
+            }
+
+            // Sincronizar estado por si viene de drag (sillaOrigenMover puede ser null)
+            if (!window.palapaState.sillaOrigenMover) {
+            window.palapaState.sillaOrigenMover = { mesaId: srcMesa, sillaNum: srcSilla };
+            }
+
+            var sourceKey = srcMesa + '-' + srcSilla;
+            var targetKey = targetMesaId + '-' + targetSillaNum;
+            var sourceCuenta = window.palapaState.cuentas[sourceKey];
+            var targetCuenta = window.palapaState.cuentas[targetKey];
+            var isSourceOccupied = !!(sourceCuenta &amp;&amp; (sourceCuenta.estado === 'ocupada' || (sourceCuenta.items &amp;&amp; sourceCuenta.items.length > 0)));
+
+            if (!isSourceOccupied) {
+            showDragToast('⚠ La silla origen ya no está ocupada', 'warn');
+            cancelarModoMover(); return;
+            }
+
+            var nowStr = (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            if (sourceCuenta.items) {
+            sourceCuenta.items.forEach(function (i) {
+            if (i.mesaId === undefined) { i.mesaId = srcMesa; i.sillaNum = srcSilla; }
+            });
+            }
+            sourceCuenta.historialUbicaciones = sourceCuenta.historialUbicaciones || [{ mesaId: srcMesa, sillaNum: srcSilla, hora: nowStr }];
+            var yaExiste = sourceCuenta.historialUbicaciones.some(function (u) { return u.mesaId === targetMesaId &amp;&amp; u.sillaNum === targetSillaNum; });
+            if (!yaExiste) {
+            sourceCuenta.historialUbicaciones.push({ mesaId: targetMesaId, sillaNum: targetSillaNum, hora: nowStr });
+            }
+
+            var isTargetOccupied = !!(targetCuenta &amp;&amp; (targetCuenta.estado === 'ocupada' || (targetCuenta.items &amp;&amp; targetCuenta.items.length > 0)));
+            var targetHasItems = targetCuenta &amp;&amp; targetCuenta.items &amp;&amp; targetCuenta.items.length > 0;
+            var sourceHasItems = sourceCuenta.items &amp;&amp; sourceCuenta.items.length > 0;
+
+            if (isTargetOccupied &amp;&amp; (targetHasItems || sourceHasItems)) {
+            // Silla destino ocupada y con consumos — pedir confirmación sin alert()
+            showCombineConfirm(srcMesa, srcSilla, targetMesaId, targetSillaNum, function () {
+            // onYes: combinar
+            targetCuenta.items = (targetCuenta.items || []).concat(sourceCuenta.items || []);
+            delete window.palapaState.cuentas[sourceKey];
+            window.palapaState.mesaSeleccionadaId = targetMesaId;
+            window.palapaState.sillaSeleccionadaNum = targetSillaNum;
+            saveStateToStorage();
+            cancelarModoMover();
+            showDragToast('✅ Cuentas combinadas en Mesa ' + targetMesaId + ' Silla ' + targetSillaNum, 'ok');
+            });
+            } else {
+            // Silla destino libre o sin consumos — mover comensal/cuenta
+            if (targetCuenta &amp;&amp; targetCuenta.items &amp;&amp; targetCuenta.items.length > 0) {
+            // Destino tiene items, origen estaba vacía
+            } else {
+            window.palapaState.cuentas[targetKey] = sourceCuenta;
+            }
+            delete window.palapaState.cuentas[sourceKey];
+            window.palapaState.mesaSeleccionadaId = targetMesaId;
+            window.palapaState.sillaSeleccionadaNum = targetSillaNum;
+            saveStateToStorage();
+            cancelarModoMover();
+            showDragToast('✅ Comensal trasladado → Mesa ' + targetMesaId + ' Silla ' + targetSillaNum, 'ok');
+            }
+            }
+
+            function abrirModalComandaActual() {
+            const mesaId = window.palapaState.mesaSeleccionadaId;
+            const sillaNum = window.palapaState.sillaSeleccionadaNum;
+
+            const modal = document.getElementById('modalComandaBackdrop');
+            const modalCard = document.getElementById('modalComandaCard');
+            const title = document.getElementById('modalTitle');
+            const subtitle = document.getElementById('modalSubtitle');
+            const header = document.getElementById('modalItemsHeader');
+            const container = document.getElementById('modalItemsList');
+            const subtotalMontoEl = document.getElementById('modalSubtotalMonto');
+            const ivaMontoEl = document.getElementById('modalIvaMonto');
+            const propinaMontoEl = document.getElementById('modalPropinaMonto');
+            const totalMontoEl = document.getElementById('modalTotalMonto');
+            const totalLabelEl = document.getElementById('modalTotalLabel');
+            const lblSubtotal = document.getElementById('lblSubtotalModal');
+            const btnCobrarDirecto = document.getElementById('btnCobrarModalDirecto');
+            const txtBtnCobrar = document.getElementById('txtBtnCobrarModal');
+            const btnVerTodaMesa = document.getElementById('btnVerTodaMesaHeader');
+            const btnMover = document.getElementById('btnMoverDesdeModal');
+            const btnLiberar = document.getElementById('btnLiberarSilla');
+            const boxAdicionarSillas = document.getElementById('boxAdicionarSillasAComanda');
+            const chipsContainer = document.getElementById('comandaSillasChipsContainer');
+            const alertPendientes = document.getElementById('modalPendientesAlert');
+            const txtPendientes = document.getElementById('txtPendientesMensaje');
+
+            if (!container || !modal) return;
+            container.innerHTML = '';
+
+            // 1. Recopilar todas las sillas ocupadas de la mesa
+            var sillasOcupadas = [];
+            for (let s = 1; s <= 10; s++) {
+            const key = `${mesaId}-${s}`;
+            const cuenta = window.palapaState.cuentas[key];
+            if (cuenta &amp;&amp; (cuenta.estado === 'ocupada' || (cuenta.items &amp;&amp; cuenta.items.length > 0))) {
+            var subChair = 0;
+            if (cuenta.items) {
+            cuenta.items.forEach(it => { subChair += (it.precio * it.cantidad); });
+            }
+            sillasOcupadas.push({ sillaNum: s, cuenta: cuenta, subtotal: subChair });
+            }
+            }
+
+            // 2. Gestionar sillas seleccionadas para cobro
+            if (!window.palapaState.sillasSeleccionadasCobro || window.palapaState.sillasSeleccionadasCobroMesa !== mesaId) {
+            window.palapaState.sillasSeleccionadasCobroMesa = mesaId;
+            if (sillaNum !== null) {
+            window.palapaState.sillasSeleccionadasCobro = [sillaNum];
+            } else {
+            window.palapaState.sillasSeleccionadasCobro = sillasOcupadas.map(o => o.sillaNum);
+            }
+            }
+
+            // Si estamos en una silla titular, esa silla SIEMPRE es fija e inamovible de su ticket
+            if (sillaNum !== null &amp;&amp; window.palapaState.sillasSeleccionadasCobro.indexOf(sillaNum) === -1) {
+            window.palapaState.sillasSeleccionadasCobro.unshift(sillaNum);
+            }
+
+            var seleccionadas = window.palapaState.sillasSeleccionadasCobro || [];
+
+            // 3. Renderizar Header y Selector de Sillas de la Mesa
+            if (sillaNum !== null) {
+            // MODO COBRO / TICKET POR COMENSAL ESPECÍFICO
+            const key = `${mesaId}-${sillaNum}`;
+            const cuenta = window.palapaState.cuentas[key] || { items: [] };
+            const qrId = cuenta.qrId || ('PV-0' + mesaId + sillaNum);
+            if (title) title.innerHTML = `<i class=&quot;fa-solid fa-receipt&quot; style=&quot;color: #34d399;&quot;></i> Ticket Silla ${sillaNum} <span style=&quot;font-size: 11px; background: #1e293b; color: #38bdf8; padding: 2px 8px; border-radius: 6px; border: 1px solid #334155; margin-left: 6px;&quot;>🏷️ QR ${qrId}</span>`;
+            if (subtitle) subtitle.innerText = `Mesa ${mesaId} • ${cuenta.creadoPor === 'mesero_presencial' ? 'Comensal Ubicado Presencialmente' : 'Registro QR'}`;
+            if (btnVerTodaMesa) btnVerTodaMesa.style.display = 'inline-flex';
+
+            // 4. Renderizar Chips de Sillas Faltantes para Anexar (SOLO en modo silla específica)
+            if (boxAdicionarSillas &amp;&amp; chipsContainer) {
+            var sillasDisponiblesParaAnexar = sillasOcupadas.filter(o => o.sillaNum !== sillaNum);
+
+            if (sillasDisponiblesParaAnexar.length > 0) {
+            boxAdicionarSillas.style.display = 'flex';
+            chipsContainer.innerHTML = '';
+
+            var lblSelector = boxAdicionarSillas.querySelector('span');
+            if (lblSelector) {
+            lblSelector.innerHTML = `<i class=&quot;fa-solid fa-user-plus&quot; style=&quot;color: #38bdf8;&quot;></i> ¿Esta cuenta (Silla ${sillaNum}) paga por otras sillas de la mesa?`;
+            }
+
+            var btnSoloEsta = document.getElementById('btnComandaSoloEsta');
+            if (btnSoloEsta) {
+            btnSoloEsta.innerText = `Solo Silla ${sillaNum}`;
+            }
+
+            sillasDisponiblesParaAnexar.forEach(obj => {
+            var s = obj.sillaNum;
+            var isSel = (seleccionadas.indexOf(s) !== -1);
+
+            var chip = document.createElement('button');
+            chip.type = 'button';
+            chip.onclick = function() { window.toggleSillaAdicional(s); };
+            chip.style.cssText = `padding: 6px 12px !important; font-size: 11px !important; font-weight: 800 !important; border-radius: 8px !important; cursor: pointer !important; transition: all 0.2s ease !important; display: flex !important; align-items: center !important; gap: 6px !important; ${
+            isSel
+            ? 'background: #064e3b !important; color: #34d399 !important; border: 2px solid #10b981 !important; box-shadow: 0 0 10px rgba(16, 185, 129, 0.3) !important;'
+            : 'background: #1e293b !important; color: #cbd5e1 !important; border: 1px solid #334155 !important;'
+            }`;
+            chip.innerHTML = isSel
+            ? `<i class=&quot;fa-solid fa-check&quot;></i> Silla ${s} • $${obj.subtotal.toFixed(2)} <span style=&quot;font-size: 10px; color: #f87171; margin-left: 4px; font-weight: 900;&quot; title=&quot;Quitar&quot;>✕</span>`
+            : `<i class=&quot;fa-solid fa-plus&quot; style=&quot;color: #38bdf8;&quot;></i> Silla ${s} • $${obj.subtotal.toFixed(2)}`;
+            chipsContainer.appendChild(chip);
+            });
+            } else {
+            boxAdicionarSillas.style.display = 'none';
+            }
+            }
+            } else {
+            // MODO PANORAMA GENERAL DE LA MESA (SUPERVISIÓN PURAMENTE INFORMATIVA)
+            if (title) title.innerHTML = `<i class=&quot;fa-solid fa-table-cells&quot; style=&quot;color: #38bdf8;&quot;></i> Panorama General • Mesa ${mesaId} (${sillasOcupadas.length} Comensales)`;
+            if (subtitle) subtitle.innerText = `Vista informativa de supervisión y consumos por silla (haz clic en una silla para cobrarla)`;
+            if (btnVerTodaMesa) btnVerTodaMesa.style.display = 'none';
+
+            // Ocultar caja de anexión en vista general para evitar confusiones
+            if (boxAdicionarSillas) boxAdicionarSillas.style.display = 'none';
+            }
+
+            if (modalCard) {
+            modalCard.style.maxWidth = (seleccionadas.length > 1 || sillaNum === null) ? '960px' : '640px';
+            }
+
+            // 5. Renderizar Consumos
+            if (header) {
+            if (sillaNum === null) {
+            header.innerHTML = `<i class=&quot;fa-solid fa-list-check&quot; style=&quot;color: #38bdf8;&quot;></i> Desglose Individual de Consumos por Silla:`;
+            } else {
+            header.innerText = (seleccionadas.length > 1)
+            ? `Consumos Consolidados (${seleccionadas.length} Sillas: ${seleccionadas.map(s => 'Silla ' + s).join(' + ')}):`
+            : `Consumos en Silla ${sillaNum}:`;
+            }
+            }
+
+            if (sillaNum === null) {
+            // PANORAMA GENERAL: Tarjetas informativas de todas las sillas de la mesa
+            container.style.cssText = 'display: grid !important; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)) !important; gap: 12px !important; max-height: 340px !important; overflow-y: auto !important;';
+
+            if (sillasOcupadas.length === 0) {
+            container.innerHTML = `<div style=&quot;text-align: center; grid-column: 1/-1; padding: 25px; color: #64748b; font-size: 12px;&quot;>No hay comensales sentados en esta mesa actualmente.</div>`;
+            } else {
+            sillasOcupadas.forEach(obj => {
+            var s = obj.sillaNum;
+            var c = obj.cuenta;
+            var qrId = c.qrId || ('PV-0' + mesaId + s);
+            var sub = obj.subtotal;
+
+            var card = document.createElement('div');
+            card.style.cssText = 'background: #0f172a !important; border: 1px solid #334155 !important; border-radius: 12px !important; padding: 12px !important; display: flex !important; flex-direction: column !important; justify-content: space-between !important; gap: 8px !important;';
+
+            var cardHeader = document.createElement('div');
+            cardHeader.style.cssText = 'display: flex !important; justify-content: space-between !important; align-items: center !important; padding-bottom: 6px !important; border-bottom: 1px solid #1e293b !important; font-size: 11px !important;';
+            cardHeader.innerHTML = `
+            <div>
+            <span style=&quot;font-weight: 900; color: #38bdf8; font-size: 12px; display: block;&quot;>
+            <i class=&quot;fa-solid fa-user&quot;></i> Silla ${s} (${c.comensalNombre || 'Comensal'})
+            </span>
+            <span style=&quot;font-size: 10px; color: #64748b;&quot;>Portavasos #${qrId}</span>
+            </div>
+            <span style=&quot;font-weight: 900; color: #fbbf24; font-size: 13px;&quot;>$${sub.toFixed(2)}</span>
+            `;
+            card.appendChild(cardHeader);
+
+            var itemsWrap = document.createElement('div');
+            itemsWrap.style.cssText = 'display: flex !important; flex-direction: column !important; gap: 4px !important; flex: 1 !important; max-height: 120px !important; overflow-y: auto !important;';
+
+            if (!c.items || c.items.length === 0) {
+            itemsWrap.innerHTML = `<div style=&quot;text-align: center; color: #64748b; font-size: 10px; padding: 10px 0;&quot;>Sin consumos registrados</div>`;
+            } else {
+            c.items.forEach((it) => {
+            var itSub = it.precio * it.cantidad;
+            var row = document.createElement('div');
+            row.style.cssText = 'display: flex !important; justify-content: space-between !important; align-items: center !important; background: #020617 !important; padding: 4px 6px !important; border-radius: 6px !important; font-size: 10px !important;';
+            row.innerHTML = `
+            <div style=&quot;flex: 1; padding-right: 4px;&quot;>
+            <span style=&quot;font-weight: 700; color: #ffffff;&quot;>${it.cantidad}x ${it.nombre}</span>
+            </div>
+            <span style=&quot;font-weight: 900; color: #34d399;&quot;>$${itSub.toFixed(2)}</span>
+            `;
+            itemsWrap.appendChild(row);
+            });
+            }
+            card.appendChild(itemsWrap);
+
+            var btnCard = document.createElement('button');
+            btnCard.type = 'button';
+            btnCard.onclick = function() { window.seleccionarSillaDesdeMesa(s); };
+            btnCard.style.cssText = 'width: 100% !important; padding: 8px !important; background: rgba(56, 189, 248, 0.15) !important; color: #38bdf8 !important; border: 1px solid rgba(56, 189, 248, 0.3) !important; border-radius: 8px !important; font-size: 11px !important; font-weight: 800 !important; cursor: pointer !important; display: flex !important; align-items: center !important; justify-content: center !important; gap: 6px !important; transition: all 0.2s ease !important;';
+            btnCard.innerHTML = `<i class=&quot;fa-solid fa-receipt&quot;></i> Atender / Cobrar Silla ${s}`;
+            card.appendChild(btnCard);
+
+            container.appendChild(card);
+            });
+            }
+            } else if (seleccionadas.length === 1 &amp;&amp; seleccionadas[0] === sillaNum) {
+            // Vista detallada individual de la silla titular
+            container.style.cssText = 'display: flex !important; flex-direction: column !important; gap: 8px !important; max-height: 320px !important; overflow-y: auto !important;';
+            const key = `${mesaId}-${sillaNum}`;
+            const cuenta = window.palapaState.cuentas[key] || { items: [] };
+
+            if (!cuenta.items || cuenta.items.length === 0) {
+            container.innerHTML = `
+            <div style=&quot;background: rgba(15, 23, 42, 0.8) !important; border: 1px dashed #059669 !important; border-radius: 14px !important; padding: 18px !important; text-align: center !important; display: flex !important; flex-direction: column !important; align-items: center !important; gap: 8px !important;&quot;>
+            <div style=&quot;width: 42px !important; height: 42px !important; border-radius: 50% !important; background: rgba(16, 185, 129, 0.15) !important; border: 2px solid #10b981 !important; display: flex !important; align-items: center !important; justify-content: center !important; font-size: 18px !important; color: #34d399 !important;&quot;>
+            <i class=&quot;fa-solid fa-user-check&quot;></i>
+            </div>
+            <div>
+            <div style=&quot;font-size: 13px !important; font-weight: 800 !important; color: #ffffff !important;&quot;>Comensal Ubicado en Silla ${sillaNum}</div>
+            <div style=&quot;font-size: 11px !important; color: #94a3b8 !important; margin-top: 3px !important;&quot;>La silla está registrada como <b style=&quot;color: #fbbf24;&quot;>OCUPADA</b> (ubicación presencial).</div>
+            </div>
+            <div style=&quot;font-size: 11px !important; color: #34d399 !important; font-weight: 700 !important; background: rgba(5, 150, 105, 0.15) !important; padding: 4px 12px !important; border-radius: 20px !important; border: 1px solid rgba(52, 211, 153, 0.3) !important; margin-top: 4px !important;&quot;>
+            👉 Selecciona platillos del catálogo a la derecha para iniciar la orden
+            </div>
+            </div>
+            `;
+            } else {
+            cuenta.items.forEach((it, idx) => {
+            var itSub = it.precio * it.cantidad;
+            var isSent = !!it.enviadoCocina;
+            var row = document.createElement('div');
+            row.style.cssText = 'display: flex !important; justify-content: space-between !important; align-items: center !important; background: #0f172a !important; padding: 8px 12px !important; border-radius: 10px !important; border: 1px solid ' + (isSent ? '#1e293b' : '#f59e0b') + ' !important; font-size: 12px !important;';
+            row.innerHTML = `
+            <div style=&quot;flex: 1; padding-right: 8px;&quot;>
+            <div style=&quot;display: flex; align-items: center; gap: 6px;&quot;>
+            <span style=&quot;font-weight: 700; color: #ffffff;&quot;>${it.cantidad}x ${it.nombre}</span>
+            ${isSent
+            ? '<span style=&quot;font-size: 9px; color: #34d399; background: rgba(16,185,129,0.15); border: 1px solid rgba(16,185,129,0.3); border-radius: 4px; padding: 1px 5px; font-weight: bold;&quot;><i class=&quot;fa-solid fa-check&quot;></i> En Cocina</span>'
+            : '<span style=&quot;font-size: 9px; color: #f59e0b; background: rgba(245,158,11,0.15); border: 1px solid rgba(245,158,11,0.4); border-radius: 4px; padding: 1px 5px; font-weight: bold;&quot;><i class=&quot;fa-solid fa-fire&quot;></i> Pendiente KDS</span>'
+            }
+            </div>
+            <span style=&quot;font-size: 10px; color: #94a3b8; font-style: italic;&quot;>${it.notas ? it.notas + ' • ' : ''}${it.hora || ''}</span>
+            </div>
+            <div style=&quot;display: flex; align-items: center; gap: 8px;&quot;>
+            <span style=&quot;font-weight: 900; color: #34d399; font-size: 12px;&quot;>$${itSub.toFixed(2)}</span>
+            <button onclick=&quot;window.eliminarItemModal('${key}', ${idx})&quot; style=&quot;background: transparent; border: none; color: #f87171; cursor: pointer; padding: 2px;&quot;><i class=&quot;fa-solid fa-trash-can&quot; style=&quot;font-size: 11px;&quot;></i></button>
+            </div>
+            `;
+            container.appendChild(row);
+            });
+            }
+            } else {
+            // Vista multitarjeta cuando se anexan sillas a la silla titular
+            container.style.cssText = 'display: grid !important; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)) !important; gap: 12px !important; max-height: 340px !important; overflow-y: auto !important;';
+
+            seleccionadas.forEach(s => {
+            var chairObj = sillasOcupadas.find(o => o.sillaNum === s);
+            var c = chairObj ? chairObj.cuenta : (window.palapaState.cuentas[`${mesaId}-${s}`] || { items: [] });
+            var sub = chairObj ? chairObj.subtotal : 0;
+            var qrId = c.qrId || ('PV-0' + mesaId + s);
+            var isTitular = (sillaNum !== null &amp;&amp; s === sillaNum);
+
+            var card = document.createElement('div');
+            card.style.cssText = 'background: ' + (isTitular ? '#042f2e' : '#0b2921') + ' !important; border: 2px solid ' + (isTitular ? '#059669' : '#10b981') + ' !important; border-radius: 12px !important; padding: 10px 12px !important; display: flex !important; flex-direction: column !important; justify-content: space-between !important; gap: 8px !important; box-shadow: 0 0 12px rgba(16,185,129,0.2) !important;';
+
+            var cardHeader = document.createElement('div');
+            cardHeader.style.cssText = 'display: flex !important; justify-content: space-between !important; align-items: center !important; padding-bottom: 6px !important; border-bottom: 1px dashed #10b981 !important; font-size: 11px !important;';
+            cardHeader.innerHTML = `
+            <div>
+            <span style=&quot;font-weight: 900; color: ${isTitular ? '#34d399' : '#a7f3d0'}; font-size: 12px; display: block;&quot;>
+            <i class=&quot;fa-solid fa-receipt&quot;></i> Silla ${s} ${isTitular ? '(Titular)' : '(Anexada)'}
+            </span>
+            <span style=&quot;font-size: 10px; color: #94a3b8;&quot;>Portavasos #${qrId}</span>
+            </div>
+            <div style=&quot;display: flex; align-items: center; gap: 6px;&quot;>
+            <span style=&quot;font-weight: 900; color: #fbbf24; font-size: 12px;&quot;>$${sub.toFixed(2)}</span>
+            ${!isTitular ? `<button onclick=&quot;window.toggleSillaAdicional(${s})&quot; style=&quot;background: rgba(239, 68, 68, 0.2); border: 1px solid rgba(239, 68, 68, 0.4); color: #f87171; border-radius: 4px; padding: 2px 6px; font-size: 10px; font-weight: bold; cursor: pointer;&quot; title=&quot;Quitar de este cobro&quot;>✕</button>` : ''}
+            </div>
+            `;
+            card.appendChild(cardHeader);
+
+            var itemsWrap = document.createElement('div');
+            itemsWrap.style.cssText = 'display: flex !important; flex-direction: column !important; gap: 4px !important; flex: 1 !important; max-height: 140px !important; overflow-y: auto !important;';
+
+            if (!c.items || c.items.length === 0) {
+            itemsWrap.innerHTML = `<div style=&quot;text-align: center; color: #64748b; font-size: 10px; padding: 10px 0;&quot;>Sin consumos</div>`;
+            } else {
+            c.items.forEach((it) => {
+            var itSub = it.precio * it.cantidad;
+            var isSent = !!it.enviadoCocina;
+            var row = document.createElement('div');
+            row.style.cssText = 'display: flex !important; justify-content: space-between !important; align-items: center !important; background: #020617 !important; padding: 4px 6px !important; border-radius: 6px !important; font-size: 10px !important;';
+            row.innerHTML = `
+            <div style=&quot;flex: 1; padding-right: 4px;&quot;>
+            <span style=&quot;font-weight: 700; color: #ffffff;&quot;>${it.cantidad}x ${it.nombre}</span>
+            ${!isSent ? '<span style=&quot;font-size: 8px; color: #f59e0b; margin-left: 4px;&quot;>⏳ Pendiente</span>' : ''}
+            </div>
+            <span style=&quot;font-weight: 900; color: #34d399;&quot;>$${itSub.toFixed(2)}</span>
+            `;
+            itemsWrap.appendChild(row);
+            });
+            }
+            card.appendChild(itemsWrap);
+            container.appendChild(card);
+            });
+            }
+
+            // 6. Cálculo de Totales Consolidados
+            var totalNeto = 0;
+            var totalPendiente = 0;
+            var sillasPendientes = [];
+
+            if (sillaNum === null) {
+            // En panorama general, el total es el acumulado de toda la mesa
+            sillasOcupadas.forEach(obj => {
+            totalNeto += obj.subtotal;
+            });
+            } else {
+            sillasOcupadas.forEach(obj => {
+            if (seleccionadas.indexOf(obj.sillaNum) !== -1) {
+            totalNeto += obj.subtotal;
+            } else {
+            totalPendiente += obj.subtotal;
+            sillasPendientes.push(`Silla ${obj.sillaNum}`);
+            }
+            });
+            }
+
+            var iva = totalNeto * 0.16;
+            var propina = totalNeto * 0.10;
+            var granTotal = totalNeto + iva;
+
+            if (lblSubtotal) {
+            lblSubtotal.innerText = (sillaNum === null)
+            ? `Subtotal Acumulado (Toda la Mesa):`
+            : `Subtotal (${seleccionadas.length} Silla${seleccionadas.length !== 1 ? 's' : ''}):`;
+            }
+            if (totalLabelEl) {
+            if (sillaNum === null) {
+            totalLabelEl.innerText = `Total Acumulado de la Mesa:`;
+            } else if (seleccionadas.length === sillasOcupadas.length &amp;&amp; sillasOcupadas.length > 0) {
+            totalLabelEl.innerText = `Total a Pagar (Toda la Mesa):`;
+            } else {
+            totalLabelEl.innerText = `Total a Pagar (Silla${seleccionadas.length > 1 ? 's ' : ' '}${seleccionadas.join(', ')}):`;
+            }
+            }
+
+            if (subtotalMontoEl) subtotalMontoEl.innerText = `$${totalNeto.toFixed(2)}`;
+            if (ivaMontoEl) ivaMontoEl.innerText = `$${iva.toFixed(2)}`;
+            if (propinaMontoEl) propinaMontoEl.innerText = `$${propina.toFixed(2)}`;
+            if (totalMontoEl) totalMontoEl.innerText = `$${granTotal.toFixed(2)}`;
+            if (txtBtnCobrar) txtBtnCobrar.innerText = `$${granTotal.toFixed(2)}`;
+
+            // 7. Alerta de sillas pendientes no incluidas en este cobro (solo en modo cobro específico)
+            if (alertPendientes &amp;&amp; txtPendientes) {
+            if (sillaNum !== null &amp;&amp; sillasPendientes.length > 0 &amp;&amp; totalNeto > 0) {
+            alertPendientes.style.display = 'block';
+            txtPendientes.innerHTML = `<b>Quedará pendiente en la mesa:</b> ${sillasPendientes.join(', ')} por <b>$${(totalPendiente * 1.16).toFixed(2)}</b> (no se cobrará en este ticket).`;
+            } else {
+            alertPendientes.style.display = 'none';
+            }
+            }
+
+            // 8. Botones de acción
+            const btnEnviarCocina = document.getElementById('btnEnviarCocina');
+            if (sillaNum === null) {
+            // EN PANORAMA GENERAL (Centro de Mesa): Vista 100% informativa
+            // NO se muestra botón de cobro aquí porque todo cobro requiere un comensal titular solicitante.
+            if (btnCobrarDirecto) btnCobrarDirecto.style.display = 'none';
+            if (btnEnviarCocina) btnEnviarCocina.style.display = 'none';
+            if (btnMover) btnMover.style.display = 'none';
+            if (btnLiberar) btnLiberar.style.display = 'none';
+            } else {
+            // EN COBRO POR COMENSAL:
+            if (btnCobrarDirecto) {
+            btnCobrarDirecto.style.display = (totalNeto > 0) ? 'flex' : 'none';
+            var labelCobro = (seleccionadas.length > 1) ? `Sillas ${seleccionadas.join(', ')}` : `Silla ${sillaNum}`;
+            btnCobrarDirecto.innerHTML = `<i class=&quot;fa-solid fa-credit-card&quot;></i> Cobrar y Liquidar ${labelCobro} (<span id=&quot;txtBtnCobrarMonto&quot;>$${granTotal.toFixed(2)}</span>)`;
+            }
+
+            // Control dinámico de Enviar a Cocina (KDS)
+            if (btnEnviarCocina) {
+            btnEnviarCocina.style.display = 'flex';
+            var cuentaActual = window.palapaState.cuentas[`${mesaId}-${sillaNum}`] || { items: [] };
+            var pendientes = (cuentaActual.items || []).filter(function(i) { return !i.enviadoCocina; });
+
+            if (pendientes.length > 0) {
+            btnEnviarCocina.disabled = false;
+            btnEnviarCocina.style.opacity = '1';
+            btnEnviarCocina.style.cursor = 'pointer';
+            btnEnviarCocina.style.background = 'linear-gradient(135deg, #f59e0b, #d97706)';
+            btnEnviarCocina.style.color = '#0f172a';
+            btnEnviarCocina.innerHTML = `<i class=&quot;fa-solid fa-fire&quot;></i> Enviar Cocina (${pendientes.length} nuevo${pendientes.length > 1 ? 's' : ''})`;
+            } else {
+            btnEnviarCocina.disabled = true;
+            btnEnviarCocina.style.opacity = '0.45';
+            btnEnviarCocina.style.cursor = 'not-allowed';
+            btnEnviarCocina.style.background = '#1e293b';
+            btnEnviarCocina.style.color = '#64748b';
+            btnEnviarCocina.innerHTML = `<i class=&quot;fa-solid fa-check-double&quot;></i> Todo en Cocina`;
+            }
+            }
+
+            if (btnMover) btnMover.style.display = (seleccionadas.length === 1) ? 'flex' : 'none';
+            if (btnLiberar) btnLiberar.style.display = (seleccionadas.length === 1) ? 'flex' : 'none';
+            }
+
+            if (modal) {
+            modal.classList.add('show');
+            modal.style.setProperty('display', 'flex', 'important');
+            }
+            }
+
+            window.toggleSillaAdicional = function(sillaNum) {
+            var titular = window.palapaState.sillaSeleccionadaNum;
+            // Si la silla es la titular, NUNCA se deselecciona ni se quita de su propia comanda
+            if (titular !== null &amp;&amp; sillaNum === titular) {
+            return;
+            }
+
+            var sel = window.palapaState.sillasSeleccionadasCobro || [];
+            var idx = sel.indexOf(sillaNum);
+            if (idx === -1) {
+            sel.push(sillaNum);
+            } else {
+            sel.splice(idx, 1);
+            }
+
+            // Asegurar que la silla titular siempre permanezca en la lista
+            if (titular !== null &amp;&amp; sel.indexOf(titular) === -1) {
+            sel.unshift(titular);
+            }
+
+            window.palapaState.sillasSeleccionadasCobro = sel;
+            abrirModalComandaActual();
+            };
+
+            window.comandaToggleTodaLaMesa = function() {
+            var mesaId = window.palapaState.mesaSeleccionadaId;
+            var allChairs = [];
+            for (var s = 1; s <= 10; s++) {
+            if (window.palapaState.cuentas[`${mesaId}-${s}`]) {
+            allChairs.push(s);
+            }
+            }
+            window.palapaState.sillasSeleccionadasCobro = allChairs;
+            abrirModalComandaActual();
+            };
+
+            window.comandaSoloEstaSilla = function() {
+            var current = window.palapaState.sillaSeleccionadaNum || 1;
+            window.palapaState.sillasSeleccionadasCobro = [current];
+            abrirModalComandaActual();
+            };
+
+            window.cobrarSeleccionadasDesdeComanda = function() {
+            var mesaId = window.palapaState.mesaSeleccionadaId;
+            var sillaNum = window.palapaState.sillaSeleccionadaNum;
+            var sel = window.palapaState.sillasSeleccionadasCobro || [];
+
+            if (sillaNum === null) {
+            // Liquidación Total de toda la Mesa
+            var totalText = document.getElementById('modalTotalMonto') ? document.getElementById('modalTotalMonto').innerText : '$0.00';
+            if (confirm(`¿Confirmar cobro y liquidación TOTAL de Mesa ${mesaId} por un total de ${totalText}?\n\nTodas las sillas de la mesa quedarán liberadas.`)) {
+            for (var s = 1; s <= 10; s++) {
+            delete window.palapaState.cuentas[mesaId + '-' + s];
+            }
+            window.palapaState.sillasSeleccionadasCobro = [];
+            saveStateToStorage();
+            renderStateUI();
+            cerrarModalComanda();
+            showDragToast(`💳 ¡Mesa ${mesaId} liquidada en su totalidad (${totalText})! Sillas liberadas.`, 'ok');
+            }
+            return;
+            }
+
+            if (sel.length === 0) {
+            showDragToast('⚠ Selecciona al menos una silla para cobrar.', 'warn');
+            return;
+            }
+
+            var totalText = document.getElementById('modalTotalMonto') ? document.getElementById('modalTotalMonto').innerText : '$0.00';
+            var sillasStr = sel.map(s => 'Silla ' + s).join(', ');
+
+            if (confirm(`¿Confirmar cobro y liquidación de ${sillasStr} de Mesa ${mesaId} por un total de ${totalText}?\n\nLas sillas seleccionadas quedarán liberadas y las restantes continuarán activas en la mesa.`)) {
+            sel.forEach(sNum => {
+            delete window.palapaState.cuentas[mesaId + '-' + sNum];
+            });
+            window.palapaState.sillasSeleccionadasCobro = [];
+            saveStateToStorage();
+            renderStateUI();
+            cerrarModalComanda();
+            showDragToast(`💳 ¡Cobro exitoso de Mesa ${mesaId} (${sillasStr})! Sillas liberadas.`, 'ok');
+            }
+            };
+
+            window.enviarCocinaActual = function() {
+            var mesaId = window.palapaState.mesaSeleccionadaId;
+            var sillaNum = window.palapaState.sillaSeleccionadaNum;
+            if (sillaNum === null) return;
+            var key = mesaId + '-' + sillaNum;
+            var cuenta = window.palapaState.cuentas[key];
+            if (!cuenta || !cuenta.items || cuenta.items.length === 0) {
+            showDragToast('ℹ Agrega al menos un platillo o bebida antes de enviar a cocina.', 'warn');
+            return;
+            }
+
+            var pendientes = cuenta.items.filter(function(i) { return !i.enviadoCocina; });
+            if (pendientes.length === 0) {
+            showDragToast('ℹ Todos los productos de esta comanda ya fueron enviados a Cocina (KDS).', 'info');
+            return;
+            }
+
+            var nowStr = (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            pendientes.forEach(function(i) {
+            i.enviadoCocina = true;
+            if (!i.hora) i.hora = nowStr;
+            });
+
+            saveStateToStorage();
+            renderStateUI();
+            abrirModalComandaActual();
+            showDragToast(`🔥 ¡Comanda de Silla ${sillaNum} (${pendientes.length} producto${pendientes.length > 1 ? 's' : ''}) enviada a Cocina (KDS)!`, 'ok');
+            };
+
+            window.seleccionarSillaDesdeMesa = function(sillaNum) {
+            window.palapaState.sillaSeleccionadaNum = sillaNum;
+            window.palapaState.sillasSeleccionadasCobro = [sillaNum];
+            renderStateUI();
+            abrirModalComandaActual();
+            };
+
+            window.verTodaLaMesaEnColumnas = function() {
+            window.palapaState.sillaSeleccionadaNum = null;
+            window.palapaState.sillasSeleccionadasCobro = [];
+            renderStateUI();
+            abrirModalComandaActual();
+            };
+
+            var _precuentaMesaId = 2;
+            var _precuentaSillasSeleccionadas = [];
+
+            function abrirPrecuenta() {
+            const mesaId = window.palapaState.mesaSeleccionadaId;
+            const sillaNum = window.palapaState.sillaSeleccionadaNum;
+            const modalP = document.getElementById('modalPrecuentaBackdrop');
+            const fechaEl = document.getElementById('precuentaFecha');
+            const checklistContainer = document.getElementById('precuentaSillasChecklist');
+
+            if (!modalP) return;
+            _precuentaMesaId = mesaId;
+
+            if (fechaEl) fechaEl.innerText = 'Fecha: ' + (new Date()).toLocaleDateString() + ' ' + (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+            // Encontrar todas las sillas ocupadas de esta mesa
+            var sillasOcupadas = [];
+            for (var s = 1; s <= 4; s++) {
+            var k = mesaId + '-' + s;
+            var c = window.palapaState.cuentas[k];
+            if (c &amp;&amp; (c.estado === 'ocupada' || (c.items &amp;&amp; c.items.length > 0))) {
+            var tot = 0;
+            if (c.items) c.items.forEach(function(it) { tot += it.precio * it.cantidad; });
+            sillasOcupadas.push({ sillaNum: s, cuenta: c, total: tot });
+            }
+            }
+
+            // Si se abrió desde una silla específica, seleccionar inicialmente esa silla; si es mesa completa, seleccionar todas
+            if (sillaNum !== null) {
+            _precuentaSillasSeleccionadas = [sillaNum];
+            } else {
+            _precuentaSillasSeleccionadas = sillasOcupadas.map(function(o) { return o.sillaNum; });
+            }
+
+            // Renderizar checklist
+            if (checklistContainer) {
+            checklistContainer.innerHTML = '';
+            if (sillasOcupadas.length === 0) {
+            checklistContainer.innerHTML = '<div style=&quot;grid-column: span 2; color: #94a3b8; font-size: 11px;&quot;>No hay sillas con consumos en esta mesa.</div>';
+            } else {
+            sillasOcupadas.forEach(function(obj) {
+            var s = obj.sillaNum;
+            var isChecked = _precuentaSillasSeleccionadas.indexOf(s) !== -1;
+            var lbl = document.createElement('label');
+            lbl.style.cssText = 'display: flex !important; align-items: center !important; gap: 6px !important; background: ' + (isChecked ? '#ecfdf5' : '#ffffff') + ' !important; padding: 6px 8px !important; border-radius: 8px !important; border: 1px solid ' + (isChecked ? '#10b981' : '#cbd5e1') + ' !important; cursor: pointer !important; user-select: none !important;';
+            lbl.innerHTML = `
+            <input type=&quot;checkbox&quot; value=&quot;${s}&quot; ${isChecked ? 'checked' : ''} onchange=&quot;window.togglePrecuentaSilla(${s})&quot; style=&quot;accent-color: #059669 !important; width: 14px !important; height: 14px !important;&quot;>
+            <div style=&quot;display: flex; flex-direction: column; line-height: 1.1;&quot;>
+            <span style=&quot;font-weight: 800; font-size: 11px; color: #0f172a;&quot;>Silla ${s} <span style=&quot;font-weight: normal; color: #64748b; font-size: 9px;&quot;>${obj.cuenta.comensalNombre ? '• ' + obj.cuenta.comensalNombre : ''}</span></span>
+            <span style=&quot;font-weight: 900; color: #059669; font-size: 10px;&quot;>$${obj.total.toFixed(2)}</span>
+            </div>
+            `;
+            checklistContainer.appendChild(lbl);
+            });
+            }
+            }
+
+            recalcularPrecuenta();
+            modalP.classList.add('show');
+            modalP.style.setProperty('display', 'flex', 'important');
+            }
+
+            window.togglePrecuentaSilla = function(sillaNum) {
+            var idx = _precuentaSillasSeleccionadas.indexOf(sillaNum);
+            if (idx === -1) {
+            _precuentaSillasSeleccionadas.push(sillaNum);
+            } else {
+            _precuentaSillasSeleccionadas.splice(idx, 1);
+            }
+            actualizarChecklistVisual();
+            recalcularPrecuenta();
+            };
+
+            window.precuentaSelectPreset = function(preset) {
+            var mesaId = _precuentaMesaId;
+            if (preset === 'solo_esta') {
+            var sSel = window.palapaState.sillaSeleccionadaNum || 1;
+            _precuentaSillasSeleccionadas = [sSel];
+            } else if (preset === 'todas') {
+            _precuentaSillasSeleccionadas = [];
+            for (var s = 1; s <= 10; s++) {
+            if (window.palapaState.cuentas[mesaId + '-' + s]) {
+            _precuentaSillasSeleccionadas.push(s);
+            }
+            }
+            }
+            actualizarChecklistVisual();
+            recalcularPrecuenta();
+            };
+
+            function actualizarChecklistVisual() {
+            var checklistContainer = document.getElementById('precuentaSillasChecklist');
+            if (!checklistContainer) return;
+            var inputs = checklistContainer.querySelectorAll('input[type=&quot;checkbox&quot;]');
+            inputs.forEach(function(inp) {
+            var sVal = parseInt(inp.value);
+            var isChecked = _precuentaSillasSeleccionadas.indexOf(sVal) !== -1;
+            inp.checked = isChecked;
+            var parentLbl = inp.closest('label');
+            if (parentLbl) {
+            parentLbl.style.background = isChecked ? '#ecfdf5' : '#ffffff';
+            parentLbl.style.borderColor = isChecked ? '#10b981' : '#cbd5e1';
+            }
+            });
+            }
+
+            function recalcularPrecuenta() {
+            const mesaId = _precuentaMesaId;
+            const listContainer = document.getElementById('precuentaTramosList');
+            const subtotalEl = document.getElementById('precuentaSubtotal');
+            const ivaEl = document.getElementById('precuentaIva');
+            const propinaEl = document.getElementById('precuentaPropina');
+            const totalEl = document.getElementById('precuentaTotal');
+            const headerTag = document.getElementById('precuentaHeaderTag');
+            const btnCobrarMonto = document.getElementById('btnCobrarMonto');
+
+            if (!listContainer) return;
+            listContainer.innerHTML = '';
+
+            var sillasList = _precuentaSillasSeleccionadas.slice().sort();
+
+            if (sillasList.length === 0) {
+            if (headerTag) headerTag.innerHTML = `MESA ${mesaId} • NINGUNA SILLA SELECCIONADA`;
+            listContainer.innerHTML = `<div style=&quot;text-align:center; padding: 15px; color:#94a3b8; font-size:11px;&quot;>Marca al menos una silla para ver su precuenta.</div>`;
+            if (subtotalEl) subtotalEl.innerText = '$0.00';
+            if (ivaEl) ivaEl.innerText = '$0.00';
+            if (propinaEl) propinaEl.innerText = '$0.00';
+            if (totalEl) totalEl.innerText = '$0.00';
+            if (btnCobrarMonto) btnCobrarMonto.innerText = '$0.00';
+            return;
+            }
+
+            var sillasStr = sillasList.map(function(s) { return 'Silla ' + s; }).join(', ');
+            if (headerTag) {
+            headerTag.innerHTML = `MESA ${mesaId} • ${sillasStr.toUpperCase()} <br><span style=&quot;font-size:10px;color:#475569;&quot;>CUENTA AGRUPADA (${sillasList.length} COMENSAL${sillasList.length > 1 ? 'ES' : ''})</span>`;
+            }
+
+            var totalNeto = 0;
+
+            sillasList.forEach(function(sNum) {
+            var k = mesaId + '-' + sNum;
+            var cuenta = window.palapaState.cuentas[k];
+            if (!cuenta || !cuenta.items || cuenta.items.length === 0) return;
+
+            var chairBlock = document.createElement('div');
+            chairBlock.style.cssText = 'border-bottom: 1px dashed #cbd5e1 !important; padding-bottom: 6px !important; margin-bottom: 4px !important;';
+
+            var chairHeader = document.createElement('div');
+            chairHeader.style.cssText = 'display: flex !important; justify-content: space-between !important; font-weight: 900 !important; color: #047857 !important; margin-bottom: 4px !important; font-size: 11px !important;';
+            chairHeader.innerHTML = `<span>SILLA ${sNum} ${cuenta.comensalNombre ? '· ' + cuenta.comensalNombre.toUpperCase() : ''}</span><span style=&quot;font-size: 9px; color: #64748b;&quot;>QR: #${cuenta.qrId || 'PV-0'+mesaId+sNum}</span>`;
+            chairBlock.appendChild(chairHeader);
+
+            var subChair = 0;
+            cuenta.items.forEach(function(it) {
+            var row = document.createElement('div');
+            var itTotal = it.precio * it.cantidad;
+            subChair += itTotal;
+            totalNeto += itTotal;
+            row.style.cssText = 'display: flex !important; justify-content: space-between !important; margin-bottom: 2px !important; font-size: 11px !important;';
+            row.innerHTML = `<span>${it.cantidad}x ${it.nombre}</span><span>$${itTotal.toFixed(2)}</span>`;
+            chairBlock.appendChild(row);
+            });
+
+            var subChairRow = document.createElement('div');
+            subChairRow.style.cssText = 'display: flex !important; justify-content: space-between !important; font-weight: bold !important; color: #475569 !important; margin-top: 3px !important; font-size: 10px !important;';
+            subChairRow.innerHTML = `<span>SUBTOTAL SILLA ${sNum}:</span><span>$${subChair.toFixed(2)}</span>`;
+            chairBlock.appendChild(subChairRow);
+
+            listContainer.appendChild(chairBlock);
+            });
+
+            var ivaVal = totalNeto * 0.16;
+            var propinaVal = totalNeto * 0.10;
+            var granTotal = totalNeto + ivaVal;
+
+            if (subtotalEl) subtotalEl.innerText = `$${totalNeto.toFixed(2)}`;
+            if (ivaEl) ivaEl.innerText = `$${ivaVal.toFixed(2)}`;
+            if (propinaEl) propinaEl.innerText = `$${propinaVal.toFixed(2)}`;
+            if (totalEl) totalEl.innerText = `$${granTotal.toFixed(2)}`;
+            if (btnCobrarMonto) btnCobrarMonto.innerText = `$${granTotal.toFixed(2)}`;
+            }
+
+            window.cobrarSillasPrecuenta = function() {
+            var mesaId = _precuentaMesaId;
+            var sillasList = _precuentaSillasSeleccionadas.slice();
+            if (sillasList.length === 0) {
+            showDragToast('⚠ Selecciona al menos una silla para cobrar', 'warn');
+            return;
+            }
+
+            var totalText = document.getElementById('precuentaTotal') ? document.getElementById('precuentaTotal').innerText : '$0.00';
+            var sillasStr = sillasList.map(function(s) { return 'Silla ' + s; }).join(', ');
+
+            if (confirm(`¿Confirmar cobro de ${sillasStr} de Mesa ${mesaId} por un total de ${totalText}?\n\nLas sillas seleccionadas serán liquidadas y quedarán libres.`)) {
+            sillasList.forEach(function(sNum) {
+            var k = mesaId + '-' + sNum;
+            delete window.palapaState.cuentas[k];
+            });
+            saveStateToStorage();
+            renderStateUI();
+            cerrarPrecuenta();
+            cerrarModalComanda();
+            showDragToast(`💳 ¡Pago completado para Mesa ${mesaId} (${sillasStr})! Sillas liberadas.`, 'ok');
+            }
+            };
+
+            function cerrarPrecuenta() {
+            const modalP = document.getElementById('modalPrecuentaBackdrop');
+            if (modalP) {
+            modalP.classList.remove('show');
+            modalP.style.setProperty('display', 'none', 'important');
+            }
+            }
+
+            window.abrirPrecuenta = function () {
+            abrirPrecuenta();
+            };
+            window.cerrarPrecuenta = function () {
+            cerrarPrecuenta();
+            };
+
+            function cerrarModalComanda() {
+            const modal = document.getElementById('modalComandaBackdrop');
+            if (modal) {
+            modal.classList.remove('show');
+            modal.style.setProperty('display', 'none', 'important');
+            }
+            }
+
+            window.cerrarModalComanda = function () {
+            cerrarModalComanda();
+            };
+            window.abrirModalComandaActual = function () {
+            abrirModalComandaActual();
+            };
+
+            window.liberarSillaActual = function () {
+            const mesaId = window.palapaState.mesaSeleccionadaId;
+            const sillaNum = window.palapaState.sillaSeleccionadaNum;
+            if (sillaNum === null) return;
+            const key = `${mesaId}-${sillaNum}`;
+            const cuenta = window.palapaState.cuentas[key];
+            if (cuenta) {
+            if (cuenta.items &amp;&amp; cuenta.items.length > 0) {
+            if (!confirm(`La Silla ${sillaNum} de Mesa ${mesaId} tiene ${cuenta.items.length} consumos registrados. ¿Deseas liberar la silla y eliminar la cuenta?`)) {
+            return;
+            }
+            }
+            delete window.palapaState.cuentas[key];
+            saveStateToStorage();
+            renderStateUI();
+            cerrarModalComanda();
+            showDragToast(`🟢 Silla ${sillaNum} de Mesa ${mesaId} liberada y disponible`, 'ok');
+            }
+            };
+
+            window.eliminarItemModal = function (key, idx) {
+            if (window.palapaState.cuentas[key] &amp;&amp; window.palapaState.cuentas[key].items) {
+            window.palapaState.cuentas[key].items.splice(idx, 1);
+            if (window.palapaState.cuentas[key].items.length === 0) {
+            delete window.palapaState.cuentas[key];
+            }
+            saveStateToStorage();
+            renderStateUI();
+            abrirModalComandaActual();
+            }
+            };
+
+            function renderStateUI() {
+            const isMoveMode = window.palapaState.modoMoverActivo;
+            const origen = window.palapaState.sillaOrigenMover;
+
+            for (let m = 1; m <= 3; m++) {
+            let busyCount = 0;
+            for (let s = 1; s <= 4; s++) {
+            const key = `${m}-${s}`;
+            let chairEl = document.getElementById(`chair-${m}-${s}`);
+            const cuenta = window.palapaState.cuentas[key];
+            const isOccupied = !!(cuenta &amp;&amp; (cuenta.estado === 'ocupada' || (cuenta.items &amp;&amp; cuenta.items.length > 0)));
+
+            if (isOccupied) busyCount++;
+
+            if (chairEl) {
+            const posClass = s === 1 ? 'chair-pos-top' : s === 2 ? 'chair-pos-right' : s === 3 ? 'chair-pos-bottom' : 'chair-pos-left';
+
+            // Update draggable attribute based on current occupied state
+            chairEl.setAttribute('draggable', isOccupied ? 'true' : 'false');
+            const numItems = (cuenta &amp;&amp; cuenta.items) ? cuenta.items.length : 0;
+            chairEl.setAttribute('title', isOccupied
+            ? `Mesa ${m} Silla ${s} (Ocupada${numItems > 0 ? ' · ' + numItems + ' consumos' : ' · Sin consumos'}) • Arrastra para mover`
+            : `Mesa ${m} Silla ${s} (Disponible) • Haz clic para ubicar comensal`);
+
+            if (isMoveMode &amp;&amp; origen &amp;&amp; origen.mesaId === m &amp;&amp; origen.sillaNum === s) {
+            chairEl.className = `chair-btn-fixed ${posClass} chair-moving-source`;
+            } else if (isMoveMode) {
+            chairEl.className = `chair-btn-fixed ${posClass} chair-moving-target ${isOccupied ? 'chair-state-busy' : 'chair-state-free'}`;
+            } else {
+            chairEl.className = `chair-btn-fixed ${posClass} ${isOccupied ? 'chair-state-busy' : 'chair-state-free'}`;
+            }
+            }
+            }
+
+            const circle = document.getElementById(`table-circle-${m}`);
+            const statusText = document.getElementById(`table-status-${m}`);
+            const labelText = document.getElementById(`table-label-${m}`);
+
+            if (circle) {
+            if (busyCount > 0) {
+            circle.style.background = &quot;#78350f&quot;;
+            circle.style.border = &quot;4px solid #f59e0b&quot;;
+            if (statusText) statusText.innerText = `${busyCount} Ocupada${busyCount > 1 ? 's' : ''}`;
+            if (labelText) {
+            labelText.style.color = &quot;#fbbf24&quot;;
+            labelText.innerText = `🟡 Ocupada (${busyCount} Comensal${busyCount > 1 ? 'es' : ''})`;
+            }
+            } else {
+            circle.style.background = &quot;#064e3b&quot;;
+            circle.style.border = &quot;4px solid #10b981&quot;;
+            if (statusText) statusText.innerText = `Libre`;
+            if (labelText) {
+            labelText.style.color = &quot;#34d399&quot;;
+            labelText.innerText = `🟢 Disponible`;
+            }
+            }
+            }
+            }
+
+            const badge = document.getElementById('activeTargetBadge');
+            if (badge) {
+            if (window.palapaState.sillaSeleccionadaNum !== null) {
+            const selKey = `${window.palapaState.mesaSeleccionadaId}-${window.palapaState.sillaSeleccionadaNum}`;
+            const selCuenta = window.palapaState.cuentas[selKey];
+            const isSelOcc = !!(selCuenta &amp;&amp; (selCuenta.estado === 'ocupada' || (selCuenta.items &amp;&amp; selCuenta.items.length > 0)));
+            badge.innerText = `Mesa ${window.palapaState.mesaSeleccionadaId} • Silla ${window.palapaState.sillaSeleccionadaNum} (${isSelOcc ? 'Ocupada' : 'Disponible'})`;
+            } else {
+            badge.innerText = `Mesa ${window.palapaState.mesaSeleccionadaId} (Completa)`;
+            }
+            }
+
+            renderWaiterMenuGrid();
+            }
+
+            function renderWaiterMenuGrid() {
+            const grid = document.getElementById('waiterMenuGrid');
+            if (!grid) return;
+            grid.innerHTML = '';
+
+            const catFiltro = window.palapaState.categoriaFiltro || 'Todos';
+            const filtrados = window.catalogProducts.filter(p => catFiltro === 'Todos' || p.categoria_nombre === catFiltro);
+
+            filtrados.forEach(prod => {
+            const card = document.createElement('div');
+            card.style.cssText = 'background: #0f172a !important; border: 1px solid #1e293b !important; border-radius: 12px !important; padding: 12px !important; display: flex !important; justify-content: space-between !important; align-items: center !important; cursor: pointer !important;';
+            card.onclick = () => agregarPlatilloDirecto(prod);
+
+            card.innerHTML = `
+            <div style=&quot;display: flex; align-items: center; gap: 8px;&quot;>
+            <span style=&quot;font-size: 20px;&quot;>${prod.icono}</span>
+            <div>
+            <span style=&quot;font-size: 11px; font-weight: 700; color: #ffffff; display: block; line-height: 1.2;&quot;>${prod.nombre}</span>
+            <span style=&quot;font-size: 11px; font-weight: 900; color: #34d399;&quot;>$${prod.precio.toFixed(2)}</span>
+            </div>
+            </div>
+            <button style=&quot;padding: 6px 12px; background: #059669; color: #ffffff; font-size: 11px; font-weight: 900; border-radius: 8px; border: none; cursor: pointer;&quot;>
+            + Agregar
+            </button>
+            `;
+            grid.appendChild(card);
+            });
+            }
+
+            function agregarPlatilloDirecto(prod) {
+            const mesaId = window.palapaState.mesaSeleccionadaId;
+            let sillaNum = window.palapaState.sillaSeleccionadaNum;
+
+            if (sillaNum === null) {
+            sillaNum = 1;
+            window.palapaState.sillaSeleccionadaNum = 1;
+            }
+
+            const key = `${mesaId}-${sillaNum}`;
+            if (!window.palapaState.cuentas[key]) {
+            window.palapaState.cuentas[key] = {
+            estado: 'ocupada',
+            qrId: 'PV-0' + mesaId + sillaNum,
+            comensalNombre: 'Comensal Silla ' + sillaNum,
+            items: [],
+            historialUbicaciones: [{ mesaId: mesaId, sillaNum: sillaNum, hora: (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }]
+            };
+            }
+
+            const nowStr = (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            const items = window.palapaState.cuentas[key].items;
+            // Si ya hay un item idéntico que todavía NO se ha enviado a cocina, le incrementamos cantidad
+            const existingUnsent = items.find(i => i.id === prod.id &amp;&amp; i.mesaId === mesaId &amp;&amp; i.sillaNum === sillaNum &amp;&amp; !i.enviadoCocina);
+            if (existingUnsent) {
+            existingUnsent.cantidad += 1;
+            } else {
+            // Entra como nuevo item pendiente de enviar a cocina
+            items.push({
+            id: prod.id,
+            nombre: prod.nombre,
+            notas: '',
+            precio: prod.precio,
+            cantidad: 1,
+            mesaId: mesaId,
+            sillaNum: sillaNum,
+            hora: nowStr,
+            enviadoCocina: false
+            });
+            }
+
+            saveStateToStorage();
+            renderStateUI();
+            const modalBackdrop = document.getElementById('modalComandaBackdrop');
+            if (modalBackdrop &amp;&amp; modalBackdrop.classList.contains('show')) {
+            abrirModalComandaActual();
+            }
+            showDragToast(`➕ ${prod.nombre} agregado a Silla ${sillaNum} (Pendiente enviar a cocina)`, 'ok');
+            }
+
+            function filtrarCategoria(catNombre) {
+            window.palapaState.categoriaFiltro = catNombre;
+
+            const chipKeys = ['Todos', 'Cafe', 'Des', 'Car', 'Pos'];
+            chipKeys.forEach(k => {
+            const el = document.getElementById(`wchip-${k}`);
+            if (el) {
+            if ((k === 'Todos' &amp;&amp; catNombre === 'Todos') ||
+            (k === 'Cafe' &amp;&amp; catNombre === 'Barra de Café &amp; Infusiones') ||
+            (k === 'Des' &amp;&amp; catNombre === 'Desayunos &amp; Brunch Gourmet') ||
+            (k === 'Car' &amp;&amp; catNombre === 'Especialidades Fuertes') ||
+            (k === 'Pos' &amp;&amp; catNombre === 'Repostería &amp; Postres de Autor')) {
+            el.style.background = &quot;#059669&quot;;
+            el.style.color = &quot;#ffffff&quot;;
+            el.style.border = &quot;1px solid #34d399&quot;;
+            } else {
+            el.style.background = &quot;#1e293b&quot;;
+            el.style.color = &quot;#cbd5e1&quot;;
+            el.style.border = &quot;1px solid #334155&quot;;
+            }
+            }
+            });
+
+            renderWaiterMenuGrid();
+            }
+
+            setTimeout(function () { renderStateUI(); setupDragListeners(); }, 150);
+            })();
+            </script>"></anvil-form>
