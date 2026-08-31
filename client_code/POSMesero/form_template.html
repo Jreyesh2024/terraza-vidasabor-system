@@ -540,8 +540,14 @@
           style="font-size: 11px !important; color: #94a3b8 !important; margin: 2px 0 0 0 !important;">Mesa 3 •
           Asignación Individual</p>
       </div>
-      <button id="btnCloseModal" onclick="window.cerrarModalComanda();"
-        style="background: #1e293b !important; border: none !important; color: #94a3b8 !important; width: 32px !important; height: 32px !important; border-radius: 10px !important; font-weight: bold !important; cursor: pointer !important;">✕</button>
+      <div style="display: flex !important; align-items: center !important; gap: 8px !important;">
+        <button id="btnVerTodaMesaHeader" onclick="window.verTodaLaMesaEnColumnas();"
+          style="display: none !important; padding: 6px 12px !important; background: rgba(56, 189, 248, 0.15) !important; color: #38bdf8 !important; border: 1px solid rgba(56, 189, 248, 0.3) !important; border-radius: 8px !important; font-size: 11px !important; font-weight: 800 !important; cursor: pointer !important; align-items: center !important; gap: 4px !important;">
+          <i class="fa-solid fa-users"></i> Ver Toda la Mesa
+        </button>
+        <button id="btnCloseModal" onclick="window.cerrarModalComanda();"
+          style="background: #1e293b !important; border: none !important; color: #94a3b8 !important; width: 32px !important; height: 32px !important; border-radius: 10px !important; font-weight: bold !important; cursor: pointer !important;">✕</button>
+      </div>
     </div>
 
     <!-- MODAL ITEMS CONTAINER -->
@@ -1326,6 +1332,7 @@
       const sillaNum = window.palapaState.sillaSeleccionadaNum;
 
       const modal = document.getElementById('modalComandaBackdrop');
+      const modalCard = document.getElementById('modalComandaCard');
       const title = document.getElementById('modalTitle');
       const subtitle = document.getElementById('modalSubtitle');
       const header = document.getElementById('modalItemsHeader');
@@ -1335,11 +1342,19 @@
       const propinaMontoEl = document.getElementById('modalPropinaMonto');
       const totalMontoEl = document.getElementById('modalTotalMonto');
       const totalLabelEl = document.getElementById('modalTotalLabel');
+      const btnVerTodaMesa = document.getElementById('btnVerTodaMesaHeader');
+      const btnMover = document.getElementById('btnMoverDesdeModal');
+      const btnLiberar = document.getElementById('btnLiberarSilla');
 
       if (!container || !modal) return;
       container.innerHTML = '';
 
       if (sillaNum !== null) {
+        if (modalCard) modalCard.style.maxWidth = '640px';
+        if (btnVerTodaMesa) btnVerTodaMesa.style.display = 'inline-flex';
+        if (btnMover) btnMover.style.display = 'flex';
+        if (btnLiberar) btnLiberar.style.display = 'flex';
+
         const key = `${mesaId}-${sillaNum}`;
         const cuenta = window.palapaState.cuentas[key] || { items: [] };
         const qrId = cuenta.qrId || ('PV-0' + mesaId + sillaNum);
@@ -1465,37 +1480,95 @@
         }
 
       } else {
-        if (title) title.innerHTML = `<i class="fa-solid fa-border-all" style="color: #38bdf8;"></i> Resumen Mesa ${mesaId}`;
-        if (subtitle) subtitle.innerText = `Acumulado consolidado de 4 Sillas`;
-        if (header) header.innerText = `Todos los consumos en Mesa ${mesaId}:`;
+        // VISTA EN COLUMNAS POR COMENSAL DE TODA LA MESA
+        if (modalCard) modalCard.style.maxWidth = '1040px';
 
+        var sillasOcupadas = [];
         let totalMesa = 0;
         let countItems = 0;
 
         for (let s = 1; s <= 4; s++) {
           const key = `${mesaId}-${s}`;
           const cuenta = window.palapaState.cuentas[key];
-          if (cuenta && cuenta.items && cuenta.items.length > 0) {
-            cuenta.items.forEach(item => {
-              countItems++;
-              const sub = item.precio * item.cantidad;
-              totalMesa += sub;
-              const row = document.createElement('div');
-              row.style.cssText = 'display: flex !important; justify-content: space-between !important; align-items: center !important; background: #0f172a !important; padding: 10px 12px !important; border-radius: 10px !important; border: 1px solid #1e293b !important;';
-              row.innerHTML = `
-                <div>
-                  <span style="font-size: 12px; font-weight: 700; color: #ffffff; display: block;">${item.cantidad}x ${item.nombre}</span>
-                  <span style="font-size: 10px; color: #f59e0b; font-weight: bold;">Silla ${s}</span>
-                </div>
-                <span style="font-size: 13px; font-weight: 900; color: #34d399;">$${sub.toFixed(2)}</span>
-              `;
-              container.appendChild(row);
-            });
+          if (cuenta && (cuenta.estado === 'ocupada' || (cuenta.items && cuenta.items.length > 0))) {
+            var subChair = 0;
+            if (cuenta.items) {
+              cuenta.items.forEach(it => { subChair += (it.precio * it.cantidad); countItems++; });
+            }
+            totalMesa += subChair;
+            sillasOcupadas.push({ sillaNum: s, cuenta: cuenta, subtotal: subChair });
           }
         }
 
-        if (countItems === 0) {
-          container.innerHTML = `<div style="text-align: center; padding: 20px; color: #64748b; font-size: 12px;">No hay consumos en ninguna silla de la Mesa ${mesaId}.</div>`;
+        if (title) title.innerHTML = `<i class="fa-solid fa-users-viewfinder" style="color: #38bdf8;"></i> Comanda Mesa ${mesaId} (${sillasOcupadas.length} Comensales)`;
+        if (subtitle) subtitle.innerText = `Desglose individual en columnas por comensal • Total acumulado de la mesa`;
+        if (header) header.innerText = `Tickets por Comensal en Mesa ${mesaId}:`;
+
+        if (btnMover) btnMover.style.display = 'none';
+        if (btnLiberar) btnLiberar.style.display = 'none';
+
+        container.style.cssText = 'display: grid !important; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)) !important; gap: 12px !important; max-height: 380px !important; overflow-y: auto !important;';
+
+        if (sillasOcupadas.length === 0) {
+          container.innerHTML = `<div style="grid-column: 1 / -1; text-align: center; padding: 30px; color: #64748b; font-size: 13px;">No hay comensales ni consumos activos en la Mesa ${mesaId}.</div>`;
+        } else {
+          sillasOcupadas.forEach(obj => {
+            var s = obj.sillaNum;
+            var c = obj.cuenta;
+            var qrId = c.qrId || ('PV-0' + mesaId + s);
+            var nom = c.comensalNombre || ('Comensal Silla ' + s);
+
+            var colCard = document.createElement('div');
+            colCard.style.cssText = 'background: #0f172a !important; border: 1px solid #334155 !important; border-radius: 14px !important; padding: 12px !important; display: flex !important; flex-direction: column !important; justify-content: space-between !important; gap: 8px !important; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.5) !important;';
+
+            var colHeader = document.createElement('div');
+            colHeader.style.cssText = 'display: flex !important; justify-content: space-between !important; align-items: flex-start !important; padding-bottom: 8px !important; border-bottom: 1px solid #1e293b !important;';
+            colHeader.innerHTML = `
+              <div>
+                <span style="font-weight: 800; color: #34d399; font-size: 12px; display: block;">Silla ${s} • ${nom}</span>
+                <span style="font-size: 10px; color: #94a3b8; font-weight: 600;">Portavasos #${qrId}</span>
+              </div>
+              <span style="background: rgba(16, 185, 129, 0.15); color: #34d399; font-size: 9px; font-weight: 800; padding: 2px 6px; border-radius: 6px;">ACTIVA</span>
+            `;
+            colCard.appendChild(colHeader);
+
+            var itemsWrapper = document.createElement('div');
+            itemsWrapper.style.cssText = 'display: flex !important; flex-direction: column !important; gap: 6px !important; flex: 1 !important; max-height: 180px !important; overflow-y: auto !important;';
+
+            if (!c.items || c.items.length === 0) {
+              itemsWrapper.innerHTML = `<div style="text-align:center; color:#64748b; font-size:10px; padding:15px 0;">Silla ocupada sin consumos</div>`;
+            } else {
+              c.items.forEach(it => {
+                var itSub = it.precio * it.cantidad;
+                var row = document.createElement('div');
+                row.style.cssText = 'display: flex !important; justify-content: space-between !important; align-items: center !important; background: #020617 !important; padding: 6px 8px !important; border-radius: 8px !important; border: 1px solid #1e293b !important; font-size: 11px !important;';
+                row.innerHTML = `
+                  <div style="flex: 1; padding-right: 4px;">
+                    <span style="font-weight: 700; color: #ffffff; display: block; line-height: 1.2;">${it.cantidad}x ${it.nombre}</span>
+                    <span style="font-size: 9px; color: #94a3b8; font-style: italic;">${it.notas || ''}</span>
+                  </div>
+                  <span style="font-weight: 900; color: #34d399; font-size: 11px;">$${itSub.toFixed(2)}</span>
+                `;
+                itemsWrapper.appendChild(row);
+              });
+            }
+            colCard.appendChild(itemsWrapper);
+
+            var colFooter = document.createElement('div');
+            colFooter.style.cssText = 'border-top: 1px dashed #334155 !important; padding-top: 8px !important; margin-top: 4px !important; display: flex !important; flex-direction: column !important; gap: 6px !important;';
+            colFooter.innerHTML = `
+              <div style="display: flex !important; justify-content: space-between !important; font-weight: 900 !important; font-size: 12px !important;">
+                <span style="color: #94a3b8; font-weight: 600;">Subtotal:</span>
+                <span style="color: #fbbf24;">$${obj.subtotal.toFixed(2)}</span>
+              </div>
+              <button onclick="window.seleccionarSillaDesdeMesa(${s});" style="width: 100% !important; padding: 6px !important; background: #1e293b !important; color: #38bdf8 !important; border: 1px solid #334155 !important; border-radius: 8px !important; font-size: 10px !important; font-weight: bold !important; cursor: pointer !important; display: flex !important; align-items: center !important; justify-content: center !important; gap: 4px !important;">
+                <i class="fa-solid fa-pen-to-square"></i> Gestionar Silla ${s}
+              </button>
+            `;
+            colCard.appendChild(colFooter);
+
+            container.appendChild(colCard);
+          });
         }
 
         var ivaValMesa = totalMesa * 0.16;
@@ -1514,6 +1587,18 @@
         modal.style.setProperty('display', 'flex', 'important');
       }
     }
+
+    window.seleccionarSillaDesdeMesa = function(sillaNum) {
+      window.palapaState.sillaSeleccionadaNum = sillaNum;
+      renderStateUI();
+      abrirModalComandaActual();
+    };
+
+    window.verTodaLaMesaEnColumnas = function() {
+      window.palapaState.sillaSeleccionadaNum = null;
+      renderStateUI();
+      abrirModalComandaActual();
+    };
 
     var _precuentaMesaId = 2;
     var _precuentaSillasSeleccionadas = [];
