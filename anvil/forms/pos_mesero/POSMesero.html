@@ -1,10 +1,10 @@
-<anvil-form container="HtmlTemplate" prop:html="">
-
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <link rel="stylesheet" href="_/theme/theme.css">
 
 <style>
-  html, body, .anvil-container {
+  html,
+  body,
+  .anvil-container {
     background-color: #090d16 !important;
     color: #f8fafc !important;
     font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
@@ -18,13 +18,16 @@
     user-select: none !important;
     touch-action: none !important;
   }
+
   .chair-btn-fixed.chair-dragging {
     opacity: 0.35 !important;
     transform: scale(1.12) !important;
     border: 2px dashed #38bdf8 !important;
     box-shadow: 0 0 22px rgba(56, 189, 248, 0.85) !important;
     cursor: grabbing !important;
+    z-index: 5 !important;
   }
+
   .chair-btn-fixed.chair-drag-target-valid {
     border: 2px solid #38bdf8 !important;
     box-shadow: 0 0 22px #38bdf8, inset 0 0 12px rgba(56, 189, 248, 0.5) !important;
@@ -32,6 +35,7 @@
     transition: transform 0.12s ease, box-shadow 0.12s ease !important;
     background: rgba(56, 189, 248, 0.18) !important;
   }
+
   .chair-btn-fixed.chair-drag-target-combine {
     border: 2px solid #f59e0b !important;
     box-shadow: 0 0 22px #f59e0b, inset 0 0 12px rgba(245, 158, 11, 0.5) !important;
@@ -39,173 +43,450 @@
     transition: transform 0.12s ease, box-shadow 0.12s ease !important;
     background: rgba(245, 158, 11, 0.18) !important;
   }
+
+  /* ── Silla ORIGEN en modo mover (click o drag iniciado) ── */
+  .chair-btn-fixed.chair-moving-source {
+    border: 2px solid #38bdf8 !important;
+    box-shadow: 0 0 18px rgba(56, 189, 248, 0.9) !important;
+    animation: pulse-glow-cyan 1s ease-in-out infinite !important;
+    opacity: 0.85 !important;
+  }
+
+  /* ── Sillas DESTINO disponibles en modo mover ── */
+  .chair-btn-fixed.chair-moving-target.chair-state-free {
+    border: 2px dashed #10b981 !important;
+    box-shadow: 0 0 12px rgba(16, 185, 129, 0.5) !important;
+    animation: pulse-glow-green 1.2s ease-in-out infinite !important;
+  }
+
+  .chair-btn-fixed.chair-moving-target.chair-state-busy {
+    border: 2px dashed #f59e0b !important;
+    box-shadow: 0 0 12px rgba(245, 158, 11, 0.5) !important;
+    animation: pulse-glow-amber 1.2s ease-in-out infinite !important;
+  }
+
+  @keyframes pulse-glow-cyan {
+
+    0%,
+    100% {
+      box-shadow: 0 0 10px rgba(56, 189, 248, 0.6);
+    }
+
+    50% {
+      box-shadow: 0 0 28px rgba(56, 189, 248, 1.0);
+    }
+  }
+
+  @keyframes pulse-glow-green {
+
+    0%,
+    100% {
+      box-shadow: 0 0 6px rgba(16, 185, 129, 0.4);
+    }
+
+    50% {
+      box-shadow: 0 0 20px rgba(16, 185, 129, 0.9);
+    }
+  }
+
+  @keyframes pulse-glow-amber {
+
+    0%,
+    100% {
+      box-shadow: 0 0 6px rgba(245, 158, 11, 0.4);
+    }
+
+    50% {
+      box-shadow: 0 0 20px rgba(245, 158, 11, 0.9);
+    }
+  }
+
+  /* ── Toast de notificación drag ── */
+  #dragToast {
+    position: fixed;
+    bottom: 28px;
+    left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: #0f172a;
+    color: #f8fafc;
+    border: 1px solid #334155;
+    padding: 12px 22px;
+    border-radius: 16px;
+    font-size: 13px;
+    font-weight: 700;
+    white-space: nowrap;
+    z-index: 9999;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.7);
+    transition: transform 0.28s cubic-bezier(.34, 1.56, .64, 1), opacity 0.28s ease;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  #dragToast.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
+
+  #dragToast.toast-ok {
+    border-color: #10b981;
+    color: #34d399;
+  }
+
+  #dragToast.toast-warn {
+    border-color: #f59e0b;
+    color: #fbbf24;
+  }
+
+  #dragToast.toast-err {
+    border-color: #ef4444;
+    color: #f87171;
+  }
+
+  /* ── Mini-modal confirmación combinación ── */
+  #combineConfirmBackdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 9998;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #combineConfirmBackdrop.show {
+    display: flex;
+  }
+
+  /* ── Modal Comanda / Ticket por Silla ── */
+  #modalComandaBackdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.75);
+    z-index: 9990;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(4px);
+  }
+
+  #modalComandaBackdrop.show {
+    display: flex !important;
+  }
+
+  /* ── Modal Precuenta Térmica Formal ── */
+  #modalPrecuentaBackdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 9995;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(5px);
+  }
+
+  #modalPrecuentaBackdrop.show {
+    display: flex !important;
+  }
+
+  #combineConfirmBox {
+    background: #0f172a;
+    border: 1px solid #334155;
+    border-radius: 18px;
+    padding: 28px 32px;
+    min-width: 320px;
+    max-width: 420px;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.8);
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    animation: slideUp 0.22s cubic-bezier(.34, 1.56, .64, 1);
+  }
+
+  /* ── Durante drag: bajar z-index de círculos para que no bloqueen el drop ── */
+  body.drag-active .table-circle-fixed {
+    pointer-events: none !important;
+    z-index: 1 !important;
+  }
+
+  /* Asegurar que sillas reciban eventos durante drag ── */
+  body.drag-active .chair-btn-fixed {
+    pointer-events: auto !important;
+  }
+
+  /* Área completa de mesa como zona de drop activa */
+  .table-box-220.drop-zone-active {
+    outline: 2px dashed rgba(56, 189, 248, 0.35) !important;
+    outline-offset: 4px !important;
+    border-radius: 12px !important;
+  }
+
+  @keyframes slideUp {
+    from {
+      transform: translateY(30px);
+      opacity: 0;
+    }
+
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
 </style>
 
-<div style="background-color: #090d16 !important; color: #f8fafc !important; font-family: 'Inter', system-ui, sans-serif !important; min-height: 100vh !important; padding: 20px !important; box-sizing: border-box !important; display: flex !important; flex-direction: column !important; gap: 20px !important;">
-  
+<div
+  style="background-color: #090d16 !important; color: #f8fafc !important; font-family: 'Inter', system-ui, sans-serif !important; min-height: 100vh !important; padding: 20px !important; box-sizing: border-box !important; display: flex !important; flex-direction: column !important; gap: 20px !important;">
+
   <!-- HEADER BAR & AREA SWITCHER -->
-  <div style="display: flex !important; flex-wrap: wrap !important; justify-content: space-between !important; align-items: center !important; gap: 15px !important; padding-bottom: 15px !important; border-bottom: 1px solid #1e293b !important;">
+  <div
+    style="display: flex !important; flex-wrap: wrap !important; justify-content: space-between !important; align-items: center !important; gap: 15px !important; padding-bottom: 15px !important; border-bottom: 1px solid #1e293b !important;">
     <div style="display: flex !important; align-items: center !important; gap: 12px !important;">
-      <div style="width: 48px !important; height: 48px !important; border-radius: 16px !important; background: linear-gradient(135deg, #10b981, #0f766e) !important; display: flex !important; align-items: center !important; justify-content: center !important; font-size: 22px !important; font-weight: 900 !important; color: #ffffff !important; box-shadow: 0 0 20px rgba(16, 185, 129, 0.4) !important;">
+      <div
+        style="width: 48px !important; height: 48px !important; border-radius: 16px !important; background: linear-gradient(135deg, #10b981, #0f766e) !important; display: flex !important; align-items: center !important; justify-content: center !important; font-size: 22px !important; font-weight: 900 !important; color: #ffffff !important; box-shadow: 0 0 20px rgba(16, 185, 129, 0.4) !important;">
         V&S
       </div>
       <div>
-        <h1 style="font-size: 20px !important; font-weight: 800 !important; color: #ffffff !important; margin: 0 !important;">Plano Gráfico 2D • La Terraza de Vida & Sabor</h1>
-        <p style="font-size: 12px !important; font-weight: 600 !important; color: #34d399 !important; margin: 2px 0 0 0 !important;">Gestión Espacial de Mesas Circulares (Área Palapa 6.00m x 4.00m)</p>
+        <h1
+          style="font-size: 20px !important; font-weight: 800 !important; color: #ffffff !important; margin: 0 !important;">
+          Plano Gráfico 2D • La Terraza de Vida & Sabor</h1>
+        <p
+          style="font-size: 12px !important; font-weight: 600 !important; color: #34d399 !important; margin: 2px 0 0 0 !important;">
+          Gestión Espacial de Mesas Circulares (Área Palapa 6.00m x 4.00m)</p>
       </div>
     </div>
 
     <!-- AREA SELECTOR & MODULE SWITCHER -->
-    <div style="display: flex !important; gap: 8px !important; background: #0f172a !important; padding: 6px !important; border-radius: 16px !important; border: 1px solid #1e293b !important;">
-      <button id="btn-area-palapa" style="padding: 8px 16px !important; font-size: 12px !important; font-weight: 700 !important; border-radius: 12px !important; background-color: #059669 !important; color: #ffffff !important; border: none !important; cursor: pointer !important; display: flex !important; align-items: center !important; gap: 6px !important;">
+    <div
+      style="display: flex !important; gap: 8px !important; background: #0f172a !important; padding: 6px !important; border-radius: 16px !important; border: 1px solid #1e293b !important; align-items: center !important;">
+      <button id="btn-area-palapa"
+        style="padding: 8px 16px !important; font-size: 12px !important; font-weight: 700 !important; border-radius: 12px !important; background-color: #059669 !important; color: #ffffff !important; border: none !important; cursor: pointer !important; display: flex !important; align-items: center !important; gap: 6px !important;">
         <i class="fa-solid fa-umbrella-beach" style="color: #fcd34d !important;"></i> La Palapa (6x4m)
       </button>
-      <button id="btn-nav-cocina" style="padding: 8px 16px !important; font-size: 12px !important; font-weight: 600 !important; border-radius: 12px !important; background: transparent !important; color: #cbd5e1 !important; border: none !important; cursor: pointer !important; display: flex !important; align-items: center !important; gap: 6px !important;">
+      <button id="btnResetDemo" title="Reinicia la posición inicial de las sillas demo (Mesa 3 S1 y S2)"
+        style="padding: 8px 14px !important; font-size: 12px !important; font-weight: 700 !important; border-radius: 12px !important; background: #1e293b !important; color: #38bdf8 !important; border: 1px solid #334155 !important; cursor: pointer !important; display: flex !important; align-items: center !important; gap: 6px !important;">
+        <i class="fa-solid fa-rotate-right"></i> Reiniciar Demo
+      </button>
+      <button id="btn-nav-cocina"
+        style="padding: 8px 16px !important; font-size: 12px !important; font-weight: 600 !important; border-radius: 12px !important; background: transparent !important; color: #cbd5e1 !important; border: none !important; cursor: pointer !important; display: flex !important; align-items: center !important; gap: 6px !important;">
         <i class="fa-solid fa-fire" style="color: #f59e0b !important;"></i> Cocina KDS
       </button>
-      <button id="btn-nav-fiscal" style="padding: 8px 16px !important; font-size: 12px !important; font-weight: 600 !important; border-radius: 12px !important; background: transparent !important; color: #cbd5e1 !important; border: none !important; cursor: pointer !important; display: flex !important; align-items: center !important; gap: 6px !important;">
+      <button id="btn-nav-fiscal"
+        style="padding: 8px 16px !important; font-size: 12px !important; font-weight: 600 !important; border-radius: 12px !important; background: transparent !important; color: #cbd5e1 !important; border: none !important; cursor: pointer !important; display: flex !important; align-items: center !important; gap: 6px !important;">
         <i class="fa-solid fa-chart-pie" style="color: #38bdf8 !important;"></i> Fiscal
       </button>
     </div>
   </div>
 
   <!-- ACTION INSTRUCTION BANNER -->
-  <div id="moveInstructionBanner" style="display: flex !important; background: #0f172a !important; border: 1px solid #1e293b !important; color: #cbd5e1 !important; padding: 12px 18px !important; border-radius: 14px !important; font-size: 12px !important; font-weight: 600 !important; justify-content: space-between !important; align-items: center !important;">
+  <div id="moveInstructionBanner"
+    style="display: flex !important; background: #0f172a !important; border: 1px solid #1e293b !important; color: #cbd5e1 !important; padding: 12px 18px !important; border-radius: 14px !important; font-size: 12px !important; font-weight: 600 !important; justify-content: space-between !important; align-items: center !important;">
     <div style="display: flex !important; align-items: center !important; gap: 10px !important;">
-      <i id="bannerIcon" class="fa-solid fa-hand-pointer" style="color: #38bdf8 !important; font-size: 16px !important;"></i>
-      <span id="bannerText">Haz clic o <b>arrastra con el mouse</b> cualquier <b>Silla</b> para abrir su comanda o trasladarla a otra silla/mesa.</span>
+      <i id="bannerIcon" class="fa-solid fa-hand-pointer"
+        style="color: #38bdf8 !important; font-size: 16px !important;"></i>
+      <span id="bannerText">Haz clic o <b>arrastra con el mouse</b> cualquier <b>Silla</b> para abrir su comanda o
+        trasladarla a otra silla/mesa.</span>
     </div>
-    <button id="btnCancelMove" style="display: none !important; padding: 4px 12px !important; background: #ef4444 !important; color: #ffffff !important; border-radius: 8px !important; border: none !important; font-weight: 800 !important; cursor: pointer !important;">
+    <button id="btnCancelMove"
+      style="display: none !important; padding: 4px 12px !important; background: #ef4444 !important; color: #ffffff !important; border-radius: 8px !important; border: none !important; font-weight: 800 !important; cursor: pointer !important;">
       Cancelar Movimiento
     </button>
   </div>
 
   <!-- MAIN CANVAS GRID -->
-  <div style="display: grid !important; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) !important; gap: 24px !important; flex: 1 !important;">
-    
+  <div
+    style="display: grid !important; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) !important; gap: 24px !important; flex: 1 !important;">
+
     <!-- LEFT PANEL: 2D FLOOR PLAN OF LA PALAPA -->
-    <div style="background: rgba(15, 23, 42, 0.95) !important; border: 1px solid #1e293b !important; border-radius: 20px !important; padding: 24px !important; display: flex !important; flex-direction: column !important; justify-content: space-between !important; min-height: 540px !important; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5) !important;">
-      
+    <div
+      style="background: rgba(15, 23, 42, 0.95) !important; border: 1px solid #1e293b !important; border-radius: 20px !important; padding: 24px !important; display: flex !important; flex-direction: column !important; justify-content: space-between !important; min-height: 540px !important; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5) !important;">
+
       <!-- PARED POSTERIOR BARRA -->
-      <div style="background: rgba(30, 41, 59, 0.9) !important; border: 1px solid rgba(16, 185, 129, 0.3) !important; border-radius: 12px !important; padding: 12px 16px !important; display: flex !important; flex-wrap: wrap !important; justify-content: space-between !important; align-items: center !important; margin-bottom: 24px !important; gap: 10px !important;">
-        <div style="display: flex !important; align-items: center !important; gap: 8px !important; font-size: 12px !important; font-weight: 700 !important; color: #34d399 !important;">
+      <div
+        style="background: rgba(30, 41, 59, 0.9) !important; border: 1px solid rgba(16, 185, 129, 0.3) !important; border-radius: 12px !important; padding: 12px 16px !important; display: flex !important; flex-wrap: wrap !important; justify-content: space-between !important; align-items: center !important; margin-bottom: 24px !important; gap: 10px !important;">
+        <div
+          style="display: flex !important; align-items: center !important; gap: 8px !important; font-size: 12px !important; font-weight: 700 !important; color: #34d399 !important;">
           <i class="fa-solid fa-mug-hot" style="color: #fbbf24 !important; font-size: 16px !important;"></i>
           <span>Mueble de Servicio & Barra de Café (Pared Posterior 6.00m)</span>
         </div>
-        <div style="display: flex !important; gap: 16px !important; font-size: 11px !important; color: #94a3b8 !important; font-weight: 600 !important;">
-          <span><i class="fa-solid fa-wine-glass" style="color: #c084fc !important; margin-right: 4px !important;"></i> Cristalería</span>
-          <span><i class="fa-solid fa-fire" style="color: #fbbf24 !important; margin-right: 4px !important;"></i> Espresso</span>
-          <span><i class="fa-solid fa-sink" style="color: #38bdf8 !important; margin-right: 4px !important;"></i> Insumos</span>
+        <div
+          style="display: flex !important; gap: 16px !important; font-size: 11px !important; color: #94a3b8 !important; font-weight: 600 !important;">
+          <span><i class="fa-solid fa-wine-glass" style="color: #c084fc !important; margin-right: 4px !important;"></i>
+            Cristalería</span>
+          <span><i class="fa-solid fa-fire" style="color: #fbbf24 !important; margin-right: 4px !important;"></i>
+            Espresso</span>
+          <span><i class="fa-solid fa-sink" style="color: #38bdf8 !important; margin-right: 4px !important;"></i>
+            Insumos</span>
         </div>
       </div>
 
       <!-- 3 CIRCULAR TABLES WITH 4 CHAIRS EACH -->
-      <div style="display: grid !important; grid-template-columns: repeat(3, 1fr) !important; gap: 20px !important; margin: auto 0 !important; padding: 20px 0 !important;">
-        
+      <div
+        style="display: grid !important; grid-template-columns: repeat(3, 1fr) !important; gap: 20px !important; margin: auto 0 !important; padding: 20px 0 !important;">
+
         <!-- MESA 1 -->
-        <div style="display: flex !important; flex-direction: column !important; align-items: center !important; gap: 12px !important;">
-          <span style="font-size: 12px !important; font-weight: 900 !important; color: #cbd5e1 !important; text-transform: uppercase !important; letter-spacing: 1px !important;">Mesa 1 (Palapa)</span>
-          
-          <div class="table-box-220" style="position: relative !important; width: 220px !important; height: 220px !important; display: flex !important; align-items: center !important; justify-content: center !important; margin: 0 auto !important;">
-            <div id="table-circle-1" class="table-circle-fixed" style="width: 96px !important; height: 96px !important; border-radius: 50% !important; background: #064e3b !important; border: 4px solid #10b981 !important; box-shadow: 0 0 25px rgba(16, 185, 129, 0.4) !important; display: flex !important; flex-direction: column !important; align-items: center !important; justify-content: center !important; cursor: pointer !important; z-index: 10 !important;">
-              <span style="font-size: 18px !important; font-weight: 900 !important; color: #ffffff !important; margin: 0 !important; line-height: 1 !important;">M1</span>
-              <span id="table-status-1" style="font-size: 9px !important; font-weight: 800 !important; color: #6ee7b7 !important; text-transform: uppercase !important; margin-top: 2px !important;">Libre</span>
+        <div
+          style="display: flex !important; flex-direction: column !important; align-items: center !important; gap: 12px !important;">
+          <span
+            style="font-size: 12px !important; font-weight: 900 !important; color: #cbd5e1 !important; text-transform: uppercase !important; letter-spacing: 1px !important;">Mesa
+            1 (Palapa)</span>
+
+          <div id="table-box-1" class="table-box-220"
+            style="position: relative !important; width: 220px !important; height: 220px !important; display: flex !important; align-items: center !important; justify-content: center !important; margin: 0 auto !important;">
+            <div id="table-circle-1" class="table-circle-fixed"
+              style="width: 96px !important; height: 96px !important; border-radius: 50% !important; background: #064e3b !important; border: 4px solid #10b981 !important; box-shadow: 0 0 25px rgba(16, 185, 129, 0.4) !important; display: flex !important; flex-direction: column !important; align-items: center !important; justify-content: center !important; cursor: pointer !important; z-index: 10 !important;">
+              <span
+                style="font-size: 18px !important; font-weight: 900 !important; color: #ffffff !important; margin: 0 !important; line-height: 1 !important;">M1</span>
+              <span id="table-status-1"
+                style="font-size: 9px !important; font-weight: 800 !important; color: #6ee7b7 !important; text-transform: uppercase !important; margin-top: 2px !important;">Libre</span>
             </div>
 
-            <div id="chair-1-1" class="chair-btn-fixed chair-pos-top chair-state-free">Silla 1</div>
-            <div id="chair-1-2" class="chair-btn-fixed chair-pos-right chair-state-free">Silla 2</div>
-            <div id="chair-1-3" class="chair-btn-fixed chair-pos-bottom chair-state-free">Silla 3</div>
-            <div id="chair-1-4" class="chair-btn-fixed chair-pos-left chair-state-free">Silla 4</div>
+            <div id="chair-1-1" class="chair-btn-fixed chair-pos-top chair-state-free" draggable="false"
+              title="Mesa 1 Silla 1 (Disponible)">Silla 1</div>
+            <div id="chair-1-2" class="chair-btn-fixed chair-pos-right chair-state-free" draggable="false"
+              title="Mesa 1 Silla 2 (Disponible)">Silla 2</div>
+            <div id="chair-1-3" class="chair-btn-fixed chair-pos-bottom chair-state-free" draggable="false"
+              title="Mesa 1 Silla 3 (Disponible)">Silla 3</div>
+            <div id="chair-1-4" class="chair-btn-fixed chair-pos-left chair-state-free" draggable="false"
+              title="Mesa 1 Silla 4 (Disponible)">Silla 4</div>
           </div>
 
-          <span id="table-label-1" style="font-size: 12px !important; font-weight: 700 !important; color: #34d399 !important;">🟢 Disponible</span>
+          <span id="table-label-1"
+            style="font-size: 12px !important; font-weight: 700 !important; color: #34d399 !important;">🟢
+            Disponible</span>
         </div>
 
         <!-- MESA 2 -->
-        <div style="display: flex !important; flex-direction: column !important; align-items: center !important; gap: 12px !important;">
-          <span style="font-size: 12px !important; font-weight: 900 !important; color: #cbd5e1 !important; text-transform: uppercase !important; letter-spacing: 1px !important;">Mesa 2 (Palapa)</span>
-          
-          <div class="table-box-220" style="position: relative !important; width: 220px !important; height: 220px !important; display: flex !important; align-items: center !important; justify-content: center !important; margin: 0 auto !important;">
-            <div id="table-circle-2" class="table-circle-fixed" style="width: 96px !important; height: 96px !important; border-radius: 50% !important; background: #064e3b !important; border: 4px solid #10b981 !important; box-shadow: 0 0 25px rgba(16, 185, 129, 0.4) !important; display: flex !important; flex-direction: column !important; align-items: center !important; justify-content: center !important; cursor: pointer !important; z-index: 10 !important;">
-              <span style="font-size: 18px !important; font-weight: 900 !important; color: #ffffff !important; margin: 0 !important; line-height: 1 !important;">M2</span>
-              <span id="table-status-2" style="font-size: 9px !important; font-weight: 800 !important; color: #6ee7b7 !important; text-transform: uppercase !important; margin-top: 2px !important;">Libre</span>
+        <div
+          style="display: flex !important; flex-direction: column !important; align-items: center !important; gap: 12px !important;">
+          <span
+            style="font-size: 12px !important; font-weight: 900 !important; color: #cbd5e1 !important; text-transform: uppercase !important; letter-spacing: 1px !important;">Mesa
+            2 (Palapa)</span>
+
+          <div id="table-box-2" class="table-box-220"
+            style="position: relative !important; width: 220px !important; height: 220px !important; display: flex !important; align-items: center !important; justify-content: center !important; margin: 0 auto !important;">
+            <div id="table-circle-2" class="table-circle-fixed"
+              style="width: 96px !important; height: 96px !important; border-radius: 50% !important; background: #064e3b !important; border: 4px solid #10b981 !important; box-shadow: 0 0 25px rgba(16, 185, 129, 0.4) !important; display: flex !important; flex-direction: column !important; align-items: center !important; justify-content: center !important; cursor: pointer !important; z-index: 10 !important;">
+              <span
+                style="font-size: 18px !important; font-weight: 900 !important; color: #ffffff !important; margin: 0 !important; line-height: 1 !important;">M2</span>
+              <span id="table-status-2"
+                style="font-size: 9px !important; font-weight: 800 !important; color: #6ee7b7 !important; text-transform: uppercase !important; margin-top: 2px !important;">Libre</span>
             </div>
 
-            <div id="chair-2-1" class="chair-btn-fixed chair-pos-top chair-state-free">Silla 1</div>
-            <div id="chair-2-2" class="chair-btn-fixed chair-pos-right chair-state-free">Silla 2</div>
-            <div id="chair-2-3" class="chair-btn-fixed chair-pos-bottom chair-state-free">Silla 3</div>
-            <div id="chair-2-4" class="chair-btn-fixed chair-pos-left chair-state-free">Silla 4</div>
+            <div id="chair-2-1" class="chair-btn-fixed chair-pos-top chair-state-free" draggable="false"
+              title="Mesa 2 Silla 1 (Disponible)">Silla 1</div>
+            <div id="chair-2-2" class="chair-btn-fixed chair-pos-right chair-state-free" draggable="false"
+              title="Mesa 2 Silla 2 (Disponible)">Silla 2</div>
+            <div id="chair-2-3" class="chair-btn-fixed chair-pos-bottom chair-state-free" draggable="false"
+              title="Mesa 2 Silla 3 (Disponible)">Silla 3</div>
+            <div id="chair-2-4" class="chair-btn-fixed chair-pos-left chair-state-free" draggable="false"
+              title="Mesa 2 Silla 4 (Disponible)">Silla 4</div>
           </div>
 
-          <span id="table-label-2" style="font-size: 12px !important; font-weight: 700 !important; color: #34d399 !important;">🟢 Disponible</span>
+          <span id="table-label-2"
+            style="font-size: 12px !important; font-weight: 700 !important; color: #34d399 !important;">🟢
+            Disponible</span>
         </div>
 
         <!-- MESA 3 -->
-        <div style="display: flex !important; flex-direction: column !important; align-items: center !important; gap: 12px !important;">
-          <span style="font-size: 12px !important; font-weight: 900 !important; color: #fbbf24 !important; text-transform: uppercase !important; letter-spacing: 1px !important;">Mesa 3 (Palapa)</span>
-          
-          <div class="table-box-220" style="position: relative !important; width: 220px !important; height: 220px !important; display: flex !important; align-items: center !important; justify-content: center !important; margin: 0 auto !important;">
-            <div id="table-circle-3" class="table-circle-fixed" style="width: 96px !important; height: 96px !important; border-radius: 50% !important; background: #78350f !important; border: 4px solid #f59e0b !important; box-shadow: 0 0 25px rgba(245, 158, 11, 0.4) !important; display: flex !important; flex-direction: column !important; align-items: center !important; justify-content: center !important; cursor: pointer !important; z-index: 10 !important;">
-              <span style="font-size: 18px !important; font-weight: 900 !important; color: #fef3c7 !important; margin: 0 !important; line-height: 1 !important;">M3</span>
-              <span id="table-status-3" style="font-size: 9px !important; font-weight: 800 !important; color: #fde68a !important; text-transform: uppercase !important; margin-top: 2px !important;">2 Ocupadas</span>
+        <div
+          style="display: flex !important; flex-direction: column !important; align-items: center !important; gap: 12px !important;">
+          <span
+            style="font-size: 12px !important; font-weight: 900 !important; color: #fbbf24 !important; text-transform: uppercase !important; letter-spacing: 1px !important;">Mesa
+            3 (Palapa)</span>
+
+          <div id="table-box-3" class="table-box-220"
+            style="position: relative !important; width: 220px !important; height: 220px !important; display: flex !important; align-items: center !important; justify-content: center !important; margin: 0 auto !important;">
+            <div id="table-circle-3" class="table-circle-fixed"
+              style="width: 96px !important; height: 96px !important; border-radius: 50% !important; background: #78350f !important; border: 4px solid #f59e0b !important; box-shadow: 0 0 25px rgba(245, 158, 11, 0.4) !important; display: flex !important; flex-direction: column !important; align-items: center !important; justify-content: center !important; cursor: pointer !important; z-index: 10 !important;">
+              <span
+                style="font-size: 18px !important; font-weight: 900 !important; color: #fef3c7 !important; margin: 0 !important; line-height: 1 !important;">M3</span>
+              <span id="table-status-3"
+                style="font-size: 9px !important; font-weight: 800 !important; color: #fde68a !important; text-transform: uppercase !important; margin-top: 2px !important;">2
+                Ocupadas</span>
             </div>
 
-            <div id="chair-3-1" class="chair-btn-fixed chair-pos-top chair-state-busy">Silla 1</div>
-            <div id="chair-3-2" class="chair-btn-fixed chair-pos-right chair-state-busy">Silla 2</div>
-            <div id="chair-3-3" class="chair-btn-fixed chair-pos-bottom chair-state-free">Silla 3</div>
-            <div id="chair-3-4" class="chair-btn-fixed chair-pos-left chair-state-free">Silla 4</div>
+            <div id="chair-3-1" class="chair-btn-fixed chair-pos-top chair-state-busy" draggable="true"
+              title="Mesa 3 Silla 1 (Ocupada) • Arrastra para mover">Silla 1</div>
+            <div id="chair-3-2" class="chair-btn-fixed chair-pos-right chair-state-busy" draggable="true"
+              title="Mesa 3 Silla 2 (Ocupada) • Arrastra para mover">Silla 2</div>
+            <div id="chair-3-3" class="chair-btn-fixed chair-pos-bottom chair-state-free" draggable="false"
+              title="Mesa 3 Silla 3 (Disponible)">Silla 3</div>
+            <div id="chair-3-4" class="chair-btn-fixed chair-pos-left chair-state-free" draggable="false"
+              title="Mesa 3 Silla 4 (Disponible)">Silla 4</div>
           </div>
 
-          <span id="table-label-3" style="font-size: 12px !important; font-weight: 700 !important; color: #fbbf24 !important;">🟡 Ocupada (2 Comensales)</span>
+          <span id="table-label-3"
+            style="font-size: 12px !important; font-weight: 700 !important; color: #fbbf24 !important;">🟡 Ocupada (2
+            Comensales)</span>
         </div>
 
       </div>
 
       <!-- FOOTER INFO PASILLO -->
-      <div style="padding-top: 16px !important; border-top: 1px solid #1e293b !important; display: flex !important; justify-content: space-between !important; align-items: center !important; font-size: 12px !important; color: #94a3b8 !important; font-weight: 500 !important;">
-        <span><i class="fa-solid fa-door-open" style="color: #34d399 !important; margin-right: 6px !important;"></i> Entrada Frontal & Pasillos de Circulación</span>
+      <div
+        style="padding-top: 16px !important; border-top: 1px solid #1e293b !important; display: flex !important; justify-content: space-between !important; align-items: center !important; font-size: 12px !important; color: #94a3b8 !important; font-weight: 500 !important;">
+        <span><i class="fa-solid fa-door-open" style="color: #34d399 !important; margin-right: 6px !important;"></i>
+          Entrada Frontal & Pasillos de Circulación</span>
         <span style="color: #34d399 !important; font-weight: 700 !important;">Área 1: La Palapa (6.00m x 4.00m)</span>
       </div>
 
     </div>
 
     <!-- RIGHT PANEL: WAITER MENU CATALOG -->
-    <div style="background: rgba(15, 23, 42, 0.95) !important; border: 1px solid #1e293b !important; border-radius: 20px !important; padding: 24px !important; display: flex !important; flex-direction: column !important; justify-content: space-between !important; gap: 16px !important; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5) !important;">
-      
+    <div
+      style="background: rgba(15, 23, 42, 0.95) !important; border: 1px solid #1e293b !important; border-radius: 20px !important; padding: 24px !important; display: flex !important; flex-direction: column !important; justify-content: space-between !important; gap: 16px !important; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5) !important;">
+
       <div style="display: flex !important; flex-direction: column !important; gap: 14px !important;">
-        <div style="display: flex !important; justify-content: space-between !important; align-items: center !important; padding-bottom: 12px !important; border-bottom: 1px solid #1e293b !important;">
+        <div
+          style="display: flex !important; justify-content: space-between !important; align-items: center !important; padding-bottom: 12px !important; border-bottom: 1px solid #1e293b !important;">
           <div>
-            <h2 style="font-size: 15px !important; font-weight: 800 !important; color: #ffffff !important; margin: 0 !important; display: flex !important; align-items: center !important; gap: 8px !important;">
+            <h2
+              style="font-size: 15px !important; font-weight: 800 !important; color: #ffffff !important; margin: 0 !important; display: flex !important; align-items: center !important; gap: 8px !important;">
               <i class="fa-solid fa-utensils" style="color: #f59e0b !important;"></i> Catálogo Menú Gourmet
             </h2>
-            <p style="font-size: 11px !important; color: #94a3b8 !important; margin: 2px 0 0 0 !important;">Marcado rápido de platillos & bebidas</p>
+            <p style="font-size: 11px !important; color: #94a3b8 !important; margin: 2px 0 0 0 !important;">Marcado
+              rápido de platillos & bebidas</p>
           </div>
-          <span id="activeTargetBadge" style="padding: 6px 12px !important; background: rgba(5, 150, 105, 0.2) !important; color: #34d399 !important; border: 1px solid rgba(5, 150, 105, 0.4) !important; border-radius: 12px !important; font-size: 12px !important; font-weight: 900 !important;">
+          <span id="activeTargetBadge"
+            style="padding: 6px 12px !important; background: rgba(5, 150, 105, 0.2) !important; color: #34d399 !important; border: 1px solid rgba(5, 150, 105, 0.4) !important; border-radius: 12px !important; font-size: 12px !important; font-weight: 900 !important;">
             Mesa 3 • Silla 1
           </span>
         </div>
 
         <!-- CATEGORY CHIPS -->
         <div style="display: flex !important; gap: 8px !important; flex-wrap: wrap !important;" id="waiterCatChips">
-          <button data-cat="Todos" id="wchip-Todos" style="padding: 6px 14px !important; font-size: 11px !important; font-weight: 700 !important; border-radius: 10px !important; border: 1px solid #34d399 !important; background: #059669 !important; color: #ffffff !important; cursor: pointer !important;">Todos</button>
-          <button data-cat="Barra de Café & Infusiones" id="wchip-Cafe" style="padding: 6px 14px !important; font-size: 11px !important; font-weight: 700 !important; border-radius: 10px !important; border: 1px solid #334155 !important; background: #1e293b !important; color: #cbd5e1 !important; cursor: pointer !important;">☕ Café</button>
-          <button data-cat="Desayunos & Brunch Gourmet" id="wchip-Des" style="padding: 6px 14px !important; font-size: 11px !important; font-weight: 700 !important; border-radius: 10px !important; border: 1px solid #334155 !important; background: #1e293b !important; color: #cbd5e1 !important; cursor: pointer !important;">🍳 Desayunos</button>
-          <button data-cat="Especialidades Fuertes" id="wchip-Car" style="padding: 6px 14px !important; font-size: 11px !important; font-weight: 700 !important; border-radius: 10px !important; border: 1px solid #334155 !important; background: #1e293b !important; color: #cbd5e1 !important; cursor: pointer !important;">🥩 Carnes</button>
-          <button data-cat="Repostería & Postres de Autor" id="wchip-Pos" style="padding: 6px 14px !important; font-size: 11px !important; font-weight: 700 !important; border-radius: 10px !important; border: 1px solid #334155 !important; background: #1e293b !important; color: #cbd5e1 !important; cursor: pointer !important;">🍰 Postres</button>
+          <button data-cat="Todos" id="wchip-Todos"
+            style="padding: 6px 14px !important; font-size: 11px !important; font-weight: 700 !important; border-radius: 10px !important; border: 1px solid #34d399 !important; background: #059669 !important; color: #ffffff !important; cursor: pointer !important;">Todos</button>
+          <button data-cat="Barra de Café & Infusiones" id="wchip-Cafe"
+            style="padding: 6px 14px !important; font-size: 11px !important; font-weight: 700 !important; border-radius: 10px !important; border: 1px solid #334155 !important; background: #1e293b !important; color: #cbd5e1 !important; cursor: pointer !important;">☕
+            Café</button>
+          <button data-cat="Desayunos & Brunch Gourmet" id="wchip-Des"
+            style="padding: 6px 14px !important; font-size: 11px !important; font-weight: 700 !important; border-radius: 10px !important; border: 1px solid #334155 !important; background: #1e293b !important; color: #cbd5e1 !important; cursor: pointer !important;">🍳
+            Desayunos</button>
+          <button data-cat="Especialidades Fuertes" id="wchip-Car"
+            style="padding: 6px 14px !important; font-size: 11px !important; font-weight: 700 !important; border-radius: 10px !important; border: 1px solid #334155 !important; background: #1e293b !important; color: #cbd5e1 !important; cursor: pointer !important;">🥩
+            Carnes</button>
+          <button data-cat="Repostería & Postres de Autor" id="wchip-Pos"
+            style="padding: 6px 14px !important; font-size: 11px !important; font-weight: 700 !important; border-radius: 10px !important; border: 1px solid #334155 !important; background: #1e293b !important; color: #cbd5e1 !important; cursor: pointer !important;">🍰
+            Postres</button>
         </div>
 
         <!-- MENU ITEMS GRID -->
-        <div id="waiterMenuGrid" style="display: grid !important; grid-template-columns: repeat(2, 1fr) !important; gap: 10px !important; max-height: 380px !important; overflow-y: auto !important; padding-right: 2px !important;">
+        <div id="waiterMenuGrid"
+          style="display: grid !important; grid-template-columns: repeat(2, 1fr) !important; gap: 10px !important; max-height: 380px !important; overflow-y: auto !important; padding-right: 2px !important;">
           <!-- Product cards rendered dynamically -->
         </div>
       </div>
 
       <!-- FOOTER QUICK BUTTONS -->
-      <div style="display: flex !important; gap: 10px !important; padding-top: 12px !important; border-top: 1px solid #1e293b !important;">
-        <button id="btnVerComandaActiva" style="flex: 1 !important; padding: 12px !important; background: linear-gradient(135deg, #059669, #0d9488) !important; color: #ffffff !important; font-weight: 900 !important; font-size: 12px !important; border-radius: 12px !important; border: none !important; cursor: pointer !important; box-shadow: 0 10px 15px -3px rgba(5, 150, 105, 0.4) !important; display: flex !important; align-items: center !important; justify-content: center !important; gap: 8px !important;">
+      <div
+        style="display: flex !important; gap: 10px !important; padding-top: 12px !important; border-top: 1px solid #1e293b !important;">
+        <button id="btnVerComandaActiva"
+          style="flex: 1 !important; padding: 12px !important; background: linear-gradient(135deg, #059669, #0d9488) !important; color: #ffffff !important; font-weight: 900 !important; font-size: 12px !important; border-radius: 12px !important; border: none !important; cursor: pointer !important; box-shadow: 0 10px 15px -3px rgba(5, 150, 105, 0.4) !important; display: flex !important; align-items: center !important; justify-content: center !important; gap: 8px !important;">
           <i class="fa-solid fa-receipt"></i> Ver Comanda Activa
         </button>
-        <button id="btnMoverComensalMain" style="flex: 1 !important; padding: 12px !important; background: #0284c7 !important; color: #ffffff !important; font-weight: 900 !important; font-size: 12px !important; border-radius: 12px !important; border: none !important; cursor: pointer !important; display: flex !important; align-items: center !important; justify-content: center !important; gap: 8px !important;">
+        <button id="btnMoverComensalMain"
+          style="flex: 1 !important; padding: 12px !important; background: #0284c7 !important; color: #ffffff !important; font-weight: 900 !important; font-size: 12px !important; border-radius: 12px !important; border: none !important; cursor: pointer !important; display: flex !important; align-items: center !important; justify-content: center !important; gap: 8px !important;">
           <i class="fa-solid fa-arrow-right-arrow-left"></i> Mover Comensal
         </button>
       </div>
@@ -214,58 +495,169 @@
   </div>
 </div>
 
-<!-- MODAL POPUP PARA COMANDA / TICKET POR SILLA -->
-<div id="modalComandaBackdrop" class="modal-backdrop-fixed" style="display: none !important;">
-  <div style="background: #0f172a !important; border: 1px solid #1e293b !important; border-radius: 20px !important; padding: 24px !important; width: 100% !important; max-width: 480px !important; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8) !important; display: flex !important; flex-direction: column !important; gap: 16px !important;">
-    
-    <!-- MODAL HEADER -->
-    <div style="display: flex !important; justify-content: space-between !important; align-items: center !important; padding-bottom: 12px !important; border-bottom: 1px solid #1e293b !important;">
+<!-- Toast de notificación para drag & drop -->
+<div id="dragToast"></div>
+
+<!-- Mini-modal confirmación combinación de cuentas -->
+<div id="combineConfirmBackdrop">
+  <div id="combineConfirmBox">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <span style="font-size:28px;">🔀</span>
       <div>
-        <h2 id="modalTitle" style="font-size: 16px !important; font-weight: 900 !important; color: #ffffff !important; margin: 0 !important; display: flex !important; align-items: center !important; gap: 8px !important;">
+        <h3 id="combineConfirmTitle" style="font-size:15px;font-weight:900;color:#ffffff;margin:0;">Combinar Cuentas
+        </h3>
+        <p id="combineConfirmMsg" style="font-size:12px;color:#94a3b8;margin:4px 0 0;"></p>
+      </div>
+    </div>
+    <div
+      style="background:#020617;border:1px solid #1e293b;border-radius:12px;padding:14px;font-size:12px;color:#cbd5e1;"
+      id="combineConfirmDetail"></div>
+    <div style="display:flex;gap:10px;">
+      <button id="combineConfirmYes"
+        style="flex:1;padding:12px;background:linear-gradient(135deg,#f59e0b,#d97706);color:#0f172a;font-weight:900;font-size:13px;border-radius:12px;border:none;cursor:pointer;">✓
+        Sí, Combinar</button>
+      <button id="combineConfirmNo"
+        style="flex:1;padding:12px;background:#1e293b;color:#cbd5e1;font-weight:700;font-size:13px;border-radius:12px;border:1px solid #334155;cursor:pointer;">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL POPUP PARA COMANDA / TICKET POR SILLA -->
+<div id="modalComandaBackdrop" onclick="if (event.target === this) window.cerrarModalComanda();">
+  <div id="modalComandaCard"
+    style="background: #0f172a !important; border: 1px solid #1e293b !important; border-radius: 20px !important; padding: 24px !important; width: 100% !important; max-width: 640px !important; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8) !important; display: flex !important; flex-direction: column !important; gap: 16px !important;">
+
+    <!-- MODAL HEADER -->
+    <div
+      style="display: flex !important; justify-content: space-between !important; align-items: center !important; padding-bottom: 12px !important; border-bottom: 1px solid #1e293b !important;">
+      <div>
+        <h2 id="modalTitle"
+          style="font-size: 16px !important; font-weight: 900 !important; color: #ffffff !important; margin: 0 !important; display: flex !important; align-items: center !important; gap: 8px !important;">
           <i class="fa-solid fa-receipt" style="color: #34d399 !important;"></i> Ticket Silla 1
         </h2>
-        <p id="modalSubtitle" style="font-size: 11px !important; color: #94a3b8 !important; margin: 2px 0 0 0 !important;">Mesa 3 • Asignación Individual</p>
+        <p id="modalSubtitle"
+          style="font-size: 11px !important; color: #94a3b8 !important; margin: 2px 0 0 0 !important;">Mesa 3 •
+          Asignación Individual</p>
       </div>
-      <button id="btnCloseModal" style="background: #1e293b !important; border: none !important; color: #94a3b8 !important; width: 32px !important; height: 32px !important; border-radius: 10px !important; font-weight: bold !important; cursor: pointer !important;">✕</button>
+      <button id="btnCloseModal" onclick="window.cerrarModalComanda();"
+        style="background: #1e293b !important; border: none !important; color: #94a3b8 !important; width: 32px !important; height: 32px !important; border-radius: 10px !important; font-weight: bold !important; cursor: pointer !important;">✕</button>
     </div>
 
     <!-- MODAL ITEMS CONTAINER -->
-    <div style="background: #020617 !important; padding: 14px !important; border-radius: 14px !important; border: 1px solid #1e293b !important; display: flex !important; flex-direction: column !important; gap: 10px !important;">
-      <div style="display: flex !important; justify-content: space-between !important; align-items: center !important; padding-bottom: 8px !important; border-bottom: 1px solid #1e293b !important;">
-        <span style="font-size: 12px !important; font-weight: 700 !important; color: #cbd5e1 !important;" id="modalItemsHeader">Consumos en Silla 1:</span>
-        <span style="padding: 2px 8px !important; border-radius: 6px !important; background: rgba(16, 185, 129, 0.2) !important; color: #34d399 !important; font-size: 10px !important; font-weight: 800 !important; text-transform: uppercase !important;">Activa</span>
+    <div
+      style="background: #020617 !important; padding: 14px !important; border-radius: 14px !important; border: 1px solid #1e293b !important; display: flex !important; flex-direction: column !important; gap: 10px !important;">
+      <div
+        style="display: flex !important; justify-content: space-between !important; align-items: center !important; padding-bottom: 8px !important; border-bottom: 1px solid #1e293b !important;">
+        <span style="font-size: 12px !important; font-weight: 700 !important; color: #cbd5e1 !important;"
+          id="modalItemsHeader">Consumos en Silla 1:</span>
+        <span
+          style="padding: 2px 8px !important; border-radius: 6px !important; background: rgba(16, 185, 129, 0.2) !important; color: #34d399 !important; font-size: 10px !important; font-weight: 800 !important; text-transform: uppercase !important;">Activa</span>
       </div>
 
-      <div id="modalItemsList" style="display: flex !important; flex-direction: column !important; gap: 8px !important; max-height: 220px !important; overflow-y: auto !important;">
+      <div id="modalItemsList"
+        style="display: flex !important; flex-direction: column !important; gap: 8px !important; max-height: 220px !important; overflow-y: auto !important;">
         <!-- Items rendered dynamically -->
       </div>
 
-      <div style="padding-top: 10px !important; border-top: 1px solid #1e293b !important; display: flex !important; justify-content: space-between !important; font-weight: 900 !important; font-size: 15px !important; color: #ffffff !important;">
-        <span id="modalTotalLabel">Subtotal Silla:</span>
-        <span style="color: #34d399 !important;" id="modalTotalMonto">$148.00</span>
+      <!-- DESGLOSE FISCAL Y TOTALES CONSOLIDADOS -->
+      <div id="modalTotalsBreakdown"
+        style="padding-top: 10px !important; border-top: 1px solid #1e293b !important; display: flex !important; flex-direction: column !important; gap: 4px !important; font-size: 11px !important;">
+        <div style="display: flex !important; justify-content: space-between !important; color: #94a3b8 !important;">
+          <span>Subtotal Neto Consumos:</span>
+          <span style="color: #cbd5e1 !important; font-weight: 700;" id="modalSubtotalMonto">$0.00</span>
+        </div>
+        <div style="display: flex !important; justify-content: space-between !important; color: #94a3b8 !important;">
+          <span>IVA (16% Desglosado):</span>
+          <span style="color: #cbd5e1 !important; font-weight: 700;" id="modalIvaMonto">$0.00</span>
+        </div>
+        <div style="display: flex !important; justify-content: space-between !important; color: #94a3b8 !important;">
+          <span>Propina Sugerida (10%):</span>
+          <span style="color: #cbd5e1 !important; font-weight: 700;" id="modalPropinaMonto">$0.00</span>
+        </div>
+        <div
+          style="display: flex !important; justify-content: space-between !important; font-weight: 900 !important; font-size: 15px !important; color: #ffffff !important; padding-top: 6px !important; border-top: 1px dashed #334155 !important;">
+          <span id="modalTotalLabel">Total a Pagar:</span>
+          <span style="color: #34d399 !important;" id="modalTotalMonto">$0.00</span>
+        </div>
       </div>
     </div>
 
     <!-- MODAL ACTIONS -->
-    <div style="display: flex !important; flex-direction: column !important; gap: 10px !important; padding-top: 8px !important;">
+    <div
+      style="display: flex !important; flex-direction: column !important; gap: 10px !important; padding-top: 8px !important;">
       <div style="display: flex !important; gap: 10px !important;">
-        <button id="btnMoverDesdeModal" style="flex: 1 !important; padding: 10px !important; background: #0284c7 !important; color: #ffffff !important; font-weight: 800 !important; font-size: 11px !important; border-radius: 10px !important; border: none !important; cursor: pointer !important; display: flex !important; align-items: center !important; justify-content: center !important; gap: 6px !important;">
+        <button id="btnMoverDesdeModal"
+          style="flex: 1 !important; padding: 10px !important; background: #0284c7 !important; color: #ffffff !important; font-weight: 800 !important; font-size: 11px !important; border-radius: 10px !important; border: none !important; cursor: pointer !important; display: flex !important; align-items: center !important; justify-content: center !important; gap: 6px !important;">
           <i class="fa-solid fa-arrow-right-arrow-left"></i> Mover esta Cuenta
         </button>
-        <button id="btnEnviarCocina" style="flex: 1 !important; padding: 10px !important; background: #f59e0b !important; color: #0f172a !important; font-weight: 900 !important; font-size: 11px !important; border-radius: 10px !important; border: none !important; cursor: pointer !important; display: flex !important; align-items: center !important; justify-content: center !important; gap: 6px !important;">
+        <button id="btnEnviarCocina"
+          style="flex: 1 !important; padding: 10px !important; background: #f59e0b !important; color: #0f172a !important; font-weight: 900 !important; font-size: 11px !important; border-radius: 10px !important; border: none !important; cursor: pointer !important; display: flex !important; align-items: center !important; justify-content: center !important; gap: 6px !important;">
           <i class="fa-solid fa-fire"></i> Enviar Cocina (KDS)
         </button>
       </div>
-      <button id="btnPrecuenta" style="width: 100% !important; padding: 10px !important; background: #1e293b !important; color: #cbd5e1 !important; font-weight: 700 !important; font-size: 11px !important; border-radius: 10px !important; border: 1px solid #334155 !important; cursor: pointer !important; display: flex !important; align-items: center !important; justify-content: center !important; gap: 6px !important;">
-        <i class="fa-solid fa-receipt" style="color: #38bdf8 !important;"></i> Imprimir Precuenta
-      </button>
+      <div style="display: flex !important; gap: 10px !important;">
+        <button id="btnPrecuenta" onclick="window.abrirPrecuenta();"
+          style="flex: 1 !important; padding: 10px !important; background: #1e293b !important; color: #cbd5e1 !important; font-weight: 700 !important; font-size: 11px !important; border-radius: 10px !important; border: 1px solid #334155 !important; cursor: pointer !important; display: flex !important; align-items: center !important; justify-content: center !important; gap: 6px !important;">
+          <i class="fa-solid fa-receipt" style="color: #38bdf8 !important;"></i> Imprimir Precuenta
+        </button>
+        <button id="btnLiberarSilla" onclick="window.liberarSillaActual();"
+          style="padding: 10px 14px !important; background: rgba(220, 38, 38, 0.2) !important; color: #f87171 !important; font-weight: 800 !important; font-size: 11px !important; border-radius: 10px !important; border: 1px solid rgba(239, 68, 68, 0.4) !important; cursor: pointer !important; display: flex !important; align-items: center !important; justify-content: center !important; gap: 6px !important;">
+          <i class="fa-solid fa-user-slash"></i> Liberar Silla
+        </button>
+        <button id="btnCerrarModalBottom" onclick="window.cerrarModalComanda();"
+          style="flex: 1 !important; padding: 10px !important; background: #334155 !important; color: #f8fafc !important; font-weight: 800 !important; font-size: 11px !important; border-radius: 10px !important; border: none !important; cursor: pointer !important; display: flex !important; align-items: center !important; justify-content: center !important; gap: 6px !important;">
+          <i class="fa-solid fa-arrow-left"></i> Regresar a Mesas
+        </button>
+      </div>
     </div>
 
   </div>
 </div>
 
+<!-- MODAL PRECUENTA TÉRMICA FORMAL CON DESGLOSE POR TRAMOS -->
+<div id="modalPrecuentaBackdrop" onclick="if (event.target === this) window.cerrarPrecuenta();">
+  <div
+    style="background: #ffffff !important; color: #0f172a !important; border-radius: 18px !important; padding: 24px !important; width: 100% !important; max-width: 420px !important; box-shadow: 0 25px 50px rgba(0,0,0,0.85) !important; font-family: 'Courier New', Courier, monospace !important; display: flex !important; flex-direction: column !important; gap: 12px !important;">
+    <div style="text-align: center !important; border-bottom: 1px dashed #94a3b8 !important; padding-bottom: 10px !important;">
+      <h3 style="font-size: 16px !important; font-weight: 900 !important; margin: 0 !important; text-transform: uppercase !important; color: #0f172a !important;">LA TERRAZA DE VIDA & SABOR</h3>
+      <p style="font-size: 11px !important; color: #475569 !important; margin: 2px 0 0 0 !important;">Palapa & Terraza Gourmet • RFC: VYS190820-ABC</p>
+      <p style="font-size: 11px !important; color: #475569 !important; margin: 2px 0 0 0 !important;" id="precuentaFecha">Fecha: 30/08/2026</p>
+      <div style="margin-top: 6px !important; font-size: 12px !important; font-weight: bold !important; color: #0f766e !important;" id="precuentaHeaderTag">PRECUENTA DE CONSUMO</div>
+    </div>
+
+    <!-- Tramos list for precuenta -->
+    <div id="precuentaTramosList" style="display: flex !important; flex-direction: column !important; gap: 10px !important; max-height: 260px !important; overflow-y: auto !important; font-size: 11px !important;">
+      <!-- Content populated dynamically -->
+    </div>
+
+    <div style="border-top: 1px dashed #94a3b8 !important; padding-top: 8px !important; font-size: 11px !important; display: flex !important; flex-direction: column !important; gap: 3px !important;">
+      <div style="display: flex !important; justify-content: space-between !important;"><span>SUBTOTAL:</span><span id="precuentaSubtotal" style="font-weight: bold;">$0.00</span></div>
+      <div style="display: flex !important; justify-content: space-between !important;"><span>IVA 16% TRASLADADO:</span><span id="precuentaIva" style="font-weight: bold;">$0.00</span></div>
+      <div style="display: flex !important; justify-content: space-between !important;"><span>PROPINA SUG. 10%:</span><span id="precuentaPropina" style="font-weight: bold;">$0.00</span></div>
+      <div style="display: flex !important; justify-content: space-between !important; font-size: 15px !important; font-weight: 900 !important; border-top: 1px solid #0f172a !important; padding-top: 6px !important; margin-top: 4px !important;">
+        <span>TOTAL:</span>
+        <span id="precuentaTotal" style="color: #047857; font-weight: 900;">$0.00</span>
+      </div>
+    </div>
+
+    <div style="text-align: center !important; font-size: 10px !important; color: #64748b !important; border-top: 1px dashed #cbd5e1 !important; padding-top: 8px !important;">
+      <p style="margin: 0 !important;">¡Gracias por su preferencia!</p>
+      <p style="margin: 2px 0 0 0 !important;">Comanda con Portavasos QR Registrado</p>
+    </div>
+
+    <div style="display: flex !important; gap: 8px !important; margin-top: 4px !important;">
+      <button onclick="window.print();" style="flex: 1 !important; padding: 10px !important; background: #0f172a !important; color: #ffffff !important; border: none !important; border-radius: 8px !important; font-size: 12px !important; font-weight: bold !important; cursor: pointer !important;">
+        🖨️ Imprimir
+      </button>
+      <button onclick="window.cerrarPrecuenta();" style="flex: 1 !important; padding: 10px !important; background: #e2e8f0 !important; color: #334155 !important; border: none !important; border-radius: 8px !important; font-size: 12px !important; font-weight: bold !important; cursor: pointer !important;">
+        ✕ Cerrar
+      </button>
+    </div>
+  </div>
+</div>
+
 <script>
-  (function() {
+  (function () {
     window.catalogProducts = [
       { id: 1, categoria_nombre: "Barra de Café & Infusiones", nombre: "Capuchino Especial V&S", precio: 68.00, icono: "☕" },
       { id: 2, categoria_nombre: "Barra de Café & Infusiones", nombre: "Espresso Italiano", precio: 48.00, icono: "☕" },
@@ -278,124 +670,351 @@
       { id: 10, categoria_nombre: "Bebidas & Coctelería de Autor", nombre: "Limonada Botánica", precio: 60.00, icono: "🍋" }
     ];
 
+    var DEFAULT_CUENTAS = {
+      '3-1': {
+        estado: 'ocupada',
+        qrId: 'PV-031',
+        comensalNombre: 'Comensal Portavasos #31',
+        items: [
+          { id: 4, nombre: 'Chilaquiles Verdes Pollo', notas: 'Sin cebolla • Salsa aparte', precio: 148.00, cantidad: 1, mesaId: 3, sillaNum: 1, hora: '12:15 PM' }
+        ],
+        historialUbicaciones: [
+          { mesaId: 3, sillaNum: 1, hora: '12:10 PM' }
+        ]
+      },
+      '3-2': {
+        estado: 'ocupada',
+        qrId: 'PV-032',
+        comensalNombre: 'Comensal Portavasos #32',
+        items: [
+          { id: 1, nombre: 'Capuchino Especial V&S', notas: 'Leche de almendras', precio: 68.00, cantidad: 1, mesaId: 3, sillaNum: 2, hora: '12:20 PM' }
+        ],
+        historialUbicaciones: [
+          { mesaId: 3, sillaNum: 2, hora: '12:20 PM' }
+        ]
+      }
+    };
+
+    function saveStateToStorage() {
+      try {
+        localStorage.setItem('palapa_cuentas_v1', JSON.stringify(window.palapaState.cuentas));
+      } catch (e) {}
+    }
+
+    function loadStateFromStorage() {
+      try {
+        var saved = localStorage.getItem('palapa_cuentas_v1');
+        if (saved) {
+          var parsed = JSON.parse(saved);
+          if (parsed && typeof parsed === 'object' && Object.keys(parsed).length > 0) {
+            return parsed;
+          }
+        }
+      } catch (e) {}
+      return JSON.parse(JSON.stringify(DEFAULT_CUENTAS));
+    }
+
     window.palapaState = {
       mesaSeleccionadaId: 3,
       sillaSeleccionadaNum: 1,
       categoriaFiltro: "Todos",
       modoMoverActivo: false,
       sillaOrigenMover: null,
-      cuentas: {
-        '3-1': {
-          estado: 'ocupada',
-          items: [
-            { id: 4, nombre: 'Chilaquiles Verdes Pollo', notas: 'Sin cebolla • Salsa aparte', precio: 148.00, cantidad: 1 }
-          ]
-        },
-        '3-2': {
-          estado: 'ocupada',
-          items: [
-            { id: 1, nombre: 'Capuchino Especial V&S', notas: 'Leche de almendras', precio: 68.00, cantidad: 1 }
-          ]
-        }
-      }
+      cuentas: loadStateFromStorage()
     };
 
-    // ── HTML5 Native Drag & Drop (attached ONCE at startup) ──
-    let _dragSrcMesa = null;
-    let _dragSrcSilla = null;
+    function resetDemoState() {
+      window.palapaState.cuentas = JSON.parse(JSON.stringify(DEFAULT_CUENTAS));
+      window.palapaState.mesaSeleccionadaId = 3;
+      window.palapaState.sillaSeleccionadaNum = 1;
+      saveStateToStorage();
+      cancelarModoMover();
+      cerrarModalComanda();
+      renderStateUI();
+      showDragToast('🔄 Estado reiniciado a demo inicial (Mesa 3 S1 y S2)', 'ok');
+    }
 
-    function limpiarDragState() {
-      document.querySelectorAll('.chair-btn-fixed').forEach(function(el) {
-        el.classList.remove('chair-dragging', 'chair-drag-target-valid', 'chair-drag-target-combine');
+    // ── Toast de notificación (reemplaza alert()) ──
+    var _toastTimer = null;
+    function showDragToast(msg, tipo) {
+      // tipo: 'ok' | 'warn' | 'err'
+      var t = document.getElementById('dragToast');
+      if (!t) return;
+      t.textContent = msg;
+      t.className = 'show toast-' + (tipo || 'ok');
+      if (_toastTimer) clearTimeout(_toastTimer);
+      _toastTimer = setTimeout(function () {
+        t.className = t.className.replace(' show', '').replace('show', '');
+      }, 3200);
+    }
+
+    // ── Mini-modal confirmación (reemplaza confirm()) ──
+    var _combineCallback = null;
+    function showCombineConfirm(srcMesa, srcSilla, tgtMesa, tgtSilla, onYes) {
+      var backdrop = document.getElementById('combineConfirmBackdrop');
+      var title = document.getElementById('combineConfirmTitle');
+      var msg = document.getElementById('combineConfirmMsg');
+      var detail = document.getElementById('combineConfirmDetail');
+      if (!backdrop) { onYes(); return; }
+
+      if (title) title.textContent = 'Combinar Cuentas';
+      if (msg) msg.textContent = 'Ambas sillas ya tienen consumos.';
+      if (detail) detail.innerHTML =
+        '<b style="color:#f59e0b;">Origen:</b> Mesa ' + srcMesa + ' Silla ' + srcSilla +
+        '<br><b style="color:#38bdf8;">Destino:</b> Mesa ' + tgtMesa + ' Silla ' + tgtSilla +
+        '<br><span style="color:#64748b;font-size:11px;">Los consumos del origen se agregarán a la silla destino.</span>';
+
+      _combineCallback = onYes;
+      backdrop.classList.add('show');
+
+      document.getElementById('combineConfirmYes').onclick = function () {
+        backdrop.classList.remove('show');
+        if (_combineCallback) _combineCallback();
+        _combineCallback = null;
+      };
+      document.getElementById('combineConfirmNo').onclick = function () {
+        backdrop.classList.remove('show');
+        _combineCallback = null;
+        cancelarModoMover();
+      };
+    }
+
+    // ════════════════════════════════════════════════════════════
+    //  DRAG DE SILLAS — patrón mousedown/mousemove/mouseup
+    //  Igual al resize de VidaSpa: eventos en document para que
+    //  z-index y pointer-events de elementos hijos NO interfieran.
+    //  document.elementFromPoint() en mouseup detecta la silla destino.
+    // ════════════════════════════════════════════════════════════
+
+    var _ms = {
+      active: false,   // mousedown activo esperando movimiento
+      dragging: false,   // ya pasó el umbral → modo drag visual
+      srcMesa: null,
+      srcSilla: null,
+      startX: 0,
+      startY: 0,
+      ghost: null
+    };
+    var _wasDrag = false; // bloquea el click que dispara el browser post-mouseup
+    var DRAG_THRESHOLD = 6; // píxeles mínimos para activar drag
+
+    function _limpiarDragVisual() {
+      document.querySelectorAll('.chair-btn-fixed').forEach(function (c) {
+        c.classList.remove('chair-dragging', 'chair-drag-target-valid', 'chair-drag-target-combine');
       });
+      if (_ms.ghost && _ms.ghost.parentNode) {
+        _ms.ghost.parentNode.removeChild(_ms.ghost);
+      }
+      _ms.ghost = null;
+    }
+
+    function getClosestChair(mesaId, clientX, clientY, srcM, srcS) {
+      var minDist = Infinity;
+      var closest = null;
+      for (var s = 1; s <= 4; s++) {
+        if (mesaId === srcM && s === srcS) continue;
+        var el = document.getElementById('chair-' + mesaId + '-' + s);
+        if (!el) continue;
+        var rect = el.getBoundingClientRect();
+        var cx = rect.left + rect.width / 2;
+        var cy = rect.top + rect.height / 2;
+        var dist = Math.hypot(clientX - cx, clientY - cy);
+        if (dist < minDist) { minDist = dist; closest = { mesa: mesaId, silla: s }; }
+      }
+      return closest;
+    }
+
+    function _resolveTargetChair(clientX, clientY, srcM, srcS) {
+      var elem = document.elementFromPoint(clientX, clientY);
+
+      // 1. Direct hit on chair
+      if (elem) {
+        var chairEl = elem.closest ? elem.closest('.chair-btn-fixed') : null;
+        if (chairEl) {
+          var p = chairEl.id.split('-');
+          var tM = parseInt(p[1]);
+          var tS = parseInt(p[2]);
+          if (!(tM === srcM && tS === srcS)) {
+            return { mesaId: tM, sillaNum: tS, el: chairEl };
+          }
+        }
+
+        // 2. Hit on table box or table circle
+        var tableBox = elem.closest ? elem.closest('.table-box-220') : null;
+        var tableCircle = elem.closest ? elem.closest('.table-circle-fixed') : null;
+        var mesaId = null;
+        if (tableBox && tableBox.id) {
+          mesaId = parseInt(tableBox.id.replace('table-box-', ''));
+        } else if (tableCircle && tableCircle.id) {
+          mesaId = parseInt(tableCircle.id.replace('table-circle-', ''));
+        }
+
+        if (mesaId) {
+          var closest = getClosestChair(mesaId, clientX, clientY, srcM, srcS);
+          if (closest) {
+            var cel = document.getElementById('chair-' + closest.mesa + '-' + closest.silla);
+            return { mesaId: closest.mesa, sillaNum: closest.silla, el: cel };
+          }
+        }
+      }
+
+      // 3. Proximity fallback: find closest chair within 150px
+      var globalMinDist = Infinity;
+      var globalClosest = null;
+      for (var m = 1; m <= 3; m++) {
+        for (var s = 1; s <= 4; s++) {
+          if (m === srcM && s === srcS) continue;
+          var cel = document.getElementById('chair-' + m + '-' + s);
+          if (!cel) continue;
+          var rect = cel.getBoundingClientRect();
+          var cx = rect.left + rect.width / 2;
+          var cy = rect.top + rect.height / 2;
+          var dist = Math.hypot(clientX - cx, clientY - cy);
+          if (dist < globalMinDist && dist < 150) {
+            globalMinDist = dist;
+            globalClosest = { mesaId: m, sillaNum: s, el: cel };
+          }
+        }
+      }
+
+      return globalClosest;
+    }
+
+    function _chairMousedown(e, mesaId, sillaNum) {
+      // Solo button izquierdo y solo sillas con cuenta u ocupadas
+      if (e.button !== 0) return;
+      var key = mesaId + '-' + sillaNum;
+      var cuenta = window.palapaState.cuentas[key];
+      var isOccupied = !!(cuenta && (cuenta.estado === 'ocupada' || (cuenta.items && cuenta.items.length > 0)));
+      if (!cuenta || !isOccupied) return;
+
+      _ms.active = true;
+      _ms.dragging = false;
+      _ms.srcMesa = mesaId;
+      _ms.srcSilla = sillaNum;
+      _ms.startX = e.clientX;
+      _ms.startY = e.clientY;
+
+      document.addEventListener('mousemove', _chairMousemove);
+      document.addEventListener('mouseup', _chairMouseup);
+    }
+
+    function _chairMousemove(e) {
+      if (!_ms.active) return;
+
+      var dx = Math.abs(e.clientX - _ms.startX);
+      var dy = Math.abs(e.clientY - _ms.startY);
+
+      // ── Activar modo drag si pasó el umbral ──
+      if (!_ms.dragging && (dx > DRAG_THRESHOLD || dy > DRAG_THRESHOLD)) {
+        _ms.dragging = true;
+        cerrarModalComanda();
+        window.palapaState.modoMoverActivo = true;
+        window.palapaState.sillaOrigenMover = { mesaId: _ms.srcMesa, sillaNum: _ms.srcSilla };
+
+        // Marcar silla origen
+        var srcEl = document.getElementById('chair-' + _ms.srcMesa + '-' + _ms.srcSilla);
+        if (srcEl) srcEl.classList.add('chair-dragging');
+
+        // Ghost que sigue al cursor (pointer-events:none → no bloquea elementFromPoint)
+        var ghost = document.createElement('div');
+        ghost.style.cssText = [
+          'position:fixed', 'z-index:99999', 'pointer-events:none',
+          'padding:8px 18px', 'background:#0f172a', 'color:#38bdf8',
+          'font-size:13px', 'font-weight:800', 'border-radius:12px',
+          'border:2px solid #38bdf8', 'white-space:nowrap',
+          'box-shadow:0 8px 28px rgba(0,0,0,0.85)',
+          'transform:translate(-50%,-130%)',
+          'left:' + e.clientX + 'px', 'top:' + e.clientY + 'px'
+        ].join(';') + ';';
+        var key = _ms.srcMesa + '-' + _ms.srcSilla;
+        var cuenta = window.palapaState.cuentas[key] || { items: [] };
+        var total = 0;
+        cuenta.items.forEach(function (i) { total += i.precio * i.cantidad; });
+        ghost.textContent = '\uD83E\uDE91 M' + _ms.srcMesa + ' \u00b7 S' + _ms.srcSilla + '  $' + total.toFixed(2);
+        document.body.appendChild(ghost);
+        _ms.ghost = ghost;
+
+        // Banner
+        var bt = document.getElementById('bannerText');
+        var bc = document.getElementById('btnCancelMove');
+        if (bt) bt.innerHTML = '\uD83E\uDE91 <b style="color:#38bdf8;">ARRASTRANDO</b> Mesa ' + _ms.srcMesa + ' Silla ' + _ms.srcSilla + ' \u2014 Suelta sobre la silla destino (misma o diferente mesa).';
+        if (bc) bc.style.setProperty('display', 'block', 'important');
+      }
+
+      if (!_ms.dragging) return;
+
+      // ── Mover ghost ──
+      if (_ms.ghost) {
+        _ms.ghost.style.left = e.clientX + 'px';
+        _ms.ghost.style.top = e.clientY + 'px';
+      }
+
+      // ── Highlight silla destino detectada ──
+      document.querySelectorAll('.chair-btn-fixed').forEach(function (c) {
+        c.classList.remove('chair-drag-target-valid', 'chair-drag-target-combine');
+      });
+
+      var target = _resolveTargetChair(e.clientX, e.clientY, _ms.srcMesa, _ms.srcSilla);
+      if (target && target.el) {
+        var tgt = window.palapaState.cuentas[target.mesaId + '-' + target.sillaNum];
+        var busy = tgt && tgt.items && tgt.items.length > 0;
+        target.el.classList.add(busy ? 'chair-drag-target-combine' : 'chair-drag-target-valid');
+      }
+    }
+
+    function _chairMouseup(e) {
+      document.removeEventListener('mousemove', _chairMousemove);
+      document.removeEventListener('mouseup', _chairMouseup);
+
+      var wasRealDrag = _ms.dragging;
+      var srcM = _ms.srcMesa;
+      var srcS = _ms.srcSilla;
+
+      _limpiarDragVisual();
+      _ms.active = false;
+      _ms.dragging = false;
+      _ms.srcMesa = null;
+      _ms.srcSilla = null;
+
+      if (!wasRealDrag) {
+        return;
+      }
+
+      // ── Es un drag real: bloquear el click post-mouseup ──
+      _wasDrag = true;
+      setTimeout(function () { _wasDrag = false; }, 80);
+
+      // Resolver la silla destino
+      var target = _resolveTargetChair(e.clientX, e.clientY, srcM, srcS);
+      if (target) {
+        completarMovimiento(target.mesaId, target.sillaNum, srcM, srcS);
+      } else {
+        cancelarModoMover();
+        showDragToast('\u26a0 Suelta sobre una silla o mesa para mover la cuenta', 'warn');
+      }
     }
 
     function setupDragListeners() {
+      // Asignar mousedown a TODAS las sillas (no solo ocupadas).
+      // _chairMousedown ya verifica si tiene cuenta antes de activar.
       for (var m = 1; m <= 3; m++) {
         for (var s = 1; s <= 4; s++) {
-          (function(mesaId, sillaNum) {
+          (function (mesaId, sillaNum) {
             var el = document.getElementById('chair-' + mesaId + '-' + sillaNum);
             if (!el) return;
-
-            // dragstart — only fires if draggable="true" is set on the element
-            el.addEventListener('dragstart', function(e) {
-              var key = mesaId + '-' + sillaNum;
-              var cuenta = window.palapaState.cuentas[key];
-              if (!cuenta || !cuenta.items || cuenta.items.length === 0) {
-                e.preventDefault();
-                return;
-              }
-              _dragSrcMesa = mesaId;
-              _dragSrcSilla = sillaNum;
-              window.palapaState.modoMoverActivo = true;
-              window.palapaState.sillaOrigenMover = { mesaId: mesaId, sillaNum: sillaNum };
-
-              // Custom ghost drag image
-              var ghost = document.createElement('div');
-              ghost.style.cssText = 'position:fixed;top:-300px;left:-300px;padding:8px 16px;background:#0284c7;color:#fff;font-size:13px;font-weight:800;border-radius:12px;border:2px solid #38bdf8;white-space:nowrap;box-shadow:0 8px 24px rgba(0,0,0,0.6);';
-              var total = 0;
-              cuenta.items.forEach(function(i) { total += i.precio * i.cantidad; });
-              ghost.textContent = '\uD83E\uDE91 M' + mesaId + ' Silla ' + sillaNum + '  \u2022  $' + total.toFixed(2);
-              document.body.appendChild(ghost);
-              try { e.dataTransfer.setDragImage(ghost, 90, 22); } catch(err) {}
-              setTimeout(function() { if (ghost.parentNode) ghost.parentNode.removeChild(ghost); }, 0);
-
-              e.dataTransfer.effectAllowed = 'move';
-              try { e.dataTransfer.setData('text/plain', key); } catch(err) {}
-
-              var self = this;
-              setTimeout(function() { self.classList.add('chair-dragging'); }, 0);
-
-              var bannerText = document.getElementById('bannerText');
-              var btnCancel  = document.getElementById('btnCancelMove');
-              if (bannerText) bannerText.innerHTML = '<b style="color:#38bdf8;">ARRASTRANDO:</b> Mesa ' + mesaId + ' Silla ' + sillaNum + '. Suelta sobre la silla destino.';
-              if (btnCancel)  btnCancel.style.display = 'block';
+            el.addEventListener('mousedown', function (e) {
+              _chairMousedown(e, mesaId, sillaNum);
             });
-
-            el.addEventListener('dragend', function() {
-              this.classList.remove('chair-dragging');
-              limpiarDragState();
-              _dragSrcMesa = null;
-              _dragSrcSilla = null;
-              if (window.palapaState.modoMoverActivo) cancelarModoMover();
-            });
-
-            el.addEventListener('dragover', function(e) {
-              if (_dragSrcMesa === null) return;
-              if (mesaId === _dragSrcMesa && sillaNum === _dragSrcSilla) return;
-              e.preventDefault();
-              e.dataTransfer.dropEffect = 'move';
-              limpiarDragState();
-              var key = mesaId + '-' + sillaNum;
-              var tgt = window.palapaState.cuentas[key];
-              var tgtBusy = tgt && tgt.items && tgt.items.length > 0;
-              this.classList.add(tgtBusy ? 'chair-drag-target-combine' : 'chair-drag-target-valid');
-            });
-
-            el.addEventListener('dragleave', function(e) {
-              // Only remove highlight if we actually left this element
-              if (!this.contains(e.relatedTarget)) {
-                this.classList.remove('chair-drag-target-valid', 'chair-drag-target-combine');
-              }
-            });
-
-            el.addEventListener('drop', function(e) {
-              e.preventDefault();
-              this.classList.remove('chair-drag-target-valid', 'chair-drag-target-combine');
-              if (_dragSrcMesa !== null && !(mesaId === _dragSrcMesa && sillaNum === _dragSrcSilla)) {
-                completarMovimiento(mesaId, sillaNum);
-              }
-              _dragSrcMesa = null;
-              _dragSrcSilla = null;
-            });
-
           })(m, s);
         }
       }
     }
 
     // Global Event Delegation for all Clicks
-    document.addEventListener('click', function(e) {
+    document.addEventListener('click', function (e) {
+      // Ignorar click que el browser dispara tras un drag con mouse
+      if (_wasDrag) return;
       // 1. Chair clicked
       const chairNode = e.target.closest('.chair-btn-fixed');
       if (chairNode) {
@@ -430,13 +1049,30 @@
       }
 
       // 4. Action buttons
+      if (e.target.closest('#btnResetDemo')) { resetDemoState(); return; }
       if (e.target.closest('#btnVerComandaActiva')) { abrirModalComandaActual(); return; }
       if (e.target.closest('#btnMoverComensalMain')) { iniciarModoMover(); return; }
       if (e.target.closest('#btnMoverDesdeModal')) { cerrarModalComanda(); iniciarModoMover(); return; }
-      if (e.target.closest('#btnCloseModal')) { cerrarModalComanda(); return; }
+      if (e.target.closest('#btnCloseModal') || e.target.closest('#btnCerrarModalBottom')) { cerrarModalComanda(); return; }
       if (e.target.closest('#btnCancelMove')) { cancelarModoMover(); return; }
       if (e.target.closest('#btnEnviarCocina')) { alert(`Comanda enviada a Cocina (KDS)`); cerrarModalComanda(); return; }
       if (e.target.closest('#btnPrecuenta')) { alert(`Imprimiendo precuenta`); cerrarModalComanda(); return; }
+
+      // 5. Click outside modal content (on backdrop) closes modal
+      if (e.target.id === 'modalComandaBackdrop') {
+        cerrarModalComanda();
+        return;
+      }
+    });
+
+    // Escape key closes modals and cancels move mode
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') {
+        cerrarModalComanda();
+        cancelarModoMover();
+        var cb = document.getElementById('combineConfirmBackdrop');
+        if (cb) cb.classList.remove('show');
+      }
     });
 
     function handleSillaClick(mesaId, sillaNum) {
@@ -444,6 +1080,27 @@
         completarMovimiento(mesaId, sillaNum);
         return;
       }
+
+      const key = `${mesaId}-${sillaNum}`;
+
+      // Si la silla no tiene cuenta, el mesero la registra de inmediato como OCUPADA (comensal presencial ubicado)
+      if (!window.palapaState.cuentas[key]) {
+        const nowStr = (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        window.palapaState.cuentas[key] = {
+          estado: 'ocupada',
+          qrId: 'PV-0' + mesaId + sillaNum,
+          comensalNombre: 'Comensal Silla ' + sillaNum,
+          items: [],
+          historialUbicaciones: [
+            { mesaId: mesaId, sillaNum: sillaNum, hora: nowStr }
+          ],
+          creadoPor: 'mesero_presencial',
+          horaLlegada: nowStr
+        };
+        saveStateToStorage();
+        showDragToast('🪑 Comensal ubicado en Mesa ' + mesaId + ' Silla ' + sillaNum + ' (Silla ocupada)', 'ok');
+      }
+
       window.palapaState.mesaSeleccionadaId = mesaId;
       window.palapaState.sillaSeleccionadaNum = sillaNum;
       renderStateUI();
@@ -466,15 +1123,16 @@
       const sillaNum = window.palapaState.sillaSeleccionadaNum;
 
       if (sillaNum === null) {
-        alert("Por favor selecciona una silla específica para mover.");
+        showDragToast("Por favor selecciona una silla específica para mover.", "warn");
         return;
       }
 
       const key = `${mesaId}-${sillaNum}`;
       const cuenta = window.palapaState.cuentas[key];
+      const isOccupied = !!(cuenta && (cuenta.estado === 'ocupada' || (cuenta.items && cuenta.items.length > 0)));
 
-      if (!cuenta || !cuenta.items || cuenta.items.length === 0) {
-        alert(`La Silla ${sillaNum} de Mesa ${mesaId} está vacía. Selecciona una silla ocupada para mover.`);
+      if (!isOccupied) {
+        showDragToast(`⚠ La Silla ${sillaNum} de Mesa ${mesaId} está disponible. Selecciona una silla ocupada para mover.`, "warn");
         return;
       }
 
@@ -492,12 +1150,20 @@
       renderStateUI();
     }
 
+    function limpiarDragState() {
+      _limpiarDragVisual();
+    }
+
     function cancelarModoMover() {
       window.palapaState.modoMoverActivo = false;
       window.palapaState.sillaOrigenMover = null;
-      _dragSrcMesa = null;
-      _dragSrcSilla = null;
-      limpiarDragState();
+      if (typeof _ms !== 'undefined') {
+        _ms.active   = false;
+        _ms.dragging = false;
+        _ms.srcMesa  = null;
+        _ms.srcSilla = null;
+      }
+      _limpiarDragVisual();
 
       const bannerText = document.getElementById('bannerText');
       const btnCancel = document.getElementById('btnCancelMove');
@@ -510,36 +1176,74 @@
       renderStateUI();
     }
 
-    function completarMovimiento(targetMesaId, targetSillaNum) {
-      const origen = window.palapaState.sillaOrigenMover;
-      if (!origen) return;
+    function completarMovimiento(targetMesaId, targetSillaNum, overrideSrcMesa, overrideSrcSilla) {
+      // Soporte dual: modo click (sillaOrigenMover) y drag & drop (override params)
+      var srcMesa = overrideSrcMesa !== undefined ? overrideSrcMesa : (window.palapaState.sillaOrigenMover ? window.palapaState.sillaOrigenMover.mesaId : null);
+      var srcSilla = overrideSrcSilla !== undefined ? overrideSrcSilla : (window.palapaState.sillaOrigenMover ? window.palapaState.sillaOrigenMover.sillaNum : null);
 
-      if (origen.mesaId === targetMesaId && origen.sillaNum === targetSillaNum) {
-        cancelarModoMover();
-        return;
+      if (srcMesa === null || srcSilla === null) return;
+      if (srcMesa === targetMesaId && srcSilla === targetSillaNum) {
+        cancelarModoMover(); return;
       }
 
-      const sourceKey = `${origen.mesaId}-${origen.sillaNum}`;
-      const targetKey = `${targetMesaId}-${targetSillaNum}`;
+      // Sincronizar estado por si viene de drag (sillaOrigenMover puede ser null)
+      if (!window.palapaState.sillaOrigenMover) {
+        window.palapaState.sillaOrigenMover = { mesaId: srcMesa, sillaNum: srcSilla };
+      }
 
-      const sourceCuenta = window.palapaState.cuentas[sourceKey];
-      const targetCuenta = window.palapaState.cuentas[targetKey];
+      var sourceKey = srcMesa + '-' + srcSilla;
+      var targetKey = targetMesaId + '-' + targetSillaNum;
+      var sourceCuenta = window.palapaState.cuentas[sourceKey];
+      var targetCuenta = window.palapaState.cuentas[targetKey];
+      var isSourceOccupied = !!(sourceCuenta && (sourceCuenta.estado === 'ocupada' || (sourceCuenta.items && sourceCuenta.items.length > 0)));
 
-      if (targetCuenta && targetCuenta.items && targetCuenta.items.length > 0) {
-        if (confirm(`¿Deseas combinar la cuenta de Mesa ${origen.mesaId} Silla ${origen.sillaNum} con la Silla ${targetSillaNum} de Mesa ${targetMesaId}?`)) {
-          targetCuenta.items = targetCuenta.items.concat(sourceCuenta.items);
+      if (!isSourceOccupied) {
+        showDragToast('⚠ La silla origen ya no está ocupada', 'warn');
+        cancelarModoMover(); return;
+      }
+
+      var nowStr = (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      if (sourceCuenta.items) {
+        sourceCuenta.items.forEach(function (i) {
+          if (i.mesaId === undefined) { i.mesaId = srcMesa; i.sillaNum = srcSilla; }
+        });
+      }
+      sourceCuenta.historialUbicaciones = sourceCuenta.historialUbicaciones || [{ mesaId: srcMesa, sillaNum: srcSilla, hora: nowStr }];
+      var yaExiste = sourceCuenta.historialUbicaciones.some(function (u) { return u.mesaId === targetMesaId && u.sillaNum === targetSillaNum; });
+      if (!yaExiste) {
+        sourceCuenta.historialUbicaciones.push({ mesaId: targetMesaId, sillaNum: targetSillaNum, hora: nowStr });
+      }
+
+      var isTargetOccupied = !!(targetCuenta && (targetCuenta.estado === 'ocupada' || (targetCuenta.items && targetCuenta.items.length > 0)));
+      var targetHasItems = targetCuenta && targetCuenta.items && targetCuenta.items.length > 0;
+      var sourceHasItems = sourceCuenta.items && sourceCuenta.items.length > 0;
+
+      if (isTargetOccupied && (targetHasItems || sourceHasItems)) {
+        // Silla destino ocupada y con consumos — pedir confirmación sin alert()
+        showCombineConfirm(srcMesa, srcSilla, targetMesaId, targetSillaNum, function () {
+          // onYes: combinar
+          targetCuenta.items = (targetCuenta.items || []).concat(sourceCuenta.items || []);
           delete window.palapaState.cuentas[sourceKey];
-          alert(`¡Cuentas combinadas con éxito en Mesa ${targetMesaId} Silla ${targetSillaNum}!`);
-        }
+          window.palapaState.mesaSeleccionadaId = targetMesaId;
+          window.palapaState.sillaSeleccionadaNum = targetSillaNum;
+          saveStateToStorage();
+          cancelarModoMover();
+          showDragToast('✅ Cuentas combinadas en Mesa ' + targetMesaId + ' Silla ' + targetSillaNum, 'ok');
+        });
       } else {
-        window.palapaState.cuentas[targetKey] = sourceCuenta;
+        // Silla destino libre o sin consumos — mover comensal/cuenta
+        if (targetCuenta && targetCuenta.items && targetCuenta.items.length > 0) {
+          // Destino tiene items, origen estaba vacía
+        } else {
+          window.palapaState.cuentas[targetKey] = sourceCuenta;
+        }
         delete window.palapaState.cuentas[sourceKey];
-        alert(`¡Cuenta movida exitosamente de Mesa ${origen.mesaId} Silla ${origen.sillaNum} -> Mesa ${targetMesaId} Silla ${targetSillaNum}!`);
+        window.palapaState.mesaSeleccionadaId = targetMesaId;
+        window.palapaState.sillaSeleccionadaNum = targetSillaNum;
+        saveStateToStorage();
+        cancelarModoMover();
+        showDragToast('✅ Comensal trasladado → Mesa ' + targetMesaId + ' Silla ' + targetSillaNum, 'ok');
       }
-
-      window.palapaState.mesaSeleccionadaId = targetMesaId;
-      window.palapaState.sillaSeleccionadaNum = targetSillaNum;
-      cancelarModoMover();
     }
 
     function abrirModalComandaActual() {
@@ -551,8 +1255,11 @@
       const subtitle = document.getElementById('modalSubtitle');
       const header = document.getElementById('modalItemsHeader');
       const container = document.getElementById('modalItemsList');
-      const totalLabel = document.getElementById('modalTotalLabel');
-      const totalMonto = document.getElementById('modalTotalMonto');
+      const subtotalMontoEl = document.getElementById('modalSubtotalMonto');
+      const ivaMontoEl = document.getElementById('modalIvaMonto');
+      const propinaMontoEl = document.getElementById('modalPropinaMonto');
+      const totalMontoEl = document.getElementById('modalTotalMonto');
+      const totalLabelEl = document.getElementById('modalTotalLabel');
 
       if (!container || !modal) return;
       container.innerHTML = '';
@@ -560,36 +1267,127 @@
       if (sillaNum !== null) {
         const key = `${mesaId}-${sillaNum}`;
         const cuenta = window.palapaState.cuentas[key] || { items: [] };
+        const qrId = cuenta.qrId || ('PV-0' + mesaId + sillaNum);
 
-        if (title) title.innerHTML = `<i class="fa-solid fa-receipt" style="color: #34d399;"></i> Ticket Silla ${sillaNum}`;
-        if (subtitle) subtitle.innerText = `Mesa ${mesaId} • Asignación Individual`;
-        if (header) header.innerText = `Consumos en Silla ${sillaNum}:`;
+        if (title) title.innerHTML = `<i class="fa-solid fa-receipt" style="color: #34d399;"></i> Ticket Silla ${sillaNum} <span style="font-size: 11px; background: #1e293b; color: #38bdf8; padding: 2px 8px; border-radius: 6px; border: 1px solid #334155; margin-left: 6px;">🏷️ QR ${qrId}</span>`;
+        if (subtitle) subtitle.innerText = `Mesa ${mesaId} • Ubicación Actual • ${cuenta.creadoPor === 'mesero_presencial' ? 'Comensal Ubicado Presencialmente' : 'Registro QR'}`;
+        if (header) header.innerText = `Detalle de Consumos por Ubicación:`;
 
-        let total = 0;
         if (!cuenta.items || cuenta.items.length === 0) {
-          container.innerHTML = `<div style="text-align: center; padding: 20px; color: #64748b; font-size: 12px;">Silla vacía. Marca platillos desde el catálogo del panel derecho para iniciar la orden.</div>`;
-        } else {
-          cuenta.items.forEach((item, idx) => {
-            const sub = item.precio * item.cantidad;
-            total += sub;
-            const row = document.createElement('div');
-            row.style.cssText = 'display: flex !important; justify-content: space-between !important; align-items: center !important; background: #0f172a !important; padding: 10px 12px !important; border-radius: 10px !important; border: 1px solid #1e293b !important;';
-            row.innerHTML = `
+          container.innerHTML = `
+            <div style="background: rgba(15, 23, 42, 0.8) !important; border: 1px dashed #059669 !important; border-radius: 14px !important; padding: 18px !important; text-align: center !important; display: flex !important; flex-direction: column !important; align-items: center !important; gap: 8px !important;">
+              <div style="width: 42px !important; height: 42px !important; border-radius: 50% !important; background: rgba(16, 185, 129, 0.15) !important; border: 2px solid #10b981 !important; display: flex !important; align-items: center !important; justify-content: center !important; font-size: 18px !important; color: #34d399 !important;">
+                <i class="fa-solid fa-user-check"></i>
+              </div>
               <div>
-                <span style="font-size: 12px; font-weight: 700; color: #ffffff; display: block;">${item.cantidad}x ${item.nombre}</span>
-                <span style="font-size: 10px; color: #94a3b8; font-style: italic;">${item.notas || ''}</span>
+                <div style="font-size: 13px !important; font-weight: 800 !important; color: #ffffff !important;">Comensal Ubicado en Silla ${sillaNum}</div>
+                <div style="font-size: 11px !important; color: #94a3b8 !important; margin-top: 3px !important;">La silla está registrada como <b style="color: #fbbf24;">OCUPADA</b> (ubicación presencial).</div>
               </div>
-              <div style="display: flex; align-items: center; gap: 8px;">
-                <span style="font-size: 13px; font-weight: 900; color: #34d399;">$${sub.toFixed(2)}</span>
-                <button onclick="window.eliminarItemModal('${key}', ${idx})" style="background: transparent; border: none; color: #f87171; cursor: pointer;"><i class="fa-solid fa-trash-can"></i></button>
+              <div style="font-size: 11px !important; color: #34d399 !important; font-weight: 700 !important; background: rgba(5, 150, 105, 0.15) !important; padding: 4px 12px !important; border-radius: 20px !important; border: 1px solid rgba(52, 211, 153, 0.3) !important; margin-top: 4px !important;">
+                👉 Selecciona platillos del catálogo a la derecha para iniciar la orden
               </div>
-            `;
-            container.appendChild(row);
+            </div>
+          `;
+          if (subtotalMontoEl) subtotalMontoEl.innerText = '$0.00';
+          if (ivaMontoEl) ivaMontoEl.innerText = '$0.00';
+          if (propinaMontoEl) propinaMontoEl.innerText = '$0.00';
+          if (totalMontoEl) totalMontoEl.innerText = '$0.00';
+        } else {
+          // Agrupar consumos por Tramo / Ubicación donde se ordenaron
+          var tramosMap = {};
+          cuenta.items.forEach((it, idx) => {
+            var tMesa = it.mesaId !== undefined ? it.mesaId : mesaId;
+            var tSilla = it.sillaNum !== undefined ? it.sillaNum : sillaNum;
+            var tKey = tMesa + '-' + tSilla;
+            if (!tramosMap[tKey]) {
+              tramosMap[tKey] = {
+                mesaId: tMesa,
+                sillaNum: tSilla,
+                items: [],
+                subtotal: 0
+              };
+            }
+            tramosMap[tKey].items.push({ item: it, originalIdx: idx });
+            tramosMap[tKey].subtotal += (it.precio * it.cantidad);
           });
-        }
 
-        if (totalLabel) totalLabel.innerText = `Subtotal Silla ${sillaNum}:`;
-        if (totalMonto) totalMonto.innerText = `$${total.toFixed(2)}`;
+          var tramoKeys = Object.keys(tramosMap);
+          var totalNeto = 0;
+
+          // Configurar contenedor en 2 columnas verticales si hay más de 1 tramo
+          if (tramoKeys.length > 1) {
+            container.style.cssText = 'display: grid !important; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)) !important; gap: 12px !important; max-height: 280px !important; overflow-y: auto !important;';
+          } else {
+            container.style.cssText = 'display: flex !important; flex-direction: column !important; gap: 8px !important; max-height: 260px !important; overflow-y: auto !important;';
+          }
+
+          tramoKeys.forEach((tKey, tIdx) => {
+            var tramo = tramosMap[tKey];
+            totalNeto += tramo.subtotal;
+            var isCurrent = (tramo.mesaId === mesaId && tramo.sillaNum === sillaNum);
+
+            var tramoCard = document.createElement('div');
+            tramoCard.style.cssText = 'background: #020617 !important; border: 1px solid ' + (isCurrent ? '#059669' : '#334155') + ' !important; border-radius: 14px !important; padding: 12px !important; display: flex !important; flex-direction: column !important; justify-content: space-between !important; gap: 8px !important; box-shadow: inset 0 0 15px rgba(0,0,0,0.5) !important;';
+
+            var tramoHeader = document.createElement('div');
+            tramoHeader.style.cssText = 'display: flex !important; justify-content: space-between !important; align-items: center !important; padding-bottom: 8px !important; border-bottom: 1px dashed ' + (isCurrent ? '#059669' : '#475569') + ' !important; font-size: 11px !important;';
+            tramoHeader.innerHTML = `
+              <div style="display: flex; flex-direction: column; gap: 2px;">
+                <span style="font-weight: 900; color: ${isCurrent ? '#34d399' : '#fbbf24'}; font-size: 12px;">
+                  <i class="fa-solid fa-receipt" style="margin-right: 4px;"></i> Ticket Tramo ${tIdx + 1}
+                </span>
+                <span style="font-size: 10px; color: #94a3b8; font-weight: bold;">Mesa ${tramo.mesaId} • Silla ${tramo.sillaNum}</span>
+              </div>
+              <span style="background: ${isCurrent ? 'rgba(16,185,129,0.2)' : 'rgba(245,158,11,0.2)'}; color: ${isCurrent ? '#34d399' : '#fbbf24'}; font-size: 9px; font-weight: 800; padding: 2px 6px; border-radius: 6px; text-transform: uppercase;">
+                ${isCurrent ? 'Actual' : 'Histórico'}
+              </span>
+            `;
+            tramoCard.appendChild(tramoHeader);
+
+            var itemsWrapper = document.createElement('div');
+            itemsWrapper.style.cssText = 'display: flex !important; flex-direction: column !important; gap: 6px !important; flex: 1 !important;';
+
+            tramo.items.forEach(obj => {
+              var it = obj.item;
+              var sub = it.precio * it.cantidad;
+              var row = document.createElement('div');
+              row.style.cssText = 'display: flex !important; justify-content: space-between !important; align-items: center !important; background: #0f172a !important; padding: 6px 8px !important; border-radius: 8px !important; border: 1px solid #1e293b !important; font-size: 11px !important;';
+              row.innerHTML = `
+                <div style="flex: 1; padding-right: 6px;">
+                  <span style="font-weight: 700; color: #ffffff; display: block; line-height: 1.2;">${it.cantidad}x ${it.nombre}</span>
+                  <span style="font-size: 9px; color: #94a3b8; font-style: italic;">${it.notas ? it.notas + ' • ' : ''}${it.hora || ''}</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 6px;">
+                  <span style="font-weight: 900; color: #34d399; font-size: 11px;">$${sub.toFixed(2)}</span>
+                  <button onclick="window.eliminarItemModal('${key}', ${obj.originalIdx})" style="background: transparent; border: none; color: #f87171; cursor: pointer; padding: 2px;"><i class="fa-solid fa-trash-can" style="font-size: 10px;"></i></button>
+                </div>
+              `;
+              itemsWrapper.appendChild(row);
+            });
+            tramoCard.appendChild(itemsWrapper);
+
+            var tramoFooter = document.createElement('div');
+            tramoFooter.style.cssText = 'display: flex !important; justify-content: space-between !important; align-items: center !important; padding-top: 6px !important; border-top: 1px dashed #334155 !important; font-size: 11px !important; margin-top: 4px !important;';
+            tramoFooter.innerHTML = `
+              <span style="color: #94a3b8; font-weight: 600;">Subtotal Tramo ${tIdx + 1}:</span>
+              <span style="color: #ffffff; font-weight: 900;">$${tramo.subtotal.toFixed(2)}</span>
+            `;
+            tramoCard.appendChild(tramoFooter);
+
+            container.appendChild(tramoCard);
+          });
+
+          // Cálculos fiscales y consolidados
+          var ivaVal = totalNeto * 0.16;
+          var propinaVal = totalNeto * 0.10;
+          var totalFinal = totalNeto + ivaVal;
+
+          if (subtotalMontoEl) subtotalMontoEl.innerText = `$${totalNeto.toFixed(2)}`;
+          if (ivaMontoEl) ivaMontoEl.innerText = `$${ivaVal.toFixed(2)}`;
+          if (propinaMontoEl) propinaMontoEl.innerText = `$${propinaVal.toFixed(2)}`;
+          if (totalMontoEl) totalMontoEl.innerText = `$${totalFinal.toFixed(2)}`;
+          if (totalLabelEl) totalLabelEl.innerText = `Total a Pagar:`;
+        }
 
       } else {
         if (title) title.innerHTML = `<i class="fa-solid fa-border-all" style="color: #38bdf8;"></i> Resumen Mesa ${mesaId}`;
@@ -625,24 +1423,155 @@
           container.innerHTML = `<div style="text-align: center; padding: 20px; color: #64748b; font-size: 12px;">No hay consumos en ninguna silla de la Mesa ${mesaId}.</div>`;
         }
 
-        if (totalLabel) totalLabel.innerText = `Total Acumulado Mesa ${mesaId}:`;
-        if (totalMonto) totalMonto.innerText = `$${totalMesa.toFixed(2)}`;
+        var ivaValMesa = totalMesa * 0.16;
+        var propinaValMesa = totalMesa * 0.10;
+        var totalFinalMesa = totalMesa + ivaValMesa;
+
+        if (subtotalMontoEl) subtotalMontoEl.innerText = `$${totalMesa.toFixed(2)}`;
+        if (ivaMontoEl) ivaMontoEl.innerText = `$${ivaValMesa.toFixed(2)}`;
+        if (propinaMontoEl) propinaMontoEl.innerText = `$${propinaValMesa.toFixed(2)}`;
+        if (totalMontoEl) totalMontoEl.innerText = `$${totalFinalMesa.toFixed(2)}`;
+        if (totalLabelEl) totalLabelEl.innerText = `Total Acumulado Mesa ${mesaId}:`;
       }
 
-      modal.style.display = 'flex';
+      if (modal) {
+        modal.classList.add('show');
+        modal.style.setProperty('display', 'flex', 'important');
+      }
     }
+
+    function abrirPrecuenta() {
+      const mesaId = window.palapaState.mesaSeleccionadaId;
+      const sillaNum = window.palapaState.sillaSeleccionadaNum;
+      const modalP = document.getElementById('modalPrecuentaBackdrop');
+      const listContainer = document.getElementById('precuentaTramosList');
+      const subtotalEl = document.getElementById('precuentaSubtotal');
+      const ivaEl = document.getElementById('precuentaIva');
+      const propinaEl = document.getElementById('precuentaPropina');
+      const totalEl = document.getElementById('precuentaTotal');
+      const headerTag = document.getElementById('precuentaHeaderTag');
+      const fechaEl = document.getElementById('precuentaFecha');
+
+      if (!modalP || !listContainer) return;
+      listContainer.innerHTML = '';
+
+      if (fechaEl) fechaEl.innerText = 'Fecha: ' + (new Date()).toLocaleDateString() + ' ' + (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+      if (sillaNum !== null) {
+        const key = `${mesaId}-${sillaNum}`;
+        const cuenta = window.palapaState.cuentas[key] || { items: [] };
+        const qrId = cuenta.qrId || ('PV-' + mesaId + sillaNum);
+        if (headerTag) headerTag.innerHTML = `MESA ${mesaId} • SILLA ${sillaNum} <br><span style="font-size:10px;color:#475569;">PORTAVASOS QR: #${qrId}</span>`;
+
+        var tramosMap = {};
+        cuenta.items.forEach(it => {
+          var tMesa = it.mesaId !== undefined ? it.mesaId : mesaId;
+          var tSilla = it.sillaNum !== undefined ? it.sillaNum : sillaNum;
+          var tKey = tMesa + '-' + tSilla;
+          if (!tramosMap[tKey]) tramosMap[tKey] = { mesaId: tMesa, sillaNum: tSilla, items: [], subtotal: 0 };
+          tramosMap[tKey].items.push(it);
+          tramosMap[tKey].subtotal += (it.precio * it.cantidad);
+        });
+
+        var tramoKeys = Object.keys(tramosMap);
+        var totalNeto = 0;
+
+        tramoKeys.forEach((tKey, idx) => {
+          var tramo = tramosMap[tKey];
+          totalNeto += tramo.subtotal;
+          var block = document.createElement('div');
+          block.style.cssText = 'border-bottom: 1px solid #e2e8f0 !important; padding-bottom: 6px !important;';
+          var h = document.createElement('div');
+          h.style.cssText = 'font-weight: 900 !important; color: #047857 !important; margin-bottom: 4px !important;';
+          h.innerText = `--- TRAMO ${idx + 1}: MESA ${tramo.mesaId} SILLA ${tramo.sillaNum} ---`;
+          block.appendChild(h);
+
+          tramo.items.forEach(it => {
+            var row = document.createElement('div');
+            row.style.cssText = 'display: flex !important; justify-content: space-between !important; margin-bottom: 2px !important;';
+            row.innerHTML = `<span>${it.cantidad}x ${it.nombre}</span><span>$${(it.precio * it.cantidad).toFixed(2)}</span>`;
+            block.appendChild(row);
+          });
+
+          var subRow = document.createElement('div');
+          subRow.style.cssText = 'display: flex !important; justify-content: space-between !important; font-weight: bold !important; color: #475569 !important; margin-top: 4px !important; font-size: 10px !important;';
+          subRow.innerHTML = `<span>SUBTOTAL TRAMO ${idx + 1}:</span><span>$${tramo.subtotal.toFixed(2)}</span>`;
+          block.appendChild(subRow);
+
+          listContainer.appendChild(block);
+        });
+
+        var ivaVal = totalNeto * 0.16;
+        var propinaVal = totalNeto * 0.10;
+        var granTotal = totalNeto + ivaVal;
+
+        if (subtotalEl) subtotalEl.innerText = `$${totalNeto.toFixed(2)}`;
+        if (ivaEl) ivaEl.innerText = `$${ivaVal.toFixed(2)}`;
+        if (propinaEl) propinaEl.innerText = `$${propinaVal.toFixed(2)}`;
+        if (totalEl) totalEl.innerText = `$${granTotal.toFixed(2)}`;
+      }
+
+      modalP.classList.add('show');
+      modalP.style.setProperty('display', 'flex', 'important');
+    }
+
+    function cerrarPrecuenta() {
+      const modalP = document.getElementById('modalPrecuentaBackdrop');
+      if (modalP) {
+        modalP.classList.remove('show');
+        modalP.style.setProperty('display', 'none', 'important');
+      }
+    }
+
+    window.abrirPrecuenta = function () {
+      abrirPrecuenta();
+    };
+    window.cerrarPrecuenta = function () {
+      cerrarPrecuenta();
+    };
 
     function cerrarModalComanda() {
       const modal = document.getElementById('modalComandaBackdrop');
-      if (modal) modal.style.display = 'none';
+      if (modal) {
+        modal.classList.remove('show');
+        modal.style.setProperty('display', 'none', 'important');
+      }
     }
 
-    window.eliminarItemModal = function(key, idx) {
+    window.cerrarModalComanda = function () {
+      cerrarModalComanda();
+    };
+    window.abrirModalComandaActual = function () {
+      abrirModalComandaActual();
+    };
+
+    window.liberarSillaActual = function () {
+      const mesaId = window.palapaState.mesaSeleccionadaId;
+      const sillaNum = window.palapaState.sillaSeleccionadaNum;
+      if (sillaNum === null) return;
+      const key = `${mesaId}-${sillaNum}`;
+      const cuenta = window.palapaState.cuentas[key];
+      if (cuenta) {
+        if (cuenta.items && cuenta.items.length > 0) {
+          if (!confirm(`La Silla ${sillaNum} de Mesa ${mesaId} tiene ${cuenta.items.length} consumos registrados. ¿Deseas liberar la silla y eliminar la cuenta?`)) {
+            return;
+          }
+        }
+        delete window.palapaState.cuentas[key];
+        saveStateToStorage();
+        renderStateUI();
+        cerrarModalComanda();
+        showDragToast(`🟢 Silla ${sillaNum} de Mesa ${mesaId} liberada y disponible`, 'ok');
+      }
+    };
+
+    window.eliminarItemModal = function (key, idx) {
       if (window.palapaState.cuentas[key] && window.palapaState.cuentas[key].items) {
         window.palapaState.cuentas[key].items.splice(idx, 1);
         if (window.palapaState.cuentas[key].items.length === 0) {
           delete window.palapaState.cuentas[key];
         }
+        saveStateToStorage();
         renderStateUI();
         abrirModalComandaActual();
       }
@@ -658,7 +1587,7 @@
           const key = `${m}-${s}`;
           let chairEl = document.getElementById(`chair-${m}-${s}`);
           const cuenta = window.palapaState.cuentas[key];
-          const isOccupied = (cuenta && cuenta.items && cuenta.items.length > 0);
+          const isOccupied = !!(cuenta && (cuenta.estado === 'ocupada' || (cuenta.items && cuenta.items.length > 0)));
 
           if (isOccupied) busyCount++;
 
@@ -667,9 +1596,10 @@
 
             // Update draggable attribute based on current occupied state
             chairEl.setAttribute('draggable', isOccupied ? 'true' : 'false');
+            const numItems = (cuenta && cuenta.items) ? cuenta.items.length : 0;
             chairEl.setAttribute('title', isOccupied
-              ? `Mesa ${m} Silla ${s} (Ocupada) • Arrastra para mover`
-              : `Mesa ${m} Silla ${s} (Disponible)`);
+              ? `Mesa ${m} Silla ${s} (Ocupada${numItems > 0 ? ' · ' + numItems + ' consumos' : ' · Sin consumos'}) • Arrastra para mover`
+              : `Mesa ${m} Silla ${s} (Disponible) • Haz clic para ubicar comensal`);
 
             if (isMoveMode && origen && origen.mesaId === m && origen.sillaNum === s) {
               chairEl.className = `chair-btn-fixed ${posClass} chair-moving-source`;
@@ -692,7 +1622,7 @@
             if (statusText) statusText.innerText = `${busyCount} Ocupada${busyCount > 1 ? 's' : ''}`;
             if (labelText) {
               labelText.style.color = "#fbbf24";
-              labelText.innerText = `🟡 Ocupada (${busyCount} Comensales)`;
+              labelText.innerText = `🟡 Ocupada (${busyCount} Comensal${busyCount > 1 ? 'es' : ''})`;
             }
           } else {
             circle.style.background = "#064e3b";
@@ -709,7 +1639,10 @@
       const badge = document.getElementById('activeTargetBadge');
       if (badge) {
         if (window.palapaState.sillaSeleccionadaNum !== null) {
-          badge.innerText = `Mesa ${window.palapaState.mesaSeleccionadaId} • Silla ${window.palapaState.sillaSeleccionadaNum}`;
+          const selKey = `${window.palapaState.mesaSeleccionadaId}-${window.palapaState.sillaSeleccionadaNum}`;
+          const selCuenta = window.palapaState.cuentas[selKey];
+          const isSelOcc = !!(selCuenta && (selCuenta.estado === 'ocupada' || (selCuenta.items && selCuenta.items.length > 0)));
+          badge.innerText = `Mesa ${window.palapaState.mesaSeleccionadaId} • Silla ${window.palapaState.sillaSeleccionadaNum} (${isSelOcc ? 'Ocupada' : 'Disponible'})`;
         } else {
           badge.innerText = `Mesa ${window.palapaState.mesaSeleccionadaId} (Completa)`;
         }
@@ -758,32 +1691,50 @@
 
       const key = `${mesaId}-${sillaNum}`;
       if (!window.palapaState.cuentas[key]) {
-        window.palapaState.cuentas[key] = { estado: 'ocupada', items: [] };
+        window.palapaState.cuentas[key] = {
+          estado: 'ocupada',
+          qrId: 'PV-0' + mesaId + sillaNum,
+          comensalNombre: 'Comensal Silla ' + sillaNum,
+          items: [],
+          historialUbicaciones: [{ mesaId: mesaId, sillaNum: sillaNum, hora: (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }]
+        };
       }
 
+      const nowStr = (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
       const items = window.palapaState.cuentas[key].items;
-      const existing = items.find(i => i.id === prod.id);
+      const existing = items.find(i => i.id === prod.id && i.mesaId === mesaId && i.sillaNum === sillaNum);
       if (existing) {
         existing.cantidad += 1;
       } else {
-        items.push({ id: prod.id, nombre: prod.nombre, notas: '', precio: prod.precio, cantidad: 1 });
+        items.push({
+          id: prod.id,
+          nombre: prod.nombre,
+          notas: '',
+          precio: prod.precio,
+          cantidad: 1,
+          mesaId: mesaId,
+          sillaNum: sillaNum,
+          hora: nowStr
+        });
       }
 
+      saveStateToStorage();
       renderStateUI();
+      showDragToast(`➕ ${prod.nombre} agregado a Mesa ${mesaId} Silla ${sillaNum}`, 'ok');
     }
 
     function filtrarCategoria(catNombre) {
       window.palapaState.categoriaFiltro = catNombre;
-      
+
       const chipKeys = ['Todos', 'Cafe', 'Des', 'Car', 'Pos'];
       chipKeys.forEach(k => {
         const el = document.getElementById(`wchip-${k}`);
         if (el) {
-          if ((k === 'Todos' && catNombre === 'Todos') || 
-              (k === 'Cafe' && catNombre === 'Barra de Café & Infusiones') ||
-              (k === 'Des' && catNombre === 'Desayunos & Brunch Gourmet') ||
-              (k === 'Car' && catNombre === 'Especialidades Fuertes') ||
-              (k === 'Pos' && catNombre === 'Repostería & Postres de Autor')) {
+          if ((k === 'Todos' && catNombre === 'Todos') ||
+            (k === 'Cafe' && catNombre === 'Barra de Café & Infusiones') ||
+            (k === 'Des' && catNombre === 'Desayunos & Brunch Gourmet') ||
+            (k === 'Car' && catNombre === 'Especialidades Fuertes') ||
+            (k === 'Pos' && catNombre === 'Repostería & Postres de Autor')) {
             el.style.background = "#059669";
             el.style.color = "#ffffff";
             el.style.border = "1px solid #34d399";
@@ -798,8 +1749,6 @@
       renderWaiterMenuGrid();
     }
 
-    setTimeout(function() { renderStateUI(); setupDragListeners(); }, 150);
+    setTimeout(function () { renderStateUI(); setupDragListeners(); }, 150);
   })();
 </script>
-
-</anvil-form>
