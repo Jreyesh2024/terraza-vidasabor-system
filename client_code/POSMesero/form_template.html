@@ -1432,26 +1432,44 @@
         modalCard.style.maxWidth = (seleccionadas.length > 1 || sillaNum === null) ? '960px' : '640px';
       }
 
-      // 4. Renderizar Chips de Sillas en boxAdicionarSillasAComanda
+      // 4. Renderizar Chips de Sillas Faltantes en boxAdicionarSillasAComanda
       if (boxAdicionarSillas && chipsContainer) {
-        if (sillasOcupadas.length > 1) {
+        // Si estamos viendo una silla específica (ej. Silla 3), solo mostramos las OTRAS sillas de la mesa para anexar
+        var sillasDisponiblesParaAnexar = (sillaNum !== null)
+          ? sillasOcupadas.filter(o => o.sillaNum !== sillaNum)
+          : sillasOcupadas;
+
+        if (sillasDisponiblesParaAnexar.length > 0) {
           boxAdicionarSillas.style.display = 'flex';
           chipsContainer.innerHTML = '';
 
-          sillasOcupadas.forEach(obj => {
+          var lblSelector = boxAdicionarSillas.querySelector('span');
+          if (lblSelector) {
+            lblSelector.innerHTML = (sillaNum !== null)
+              ? `<i class="fa-solid fa-user-plus" style="color: #38bdf8;"></i> ¿Esta cuenta (Silla ${sillaNum}) paga por otras sillas de la mesa?`
+              : `<i class="fa-solid fa-layer-group" style="color: #10b981;"></i> Sillas de la mesa a incluir en este cobro:`;
+          }
+
+          var btnSoloEsta = document.getElementById('btnComandaSoloEsta');
+          if (btnSoloEsta && sillaNum !== null) {
+            btnSoloEsta.innerText = `Solo Silla ${sillaNum}`;
+          }
+
+          sillasDisponiblesParaAnexar.forEach(obj => {
             var s = obj.sillaNum;
             var isSel = (seleccionadas.indexOf(s) !== -1);
-            var isTitular = (sillaNum !== null && s === sillaNum);
 
             var chip = document.createElement('button');
             chip.type = 'button';
             chip.onclick = function() { window.toggleSillaAdicional(s); };
-            chip.style.cssText = `padding: 6px 12px !important; font-size: 11px !important; font-weight: 800 !important; border-radius: 8px !important; cursor: pointer !important; transition: all 0.2s ease !important; display: flex !important; align-items: center !important; gap: 5px !important; ${
+            chip.style.cssText = `padding: 6px 12px !important; font-size: 11px !important; font-weight: 800 !important; border-radius: 8px !important; cursor: pointer !important; transition: all 0.2s ease !important; display: flex !important; align-items: center !important; gap: 6px !important; ${
               isSel
                 ? 'background: #064e3b !important; color: #34d399 !important; border: 2px solid #10b981 !important; box-shadow: 0 0 10px rgba(16, 185, 129, 0.3) !important;'
-                : 'background: #1e293b !important; color: #94a3b8 !important; border: 1px solid #334155 !important;'
+                : 'background: #1e293b !important; color: #cbd5e1 !important; border: 1px solid #334155 !important;'
             }`;
-            chip.innerHTML = `${isSel ? '<i class="fa-solid fa-check"></i>' : '<i class="fa-solid fa-plus"></i>'} Silla ${s} ${isTitular ? '(Titular) ' : ''}• $${obj.subtotal.toFixed(2)}`;
+            chip.innerHTML = isSel
+              ? `<i class="fa-solid fa-check"></i> Silla ${s} • $${obj.subtotal.toFixed(2)} <span style="font-size: 10px; color: #f87171; margin-left: 4px; font-weight: 900;" title="Quitar">✕</span>`
+              : `<i class="fa-solid fa-plus" style="color: #38bdf8;"></i> Silla ${s} • $${obj.subtotal.toFixed(2)}`;
             chipsContainer.appendChild(chip);
           });
         } else {
@@ -1462,14 +1480,14 @@
       // 5. Renderizar Consumos de las Sillas Seleccionadas
       if (header) {
         header.innerText = (seleccionadas.length > 1)
-          ? `Consumos de ${seleccionadas.length} Sillas Seleccionadas (Sillas ${seleccionadas.join(', ')}):`
+          ? `Consumos Consolidados (${seleccionadas.length} Sillas: ${seleccionadas.map(s => 'Silla ' + s).join(' + ')}):`
           : `Consumos en Silla ${seleccionadas[0] || (sillaNum || 1)}:`;
       }
 
       if (seleccionadas.length === 0) {
         container.innerHTML = `<div style="text-align: center; padding: 25px; color: #64748b; font-size: 12px;">Ninguna silla seleccionada. Haz clic en las sillas arriba para incluirlas en el cobro.</div>`;
       } else if (seleccionadas.length === 1 && sillaNum !== null && seleccionadas[0] === sillaNum) {
-        // Vista detallada individual con tramos históricos
+        // Vista detallada individual de la silla titular
         container.style.cssText = 'display: flex !important; flex-direction: column !important; gap: 8px !important; max-height: 320px !important; overflow-y: auto !important;';
         const key = `${mesaId}-${sillaNum}`;
         const cuenta = window.palapaState.cuentas[key] || { items: [] };
@@ -1508,7 +1526,7 @@
           });
         }
       } else {
-        // Vista multitarjeta de las sillas seleccionadas
+        // Vista multitarjeta de las sillas seleccionadas (Titular + Anexadas)
         container.style.cssText = 'display: grid !important; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)) !important; gap: 12px !important; max-height: 340px !important; overflow-y: auto !important;';
 
         seleccionadas.forEach(s => {
@@ -1519,18 +1537,21 @@
           var isTitular = (sillaNum !== null && s === sillaNum);
 
           var card = document.createElement('div');
-          card.style.cssText = 'background: #0b2921 !important; border: 2px solid #10b981 !important; border-radius: 12px !important; padding: 10px 12px !important; display: flex !important; flex-direction: column !important; justify-content: space-between !important; gap: 8px !important; box-shadow: 0 0 12px rgba(16,185,129,0.2) !important;';
+          card.style.cssText = 'background: ' + (isTitular ? '#042f2e' : '#0b2921') + ' !important; border: 2px solid ' + (isTitular ? '#059669' : '#10b981') + ' !important; border-radius: 12px !important; padding: 10px 12px !important; display: flex !important; flex-direction: column !important; justify-content: space-between !important; gap: 8px !important; box-shadow: 0 0 12px rgba(16,185,129,0.2) !important;';
 
           var cardHeader = document.createElement('div');
           cardHeader.style.cssText = 'display: flex !important; justify-content: space-between !important; align-items: center !important; padding-bottom: 6px !important; border-bottom: 1px dashed #10b981 !important; font-size: 11px !important;';
           cardHeader.innerHTML = `
             <div>
-              <span style="font-weight: 900; color: #34d399; font-size: 12px; display: block;">
-                <i class="fa-solid fa-receipt"></i> Silla ${s} ${isTitular ? '(Titular)' : '(Adicionada)'}
+              <span style="font-weight: 900; color: ${isTitular ? '#34d399' : '#a7f3d0'}; font-size: 12px; display: block;">
+                <i class="fa-solid fa-receipt"></i> Silla ${s} ${isTitular ? '(Titular)' : '(Anexada)'}
               </span>
               <span style="font-size: 10px; color: #94a3b8;">Portavasos #${qrId}</span>
             </div>
-            <span style="font-weight: 900; color: #fbbf24; font-size: 12px;">$${sub.toFixed(2)}</span>
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <span style="font-weight: 900; color: #fbbf24; font-size: 12px;">$${sub.toFixed(2)}</span>
+              ${!isTitular ? `<button onclick="window.toggleSillaAdicional(${s})" style="background: rgba(239, 68, 68, 0.2); border: 1px solid rgba(239, 68, 68, 0.4); color: #f87171; border-radius: 4px; padding: 2px 6px; font-size: 10px; font-weight: bold; cursor: pointer;" title="Quitar de este cobro">✕</button>` : ''}
+            </div>
           `;
           card.appendChild(cardHeader);
 
