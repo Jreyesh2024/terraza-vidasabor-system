@@ -1703,18 +1703,25 @@
       }
 
       // 8. Botones de acción
-      if (btnCobrarDirecto) {
-        btnCobrarDirecto.style.display = (totalNeto > 0) ? 'flex' : 'none';
-        var btnCobrarSpan = btnCobrarDirecto.querySelector('span:first-child') || btnCobrarDirecto;
-        if (sillaNum === null) {
-          btnCobrarDirecto.innerHTML = `<i class="fa-solid fa-credit-card"></i> Cobrar Toda la Mesa (<span id="txtBtnCobrarMonto">$${granTotal.toFixed(2)}</span>)`;
-        } else {
+      const btnEnviarCocina = document.getElementById('btnEnviarCocina');
+      if (sillaNum === null) {
+        // EN PANORAMA GENERAL (Centro de Mesa): Vista 100% informativa
+        // NO se muestra botón de cobro aquí porque todo cobro requiere un comensal titular solicitante.
+        if (btnCobrarDirecto) btnCobrarDirecto.style.display = 'none';
+        if (btnEnviarCocina) btnEnviarCocina.style.display = 'none';
+        if (btnMover) btnMover.style.display = 'none';
+        if (btnLiberar) btnLiberar.style.display = 'none';
+      } else {
+        // EN COBRO POR COMENSAL:
+        if (btnCobrarDirecto) {
+          btnCobrarDirecto.style.display = (totalNeto > 0) ? 'flex' : 'none';
           var labelCobro = (seleccionadas.length > 1) ? `Sillas ${seleccionadas.join(', ')}` : `Silla ${sillaNum}`;
           btnCobrarDirecto.innerHTML = `<i class="fa-solid fa-credit-card"></i> Cobrar y Liquidar ${labelCobro} (<span id="txtBtnCobrarMonto">$${granTotal.toFixed(2)}</span>)`;
         }
+        if (btnEnviarCocina) btnEnviarCocina.style.display = 'flex';
+        if (btnMover) btnMover.style.display = (seleccionadas.length === 1) ? 'flex' : 'none';
+        if (btnLiberar) btnLiberar.style.display = (seleccionadas.length === 1) ? 'flex' : 'none';
       }
-      if (btnMover) btnMover.style.display = (seleccionadas.length === 1 && sillaNum !== null) ? 'flex' : 'none';
-      if (btnLiberar) btnLiberar.style.display = (seleccionadas.length === 1 && sillaNum !== null) ? 'flex' : 'none';
 
       if (modal) {
         modal.classList.add('show');
