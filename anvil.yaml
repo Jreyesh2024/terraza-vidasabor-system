@@ -17,5 +17,9 @@ runtime_options:
   server_spec: {}
   server_version: python3-sandbox
   version: 2
+services:
+- client_config: {enable_v2: true}
+  server_config: {}
+  source: /runtime/services/tables.yml
 startup: {module: POSMesero, type: form}
 startup_form: POSMesero
