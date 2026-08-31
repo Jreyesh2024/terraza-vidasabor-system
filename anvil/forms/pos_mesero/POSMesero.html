@@ -629,8 +629,8 @@
           style="flex: 1 !important; padding: 10px !important; background: #0284c7 !important; color: #ffffff !important; font-weight: 800 !important; font-size: 11px !important; border-radius: 10px !important; border: none !important; cursor: pointer !important; display: flex !important; align-items: center !important; justify-content: center !important; gap: 6px !important;">
           <i class="fa-solid fa-arrow-right-arrow-left"></i> Mover esta Cuenta
         </button>
-        <button id="btnEnviarCocina"
-          style="flex: 1 !important; padding: 10px !important; background: #f59e0b !important; color: #0f172a !important; font-weight: 900 !important; font-size: 11px !important; border-radius: 10px !important; border: none !important; cursor: pointer !important; display: flex !important; align-items: center !important; justify-content: center !important; gap: 6px !important;">
+        <button id="btnEnviarCocina" onclick="window.enviarCocinaActual();"
+          style="flex: 1 !important; padding: 10px !important; background: #f59e0b !important; color: #0f172a !important; font-weight: 900 !important; font-size: 11px !important; border-radius: 10px !important; border: none !important; cursor: pointer !important; display: flex !important; align-items: center !important; justify-content: center !important; gap: 6px !important; transition: all 0.2s ease !important;">
           <i class="fa-solid fa-fire"></i> Enviar Cocina (KDS)
         </button>
       </div>
@@ -735,7 +735,7 @@
         qrId: 'PV-031',
         comensalNombre: 'Comensal Silla 1',
         items: [
-          { id: 4, nombre: 'Chilaquiles Verdes Pollo', notas: 'Sin cebolla • Salsa aparte', precio: 148.00, cantidad: 1, mesaId: 3, sillaNum: 1, hora: '12:15 PM' }
+          { id: 4, nombre: 'Chilaquiles Verdes Pollo', notas: 'Sin cebolla • Salsa aparte', precio: 148.00, cantidad: 1, mesaId: 3, sillaNum: 1, hora: '12:15 PM', enviadoCocina: true }
         ],
         historialUbicaciones: [
           { mesaId: 3, sillaNum: 1, hora: '12:10 PM' }
@@ -746,7 +746,7 @@
         qrId: 'PV-032',
         comensalNombre: 'Comensal Silla 2',
         items: [
-          { id: 1, nombre: 'Capuchino Especial V&S', notas: 'Leche de almendras', precio: 68.00, cantidad: 1, mesaId: 3, sillaNum: 2, hora: '12:20 PM' }
+          { id: 1, nombre: 'Capuchino Especial V&S', notas: 'Leche de almendras', precio: 68.00, cantidad: 1, mesaId: 3, sillaNum: 2, hora: '12:20 PM', enviadoCocina: true }
         ],
         historialUbicaciones: [
           { mesaId: 3, sillaNum: 2, hora: '12:20 PM' }
@@ -759,8 +759,8 @@
         qrId: 'PV-021',
         comensalNombre: 'Comensal Silla 1',
         items: [
-          { id: 7, nombre: 'Rib Eye Grill V&S', notas: 'Término medio • Papas gajo', precio: 385.00, cantidad: 1, mesaId: 2, sillaNum: 1, hora: '12:40 PM' },
-          { id: 10, nombre: 'Limonada Botánica', notas: 'Con hierbabuena', precio: 60.00, cantidad: 1, mesaId: 2, sillaNum: 1, hora: '12:42 PM' }
+          { id: 7, nombre: 'Rib Eye Grill V&S', notas: 'Término medio • Papas gajo', precio: 385.00, cantidad: 1, mesaId: 2, sillaNum: 1, hora: '12:40 PM', enviadoCocina: true },
+          { id: 10, nombre: 'Limonada Botánica', notas: 'Con hierbabuena', precio: 60.00, cantidad: 1, mesaId: 2, sillaNum: 1, hora: '12:42 PM', enviadoCocina: true }
         ],
         historialUbicaciones: [
           { mesaId: 2, sillaNum: 1, hora: '12:35 PM' }
@@ -771,8 +771,8 @@
         qrId: 'PV-022',
         comensalNombre: 'Comensal Silla 2',
         items: [
-          { id: 8, nombre: 'Pasta Fettuccine Trufado', notas: 'Poco queso', precio: 265.00, cantidad: 1, mesaId: 2, sillaNum: 2, hora: '12:41 PM' },
-          { id: 10, nombre: 'Limonada Botánica', notas: 'Sin hielo', precio: 60.00, cantidad: 1, mesaId: 2, sillaNum: 2, hora: '12:43 PM' }
+          { id: 8, nombre: 'Pasta Fettuccine Trufado', notas: 'Poco queso', precio: 265.00, cantidad: 1, mesaId: 2, sillaNum: 2, hora: '12:41 PM', enviadoCocina: true },
+          { id: 10, nombre: 'Limonada Botánica', notas: 'Sin hielo', precio: 60.00, cantidad: 1, mesaId: 2, sillaNum: 2, hora: '12:43 PM', enviadoCocina: true }
         ],
         historialUbicaciones: [
           { mesaId: 2, sillaNum: 2, hora: '12:35 PM' }
@@ -783,8 +783,8 @@
         qrId: 'PV-023',
         comensalNombre: 'Comensal Silla 3',
         items: [
-          { id: 6, nombre: 'Molletes Masa Madre', notas: 'Bien doraditos', precio: 125.00, cantidad: 1, mesaId: 2, sillaNum: 3, hora: '12:42 PM' },
-          { id: 10, nombre: 'Limonada Botánica', notas: 'Poco dulce', precio: 60.00, cantidad: 1, mesaId: 2, sillaNum: 3, hora: '12:44 PM' }
+          { id: 6, nombre: 'Molletes Masa Madre', notas: 'Bien doraditos', precio: 125.00, cantidad: 1, mesaId: 2, sillaNum: 3, hora: '12:42 PM', enviadoCocina: true },
+          { id: 10, nombre: 'Limonada Botánica', notas: 'Poco dulce', precio: 60.00, cantidad: 1, mesaId: 2, sillaNum: 3, hora: '12:44 PM', enviadoCocina: true }
         ],
         historialUbicaciones: [
           { mesaId: 2, sillaNum: 3, hora: '12:35 PM' }
@@ -795,7 +795,7 @@
         qrId: 'PV-024',
         comensalNombre: 'Comensal Silla 4',
         items: [
-          { id: 9, nombre: 'Pastel Chocolate Valrhona', notas: 'Con helado de vainilla', precio: 105.00, cantidad: 1, mesaId: 2, sillaNum: 4, hora: '12:45 PM' }
+          { id: 9, nombre: 'Pastel Chocolate Valrhona', notas: 'Con helado de vainilla', precio: 105.00, cantidad: 1, mesaId: 2, sillaNum: 4, hora: '12:45 PM', enviadoCocina: true }
         ],
         historialUbicaciones: [
           { mesaId: 2, sillaNum: 4, hora: '12:35 PM' }
@@ -1167,8 +1167,7 @@
       if (e.target.closest('#btnMoverDesdeModal')) { cerrarModalComanda(); iniciarModoMover(); return; }
       if (e.target.closest('#btnCloseModal') || e.target.closest('#btnCerrarModalBottom')) { cerrarModalComanda(); return; }
       if (e.target.closest('#btnCancelMove')) { cancelarModoMover(); return; }
-      if (e.target.closest('#btnEnviarCocina')) { alert(`Comanda enviada a Cocina (KDS)`); cerrarModalComanda(); return; }
-      if (e.target.closest('#btnPrecuenta')) { alert(`Imprimiendo precuenta`); cerrarModalComanda(); return; }
+      if (e.target.closest('#btnPrecuenta')) { abrirPrecuenta(); return; }
 
       // 5. Click outside modal content (on backdrop) closes modal
       if (e.target.id === 'modalComandaBackdrop') {
@@ -1576,11 +1575,18 @@
         } else {
           cuenta.items.forEach((it, idx) => {
             var itSub = it.precio * it.cantidad;
+            var isSent = !!it.enviadoCocina;
             var row = document.createElement('div');
-            row.style.cssText = 'display: flex !important; justify-content: space-between !important; align-items: center !important; background: #0f172a !important; padding: 8px 12px !important; border-radius: 10px !important; border: 1px solid #1e293b !important; font-size: 12px !important;';
+            row.style.cssText = 'display: flex !important; justify-content: space-between !important; align-items: center !important; background: #0f172a !important; padding: 8px 12px !important; border-radius: 10px !important; border: 1px solid ' + (isSent ? '#1e293b' : '#f59e0b') + ' !important; font-size: 12px !important;';
             row.innerHTML = `
               <div style="flex: 1; padding-right: 8px;">
-                <span style="font-weight: 700; color: #ffffff; display: block;">${it.cantidad}x ${it.nombre}</span>
+                <div style="display: flex; align-items: center; gap: 6px;">
+                  <span style="font-weight: 700; color: #ffffff;">${it.cantidad}x ${it.nombre}</span>
+                  ${isSent
+                    ? '<span style="font-size: 9px; color: #34d399; background: rgba(16,185,129,0.15); border: 1px solid rgba(16,185,129,0.3); border-radius: 4px; padding: 1px 5px; font-weight: bold;"><i class="fa-solid fa-check"></i> En Cocina</span>'
+                    : '<span style="font-size: 9px; color: #f59e0b; background: rgba(245,158,11,0.15); border: 1px solid rgba(245,158,11,0.4); border-radius: 4px; padding: 1px 5px; font-weight: bold;"><i class="fa-solid fa-fire"></i> Pendiente KDS</span>'
+                  }
+                </div>
                 <span style="font-size: 10px; color: #94a3b8; font-style: italic;">${it.notas ? it.notas + ' • ' : ''}${it.hora || ''}</span>
               </div>
               <div style="display: flex; align-items: center; gap: 8px;">
@@ -1629,11 +1635,13 @@
           } else {
             c.items.forEach((it) => {
               var itSub = it.precio * it.cantidad;
+              var isSent = !!it.enviadoCocina;
               var row = document.createElement('div');
               row.style.cssText = 'display: flex !important; justify-content: space-between !important; align-items: center !important; background: #020617 !important; padding: 4px 6px !important; border-radius: 6px !important; font-size: 10px !important;';
               row.innerHTML = `
                 <div style="flex: 1; padding-right: 4px;">
                   <span style="font-weight: 700; color: #ffffff;">${it.cantidad}x ${it.nombre}</span>
+                  ${!isSent ? '<span style="font-size: 8px; color: #f59e0b; margin-left: 4px;">⏳ Pendiente</span>' : ''}
                 </div>
                 <span style="font-weight: 900; color: #34d399;">$${itSub.toFixed(2)}</span>
               `;
@@ -1717,7 +1725,30 @@
           var labelCobro = (seleccionadas.length > 1) ? `Sillas ${seleccionadas.join(', ')}` : `Silla ${sillaNum}`;
           btnCobrarDirecto.innerHTML = `<i class="fa-solid fa-credit-card"></i> Cobrar y Liquidar ${labelCobro} (<span id="txtBtnCobrarMonto">$${granTotal.toFixed(2)}</span>)`;
         }
-        if (btnEnviarCocina) btnEnviarCocina.style.display = 'flex';
+
+        // Control dinámico de Enviar a Cocina (KDS)
+        if (btnEnviarCocina) {
+          btnEnviarCocina.style.display = 'flex';
+          var cuentaActual = window.palapaState.cuentas[`${mesaId}-${sillaNum}`] || { items: [] };
+          var pendientes = (cuentaActual.items || []).filter(function(i) { return !i.enviadoCocina; });
+
+          if (pendientes.length > 0) {
+            btnEnviarCocina.disabled = false;
+            btnEnviarCocina.style.opacity = '1';
+            btnEnviarCocina.style.cursor = 'pointer';
+            btnEnviarCocina.style.background = 'linear-gradient(135deg, #f59e0b, #d97706)';
+            btnEnviarCocina.style.color = '#0f172a';
+            btnEnviarCocina.innerHTML = `<i class="fa-solid fa-fire"></i> Enviar Cocina (${pendientes.length} nuevo${pendientes.length > 1 ? 's' : ''})`;
+          } else {
+            btnEnviarCocina.disabled = true;
+            btnEnviarCocina.style.opacity = '0.45';
+            btnEnviarCocina.style.cursor = 'not-allowed';
+            btnEnviarCocina.style.background = '#1e293b';
+            btnEnviarCocina.style.color = '#64748b';
+            btnEnviarCocina.innerHTML = `<i class="fa-solid fa-check-double"></i> Todo en Cocina`;
+          }
+        }
+
         if (btnMover) btnMover.style.display = (seleccionadas.length === 1) ? 'flex' : 'none';
         if (btnLiberar) btnLiberar.style.display = (seleccionadas.length === 1) ? 'flex' : 'none';
       }
@@ -1809,6 +1840,35 @@
         cerrarModalComanda();
         showDragToast(`💳 ¡Cobro exitoso de Mesa ${mesaId} (${sillasStr})! Sillas liberadas.`, 'ok');
       }
+    };
+
+    window.enviarCocinaActual = function() {
+      var mesaId = window.palapaState.mesaSeleccionadaId;
+      var sillaNum = window.palapaState.sillaSeleccionadaNum;
+      if (sillaNum === null) return;
+      var key = mesaId + '-' + sillaNum;
+      var cuenta = window.palapaState.cuentas[key];
+      if (!cuenta || !cuenta.items || cuenta.items.length === 0) {
+        showDragToast('ℹ Agrega al menos un platillo o bebida antes de enviar a cocina.', 'warn');
+        return;
+      }
+
+      var pendientes = cuenta.items.filter(function(i) { return !i.enviadoCocina; });
+      if (pendientes.length === 0) {
+        showDragToast('ℹ Todos los productos de esta comanda ya fueron enviados a Cocina (KDS).', 'info');
+        return;
+      }
+
+      var nowStr = (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      pendientes.forEach(function(i) {
+        i.enviadoCocina = true;
+        if (!i.hora) i.hora = nowStr;
+      });
+
+      saveStateToStorage();
+      renderStateUI();
+      abrirModalComandaActual();
+      showDragToast(`🔥 ¡Comanda de Silla ${sillaNum} (${pendientes.length} producto${pendientes.length > 1 ? 's' : ''}) enviada a Cocina (KDS)!`, 'ok');
     };
 
     window.seleccionarSillaDesdeMesa = function(sillaNum) {
@@ -2218,10 +2278,12 @@
 
       const nowStr = (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
       const items = window.palapaState.cuentas[key].items;
-      const existing = items.find(i => i.id === prod.id && i.mesaId === mesaId && i.sillaNum === sillaNum);
-      if (existing) {
-        existing.cantidad += 1;
+      // Si ya hay un item idéntico que todavía NO se ha enviado a cocina, le incrementamos cantidad
+      const existingUnsent = items.find(i => i.id === prod.id && i.mesaId === mesaId && i.sillaNum === sillaNum && !i.enviadoCocina);
+      if (existingUnsent) {
+        existingUnsent.cantidad += 1;
       } else {
+        // Entra como nuevo item pendiente de enviar a cocina
         items.push({
           id: prod.id,
           nombre: prod.nombre,
@@ -2230,13 +2292,18 @@
           cantidad: 1,
           mesaId: mesaId,
           sillaNum: sillaNum,
-          hora: nowStr
+          hora: nowStr,
+          enviadoCocina: false
         });
       }
 
       saveStateToStorage();
       renderStateUI();
-      showDragToast(`➕ ${prod.nombre} agregado a Mesa ${mesaId} Silla ${sillaNum}`, 'ok');
+      const modalBackdrop = document.getElementById('modalComandaBackdrop');
+      if (modalBackdrop && modalBackdrop.classList.contains('show')) {
+        abrirModalComandaActual();
+      }
+      showDragToast(`➕ ${prod.nombre} agregado a Silla ${sillaNum} (Pendiente enviar a cocina)`, 'ok');
     }
 
     function filtrarCategoria(catNombre) {
