@@ -213,6 +213,12 @@
           </div>
         </div>
 
+        <!-- BOTÓN ENVIAR A COCINA / BARRA (POR TRAMOS) -->
+        <button id=&quot;btnClienteEnviarCocina&quot; onclick=&quot;window.enviarPedidoClienteCocina();&quot;
+          class=&quot;w-full py-2.5 px-3 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-xs shadow-lg shadow-amber-500/20 transition flex items-center justify-center gap-2 cursor-pointer&quot;>
+          <i class=&quot;fa-solid fa-fire&quot;></i> <span id=&quot;btnClienteEnviarCocinaTxt&quot;>Enviar a Cocina / Barra</span>
+        </button>
+
         <!-- BOTONES DE COBRO MULTICANAL -->
         <div class=&quot;grid grid-cols-2 gap-2&quot;>
           <button onclick=&quot;window.abrirModalCobroCliente('santander')&quot;
@@ -250,7 +256,7 @@
       <!-- SELECTOR DE ALCANCE DEL PAGO -->
       <div class=&quot;bg-slate-950/80 p-3 rounded-xl border border-slate-800/80 space-y-2&quot;>
         <span class=&quot;text-xs font-bold text-slate-300 block&quot;><i
-                                                               class=&quot;fa-solid fa-hand-holding-dollar text-emerald-400 mr-1&quot;></i> ¿Qué deseas pagar?</span>
+            class=&quot;fa-solid fa-hand-holding-dollar text-emerald-400 mr-1&quot;></i> ¿Qué deseas pagar?</span>
         <div class=&quot;grid grid-cols-3 gap-1.5 text-[11px]&quot;>
           <button type=&quot;button&quot; onclick=&quot;window.setModoPagoCliente('solo_yo')&quot; id=&quot;btnModoSoloYo&quot;
             class=&quot;p-2 rounded-lg font-bold border text-center transition bg-slate-800 text-slate-300 border-slate-700 cursor-pointer&quot;>Solo
@@ -271,11 +277,11 @@
       <!-- TOTALES -->
       <div class=&quot;pt-3 border-t border-slate-800 space-y-1.5 text-xs&quot;>
         <div class=&quot;flex justify-between text-slate-400&quot;><span>Subtotal Neto:</span><span id=&quot;modalSubtotal&quot;
-                                                                                      class=&quot;text-slate-200 font-bold&quot;>$0.00</span></div>
+            class=&quot;text-slate-200 font-bold&quot;>$0.00</span></div>
         <div class=&quot;flex justify-between text-slate-400&quot;><span>IVA 16% Trasladado:</span><span id=&quot;modalIVA&quot;
-                                                                                           class=&quot;text-slate-200 font-bold&quot;>$0.00</span></div>
+            class=&quot;text-slate-200 font-bold&quot;>$0.00</span></div>
         <div class=&quot;flex justify-between text-slate-400&quot;><span>Propina Sugerida (10%):</span><span id=&quot;modalPropina&quot;
-                                                                                               class=&quot;text-slate-200 font-bold&quot;>$0.00</span></div>
+            class=&quot;text-slate-200 font-bold&quot;>$0.00</span></div>
         <div class=&quot;flex justify-between text-base font-black text-white pt-2 border-t border-slate-800&quot;>
           <span>Total Final a Liquidar:</span>
           <span id=&quot;modalTotal&quot; class=&quot;text-emerald-400 text-lg font-black&quot;>$0.00</span>
@@ -985,17 +991,28 @@
     var cuentaActual = cuentas[key] || { items: [] };
     var items = cuentaActual.items || [];
 
+    var pendientesCount = 0;
+
     if (items.length === 0) {
       container.innerHTML = `<div class=&quot;text-center py-6 text-slate-500 text-xs&quot;>No hay consumos registrados en tu silla.</div>`;
     } else {
       items.forEach((item, idx) => {
         const itemSubtotal = item.precio * item.cantidad;
+        if (!item.enviadoCocina) pendientesCount++;
+
         const row = document.createElement('div');
         row.className = 'flex justify-between items-center bg-slate-900/80 p-2.5 rounded-xl border border-slate-800 text-xs';
         row.innerHTML = `
             <div>
-              <span class=&quot;font-bold text-white&quot;>${item.nombre} x${item.cantidad}</span>
-              <span class=&quot;block text-[10px] text-slate-400&quot;>${item.notas ? item.notas + ' • ' : ''}$${Number(item.precio).toFixed(2)} c/u</span>
+              <div class=&quot;flex items-center gap-1.5&quot;>
+                <span class=&quot;font-bold text-white&quot;>${item.nombre} x${item.cantidad}</span>
+              </div>
+              <div class=&quot;flex items-center gap-2 mt-1&quot;>
+                <span class=&quot;text-[10px] text-slate-400&quot;>${item.notas ? item.notas + ' • ' : ''}$${Number(item.precio).toFixed(2)} c/u</span>
+                ${item.enviadoCocina
+                  ? `<span class=&quot;bg-emerald-950/60 text-emerald-300 border border-emerald-500/40 text-[9px] font-bold px-1.5 py-0.5 rounded flex items-center gap-1&quot;><i class=&quot;fa-solid fa-fire text-emerald-400&quot;></i> En Cocina (${item.horaEnvioCocina || item.hora || ''})</span>`
+                  : `<span class=&quot;bg-amber-950/60 text-amber-300 border border-amber-500/40 text-[9px] font-bold px-1.5 py-0.5 rounded flex items-center gap-1&quot;><i class=&quot;fa-solid fa-clock text-amber-400&quot;></i> Pendiente</span>`}
+              </div>
             </div>
             <span class=&quot;font-black text-emerald-400&quot;>$${itemSubtotal.toFixed(2)}</span>
           `;
@@ -1003,7 +1020,54 @@
       });
     }
 
+    const btnSendCocina = document.getElementById('btnClienteEnviarCocina');
+    const btnSendCocinaTxt = document.getElementById('btnClienteEnviarCocinaTxt');
+    if (btnSendCocina &amp;&amp; btnSendCocinaTxt) {
+      if (pendientesCount > 0) {
+        btnSendCocina.disabled = false;
+        btnSendCocina.style.opacity = '1';
+        btnSendCocina.style.cursor = 'pointer';
+        btnSendCocinaTxt.innerHTML = `<b>Enviar a Cocina / Barra</b> (${pendientesCount} pendiente${pendientesCount > 1 ? 's' : ''})`;
+      } else if (items.length > 0) {
+        btnSendCocina.disabled = true;
+        btnSendCocina.style.opacity = '0.65';
+        btnSendCocina.style.cursor = 'default';
+        btnSendCocinaTxt.innerHTML = `<i class=&quot;fa-solid fa-check-double&quot;></i> Todo enviado a Cocina`;
+      } else {
+        btnSendCocina.disabled = true;
+        btnSendCocina.style.opacity = '0.4';
+        btnSendCocina.style.cursor = 'not-allowed';
+        btnSendCocinaTxt.innerHTML = `Enviar a Cocina / Barra`;
+      }
+    }
+
     window.recalcularTotalesCompletos();
+  };
+
+  window.enviarPedidoClienteCocina = function () {
+    var cuentas = getStorageCuentas();
+    var key = window.simMesaId + '-' + window.simSillaNum;
+    var cuenta = cuentas[key];
+    if (!cuenta || !cuenta.items || cuenta.items.length === 0) {
+      alert('Agrega al menos un producto a tu comanda antes de enviar a cocina.');
+      return;
+    }
+
+    var pendientes = cuenta.items.filter(i => !i.enviadoCocina);
+    if (pendientes.length === 0) {
+      alert('Todos tus productos ya fueron enviados a Cocina / Barra de Café.');
+      return;
+    }
+
+    var nowStr = (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    pendientes.forEach(i => {
+      i.enviadoCocina = true;
+      i.horaEnvioCocina = nowStr;
+    });
+
+    saveStorageCuentas(cuentas);
+    window.renderCarrito();
+    alert(`🚀 ¡${pendientes.length} producto(s) enviados a Cocina / Barra de Café (${nowStr})! La preparación ha iniciado.`);
   };
 
   window.renderAcompanantesMesa = function () {
