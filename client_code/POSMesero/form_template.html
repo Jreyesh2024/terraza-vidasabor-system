@@ -457,6 +457,8 @@
 
             <span id="table-label-1"
               style="font-size: 12px !important; font-weight: 700 !important; color: #059669 !important;">🟢 Disponible</span>
+            <!-- CONTENEDOR DEDICADO DE SILLAS ARRIMADAS (SIN TRASLAPE) -->
+            <div id="table-arrimadas-container-1" style="display: flex !important; gap: 8px !important; align-items: center !important; justify-content: center !important; flex-wrap: wrap !important; min-height: 24px !important;"></div>
           </div>
 
           <!-- MESA 2 -->
@@ -487,6 +489,8 @@
 
             <span id="table-label-2"
               style="font-size: 12px !important; font-weight: 700 !important; color: #059669 !important;">🟢 Disponible</span>
+            <!-- CONTENEDOR DEDICADO DE SILLAS ARRIMADAS (SIN TRASLAPE) -->
+            <div id="table-arrimadas-container-2" style="display: flex !important; gap: 8px !important; align-items: center !important; justify-content: center !important; flex-wrap: wrap !important; min-height: 24px !important;"></div>
           </div>
 
           <!-- MESA 3 -->
@@ -517,6 +521,8 @@
 
             <span id="table-label-3"
               style="font-size: 12px !important; font-weight: 700 !important; color: #d97706 !important;">🟡 Ocupada (2 Comensales)</span>
+            <!-- CONTENEDOR DEDICADO DE SILLAS ARRIMADAS (SIN TRASLAPE) -->
+            <div id="table-arrimadas-container-3" style="display: flex !important; gap: 8px !important; align-items: center !important; justify-content: center !important; flex-wrap: wrap !important; min-height: 24px !important;"></div>
           </div>
 
         </div>
@@ -3971,7 +3977,12 @@
           }
         }
 
-        // B. Sillas Arrimadas Extras (s >= 5)
+        // B. Sillas Arrimadas Extras (s >= 5) — Renderizado limpio en contenedor dedicado (CERO TRASLAPE)
+        const arrimadasBox = document.getElementById(`table-arrimadas-container-${m}`);
+        if (arrimadasBox) {
+          arrimadasBox.innerHTML = '';
+        }
+
         Object.keys(window.palapaState.cuentas).forEach(k => {
           const parts = k.split('-');
           if (parseInt(parts[0]) === m) {
@@ -3983,24 +3994,24 @@
                 busyCount++;
                 arrimadasCount++;
 
-                if (tableBox) {
-                  const posClass = sn === 5 ? 'chair-pos-diag-tr' : sn === 6 ? 'chair-pos-diag-tl' : sn === 7 ? 'chair-pos-diag-br' : 'chair-pos-diag-bl';
+                if (arrimadasBox) {
                   const arrEl = document.createElement('div');
                   arrEl.id = `chair-${m}-${sn}`;
-                  arrEl.className = `chair-btn-fixed ${posClass} chair-state-busy chair-arrimada-item`;
+                  arrEl.className = `chair-btn-fixed chair-state-busy chair-arrimada-item`;
                   arrEl.setAttribute('draggable', 'true');
                   arrEl.setAttribute('title', `Mesa ${m} Silla ${sn} (Arrimada) • Arrastra para mover o clic para comanda`);
-                  arrEl.innerHTML = `🪑 S${sn} <span style="font-size:9px;opacity:0.85;">(Arrimada)</span>`;
+                  arrEl.style.cssText = 'padding: 6px 14px !important; font-size: 11px !important; font-weight: 800 !important; border-radius: 10px !important; cursor: pointer !important; display: flex !important; align-items: center !important; gap: 6px !important; box-shadow: 0 2px 6px rgba(0,0,0,0.1) !important;';
+                  arrEl.innerHTML = `🪑 Silla ${sn} <span style="font-size:9px; opacity:0.85; background: rgba(0,0,0,0.08); padding: 2px 6px; border-radius: 6px;">Arrimada</span>`;
 
                   arrEl.addEventListener('mousedown', function(e) {
                     _chairMousedown(e, m, sn);
                   });
 
                   if (isMoveMode && origen && origen.mesaId === m && origen.sillaNum === sn) {
-                    arrEl.className = `chair-btn-fixed ${posClass} chair-moving-source chair-arrimada-item`;
+                    arrEl.className = `chair-btn-fixed chair-moving-source chair-arrimada-item`;
                   }
 
-                  tableBox.appendChild(arrEl);
+                  arrimadasBox.appendChild(arrEl);
                 }
               }
             }
@@ -4042,7 +4053,7 @@
         }
       }
 
-      // 2.1 Renderizar Efecto Visual de Mesas Unidas / Grupos Modulares
+      // 2.1 Transformación Física y Visual de Mesas Unidas / Grupos Modulares
       const unidas = window.palapaState.mesasUnidas;
       const btnSep = document.getElementById('btnSeparateTables');
       const btn12 = document.getElementById('btnJoin12');
@@ -4050,38 +4061,143 @@
       const btnAll = document.getElementById('btnJoinAll');
 
       if (btnSep) btnSep.style.setProperty('display', unidas ? 'flex' : 'none', 'important');
-      if (btn12) btn12.style.background = unidas === '1-2' ? '#0284c7' : '#ffffff';
-      if (btn12) btn12.style.color = unidas === '1-2' ? '#ffffff' : '#0284c7';
-      if (btn23) btn23.style.background = unidas === '2-3' ? '#0284c7' : '#ffffff';
-      if (btn23) btn23.style.color = unidas === '2-3' ? '#ffffff' : '#0284c7';
-      if (btnAll) btnAll.style.background = unidas === '1-2-3' ? '#0369a1' : 'linear-gradient(135deg, #0284c7, #0369a1)';
+      if (btn12) {
+        btn12.style.background = unidas === '1-2' ? '#0284c7' : '#ffffff';
+        btn12.style.color = unidas === '1-2' ? '#ffffff' : '#0284c7';
+      }
+      if (btn23) {
+        btn23.style.background = unidas === '2-3' ? '#0284c7' : '#ffffff';
+        btn23.style.color = unidas === '2-3' ? '#ffffff' : '#0284c7';
+      }
+      if (btnAll) {
+        btnAll.style.background = unidas === '1-2-3' ? '#0369a1' : 'linear-gradient(135deg, #0284c7, #0369a1)';
+      }
 
-      for (let m = 1; m <= 3; m++) {
-        const card = document.getElementById(`table-card-container-${m}`);
-        const headerTitle = document.getElementById(`table-header-title-${m}`);
-        const isJoined = unidas === '1-2-3' || (unidas === '1-2' && (m === 1 || m === 2)) || (unidas === '2-3' && (m === 2 || m === 3));
+      const grid = document.getElementById('floorplanTablesGrid');
+      const card1 = document.getElementById('table-card-container-1');
+      const card2 = document.getElementById('table-card-container-2');
+      const card3 = document.getElementById('table-card-container-3');
+      const box1 = document.getElementById('table-box-1');
+      const box2 = document.getElementById('table-box-2');
+      const box3 = document.getElementById('table-box-3');
+      const circle1 = document.getElementById('table-circle-1');
+      const circle2 = document.getElementById('table-circle-2');
+      const circle3 = document.getElementById('table-circle-3');
+      const head1 = document.getElementById('table-header-title-1');
+      const head2 = document.getElementById('table-header-title-2');
+      const head3 = document.getElementById('table-header-title-3');
 
-        if (card) {
-          if (isJoined) {
-            card.style.border = '2px solid #0284c7';
-            card.style.background = '#f0f9ff';
-            card.style.boxShadow = '0 6px 20px rgba(2, 132, 199, 0.15)';
-          } else {
-            card.style.border = '1px solid #dce8f5';
-            card.style.background = '#f8fbff';
-            card.style.boxShadow = 'none';
+      if (grid && card1 && card2 && card3) {
+        if (unidas === '1-2') {
+          // Fusión física Mesa 1 + 2 (8 Pax)
+          grid.style.setProperty('grid-template-columns', '2fr 1fr', 'important');
+          card1.style.setProperty('display', 'flex', 'important');
+          card1.style.setProperty('border', '2.5px solid #0284c7', 'important');
+          card1.style.setProperty('background', '#f0f9ff', 'important');
+          card1.style.setProperty('box-shadow', '0 8px 25px rgba(2, 132, 199, 0.15)', 'important');
+          if (head1) head1.innerHTML = '🔗 MESA 1 + MESA 2 UNIDAS <span style="font-size:11px;color:#0284c7;">(GRUPO MODULAR 8 PAX)</span>';
+
+          if (box1) { box1.style.width = '360px'; box1.style.height = '230px'; }
+          if (circle1) {
+            circle1.style.width = '240px';
+            circle1.style.height = '104px';
+            circle1.innerHTML = `<span style="font-size:18px; font-weight:900; color:#0369a1;">M1 + M2 (UNIDAS)</span><span style="font-size:10px; font-weight:800; color:#0284c7; text-transform:uppercase;">Grupo Modular 8 Lugares</span>`;
           }
-        }
 
-        if (headerTitle) {
-          if (unidas === '1-2-3') {
-            headerTitle.innerHTML = `👑 Mesa ${m} <span style="font-size:10px; color:#0284c7;">(Imperial 10-12 Pax)</span>`;
-          } else if (unidas === '1-2' && (m === 1 || m === 2)) {
-            headerTitle.innerHTML = `🔗 Mesa ${m} <span style="font-size:10px; color:#0284c7;">(Grupo M1+M2)</span>`;
-          } else if (unidas === '2-3' && (m === 2 || m === 3)) {
-            headerTitle.innerHTML = `🔗 Mesa ${m} <span style="font-size:10px; color:#0284c7;">(Grupo M2+M3)</span>`;
-          } else {
-            headerTitle.innerHTML = `Mesa ${m} (Palapa)`;
+          card2.style.setProperty('display', 'none', 'important');
+
+          card3.style.setProperty('display', 'flex', 'important');
+          card3.style.setProperty('border', '1px solid #dce8f5', 'important');
+          card3.style.setProperty('background', '#f8fbff', 'important');
+          card3.style.setProperty('box-shadow', 'none', 'important');
+          if (head3) head3.innerHTML = 'Mesa 3 (Palapa)';
+          if (box3) { box3.style.width = '250px'; box3.style.height = '230px'; }
+          if (circle3) {
+            circle3.style.width = '104px';
+            circle3.style.height = '104px';
+          }
+
+        } else if (unidas === '2-3') {
+          // Fusión física Mesa 2 + 3 (8 Pax)
+          grid.style.setProperty('grid-template-columns', '1fr 2fr', 'important');
+          card1.style.setProperty('display', 'flex', 'important');
+          card1.style.setProperty('border', '1px solid #dce8f5', 'important');
+          card1.style.setProperty('background', '#f8fbff', 'important');
+          card1.style.setProperty('box-shadow', 'none', 'important');
+          if (head1) head1.innerHTML = 'Mesa 1 (Palapa)';
+          if (box1) { box1.style.width = '250px'; box1.style.height = '230px'; }
+          if (circle1) {
+            circle1.style.width = '104px';
+            circle1.style.height = '104px';
+          }
+
+          card2.style.setProperty('display', 'flex', 'important');
+          card2.style.setProperty('border', '2.5px solid #0284c7', 'important');
+          card2.style.setProperty('background', '#f0f9ff', 'important');
+          card2.style.setProperty('box-shadow', '0 8px 25px rgba(2, 132, 199, 0.15)', 'important');
+          if (head2) head2.innerHTML = '🔗 MESA 2 + MESA 3 UNIDAS <span style="font-size:11px;color:#0284c7;">(GRUPO MODULAR 8 PAX)</span>';
+
+          if (box2) { box2.style.width = '360px'; box2.style.height = '230px'; }
+          if (circle2) {
+            circle2.style.width = '240px';
+            circle2.style.height = '104px';
+            circle2.innerHTML = `<span style="font-size:18px; font-weight:900; color:#0369a1;">M2 + M3 (UNIDAS)</span><span style="font-size:10px; font-weight:800; color:#0284c7; text-transform:uppercase;">Grupo Modular 8 Lugares</span>`;
+          }
+
+          card3.style.setProperty('display', 'none', 'important');
+
+        } else if (unidas === '1-2-3') {
+          // Gran Mesa Imperial (M1 + M2 + M3)
+          grid.style.setProperty('grid-template-columns', '1fr', 'important');
+          card1.style.setProperty('display', 'flex', 'important');
+          card1.style.setProperty('border', '2.5px solid #0284c7', 'important');
+          card1.style.setProperty('background', '#f0f9ff', 'important');
+          card1.style.setProperty('box-shadow', '0 10px 30px rgba(2, 132, 199, 0.2)', 'important');
+          if (head1) head1.innerHTML = '👑 GRAN MESA IMPERIAL PALAPA (M1 + M2 + M3) • 10 A 12 PERSONAS';
+
+          if (box1) { box1.style.width = '560px'; box1.style.height = '230px'; }
+          if (circle1) {
+            circle1.style.width = '420px';
+            circle1.style.height = '104px';
+            circle1.innerHTML = `<span style="font-size:18px; font-weight:900; color:#0369a1;">👑 M1 + M2 + M3 • BANQUETE IMPERIAL</span><span style="font-size:10px; font-weight:800; color:#0284c7; text-transform:uppercase;">Reservado Palapa 10 a 12 Lugares</span>`;
+          }
+
+          card2.style.setProperty('display', 'none', 'important');
+          card3.style.setProperty('display', 'none', 'important');
+
+        } else {
+          // Mesas Individuales Estándar
+          grid.style.setProperty('grid-template-columns', 'repeat(3, 1fr)', 'important');
+          [card1, card2, card3].forEach((c, idx) => {
+            const mesaNum = idx + 1;
+            c.style.setProperty('display', 'flex', 'important');
+            c.style.setProperty('border', '1px solid #dce8f5', 'important');
+            c.style.setProperty('background', '#f8fbff', 'important');
+            c.style.setProperty('box-shadow', 'none', 'important');
+          });
+
+          if (head1) head1.innerHTML = 'Mesa 1 (Palapa)';
+          if (head2) head2.innerHTML = 'Mesa 2 (Palapa)';
+          if (head3) head3.innerHTML = 'Mesa 3 (Palapa)';
+
+          if (box1) { box1.style.width = '250px'; box1.style.height = '230px'; }
+          if (box2) { box2.style.width = '250px'; box2.style.height = '230px'; }
+          if (box3) { box3.style.width = '250px'; box3.style.height = '230px'; }
+
+          if (circle1) {
+            circle1.style.width = '104px';
+            circle1.style.height = '104px';
+            circle1.innerHTML = `<span style="font-size:18px; font-weight:900; color:#065f46; line-height:1;">M1</span><span id="table-status-1" style="font-size:9px; font-weight:800; color:#059669; text-transform:uppercase; margin-top:2px;">Libre</span>`;
+          }
+          if (circle2) {
+            circle2.style.width = '104px';
+            circle2.style.height = '104px';
+            circle2.innerHTML = `<span style="font-size:18px; font-weight:900; color:#065f46; line-height:1;">M2</span><span id="table-status-2" style="font-size:9px; font-weight:800; color:#059669; text-transform:uppercase; margin-top:2px;">Libre</span>`;
+          }
+          if (circle3) {
+            circle3.style.width = '104px';
+            circle3.style.height = '104px';
+            circle3.innerHTML = `<span style="font-size:18px; font-weight:900; color:#92400e; line-height:1;">M3</span><span id="table-status-3" style="font-size:9px; font-weight:800; color:#d97706; text-transform:uppercase; margin-top:2px;">2 Ocupadas</span>`;
           }
         }
       }
