@@ -213,6 +213,12 @@
           </div>
         </div>
 
+        <!-- BOTÓN ENVIAR A COCINA / BARRA (POR TRAMOS) -->
+        <button id="btnClienteEnviarCocina" onclick="window.enviarPedidoClienteCocina();"
+          class="w-full py-2.5 px-3 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-xs shadow-lg shadow-amber-500/20 transition flex items-center justify-center gap-2 cursor-pointer">
+          <i class="fa-solid fa-fire"></i> <span id="btnClienteEnviarCocinaTxt">Enviar a Cocina / Barra</span>
+        </button>
+
         <!-- BOTONES DE COBRO MULTICANAL -->
         <div class="grid grid-cols-2 gap-2">
           <button onclick="window.abrirModalCobroCliente('santander')"
@@ -985,17 +991,28 @@
     var cuentaActual = cuentas[key] || { items: [] };
     var items = cuentaActual.items || [];
 
+    var pendientesCount = 0;
+
     if (items.length === 0) {
       container.innerHTML = `<div class="text-center py-6 text-slate-500 text-xs">No hay consumos registrados en tu silla.</div>`;
     } else {
       items.forEach((item, idx) => {
         const itemSubtotal = item.precio * item.cantidad;
+        if (!item.enviadoCocina) pendientesCount++;
+
         const row = document.createElement('div');
         row.className = 'flex justify-between items-center bg-slate-900/80 p-2.5 rounded-xl border border-slate-800 text-xs';
         row.innerHTML = `
             <div>
-              <span class="font-bold text-white">${item.nombre} x${item.cantidad}</span>
-              <span class="block text-[10px] text-slate-400">${item.notas ? item.notas + ' • ' : ''}$${Number(item.precio).toFixed(2)} c/u</span>
+              <div class="flex items-center gap-1.5">
+                <span class="font-bold text-white">${item.nombre} x${item.cantidad}</span>
+              </div>
+              <div class="flex items-center gap-2 mt-1">
+                <span class="text-[10px] text-slate-400">${item.notas ? item.notas + ' • ' : ''}$${Number(item.precio).toFixed(2)} c/u</span>
+                ${item.enviadoCocina
+                  ? `<span class="bg-emerald-950/60 text-emerald-300 border border-emerald-500/40 text-[9px] font-bold px-1.5 py-0.5 rounded flex items-center gap-1"><i class="fa-solid fa-fire text-emerald-400"></i> En Cocina (${item.horaEnvioCocina || item.hora || ''})</span>`
+                  : `<span class="bg-amber-950/60 text-amber-300 border border-amber-500/40 text-[9px] font-bold px-1.5 py-0.5 rounded flex items-center gap-1"><i class="fa-solid fa-clock text-amber-400"></i> Pendiente</span>`}
+              </div>
             </div>
             <span class="font-black text-emerald-400">$${itemSubtotal.toFixed(2)}</span>
           `;
@@ -1003,7 +1020,54 @@
       });
     }
 
+    const btnSendCocina = document.getElementById('btnClienteEnviarCocina');
+    const btnSendCocinaTxt = document.getElementById('btnClienteEnviarCocinaTxt');
+    if (btnSendCocina && btnSendCocinaTxt) {
+      if (pendientesCount > 0) {
+        btnSendCocina.disabled = false;
+        btnSendCocina.style.opacity = '1';
+        btnSendCocina.style.cursor = 'pointer';
+        btnSendCocinaTxt.innerHTML = `<b>Enviar a Cocina / Barra</b> (${pendientesCount} pendiente${pendientesCount > 1 ? 's' : ''})`;
+      } else if (items.length > 0) {
+        btnSendCocina.disabled = true;
+        btnSendCocina.style.opacity = '0.65';
+        btnSendCocina.style.cursor = 'default';
+        btnSendCocinaTxt.innerHTML = `<i class="fa-solid fa-check-double"></i> Todo enviado a Cocina`;
+      } else {
+        btnSendCocina.disabled = true;
+        btnSendCocina.style.opacity = '0.4';
+        btnSendCocina.style.cursor = 'not-allowed';
+        btnSendCocinaTxt.innerHTML = `Enviar a Cocina / Barra`;
+      }
+    }
+
     window.recalcularTotalesCompletos();
+  };
+
+  window.enviarPedidoClienteCocina = function () {
+    var cuentas = getStorageCuentas();
+    var key = window.simMesaId + '-' + window.simSillaNum;
+    var cuenta = cuentas[key];
+    if (!cuenta || !cuenta.items || cuenta.items.length === 0) {
+      alert('Agrega al menos un producto a tu comanda antes de enviar a cocina.');
+      return;
+    }
+
+    var pendientes = cuenta.items.filter(i => !i.enviadoCocina);
+    if (pendientes.length === 0) {
+      alert('Todos tus productos ya fueron enviados a Cocina / Barra de Café.');
+      return;
+    }
+
+    var nowStr = (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    pendientes.forEach(i => {
+      i.enviadoCocina = true;
+      i.horaEnvioCocina = nowStr;
+    });
+
+    saveStorageCuentas(cuentas);
+    window.renderCarrito();
+    alert(`🚀 ¡${pendientes.length} producto(s) enviados a Cocina / Barra de Café (${nowStr})! La preparación ha iniciado.`);
   };
 
   window.renderAcompanantesMesa = function () {

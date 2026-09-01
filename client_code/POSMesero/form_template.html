@@ -238,6 +238,42 @@
     border-radius: 12px !important;
   }
 
+  /* Dual-mode layout transition (Overview vs Comanda & Wide Menu) */
+  #mainCanvasGrid.mode-overview {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
+    flex: 1 !important;
+  }
+  #mainCanvasGrid.mode-overview #panelMenuCatalogo {
+    display: none !important;
+  }
+  #mainCanvasGrid.mode-overview #viewOverviewCroquis {
+    display: flex !important;
+  }
+  #mainCanvasGrid.mode-overview #viewSidebarComanda {
+    display: none !important;
+  }
+
+  #mainCanvasGrid.mode-comanda {
+    display: grid !important;
+    grid-template-columns: 340px 1fr !important;
+    gap: 20px !important;
+    flex: 1 !important;
+  }
+  #mainCanvasGrid.mode-comanda #panelCroquisMesas {
+    max-width: 360px !important;
+  }
+  #mainCanvasGrid.mode-comanda #viewOverviewCroquis {
+    display: none !important;
+  }
+  #mainCanvasGrid.mode-comanda #viewSidebarComanda {
+    display: flex !important;
+  }
+  #mainCanvasGrid.mode-comanda #panelMenuCatalogo {
+    display: flex !important;
+  }
+
   @keyframes slideUp {
     from {
       transform: translateY(30px);
@@ -309,148 +345,208 @@
     </button>
   </div>
 
-  <!-- MAIN CANVAS GRID -->
-  <div
-    style="display: grid !important; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) !important; gap: 24px !important; flex: 1 !important;">
+  <!-- MAIN CANVAS GRID (DUAL-MODE: OVERVIEW PANORAMA VS COMANDA & WIDE MENU) -->
+  <div id="mainCanvasGrid" class="mode-overview"
+    style="display: grid !important; gap: 20px !important; flex: 1 !important; transition: all 0.3s ease !important;">
 
-    <!-- LEFT PANEL: 2D FLOOR PLAN OF LA PALAPA -->
-    <div
-      style="background: rgba(15, 23, 42, 0.95) !important; border: 1px solid #1e293b !important; border-radius: 20px !important; padding: 24px !important; display: flex !important; flex-direction: column !important; justify-content: space-between !important; min-height: 540px !important; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5) !important;">
+    <!-- PANEL CROQUIS / SIDEBAR DE COMANDA -->
+    <div id="panelCroquisMesas"
+      style="background: rgba(15, 23, 42, 0.95) !important; border: 1px solid #1e293b !important; border-radius: 20px !important; padding: 20px !important; display: flex !important; flex-direction: column !important; justify-content: space-between !important; min-height: 540px !important; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5) !important;">
 
-      <!-- PARED POSTERIOR BARRA -->
-      <div
-        style="background: rgba(30, 41, 59, 0.9) !important; border: 1px solid rgba(16, 185, 129, 0.3) !important; border-radius: 12px !important; padding: 12px 16px !important; display: flex !important; flex-wrap: wrap !important; justify-content: space-between !important; align-items: center !important; margin-bottom: 24px !important; gap: 10px !important;">
+      <!-- VISTA 1: MODO CROQUIS PANORÁMICO (3 MESAS GRANDES A PANTALLA COMPLETA) -->
+      <div id="viewOverviewCroquis" style="display: flex !important; flex-direction: column !important; justify-content: space-between !important; height: 100% !important; gap: 16px !important;">
+        <!-- PARED POSTERIOR BARRA -->
         <div
-          style="display: flex !important; align-items: center !important; gap: 8px !important; font-size: 12px !important; font-weight: 700 !important; color: #34d399 !important;">
-          <i class="fa-solid fa-mug-hot" style="color: #fbbf24 !important; font-size: 16px !important;"></i>
-          <span>Mueble de Servicio & Barra de Café (Pared Posterior 6.00m)</span>
+          style="background: rgba(30, 41, 59, 0.9) !important; border: 1px solid rgba(16, 185, 129, 0.3) !important; border-radius: 12px !important; padding: 12px 16px !important; display: flex !important; flex-wrap: wrap !important; justify-content: space-between !important; align-items: center !important; gap: 10px !important;">
+          <div
+            style="display: flex !important; align-items: center !important; gap: 8px !important; font-size: 12px !important; font-weight: 700 !important; color: #34d399 !important;">
+            <i class="fa-solid fa-mug-hot" style="color: #fbbf24 !important; font-size: 16px !important;"></i>
+            <span>Mueble de Servicio & Barra de Café (Pared Posterior 6.00m)</span>
+          </div>
+          <div
+            style="display: flex !important; gap: 16px !important; font-size: 11px !important; color: #94a3b8 !important; font-weight: 600 !important;">
+            <span><i class="fa-solid fa-wine-glass" style="color: #c084fc !important; margin-right: 4px !important;"></i> Cristalería</span>
+            <span><i class="fa-solid fa-fire" style="color: #fbbf24 !important; margin-right: 4px !important;"></i> Espresso</span>
+            <span><i class="fa-solid fa-sink" style="color: #38bdf8 !important; margin-right: 4px !important;"></i> Insumos</span>
+          </div>
         </div>
+
+        <!-- 3 CIRCULAR TABLES WITH 4 CHAIRS EACH -->
         <div
-          style="display: flex !important; gap: 16px !important; font-size: 11px !important; color: #94a3b8 !important; font-weight: 600 !important;">
-          <span><i class="fa-solid fa-wine-glass" style="color: #c084fc !important; margin-right: 4px !important;"></i>
-            Cristalería</span>
-          <span><i class="fa-solid fa-fire" style="color: #fbbf24 !important; margin-right: 4px !important;"></i>
-            Espresso</span>
-          <span><i class="fa-solid fa-sink" style="color: #38bdf8 !important; margin-right: 4px !important;"></i>
-            Insumos</span>
+          style="display: grid !important; grid-template-columns: repeat(3, 1fr) !important; gap: 20px !important; margin: auto 0 !important; padding: 20px 0 !important;">
+
+          <!-- MESA 1 -->
+          <div
+            style="display: flex !important; flex-direction: column !important; align-items: center !important; gap: 12px !important;">
+            <span
+              style="font-size: 12px !important; font-weight: 900 !important; color: #cbd5e1 !important; text-transform: uppercase !important; letter-spacing: 1px !important;">Mesa 1 (Palapa)</span>
+
+            <div id="table-box-1" class="table-box-220"
+              style="position: relative !important; width: 220px !important; height: 220px !important; display: flex !important; align-items: center !important; justify-content: center !important; margin: 0 auto !important;">
+              <div id="table-circle-1" class="table-circle-fixed"
+                style="width: 96px !important; height: 96px !important; border-radius: 50% !important; background: #064e3b !important; border: 4px solid #10b981 !important; box-shadow: 0 0 25px rgba(16, 185, 129, 0.4) !important; display: flex !important; flex-direction: column !important; align-items: center !important; justify-content: center !important; cursor: pointer !important; z-index: 10 !important;">
+                <span
+                  style="font-size: 18px !important; font-weight: 900 !important; color: #ffffff !important; margin: 0 !important; line-height: 1 !important;">M1</span>
+                <span id="table-status-1"
+                  style="font-size: 9px !important; font-weight: 800 !important; color: #6ee7b7 !important; text-transform: uppercase !important; margin-top: 2px !important;">Libre</span>
+              </div>
+
+              <div id="chair-1-1" class="chair-btn-fixed chair-pos-top chair-state-free" draggable="false"
+                title="Mesa 1 Silla 1 (Disponible)">Silla 1</div>
+              <div id="chair-1-2" class="chair-btn-fixed chair-pos-right chair-state-free" draggable="false"
+                title="Mesa 1 Silla 2 (Disponible)">Silla 2</div>
+              <div id="chair-1-3" class="chair-btn-fixed chair-pos-bottom chair-state-free" draggable="false"
+                title="Mesa 1 Silla 3 (Disponible)">Silla 3</div>
+              <div id="chair-1-4" class="chair-btn-fixed chair-pos-left chair-state-free" draggable="false"
+                title="Mesa 1 Silla 4 (Disponible)">Silla 4</div>
+            </div>
+
+            <span id="table-label-1"
+              style="font-size: 12px !important; font-weight: 700 !important; color: #34d399 !important;">🟢 Disponible</span>
+          </div>
+
+          <!-- MESA 2 -->
+          <div
+            style="display: flex !important; flex-direction: column !important; align-items: center !important; gap: 12px !important;">
+            <span
+              style="font-size: 12px !important; font-weight: 900 !important; color: #cbd5e1 !important; text-transform: uppercase !important; letter-spacing: 1px !important;">Mesa 2 (Palapa)</span>
+
+            <div id="table-box-2" class="table-box-220"
+              style="position: relative !important; width: 220px !important; height: 220px !important; display: flex !important; align-items: center !important; justify-content: center !important; margin: 0 auto !important;">
+              <div id="table-circle-2" class="table-circle-fixed"
+                style="width: 96px !important; height: 96px !important; border-radius: 50% !important; background: #064e3b !important; border: 4px solid #10b981 !important; box-shadow: 0 0 25px rgba(16, 185, 129, 0.4) !important; display: flex !important; flex-direction: column !important; align-items: center !important; justify-content: center !important; cursor: pointer !important; z-index: 10 !important;">
+                <span
+                  style="font-size: 18px !important; font-weight: 900 !important; color: #ffffff !important; margin: 0 !important; line-height: 1 !important;">M2</span>
+                <span id="table-status-2"
+                  style="font-size: 9px !important; font-weight: 800 !important; color: #6ee7b7 !important; text-transform: uppercase !important; margin-top: 2px !important;">Libre</span>
+              </div>
+
+              <div id="chair-2-1" class="chair-btn-fixed chair-pos-top chair-state-free" draggable="false"
+                title="Mesa 2 Silla 1 (Disponible)">Silla 1</div>
+              <div id="chair-2-2" class="chair-btn-fixed chair-pos-right chair-state-free" draggable="false"
+                title="Mesa 2 Silla 2 (Disponible)">Silla 2</div>
+              <div id="chair-2-3" class="chair-btn-fixed chair-pos-bottom chair-state-free" draggable="false"
+                title="Mesa 2 Silla 3 (Disponible)">Silla 3</div>
+              <div id="chair-2-4" class="chair-btn-fixed chair-pos-left chair-state-free" draggable="false"
+                title="Mesa 2 Silla 4 (Disponible)">Silla 4</div>
+            </div>
+
+            <span id="table-label-2"
+              style="font-size: 12px !important; font-weight: 700 !important; color: #34d399 !important;">🟢 Disponible</span>
+          </div>
+
+          <!-- MESA 3 -->
+          <div
+            style="display: flex !important; flex-direction: column !important; align-items: center !important; gap: 12px !important;">
+            <span
+              style="font-size: 12px !important; font-weight: 900 !important; color: #fbbf24 !important; text-transform: uppercase !important; letter-spacing: 1px !important;">Mesa 3 (Palapa)</span>
+
+            <div id="table-box-3" class="table-box-220"
+              style="position: relative !important; width: 220px !important; height: 220px !important; display: flex !important; align-items: center !important; justify-content: center !important; margin: 0 auto !important;">
+              <div id="table-circle-3" class="table-circle-fixed"
+                style="width: 96px !important; height: 96px !important; border-radius: 50% !important; background: #78350f !important; border: 4px solid #f59e0b !important; box-shadow: 0 0 25px rgba(245, 158, 11, 0.4) !important; display: flex !important; flex-direction: column !important; align-items: center !important; justify-content: center !important; cursor: pointer !important; z-index: 10 !important;">
+                <span
+                  style="font-size: 18px !important; font-weight: 900 !important; color: #fef3c7 !important; margin: 0 !important; line-height: 1 !important;">M3</span>
+                <span id="table-status-3"
+                  style="font-size: 9px !important; font-weight: 800 !important; color: #fde68a !important; text-transform: uppercase !important; margin-top: 2px !important;">2 Ocupadas</span>
+              </div>
+
+              <div id="chair-3-1" class="chair-btn-fixed chair-pos-top chair-state-busy" draggable="true"
+                title="Mesa 3 Silla 1 (Ocupada) • Arrastra para mover">Silla 1</div>
+              <div id="chair-3-2" class="chair-btn-fixed chair-pos-right chair-state-busy" draggable="true"
+                title="Mesa 3 Silla 2 (Ocupada) • Arrastra para mover">Silla 2</div>
+              <div id="chair-3-3" class="chair-btn-fixed chair-pos-bottom chair-state-free" draggable="false"
+                title="Mesa 3 Silla 3 (Disponible)">Silla 3</div>
+              <div id="chair-3-4" class="chair-btn-fixed chair-pos-left chair-state-free" draggable="false"
+                title="Mesa 3 Silla 4 (Disponible)">Silla 4</div>
+            </div>
+
+            <span id="table-label-3"
+              style="font-size: 12px !important; font-weight: 700 !important; color: #fbbf24 !important;">🟡 Ocupada (2 Comensales)</span>
+          </div>
+
+        </div>
+
+        <!-- FOOTER INFO PASILLO -->
+        <div
+          style="padding-top: 16px !important; border-top: 1px solid #1e293b !important; display: flex !important; justify-content: space-between !important; align-items: center !important; font-size: 12px !important; color: #94a3b8 !important; font-weight: 500 !important;">
+          <span><i class="fa-solid fa-door-open" style="color: #34d399 !important; margin-right: 6px !important;"></i> Entrada Frontal & Pasillos de Circulación</span>
+          <span style="color: #34d399 !important; font-weight: 700 !important;">Área 1: La Palapa (6.00m x 4.00m)</span>
         </div>
       </div>
 
-      <!-- 3 CIRCULAR TABLES WITH 4 CHAIRS EACH -->
-      <div
-        style="display: grid !important; grid-template-columns: repeat(3, 1fr) !important; gap: 20px !important; margin: auto 0 !important; padding: 20px 0 !important;">
-
-        <!-- MESA 1 -->
-        <div
-          style="display: flex !important; flex-direction: column !important; align-items: center !important; gap: 12px !important;">
-          <span
-            style="font-size: 12px !important; font-weight: 900 !important; color: #cbd5e1 !important; text-transform: uppercase !important; letter-spacing: 1px !important;">Mesa
-            1 (Palapa)</span>
-
-          <div id="table-box-1" class="table-box-220"
-            style="position: relative !important; width: 220px !important; height: 220px !important; display: flex !important; align-items: center !important; justify-content: center !important; margin: 0 auto !important;">
-            <div id="table-circle-1" class="table-circle-fixed"
-              style="width: 96px !important; height: 96px !important; border-radius: 50% !important; background: #064e3b !important; border: 4px solid #10b981 !important; box-shadow: 0 0 25px rgba(16, 185, 129, 0.4) !important; display: flex !important; flex-direction: column !important; align-items: center !important; justify-content: center !important; cursor: pointer !important; z-index: 10 !important;">
-              <span
-                style="font-size: 18px !important; font-weight: 900 !important; color: #ffffff !important; margin: 0 !important; line-height: 1 !important;">M1</span>
-              <span id="table-status-1"
-                style="font-size: 9px !important; font-weight: 800 !important; color: #6ee7b7 !important; text-transform: uppercase !important; margin-top: 2px !important;">Libre</span>
-            </div>
-
-            <div id="chair-1-1" class="chair-btn-fixed chair-pos-top chair-state-free" draggable="false"
-              title="Mesa 1 Silla 1 (Disponible)">Silla 1</div>
-            <div id="chair-1-2" class="chair-btn-fixed chair-pos-right chair-state-free" draggable="false"
-              title="Mesa 1 Silla 2 (Disponible)">Silla 2</div>
-            <div id="chair-1-3" class="chair-btn-fixed chair-pos-bottom chair-state-free" draggable="false"
-              title="Mesa 1 Silla 3 (Disponible)">Silla 3</div>
-            <div id="chair-1-4" class="chair-btn-fixed chair-pos-left chair-state-free" draggable="false"
-              title="Mesa 1 Silla 4 (Disponible)">Silla 4</div>
-          </div>
-
-          <span id="table-label-1"
-            style="font-size: 12px !important; font-weight: 700 !important; color: #34d399 !important;">🟢
-            Disponible</span>
+      <!-- VISTA 2: SIDEBAR COMPACTO DE COMANDA (CUANDO SE TOMA ORDEN EN MESA/SILLA) -->
+      <div id="viewSidebarComanda" style="display: none !important; flex-direction: column !important; justify-content: space-between !important; height: 100% !important; gap: 12px !important;">
+        <!-- Top Back Button -->
+        <div style="display: flex !important; justify-content: space-between !important; align-items: center !important; border-bottom: 1px solid #1e293b !important; padding-bottom: 8px !important;">
+          <button onclick="window.volverAlCroquisGeneral();"
+            style="background: #1e293b !important; color: #38bdf8 !important; border: 1px solid #334155 !important; border-radius: 10px !important; padding: 6px 12px !important; font-size: 11px !important; font-weight: 800 !important; cursor: pointer !important; display: flex !important; align-items: center !important; gap: 6px !important;">
+            <i class="fa-solid fa-arrow-left"></i> Ver Mesas
+          </button>
+          <span id="sidebarQrBadge" style="font-size: 10px !important; font-weight: 800 !important; color: #94a3b8 !important; background: #020617 !important; padding: 4px 8px !important; border-radius: 6px !important; border: 1px solid #1e293b !important;">
+            QR: #PV-021
+          </span>
         </div>
 
-        <!-- MESA 2 -->
-        <div
-          style="display: flex !important; flex-direction: column !important; align-items: center !important; gap: 12px !important;">
-          <span
-            style="font-size: 12px !important; font-weight: 900 !important; color: #cbd5e1 !important; text-transform: uppercase !important; letter-spacing: 1px !important;">Mesa
-            2 (Palapa)</span>
-
-          <div id="table-box-2" class="table-box-220"
-            style="position: relative !important; width: 220px !important; height: 220px !important; display: flex !important; align-items: center !important; justify-content: center !important; margin: 0 auto !important;">
-            <div id="table-circle-2" class="table-circle-fixed"
-              style="width: 96px !important; height: 96px !important; border-radius: 50% !important; background: #064e3b !important; border: 4px solid #10b981 !important; box-shadow: 0 0 25px rgba(16, 185, 129, 0.4) !important; display: flex !important; flex-direction: column !important; align-items: center !important; justify-content: center !important; cursor: pointer !important; z-index: 10 !important;">
-              <span
-                style="font-size: 18px !important; font-weight: 900 !important; color: #ffffff !important; margin: 0 !important; line-height: 1 !important;">M2</span>
-              <span id="table-status-2"
-                style="font-size: 9px !important; font-weight: 800 !important; color: #6ee7b7 !important; text-transform: uppercase !important; margin-top: 2px !important;">Libre</span>
-            </div>
-
-            <div id="chair-2-1" class="chair-btn-fixed chair-pos-top chair-state-free" draggable="false"
-              title="Mesa 2 Silla 1 (Disponible)">Silla 1</div>
-            <div id="chair-2-2" class="chair-btn-fixed chair-pos-right chair-state-free" draggable="false"
-              title="Mesa 2 Silla 2 (Disponible)">Silla 2</div>
-            <div id="chair-2-3" class="chair-btn-fixed chair-pos-bottom chair-state-free" draggable="false"
-              title="Mesa 2 Silla 3 (Disponible)">Silla 3</div>
-            <div id="chair-2-4" class="chair-btn-fixed chair-pos-left chair-state-free" draggable="false"
-              title="Mesa 2 Silla 4 (Disponible)">Silla 4</div>
+        <!-- Target Chair Info & Switcher -->
+        <div style="background: #020617 !important; border: 1px solid #1e293b !important; border-radius: 12px !important; padding: 10px !important;">
+          <div style="display: flex !important; justify-content: space-between !important; align-items: center !important;">
+            <span id="sidebarTargetMesaSilla" style="font-size: 13px !important; font-weight: 900 !important; color: #34d399 !important;">Mesa 2 • Silla 1</span>
+            <span id="sidebarComensalNombre" style="font-size: 11px !important; color: #cbd5e1 !important; font-weight: 600 !important;">Comensal</span>
           </div>
 
-          <span id="table-label-2"
-            style="font-size: 12px !important; font-weight: 700 !important; color: #34d399 !important;">🟢
-            Disponible</span>
-        </div>
-
-        <!-- MESA 3 -->
-        <div
-          style="display: flex !important; flex-direction: column !important; align-items: center !important; gap: 12px !important;">
-          <span
-            style="font-size: 12px !important; font-weight: 900 !important; color: #fbbf24 !important; text-transform: uppercase !important; letter-spacing: 1px !important;">Mesa
-            3 (Palapa)</span>
-
-          <div id="table-box-3" class="table-box-220"
-            style="position: relative !important; width: 220px !important; height: 220px !important; display: flex !important; align-items: center !important; justify-content: center !important; margin: 0 auto !important;">
-            <div id="table-circle-3" class="table-circle-fixed"
-              style="width: 96px !important; height: 96px !important; border-radius: 50% !important; background: #78350f !important; border: 4px solid #f59e0b !important; box-shadow: 0 0 25px rgba(245, 158, 11, 0.4) !important; display: flex !important; flex-direction: column !important; align-items: center !important; justify-content: center !important; cursor: pointer !important; z-index: 10 !important;">
-              <span
-                style="font-size: 18px !important; font-weight: 900 !important; color: #fef3c7 !important; margin: 0 !important; line-height: 1 !important;">M3</span>
-              <span id="table-status-3"
-                style="font-size: 9px !important; font-weight: 800 !important; color: #fde68a !important; text-transform: uppercase !important; margin-top: 2px !important;">2
-                Ocupadas</span>
-            </div>
-
-            <div id="chair-3-1" class="chair-btn-fixed chair-pos-top chair-state-busy" draggable="true"
-              title="Mesa 3 Silla 1 (Ocupada) • Arrastra para mover">Silla 1</div>
-            <div id="chair-3-2" class="chair-btn-fixed chair-pos-right chair-state-busy" draggable="true"
-              title="Mesa 3 Silla 2 (Ocupada) • Arrastra para mover">Silla 2</div>
-            <div id="chair-3-3" class="chair-btn-fixed chair-pos-bottom chair-state-free" draggable="false"
-              title="Mesa 3 Silla 3 (Disponible)">Silla 3</div>
-            <div id="chair-3-4" class="chair-btn-fixed chair-pos-left chair-state-free" draggable="false"
-              title="Mesa 3 Silla 4 (Disponible)">Silla 4</div>
+          <!-- Quick chair switcher pills of active table -->
+          <div id="sidebarChairPills" style="display: flex !important; gap: 4px !important; margin-top: 8px !important; flex-wrap: wrap !important;">
+            <!-- S1, S2, S3, S4 pills -->
           </div>
-
-          <span id="table-label-3"
-            style="font-size: 12px !important; font-weight: 700 !important; color: #fbbf24 !important;">🟡 Ocupada (2
-            Comensales)</span>
         </div>
 
-      </div>
+        <!-- Real-time Comanda Items List -->
+        <div style="flex: 1 !important; display: flex !important; flex-direction: column !important; background: #020617 !important; border: 1px solid #1e293b !important; border-radius: 12px !important; padding: 10px !important; min-height: 200px !important; max-height: 260px !important; overflow-y: auto !important;">
+          <div style="display: flex !important; justify-content: space-between !important; align-items: center !important; margin-bottom: 6px !important; border-bottom: 1px solid #1e293b !important; padding-bottom: 4px !important;">
+            <span style="font-size: 11px !important; font-weight: 800 !important; color: #94a3b8 !important;"><i class="fa-solid fa-receipt"></i> Comanda de Silla</span>
+            <span id="sidebarItemsCountBadge" style="font-size: 10px !important; color: #38bdf8 !important; font-weight: 700 !important;">0 items</span>
+          </div>
+          <div id="sidebarComandaItemsList" style="display: flex !important; flex-direction: column !important; gap: 6px !important; flex: 1 !important;">
+            <!-- Dynamic items with status: Pendiente / En Cocina -->
+          </div>
+        </div>
 
-      <!-- FOOTER INFO PASILLO -->
-      <div
-        style="padding-top: 16px !important; border-top: 1px solid #1e293b !important; display: flex !important; justify-content: space-between !important; align-items: center !important; font-size: 12px !important; color: #94a3b8 !important; font-weight: 500 !important;">
-        <span><i class="fa-solid fa-door-open" style="color: #34d399 !important; margin-right: 6px !important;"></i>
-          Entrada Frontal & Pasillos de Circulación</span>
-        <span style="color: #34d399 !important; font-weight: 700 !important;">Área 1: La Palapa (6.00m x 4.00m)</span>
+        <!-- BATCH SEND TO KITCHEN BUTTON -->
+        <button id="btnSidebarEnviarCocina" onclick="window.enviarACocinaComandaActiva();"
+          style="padding: 10px !important; background: linear-gradient(135deg, #059669, #0d9488) !important; color: #ffffff !important; border: none !important; border-radius: 10px !important; font-size: 12px !important; font-weight: 900 !important; cursor: pointer !important; display: flex !important; align-items: center !important; justify-content: center !important; gap: 8px !important; box-shadow: 0 4px 12px rgba(5,150,105,0.3) !important;">
+          <i class="fa-solid fa-paper-plane"></i> <span id="btnSidebarEnviarCocinaTxt">Enviar a Cocina / Barra</span>
+        </button>
+
+        <!-- Totals and Quick Actions -->
+        <div style="background: #020617 !important; border: 1px solid #1e293b !important; border-radius: 12px !important; padding: 10px !important;">
+          <div style="display: flex !important; justify-content: space-between !important; font-size: 11px !important; color: #94a3b8 !important; margin-bottom: 2px !important;">
+            <span>Subtotal:</span><span id="sidebarSubtotal">$0.00</span>
+          </div>
+          <div style="display: flex !important; justify-content: space-between !important; font-size: 11px !important; color: #94a3b8 !important; margin-bottom: 4px !important;">
+            <span>IVA (16%):</span><span id="sidebarIva">$0.00</span>
+          </div>
+          <div style="display: flex !important; justify-content: space-between !important; font-size: 13px !important; font-weight: 900 !important; color: #34d399 !important; border-top: 1px solid #1e293b !important; padding-top: 4px !important;">
+            <span>Total:</span><span id="sidebarTotal">$0.00</span>
+          </div>
+        </div>
+
+        <div style="display: flex !important; gap: 8px !important;">
+          <button onclick="window.abrirModalComandaActual();"
+            style="flex: 1 !important; padding: 8px !important; background: #059669 !important; color: #ffffff !important; border: none !important; border-radius: 8px !important; font-size: 11px !important; font-weight: 800 !important; cursor: pointer !important;">
+            <i class="fa-solid fa-credit-card"></i> Cobrar Silla
+          </button>
+          <button onclick="window.iniciarModoMover();"
+            style="padding: 8px 12px !important; background: #1e293b !important; color: #38bdf8 !important; border: 1px solid #334155 !important; border-radius: 8px !important; font-size: 11px !important; font-weight: 800 !important; cursor: pointer !important;">
+            <i class="fa-solid fa-arrows-split-up-and-left"></i> Mover
+          </button>
+        </div>
       </div>
 
     </div>
 
-    <!-- RIGHT PANEL: WAITER MENU CATALOG -->
-    <div
+    <!-- RIGHT PANEL: WAITER MENU CATALOG (AMPLIADO A PANTALLA ANCHA) -->
+    <div id="panelMenuCatalogo"
       style="background: rgba(15, 23, 42, 0.95) !important; border: 1px solid #1e293b !important; border-radius: 20px !important; padding: 24px !important; display: flex !important; flex-direction: column !important; justify-content: space-between !important; gap: 16px !important; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5) !important;">
 
       <div style="display: flex !important; flex-direction: column !important; gap: 14px !important;">
@@ -458,37 +554,37 @@
           style="display: flex !important; justify-content: space-between !important; align-items: center !important; padding-bottom: 12px !important; border-bottom: 1px solid #1e293b !important;">
           <div>
             <h2
-              style="font-size: 15px !important; font-weight: 800 !important; color: #ffffff !important; margin: 0 !important; display: flex !important; align-items: center !important; gap: 8px !important;">
-              <i class="fa-solid fa-utensils" style="color: #f59e0b !important;"></i> Catálogo Menú Gourmet
+              style="font-size: 16px !important; font-weight: 800 !important; color: #ffffff !important; margin: 0 !important; display: flex !important; align-items: center !important; gap: 8px !important;">
+              <i class="fa-solid fa-utensils" style="color: #f59e0b !important;"></i> Catálogo de Menú Gourmet & Desayunos
             </h2>
             <p style="font-size: 11px !important; color: #94a3b8 !important; margin: 2px 0 0 0 !important;">Marcado
-              rápido de platillos & bebidas</p>
+              rápido de platillos & bebidas para cocina KDS</p>
           </div>
           <span id="activeTargetBadge"
-            style="padding: 6px 12px !important; background: rgba(5, 150, 105, 0.2) !important; color: #34d399 !important; border: 1px solid rgba(5, 150, 105, 0.4) !important; border-radius: 12px !important; font-size: 12px !important; font-weight: 900 !important;">
-            Mesa 3 • Silla 1
+            style="padding: 6px 14px !important; background: rgba(5, 150, 105, 0.2) !important; color: #34d399 !important; border: 1px solid rgba(5, 150, 105, 0.4) !important; border-radius: 12px !important; font-size: 13px !important; font-weight: 900 !important;">
+            Mesa 2 • Silla 1
           </span>
         </div>
 
         <!-- CATEGORY CHIPS (DESAYUNOS ESTRUCTURADOS - BEBIDAS PRIMERO) -->
         <div style="display: flex !important; gap: 6px !important; flex-wrap: wrap !important;" id="waiterCatChips">
-          <button data-cat="Bebidas & Jugos" id="wchip-Bebidas"
+          <button data-cat="Bebidas & Jugos" id="wchip-Bebidas" onclick="window.filtrarCategoria('Bebidas & Jugos')"
             style="padding: 6px 11px !important; font-size: 11px !important; font-weight: 800 !important; border-radius: 10px !important; border: 1px solid #34d399 !important; background: #059669 !important; color: #ffffff !important; cursor: pointer !important;">☕ Bebidas & Cafetería</button>
-          <button data-cat="Huevos & Omelettes" id="wchip-Huevos"
+          <button data-cat="Huevos & Omelettes" id="wchip-Huevos" onclick="window.filtrarCategoria('Huevos & Omelettes')"
             style="padding: 6px 11px !important; font-size: 11px !important; font-weight: 800 !important; border-radius: 10px !important; border: 1px solid #334155 !important; background: #1e293b !important; color: #cbd5e1 !important; cursor: pointer !important;">🍳 Huevos & Omelettes</button>
-          <button data-cat="Especialidades Mexicanas" id="wchip-Mex"
+          <button data-cat="Especialidades Mexicanas" id="wchip-Mex" onclick="window.filtrarCategoria('Especialidades Mexicanas')"
             style="padding: 6px 11px !important; font-size: 11px !important; font-weight: 800 !important; border-radius: 10px !important; border: 1px solid #334155 !important; background: #1e293b !important; color: #cbd5e1 !important; cursor: pointer !important;">🥘 Mexicanas</button>
-          <button data-cat="Dulces & Americanos" id="wchip-Dulces"
+          <button data-cat="Dulces & Americanos" id="wchip-Dulces" onclick="window.filtrarCategoria('Dulces & Americanos')"
             style="padding: 6px 11px !important; font-size: 11px !important; font-weight: 800 !important; border-radius: 10px !important; border: 1px solid #334155 !important; background: #1e293b !important; color: #cbd5e1 !important; cursor: pointer !important;">🥞 Dulces</button>
-          <button data-cat="Combos Recomendados" id="wchip-Combos"
+          <button data-cat="Combos Recomendados" id="wchip-Combos" onclick="window.filtrarCategoria('Combos Recomendados')"
             style="padding: 6px 11px !important; font-size: 11px !important; font-weight: 800 !important; border-radius: 10px !important; border: 1px solid #334155 !important; background: #1e293b !important; color: #cbd5e1 !important; cursor: pointer !important;">⭐ Combos</button>
-          <button data-cat="Menú Infantil (Kids)" id="wchip-Kids"
+          <button data-cat="Menú Infantil (Kids)" id="wchip-Kids" onclick="window.filtrarCategoria('Menú Infantil (Kids)')"
             style="padding: 6px 11px !important; font-size: 11px !important; font-weight: 800 !important; border-radius: 10px !important; border: 1px solid #334155 !important; background: #1e293b !important; color: #cbd5e1 !important; cursor: pointer !important;">👶 Menú Infantil</button>
         </div>
 
-        <!-- MENU ITEMS GRID -->
+        <!-- MENU ITEMS GRID (AMPLIO EN 3-4 COLUMNAS) -->
         <div id="waiterMenuGrid"
-          style="display: grid !important; grid-template-columns: repeat(2, 1fr) !important; gap: 10px !important; max-height: 380px !important; overflow-y: auto !important; padding-right: 2px !important;">
+          style="display: grid !important; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)) !important; gap: 12px !important; max-height: 480px !important; overflow-y: auto !important; padding-right: 2px !important;">
           <!-- Product cards rendered dynamically -->
         </div>
       </div>
@@ -496,11 +592,11 @@
       <!-- FOOTER QUICK BUTTONS -->
       <div
         style="display: flex !important; gap: 10px !important; padding-top: 12px !important; border-top: 1px solid #1e293b !important;">
-        <button id="btnVerComandaActiva"
+        <button id="btnVerComandaActiva" onclick="window.abrirModalComandaActual();"
           style="flex: 1 !important; padding: 12px !important; background: linear-gradient(135deg, #059669, #0d9488) !important; color: #ffffff !important; font-weight: 900 !important; font-size: 12px !important; border-radius: 12px !important; border: none !important; cursor: pointer !important; box-shadow: 0 10px 15px -3px rgba(5, 150, 105, 0.4) !important; display: flex !important; align-items: center !important; justify-content: center !important; gap: 8px !important;">
-          <i class="fa-solid fa-receipt"></i> Ver Comanda Activa
+          <i class="fa-solid fa-receipt"></i> Ver Comanda Completa
         </button>
-        <button id="btnMoverComensalMain"
+        <button id="btnMoverComensalMain" onclick="window.iniciarModoMover();"
           style="flex: 1 !important; padding: 12px !important; background: #0284c7 !important; color: #ffffff !important; font-weight: 900 !important; font-size: 12px !important; border-radius: 12px !important; border: none !important; cursor: pointer !important; display: flex !important; align-items: center !important; justify-content: center !important; gap: 8px !important;">
           <i class="fa-solid fa-arrow-right-arrow-left"></i> Mover Comensal
         </button>
@@ -1564,7 +1660,7 @@
         qrId: 'PV-031',
         comensalNombre: 'Comensal Silla 1',
         items: [
-          { id: 201, nombre: 'Chilaquiles Verdes o Rojos', notas: 'Con pollo • Salsa verde', precio: 145.00, cantidad: 1, mesaId: 3, sillaNum: 1, hora: '09:15 AM' }
+          { id: 201, nombre: 'Chilaquiles Verdes o Rojos', notas: 'Con pollo • Salsa verde', precio: 145.00, cantidad: 1, mesaId: 3, sillaNum: 1, hora: '09:15 AM', enviadoCocina: true, horaEnvioCocina: '09:15 AM' }
         ],
         historialUbicaciones: [
           { mesaId: 3, sillaNum: 1, hora: '09:10 AM' }
@@ -1575,7 +1671,7 @@
         qrId: 'PV-032',
         comensalNombre: 'Comensal Silla 2',
         items: [
-          { id: 502, nombre: 'Café con Leche / Capuchino', notas: 'Con canela', precio: 68.00, cantidad: 1, mesaId: 3, sillaNum: 2, hora: '09:20 AM' }
+          { id: 502, nombre: 'Café con Leche / Capuchino', notas: 'Con canela', precio: 68.00, cantidad: 1, mesaId: 3, sillaNum: 2, hora: '09:20 AM', enviadoCocina: true, horaEnvioCocina: '09:20 AM' }
         ],
         historialUbicaciones: [
           { mesaId: 3, sillaNum: 2, hora: '09:20 AM' }
@@ -1588,7 +1684,7 @@
         qrId: 'PV-021',
         comensalNombre: 'Adulto 1 (Papá)',
         items: [
-          { id: 402, nombre: 'Combo Chilaquiles V&S', notas: 'Con huevo estrellado y café de olla', precio: 175.00, cantidad: 1, mesaId: 2, sillaNum: 1, hora: '09:30 AM' }
+          { id: 402, nombre: 'Combo Chilaquiles V&S', notas: 'Con huevo estrellado y café de olla', precio: 175.00, cantidad: 1, mesaId: 2, sillaNum: 1, hora: '09:30 AM', enviadoCocina: true, horaEnvioCocina: '09:30 AM' }
         ],
         historialUbicaciones: [
           { mesaId: 2, sillaNum: 1, hora: '09:25 AM' }
@@ -1599,8 +1695,8 @@
         qrId: 'PV-022',
         comensalNombre: 'Adulto 2 (Mamá)',
         items: [
-          { id: 106, nombre: 'Omelette Champiñones y Espinaca', notas: 'Con frijoles refritos', precio: 130.00, cantidad: 1, mesaId: 2, sillaNum: 2, hora: '09:31 AM' },
-          { id: 504, nombre: 'Jugo Verde Energético', notas: 'Sin azúcar', precio: 60.00, cantidad: 1, mesaId: 2, sillaNum: 2, hora: '09:33 AM' }
+          { id: 106, nombre: 'Omelette Champiñones y Espinaca', notas: 'Con frijoles refritos', precio: 130.00, cantidad: 1, mesaId: 2, sillaNum: 2, hora: '09:31 AM', enviadoCocina: true, horaEnvioCocina: '09:31 AM' },
+          { id: 504, nombre: 'Jugo Verde Energético', notas: 'Sin azúcar', precio: 60.00, cantidad: 1, mesaId: 2, sillaNum: 2, hora: '09:33 AM', enviadoCocina: true, horaEnvioCocina: '09:33 AM' }
         ],
         historialUbicaciones: [
           { mesaId: 2, sillaNum: 2, hora: '09:25 AM' }
@@ -1611,8 +1707,8 @@
         qrId: 'PV-023',
         comensalNombre: 'Niño 1',
         items: [
-          { id: 302, nombre: 'Hotcakes con Fruta Fresca', notas: 'Con fresas y miel', precio: 130.00, cantidad: 1, mesaId: 2, sillaNum: 3, hora: '09:32 AM' },
-          { id: 505, nombre: 'Chocolate Caliente Tradicional', notas: 'Tibio', precio: 55.00, cantidad: 1, mesaId: 2, sillaNum: 3, hora: '09:34 AM' }
+          { id: 601, nombre: 'Hotcakes Infantiles (2 piezas)', notas: 'Con miel y mantequilla', precio: 75.00, cantidad: 1, mesaId: 2, sillaNum: 3, hora: '09:32 AM', enviadoCocina: true, horaEnvioCocina: '09:32 AM' },
+          { id: 505, nombre: 'Chocolate Caliente Tradicional', notas: 'Tibio', precio: 55.00, cantidad: 1, mesaId: 2, sillaNum: 3, hora: '09:34 AM', enviadoCocina: true, horaEnvioCocina: '09:34 AM' }
         ],
         historialUbicaciones: [
           { mesaId: 2, sillaNum: 3, hora: '09:25 AM' }
@@ -1623,7 +1719,7 @@
         qrId: 'PV-024',
         comensalNombre: 'Niño 2',
         items: [
-          { id: 301, nombre: 'Hotcakes Clásicos (3 pzas)', notas: 'Con miel de maple', precio: 110.00, cantidad: 1, mesaId: 2, sillaNum: 4, hora: '09:35 AM' }
+          { id: 602, nombre: 'Huevito Feliz con Jamón', notas: 'Con frijolitos', precio: 65.00, cantidad: 1, mesaId: 2, sillaNum: 4, hora: '09:35 AM', enviadoCocina: true, horaEnvioCocina: '09:35 AM' }
         ],
         historialUbicaciones: [
           { mesaId: 2, sillaNum: 4, hora: '09:25 AM' }
@@ -1643,7 +1739,6 @@
         if (saved) {
           var parsed = JSON.parse(saved);
           if (parsed && typeof parsed === 'object' && Object.keys(parsed).length > 0) {
-            // Asegurar que las mesas de demo existan si no están presentes
             if (!parsed['2-1'] || !parsed['3-1']) {
               parsed = Object.assign({}, DEFAULT_CUENTAS, parsed);
             }
@@ -1656,7 +1751,8 @@
 
     window.palapaState = {
       mesaSeleccionadaId: 2,
-      sillaSeleccionadaNum: 1,
+      sillaSeleccionadaNum: null,
+      modoComandaActiva: false,
       categoriaFiltro: "Bebidas & Jugos",
       modoMoverActivo: false,
       sillaOrigenMover: null,
@@ -1666,12 +1762,13 @@
     function resetDemoState() {
       window.palapaState.cuentas = JSON.parse(JSON.stringify(DEFAULT_CUENTAS));
       window.palapaState.mesaSeleccionadaId = 2;
-      window.palapaState.sillaSeleccionadaNum = 1;
+      window.palapaState.sillaSeleccionadaNum = null;
+      window.palapaState.modoComandaActiva = false;
       saveStateToStorage();
       cancelarModoMover();
       cerrarModalComanda();
       renderStateUI();
-      showDragToast('🔄 Estado reiniciado a demo (Mesa 3: 2 comensales, Mesa 2: Familia 2 adultos + 2 niños)', 'ok');
+      showDragToast('🔄 Estado reiniciado a demo panorámica (Mesa 3 y Mesa 2)', 'ok');
     }
 
     // ── Toast de notificación (reemplaza alert()) ──
@@ -2042,8 +2139,8 @@
 
       window.palapaState.mesaSeleccionadaId = mesaId;
       window.palapaState.sillaSeleccionadaNum = sillaNum;
+      window.palapaState.modoComandaActiva = true;
       renderStateUI();
-      abrirModalComandaActual();
     }
 
     function handleMesaClick(mesaId) {
@@ -3382,10 +3479,93 @@
       }
     };
 
+    window.volverAlCroquisGeneral = function () {
+      window.palapaState.modoComandaActiva = false;
+      window.palapaState.sillaSeleccionadaNum = null;
+      renderStateUI();
+      const bannerText = document.getElementById('bannerText');
+      if (bannerText) {
+        bannerText.innerHTML = `💡 Haz clic en cualquier <b>Silla</b> para tomar su orden y abrir el catálogo de menú ampliado, o <b>arrastra con el mouse</b> para mover comensales.`;
+      }
+    };
+
+    window.seleccionarSillaSidebar = function(sillaNum) {
+      const mesaId = window.palapaState.mesaSeleccionadaId || 2;
+      const key = `${mesaId}-${sillaNum}`;
+
+      if (!window.palapaState.cuentas[key]) {
+        const nowStr = (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        window.palapaState.cuentas[key] = {
+          estado: 'ocupada',
+          qrId: 'PV-0' + mesaId + sillaNum,
+          comensalNombre: 'Comensal Silla ' + sillaNum,
+          items: [],
+          historialUbicaciones: [{ mesaId: mesaId, sillaNum: sillaNum, hora: nowStr }],
+          creadoPor: 'mesero_presencial',
+          horaLlegada: nowStr
+        };
+        saveStateToStorage();
+      }
+
+      window.palapaState.sillaSeleccionadaNum = sillaNum;
+      window.palapaState.modoComandaActiva = true;
+      renderStateUI();
+    };
+
+    window.eliminarItemSidebar = function(idx) {
+      const mesaId = window.palapaState.mesaSeleccionadaId;
+      const sillaNum = window.palapaState.sillaSeleccionadaNum;
+      if (!mesaId || !sillaNum) return;
+
+      const key = `${mesaId}-${sillaNum}`;
+      if (window.palapaState.cuentas[key] && window.palapaState.cuentas[key].items) {
+        window.palapaState.cuentas[key].items.splice(idx, 1);
+        saveStateToStorage();
+        renderStateUI();
+      }
+    };
+
+    window.enviarACocinaComandaActiva = function() {
+      const mesaId = window.palapaState.mesaSeleccionadaId;
+      const sillaNum = window.palapaState.sillaSeleccionadaNum;
+      if (!mesaId || !sillaNum) return;
+
+      const key = `${mesaId}-${sillaNum}`;
+      const cuenta = window.palapaState.cuentas[key];
+      if (!cuenta || !cuenta.items || cuenta.items.length === 0) {
+        showDragToast('ℹ Agrega al menos un producto a la comanda antes de enviar a cocina.', 'warn');
+        return;
+      }
+
+      const pendientes = cuenta.items.filter(i => !i.enviadoCocina);
+      if (pendientes.length === 0) {
+        showDragToast('ℹ Todos los productos de esta orden ya fueron enviados a Cocina / Barra de Café.', 'info');
+        return;
+      }
+
+      const nowStr = (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      pendientes.forEach(i => {
+        i.enviadoCocina = true;
+        i.horaEnvioCocina = nowStr;
+      });
+
+      saveStateToStorage();
+      renderStateUI();
+      showDragToast(`🚀 ¡${pendientes.length} producto(s) enviados a Cocina / Barra (KDS)! (${nowStr})`, 'ok');
+    };
+
     function renderStateUI() {
       const isMoveMode = window.palapaState.modoMoverActivo;
       const origen = window.palapaState.sillaOrigenMover;
+      const isComandaMode = !!window.palapaState.modoComandaActiva;
 
+      // 1. Control del Layout Dual (Panorámico vs Comanda & Menú Ampliado)
+      const mainGrid = document.getElementById('mainCanvasGrid');
+      if (mainGrid) {
+        mainGrid.className = isComandaMode ? 'mode-comanda' : 'mode-overview';
+      }
+
+      // 2. Renderizar Mesas y Sillas en el Croquis
       for (let m = 1; m <= 3; m++) {
         let busyCount = 0;
         for (let s = 1; s <= 4; s++) {
@@ -3399,12 +3579,11 @@
           if (chairEl) {
             const posClass = s === 1 ? 'chair-pos-top' : s === 2 ? 'chair-pos-right' : s === 3 ? 'chair-pos-bottom' : 'chair-pos-left';
 
-            // Update draggable attribute based on current occupied state
             chairEl.setAttribute('draggable', isOccupied ? 'true' : 'false');
             const numItems = (cuenta && cuenta.items) ? cuenta.items.length : 0;
             chairEl.setAttribute('title', isOccupied
-              ? `Mesa ${m} Silla ${s} (Ocupada${numItems > 0 ? ' · ' + numItems + ' consumos' : ' · Sin consumos'}) • Arrastra para mover`
-              : `Mesa ${m} Silla ${s} (Disponible) • Haz clic para ubicar comensal`);
+              ? `Mesa ${m} Silla ${s} (Ocupada${numItems > 0 ? ' · ' + numItems + ' consumos' : ' · Sin consumos'}) • Arrastra para mover o clic para comanda`
+              : `Mesa ${m} Silla ${s} (Disponible) • Haz clic para ubicar comensal y tomar orden`);
 
             if (isMoveMode && origen && origen.mesaId === m && origen.sillaNum === s) {
               chairEl.className = `chair-btn-fixed ${posClass} chair-moving-source`;
@@ -3441,15 +3620,127 @@
         }
       }
 
-      const badge = document.getElementById('activeTargetBadge');
-      if (badge) {
-        if (window.palapaState.sillaSeleccionadaNum !== null) {
-          const selKey = `${window.palapaState.mesaSeleccionadaId}-${window.palapaState.sillaSeleccionadaNum}`;
-          const selCuenta = window.palapaState.cuentas[selKey];
-          const isSelOcc = !!(selCuenta && (selCuenta.estado === 'ocupada' || (selCuenta.items && selCuenta.items.length > 0)));
-          badge.innerText = `Mesa ${window.palapaState.mesaSeleccionadaId} • Silla ${window.palapaState.sillaSeleccionadaNum} (${isSelOcc ? 'Ocupada' : 'Disponible'})`;
-        } else {
-          badge.innerText = `Mesa ${window.palapaState.mesaSeleccionadaId} (Completa)`;
+      // 3. Renderizar Sidebar de Comanda (si está en modo comanda activa)
+      if (isComandaMode) {
+        const mesaId = window.palapaState.mesaSeleccionadaId || 2;
+        const sillaNum = window.palapaState.sillaSeleccionadaNum || 1;
+        const key = `${mesaId}-${sillaNum}`;
+        const cuenta = window.palapaState.cuentas[key] || { items: [] };
+
+        const targetEl = document.getElementById('sidebarTargetMesaSilla');
+        const qrBadgeEl = document.getElementById('sidebarQrBadge');
+        const comensalEl = document.getElementById('sidebarComensalNombre');
+        const activeBadge = document.getElementById('activeTargetBadge');
+
+        if (targetEl) targetEl.innerText = `Mesa ${mesaId} • Silla ${sillaNum}`;
+        if (qrBadgeEl) qrBadgeEl.innerText = `QR: #${cuenta.qrId || ('PV-0' + mesaId + sillaNum)}`;
+        if (comensalEl) comensalEl.innerText = cuenta.comensalNombre || `Comensal Silla ${sillaNum}`;
+        if (activeBadge) activeBadge.innerText = `Mesa ${mesaId} • Silla ${sillaNum}`;
+
+        // Selector rápido de sillas de esta mesa
+        const pillsContainer = document.getElementById('sidebarChairPills');
+        if (pillsContainer) {
+          pillsContainer.innerHTML = '';
+          for (let s = 1; s <= 4; s++) {
+            const sKey = `${mesaId}-${s}`;
+            const sCta = window.palapaState.cuentas[sKey];
+            const sOcc = !!(sCta && (sCta.estado === 'ocupada' || (sCta.items && sCta.items.length > 0)));
+            const isCurrent = (s === sillaNum);
+
+            const pill = document.createElement('button');
+            pill.onclick = (function(sn) { return function() { window.seleccionarSillaSidebar(sn); }; })(s);
+            pill.style.cssText = `flex: 1 !important; padding: 4px 6px !important; border-radius: 8px !important; font-size: 10px !important; font-weight: 800 !important; cursor: pointer !important; text-align: center !important; transition: all 0.2s !important; ${
+              isCurrent
+                ? 'background: #059669 !important; color: #ffffff !important; border: 1px solid #34d399 !important; box-shadow: 0 0 8px rgba(52,211,153,0.4) !important;'
+                : (sOcc ? 'background: #78350f !important; color: #fde68a !important; border: 1px solid #f59e0b !important;' : 'background: #1e293b !important; color: #94a3b8 !important; border: 1px solid #334155 !important;')
+            }`;
+            pill.innerHTML = `S${s} ${isCurrent ? '●' : (sOcc ? '🟡' : '⚪')}`;
+            pillsContainer.appendChild(pill);
+          }
+        }
+
+        // Lista de items de la comanda en tiempo real
+        const itemsList = document.getElementById('sidebarComandaItemsList');
+        const countBadge = document.getElementById('sidebarItemsCountBadge');
+        let subtotal = 0;
+        let pendientesCount = 0;
+
+        if (itemsList) {
+          itemsList.innerHTML = '';
+          if (!cuenta.items || cuenta.items.length === 0) {
+            itemsList.innerHTML = `
+              <div style="text-align: center; color: #64748b; font-size: 11px; padding: 25px 0;">
+                <i class="fa-solid fa-utensils" style="font-size: 20px; display: block; margin-bottom: 6px; opacity: 0.5;"></i>
+                Sin productos agregados.<br>Selecciona platillos del catálogo a la derecha.
+              </div>
+            `;
+          } else {
+            cuenta.items.forEach((it, idx) => {
+              const itTotal = (it.precio || 0) * (it.cantidad || 1);
+              subtotal += itTotal;
+              if (!it.enviadoCocina) pendientesCount++;
+
+              const row = document.createElement('div');
+              row.style.cssText = 'display: flex; justify-content: space-between; align-items: center; background: #0f172a; padding: 6px 8px; border-radius: 8px; border: 1px solid #1e293b; font-size: 11px;';
+              row.innerHTML = `
+                <div style="flex: 1; padding-right: 6px;">
+                  <div style="display: flex; align-items: center; gap: 4px;">
+                    <span style="font-weight: 800; color: #ffffff;">${it.cantidad}x ${it.nombre}</span>
+                  </div>
+                  <div style="display: flex; align-items: center; gap: 6px; margin-top: 2px;">
+                    <span style="font-size: 10px; font-weight: 800; color: #34d399;">$${itTotal.toFixed(2)}</span>
+                    ${it.enviadoCocina
+                      ? `<span style="background: rgba(5,150,105,0.2); border: 1px solid rgba(5,150,105,0.5); color: #34d399; font-size: 9px; font-weight: 800; padding: 1px 5px; border-radius: 4px;"><i class="fa-solid fa-fire"></i> En Cocina (${it.horaEnvioCocina || it.hora || ''})</span>`
+                      : `<span style="background: rgba(245,158,11,0.2); border: 1px solid rgba(245,158,11,0.5); color: #fbbf24; font-size: 9px; font-weight: 800; padding: 1px 5px; border-radius: 4px;"><i class="fa-solid fa-clock"></i> Pendiente</span>`}
+                  </div>
+                </div>
+                <button onclick="window.eliminarItemSidebar(${idx});" style="background: transparent; border: none; color: #f87171; cursor: pointer; padding: 2px 4px; font-size: 11px;" title="Eliminar">✕</button>
+              `;
+              itemsList.appendChild(row);
+            });
+          }
+        }
+
+        if (countBadge) {
+          countBadge.innerText = `${(cuenta.items || []).length} item${(cuenta.items || []).length !== 1 ? 's' : ''}`;
+        }
+
+        const iva = subtotal * 0.16;
+        const total = subtotal + iva;
+
+        const subtotalEl = document.getElementById('sidebarSubtotal');
+        const ivaEl = document.getElementById('sidebarIva');
+        const totalEl = document.getElementById('sidebarTotal');
+        if (subtotalEl) subtotalEl.innerText = `$${subtotal.toFixed(2)}`;
+        if (ivaEl) ivaEl.innerText = `$${iva.toFixed(2)}`;
+        if (totalEl) totalEl.innerText = `$${total.toFixed(2)}`;
+
+        // Botón de Enviar a Cocina (KDS) por tramos
+        const btnSendCocina = document.getElementById('btnSidebarEnviarCocina');
+        const btnSendCocinaTxt = document.getElementById('btnSidebarEnviarCocinaTxt');
+        if (btnSendCocina && btnSendCocinaTxt) {
+          if (pendientesCount > 0) {
+            btnSendCocina.disabled = false;
+            btnSendCocina.style.opacity = '1';
+            btnSendCocina.style.cursor = 'pointer';
+            btnSendCocina.style.background = 'linear-gradient(135deg, #f59e0b, #d97706)';
+            btnSendCocina.style.color = '#0f172a';
+            btnSendCocinaTxt.innerHTML = `<b>Enviar a Cocina / Barra</b> (${pendientesCount} pendiente${pendientesCount > 1 ? 's' : ''})`;
+          } else if (cuenta.items && cuenta.items.length > 0) {
+            btnSendCocina.disabled = true;
+            btnSendCocina.style.opacity = '0.6';
+            btnSendCocina.style.cursor = 'default';
+            btnSendCocina.style.background = '#1e293b';
+            btnSendCocina.style.color = '#34d399';
+            btnSendCocinaTxt.innerHTML = `<i class="fa-solid fa-check-double"></i> Todo enviado a Cocina`;
+          } else {
+            btnSendCocina.disabled = true;
+            btnSendCocina.style.opacity = '0.4';
+            btnSendCocina.style.cursor = 'not-allowed';
+            btnSendCocina.style.background = '#1e293b';
+            btnSendCocina.style.color = '#94a3b8';
+            btnSendCocinaTxt.innerHTML = `Enviar a Cocina / Barra`;
+          }
         }
       }
 
@@ -3463,28 +3754,33 @@
 
       const catFiltro = window.palapaState.categoriaFiltro || 'Bebidas & Jugos';
       const filtrados = window.catalogProducts.filter(p => p.categoria_nombre === catFiltro);
+      const sillaNum = window.palapaState.sillaSeleccionadaNum || 1;
 
       filtrados.forEach(prod => {
         const card = document.createElement('div');
-        card.style.cssText = 'background: #0f172a !important; border: 1px solid #1e293b !important; border-radius: 12px !important; padding: 10px 12px !important; display: flex !important; justify-content: space-between !important; align-items: center !important; transition: all 0.2s ease !important;';
+        card.style.cssText = 'background: #0f172a !important; border: 1px solid #1e293b !important; border-radius: 14px !important; padding: 12px 14px !important; display: flex !important; flex-direction: column !important; justify-content: space-between !important; gap: 10px !important; transition: all 0.2s ease !important;';
 
         card.innerHTML = `
-          <div style="display: flex; align-items: center; gap: 10px; flex: 1; padding-right: 8px; cursor: pointer;" onclick="window.abrirModalReceta(${prod.id});">
-            <span style="font-size: 22px;">${prod.icono}</span>
+          <div style="display: flex; align-items: flex-start; gap: 10px; cursor: pointer;" onclick="window.abrirModalReceta(${prod.id});">
+            <span style="font-size: 26px; padding: 4px; background: #020617; border-radius: 10px; border: 1px solid #1e293b;">${prod.icono}</span>
             <div style="flex: 1;">
-              <span style="font-size: 11px; font-weight: 800; color: #ffffff; display: block; line-height: 1.2;">${prod.nombre}</span>
-              <span style="font-size: 10px; color: #94a3b8; display: block; line-height: 1.2; margin-top: 2px;">${prod.descripcion || ''}</span>
-              <div style="display: flex; align-items: center; gap: 8px; margin-top: 3px;">
-                <span style="font-size: 12px; font-weight: 900; color: #34d399;">$${prod.precio.toFixed(2)}</span>
-                <span style="font-size: 9px; color: #38bdf8; font-weight: 700; background: rgba(56,189,248,0.15); padding: 1px 5px; border-radius: 4px;">⏱️ ${prod.tiempo || '8–10 min'}</span>
+              <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                <span style="font-size: 12px; font-weight: 800; color: #ffffff; line-height: 1.2;">${prod.nombre}</span>
+              </div>
+              <span style="font-size: 10px; color: #94a3b8; display: block; line-height: 1.3; margin-top: 3px;">${prod.descripcion || ''}</span>
+              <div style="display: flex; align-items: center; gap: 6px; margin-top: 6px;">
+                <span style="font-size: 13px; font-weight: 900; color: #34d399;">$${prod.precio.toFixed(2)}</span>
+                <span style="font-size: 9px; color: #38bdf8; font-weight: 700; background: rgba(56,189,248,0.15); padding: 1px 6px; border-radius: 4px;">⏱️ ${prod.tiempo || '8–10 min'}</span>
               </div>
             </div>
           </div>
-          <div style="display: flex; flex-direction: column; gap: 4px;">
-            <button onclick="window.agregarPlatilloDirectoById(${prod.id});" style="padding: 6px 10px; background: #059669; color: #ffffff; font-size: 11px; font-weight: 900; border-radius: 8px; border: none; cursor: pointer; white-space: nowrap;">
-              + Agregar
+          <div style="display: flex; gap: 6px; border-top: 1px solid #1e293b; padding-top: 8px;">
+            <button onclick="window.agregarPlatilloDirectoById(${prod.id});"
+              style="flex: 1; padding: 7px 10px; background: #059669; color: #ffffff; font-size: 11px; font-weight: 900; border-radius: 8px; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 4px;">
+              <i class="fa-solid fa-plus"></i> Silla ${sillaNum}
             </button>
-            <button onclick="window.abrirModalReceta(${prod.id});" style="padding: 3px 6px; background: #1e293b; color: #38bdf8; font-size: 9px; font-weight: 700; border-radius: 6px; border: 1px solid #334155; cursor: pointer; white-space: nowrap;">
+            <button onclick="window.abrirModalReceta(${prod.id});"
+              style="padding: 7px 10px; background: #1e293b; color: #38bdf8; font-size: 10px; font-weight: 700; border-radius: 8px; border: 1px solid #334155; cursor: pointer; white-space: nowrap;">
               📖 Receta
             </button>
           </div>
@@ -3571,7 +3867,7 @@
     };
 
     function agregarPlatilloDirecto(prod) {
-      const mesaId = window.palapaState.mesaSeleccionadaId;
+      const mesaId = window.palapaState.mesaSeleccionadaId || 2;
       let sillaNum = window.palapaState.sillaSeleccionadaNum;
 
       if (sillaNum === null) {
@@ -3592,7 +3888,7 @@
 
       const nowStr = (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
       const items = window.palapaState.cuentas[key].items;
-      const existing = items.find(i => i.id === prod.id && i.mesaId === mesaId && i.sillaNum === sillaNum);
+      const existing = items.find(i => i.id === prod.id && i.mesaId === mesaId && i.sillaNum === sillaNum && !i.enviadoCocina);
       if (existing) {
         existing.cantidad += 1;
       } else {
@@ -3604,7 +3900,8 @@
           cantidad: 1,
           mesaId: mesaId,
           sillaNum: sillaNum,
-          hora: nowStr
+          hora: nowStr,
+          enviadoCocina: false
         });
       }
 
@@ -3614,7 +3911,7 @@
       if (modalBackdrop && modalBackdrop.classList.contains('show')) {
         abrirModalComandaActual();
       }
-      showDragToast(`➕ ${prod.nombre} agregado a Silla ${sillaNum}`, 'ok');
+      showDragToast(`➕ ${prod.nombre} agregado a Silla ${sillaNum} (Pendiente de enviar)`, 'ok');
     }
 
     function filtrarCategoria(catNombre) {
