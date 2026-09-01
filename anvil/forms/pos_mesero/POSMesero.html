@@ -2855,7 +2855,9 @@
               </div>
               <div style="display: flex; align-items: center; gap: 8px;">
                 <span style="font-weight: 900; color: #34d399; font-size: 12px;">$${itSub.toFixed(2)}</span>
-                <button onclick="window.eliminarItemModal('${key}', ${idx})" style="background: transparent; border: none; color: #f87171; cursor: pointer; padding: 2px;"><i class="fa-solid fa-trash-can" style="font-size: 11px;"></i></button>
+                ${it.enviadoCocina
+                  ? `<span style="font-size: 9px; color: #34d399; font-weight: 800; background: rgba(5,150,105,0.2) !important; border: 1px solid rgba(52,211,153,0.3) !important; padding: 2px 6px !important; border-radius: 4px !important; display: inline-flex !important; align-items: center !important; gap: 3px !important;"><i class="fa-solid fa-fire"></i> En Cocina</span>`
+                  : `<button onclick="window.eliminarItemModal('${key}', ${idx})" style="background: transparent; border: none; color: #f87171; cursor: pointer; padding: 2px;" title="Eliminar (No enviado)"><i class="fa-solid fa-trash-can" style="font-size: 11px;"></i></button>`}
               </div>
             `;
             container.appendChild(row);
@@ -3816,6 +3818,11 @@
 
     window.eliminarItemModal = function (key, idx) {
       if (window.palapaState.cuentas[key] && window.palapaState.cuentas[key].items) {
+        const it = window.palapaState.cuentas[key].items[idx];
+        if (it && it.enviadoCocina) {
+          showDragToast('🔒 Este producto ya fue enviado a cocina y no puede eliminarse de la comanda.', 'warn');
+          return;
+        }
         window.palapaState.cuentas[key].items.splice(idx, 1);
         if (window.palapaState.cuentas[key].items.length === 0) {
           delete window.palapaState.cuentas[key];
@@ -3876,6 +3883,11 @@
 
       const key = `${mesaId}-${sillaNum}`;
       if (window.palapaState.cuentas[key] && window.palapaState.cuentas[key].items) {
+        const it = window.palapaState.cuentas[key].items[idx];
+        if (it && it.enviadoCocina) {
+          showDragToast('🔒 Este producto ya fue enviado a cocina y no puede eliminarse de la comanda.', 'warn');
+          return;
+        }
         window.palapaState.cuentas[key].items.splice(idx, 1);
         saveStateToStorage();
         renderStateUI();
@@ -4593,7 +4605,9 @@
                         </div>`}
                   </div>
                 </div>
-                <button onclick="window.eliminarItemSidebar(${idx});" style="background: transparent; border: none; color: #f87171; cursor: pointer; padding: 2px 4px; font-size: 12px;" title="Eliminar">✕</button>
+                ${!it.enviadoCocina
+                  ? `<button onclick="window.eliminarItemSidebar(${idx});" style="background: transparent; border: none; color: #f87171; cursor: pointer; padding: 2px 4px; font-size: 12px;" title="Eliminar (Pendiente)">✕</button>`
+                  : `<span style="color: #64748b; font-size: 10px; padding: 2px 4px;" title="En preparación en cocina (No eliminable)"><i class="fa-solid fa-lock" style="font-size: 10px; opacity: 0.5;"></i></span>`}
               `;
               itemsList.appendChild(row);
             });
