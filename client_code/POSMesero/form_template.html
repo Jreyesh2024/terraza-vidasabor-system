@@ -2151,7 +2151,7 @@
       renderStateUI();
     }
 
-    function iniciarModoMover() {
+    window.iniciarModoMover = function() {
       const mesaId = window.palapaState.mesaSeleccionadaId;
       const sillaNum = window.palapaState.sillaSeleccionadaNum;
 
@@ -2181,13 +2181,17 @@
       }
 
       renderStateUI();
+    };
+
+    function iniciarModoMover() {
+      window.iniciarModoMover();
     }
 
     function limpiarDragState() {
       _limpiarDragVisual();
     }
 
-    function cancelarModoMover() {
+    window.cancelarModoMover = function() {
       window.palapaState.modoMoverActivo = false;
       window.palapaState.sillaOrigenMover = null;
       if (typeof _ms !== 'undefined') {
@@ -2207,6 +2211,10 @@
       }
 
       renderStateUI();
+    };
+
+    function cancelarModoMover() {
+      window.cancelarModoMover();
     }
 
     function completarMovimiento(targetMesaId, targetSillaNum, overrideSrcMesa, overrideSrcSilla) {
