@@ -484,8 +484,8 @@
         <!-- Top Back Button & Table Info Header -->
         <div style="display: flex !important; justify-content: space-between !important; align-items: center !important; border-bottom: 1px solid #1e293b !important; padding-bottom: 10px !important;">
           <button onclick="window.volverAlCroquisGeneral();"
-            style="background: #1e293b !important; color: #38bdf8 !important; border: 1px solid #334155 !important; border-radius: 10px !important; padding: 7px 14px !important; font-size: 11px !important; font-weight: 800 !important; cursor: pointer !important; display: flex !important; align-items: center !important; gap: 6px !important;">
-            <i class="fa-solid fa-arrow-left"></i> ↩ Ver Mesas
+            style="background: linear-gradient(135deg, #0284c7, #0369a1) !important; color: #ffffff !important; border: none !important; border-radius: 12px !important; padding: 10px 18px !important; font-size: 13px !important; font-weight: 900 !important; cursor: pointer !important; display: flex !important; align-items: center !important; gap: 8px !important; box-shadow: 0 4px 14px rgba(2, 132, 199, 0.4) !important;">
+            <i class="fa-solid fa-arrow-left"></i> ⬅ VOLVER AL PLANO DE MESAS
           </button>
           <div style="text-align: right !important;">
             <span id="sidebarTableTitle" style="font-size: 14px !important; font-weight: 900 !important; color: #fbbf24 !important; display: block !important;">MESA 3 (PALAPA)</span>
@@ -578,10 +578,16 @@
             <p style="font-size: 11px !important; color: #94a3b8 !important; margin: 2px 0 0 0 !important;">Marcado
               rápido de platillos & bebidas para cocina KDS</p>
           </div>
-          <span id="activeTargetBadge"
-            style="padding: 6px 14px !important; background: rgba(5, 150, 105, 0.2) !important; color: #34d399 !important; border: 1px solid rgba(5, 150, 105, 0.4) !important; border-radius: 12px !important; font-size: 13px !important; font-weight: 900 !important;">
-            Mesa 2 • Silla 1
-          </span>
+          <div style="display: flex !important; align-items: center !important; gap: 8px !important;">
+            <button onclick="window.volverAlCroquisGeneral();"
+              style="background: #1e293b !important; color: #38bdf8 !important; border: 1px solid #334155 !important; border-radius: 10px !important; padding: 6px 12px !important; font-size: 11px !important; font-weight: 800 !important; cursor: pointer !important; display: flex !important; align-items: center !important; gap: 6px !important;">
+              <i class="fa-solid fa-table-cells-large"></i> ⬅ Plano de Mesas
+            </button>
+            <span id="activeTargetBadge"
+              style="padding: 6px 14px !important; background: rgba(5, 150, 105, 0.2) !important; color: #34d399 !important; border: 1px solid rgba(5, 150, 105, 0.4) !important; border-radius: 12px !important; font-size: 13px !important; font-weight: 900 !important;">
+              Mesa 2 • Silla 1
+            </span>
+          </div>
         </div>
 
         <!-- CATEGORY CHIPS (DESAYUNOS ESTRUCTURADOS - BEBIDAS PRIMERO) -->
@@ -768,9 +774,9 @@
           style="padding: 10px 14px !important; background: rgba(220, 38, 38, 0.2) !important; color: #f87171 !important; font-weight: 800 !important; font-size: 11px !important; border-radius: 10px !important; border: 1px solid rgba(239, 68, 68, 0.4) !important; cursor: pointer !important; display: flex !important; align-items: center !important; justify-content: center !important; gap: 6px !important;">
           <i class="fa-solid fa-user-slash"></i> Liberar Silla
         </button>
-        <button id="btnCerrarModalBottom" onclick="window.cerrarModalComanda();"
-          style="flex: 1.2 !important; padding: 10px !important; background: #334155 !important; color: #f8fafc !important; font-weight: 800 !important; font-size: 11px !important; border-radius: 10px !important; border: none !important; cursor: pointer !important; display: flex !important; align-items: center !important; justify-content: center !important; gap: 6px !important;">
-          <i class="fa-solid fa-arrow-left"></i> Regresar al Croquis
+        <button id="btnCerrarModalBottom" onclick="window.cerrarModalComanda(); window.volverAlCroquisGeneral();"
+          style="flex: 1.2 !important; padding: 10px !important; background: #1e293b !important; color: #38bdf8 !important; border: 1px solid #334155 !important; font-weight: 800 !important; font-size: 11px !important; border-radius: 10px !important; cursor: pointer !important; display: flex !important; align-items: center !important; justify-content: center !important; gap: 6px !important;">
+          <i class="fa-solid fa-arrow-left"></i> ⬅ Volver al Plano de Mesas
         </button>
       </div>
     </div>
