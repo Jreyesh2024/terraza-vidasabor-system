@@ -245,6 +245,10 @@
     gap: 20px !important;
     flex: 1 !important;
   }
+  #mainCanvasGrid.mode-overview #panelCroquisMesas {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
   #mainCanvasGrid.mode-overview #panelMenuCatalogo {
     display: none !important;
   }
@@ -257,12 +261,14 @@
 
   #mainCanvasGrid.mode-comanda {
     display: grid !important;
-    grid-template-columns: 340px 1fr !important;
+    grid-template-columns: 420px 1fr !important;
     gap: 20px !important;
     flex: 1 !important;
   }
   #mainCanvasGrid.mode-comanda #panelCroquisMesas {
-    max-width: 360px !important;
+    width: 420px !important;
+    max-width: 420px !important;
+    padding: 16px !important;
   }
   #mainCanvasGrid.mode-comanda #viewOverviewCroquis {
     display: none !important;
@@ -315,7 +321,7 @@
         style="padding: 8px 16px !important; font-size: 12px !important; font-weight: 700 !important; border-radius: 12px !important; background-color: #059669 !important; color: #ffffff !important; border: none !important; cursor: pointer !important; display: flex !important; align-items: center !important; gap: 6px !important;">
         <i class="fa-solid fa-umbrella-beach" style="color: #fcd34d !important;"></i> La Palapa (6x4m)
       </button>
-      <button id="btnResetDemo" title="Reinicia la posición inicial de las sillas demo (Mesa 3 S1 y S2)"
+      <button id="btnResetDemo" title="Reinicia la posición inicial de las sillas demo"
         style="padding: 8px 14px !important; font-size: 12px !important; font-weight: 700 !important; border-radius: 12px !important; background: #1e293b !important; color: #38bdf8 !important; border: 1px solid #334155 !important; cursor: pointer !important; display: flex !important; align-items: center !important; gap: 6px !important;">
         <i class="fa-solid fa-rotate-right"></i> Reiniciar Demo
       </button>
@@ -336,8 +342,7 @@
     <div style="display: flex !important; align-items: center !important; gap: 10px !important;">
       <i id="bannerIcon" class="fa-solid fa-hand-pointer"
         style="color: #38bdf8 !important; font-size: 16px !important;"></i>
-      <span id="bannerText">Haz clic o <b>arrastra con el mouse</b> cualquier <b>Silla</b> para abrir su comanda o
-        trasladarla a otra silla/mesa.</span>
+      <span id="bannerText">Haz clic en cualquier <b>Mesa</b> o <b>Silla</b> para tomar su orden y abrir el catálogo de menú ampliado, o <b>arrastra con el mouse</b> para mover comensales.</span>
     </div>
     <button id="btnCancelMove"
       style="display: none !important; padding: 4px 12px !important; background: #ef4444 !important; color: #ffffff !important; border-radius: 8px !important; border: none !important; font-weight: 800 !important; cursor: pointer !important;">
@@ -354,7 +359,7 @@
       style="background: rgba(15, 23, 42, 0.95) !important; border: 1px solid #1e293b !important; border-radius: 20px !important; padding: 20px !important; display: flex !important; flex-direction: column !important; justify-content: space-between !important; min-height: 540px !important; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5) !important;">
 
       <!-- VISTA 1: MODO CROQUIS PANORÁMICO (3 MESAS GRANDES A PANTALLA COMPLETA) -->
-      <div id="viewOverviewCroquis" style="display: flex !important; flex-direction: column !important; justify-content: space-between !important; height: 100% !important; gap: 16px !important;">
+      <div id="viewOverviewCroquis" style="flex-direction: column !important; justify-content: space-between !important; height: 100% !important; gap: 16px !important;">
         <!-- PARED POSTERIOR BARRA -->
         <div
           style="background: rgba(30, 41, 59, 0.9) !important; border: 1px solid rgba(16, 185, 129, 0.3) !important; border-radius: 12px !important; padding: 12px 16px !important; display: flex !important; flex-wrap: wrap !important; justify-content: space-between !important; align-items: center !important; gap: 10px !important;">
@@ -475,37 +480,40 @@
         </div>
       </div>
 
-      <!-- VISTA 2: SIDEBAR COMPACTO DE COMANDA (CUANDO SE TOMA ORDEN EN MESA/SILLA) -->
-      <div id="viewSidebarComanda" style="display: none !important; flex-direction: column !important; justify-content: space-between !important; height: 100% !important; gap: 12px !important;">
-        <!-- Top Back Button -->
-        <div style="display: flex !important; justify-content: space-between !important; align-items: center !important; border-bottom: 1px solid #1e293b !important; padding-bottom: 8px !important;">
+      <!-- VISTA 2: SIDEBAR COMPACTO DE COMANDA & GESTIÓN DE MESA -->
+      <div id="viewSidebarComanda" style="flex-direction: column !important; justify-content: space-between !important; height: 100% !important; gap: 12px !important;">
+        <!-- Top Back Button & Table Info Header -->
+        <div style="display: flex !important; justify-content: space-between !important; align-items: center !important; border-bottom: 1px solid #1e293b !important; padding-bottom: 10px !important;">
           <button onclick="window.volverAlCroquisGeneral();"
-            style="background: #1e293b !important; color: #38bdf8 !important; border: 1px solid #334155 !important; border-radius: 10px !important; padding: 6px 12px !important; font-size: 11px !important; font-weight: 800 !important; cursor: pointer !important; display: flex !important; align-items: center !important; gap: 6px !important;">
-            <i class="fa-solid fa-arrow-left"></i> Ver Mesas
+            style="background: #1e293b !important; color: #38bdf8 !important; border: 1px solid #334155 !important; border-radius: 10px !important; padding: 7px 14px !important; font-size: 11px !important; font-weight: 800 !important; cursor: pointer !important; display: flex !important; align-items: center !important; gap: 6px !important;">
+            <i class="fa-solid fa-arrow-left"></i> ↩ Ver Mesas
           </button>
-          <span id="sidebarQrBadge" style="font-size: 10px !important; font-weight: 800 !important; color: #94a3b8 !important; background: #020617 !important; padding: 4px 8px !important; border-radius: 6px !important; border: 1px solid #1e293b !important;">
-            QR: #PV-021
+          <div style="text-align: right !important;">
+            <span id="sidebarTableTitle" style="font-size: 14px !important; font-weight: 900 !important; color: #fbbf24 !important; display: block !important;">MESA 3 (PALAPA)</span>
+            <span id="sidebarTableOccupiedCount" style="font-size: 10px !important; color: #94a3b8 !important; font-weight: 700 !important;">2 Comensales Ubicados</span>
+          </div>
+        </div>
+
+        <!-- 4 CHAIRS SELECTOR GRID -->
+        <div>
+          <span style="font-size: 11px !important; font-weight: 800 !important; color: #cbd5e1 !important; display: block !important; margin-bottom: 6px !important;">
+            <i class="fa-solid fa-chair text-emerald-400"></i> Seleccionar Silla a Atender:
           </span>
-        </div>
-
-        <!-- Target Chair Info & Switcher -->
-        <div style="background: #020617 !important; border: 1px solid #1e293b !important; border-radius: 12px !important; padding: 10px !important;">
-          <div style="display: flex !important; justify-content: space-between !important; align-items: center !important;">
-            <span id="sidebarTargetMesaSilla" style="font-size: 13px !important; font-weight: 900 !important; color: #34d399 !important;">Mesa 2 • Silla 1</span>
-            <span id="sidebarComensalNombre" style="font-size: 11px !important; color: #cbd5e1 !important; font-weight: 600 !important;">Comensal</span>
-          </div>
-
-          <!-- Quick chair switcher pills of active table -->
-          <div id="sidebarChairPills" style="display: flex !important; gap: 4px !important; margin-top: 8px !important; flex-wrap: wrap !important;">
-            <!-- S1, S2, S3, S4 pills -->
+          <div id="sidebarChairCardsGrid" style="display: grid !important; grid-template-columns: repeat(2, 1fr) !important; gap: 6px !important;">
+            <!-- Generated dynamically for S1, S2, S3, S4 -->
           </div>
         </div>
 
-        <!-- Real-time Comanda Items List -->
-        <div style="flex: 1 !important; display: flex !important; flex-direction: column !important; background: #020617 !important; border: 1px solid #1e293b !important; border-radius: 12px !important; padding: 10px !important; min-height: 200px !important; max-height: 260px !important; overflow-y: auto !important;">
-          <div style="display: flex !important; justify-content: space-between !important; align-items: center !important; margin-bottom: 6px !important; border-bottom: 1px solid #1e293b !important; padding-bottom: 4px !important;">
-            <span style="font-size: 11px !important; font-weight: 800 !important; color: #94a3b8 !important;"><i class="fa-solid fa-receipt"></i> Comanda de Silla</span>
-            <span id="sidebarItemsCountBadge" style="font-size: 10px !important; color: #38bdf8 !important; font-weight: 700 !important;">0 items</span>
+        <!-- Real-time Active Chair Comanda Ticket -->
+        <div style="flex: 1 !important; display: flex !important; flex-direction: column !important; background: #020617 !important; border: 1px solid #1e293b !important; border-radius: 14px !important; padding: 12px !important; min-height: 220px !important; max-height: 280px !important; overflow-y: auto !important;">
+          <div style="display: flex !important; justify-content: space-between !important; align-items: center !important; margin-bottom: 8px !important; border-bottom: 1px solid #1e293b !important; padding-bottom: 6px !important;">
+            <div>
+              <span id="sidebarTargetMesaSilla" style="font-size: 12px !important; font-weight: 900 !important; color: #ffffff !important;">🧾 Comanda Silla 1</span>
+              <span id="sidebarComensalNombre" style="font-size: 10px !important; color: #94a3b8 !important; display: block !important;">Comensal Silla 1</span>
+            </div>
+            <span id="sidebarQrBadge" style="font-size: 10px !important; font-weight: 800 !important; color: #38bdf8 !important; background: #0f172a !important; padding: 3px 8px !important; border-radius: 6px !important; border: 1px solid #1e293b !important;">
+              #PV-031
+            </span>
           </div>
           <div id="sidebarComandaItemsList" style="display: flex !important; flex-direction: column !important; gap: 6px !important; flex: 1 !important;">
             <!-- Dynamic items with status: Pendiente / En Cocina -->
@@ -514,30 +522,35 @@
 
         <!-- BATCH SEND TO KITCHEN BUTTON -->
         <button id="btnSidebarEnviarCocina" onclick="window.enviarACocinaComandaActiva();"
-          style="padding: 10px !important; background: linear-gradient(135deg, #059669, #0d9488) !important; color: #ffffff !important; border: none !important; border-radius: 10px !important; font-size: 12px !important; font-weight: 900 !important; cursor: pointer !important; display: flex !important; align-items: center !important; justify-content: center !important; gap: 8px !important; box-shadow: 0 4px 12px rgba(5,150,105,0.3) !important;">
+          style="padding: 10px 12px !important; background: linear-gradient(135deg, #f59e0b, #d97706) !important; color: #0f172a !important; border: none !important; border-radius: 12px !important; font-size: 12px !important; font-weight: 900 !important; cursor: pointer !important; display: flex !important; align-items: center !important; justify-content: center !important; gap: 8px !important; box-shadow: 0 4px 12px rgba(245,158,11,0.3) !important;">
           <i class="fa-solid fa-paper-plane"></i> <span id="btnSidebarEnviarCocinaTxt">Enviar a Cocina / Barra</span>
         </button>
 
-        <!-- Totals and Quick Actions -->
-        <div style="background: #020617 !important; border: 1px solid #1e293b !important; border-radius: 12px !important; padding: 10px !important;">
+        <!-- Totals Summary -->
+        <div style="background: #020617 !important; border: 1px solid #1e293b !important; border-radius: 12px !important; padding: 10px 14px !important;">
           <div style="display: flex !important; justify-content: space-between !important; font-size: 11px !important; color: #94a3b8 !important; margin-bottom: 2px !important;">
-            <span>Subtotal:</span><span id="sidebarSubtotal">$0.00</span>
+            <span>Subtotal Silla:</span><span id="sidebarSubtotal">$0.00</span>
           </div>
           <div style="display: flex !important; justify-content: space-between !important; font-size: 11px !important; color: #94a3b8 !important; margin-bottom: 4px !important;">
             <span>IVA (16%):</span><span id="sidebarIva">$0.00</span>
           </div>
           <div style="display: flex !important; justify-content: space-between !important; font-size: 13px !important; font-weight: 900 !important; color: #34d399 !important; border-top: 1px solid #1e293b !important; padding-top: 4px !important;">
-            <span>Total:</span><span id="sidebarTotal">$0.00</span>
+            <span>Total a Pagar Silla:</span><span id="sidebarTotal">$0.00</span>
           </div>
         </div>
 
-        <div style="display: flex !important; gap: 8px !important;">
+        <!-- Action Buttons -->
+        <div style="display: flex !important; gap: 6px !important;">
           <button onclick="window.abrirModalComandaActual();"
-            style="flex: 1 !important; padding: 8px !important; background: #059669 !important; color: #ffffff !important; border: none !important; border-radius: 8px !important; font-size: 11px !important; font-weight: 800 !important; cursor: pointer !important;">
+            style="flex: 1 !important; padding: 9px !important; background: #059669 !important; color: #ffffff !important; border: none !important; border-radius: 10px !important; font-size: 11px !important; font-weight: 800 !important; cursor: pointer !important; display: flex !important; align-items: center !important; justify-content: center !important; gap: 4px !important;">
             <i class="fa-solid fa-credit-card"></i> Cobrar Silla
           </button>
+          <button onclick="window.verTodaLaMesaEnColumnas();"
+            style="padding: 9px 10px !important; background: #1e293b !important; color: #fbbf24 !important; border: 1px solid #334155 !important; border-radius: 10px !important; font-size: 11px !important; font-weight: 800 !important; cursor: pointer !important;" title="Ver resumen de toda la mesa">
+            <i class="fa-solid fa-table"></i> Toda Mesa
+          </button>
           <button onclick="window.iniciarModoMover();"
-            style="padding: 8px 12px !important; background: #1e293b !important; color: #38bdf8 !important; border: 1px solid #334155 !important; border-radius: 8px !important; font-size: 11px !important; font-weight: 800 !important; cursor: pointer !important;">
+            style="padding: 9px 10px !important; background: #1e293b !important; color: #38bdf8 !important; border: 1px solid #334155 !important; border-radius: 10px !important; font-size: 11px !important; font-weight: 800 !important; cursor: pointer !important;">
             <i class="fa-solid fa-arrows-split-up-and-left"></i> Mover
           </button>
         </div>
@@ -1654,31 +1667,9 @@
     ];
 
     var DEFAULT_CUENTAS = {
-      // MESA 3: 2 comensales
-      '3-1': {
-        estado: 'ocupada',
-        qrId: 'PV-031',
-        comensalNombre: 'Comensal Silla 1',
-        items: [
-          { id: 201, nombre: 'Chilaquiles Verdes o Rojos', notas: 'Con pollo • Salsa verde', precio: 145.00, cantidad: 1, mesaId: 3, sillaNum: 1, hora: '09:15 AM', enviadoCocina: true, horaEnvioCocina: '09:15 AM' }
-        ],
-        historialUbicaciones: [
-          { mesaId: 3, sillaNum: 1, hora: '09:10 AM' }
-        ]
-      },
-      '3-2': {
-        estado: 'ocupada',
-        qrId: 'PV-032',
-        comensalNombre: 'Comensal Silla 2',
-        items: [
-          { id: 502, nombre: 'Café con Leche / Capuchino', notas: 'Con canela', precio: 68.00, cantidad: 1, mesaId: 3, sillaNum: 2, hora: '09:20 AM', enviadoCocina: true, horaEnvioCocina: '09:20 AM' }
-        ],
-        historialUbicaciones: [
-          { mesaId: 3, sillaNum: 2, hora: '09:20 AM' }
-        ]
-      },
+      // MESA 1: 100% Libre / Disponible (0 comensales)
 
-      // MESA 2: Familia (2 adultos + 2 niños)
+      // MESA 2: Familia (2 comensales ocupados: Silla 1 y Silla 3, Silla 2 y 4 libres)
       '2-1': {
         estado: 'ocupada',
         qrId: 'PV-021',
@@ -1688,18 +1679,6 @@
         ],
         historialUbicaciones: [
           { mesaId: 2, sillaNum: 1, hora: '09:25 AM' }
-        ]
-      },
-      '2-2': {
-        estado: 'ocupada',
-        qrId: 'PV-022',
-        comensalNombre: 'Adulto 2 (Mamá)',
-        items: [
-          { id: 106, nombre: 'Omelette Champiñones y Espinaca', notas: 'Con frijoles refritos', precio: 130.00, cantidad: 1, mesaId: 2, sillaNum: 2, hora: '09:31 AM', enviadoCocina: true, horaEnvioCocina: '09:31 AM' },
-          { id: 504, nombre: 'Jugo Verde Energético', notas: 'Sin azúcar', precio: 60.00, cantidad: 1, mesaId: 2, sillaNum: 2, hora: '09:33 AM', enviadoCocina: true, horaEnvioCocina: '09:33 AM' }
-        ],
-        historialUbicaciones: [
-          { mesaId: 2, sillaNum: 2, hora: '09:25 AM' }
         ]
       },
       '2-3': {
@@ -1714,15 +1693,28 @@
           { mesaId: 2, sillaNum: 3, hora: '09:25 AM' }
         ]
       },
-      '2-4': {
+
+      // MESA 3: 2 comensales (Silla 1 y Silla 2 ocupadas, Silla 3 y 4 libres)
+      '3-1': {
         estado: 'ocupada',
-        qrId: 'PV-024',
-        comensalNombre: 'Niño 2',
+        qrId: 'PV-031',
+        comensalNombre: 'Comensal Silla 1',
         items: [
-          { id: 602, nombre: 'Huevito Feliz con Jamón', notas: 'Con frijolitos', precio: 65.00, cantidad: 1, mesaId: 2, sillaNum: 4, hora: '09:35 AM', enviadoCocina: true, horaEnvioCocina: '09:35 AM' }
+          { id: 201, nombre: 'Chilaquiles Verdisimos', notas: 'Con pollo • Salsa verde', precio: 145.00, cantidad: 1, mesaId: 3, sillaNum: 1, hora: '09:15 AM', enviadoCocina: true, horaEnvioCocina: '09:15 AM' }
         ],
         historialUbicaciones: [
-          { mesaId: 2, sillaNum: 4, hora: '09:25 AM' }
+          { mesaId: 3, sillaNum: 1, hora: '09:10 AM' }
+        ]
+      },
+      '3-2': {
+        estado: 'ocupada',
+        qrId: 'PV-032',
+        comensalNombre: 'Comensal Silla 2',
+        items: [
+          { id: 502, nombre: 'Café con Leche / Capuchino', notas: 'Con canela', precio: 68.00, cantidad: 1, mesaId: 3, sillaNum: 2, hora: '09:20 AM', enviadoCocina: true, horaEnvioCocina: '09:20 AM' }
+        ],
+        historialUbicaciones: [
+          { mesaId: 3, sillaNum: 2, hora: '09:20 AM' }
         ]
       }
     };
@@ -1739,9 +1731,6 @@
         if (saved) {
           var parsed = JSON.parse(saved);
           if (parsed && typeof parsed === 'object' && Object.keys(parsed).length > 0) {
-            if (!parsed['2-1'] || !parsed['3-1']) {
-              parsed = Object.assign({}, DEFAULT_CUENTAS, parsed);
-            }
             return parsed;
           }
         }
@@ -1750,8 +1739,8 @@
     }
 
     window.palapaState = {
-      mesaSeleccionadaId: 2,
-      sillaSeleccionadaNum: null,
+      mesaSeleccionadaId: 3,
+      sillaSeleccionadaNum: 1,
       modoComandaActiva: false,
       categoriaFiltro: "Bebidas & Jugos",
       modoMoverActivo: false,
@@ -1761,14 +1750,14 @@
 
     function resetDemoState() {
       window.palapaState.cuentas = JSON.parse(JSON.stringify(DEFAULT_CUENTAS));
-      window.palapaState.mesaSeleccionadaId = 2;
-      window.palapaState.sillaSeleccionadaNum = null;
+      window.palapaState.mesaSeleccionadaId = 3;
+      window.palapaState.sillaSeleccionadaNum = 1;
       window.palapaState.modoComandaActiva = false;
       saveStateToStorage();
       cancelarModoMover();
       cerrarModalComanda();
       renderStateUI();
-      showDragToast('🔄 Estado reiniciado a demo panorámica (Mesa 3 y Mesa 2)', 'ok');
+      showDragToast('🔄 Estado reiniciado a demo (Mesa 1: Libre, Mesa 2: 2 ocupadas, Mesa 3: 2 ocupadas)', 'ok');
     }
 
     // ── Toast de notificación (reemplaza alert()) ──
@@ -2145,13 +2134,21 @@
 
     function handleMesaClick(mesaId) {
       if (window.palapaState.modoMoverActivo) {
-        alert("Selecciona una silla específica a donde deseas mover la cuenta.");
+        showDragToast("Selecciona una silla específica a donde deseas mover la cuenta.", "warn");
         return;
       }
       window.palapaState.mesaSeleccionadaId = mesaId;
-      window.palapaState.sillaSeleccionadaNum = null;
+      var targetSilla = 1;
+      for (var s = 1; s <= 4; s++) {
+        var k = mesaId + '-' + s;
+        if (window.palapaState.cuentas[k] && (window.palapaState.cuentas[k].estado === 'ocupada' || (window.palapaState.cuentas[k].items && window.palapaState.cuentas[k].items.length > 0))) {
+          targetSilla = s;
+          break;
+        }
+      }
+      window.palapaState.sillaSeleccionadaNum = targetSilla;
+      window.palapaState.modoComandaActiva = true;
       renderStateUI();
-      abrirModalComandaActual();
     }
 
     function iniciarModoMover() {
@@ -3481,16 +3478,15 @@
 
     window.volverAlCroquisGeneral = function () {
       window.palapaState.modoComandaActiva = false;
-      window.palapaState.sillaSeleccionadaNum = null;
       renderStateUI();
       const bannerText = document.getElementById('bannerText');
       if (bannerText) {
-        bannerText.innerHTML = `💡 Haz clic en cualquier <b>Silla</b> para tomar su orden y abrir el catálogo de menú ampliado, o <b>arrastra con el mouse</b> para mover comensales.`;
+        bannerText.innerHTML = `💡 Haz clic en cualquier <b>Mesa</b> o <b>Silla</b> para tomar su orden y abrir el catálogo de menú ampliado, o <b>arrastra con el mouse</b> para mover comensales.`;
       }
     };
 
     window.seleccionarSillaSidebar = function(sillaNum) {
-      const mesaId = window.palapaState.mesaSeleccionadaId || 2;
+      const mesaId = window.palapaState.mesaSeleccionadaId || 3;
       const key = `${mesaId}-${sillaNum}`;
 
       if (!window.palapaState.cuentas[key]) {
@@ -3505,6 +3501,7 @@
           horaLlegada: nowStr
         };
         saveStateToStorage();
+        showDragToast(`🪑 Comensal ubicado en Mesa ${mesaId} Silla ${sillaNum}`, 'ok');
       }
 
       window.palapaState.sillaSeleccionadaNum = sillaNum;
@@ -3523,6 +3520,25 @@
         saveStateToStorage();
         renderStateUI();
       }
+    };
+
+    window.enviarItemIndividualACocina = function(idx) {
+      const mesaId = window.palapaState.mesaSeleccionadaId;
+      const sillaNum = window.palapaState.sillaSeleccionadaNum;
+      if (!mesaId || !sillaNum) return;
+
+      const key = `${mesaId}-${sillaNum}`;
+      const cuenta = window.palapaState.cuentas[key];
+      if (!cuenta || !cuenta.items || !cuenta.items[idx]) return;
+
+      const item = cuenta.items[idx];
+      const nowStr = (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      item.enviadoCocina = true;
+      item.horaEnvioCocina = nowStr;
+
+      saveStateToStorage();
+      renderStateUI();
+      showDragToast(`🚀 ¡${item.nombre} enviado a Cocina / Barra (${nowStr})!`, 'ok');
     };
 
     window.enviarACocinaComandaActiva = function() {
@@ -3561,11 +3577,16 @@
 
       // 1. Control del Layout Dual (Panorámico vs Comanda & Menú Ampliado)
       const mainGrid = document.getElementById('mainCanvasGrid');
-      if (mainGrid) {
-        mainGrid.className = isComandaMode ? 'mode-comanda' : 'mode-overview';
-      }
+      const viewCroquis = document.getElementById('viewOverviewCroquis');
+      const viewSidebar = document.getElementById('viewSidebarComanda');
+      const panelMenu = document.getElementById('panelMenuCatalogo');
 
-      // 2. Renderizar Mesas y Sillas en el Croquis
+      if (mainGrid) mainGrid.className = isComandaMode ? 'mode-comanda' : 'mode-overview';
+      if (viewCroquis) viewCroquis.style.setProperty('display', isComandaMode ? 'none' : 'flex', 'important');
+      if (viewSidebar) viewSidebar.style.setProperty('display', isComandaMode ? 'flex' : 'none', 'important');
+      if (panelMenu) panelMenu.style.setProperty('display', isComandaMode ? 'flex' : 'none', 'important');
+
+      // 2. Renderizar Mesas y Sillas en el Croquis Panorámico
       for (let m = 1; m <= 3; m++) {
         let busyCount = 0;
         for (let s = 1; s <= 4; s++) {
@@ -3622,46 +3643,80 @@
 
       // 3. Renderizar Sidebar de Comanda (si está en modo comanda activa)
       if (isComandaMode) {
-        const mesaId = window.palapaState.mesaSeleccionadaId || 2;
+        const mesaId = window.palapaState.mesaSeleccionadaId || 3;
         const sillaNum = window.palapaState.sillaSeleccionadaNum || 1;
         const key = `${mesaId}-${sillaNum}`;
         const cuenta = window.palapaState.cuentas[key] || { items: [] };
+
+        const titleEl = document.getElementById('sidebarTableTitle');
+        const countEl = document.getElementById('sidebarTableOccupiedCount');
+        if (titleEl) titleEl.innerText = `MESA ${mesaId} (PALAPA)`;
+
+        let totalOcupadasMesa = 0;
+        for (let s = 1; s <= 4; s++) {
+          const k = `${mesaId}-${s}`;
+          const c = window.palapaState.cuentas[k];
+          if (c && (c.estado === 'ocupada' || (c.items && c.items.length > 0))) {
+            totalOcupadasMesa++;
+          }
+        }
+        if (countEl) countEl.innerText = `${totalOcupadasMesa} de 4 Sillas Ocupadas`;
 
         const targetEl = document.getElementById('sidebarTargetMesaSilla');
         const qrBadgeEl = document.getElementById('sidebarQrBadge');
         const comensalEl = document.getElementById('sidebarComensalNombre');
         const activeBadge = document.getElementById('activeTargetBadge');
 
-        if (targetEl) targetEl.innerText = `Mesa ${mesaId} • Silla ${sillaNum}`;
+        if (targetEl) targetEl.innerText = `🧾 Comanda Silla ${sillaNum}`;
         if (qrBadgeEl) qrBadgeEl.innerText = `QR: #${cuenta.qrId || ('PV-0' + mesaId + sillaNum)}`;
         if (comensalEl) comensalEl.innerText = cuenta.comensalNombre || `Comensal Silla ${sillaNum}`;
         if (activeBadge) activeBadge.innerText = `Mesa ${mesaId} • Silla ${sillaNum}`;
 
-        // Selector rápido de sillas de esta mesa
-        const pillsContainer = document.getElementById('sidebarChairPills');
-        if (pillsContainer) {
-          pillsContainer.innerHTML = '';
+        // Selector rápido de sillas de esta mesa (Card Grid 2x2)
+        const cardsGrid = document.getElementById('sidebarChairCardsGrid');
+        if (cardsGrid) {
+          cardsGrid.innerHTML = '';
           for (let s = 1; s <= 4; s++) {
             const sKey = `${mesaId}-${s}`;
             const sCta = window.palapaState.cuentas[sKey];
             const sOcc = !!(sCta && (sCta.estado === 'ocupada' || (sCta.items && sCta.items.length > 0)));
             const isCurrent = (s === sillaNum);
 
-            const pill = document.createElement('button');
-            pill.onclick = (function(sn) { return function() { window.seleccionarSillaSidebar(sn); }; })(s);
-            pill.style.cssText = `flex: 1 !important; padding: 4px 6px !important; border-radius: 8px !important; font-size: 10px !important; font-weight: 800 !important; cursor: pointer !important; text-align: center !important; transition: all 0.2s !important; ${
+            let subSilla = 0;
+            let numItems = 0;
+            if (sCta && sCta.items) {
+              numItems = sCta.items.length;
+              sCta.items.forEach(i => { subSilla += (i.precio * i.cantidad); });
+            }
+
+            const card = document.createElement('div');
+            card.onclick = (function(sn) { return function() { window.seleccionarSillaSidebar(sn); }; })(s);
+            card.style.cssText = `padding: 8px 10px !important; border-radius: 10px !important; cursor: pointer !important; transition: all 0.2s !important; display: flex !important; flex-direction: column !important; gap: 2px !important; ${
               isCurrent
-                ? 'background: #059669 !important; color: #ffffff !important; border: 1px solid #34d399 !important; box-shadow: 0 0 8px rgba(52,211,153,0.4) !important;'
-                : (sOcc ? 'background: #78350f !important; color: #fde68a !important; border: 1px solid #f59e0b !important;' : 'background: #1e293b !important; color: #94a3b8 !important; border: 1px solid #334155 !important;')
+                ? 'background: rgba(5, 150, 105, 0.25) !important; border: 2px solid #34d399 !important; box-shadow: 0 0 12px rgba(52,211,153,0.3) !important;'
+                : (sOcc ? 'background: #0f172a !important; border: 1px solid #f59e0b !important;' : 'background: #090d16 !important; border: 1px solid #1e293b !important; opacity: 0.7 !important;')
             }`;
-            pill.innerHTML = `S${s} ${isCurrent ? '●' : (sOcc ? '🟡' : '⚪')}`;
-            pillsContainer.appendChild(pill);
+
+            card.innerHTML = `
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-weight: 900; font-size: 11px; color: ${isCurrent ? '#34d399' : (sOcc ? '#fbbf24' : '#cbd5e1')};">Silla ${s}</span>
+                <span style="font-size: 9px; font-weight: 800; padding: 1px 5px; border-radius: 4px; ${
+                  isCurrent
+                    ? 'background: #059669; color: #ffffff;'
+                    : (sOcc ? 'background: #78350f; color: #fde68a;' : 'background: #1e293b; color: #64748b;')
+                }">${isCurrent ? '● ATENDIENDO' : (sOcc ? '🟡 OCUPADA' : '⚪ LIBRE')}</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 2px;">
+                <span style="font-size: 9px; color: #94a3b8;">${sOcc ? `${numItems} prod.` : 'Sin comensal'}</span>
+                <span style="font-size: 11px; font-weight: 900; color: ${sOcc ? '#34d399' : '#64748b'};">$${subSilla.toFixed(2)}</span>
+              </div>
+            `;
+            cardsGrid.appendChild(card);
           }
         }
 
         // Lista de items de la comanda en tiempo real
         const itemsList = document.getElementById('sidebarComandaItemsList');
-        const countBadge = document.getElementById('sidebarItemsCountBadge');
         let subtotal = 0;
         let pendientesCount = 0;
 
@@ -3671,7 +3726,7 @@
             itemsList.innerHTML = `
               <div style="text-align: center; color: #64748b; font-size: 11px; padding: 25px 0;">
                 <i class="fa-solid fa-utensils" style="font-size: 20px; display: block; margin-bottom: 6px; opacity: 0.5;"></i>
-                Sin productos agregados.<br>Selecciona platillos del catálogo a la derecha.
+                No hay consumos en Silla ${sillaNum}.<br>Selecciona platillos del catálogo a la derecha.
               </div>
             `;
           } else {
@@ -3687,22 +3742,21 @@
                   <div style="display: flex; align-items: center; gap: 4px;">
                     <span style="font-weight: 800; color: #ffffff;">${it.cantidad}x ${it.nombre}</span>
                   </div>
-                  <div style="display: flex; align-items: center; gap: 6px; margin-top: 2px;">
-                    <span style="font-size: 10px; font-weight: 800; color: #34d399;">$${itTotal.toFixed(2)}</span>
+                  <div style="display: flex; align-items: center; gap: 6px; margin-top: 3px;">
+                    <span style="font-size: 11px; font-weight: 900; color: #34d399;">$${itTotal.toFixed(2)}</span>
                     ${it.enviadoCocina
-                      ? `<span style="background: rgba(5,150,105,0.2); border: 1px solid rgba(5,150,105,0.5); color: #34d399; font-size: 9px; font-weight: 800; padding: 1px 5px; border-radius: 4px;"><i class="fa-solid fa-fire"></i> En Cocina (${it.horaEnvioCocina || it.hora || ''})</span>`
-                      : `<span style="background: rgba(245,158,11,0.2); border: 1px solid rgba(245,158,11,0.5); color: #fbbf24; font-size: 9px; font-weight: 800; padding: 1px 5px; border-radius: 4px;"><i class="fa-solid fa-clock"></i> Pendiente</span>`}
+                      ? `<span style="background: rgba(5,150,105,0.25); border: 1px solid #10b981; color: #34d399; font-size: 9px; font-weight: 800; padding: 1px 5px; border-radius: 4px;"><i class="fa-solid fa-fire"></i> En Cocina (${it.horaEnvioCocina || it.hora || ''})</span>`
+                      : `<div style="display: flex; align-items: center; gap: 4px;">
+                          <span style="background: rgba(245,158,11,0.25); border: 1px solid #f59e0b; color: #fbbf24; font-size: 9px; font-weight: 800; padding: 1px 5px; border-radius: 4px;"><i class="fa-solid fa-clock"></i> Pendiente</span>
+                          <button onclick="window.enviarItemIndividualACocina(${idx});" style="background: #f59e0b; color: #0f172a; border: none; padding: 2px 6px; border-radius: 4px; font-size: 9px; font-weight: 900; cursor: pointer; display: flex; align-items: center; gap: 2px;" title="Enviar este producto a cocina ahora">🚀 Enviar</button>
+                        </div>`}
                   </div>
                 </div>
-                <button onclick="window.eliminarItemSidebar(${idx});" style="background: transparent; border: none; color: #f87171; cursor: pointer; padding: 2px 4px; font-size: 11px;" title="Eliminar">✕</button>
+                <button onclick="window.eliminarItemSidebar(${idx});" style="background: transparent; border: none; color: #f87171; cursor: pointer; padding: 2px 4px; font-size: 12px;" title="Eliminar">✕</button>
               `;
               itemsList.appendChild(row);
             });
           }
-        }
-
-        if (countBadge) {
-          countBadge.innerText = `${(cuenta.items || []).length} item${(cuenta.items || []).length !== 1 ? 's' : ''}`;
         }
 
         const iva = subtotal * 0.16;
