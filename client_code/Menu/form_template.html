@@ -1,6 +1,6 @@
-<anvil-form container="HtmlTemplate" prop:html="">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+<anvil-form container="HtmlTemplate" prop:html="
+  <link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css&quot;>
+  <link rel=&quot;stylesheet&quot; href=&quot;https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css&quot;>
   <style>
     body,
     html {
@@ -13,12 +13,18 @@
       border: 1px solid rgba(255, 255, 255, 0.12) !important;
     }
   </style>
-  <!-- TAILWIND CSS CDN INJECTION & FONTS -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+
+
+
+  <!-- TAILWIND CSS CDN INJECTION &amp; FONTS -->
+  <script src=&quot;https://cdn.tailwindcss.com&quot;></script>
+  <link rel=&quot;preconnect&quot; href=&quot;https://fonts.googleapis.com&quot;>
+  <link rel=&quot;preconnect&quot; href=&quot;https://fonts.gstatic.com&quot; crossorigin>
+  <link href=&quot;https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;display=swap&quot;
+    rel=&quot;stylesheet&quot;>
+  <link rel=&quot;stylesheet&quot; href=&quot;https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css&quot;>
+
   <style>
     body,
     .anvil-container {
@@ -44,94 +50,100 @@
       box-shadow: 0 0 25px rgba(16, 185, 129, 0.3);
     }
   </style>
-  <div class="min-h-screen bg-[#090d16] text-slate-100 flex flex-col font-sans">
 
-    <!-- HEADER BAR / BRANDING V&S -->
-    <header class="glass-nav sticky top-0 z-50 px-6 py-4 flex items-center justify-between">
-      <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-700 flex items-center justify-center font-black text-xl text-white shadow-lg brand-glow">
+  <div class=&quot;min-h-screen bg-[#090d16] text-slate-100 flex flex-col font-sans&quot;>
+
+    <!-- HEADER BAR / BRANDING V&amp;S -->
+    <header class=&quot;glass-nav sticky top-0 z-50 px-6 py-4 flex items-center justify-between&quot;>
+      <div class=&quot;flex items-center gap-3&quot;>
+        <div
+          class=&quot;w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-700 flex items-center justify-center font-black text-xl text-white shadow-lg brand-glow&quot;>
           V&amp;S
         </div>
         <div>
-          <h1 class="text-lg font-bold tracking-tight text-white">La Terraza de Vida &amp; Sabor</h1>
-          <p class="text-xs text-slate-400 font-medium">Menú Digital &amp; Comandas en Mesa</p>
+          <h1 class=&quot;text-lg font-bold tracking-tight text-white&quot;>La Terraza de Vida &amp; Sabor</h1>
+          <p class=&quot;text-xs text-slate-400 font-medium&quot;>Menú Digital &amp; Comandas en Mesa</p>
         </div>
       </div>
 
       <!-- BOTONES DE NAVEGACIÓN Y MÓDULOS DEL SISTEMA -->
-      <div class="flex flex-wrap items-center gap-2">
-        <button onclick="window.navMenu &amp;&amp; window.navMenu('menu')" class="px-3 py-1.5 text-xs font-bold rounded-xl bg-emerald-600/30 border border-emerald-500/50 text-emerald-300 transition flex items-center gap-1.5">
-          <i class="fa-solid fa-mobile-screen-button text-emerald-400"></i> 📱 Cliente QR
+      <div class=&quot;flex flex-wrap items-center gap-2&quot;>
+        <button onclick=&quot;window.navMenu &amp;&amp; window.navMenu('menu')&quot;
+          class=&quot;px-3 py-1.5 text-xs font-bold rounded-xl bg-emerald-600/30 border border-emerald-500/50 text-emerald-300 transition flex items-center gap-1.5&quot;>
+          <i class=&quot;fa-solid fa-mobile-screen-button text-emerald-400&quot;></i> 📱 Cliente QR
         </button>
-        <button onclick="window.navMenu &amp;&amp; window.navMenu('pos_mesero')" class="px-3 py-1.5 text-xs font-bold rounded-xl glass-card text-amber-300 border-amber-500/30 hover:bg-amber-500/10 transition flex items-center gap-1.5">
-          <i class="fa-solid fa-chair text-amber-400"></i> 📲 POS Croquis
+        <button onclick=&quot;window.navMenu &amp;&amp; window.navMenu('pos_mesero')&quot;
+          class=&quot;px-3 py-1.5 text-xs font-bold rounded-xl glass-card text-amber-300 border-amber-500/30 hover:bg-amber-500/10 transition flex items-center gap-1.5&quot;>
+          <i class=&quot;fa-solid fa-chair text-amber-400&quot;></i> 📲 POS Croquis
         </button>
-        <button onclick="window.navMenu &amp;&amp; window.navMenu('monitor_cocina')" class="px-3 py-1.5 text-xs font-bold rounded-xl glass-card text-sky-300 border-sky-500/30 hover:bg-sky-500/10 transition flex items-center gap-1.5">
-          <i class="fa-solid fa-fire text-amber-400"></i> 👨‍🍳 Cocina KDS
+        <button onclick=&quot;window.navMenu &amp;&amp; window.navMenu('monitor_cocina')&quot;
+          class=&quot;px-3 py-1.5 text-xs font-bold rounded-xl glass-card text-sky-300 border-sky-500/30 hover:bg-sky-500/10 transition flex items-center gap-1.5&quot;>
+          <i class=&quot;fa-solid fa-fire text-amber-400&quot;></i> 👨‍🍳 Cocina KDS
         </button>
-        <button onclick="window.navMenu &amp;&amp; window.navMenu('monitor_fiscal')" class="px-3 py-1.5 text-xs font-bold rounded-xl glass-card text-slate-300 border-slate-700 hover:bg-slate-800 transition flex items-center gap-1.5">
-          <i class="fa-solid fa-chart-pie text-sky-400"></i> 🧾 Fiscal
+        <button onclick=&quot;window.navMenu &amp;&amp; window.navMenu('monitor_fiscal')&quot;
+          class=&quot;px-3 py-1.5 text-xs font-bold rounded-xl glass-card text-slate-300 border-slate-700 hover:bg-slate-800 transition flex items-center gap-1.5&quot;>
+          <i class=&quot;fa-solid fa-chart-pie text-sky-400&quot;></i> 🧾 Fiscal
         </button>
-        <button onclick="window.navMenu &amp;&amp; window.navMenu('clientes_lealtad')" class="px-3 py-1.5 text-xs font-bold rounded-xl glass-card text-purple-300 border-purple-500/30 hover:bg-purple-500/10 transition flex items-center gap-1.5">
-          <i class="fa-solid fa-award text-purple-400"></i> 💳 Rewards
+        <button onclick=&quot;window.navMenu &amp;&amp; window.navMenu('clientes_lealtad')&quot;
+          class=&quot;px-3 py-1.5 text-xs font-bold rounded-xl glass-card text-purple-300 border-purple-500/30 hover:bg-purple-500/10 transition flex items-center gap-1.5&quot;>
+          <i class=&quot;fa-solid fa-award text-purple-400&quot;></i> 💳 Rewards
         </button>
       </div>
     </header>
 
     <!-- BARRA DE UBICACIÓN QR Y SELECTOR DE SILLA (SIMULACIÓN DE ESCANEO QR) -->
-    <div class="bg-slate-900/90 border-b border-slate-800 px-6 py-2.5 flex flex-wrap justify-between items-center gap-3">
-      <div class="flex items-center gap-2 text-xs">
-        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-500/30">
-          <i class="fa-solid fa-qrcode text-emerald-400"></i> Portavasos QR: <span id="lblQrActivo">PV-021</span>
+    <div class=&quot;bg-slate-900/90 border-b border-slate-800 px-6 py-2.5 flex flex-wrap justify-between items-center gap-3&quot;>
+      <div class=&quot;flex items-center gap-2 text-xs&quot;>
+        <span class=&quot;inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-500/30&quot;>
+          <i class=&quot;fa-solid fa-qrcode text-emerald-400&quot;></i> Portavasos QR: <span id=&quot;lblQrActivo&quot;>PV-021</span>
         </span>
-        <span id="lblUbicacionActiva" class="text-slate-300 font-semibold">Mesa 2 • Silla 1 (Adulto 1 / Papá)</span>
+        <span class=&quot;text-slate-300 font-semibold&quot; id=&quot;lblUbicacionActiva&quot;>Mesa 2 • Silla 1 (Adulto 1 / Papá)</span>
       </div>
-      <div class="flex items-center gap-2">
-        <span class="text-xs text-slate-400 font-medium">Simular escaneo QR en:</span>
-        <div class="bg-slate-800 text-slate-200 text-xs font-bold px-3 py-1.5 rounded-xl border border-slate-700 focus:outline-none focus:border-emerald-500 cursor-pointer">
-          <select id="selSimularQr" onchange="window.cambiarSimulacionQr(this.value)" class="bg-slate-800 text-slate-200 text-xs font-bold px-3 py-1.5 rounded-xl border border-slate-700 focus:outline-none focus:border-emerald-500 cursor-pointer">
-
-
-          </select>
-          <optgroup label="Mesa 2 (Familia 2 adultos + 2 niños)">
-            <option value="2-1" selected>Mesa 2 · Silla 1 (Papá - $445.00)</option>
-            <option value="2-2">Mesa 2 · Silla 2 (Mamá - $325.00)</option>
-            <option value="2-3">Mesa 2 · Silla 3 (Niño 1 - $185.00)</option>
-            <option value="2-4">Mesa 2 · Silla 4 (Niño 2 - $105.00)</option>
+      <div class=&quot;flex items-center gap-2&quot;>
+        <span class=&quot;text-xs text-slate-400 font-medium&quot;>Simular escaneo QR en:</span>
+        <select id=&quot;selSimularQr&quot; onchange=&quot;window.cambiarSimulacionQr(this.value)&quot; class=&quot;bg-slate-800 text-slate-200 text-xs font-bold px-3 py-1.5 rounded-xl border border-slate-700 focus:outline-none focus:border-emerald-500 cursor-pointer&quot;>
+          <optgroup label=&quot;Mesa 2 (Familia 2 adultos + 2 niños)&quot;>
+            <option value=&quot;2-1&quot; selected>Mesa 2 · Silla 1 (Papá - $445.00)</option>
+            <option value=&quot;2-2&quot;>Mesa 2 · Silla 2 (Mamá - $325.00)</option>
+            <option value=&quot;2-3&quot;>Mesa 2 · Silla 3 (Niño 1 - $185.00)</option>
+            <option value=&quot;2-4&quot;>Mesa 2 · Silla 4 (Niño 2 - $105.00)</option>
           </optgroup>
-          <optgroup label="Mesa 3 (2 Comensales)">
-            <option value="3-1">Mesa 3 · Silla 1 (Adulto 1 - $148.00)</option>
-            <option value="3-2">Mesa 3 · Silla 2 (Adulto 2 - $68.00)</option>
+          <optgroup label=&quot;Mesa 3 (2 Comensales)&quot;>
+            <option value=&quot;3-1&quot;>Mesa 3 · Silla 1 (Adulto 1 - $148.00)</option>
+            <option value=&quot;3-2&quot;>Mesa 3 · Silla 2 (Adulto 2 - $68.00)</option>
           </optgroup>
-        </div>
+        </select>
       </div>
     </div>
 
     <!-- CONTENIDO PRINCIPAL DEL MENÚ DIGITAL -->
-    <main class="flex-1 max-w-7xl w-full mx-auto p-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <main class=&quot;flex-1 max-w-7xl w-full mx-auto p-6 grid grid-cols-1 lg:grid-cols-3 gap-6&quot;>
 
       <!-- SECCIÓN IZQUIERDA: CATÁLOGO Y PRODUCTOS -->
-      <section class="lg:col-span-2 flex flex-col gap-6">
+      <section class=&quot;lg:col-span-2 flex flex-col gap-6&quot;>
 
-        <!-- BUSCADOR & BARRA DE CATEGORÍAS -->
-        <div class="flex flex-col sm:flex-row gap-4 justify-between items-center">
-          <div class="relative w-full sm:w-80">
-            <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3.5 text-slate-500 text-sm"></i>
-            <input type="text" id="searchInput" placeholder="Buscar platillos o bebidas..." oninput="window.filtrarProductos()" class="w-full pl-10 pr-4 py-2.5 bg-slate-900/80 border border-slate-700/80 rounded-xl text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-emerald-500 transition" />
+        <!-- BUSCADOR &amp; BARRA DE CATEGORÍAS -->
+        <div class=&quot;flex flex-col sm:flex-row gap-4 justify-between items-center&quot;>
+          <div class=&quot;relative w-full sm:w-80&quot;>
+            <i class=&quot;fa-solid fa-magnifying-glass absolute left-3.5 top-3.5 text-slate-500 text-sm&quot;></i>
+            <input type=&quot;text&quot; id=&quot;searchInput&quot; placeholder=&quot;Buscar platillos o bebidas...&quot;
+              oninput=&quot;window.filtrarProductos()&quot;
+              class=&quot;w-full pl-10 pr-4 py-2.5 bg-slate-900/80 border border-slate-700/80 rounded-xl text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-emerald-500 transition&quot;>
           </div>
 
           <!-- CHIPS DE CATEGORÍAS -->
-          <div id="categoriesChips" class="flex gap-2 overflow-x-auto w-full sm:w-auto pb-1">
-            <button onclick="window.seleccionarCategoria('Todos')" class="cat-chip active px-4 py-2 text-xs font-bold rounded-xl bg-emerald-500 text-white shadow-md shadow-emerald-500/20 whitespace-nowrap transition">
+          <div class=&quot;flex gap-2 overflow-x-auto w-full sm:w-auto pb-1&quot; id=&quot;categoriesChips&quot;>
+            <button onclick=&quot;window.seleccionarCategoria('Todos')&quot;
+              class=&quot;cat-chip active px-4 py-2 text-xs font-bold rounded-xl bg-emerald-500 text-white shadow-md shadow-emerald-500/20 whitespace-nowrap transition&quot;>
               Todos
             </button>
           </div>
         </div>
 
         <!-- GRID DE TARJETAS DE PLATILLOS -->
-        <div id="productsGridContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div class="text-center py-12 text-slate-500 col-span-2">
-            <i class="fa-solid fa-spinner animate-spin text-2xl text-emerald-500 mb-2"></i>
+        <div class=&quot;grid grid-cols-1 md:grid-cols-2 gap-4&quot; id=&quot;productsGridContainer&quot;>
+          <div class=&quot;text-center py-12 text-slate-500 col-span-2&quot;>
+            <i class=&quot;fa-solid fa-spinner animate-spin text-2xl text-emerald-500 mb-2&quot;></i>
             <p>Cargando menú de La Terraza V&amp;S...</p>
           </div>
         </div>
@@ -139,70 +151,73 @@
       </section>
 
       <!-- SECCIÓN DERECHA: SIDEBAR DE COMANDA Y COBRO AGRUPADO -->
-      <aside class="glass-card rounded-2xl p-6 flex flex-col justify-between h-full border border-slate-800 shadow-2xl gap-4">
+      <aside class=&quot;glass-card rounded-2xl p-6 flex flex-col justify-between h-full border border-slate-800 shadow-2xl gap-4&quot;>
         <div>
-          <div class="flex justify-between items-center pb-3 border-b border-slate-800 mb-3">
+          <div class=&quot;flex justify-between items-center pb-3 border-b border-slate-800 mb-3&quot;>
             <div>
-              <h2 class="text-base font-bold text-white flex items-center gap-2">
-                <i class="fa-solid fa-receipt text-emerald-400"></i> <span id="txtTituloComanda">Mi Comanda (Silla 1)</span>
+              <h2 class=&quot;text-base font-bold text-white flex items-center gap-2&quot;>
+                <i class=&quot;fa-solid fa-receipt text-emerald-400&quot;></i> <span id=&quot;txtTituloComanda&quot;>Mi Comanda (Silla 1)</span>
               </h2>
-              <p id="txtSubComanda" class="text-xs text-slate-400">Mesa 2 • Portavasos #PV-021</p>
+              <p class=&quot;text-xs text-slate-400&quot; id=&quot;txtSubComanda&quot;>Mesa 2 • Portavasos #PV-021</p>
             </div>
-            <span class="px-2.5 py-1 text-[10px] font-black rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 uppercase">
+            <span
+              class=&quot;px-2.5 py-1 text-[10px] font-black rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 uppercase&quot;>
               Activa
             </span>
           </div>
 
           <!-- LISTA DE ITEMS REGISTRADOS DE MI SILLA -->
-          <div id="cartItemsList" class="space-y-2.5 max-h-56 overflow-y-auto pr-1">
-            <div class="text-center py-6 text-slate-500 text-xs">
+          <div class=&quot;space-y-2.5 max-h-56 overflow-y-auto pr-1&quot; id=&quot;cartItemsList&quot;>
+            <div class=&quot;text-center py-6 text-slate-500 text-xs&quot;>
               No hay consumos agregados a esta silla.
             </div>
           </div>
 
           <!-- SECCIÓN: PAGAR POR ACOMPAÑANTES / NIÑOS EN MI MESA -->
-          <div class="mt-4 pt-3 border-t border-slate-800/80">
-            <div class="flex justify-between items-center mb-2">
-              <span class="text-xs font-bold text-slate-200 flex items-center gap-1.5">
-                <i class="fa-solid fa-users text-amber-400"></i> Pagar por otros en mi mesa:
+          <div class=&quot;mt-4 pt-3 border-t border-slate-800/80&quot;>
+            <div class=&quot;flex justify-between items-center mb-2&quot;>
+              <span class=&quot;text-xs font-bold text-slate-200 flex items-center gap-1.5&quot;>
+                <i class=&quot;fa-solid fa-users text-amber-400&quot;></i> Pagar por otros en mi mesa:
               </span>
-              <button onclick="window.seleccionarTodosAcompanantes()" class="text-[10px] text-emerald-400 hover:underline font-semibold">Toda Mesa</button>
+              <button onclick=&quot;window.seleccionarTodosAcompanantes()&quot; class=&quot;text-[10px] text-emerald-400 hover:underline font-semibold&quot;>Toda Mesa</button>
             </div>
 
-            <div id="listaAcompanantesMesa" class="space-y-1.5 max-h-36 overflow-y-auto pr-1 text-xs">
+            <div id=&quot;listaAcompanantesMesa&quot; class=&quot;space-y-1.5 max-h-36 overflow-y-auto pr-1 text-xs&quot;>
               <!-- Checklist populated dynamically -->
             </div>
           </div>
         </div>
 
         <!-- TOTALES Y ACCIONES DE COBRO CONSOLIDADAS -->
-        <div class="pt-3 border-t border-slate-800 space-y-3">
-          <div class="space-y-1.5 text-xs">
-            <div class="flex justify-between text-slate-400">
-              <span id="lblSubtotalDetalle">Subtotal (Mi Silla + Acompañantes):</span>
-              <span id="txtSubtotal" class="font-semibold text-slate-200">$0.00</span>
+        <div class=&quot;pt-3 border-t border-slate-800 space-y-3&quot;>
+          <div class=&quot;space-y-1.5 text-xs&quot;>
+            <div class=&quot;flex justify-between text-slate-400&quot;>
+              <span id=&quot;lblSubtotalDetalle&quot;>Subtotal (Mi Silla + Acompañantes):</span>
+              <span class=&quot;font-semibold text-slate-200&quot; id=&quot;txtSubtotal&quot;>$0.00</span>
             </div>
-            <div class="flex justify-between text-slate-400">
+            <div class=&quot;flex justify-between text-slate-400&quot;>
               <span>IVA 16% Trasladado:</span>
-              <span id="txtIVA" class="font-semibold text-slate-200">$0.00</span>
+              <span class=&quot;font-semibold text-slate-200&quot; id=&quot;txtIVA&quot;>$0.00</span>
             </div>
-            <div class="flex justify-between text-slate-400">
+            <div class=&quot;flex justify-between text-slate-400&quot;>
               <span>Propina Sugerida (10%):</span>
-              <span id="txtPropina" class="font-semibold text-slate-200">$0.00</span>
+              <span class=&quot;font-semibold text-slate-200&quot; id=&quot;txtPropina&quot;>$0.00</span>
             </div>
-            <div class="flex justify-between text-base font-black text-white pt-2 border-t border-slate-800">
-              <span id="lblTotalCobro">Total a Pagar:</span>
-              <span id="txtTotal" class="text-emerald-400 text-lg font-black">$0.00</span>
+            <div class=&quot;flex justify-between text-base font-black text-white pt-2 border-t border-slate-800&quot;>
+              <span id=&quot;lblTotalCobro&quot;>Total a Pagar:</span>
+              <span class=&quot;text-emerald-400 text-lg font-black&quot; id=&quot;txtTotal&quot;>$0.00</span>
             </div>
           </div>
 
           <!-- BOTONES DE COBRO MULTICANAL -->
-          <div class="grid grid-cols-2 gap-2">
-            <button onclick="window.abrirModalCobroCliente('santander')" class="py-3 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-100 text-xs font-bold border border-slate-700 transition flex items-center justify-center gap-1.5 cursor-pointer">
-              <i class="fa-solid fa-credit-card text-sky-400"></i> Santander
+          <div class=&quot;grid grid-cols-2 gap-2&quot;>
+            <button onclick=&quot;window.abrirModalCobroCliente('santander')&quot;
+              class=&quot;py-3 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-100 text-xs font-bold border border-slate-700 transition flex items-center justify-center gap-1.5 cursor-pointer&quot;>
+              <i class=&quot;fa-solid fa-credit-card text-sky-400&quot;></i> Santander
             </button>
-            <button onclick="window.abrirModalCobroCliente('tarjeta')" class="py-3 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold shadow-lg shadow-emerald-600/30 transition flex items-center justify-center gap-1.5 cursor-pointer">
-              <i class="fa-solid fa-check-double"></i> Pagar / Ticket (<span id="txtBtnPagarMonto">$0.00</span>)
+            <button onclick=&quot;window.abrirModalCobroCliente('tarjeta')&quot;
+              class=&quot;py-3 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold shadow-lg shadow-emerald-600/30 transition flex items-center justify-center gap-1.5 cursor-pointer&quot;>
+              <i class=&quot;fa-solid fa-check-double&quot;></i> Pagar / Ticket (<span id=&quot;txtBtnPagarMonto&quot;>$0.00</span>)
             </button>
           </div>
         </div>
@@ -212,81 +227,85 @@
     </main>
 
     <!-- MODAL DE COBRO Y PRECUENTA DIGITAL CLIENTE QR -->
-    <div id="modalCobroCliente" onclick="if(event.target === this) window.cerrarModalCobroCliente();" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden items-center justify-center p-4">
-      <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-md p-6 shadow-2xl flex flex-col gap-4 text-slate-100">
-        <div class="flex justify-between items-start border-b border-slate-800 pb-3">
+    <div id=&quot;modalCobroCliente&quot; class=&quot;fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden items-center justify-center p-4&quot; onclick=&quot;if(event.target === this) window.cerrarModalCobroCliente();&quot;>
+      <div class=&quot;bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-md p-6 shadow-2xl flex flex-col gap-4 text-slate-100&quot;>
+        <div class=&quot;flex justify-between items-start border-b border-slate-800 pb-3&quot;>
           <div>
-            <h3 class="text-base font-bold text-white flex items-center gap-2">
-              <i class="fa-solid fa-receipt text-emerald-400"></i> Precuenta y Pago Digital
+            <h3 class=&quot;text-base font-bold text-white flex items-center gap-2&quot;>
+              <i class=&quot;fa-solid fa-receipt text-emerald-400&quot;></i> Precuenta y Pago Digital
             </h3>
-            <p id="modalCobroSubtitulo" class="text-xs text-slate-400">Mesa 2 • Portavasos #PV-021</p>
+            <p class=&quot;text-xs text-slate-400&quot; id=&quot;modalCobroSubtitulo&quot;>Mesa 2 • Portavasos #PV-021</p>
           </div>
-          <button onclick="window.cerrarModalCobroCliente();" class="text-slate-400 hover:text-white text-lg cursor-pointer">✕</button>
+          <button onclick=&quot;window.cerrarModalCobroCliente();&quot; class=&quot;text-slate-400 hover:text-white text-lg cursor-pointer&quot;>✕</button>
         </div>
 
         <!-- SELECTOR DE ALCANCE DEL PAGO -->
-        <div class="bg-slate-950/80 p-3 rounded-xl border border-slate-800/80 space-y-2">
-          <span class="text-xs font-bold text-slate-300 block"><i class="fa-solid fa-hand-holding-dollar text-emerald-400 mr-1"></i> ¿Qué deseas pagar?</span>
-          <div class="grid grid-cols-3 gap-1.5 text-[11px]">
-            <button type="button" onclick="window.setModoPagoCliente('solo_yo')" id="btnModoSoloYo" class="p-2 rounded-lg font-bold border text-center transition bg-slate-800 text-slate-300 border-slate-700 cursor-pointer">Solo Mi Silla</button>
-            <button type="button" onclick="window.setModoPagoCliente('incluir_ninos')" id="btnModoNinos" class="p-2 rounded-lg font-bold border text-center transition bg-emerald-600/30 text-emerald-300 border-emerald-500/50 cursor-pointer">Acompañantes</button>
-            <button type="button" onclick="window.setModoPagoCliente('toda_mesa')" id="btnModoTodaMesa" class="p-2 rounded-lg font-bold border text-center transition bg-slate-800 text-slate-300 border-slate-700 cursor-pointer">Toda la Mesa</button>
+        <div class=&quot;bg-slate-950/80 p-3 rounded-xl border border-slate-800/80 space-y-2&quot;>
+          <span class=&quot;text-xs font-bold text-slate-300 block&quot;><i class=&quot;fa-solid fa-hand-holding-dollar text-emerald-400 mr-1&quot;></i> ¿Qué deseas pagar?</span>
+          <div class=&quot;grid grid-cols-3 gap-1.5 text-[11px]&quot;>
+            <button type=&quot;button&quot; onclick=&quot;window.setModoPagoCliente('solo_yo')&quot; id=&quot;btnModoSoloYo&quot; class=&quot;p-2 rounded-lg font-bold border text-center transition bg-slate-800 text-slate-300 border-slate-700 cursor-pointer&quot;>Solo Mi Silla</button>
+            <button type=&quot;button&quot; onclick=&quot;window.setModoPagoCliente('incluir_ninos')&quot; id=&quot;btnModoNinos&quot; class=&quot;p-2 rounded-lg font-bold border text-center transition bg-emerald-600/30 text-emerald-300 border-emerald-500/50 cursor-pointer&quot;>Acompañantes</button>
+            <button type=&quot;button&quot; onclick=&quot;window.setModoPagoCliente('toda_mesa')&quot; id=&quot;btnModoTodaMesa&quot; class=&quot;p-2 rounded-lg font-bold border text-center transition bg-slate-800 text-slate-300 border-slate-700 cursor-pointer&quot;>Toda la Mesa</button>
           </div>
         </div>
 
         <!-- DESGLOSE DE CUENTAS INCLUIDAS -->
-        <div id="modalCobroDetalleTramos" class="space-y-2 max-h-56 overflow-y-auto pr-1 text-xs">
+        <div id=&quot;modalCobroDetalleTramos&quot; class=&quot;space-y-2 max-h-56 overflow-y-auto pr-1 text-xs&quot;>
           <!-- Generado dinámicamente -->
         </div>
 
         <!-- TOTALES -->
-        <div class="pt-3 border-t border-slate-800 space-y-1.5 text-xs">
-          <div class="flex justify-between text-slate-400"><span>Subtotal Neto:</span><span id="modalSubtotal" class="text-slate-200 font-bold">$0.00</span></div>
-          <div class="flex justify-between text-slate-400"><span>IVA 16% Trasladado:</span><span id="modalIVA" class="text-slate-200 font-bold">$0.00</span></div>
-          <div class="flex justify-between text-slate-400"><span>Propina Sugerida (10%):</span><span id="modalPropina" class="text-slate-200 font-bold">$0.00</span></div>
-          <div class="flex justify-between text-base font-black text-white pt-2 border-t border-slate-800">
+        <div class=&quot;pt-3 border-t border-slate-800 space-y-1.5 text-xs&quot;>
+          <div class=&quot;flex justify-between text-slate-400&quot;><span>Subtotal Neto:</span><span id=&quot;modalSubtotal&quot; class=&quot;text-slate-200 font-bold&quot;>$0.00</span></div>
+          <div class=&quot;flex justify-between text-slate-400&quot;><span>IVA 16% Trasladado:</span><span id=&quot;modalIVA&quot; class=&quot;text-slate-200 font-bold&quot;>$0.00</span></div>
+          <div class=&quot;flex justify-between text-slate-400&quot;><span>Propina Sugerida (10%):</span><span id=&quot;modalPropina&quot; class=&quot;text-slate-200 font-bold&quot;>$0.00</span></div>
+          <div class=&quot;flex justify-between text-base font-black text-white pt-2 border-t border-slate-800&quot;>
             <span>Total Final a Liquidar:</span>
-            <span id="modalTotal" class="text-emerald-400 text-lg font-black">$0.00</span>
+            <span id=&quot;modalTotal&quot; class=&quot;text-emerald-400 text-lg font-black&quot;>$0.00</span>
           </div>
         </div>
 
         <!-- BOTONES DE PROCESAR PAGO -->
-        <div class="grid grid-cols-2 gap-2 pt-2">
-          <button onclick="window.ejecutarPagoFinal('santander')" class="py-3 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-sky-400 text-xs font-bold border border-slate-700 flex items-center justify-center gap-1.5 cursor-pointer">
-            <i class="fa-solid fa-credit-card"></i> Pagar Santander
+        <div class=&quot;grid grid-cols-3 gap-1.5 pt-2&quot;>
+          <button onclick=&quot;window.ejecutarPagoFinal('mercadopago')&quot; class=&quot;py-2.5 px-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-[11px] font-bold shadow-lg shadow-emerald-600/30 flex flex-col items-center justify-center gap-1 cursor-pointer&quot;>
+            <i class=&quot;fa-solid fa-mobile-screen&quot;></i> Mercado Pago
           </button>
-          <button onclick="window.ejecutarPagoFinal('tarjeta')" class="py-3 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold shadow-lg shadow-emerald-600/30 flex items-center justify-center gap-1.5 cursor-pointer">
-            <i class="fa-solid fa-check-circle"></i> Confirmar Pago
+          <button onclick=&quot;window.ejecutarPagoFinal('santander')&quot; class=&quot;py-2.5 px-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-sky-400 text-[11px] font-bold border border-slate-700 flex flex-col items-center justify-center gap-1 cursor-pointer&quot;>
+            <i class=&quot;fa-solid fa-credit-card&quot;></i> Santander
+          </button>
+          <button onclick=&quot;window.ejecutarPagoFinal('efectivo')&quot; class=&quot;py-2.5 px-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-amber-300 text-[11px] font-bold border border-slate-700 flex flex-col items-center justify-center gap-1 cursor-pointer&quot;>
+            <i class=&quot;fa-solid fa-money-bill-wave&quot;></i> Efectivo
           </button>
         </div>
       </div>
     </div>
 
   </div>
+
   <script>
     window.vsMenuData = [
-      { id: 1, categoria_nombre: "Barra de Café &amp;amp;amp; Infusiones", nombre: "Café Capuchino Especial V&amp;amp;amp;S", descripcion: "Espresso doble con leche cremada artesanal y toque de canela", precio_unitario: 68.00, estacion_preparacion: "barra_cafe", icono: "☕" },
-      { id: 2, categoria_nombre: "Barra de Café &amp;amp;amp; Infusiones", nombre: "Espresso Italiano Robusto", descripcion: "Grano seleccionado 100% arábica tostado de la casa", precio_unitario: 48.00, estacion_preparacion: "barra_cafe", icono: "☕" },
-      { id: 3, categoria_nombre: "Barra de Café &amp;amp;amp; Infusiones", nombre: "Latte Machiatto Vainilla Bourbon", descripcion: "Espresso con leche de almendra y jarabe natural de vainilla bourbon", precio_unitario: 75.00, estacion_preparacion: "barra_cafe", icono: "🥛" },
-      { id: 4, categoria_nombre: "Desayunos &amp;amp;amp; Brunch Gourmet", nombre: "Chilaquiles Verdes con Pollo y Queso Gouda", descripcion: "Totopos artesanos en salsa de tomatillo con pollo deshebrado y gouda", precio_unitario: 148.00, estacion_preparacion: "cocina", icono: "🥘" },
-      { id: 5, categoria_nombre: "Desayunos &amp;amp;amp; Brunch Gourmet", nombre: "Omelette Supremo La Terraza", descripcion: "3 huevos orgánicos rellenos de portobello, espinacas baby y queso asadero", precio_unitario: 155.00, estacion_preparacion: "cocina", icono: "🍳" },
-      { id: 6, categoria_nombre: "Desayunos &amp;amp;amp; Brunch Gourmet", nombre: "Molletes de Masa Madre con Chorizo", descripcion: "Pan artesano de masa madre con frijol negro, gouda y chorizo", precio_unitario: 125.00, estacion_preparacion: "cocina", icono: "🥖" },
-      { id: 7, categoria_nombre: "Especialidades Fuertes", nombre: "Rib Eye Grill V&amp;amp;amp;S (350g)", descripcion: "Corte de alta calidad a las brasas servido con papas gajo y espárragos", precio_unitario: 385.00, estacion_preparacion: "cocina", icono: "🥩" },
-      { id: 8, categoria_nombre: "Especialidades Fuertes", nombre: "Pasta Fettuccine con Camarones al Trufado", descripcion: "Pasta fresca hecha en casa con camarones u-15 y crema suave de trufa", precio_unitario: 265.00, estacion_preparacion: "cocina", icono: "🍝" },
-      { id: 9, categoria_nombre: "Repostería &amp;amp;amp; Postres de Autor", nombre: "Pastel Supremo de Chocolate Valrhona", descripcion: "Rebanada caliente de pastel de chocolate amargo con helado de vainilla", precio_unitario: 105.00, estacion_preparacion: "reposteria", icono: "🍰" },
-      { id: 10, categoria_nombre: "Bebidas &amp;amp;amp; Coctelería de Autor", nombre: "Limonada Botánica de Hierbabuena &amp;amp;amp; Jengibre", descripcion: "Agua mineral infucionada con jengibre fresco, limón eufrata y hierbabuena", precio_unitario: 60.00, estacion_preparacion: "barra_cafe", icono: "🍋" }
+      { id: 1, categoria_nombre: &quot;Barra de Café &amp; Infusiones&quot;, nombre: &quot;Café Capuchino Especial V&amp;S&quot;, descripcion: &quot;Espresso doble con leche cremada artesanal y toque de canela&quot;, precio_unitario: 68.00, estacion_preparacion: &quot;barra_cafe&quot;, icono: &quot;☕&quot; },
+      { id: 2, categoria_nombre: &quot;Barra de Café &amp; Infusiones&quot;, nombre: &quot;Espresso Italiano Robusto&quot;, descripcion: &quot;Grano seleccionado 100% arábica tostado de la casa&quot;, precio_unitario: 48.00, estacion_preparacion: &quot;barra_cafe&quot;, icono: &quot;☕&quot; },
+      { id: 3, categoria_nombre: &quot;Barra de Café &amp; Infusiones&quot;, nombre: &quot;Latte Machiatto Vainilla Bourbon&quot;, descripcion: &quot;Espresso con leche de almendra y jarabe natural de vainilla bourbon&quot;, precio_unitario: 75.00, estacion_preparacion: &quot;barra_cafe&quot;, icono: &quot;🥛&quot; },
+      { id: 4, categoria_nombre: &quot;Desayunos &amp; Brunch Gourmet&quot;, nombre: &quot;Chilaquiles Verdes con Pollo y Queso Gouda&quot;, descripcion: &quot;Totopos artesanos en salsa de tomatillo con pollo deshebrado y gouda&quot;, precio_unitario: 148.00, estacion_preparacion: &quot;cocina&quot;, icono: &quot;🥘&quot; },
+      { id: 5, categoria_nombre: &quot;Desayunos &amp; Brunch Gourmet&quot;, nombre: &quot;Omelette Supremo La Terraza&quot;, descripcion: &quot;3 huevos orgánicos rellenos de portobello, espinacas baby y queso asadero&quot;, precio_unitario: 155.00, estacion_preparacion: &quot;cocina&quot;, icono: &quot;🍳&quot; },
+      { id: 6, categoria_nombre: &quot;Desayunos &amp; Brunch Gourmet&quot;, nombre: &quot;Molletes de Masa Madre con Chorizo&quot;, descripcion: &quot;Pan artesano de masa madre con frijol negro, gouda y chorizo&quot;, precio_unitario: 125.00, estacion_preparacion: &quot;cocina&quot;, icono: &quot;🥖&quot; },
+      { id: 7, categoria_nombre: &quot;Especialidades Fuertes&quot;, nombre: &quot;Rib Eye Grill V&amp;S (350g)&quot;, descripcion: &quot;Corte de alta calidad a las brasas servido con papas gajo y espárragos&quot;, precio_unitario: 385.00, estacion_preparacion: &quot;cocina&quot;, icono: &quot;🥩&quot; },
+      { id: 8, categoria_nombre: &quot;Especialidades Fuertes&quot;, nombre: &quot;Pasta Fettuccine con Camarones al Trufado&quot;, descripcion: &quot;Pasta fresca hecha en casa con camarones u-15 y crema suave de trufa&quot;, precio_unitario: 265.00, estacion_preparacion: &quot;cocina&quot;, icono: &quot;🍝&quot; },
+      { id: 9, categoria_nombre: &quot;Repostería &amp; Postres de Autor&quot;, nombre: &quot;Pastel Supremo de Chocolate Valrhona&quot;, descripcion: &quot;Rebanada caliente de pastel de chocolate amargo con helado de vainilla&quot;, precio_unitario: 105.00, estacion_preparacion: &quot;reposteria&quot;, icono: &quot;🍰&quot; },
+      { id: 10, categoria_nombre: &quot;Bebidas &amp; Coctelería de Autor&quot;, nombre: &quot;Limonada Botánica de Hierbabuena &amp; Jengibre&quot;, descripcion: &quot;Agua mineral infucionada con jengibre fresco, limón eufrata y hierbabuena&quot;, precio_unitario: 60.00, estacion_preparacion: &quot;barra_cafe&quot;, icono: &quot;🍋&quot; }
     ];
 
     window.vsCategoriasData = [
-      { id: 1, nombre: "Barra de Café &amp;amp;amp; Infusiones", icono: "☕" },
-      { id: 2, nombre: "Desayunos &amp;amp;amp; Brunch Gourmet", icono: "🍳" },
-      { id: 3, nombre: "Entradas &amp;amp;amp; Tapas de la Terraza", icono: "🥗" },
-      { id: 4, nombre: "Especialidades Fuertes", icono: "🥩" },
-      { id: 5, nombre: "Repostería &amp;amp;amp; Postres de Autor", icono: "🍰" },
-      { id: 6, nombre: "Bebidas &amp;amp;amp; Coctelería de Autor", icono: "🍹" }
+      { id: 1, nombre: &quot;Barra de Café &amp; Infusiones&quot;, icono: &quot;☕&quot; },
+      { id: 2, nombre: &quot;Desayunos &amp; Brunch Gourmet&quot;, icono: &quot;🍳&quot; },
+      { id: 3, nombre: &quot;Entradas &amp; Tapas de la Terraza&quot;, icono: &quot;🥗&quot; },
+      { id: 4, nombre: &quot;Especialidades Fuertes&quot;, icono: &quot;🥩&quot; },
+      { id: 5, nombre: &quot;Repostería &amp; Postres de Autor&quot;, icono: &quot;🍰&quot; },
+      { id: 6, nombre: &quot;Bebidas &amp; Coctelería de Autor&quot;, icono: &quot;🍹&quot; }
     ];
 
-    window.categoriaActual = "Todos";
+    window.categoriaActual = &quot;Todos&quot;;
     window.simMesaId = 2;
     window.simSillaNum = 1;
     window.sillasAcompanantesSeleccionadas = [3, 4]; // Por defecto, Papá (Silla 1) incluye a los niños (3 y 4)
@@ -311,7 +330,7 @@
       window.simSillaNum = parseInt(parts[1]);
 
       // Si es Mesa 2 Silla 1 (Papá), sugerir niños seleccionados (3 y 4)
-      if (window.simMesaId === 2 &amp;amp;amp;&amp;amp;amp; window.simSillaNum === 1) {
+      if (window.simMesaId === 2 &amp;&amp; window.simSillaNum === 1) {
         window.sillasAcompanantesSeleccionadas = [3, 4];
       } else {
         window.sillasAcompanantesSeleccionadas = [];
@@ -325,8 +344,8 @@
       var key = window.simMesaId + '-' + window.simSillaNum;
       var cuentaActual = cuentas[key];
 
-      var qrId = (cuentaActual &amp;amp;amp;&amp;amp;amp; cuentaActual.qrId) ? cuentaActual.qrId : ('PV-0' + window.simMesaId + window.simSillaNum);
-      var comensalNom = (cuentaActual &amp;amp;amp;&amp;amp;amp; cuentaActual.comensalNombre) ? cuentaActual.comensalNombre : ('Comensal Silla ' + window.simSillaNum);
+      var qrId = (cuentaActual &amp;&amp; cuentaActual.qrId) ? cuentaActual.qrId : ('PV-0' + window.simMesaId + window.simSillaNum);
+      var comensalNom = (cuentaActual &amp;&amp; cuentaActual.comensalNombre) ? cuentaActual.comensalNombre : ('Comensal Silla ' + window.simSillaNum);
 
       var lblQr = document.getElementById('lblQrActivo');
       var lblUbicacion = document.getElementById('lblUbicacionActiva');
@@ -353,18 +372,18 @@
       var items = cuentaActual.items || [];
 
       if (items.length === 0) {
-        container.innerHTML = `&amp;amp;lt;div class="text-center py-6 text-slate-500 text-xs"&amp;amp;gt;No hay consumos registrados en tu silla.&amp;amp;lt;/div&amp;amp;gt;`;
+        container.innerHTML = `<div class=&quot;text-center py-6 text-slate-500 text-xs&quot;>No hay consumos registrados en tu silla.</div>`;
       } else {
-        items.forEach((item, idx) =&amp;amp;gt; {
+        items.forEach((item, idx) => {
           const itemSubtotal = item.precio * item.cantidad;
           const row = document.createElement('div');
           row.className = 'flex justify-between items-center bg-slate-900/80 p-2.5 rounded-xl border border-slate-800 text-xs';
           row.innerHTML = `
-            &amp;amp;lt;div&amp;amp;gt;
-              &amp;amp;lt;span class="font-bold text-white"&amp;amp;gt;${item.nombre} x${item.cantidad}&amp;amp;lt;/span&amp;amp;gt;
-              &amp;amp;lt;span class="block text-[10px] text-slate-400"&amp;amp;gt;${item.notas ? item.notas + ' • ' : ''}$${Number(item.precio).toFixed(2)} c/u&amp;amp;lt;/span&amp;amp;gt;
-            &amp;amp;lt;/div&amp;amp;gt;
-            &amp;amp;lt;span class="font-black text-emerald-400"&amp;amp;gt;$${itemSubtotal.toFixed(2)}&amp;amp;lt;/span&amp;amp;gt;
+            <div>
+              <span class=&quot;font-bold text-white&quot;>${item.nombre} x${item.cantidad}</span>
+              <span class=&quot;block text-[10px] text-slate-400&quot;>${item.notas ? item.notas + ' • ' : ''}$${Number(item.precio).toFixed(2)} c/u</span>
+            </div>
+            <span class=&quot;font-black text-emerald-400&quot;>$${itemSubtotal.toFixed(2)}</span>
           `;
           container.appendChild(row);
         });
@@ -383,11 +402,11 @@
       var miSilla = window.simSillaNum;
 
       var otrasSillas = [];
-      for (var s = 1; s &amp;amp;lt;= 10; s++) {
+      for (var s = 1; s <= 10; s++) {
         if (s !== miSilla) {
           var k = mesaId + '-' + s;
           var c = cuentas[k];
-          if (c &amp;amp;amp;&amp;amp;amp; c.items &amp;amp;amp;&amp;amp;amp; c.items.length &amp;amp;gt; 0) {
+          if (c &amp;&amp; c.items &amp;&amp; c.items.length > 0) {
             var tot = 0;
             c.items.forEach(function(i) { tot += i.precio * i.cantidad; });
             otrasSillas.push({ sillaNum: s, cuenta: c, total: tot });
@@ -396,24 +415,24 @@
       }
 
       if (otrasSillas.length === 0) {
-        container.innerHTML = '&amp;amp;lt;div class="text-slate-500 text-[11px] py-1 italic"&amp;amp;gt;No hay otros comensales con cuenta en esta mesa.&amp;amp;lt;/div&amp;amp;gt;';
+        container.innerHTML = '<div class=&quot;text-slate-500 text-[11px] py-1 italic&quot;>No hay otros comensales con cuenta en esta mesa.</div>';
         return;
       }
 
-      otrasSillas.forEach(obj =&amp;amp;gt; {
+      otrasSillas.forEach(obj => {
         var s = obj.sillaNum;
         var isChecked = window.sillasAcompanantesSeleccionadas.indexOf(s) !== -1;
         var row = document.createElement('label');
         row.className = `flex items-center justify-between p-2 rounded-xl border cursor-pointer transition select-none ${isChecked ? 'bg-emerald-950/40 border-emerald-500/50' : 'bg-slate-900/60 border-slate-800 hover:border-slate-700'}`;
         row.innerHTML = `
-          &amp;amp;lt;div class="flex items-center gap-2"&amp;amp;gt;
-            &amp;amp;lt;input type="checkbox" value="${s}" ${isChecked ? 'checked' : ''} onchange="window.toggleAcompanante(${s})" class="accent-emerald-500 rounded"&amp;amp;gt;
-            &amp;amp;lt;div&amp;amp;gt;
-              &amp;amp;lt;span class="font-bold text-slate-100 block"&amp;amp;gt;Silla ${s} &amp;amp;lt;span class="text-slate-400 font-normal"&amp;amp;gt;(${obj.cuenta.comensalNombre || 'Comensal'})&amp;amp;lt;/span&amp;amp;gt;&amp;amp;lt;/span&amp;amp;gt;
-              &amp;amp;lt;span class="text-[10px] text-slate-400"&amp;amp;gt;${obj.cuenta.items.length} consumos&amp;amp;lt;/span&amp;amp;gt;
-            &amp;amp;lt;/div&amp;amp;gt;
-          &amp;amp;lt;/div&amp;amp;gt;
-          &amp;amp;lt;span class="font-bold text-amber-400"&amp;amp;gt;$${obj.total.toFixed(2)}&amp;amp;lt;/span&amp;amp;gt;
+          <div class=&quot;flex items-center gap-2&quot;>
+            <input type=&quot;checkbox&quot; value=&quot;${s}&quot; ${isChecked ? 'checked' : ''} onchange=&quot;window.toggleAcompanante(${s})&quot; class=&quot;accent-emerald-500 rounded&quot;>
+            <div>
+              <span class=&quot;font-bold text-slate-100 block&quot;>Silla ${s} <span class=&quot;text-slate-400 font-normal&quot;>(${obj.cuenta.comensalNombre || 'Comensal'})</span></span>
+              <span class=&quot;text-[10px] text-slate-400&quot;>${obj.cuenta.items.length} consumos</span>
+            </div>
+          </div>
+          <span class=&quot;font-bold text-amber-400&quot;>$${obj.total.toFixed(2)}</span>
         `;
         container.appendChild(row);
       });
@@ -435,8 +454,8 @@
       var mesaId = window.simMesaId;
       var miSilla = window.simSillaNum;
       window.sillasAcompanantesSeleccionadas = [];
-      for (var s = 1; s &amp;amp;lt;= 10; s++) {
-        if (s !== miSilla &amp;amp;amp;&amp;amp;amp; cuentas[mesaId + '-' + s]) {
+      for (var s = 1; s <= 10; s++) {
+        if (s !== miSilla &amp;&amp; cuentas[mesaId + '-' + s]) {
           window.sillasAcompanantesSeleccionadas.push(s);
         }
       }
@@ -451,14 +470,14 @@
 
       var subtotalPropio = 0;
       var cPropia = cuentas[mesaId + '-' + miSilla];
-      if (cPropia &amp;amp;amp;&amp;amp;amp; cPropia.items) {
+      if (cPropia &amp;&amp; cPropia.items) {
         cPropia.items.forEach(function(i) { subtotalPropio += (i.precio * i.cantidad); });
       }
 
       var subtotalAcompanantes = 0;
       window.sillasAcompanantesSeleccionadas.forEach(function(sNum) {
         var cAcomp = cuentas[mesaId + '-' + sNum];
-        if (cAcomp &amp;amp;amp;&amp;amp;amp; cAcomp.items) {
+        if (cAcomp &amp;&amp; cAcomp.items) {
           cAcomp.items.forEach(function(i) { subtotalAcompanantes += (i.precio * i.cantidad); });
         }
       });
@@ -476,7 +495,7 @@
       var lblSubtotalDetalle = document.getElementById('lblSubtotalDetalle');
 
       if (lblSubtotalDetalle) {
-        if (window.sillasAcompanantesSeleccionadas.length &amp;amp;gt; 0) {
+        if (window.sillasAcompanantesSeleccionadas.length > 0) {
           lblSubtotalDetalle.innerText = `Subtotal (Silla ${miSilla} + ${window.sillasAcompanantesSeleccionadas.length} Acompañantes):`;
         } else {
           lblSubtotalDetalle.innerText = `Subtotal (Solo Silla ${miSilla}):`;
@@ -504,7 +523,7 @@
       }
 
       var items = cuentas[key].items;
-      var existing = items.find(i =&amp;amp;gt; i.id === prod.id);
+      var existing = items.find(i => i.id === prod.id);
       if (existing) {
         existing.cantidad += 1;
       } else {
@@ -547,17 +566,17 @@
       var btnNinos = document.getElementById('btnModoNinos');
       var btnToda = document.getElementById('btnModoTodaMesa');
 
-      [btnSolo, btnNinos, btnToda].forEach(b =&amp;amp;gt; {
+      [btnSolo, btnNinos, btnToda].forEach(b => {
         if (b) {
           b.className = 'p-2 rounded-lg font-bold border text-center transition bg-slate-800 text-slate-300 border-slate-700 cursor-pointer';
         }
       });
 
-      if (modo === 'solo_yo' &amp;amp;amp;&amp;amp;amp; btnSolo) {
+      if (modo === 'solo_yo' &amp;&amp; btnSolo) {
         btnSolo.className = 'p-2 rounded-lg font-bold border text-center transition bg-emerald-600/30 text-emerald-300 border-emerald-500/50 cursor-pointer';
-      } else if (modo === 'incluir_ninos' &amp;amp;amp;&amp;amp;amp; btnNinos) {
+      } else if (modo === 'incluir_ninos' &amp;&amp; btnNinos) {
         btnNinos.className = 'p-2 rounded-lg font-bold border text-center transition bg-emerald-600/30 text-emerald-300 border-emerald-500/50 cursor-pointer';
-      } else if (modo === 'toda_mesa' &amp;amp;amp;&amp;amp;amp; btnToda) {
+      } else if (modo === 'toda_mesa' &amp;&amp; btnToda) {
         btnToda.className = 'p-2 rounded-lg font-bold border text-center transition bg-emerald-600/30 text-emerald-300 border-emerald-500/50 cursor-pointer';
       }
 
@@ -584,7 +603,7 @@
       } else if (window.modoPagoCliente === 'incluir_ninos') {
         sillasAIncluir = [miSilla].concat(window.sillasAcompanantesSeleccionadas);
       } else if (window.modoPagoCliente === 'toda_mesa') {
-        for (var s = 1; s &amp;amp;lt;= 10; s++) {
+        for (var s = 1; s <= 10; s++) {
           if (cuentas[mesaId + '-' + s]) {
             sillasAIncluir.push(s);
           }
@@ -592,15 +611,15 @@
       }
 
       // Eliminar duplicados
-      sillasAIncluir = sillasAIncluir.filter((v, i, a) =&amp;amp;gt; a.indexOf(v) === i).sort();
+      sillasAIncluir = sillasAIncluir.filter((v, i, a) => a.indexOf(v) === i).sort();
 
       if (subtituloEl) {
-        subtituloEl.innerText = `Mesa ${mesaId} • ${sillasAIncluir.length} Cuenta${sillasAIncluir.length &amp;amp;gt; 1 ? 's' : ''} Seleccionada${sillasAIncluir.length &amp;amp;gt; 1 ? 's' : ''}`;
+        subtituloEl.innerText = `Mesa ${mesaId} • ${sillasAIncluir.length} Cuenta${sillasAIncluir.length > 1 ? 's' : ''} Seleccionada${sillasAIncluir.length > 1 ? 's' : ''}`;
       }
 
       var totalNeto = 0;
 
-      sillasAIncluir.forEach(sNum =&amp;amp;gt; {
+      sillasAIncluir.forEach(sNum => {
         var c = cuentas[mesaId + '-' + sNum];
         if (!c || !c.items || c.items.length === 0) return;
 
@@ -610,22 +629,22 @@
 
         var h = document.createElement('div');
         h.className = 'flex justify-between items-center font-bold text-emerald-400 mb-1';
-        h.innerHTML = `&amp;amp;lt;span&amp;amp;gt;Silla ${sNum} ${c.comensalNombre ? '• ' + c.comensalNombre : ''}&amp;amp;lt;/span&amp;amp;gt;&amp;amp;lt;span class="text-[10px] text-slate-500"&amp;amp;gt;QR: #${c.qrId || 'PV-0'+mesaId+sNum}&amp;amp;lt;/span&amp;amp;gt;`;
+        h.innerHTML = `<span>Silla ${sNum} ${c.comensalNombre ? '• ' + c.comensalNombre : ''}</span><span class=&quot;text-[10px] text-slate-500&quot;>QR: #${c.qrId || 'PV-0'+mesaId+sNum}</span>`;
         block.appendChild(h);
 
-        c.items.forEach(it =&amp;amp;gt; {
+        c.items.forEach(it => {
           var itTotal = it.precio * it.cantidad;
           subSilla += itTotal;
           totalNeto += itTotal;
           var row = document.createElement('div');
           row.className = 'flex justify-between text-slate-300 py-0.5';
-          row.innerHTML = `&amp;amp;lt;span&amp;amp;gt;${it.cantidad}x ${it.nombre}&amp;amp;lt;/span&amp;amp;gt;&amp;amp;lt;span&amp;amp;gt;$${itTotal.toFixed(2)}&amp;amp;lt;/span&amp;amp;gt;`;
+          row.innerHTML = `<span>${it.cantidad}x ${it.nombre}</span><span>$${itTotal.toFixed(2)}</span>`;
           block.appendChild(row);
         });
 
         var subRow = document.createElement('div');
         subRow.className = 'flex justify-between text-slate-400 font-bold pt-1 mt-1 border-t border-slate-900 text-[11px]';
-        subRow.innerHTML = `&amp;amp;lt;span&amp;amp;gt;Subtotal Silla ${sNum}:&amp;amp;lt;/span&amp;amp;gt;&amp;amp;lt;span class="text-amber-400"&amp;amp;gt;$${subSilla.toFixed(2)}&amp;amp;lt;/span&amp;amp;gt;`;
+        subRow.innerHTML = `<span>Subtotal Silla ${sNum}:</span><span class=&quot;text-amber-400&quot;>$${subSilla.toFixed(2)}</span>`;
         block.appendChild(subRow);
 
         container.appendChild(block);
@@ -652,14 +671,14 @@
       } else if (window.modoPagoCliente === 'incluir_ninos') {
         sillasAIncluir = [miSilla].concat(window.sillasAcompanantesSeleccionadas);
       } else if (window.modoPagoCliente === 'toda_mesa') {
-        for (var s = 1; s &amp;amp;lt;= 10; s++) {
+        for (var s = 1; s <= 10; s++) {
           if (cuentas[mesaId + '-' + s]) {
             sillasAIncluir.push(s);
           }
         }
       }
 
-      sillasAIncluir = sillasAIncluir.filter((v, i, a) =&amp;amp;gt; a.indexOf(v) === i);
+      sillasAIncluir = sillasAIncluir.filter((v, i, a) => a.indexOf(v) === i);
       var totalText = document.getElementById('modalTotal') ? document.getElementById('modalTotal').innerText : '$0.00';
       var sillasStr = sillasAIncluir.map(function(s) { return 'Silla ' + s; }).join(', ');
 
@@ -675,8 +694,8 @@
     };
 
     window.cargarDatosMenu = function (productos, categorias) {
-      if (productos &amp;amp;amp;&amp;amp;amp; productos.length &amp;amp;gt; 0) window.vsMenuData = productos;
-      if (categorias &amp;amp;amp;&amp;amp;amp; categorias.length &amp;amp;gt; 0) window.vsCategoriasData = categorias;
+      if (productos &amp;&amp; productos.length > 0) window.vsMenuData = productos;
+      if (categorias &amp;&amp; categorias.length > 0) window.vsCategoriasData = categorias;
       window.renderCategoriasChips(window.vsCategoriasData);
       window.renderProductos();
       window.sincronizarCuentaDesdeStorage();
@@ -685,14 +704,14 @@
     window.renderCategoriasChips = function (categorias) {
       const container = document.getElementById('categoriesChips');
       if (!container) return;
-      container.innerHTML = `&amp;amp;lt;button onclick="window.seleccionarCategoria('Todos')" class="cat-chip ${window.categoriaActual === 'Todos' ? 'active bg-emerald-500 text-white' : 'bg-slate-800/80 text-slate-400'} px-4 py-2 text-xs font-bold rounded-xl whitespace-nowrap transition"&amp;amp;gt;Todos&amp;amp;lt;/button&amp;amp;gt;`;
+      container.innerHTML = `<button onclick=&quot;window.seleccionarCategoria('Todos')&quot; class=&quot;cat-chip ${window.categoriaActual === 'Todos' ? 'active bg-emerald-500 text-white' : 'bg-slate-800/80 text-slate-400'} px-4 py-2 text-xs font-bold rounded-xl whitespace-nowrap transition&quot;>Todos</button>`;
 
-      categorias.forEach(cat =&amp;amp;gt; {
+      categorias.forEach(cat => {
         const btn = document.createElement('button');
         const isActive = window.categoriaActual === cat.nombre;
         btn.className = `cat-chip ${isActive ? 'active bg-emerald-500 text-white shadow-md shadow-emerald-500/20' : 'bg-slate-800/80 text-slate-400 hover:text-white'} px-4 py-2 text-xs font-bold rounded-xl whitespace-nowrap transition`;
         btn.innerText = `${cat.icono || '🍽️'} ${cat.nombre}`;
-        btn.onclick = () =&amp;amp;gt; window.seleccionarCategoria(cat.nombre);
+        btn.onclick = () => window.seleccionarCategoria(cat.nombre);
         container.appendChild(btn);
       });
     };
@@ -700,7 +719,7 @@
     window.seleccionarCategoria = function (catNombre) {
       window.categoriaActual = catNombre;
       const chips = document.querySelectorAll('.cat-chip');
-      chips.forEach(c =&amp;amp;gt; c.classList.remove('active', 'bg-emerald-500', 'text-white'));
+      chips.forEach(c => c.classList.remove('active', 'bg-emerald-500', 'text-white'));
       window.renderProductos();
     };
 
@@ -716,36 +735,36 @@
       container.innerHTML = '';
 
       const list = window.vsMenuData || [];
-      const filtrados = list.filter(p =&amp;amp;gt; {
+      const filtrados = list.filter(p => {
         const matchCat = window.categoriaActual === 'Todos' || p.categoria_nombre === window.categoriaActual;
-        const matchSearch = p.nombre.toLowerCase().includes(searchVal) || (p.descripcion &amp;amp;amp;&amp;amp;amp; p.descripcion.toLowerCase().includes(searchVal));
-        return matchCat &amp;amp;amp;&amp;amp;amp; matchSearch;
+        const matchSearch = p.nombre.toLowerCase().includes(searchVal) || (p.descripcion &amp;&amp; p.descripcion.toLowerCase().includes(searchVal));
+        return matchCat &amp;&amp; matchSearch;
       });
 
       if (filtrados.length === 0) {
-        container.innerHTML = `&amp;amp;lt;div class="text-center py-12 text-slate-500 text-sm col-span-2"&amp;amp;gt;No se encontraron platillos o bebidas disponibles&amp;amp;lt;/div&amp;amp;gt;`;
+        container.innerHTML = `<div class=&quot;text-center py-12 text-slate-500 text-sm col-span-2&quot;>No se encontraron platillos o bebidas disponibles</div>`;
         return;
       }
 
-      filtrados.forEach(prod =&amp;amp;gt; {
+      filtrados.forEach(prod => {
         const card = document.createElement('div');
         card.className = 'glass-card p-4 rounded-2xl flex justify-between items-center hover:border-emerald-500/50 transition cursor-pointer group';
-        card.onclick = () =&amp;amp;gt; window.agregarAlCarrito(prod);
+        card.onclick = () => window.agregarAlCarrito(prod);
 
         card.innerHTML = `
-          &amp;amp;lt;div class="flex items-center gap-3"&amp;amp;gt;
-            &amp;amp;lt;div class="w-12 h-12 rounded-xl bg-slate-800 flex items-center justify-center text-2xl group-hover:scale-110 transition"&amp;amp;gt;
+          <div class=&quot;flex items-center gap-3&quot;>
+            <div class=&quot;w-12 h-12 rounded-xl bg-slate-800 flex items-center justify-center text-2xl group-hover:scale-110 transition&quot;>
               ${prod.icono || '🍲'}
-            &amp;amp;lt;/div&amp;amp;gt;
-            &amp;amp;lt;div&amp;amp;gt;
-              &amp;amp;lt;h3 class="text-sm font-bold text-white group-hover:text-emerald-400 transition"&amp;amp;gt;${prod.nombre}&amp;amp;lt;/h3&amp;amp;gt;
-              &amp;amp;lt;p class="text-xs text-slate-400 line-clamp-1"&amp;amp;gt;${prod.descripcion || ''}&amp;amp;lt;/p&amp;amp;gt;
-            &amp;amp;lt;/div&amp;amp;gt;
-          &amp;amp;lt;/div&amp;amp;gt;
-          &amp;amp;lt;div class="text-right"&amp;amp;gt;
-            &amp;amp;lt;span class="text-sm font-black text-emerald-400 block"&amp;amp;gt;$${Number(prod.precio_unitario).toFixed(2)}&amp;amp;lt;/span&amp;amp;gt;
-            &amp;amp;lt;span class="text-[10px] text-slate-500 font-semibold uppercase"&amp;amp;gt;${prod.estacion_preparacion || 'cocina'}&amp;amp;lt;/span&amp;amp;gt;
-          &amp;amp;lt;/div&amp;amp;gt;
+            </div>
+            <div>
+              <h3 class=&quot;text-sm font-bold text-white group-hover:text-emerald-400 transition&quot;>${prod.nombre}</h3>
+              <p class=&quot;text-xs text-slate-400 line-clamp-1&quot;>${prod.descripcion || ''}</p>
+            </div>
+          </div>
+          <div class=&quot;text-right&quot;>
+            <span class=&quot;text-sm font-black text-emerald-400 block&quot;>$${Number(prod.precio_unitario).toFixed(2)}</span>
+            <span class=&quot;text-[10px] text-slate-500 font-semibold uppercase&quot;>${prod.estacion_preparacion || 'cocina'}</span>
+          </div>
         `;
         container.appendChild(card);
       });
@@ -770,5 +789,4 @@
     }
     setTimeout(initImmediate, 10);
     setTimeout(initImmediate, 100);
-  </script>
-</anvil-form>
+  </script>"></anvil-form>
