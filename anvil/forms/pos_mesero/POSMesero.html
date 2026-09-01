@@ -469,18 +469,18 @@
           </span>
         </div>
 
-        <!-- CATEGORY CHIPS (DESAYUNOS ESTRUCTURADOS) -->
+        <!-- CATEGORY CHIPS (DESAYUNOS ESTRUCTURADOS - BEBIDAS PRIMERO) -->
         <div style="display: flex !important; gap: 6px !important; flex-wrap: wrap !important;" id="waiterCatChips">
+          <button data-cat="Bebidas & Jugos" id="wchip-Bebidas"
+            style="padding: 6px 11px !important; font-size: 11px !important; font-weight: 800 !important; border-radius: 10px !important; border: 1px solid #34d399 !important; background: #059669 !important; color: #ffffff !important; cursor: pointer !important;">☕ Bebidas & Cafetería</button>
           <button data-cat="Huevos & Omelettes" id="wchip-Huevos"
-            style="padding: 6px 11px !important; font-size: 11px !important; font-weight: 800 !important; border-radius: 10px !important; border: 1px solid #34d399 !important; background: #059669 !important; color: #ffffff !important; cursor: pointer !important;">🍳 Huevos & Omelettes</button>
+            style="padding: 6px 11px !important; font-size: 11px !important; font-weight: 800 !important; border-radius: 10px !important; border: 1px solid #334155 !important; background: #1e293b !important; color: #cbd5e1 !important; cursor: pointer !important;">🍳 Huevos & Omelettes</button>
           <button data-cat="Especialidades Mexicanas" id="wchip-Mex"
             style="padding: 6px 11px !important; font-size: 11px !important; font-weight: 800 !important; border-radius: 10px !important; border: 1px solid #334155 !important; background: #1e293b !important; color: #cbd5e1 !important; cursor: pointer !important;">🥘 Mexicanas</button>
           <button data-cat="Dulces & Americanos" id="wchip-Dulces"
             style="padding: 6px 11px !important; font-size: 11px !important; font-weight: 800 !important; border-radius: 10px !important; border: 1px solid #334155 !important; background: #1e293b !important; color: #cbd5e1 !important; cursor: pointer !important;">🥞 Dulces</button>
           <button data-cat="Combos Recomendados" id="wchip-Combos"
             style="padding: 6px 11px !important; font-size: 11px !important; font-weight: 800 !important; border-radius: 10px !important; border: 1px solid #334155 !important; background: #1e293b !important; color: #cbd5e1 !important; cursor: pointer !important;">⭐ Combos</button>
-          <button data-cat="Bebidas & Jugos" id="wchip-Bebidas"
-            style="padding: 6px 11px !important; font-size: 11px !important; font-weight: 800 !important; border-radius: 10px !important; border: 1px solid #334155 !important; background: #1e293b !important; color: #cbd5e1 !important; cursor: pointer !important;">☕ Bebidas</button>
         </div>
 
         <!-- MENU ITEMS GRID -->
@@ -970,46 +970,451 @@
   </div>
 </div>
 
+<!-- MODAL DE FICHA TÉCNICA Y RECETA DE COCINA -->
+<div id="modalRecetaBackdrop"
+  style="display: none !important; position: fixed !important; inset: 0 !important; z-index: 100000 !important; background: rgba(2, 6, 23, 0.85) !important; backdrop-filter: blur(12px) !important; align-items: center !important; justify-content: center !important; padding: 16px !important;"
+  onclick="if(event.target === this) window.cerrarModalReceta();">
+  <div id="modalRecetaCard"
+    style="background: #090d16 !important; border: 1px solid #334155 !important; border-radius: 20px !important; width: 100% !important; max-width: 580px !important; padding: 20px !important; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.8), 0 0 30px rgba(56,189,248,0.2) !important; display: flex !important; flex-direction: column !important; gap: 12px !important; color: #f8fafc !important; max-height: 90vh !important; overflow-y: auto !important;">
+    
+    <!-- HEADER -->
+    <div style="display: flex !important; justify-content: space-between !important; align-items: flex-start !important; border-bottom: 1px solid #1e293b !important; padding-bottom: 10px !important;">
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <div id="recetaIcono" style="width: 46px; height: 46px; border-radius: 12px; background: #1e293b; display: flex; align-items: center; justify-content: center; font-size: 26px; border: 1px solid #334155;">🍳</div>
+        <div>
+          <span style="font-size: 10px; font-weight: 800; color: #38bdf8; text-transform: uppercase; letter-spacing: 0.5px;" id="recetaCategoria">Especialidades Mexicanas</span>
+          <h2 style="font-size: 16px; font-weight: 900; color: #ffffff; margin: 0; line-height: 1.2;" id="recetaTitulo">Chilaquiles Verdes o Rojos</h2>
+        </div>
+      </div>
+      <button onclick="window.cerrarModalReceta();"
+        style="background: #1e293b !important; border: none !important; color: #94a3b8 !important; width: 30px !important; height: 30px !important; border-radius: 8px !important; font-weight: bold !important; cursor: pointer !important;">✕</button>
+    </div>
+
+    <!-- METRICS BAR -->
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; background: #020617; padding: 10px; border-radius: 12px; border: 1px solid #1e293b; text-align: center;">
+      <div>
+        <span style="font-size: 10px; color: #94a3b8; display: block;">⏱️ Tiempo Estimado</span>
+        <span id="recetaTiempo" style="font-size: 12px; font-weight: 800; color: #fbbf24;">15–18 min</span>
+      </div>
+      <div>
+        <span style="font-size: 10px; color: #94a3b8; display: block;">👤 Porción</span>
+        <span id="recetaPorcion" style="font-size: 12px; font-weight: 800; color: #38bdf8;">1 persona</span>
+      </div>
+      <div>
+        <span style="font-size: 10px; color: #94a3b8; display: block;">💲 Precio Carta</span>
+        <span id="recetaPrecio" style="font-size: 12px; font-weight: 900; color: #34d399;">$145.00</span>
+      </div>
+    </div>
+
+    <!-- INGREDIENTES -->
+    <div style="background: #0f172a; border: 1px solid #1e293b; border-radius: 12px; padding: 12px;">
+      <span style="font-size: 11px; font-weight: 800; color: #38bdf8; display: block; margin-bottom: 8px;">
+        <i class="fa-solid fa-scale-balanced"></i> Ingredientes y Gramajes (Ficha Técnica):
+      </span>
+      <ul id="recetaIngredientesList" style="margin: 0; padding-left: 18px; font-size: 11px; color: #cbd5e1; display: flex; flex-direction: column; gap: 4px;">
+        <!-- Dynamic list -->
+      </ul>
+    </div>
+
+    <!-- PREPARACIÓN PASO A PASO -->
+    <div style="background: #0f172a; border: 1px solid #1e293b; border-radius: 12px; padding: 12px;">
+      <span style="font-size: 11px; font-weight: 800; color: #34d399; display: block; margin-bottom: 8px;">
+        <i class="fa-solid fa-kitchen-set"></i> Preparación y Montaje:
+      </span>
+      <ol id="recetaPasosList" style="margin: 0; padding-left: 18px; font-size: 11px; color: #e2e8f0; display: flex; flex-direction: column; gap: 6px;">
+        <!-- Dynamic steps -->
+      </ol>
+    </div>
+
+    <!-- NOTAS DE COCINA -->
+    <div id="boxRecetaNotas" style="background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.3); border-radius: 10px; padding: 10px; font-size: 11px; color: #fde68a;">
+      <i class="fa-solid fa-lightbulb"></i> <b>Nota de Cocina:</b> <span id="recetaNotasTexto"></span>
+    </div>
+
+    <!-- FOOTER -->
+    <button onclick="window.cerrarModalReceta();"
+      style="padding: 10px !important; background: #1e293b !important; color: #f8fafc !important; border: 1px solid #334155 !important; border-radius: 10px !important; font-size: 12px !important; font-weight: 800 !important; cursor: pointer !important;">
+      Cerrar Ficha Técnica
+    </button>
+  </div>
+</div>
+
 <script>
   (function () {
     window.catalogProducts = [
-      // 1. HUEVOS Y OMELETTES
-      { id: 101, categoria_nombre: "Huevos & Omelettes", nombre: "Huevos al Gusto", descripcion: "2 huevos (fritos, revueltos o estrellados) + frijoles + tortillas o pan", precio: 90.00, icono: "🍳" },
-      { id: 102, categoria_nombre: "Huevos & Omelettes", nombre: "Huevos a la Mexicana", descripcion: "Huevos revueltos con jitomate, cebolla y chile + frijoles refritos", precio: 95.00, icono: "🍳" },
-      { id: 103, categoria_nombre: "Huevos & Omelettes", nombre: "Huevos Rancheros", descripcion: "Huevos estrellados sobre tortilla con salsa roja o verde + frijoles", precio: 105.00, icono: "🍳" },
-      { id: 104, categoria_nombre: "Huevos & Omelettes", nombre: "Huevos con Jamón / Tocino / Chorizo", descripcion: "Huevos al gusto + proteína a elegir + frijoles de la olla", precio: 115.00, icono: "🥓" },
-      { id: 105, categoria_nombre: "Huevos & Omelettes", nombre: "Omelette de Jamón y Queso", descripcion: "Omelette relleno con queso gouda y jamón + ensalada o frijoles", precio: 125.00, icono: "🧀" },
-      { id: 106, categoria_nombre: "Huevos & Omelettes", nombre: "Omelette Champiñones y Espinaca", descripcion: "Opción ligera con espinacas baby, champiñón fresco y queso", precio: 130.00, icono: "🍄" },
-      { id: 107, categoria_nombre: "Huevos & Omelettes", nombre: "Machaca con Huevo Norteña", descripcion: "Clásico norteño de carne seca con huevo + frijoles y tortillas", precio: 135.00, icono: "🥩" },
+      // 1. BEBIDAS & CAFETERÍA (PRIMERA OPCIÓN DE SERVICIO)
+      {
+        id: 501,
+        categoria_nombre: "Bebidas & Jugos",
+        nombre: "Café Americano / de Olla",
+        descripcion: "Café de altura recién tostado o receta tradicional con canela y piloncillo",
+        precio: 45.00,
+        icono: "☕",
+        tiempo: "3–5 min",
+        porciones: "1 taza (240ml)",
+        ingredientes: ["15g café de grano arábica molido", "240ml agua purificada a 90°C", "Opción de olla: 5g piloncillo y raja de canela"],
+        pasos: ["Extraer en cafetera de goteo o hervir infusión de canela/piloncillo.", "Servir bien caliente en taza precalentada."],
+        notas: "Mantener café molido en contenedor hermético."
+      },
+      {
+        id: 502,
+        categoria_nombre: "Bebidas & Jugos",
+        nombre: "Café con Leche / Capuchino",
+        descripcion: "Espresso doble con leche cremada artesanal al vapor",
+        precio: 68.00,
+        icono: "☕",
+        tiempo: "4–6 min",
+        porciones: "1 taza (240ml)",
+        ingredientes: ["18g café espresso molido fino", "60ml espresso doble", "180ml leche entera o almendra cremada al vapor", "Canela en polvo"],
+        pasos: ["Extraer espresso doble en taza.", "Cremar leche con textura aterciopelada a 65°C.", "Verter sobre espresso y espolvorear canela."],
+        notas: "Textura microespuma sedosa sin burbujas grandes."
+      },
+      {
+        id: 503,
+        categoria_nombre: "Bebidas & Jugos",
+        nombre: "Jugo de Naranja Natural",
+        descripcion: "100% natural recién exprimido al momento",
+        precio: 55.00,
+        icono: "🍊",
+        tiempo: "3–5 min",
+        porciones: "1 vaso (300ml)",
+        ingredientes: ["4–5 naranjas de jugo frescas (aprox. 300ml)"],
+        pasos: ["Lavar naranjas, cortar a la mitad y exprimir en extractor de inmediato.", "Servir en vaso alto con hielo opcional."],
+        notas: "Exprimir al momento para evitar que se oxide o amargue."
+      },
+      {
+        id: 504,
+        categoria_nombre: "Bebidas & Jugos",
+        nombre: "Jugo Verde Energético",
+        descripcion: "Nopal, apio, piña, perejil y jugo de naranja fresco",
+        precio: 60.00,
+        icono: "🥬",
+        tiempo: "4–6 min",
+        porciones: "1 vaso (350ml)",
+        ingredientes: ["1/2 nopal tierno limpio", "1 vara de apio fresco", "60g piña en cubos", "Ramita de perejil", "180ml jugo de naranja natural recién exprimido"],
+        pasos: ["Colocar todos los ingredientes en licuadora de alta potencia.", "Licuar a máxima velocidad durante 45 segundos hasta textura tersa.", "Servir de inmediato sin colar."],
+        notas: "Bebida detox y digestiva de alto valor."
+      },
+      {
+        id: 505,
+        categoria_nombre: "Bebidas & Jugos",
+        nombre: "Chocolate Caliente Tradicional",
+        descripcion: "Preparado con cacao criollo, canela y leche caliente",
+        precio: 55.00,
+        icono: "🍫",
+        tiempo: "5–7 min",
+        porciones: "1 taza (240ml)",
+        ingredientes: ["40g tableta de chocolate de mesa con canela", "240ml leche entera caliente"],
+        pasos: ["Disolver chocolate en la leche caliente a fuego bajo.", "Batir con molinillo tradicional de madera hasta lograr abundante espuma espesa.", "Servir bien caliente."],
+        notas: "Tradición mexicana con espuma artesanal."
+      },
+      {
+        id: 506,
+        categoria_nombre: "Bebidas & Jugos",
+        nombre: "Agua Fresca de Fruta del Día",
+        descripcion: "Agua de fruta natural de temporada (500 ml)",
+        precio: 40.00,
+        icono: "🍉",
+        tiempo: "2–3 min",
+        porciones: "1 vaso (500ml)",
+        ingredientes: ["500ml agua de fruta natural (Jamaica, Horchata, Limón con Chía, etc.)", "Hielo al gusto"],
+        pasos: ["Servir en vaso de 500ml con cubos de hielo."],
+        notas: "Preparada diariamente con fruta 100% natural."
+      },
+      {
+        id: 507,
+        categoria_nombre: "Bebidas & Jugos",
+        nombre: "Refresco de Lata (355ml)",
+        descripcion: "Variedad de refrescos fríos de lata",
+        precio: 38.00,
+        icono: "🥤",
+        tiempo: "1–2 min",
+        porciones: "1 lata (355ml)",
+        ingredientes: ["1 lata 355ml fría surtida", "Vaso con hielo y rodaja de limón"],
+        pasos: ["Entregar lata cerrada acompañada de vaso con hielo."],
+        notas: "Mantener refrigerador a 3°C."
+      },
 
-      // 2. ESPECIALIDADES MEXICANAS
-      { id: 201, categoria_nombre: "Especialidades Mexicanas", nombre: "Chilaquiles Verdes o Rojos", descripcion: "Con crema, queso y cebolla. Acompañados con huevo o pollo", precio: 145.00, icono: "🥘" },
-      { id: 202, categoria_nombre: "Especialidades Mexicanas", nombre: "Chilaquiles con Bistec o Chorizo", descripcion: "Versión fuerte con bistec a la plancha o chorizo artesanal", precio: 165.00, icono: "🥩" },
-      { id: 203, categoria_nombre: "Especialidades Mexicanas", nombre: "Enchiladas de Desayuno", descripcion: "Rojas o verdes, rellenas de pollo o queso + huevo estrellado encima", precio: 145.00, icono: "🌶️" },
-      { id: 204, categoria_nombre: "Especialidades Mexicanas", nombre: "Molletes Tradicionales", descripcion: "Bolillo con frijoles refritos, queso gratinado y pico de gallo", precio: 105.00, icono: "🥖" },
-      { id: 205, categoria_nombre: "Especialidades Mexicanas", nombre: "Tacos de Huevo al Gusto (3 pzas)", descripcion: "3 tacos de huevo con salsa a elegir y frijoles", precio: 85.00, icono: "🌮" },
-      { id: 206, categoria_nombre: "Especialidades Mexicanas", nombre: "Tacos de Chorizo con Huevo (3 pzas)", descripcion: "Guisado tradicional en tortillas recién hechas", precio: 95.00, icono: "🌮" },
+      // 2. HUEVOS Y OMELETTES
+      {
+        id: 101,
+        categoria_nombre: "Huevos & Omelettes",
+        nombre: "Huevos al Gusto",
+        descripcion: "2 huevos (fritos, revueltos o estrellados) + frijoles + tortillas o pan",
+        precio: 90.00,
+        icono: "🍳",
+        tiempo: "8–10 min",
+        porciones: "1 persona",
+        ingredientes: ["2 huevos frescos", "1 cda aceite o mantequilla", "80g frijoles refritos de la casa", "2–3 tortillas de maíz o pan tostado", "Sal al gusto"],
+        pasos: ["Cocinar los huevos al término elegido por el comensal (revueltos, fritos o estrellados).", "Acompañar con 80g de frijoles refritos calientes y tortillas de maíz o pan tostado."],
+        notas: "Preguntar siempre término de cocción de la yema."
+      },
+      {
+        id: 102,
+        categoria_nombre: "Huevos & Omelettes",
+        nombre: "Huevos a la Mexicana",
+        descripcion: "Huevos revueltos con jitomate, cebolla y chile + frijoles refritos",
+        precio: 95.00,
+        icono: "🍳",
+        tiempo: "8–10 min",
+        porciones: "1 persona",
+        ingredientes: ["2 huevos frescos", "40g jitomate picado", "25g cebolla picada", "10–15g chile serrano o jalapeño picado", "10g cilantro picado", "Sal al gusto", "1 cda aceite", "80g frijoles refritos + tortillas"],
+        pasos: ["Sofríe cebolla, jitomate y chile durante 2–3 minutos en sartén.", "Agrega los huevos batidos con sal y revuelve hasta el punto deseado (3–4 min).", "Ajusta sal y agrega cilantro fresco al final.", "Sirve con frijoles refritos y tortillas calientes."],
+        notas: "Preguntar nivel de picante al cliente."
+      },
+      {
+        id: 103,
+        categoria_nombre: "Huevos & Omelettes",
+        nombre: "Huevos Rancheros",
+        descripcion: "Huevos estrellados sobre tortilla con salsa roja o verde + frijoles",
+        precio: 105.00,
+        icono: "🍳",
+        tiempo: "10–12 min",
+        porciones: "1 persona",
+        ingredientes: ["2 huevos", "2 tortillas de maíz pasadas por aceite", "120ml salsa roja o verde caliente", "80g frijoles refritos", "20g queso fresco desmoronado", "15g crema mexicana"],
+        pasos: ["Calienta las tortillas pasándolas ligeramente por aceite y colócalas en el plato.", "Fríe los dos huevos estrellados con yema tierna.", "Coloca los huevos sobre las tortillas, baña con salsa caliente y corona con crema, queso fresco y frijoles."],
+        notas: "La salsa debe estar hirviendo al momento de bañar."
+      },
+      {
+        id: 104,
+        categoria_nombre: "Huevos & Omelettes",
+        nombre: "Huevos con Jamón / Tocino / Chorizo",
+        descripcion: "Huevos al gusto + proteína a elegir + frijoles de la olla",
+        precio: 115.00,
+        icono: "🥓",
+        tiempo: "8–10 min",
+        porciones: "1 persona",
+        ingredientes: ["2 huevos", "40–50g de jamón, tocino o chorizo", "Sal y pimienta", "1 cda aceite o mantequilla", "80g frijoles + tortillas"],
+        pasos: ["Con jamón: Calienta el jamón 1 min, agrega huevos y revuelve.", "Con tocino: Fríe el tocino hasta crujiente, retira exceso de grasa y cocina los huevos.", "Con chorizo: Dora el chorizo 3–4 min, agrega los huevos y revuelve.", "Sirve con frijoles y tortillas."],
+        notas: "Escurrir grasa excedente en tocino y chorizo."
+      },
+      {
+        id: 105,
+        categoria_nombre: "Huevos & Omelettes",
+        nombre: "Omelette de Jamón y Queso",
+        descripcion: "Omelette relleno con queso gouda y jamón + ensalada o frijoles",
+        precio: 125.00,
+        icono: "🧀",
+        tiempo: "7–9 min",
+        porciones: "1 persona",
+        ingredientes: ["3 huevos", "40g jamón picado", "40g queso manchego o Oaxaca", "Sal y pimienta", "1 cda mantequilla"],
+        pasos: ["Bate los 3 huevos con sal y pimienta.", "Calienta la mantequilla en sartén antiadherente, vierte huevos y deja cuajar a fuego medio.", "Agrega jamón y queso en una mitad, dobla en media luna y termina de cocinar 1–2 min.", "Sirve con ensalada o frijoles."],
+        notas: "Doblar cuando el centro esté jugoso para lograr consistencia cremosa."
+      },
+      {
+        id: 106,
+        categoria_nombre: "Huevos & Omelettes",
+        nombre: "Omelette Champiñones y Espinaca",
+        descripcion: "Opción ligera con espinacas baby, champiñón fresco y queso",
+        precio: 130.00,
+        icono: "🍄",
+        tiempo: "8–10 min",
+        porciones: "1 persona",
+        ingredientes: ["3 huevos orgánicos", "50g champiñones frescos rebanados", "30g espinaca baby fresca", "30g queso panela o asadero", "Mantequilla, sal y pimienta"],
+        pasos: ["Saltea champiñones y espinacas 2 min con mantequilla.", "Vierte los huevos batidos, deja cuajar la base, coloca el salteado y queso, dobla y cocina 1 min.", "Sirve con frijoles o ensalada."],
+        notas: "Opción vegetariana y saludable."
+      },
+      {
+        id: 107,
+        categoria_nombre: "Huevos & Omelettes",
+        nombre: "Machaca con Huevo Norteña",
+        descripcion: "Clásico norteño de carne seca con huevo + frijoles y tortillas",
+        precio: 135.00,
+        icono: "🥩",
+        tiempo: "10–12 min",
+        porciones: "1 persona",
+        ingredientes: ["50g machaca de res sonorense deshebrada", "2 huevos", "30g jitomate y cebolla picados", "80g frijoles refritos + tortillas de harina"],
+        pasos: ["Sofríe cebolla y jitomate, agrega la machaca para hidratar 2 min.", "Incorpora los huevos batidos y revuelve bien hasta integrar.", "Sirve con frijoles refritos y tortillas de harina calientes."],
+        notas: "Auténtica machaca sonorense de res."
+      },
 
-      // 3. DULCES / AMERICANOS
-      { id: 301, categoria_nombre: "Dulces & Americanos", nombre: "Hotcakes Clásicos (3 pzas)", descripcion: "Con mantequilla de rancho y miel de maple o cajeta", precio: 110.00, icono: "🥞" },
-      { id: 302, categoria_nombre: "Dulces & Americanos", nombre: "Hotcakes con Fruta Fresca", descripcion: "Acompañados de plátano, fresas de temporada o mixtas", precio: 130.00, icono: "🍓" },
-      { id: 303, categoria_nombre: "Dulces & Americanos", nombre: "Waffles Belgas con Frutas", descripcion: "Waffles dorados con fruta fresca y miel de abeja", precio: 135.00, icono: "🧇" },
-      { id: 304, categoria_nombre: "Dulces & Americanos", nombre: "Orden de Fruta de Temporada", descripcion: "Papaya, melón y piña con yogurt natural o granola", precio: 95.00, icono: "🍍" },
-      { id: 305, categoria_nombre: "Dulces & Americanos", nombre: "Yogurt con Granola y Fruta", descripcion: "Bowl fresco con yogurt natural, granola artesanal y fruta", precio: 90.00, icono: "🥣" },
+      // 3. ESPECIALIDADES MEXICANAS
+      {
+        id: 201,
+        categoria_nombre: "Especialidades Mexicanas",
+        nombre: "Chilaquiles Verdes o Rojos",
+        descripcion: "Con crema, queso y cebolla. Acompañados con huevo o pollo",
+        precio: 145.00,
+        icono: "🥘",
+        tiempo: "15–18 min",
+        porciones: "1 persona",
+        ingredientes: ["80–90g totopos artesanos de maíz", "180ml salsa verde o roja casera", "1 huevo frito/estrellado o 40g pollo deshebrado", "30g crema mexicana", "25g queso fresco desmoronado", "15g cebolla en pluma", "Cilantro fresco al gusto"],
+        pasos: ["Calienta la salsa en un sartén hondo (3–4 min).", "Agrega los totopos y mezcla solo hasta que se hidraten (1–2 min). No dejarlos de más para que no se hagan papilla.", "Sirve en plato, agrega pollo o huevo encima, crema, queso fresco, cebolla en pluma y cilantro."],
+        notas: "Los totopos se tienen fritos en recipiente hermético. La salsa debe hervir antes de añadir totopos."
+      },
+      {
+        id: 202,
+        categoria_nombre: "Especialidades Mexicanas",
+        nombre: "Chilaquiles con Bistec o Chorizo",
+        descripcion: "Versión fuerte con bistec a la plancha o chorizo artesanal",
+        precio: 165.00,
+        icono: "🥩",
+        tiempo: "15–18 min",
+        porciones: "1 persona",
+        ingredientes: ["90g totopos", "180ml salsa verde/roja caliente", "120g bistec de res a la plancha o 60g chorizo frito", "Crema, queso fresco, cebolla y cilantro"],
+        pasos: ["Asa el bistec a la plancha al término deseado con sal y pimienta.", "Prepara los chilaquiles hidratando totopos en salsa caliente 1–2 min.", "Monta los chilaquiles y corona con el bistec en fajitas o chorizo dorado."],
+        notas: "Platillo de alto ticket y gran satisfacción."
+      },
+      {
+        id: 203,
+        categoria_nombre: "Especialidades Mexicanas",
+        nombre: "Enchiladas de Desayuno",
+        descripcion: "Rojas o verdes, rellenas de pollo o queso + huevo estrellado encima",
+        precio: 145.00,
+        icono: "🌶️",
+        tiempo: "12–15 min",
+        porciones: "1 persona (3 enchiladas)",
+        ingredientes: ["3 tortillas de maíz pasadas por aceite", "100g pollo deshebrado o queso", "180ml salsa verde o roja caliente", "1 huevo estrellado encima", "Crema, queso fresco y cebolla"],
+        pasos: ["Rellena las tortillas con pollo o queso y enrolla.", "Baña con abundante salsa caliente.", "Corona con huevo estrellado, crema, queso fresco y cebolla en pluma."],
+        notas: "Platillo insignia de desayuno mexicano."
+      },
+      {
+        id: 204,
+        categoria_nombre: "Especialidades Mexicanas",
+        nombre: "Molletes Tradicionales",
+        descripcion: "Bolillo con frijoles refritos, queso gratinado y pico de gallo",
+        precio: 105.00,
+        icono: "🥖",
+        tiempo: "8–10 min",
+        porciones: "1 persona (2 mitades de bolillo)",
+        ingredientes: ["1 bolillo artesano partido a la mitad", "80g frijoles refritos", "50–60g queso manchego o Oaxaca rallado", "40g pico de gallo fresco (jitomate, cebolla, cilantro, limón y sal)", "Opcional: 30g chorizo dorado"],
+        pasos: ["Abre el bolillo y tuesta ligeramente la base.", "Unta los frijoles refritos, agrega el queso rallado (y chorizo si aplica).", "Gratina en horno o salamandra 3–4 minutos.", "Sirve con pico de gallo fresco encima."],
+        notas: "El pan debe quedar crujiente por fuera y suave por dentro."
+      },
+      {
+        id: 205,
+        categoria_nombre: "Especialidades Mexicanas",
+        nombre: "Tacos de Huevo al Gusto (3 pzas)",
+        descripcion: "3 tacos de huevo con salsa a elegir y frijoles",
+        precio: 85.00,
+        icono: "🌮",
+        tiempo: "8–10 min",
+        porciones: "1 persona (3 tacos)",
+        ingredientes: ["3 tortillas calientes de maíz o harina", "2 huevos revueltos al gusto", "Salsas de la casa + 60g frijoles"],
+        pasos: ["Prepara el huevo revuelto al gusto del comensal.", "Reparte en 3 tortillas calientes con frijoles y salsas al lado."],
+        notas: "Opción rápida y tradicional."
+      },
+      {
+        id: 206,
+        categoria_nombre: "Especialidades Mexicanas",
+        nombre: "Tacos de Chorizo con Huevo (3 pzas)",
+        descripcion: "Guisado tradicional en tortillas recién hechas",
+        precio: 95.00,
+        icono: "🌮",
+        tiempo: "8–10 min",
+        porciones: "1 persona (3 tacos)",
+        ingredientes: ["3 tortillas", "50g chorizo de cerdo artesanal", "2 huevos", "Cebolla, cilantro y salsas"],
+        pasos: ["Dora el chorizo 3 min, agrega los huevos y revuelve.", "Monta en 3 tortillas calientes con cebolla y cilantro."],
+        notas: "Sabor casero muy solicitado."
+      },
 
-      // 4. COMBOS RECOMENDADOS
-      { id: 401, categoria_nombre: "Combos Recomendados", nombre: "Combo Clásico Desayuno", descripcion: "Huevos al gusto + frijoles + jugo de naranja + café", precio: 145.00, icono: "⭐" },
-      { id: 402, categoria_nombre: "Combos Recomendados", nombre: "Combo Chilaquiles V&S", descripcion: "Chilaquiles con huevo/pollo + jugo natural + café", precio: 175.00, icono: "⭐" },
-      { id: 403, categoria_nombre: "Combos Recomendados", nombre: "Combo Dulce Mañana", descripcion: "Hotcakes + jugo de naranja natural + café americano", precio: 155.00, icono: "⭐" },
+      // 4. DULCES / AMERICANOS
+      {
+        id: 301,
+        categoria_nombre: "Dulces & Americanos",
+        nombre: "Hotcakes Clásicos (3 pzas)",
+        descripcion: "Con mantequilla de rancho y miel de maple o cajeta",
+        precio: 110.00,
+        icono: "🥞",
+        tiempo: "12–15 min",
+        porciones: "1 persona (3 piezas)",
+        ingredientes: ["120g harina para hotcakes", "1 huevo", "150ml leche", "15g azúcar", "10g mantequilla derretida", "Pizca de sal", "Mantequilla de rancho y miel de maple o cajeta para servir"],
+        pasos: ["Mezcla todos los ingredientes hasta masa homogénea (sin sobrebatir).", "Cocina en sartén antiadherente a fuego medio (aprox. 2 min por lado).", "Sirve torre de 3 con cubo de mantequilla y miel o cajeta."],
+        notas: "Sartén a fuego medio constante para dorado parejo."
+      },
+      {
+        id: 302,
+        categoria_nombre: "Dulces & Americanos",
+        nombre: "Hotcakes con Fruta Fresca",
+        descripcion: "Acompañados de plátano, fresas de temporada o mixtas",
+        precio: 130.00,
+        icono: "🍓",
+        tiempo: "12–15 min",
+        porciones: "1 persona (3 piezas)",
+        ingredientes: ["3 hotcakes esponjosos", "40g plátano rebanado", "40g fresas de temporada", "Miel de maple pura"],
+        pasos: ["Cocina los 3 hotcakes.", "Monta intercalando fruta fresca entre cada capa y baña con miel."],
+        notas: "Favorito para niños y desayunos familiares."
+      },
+      {
+        id: 303,
+        categoria_nombre: "Dulces & Americanos",
+        nombre: "Waffles Belgas con Frutas",
+        descripcion: "Waffles dorados con fruta fresca y miel de abeja",
+        precio: 135.00,
+        icono: "🧇",
+        tiempo: "10–12 min",
+        porciones: "1 persona",
+        ingredientes: ["1 waffle belga dorado crujiente", "Fresas, plátano y moras frescas", "Miel de abeja pura y azúcar glass"],
+        pasos: ["Hornear en waflera 4 min hasta dorado crujiente.", "Decorar con fruta fresca, espolvorear azúcar glass y servir miel."],
+        notas: "Textura exterior crujiente e interior esponjoso."
+      },
+      {
+        id: 304,
+        categoria_nombre: "Dulces & Americanos",
+        nombre: "Orden de Fruta de Temporada",
+        descripcion: "Papaya, melón y piña con yogurt natural o granola",
+        precio: 95.00,
+        icono: "🍍",
+        tiempo: "4–6 min",
+        porciones: "1 persona",
+        ingredientes: ["80g papaya", "80g melón", "80g piña en cubos", "60ml yogurt natural o 30g granola artesanal"],
+        pasos: ["Cortar fruta fresca en cubos uniformes.", "Montar en plato hondo con ramequín de yogurt o granola."],
+        notas: "Opción fresca y saludable."
+      },
+      {
+        id: 305,
+        categoria_nombre: "Dulces & Americanos",
+        nombre: "Yogurt con Granola y Fruta",
+        descripcion: "Bowl fresco con yogurt natural, granola artesanal y fruta",
+        precio: 90.00,
+        icono: "🥣",
+        tiempo: "4–6 min",
+        porciones: "1 persona",
+        ingredientes: ["150g yogurt griego natural", "40g granola artesanal con frutos secos", "Fresas, plátano y miel de abeja"],
+        pasos: ["Colocar cama de yogurt en bowl.", "Decorar con granola y frutas en abanico, bañar con hilo de miel."],
+        notas: "Excelente opción ligera."
+      },
 
-      // 5. BEBIDAS & JUGOS
-      { id: 501, categoria_nombre: "Bebidas & Jugos", nombre: "Café Americano / de Olla", descripcion: "Café de altura recién tostado o receta tradicional con canela y piloncillo", precio: 45.00, icono: "☕" },
-      { id: 502, categoria_nombre: "Bebidas & Jugos", nombre: "Café con Leche / Capuchino", descripcion: "Espresso doble con leche cremada al vapor", precio: 68.00, icono: "☕" },
-      { id: 503, categoria_nombre: "Bebidas & Jugos", nombre: "Jugo de Naranja Natural", descripcion: "100% natural recién exprimido al momento", precio: 55.00, icono: "🍊" },
-      { id: 504, categoria_nombre: "Bebidas & Jugos", nombre: "Jugo Verde Energético", descripcion: "Nopal, apio, piña, perejil y jugo de naranja fresco", precio: 60.00, icono: "🥬" },
-      { id: 505, categoria_nombre: "Bebidas & Jugos", nombre: "Chocolate Caliente Tradicional", descripcion: "Preparado con cacao criollo, canela y leche caliente", precio: 55.00, icono: "🍫" },
-      { id: 506, categoria_nombre: "Bebidas & Jugos", nombre: "Agua Fresca de Fruta del Día", descripcion: "Agua de fruta natural de temporada (500 ml)", precio: 40.00, icono: "🍉" },
-      { id: 507, categoria_nombre: "Bebidas & Jugos", nombre: "Refresco de Lata (355ml)", descripcion: "Variedad de refrescos fríos de lata", precio: 38.00, icono: "🥤" }
+      // 5. COMBOS RECOMENDADOS
+      {
+        id: 401,
+        categoria_nombre: "Combos Recomendados",
+        nombre: "Combo Clásico Desayuno",
+        descripcion: "Huevos al gusto + frijoles + jugo de naranja + café",
+        precio: 145.00,
+        icono: "⭐",
+        tiempo: "12–15 min",
+        porciones: "1 persona",
+        ingredientes: ["Huevos al gusto con frijoles y tortillas", "1 Jugo de naranja natural (240ml)", "1 Café americano o de olla (240ml)"],
+        pasos: ["Servir café y jugo de inmediato para abrir apetito.", "Cocinar huevos al gusto y montar con frijoles."],
+        notas: "Servicio de bebidas inmediato."
+      },
+      {
+        id: 402,
+        categoria_nombre: "Combos Recomendados",
+        nombre: "Combo Chilaquiles V&S",
+        descripcion: "Chilaquiles con huevo/pollo + jugo natural + café",
+        precio: 175.00,
+        icono: "⭐",
+        tiempo: "15–18 min",
+        porciones: "1 persona",
+        ingredientes: ["Chilaquiles verdes o rojos con huevo/pollo", "1 Jugo de naranja natural", "1 Café americano o de olla"],
+        pasos: ["Entregar café y jugo.", "Preparar chilaquiles al momento y servir calientes."],
+        notas: "Combo más vendido de la mañana."
+      },
+      {
+        id: 403,
+        categoria_nombre: "Combos Recomendados",
+        nombre: "Combo Dulce Mañana",
+        descripcion: "Hotcakes + jugo de naranja natural + café americano",
+        precio: 155.00,
+        icono: "⭐",
+        tiempo: "12–15 min",
+        porciones: "1 persona",
+        ingredientes: ["3 Hotcakes clásicos con mantequilla y miel", "1 Jugo de naranja natural", "1 Café americano"],
+        pasos: ["Servir café y jugo.", "Cocinar hotcakes y servir calientes con mantequilla y miel."],
+        notas: "Opción dulce integral."
+      }
     ];
 
     var DEFAULT_CUENTAS = {
@@ -1112,7 +1517,7 @@
     window.palapaState = {
       mesaSeleccionadaId: 2,
       sillaSeleccionadaNum: 1,
-      categoriaFiltro: "Todos",
+      categoriaFiltro: "Bebidas & Jugos",
       modoMoverActivo: false,
       sillaOrigenMover: null,
       cuentas: loadStateFromStorage()
@@ -2916,30 +3321,97 @@
       if (!grid) return;
       grid.innerHTML = '';
 
-      const catFiltro = window.palapaState.categoriaFiltro || 'Huevos & Omelettes';
+      const catFiltro = window.palapaState.categoriaFiltro || 'Bebidas & Jugos';
       const filtrados = window.catalogProducts.filter(p => p.categoria_nombre === catFiltro);
 
       filtrados.forEach(prod => {
         const card = document.createElement('div');
-        card.style.cssText = 'background: #0f172a !important; border: 1px solid #1e293b !important; border-radius: 12px !important; padding: 10px 12px !important; display: flex !important; justify-content: space-between !important; align-items: center !important; cursor: pointer !important; transition: all 0.2s ease !important;';
-        card.onclick = () => agregarPlatilloDirecto(prod);
+        card.style.cssText = 'background: #0f172a !important; border: 1px solid #1e293b !important; border-radius: 12px !important; padding: 10px 12px !important; display: flex !important; justify-content: space-between !important; align-items: center !important; transition: all 0.2s ease !important;';
 
         card.innerHTML = `
-          <div style="display: flex; align-items: center; gap: 10px; flex: 1; padding-right: 8px;">
+          <div style="display: flex; align-items: center; gap: 10px; flex: 1; padding-right: 8px; cursor: pointer;" onclick="window.abrirModalReceta(${prod.id});">
             <span style="font-size: 22px;">${prod.icono}</span>
             <div style="flex: 1;">
               <span style="font-size: 11px; font-weight: 800; color: #ffffff; display: block; line-height: 1.2;">${prod.nombre}</span>
               <span style="font-size: 10px; color: #94a3b8; display: block; line-height: 1.2; margin-top: 2px;">${prod.descripcion || ''}</span>
-              <span style="font-size: 12px; font-weight: 900; color: #34d399; display: block; margin-top: 3px;">$${prod.precio.toFixed(2)}</span>
+              <div style="display: flex; align-items: center; gap: 8px; margin-top: 3px;">
+                <span style="font-size: 12px; font-weight: 900; color: #34d399;">$${prod.precio.toFixed(2)}</span>
+                <span style="font-size: 9px; color: #38bdf8; font-weight: 700; background: rgba(56,189,248,0.15); padding: 1px 5px; border-radius: 4px;">⏱️ ${prod.tiempo || '8–10 min'}</span>
+              </div>
             </div>
           </div>
-          <button style="padding: 6px 12px; background: #059669; color: #ffffff; font-size: 11px; font-weight: 900; border-radius: 8px; border: none; cursor: pointer; white-space: nowrap;">
-            + Agregar
-          </button>
+          <div style="display: flex; flex-direction: column; gap: 4px;">
+            <button onclick="window.agregarPlatilloDirectoById(${prod.id});" style="padding: 6px 10px; background: #059669; color: #ffffff; font-size: 11px; font-weight: 900; border-radius: 8px; border: none; cursor: pointer; white-space: nowrap;">
+              + Agregar
+            </button>
+            <button onclick="window.abrirModalReceta(${prod.id});" style="padding: 3px 6px; background: #1e293b; color: #38bdf8; font-size: 9px; font-weight: 700; border-radius: 6px; border: 1px solid #334155; cursor: pointer; white-space: nowrap;">
+              📖 Receta
+            </button>
+          </div>
         `;
         grid.appendChild(card);
       });
     }
+
+    window.agregarPlatilloDirectoById = function(prodId) {
+      const prod = window.catalogProducts.find(p => p.id === prodId);
+      if (prod) agregarPlatilloDirecto(prod);
+    };
+
+    window.abrirModalReceta = function(prodId) {
+      const prod = window.catalogProducts.find(p => p.id === prodId);
+      if (!prod) return;
+
+      document.getElementById('recetaIcono').innerText = prod.icono || '🍳';
+      document.getElementById('recetaCategoria').innerText = prod.categoria_nombre || 'Desayuno';
+      document.getElementById('recetaTitulo').innerText = prod.nombre;
+      document.getElementById('recetaTiempo').innerText = prod.tiempo || '8–10 min';
+      document.getElementById('recetaPorcion').innerText = prod.porciones || '1 persona';
+      document.getElementById('recetaPrecio').innerText = `$${Number(prod.precio).toFixed(2)}`;
+
+      const listIng = document.getElementById('recetaIngredientesList');
+      if (listIng) {
+        listIng.innerHTML = '';
+        (prod.ingredientes || ['Ingredientes frescos de temporada']).forEach(ing => {
+          const li = document.createElement('li');
+          li.innerText = ing;
+          listIng.appendChild(li);
+        });
+      }
+
+      const listPasos = document.getElementById('recetaPasosList');
+      if (listPasos) {
+        listPasos.innerHTML = '';
+        (prod.pasos || ['Preparar al momento con ingredientes frescos.']).forEach(paso => {
+          const li = document.createElement('li');
+          li.innerText = paso;
+          listPasos.appendChild(li);
+        });
+      }
+
+      const boxNotas = document.getElementById('boxRecetaNotas');
+      const textNotas = document.getElementById('recetaNotasTexto');
+      if (boxNotas && textNotas) {
+        if (prod.notas) {
+          boxNotas.style.display = 'block';
+          textNotas.innerText = prod.notas;
+        } else {
+          boxNotas.style.display = 'none';
+        }
+      }
+
+      const modal = document.getElementById('modalRecetaBackdrop');
+      if (modal) {
+        modal.style.display = 'flex';
+      }
+    };
+
+    window.cerrarModalReceta = function() {
+      const modal = document.getElementById('modalRecetaBackdrop');
+      if (modal) {
+        modal.style.display = 'none';
+      }
+    };
 
     function agregarPlatilloDirecto(prod) {
       const mesaId = window.palapaState.mesaSeleccionadaId;
@@ -2992,11 +3464,11 @@
       window.palapaState.categoriaFiltro = catNombre;
 
       const chipMap = [
+        { id: 'wchip-Bebidas', cat: 'Bebidas & Jugos' },
         { id: 'wchip-Huevos', cat: 'Huevos & Omelettes' },
         { id: 'wchip-Mex', cat: 'Especialidades Mexicanas' },
         { id: 'wchip-Dulces', cat: 'Dulces & Americanos' },
-        { id: 'wchip-Combos', cat: 'Combos Recomendados' },
-        { id: 'wchip-Bebidas', cat: 'Bebidas & Jugos' }
+        { id: 'wchip-Combos', cat: 'Combos Recomendados' }
       ];
 
       chipMap.forEach(item => {
