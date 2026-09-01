@@ -2539,6 +2539,18 @@
         items: [],
         comensalNombre: 'Comensal Silla ' + srcSilla
       };
+
+      // ── CASO ESPECIAL: Si es arrimada (S5+) y se arrastra sobre una silla de la misma mesa, cambiar su lado (top/right/bottom/left) ──
+      if (srcMesa === targetMesaId && srcSilla > 4) {
+        var lado = targetSillaNum === 1 ? 'top' : targetSillaNum === 2 ? 'right' : targetSillaNum === 3 ? 'bottom' : 'left';
+        sourceCuenta.posicionArrimada = lado;
+        saveStateToStorage();
+        cancelarModoMover();
+        renderStateUI();
+        showDragToast('🪑 Silla ' + srcSilla + ' reubicada junto a Silla ' + targetSillaNum + ' en Mesa ' + srcMesa, 'ok');
+        return;
+      }
+
       var targetCuenta = window.palapaState.cuentas[targetKey];
 
       var nowStr = (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -3987,7 +3999,7 @@
         }
       });
 
-      // MODO 1: GRUPO MODULAR MESA 1 + MESA 2 UNIDAS
+      // MODO 1: GRUPO MODULAR MESA 1 + MESA 2 UNIDAS (DOS CUADRADOS LADO A LADO)
       if (unidas === '1-2' && grid && card1 && card2 && card3) {
         grid.style.setProperty('grid-template-columns', '2fr 1fr', 'important');
         card1.style.setProperty('display', 'flex', 'important');
@@ -3995,38 +4007,72 @@
         card1.style.setProperty('background', '#f0f9ff', 'important');
         card1.style.setProperty('box-shadow', '0 8px 25px rgba(2, 132, 199, 0.15)', 'important');
         if (head1) head1.innerHTML = '🔗 MESA 1 + MESA 2 UNIDAS <span style="font-size:11px;color:#0284c7;">(GRUPO MODULAR 8 A 10 PAX)</span>';
-        if (box1) { box1.style.width = '520px'; box1.style.height = '230px'; }
-        if (circle1) {
-          circle1.style.width = '380px';
-          circle1.style.height = '104px';
-          circle1.style.borderRadius = '18px';
-          circle1.innerHTML = `<span style="font-size:18px; font-weight:900; color:#0369a1;">M1 + M2 (UNIDAS)</span><span style="font-size:10px; font-weight:800; color:#0284c7; text-transform:uppercase;">Grupo Modular 8 a 10 Lugares</span>`;
-        }
-
-        // Renderizar sillas perimetrales de M1 y M2
-        let busyM1 = 0, busyM2 = 0;
-        busyM1 += renderChairBadge(1, 1, 'top: 2px; left: 22%; transform: translateX(-50%);', box1, true);
-        busyM1 += renderChairBadge(1, 2, 'top: 2px; left: 42%; transform: translateX(-50%);', box1, true);
-        busyM2 += renderChairBadge(2, 1, 'top: 2px; left: 62%; transform: translateX(-50%);', box1, true);
         
-        // Revisar arrimadas de M2 (S5)
-        if (window.palapaState.cuentas['2-5']) {
-          busyM2 += renderChairBadge(2, 5, 'top: 2px; left: 82%; transform: translateX(-50%);', box1, true);
-        }
+        if (box1) {
+          box1.style.setProperty('width', '560px', 'important');
+          box1.style.setProperty('height', '230px', 'important');
+          box1.style.setProperty('display', 'flex', 'important');
+          box1.style.setProperty('align-items', 'center', 'important');
+          box1.style.setProperty('justify-content', 'center', 'important');
+          box1.style.setProperty('gap', '36px', 'important');
+          box1.innerHTML = `
+            <div id="sub-box-1" style="position: relative !important; width: 230px !important; height: 210px !important; display: flex !important; align-items: center !important; justify-content: center !important;">
+              <div id="table-circle-1" class="table-square-fixed" style="width: 104px !important; height: 104px !important; border-radius: 16px !important; background: #ecfdf5 !important; border: 3px solid #10b981 !important; display: flex !important; flex-direction: column !important; align-items: center !important; justify-content: center !important; cursor: pointer !important; z-index: 10 !important;">
+                <span style="font-size: 18px !important; font-weight: 900 !important; color: #065f46 !important; line-height: 1 !important;">M1</span>
+                <span style="font-size: 9px !important; font-weight: 800 !important; color: #059669 !important; text-transform: uppercase !important; margin-top: 2px !important;">Unida</span>
+              </div>
+            </div>
+            <div style="width: 32px !important; height: 12px !important; background: #0284c7 !important; border-radius: 6px !important; display: flex !important; align-items: center !important; justify-content: center !important; color: #ffffff !important; font-size: 8px !important; font-weight: 900 !important; box-shadow: 0 2px 6px rgba(2,132,199,0.3) !important; z-index: 15 !important;">🔗</div>
+            <div id="sub-box-2" style="position: relative !important; width: 230px !important; height: 210px !important; display: flex !important; align-items: center !important; justify-content: center !important;">
+              <div id="table-circle-2" class="table-square-fixed" style="width: 104px !important; height: 104px !important; border-radius: 16px !important; background: #fffbeb !important; border: 3px solid #f59e0b !important; display: flex !important; flex-direction: column !important; align-items: center !important; justify-content: center !important; cursor: pointer !important; z-index: 10 !important;">
+                <span style="font-size: 18px !important; font-weight: 900 !important; color: #92400e !important; line-height: 1 !important;">M2</span>
+                <span style="font-size: 9px !important; font-weight: 800 !important; color: #d97706 !important; text-transform: uppercase !important; margin-top: 2px !important;">Unida</span>
+              </div>
+            </div>
+          `;
 
-        busyM1 += renderChairBadge(1, 3, 'bottom: 2px; left: 26%; transform: translateX(-50%);', box1, true);
-        busyM2 += renderChairBadge(2, 3, 'bottom: 2px; left: 56%; transform: translateX(-50%);', box1, true);
-        busyM2 += renderChairBadge(2, 4, 'bottom: 2px; left: 80%; transform: translateX(-50%);', box1, true);
+          const sub1 = document.getElementById('sub-box-1');
+          const sub2 = document.getElementById('sub-box-2');
 
-        busyM1 += renderChairBadge(1, 4, 'left: 2px; top: 50%; transform: translateY(-50%);', box1, true);
-        busyM2 += renderChairBadge(2, 2, 'right: 2px; top: 50%; transform: translateY(-50%);', box1, true);
+          let busyM1 = 0, busyM2 = 0;
+          if (sub1) {
+            busyM1 += renderChairBadge(1, 1, 'top: 2px; left: 50%; transform: translateX(-50%);', sub1, true);
+            busyM1 += renderChairBadge(1, 4, 'left: 2px; top: 50%; transform: translateY(-50%);', sub1, true);
+            busyM1 += renderChairBadge(1, 3, 'bottom: 2px; left: 50%; transform: translateX(-50%);', sub1, true);
+            busyM1 += renderChairBadge(1, 2, 'right: 2px; top: 12px;', sub1, true);
+          }
 
-        const totalBusyJoined = busyM1 + busyM2;
-        if (label1) {
-          label1.style.color = totalBusyJoined > 0 ? '#d97706' : '#059669';
-          label1.innerHTML = totalBusyJoined > 0
-            ? `🟡 Ocupada (${totalBusyJoined} Comensales Unidos: ${busyM1} de M1 + ${busyM2} de M2)`
-            : `🟢 Disponible (8 Lugares)`;
+          if (sub2) {
+            busyM2 += renderChairBadge(2, 1, 'top: 2px; left: 50%; transform: translateX(-50%);', sub2, true);
+            busyM2 += renderChairBadge(2, 2, 'right: 2px; top: 50%; transform: translateY(-50%);', sub2, true);
+            busyM2 += renderChairBadge(2, 3, 'bottom: 2px; left: 50%; transform: translateX(-50%);', sub2, true);
+            busyM2 += renderChairBadge(2, 4, 'left: 2px; bottom: 12px;', sub2, true);
+
+            // Arrimadas en M2 respetando su lado asignado (posicionArrimada)
+            Object.keys(window.palapaState.cuentas).forEach(k => {
+              const parts = k.split('-');
+              if (parseInt(parts[0]) === 2 && parseInt(parts[1]) >= 5) {
+                const sn = parseInt(parts[1]);
+                const pos = window.palapaState.cuentas[k].posicionArrimada || 'top';
+                const offCss = pos === 'top'
+                  ? 'top: 2px; left: calc(50% + 56px);'
+                  : pos === 'bottom'
+                  ? 'bottom: 2px; left: calc(50% + 56px);'
+                  : pos === 'right'
+                  ? 'right: 2px; top: calc(50% - 44px);'
+                  : 'left: 2px; top: calc(50% - 44px);';
+                busyM2 += renderChairBadge(2, sn, offCss, sub2, true);
+              }
+            });
+          }
+
+          const totalBusyJoined = busyM1 + busyM2;
+          if (label1) {
+            label1.style.color = totalBusyJoined > 0 ? '#d97706' : '#059669';
+            label1.innerHTML = totalBusyJoined > 0
+              ? `🟡 Ocupada (${totalBusyJoined} Comensales Unidos: ${busyM1} de M1 + ${busyM2} de M2)`
+              : `🟢 Disponible (8 a 10 Lugares)`;
+          }
         }
 
         card2.style.setProperty('display', 'none', 'important');
@@ -4037,24 +4083,27 @@
         card3.style.setProperty('background', '#f8fbff', 'important');
         card3.style.setProperty('box-shadow', 'none', 'important');
         if (head3) head3.innerHTML = 'Mesa 3 (Palapa)';
-        if (box3) { box3.style.width = '250px'; box3.style.height = '230px'; }
-        if (circle3) {
-          circle3.style.width = '104px';
-          circle3.style.height = '104px';
-          circle3.innerHTML = `<span style="font-size:18px; font-weight:900; color:#92400e; line-height:1;">M3</span><span id="table-status-3" style="font-size:9px; font-weight:800; color:#d97706; text-transform:uppercase; margin-top:2px;">Ocupada</span>`;
+        if (box3) {
+          box3.style.setProperty('width', '250px', 'important');
+          box3.style.setProperty('height', '230px', 'important');
+          box3.innerHTML = `
+            <div id="table-circle-3" class="table-square-fixed" style="width: 104px !important; height: 104px !important; border-radius: 16px !important; background: #fffbeb !important; border: 3px solid #f59e0b !important; display: flex !important; flex-direction: column !important; align-items: center !important; justify-content: center !important; cursor: pointer !important; z-index: 10 !important;">
+              <span style="font-size: 18px !important; font-weight: 900 !important; color: #92400e !important; line-height: 1 !important;">M3</span>
+              <span id="table-status-3" style="font-size: 9px !important; font-weight: 800 !important; color: #d97706 !important; text-transform: uppercase !important; margin-top: 2px !important;">Ocupada</span>
+            </div>
+          `;
+          let busy3 = 0;
+          busy3 += renderChairBadge(3, 1, 'top: 2px; left: 50%; transform: translateX(-50%);', box3, false);
+          busy3 += renderChairBadge(3, 2, 'right: 2px; top: 50%; transform: translateY(-50%);', box3, false);
+          busy3 += renderChairBadge(3, 3, 'bottom: 2px; left: 50%; transform: translateX(-50%);', box3, false);
+          busy3 += renderChairBadge(3, 4, 'left: 2px; top: 50%; transform: translateY(-50%);', box3, false);
+          if (label3) {
+            label3.style.color = busy3 > 0 ? '#d97706' : '#059669';
+            label3.innerHTML = busy3 > 0 ? `🟡 Ocupada (${busy3} Comensal${busy3 > 1 ? 'es' : ''})` : `🟢 Disponible`;
+          }
         }
 
-        let busy3 = 0;
-        busy3 += renderChairBadge(3, 1, 'top: 2px; left: 50%; transform: translateX(-50%);', box3, false);
-        busy3 += renderChairBadge(3, 2, 'right: 2px; top: 50%; transform: translateY(-50%);', box3, false);
-        busy3 += renderChairBadge(3, 3, 'bottom: 2px; left: 50%; transform: translateX(-50%);', box3, false);
-        busy3 += renderChairBadge(3, 4, 'left: 2px; top: 50%; transform: translateY(-50%);', box3, false);
-        if (label3) {
-          label3.style.color = busy3 > 0 ? '#d97706' : '#059669';
-          label3.innerHTML = busy3 > 0 ? `🟡 Ocupada (${busy3} Comensal${busy3 > 1 ? 'es' : ''})` : `🟢 Disponible`;
-        }
-
-      // MODO 2: GRUPO MODULAR MESA 2 + MESA 3 UNIDAS
+      // MODO 2: GRUPO MODULAR MESA 2 + MESA 3 UNIDAS (DOS CUADRADOS LADO A LADO)
       } else if (unidas === '2-3' && grid && card1 && card2 && card3) {
         grid.style.setProperty('grid-template-columns', '1fr 2fr', 'important');
         
@@ -4064,21 +4113,24 @@
         card1.style.setProperty('background', '#f8fbff', 'important');
         card1.style.setProperty('box-shadow', 'none', 'important');
         if (head1) head1.innerHTML = 'Mesa 1 (Palapa)';
-        if (box1) { box1.style.width = '250px'; box1.style.height = '230px'; }
-        if (circle1) {
-          circle1.style.width = '104px';
-          circle1.style.height = '104px';
-          circle1.innerHTML = `<span style="font-size:18px; font-weight:900; color:#065f46; line-height:1;">M1</span><span id="table-status-1" style="font-size:9px; font-weight:800; color:#059669; text-transform:uppercase; margin-top:2px;">Libre</span>`;
-        }
-
-        let busy1 = 0;
-        busy1 += renderChairBadge(1, 1, 'top: 2px; left: 50%; transform: translateX(-50%);', box1, false);
-        busy1 += renderChairBadge(1, 2, 'right: 2px; top: 50%; transform: translateY(-50%);', box1, false);
-        busy1 += renderChairBadge(1, 3, 'bottom: 2px; left: 50%; transform: translateX(-50%);', box1, false);
-        busy1 += renderChairBadge(1, 4, 'left: 2px; top: 50%; transform: translateY(-50%);', box1, false);
-        if (label1) {
-          label1.style.color = busy1 > 0 ? '#d97706' : '#059669';
-          label1.innerHTML = busy1 > 0 ? `🟡 Ocupada (${busy1} Comensal${busy1 > 1 ? 'es' : ''})` : `🟢 Disponible`;
+        if (box1) {
+          box1.style.setProperty('width', '250px', 'important');
+          box1.style.setProperty('height', '230px', 'important');
+          box1.innerHTML = `
+            <div id="table-circle-1" class="table-square-fixed" style="width: 104px !important; height: 104px !important; border-radius: 16px !important; background: #ecfdf5 !important; border: 3px solid #10b981 !important; display: flex !important; flex-direction: column !important; align-items: center !important; justify-content: center !important; cursor: pointer !important; z-index: 10 !important;">
+              <span style="font-size: 18px !important; font-weight: 900 !important; color: #065f46 !important; line-height: 1 !important;">M1</span>
+              <span id="table-status-1" style="font-size: 9px !important; font-weight: 800 !important; color: #059669 !important; text-transform: uppercase !important; margin-top: 2px !important;">Libre</span>
+            </div>
+          `;
+          let busy1 = 0;
+          busy1 += renderChairBadge(1, 1, 'top: 2px; left: 50%; transform: translateX(-50%);', box1, false);
+          busy1 += renderChairBadge(1, 2, 'right: 2px; top: 50%; transform: translateY(-50%);', box1, false);
+          busy1 += renderChairBadge(1, 3, 'bottom: 2px; left: 50%; transform: translateX(-50%);', box1, false);
+          busy1 += renderChairBadge(1, 4, 'left: 2px; top: 50%; transform: translateY(-50%);', box1, false);
+          if (label1) {
+            label1.style.color = busy1 > 0 ? '#d97706' : '#059669';
+            label1.innerHTML = busy1 > 0 ? `🟡 Ocupada (${busy1} Comensal${busy1 > 1 ? 'es' : ''})` : `🟢 Disponible`;
+          }
         }
 
         // Mesa 2 + 3 Unidas
@@ -4087,40 +4139,69 @@
         card2.style.setProperty('background', '#f0f9ff', 'important');
         card2.style.setProperty('box-shadow', '0 8px 25px rgba(2, 132, 199, 0.15)', 'important');
         if (head2) head2.innerHTML = '🔗 MESA 2 + MESA 3 UNIDAS <span style="font-size:11px;color:#0284c7;">(GRUPO MODULAR 8 A 10 PAX)</span>';
-        if (box2) { box2.style.width = '520px'; box2.style.height = '230px'; }
-        if (circle2) {
-          circle2.style.width = '380px';
-          circle2.style.height = '104px';
-          circle2.style.borderRadius = '18px';
-          circle2.innerHTML = `<span style="font-size:18px; font-weight:900; color:#0369a1;">M2 + M3 (UNIDAS)</span><span style="font-size:10px; font-weight:800; color:#0284c7; text-transform:uppercase;">Grupo Modular 8 a 10 Lugares</span>`;
-        }
+        if (box2) {
+          box2.style.setProperty('width', '560px', 'important');
+          box2.style.setProperty('height', '230px', 'important');
+          box2.style.setProperty('display', 'flex', 'important');
+          box2.style.setProperty('align-items', 'center', 'important');
+          box2.style.setProperty('justify-content', 'center', 'important');
+          box2.style.setProperty('gap', '36px', 'important');
+          box2.innerHTML = `
+            <div id="sub-box-2" style="position: relative !important; width: 230px !important; height: 210px !important; display: flex !important; align-items: center !important; justify-content: center !important;">
+              <div id="table-circle-2" class="table-square-fixed" style="width: 104px !important; height: 104px !important; border-radius: 16px !important; background: #fffbeb !important; border: 3px solid #f59e0b !important; display: flex !important; flex-direction: column !important; align-items: center !important; justify-content: center !important; cursor: pointer !important; z-index: 10 !important;">
+                <span style="font-size: 18px !important; font-weight: 900 !important; color: #92400e !important; line-height: 1 !important;">M2</span>
+                <span style="font-size: 9px !important; font-weight: 800 !important; color: #d97706 !important; text-transform: uppercase !important; margin-top: 2px !important;">Unida</span>
+              </div>
+            </div>
+            <div style="width: 32px !important; height: 12px !important; background: #0284c7 !important; border-radius: 6px !important; display: flex !important; align-items: center !important; justify-content: center !important; color: #ffffff !important; font-size: 8px !important; font-weight: 900 !important; box-shadow: 0 2px 6px rgba(2,132,199,0.3) !important; z-index: 15 !important;">🔗</div>
+            <div id="sub-box-3" style="position: relative !important; width: 230px !important; height: 210px !important; display: flex !important; align-items: center !important; justify-content: center !important;">
+              <div id="table-circle-3" class="table-square-fixed" style="width: 104px !important; height: 104px !important; border-radius: 16px !important; background: #fffbeb !important; border: 3px solid #f59e0b !important; display: flex !important; flex-direction: column !important; align-items: center !important; justify-content: center !important; cursor: pointer !important; z-index: 10 !important;">
+                <span style="font-size: 18px !important; font-weight: 900 !important; color: #92400e !important; line-height: 1 !important;">M3</span>
+                <span style="font-size: 9px !important; font-weight: 800 !important; color: #d97706 !important; text-transform: uppercase !important; margin-top: 2px !important;">Unida</span>
+              </div>
+            </div>
+          `;
 
-        let busyM2 = 0, busyM3 = 0;
-        busyM2 += renderChairBadge(2, 1, 'top: 2px; left: 22%; transform: translateX(-50%);', box2, true);
-        if (window.palapaState.cuentas['2-5']) {
-          busyM2 += renderChairBadge(2, 5, 'top: 2px; left: 42%; transform: translateX(-50%);', box2, true);
-        }
-        busyM3 += renderChairBadge(3, 1, 'top: 2px; left: 62%; transform: translateX(-50%);', box2, true);
-        busyM3 += renderChairBadge(3, 2, 'top: 2px; left: 82%; transform: translateX(-50%);', box2, true);
+          const sub2 = document.getElementById('sub-box-2');
+          const sub3 = document.getElementById('sub-box-3');
 
-        busyM2 += renderChairBadge(2, 3, 'bottom: 2px; left: 26%; transform: translateX(-50%);', box2, true);
-        busyM2 += renderChairBadge(2, 4, 'bottom: 2px; left: 56%; transform: translateX(-50%);', box2, true);
-        busyM3 += renderChairBadge(3, 3, 'bottom: 2px; left: 80%; transform: translateX(-50%);', box2, true);
+          let busyM2 = 0, busyM3 = 0;
+          if (sub2) {
+            busyM2 += renderChairBadge(2, 1, 'top: 2px; left: 50%; transform: translateX(-50%);', sub2, true);
+            busyM2 += renderChairBadge(2, 4, 'left: 2px; top: 50%; transform: translateY(-50%);', sub2, true);
+            busyM2 += renderChairBadge(2, 3, 'bottom: 2px; left: 50%; transform: translateX(-50%);', sub2, true);
+            busyM2 += renderChairBadge(2, 2, 'right: 2px; top: 12px;', sub2, true);
 
-        busyM2 += renderChairBadge(2, 2, 'left: 2px; top: 50%; transform: translateY(-50%);', box2, true);
-        busyM3 += renderChairBadge(3, 4, 'right: 2px; top: 50%; transform: translateY(-50%);', box2, true);
+            Object.keys(window.palapaState.cuentas).forEach(k => {
+              const parts = k.split('-');
+              if (parseInt(parts[0]) === 2 && parseInt(parts[1]) >= 5) {
+                const sn = parseInt(parts[1]);
+                const pos = window.palapaState.cuentas[k].posicionArrimada || 'top';
+                const offCss = pos === 'top' ? 'top: 2px; left: calc(50% + 56px);' : pos === 'bottom' ? 'bottom: 2px; left: calc(50% + 56px);' : pos === 'right' ? 'right: 2px; top: calc(50% - 44px);' : 'left: 2px; top: calc(50% - 44px);';
+                busyM2 += renderChairBadge(2, sn, offCss, sub2, true);
+              }
+            });
+          }
 
-        const totalBusyJoined23 = busyM2 + busyM3;
-        if (label2) {
-          label2.style.color = totalBusyJoined23 > 0 ? '#d97706' : '#059669';
-          label2.innerHTML = totalBusyJoined23 > 0
-            ? `🟡 Ocupada (${totalBusyJoined23} Comensales Unidos: ${busyM2} de M2 + ${busyM3} de M3)`
-            : `🟢 Disponible (8 Lugares)`;
+          if (sub3) {
+            busyM3 += renderChairBadge(3, 1, 'top: 2px; left: 50%; transform: translateX(-50%);', sub3, true);
+            busyM3 += renderChairBadge(3, 2, 'right: 2px; top: 50%; transform: translateY(-50%);', sub3, true);
+            busyM3 += renderChairBadge(3, 3, 'bottom: 2px; left: 50%; transform: translateX(-50%);', sub3, true);
+            busyM3 += renderChairBadge(3, 4, 'left: 2px; bottom: 12px;', sub3, true);
+          }
+
+          const totalBusyJoined23 = busyM2 + busyM3;
+          if (label2) {
+            label2.style.color = totalBusyJoined23 > 0 ? '#d97706' : '#059669';
+            label2.innerHTML = totalBusyJoined23 > 0
+              ? `🟡 Ocupada (${totalBusyJoined23} Comensales Unidos: ${busyM2} de M2 + ${busyM3} de M3)`
+              : `🟢 Disponible (8 a 10 Lugares)`;
+          }
         }
 
         card3.style.setProperty('display', 'none', 'important');
 
-      // MODO 3: GRAN MESA IMPERIAL (M1 + M2 + M3)
+      // MODO 3: GRAN MESA IMPERIAL (M1 + M2 + M3) — TRES CUADRADOS LADO A LADO
       } else if (unidas === '1-2-3' && grid && card1 && card2 && card3) {
         grid.style.setProperty('grid-template-columns', '1fr', 'important');
         card1.style.setProperty('display', 'flex', 'important');
@@ -4128,45 +4209,86 @@
         card1.style.setProperty('background', '#f0f9ff', 'important');
         card1.style.setProperty('box-shadow', '0 10px 30px rgba(2, 132, 199, 0.2)', 'important');
         if (head1) head1.innerHTML = '👑 GRAN MESA IMPERIAL PALAPA (M1 + M2 + M3) • 10 A 14 PERSONAS';
-        if (box1) { box1.style.width = '740px'; box1.style.height = '230px'; }
-        if (circle1) {
-          circle1.style.width = '620px';
-          circle1.style.height = '104px';
-          circle1.style.borderRadius = '18px';
-          circle1.innerHTML = `<span style="font-size:18px; font-weight:900; color:#0369a1;">👑 M1 + M2 + M3 • BANQUETE IMPERIAL PALAPA</span><span style="font-size:10px; font-weight:800; color:#0284c7; text-transform:uppercase;">Reservado Especial 10 a 14 Lugares</span>`;
-        }
 
-        let busy1 = 0, busy2 = 0, busy3 = 0;
-        busy1 += renderChairBadge(1, 1, 'top: 2px; left: 14%; transform: translateX(-50%);', box1, true);
-        busy1 += renderChairBadge(1, 2, 'top: 2px; left: 28%; transform: translateX(-50%);', box1, true);
-        busy2 += renderChairBadge(2, 1, 'top: 2px; left: 42%; transform: translateX(-50%);', box1, true);
-        if (window.palapaState.cuentas['2-5']) {
-          busy2 += renderChairBadge(2, 5, 'top: 2px; left: 56%; transform: translateX(-50%);', box1, true);
-        }
-        busy3 += renderChairBadge(3, 1, 'top: 2px; left: 70%; transform: translateX(-50%);', box1, true);
-        busy3 += renderChairBadge(3, 2, 'top: 2px; left: 84%; transform: translateX(-50%);', box1, true);
+        if (box1) {
+          box1.style.setProperty('width', '820px', 'important');
+          box1.style.setProperty('height', '230px', 'important');
+          box1.style.setProperty('display', 'flex', 'important');
+          box1.style.setProperty('align-items', 'center', 'important');
+          box1.style.setProperty('justify-content', 'center', 'important');
+          box1.style.setProperty('gap', '24px', 'important');
+          box1.innerHTML = `
+            <div id="sub-box-1" style="position: relative !important; width: 220px !important; height: 210px !important; display: flex !important; align-items: center !important; justify-content: center !important;">
+              <div id="table-circle-1" class="table-square-fixed" style="width: 104px !important; height: 104px !important; border-radius: 16px !important; background: #ecfdf5 !important; border: 3px solid #10b981 !important; display: flex !important; flex-direction: column !important; align-items: center !important; justify-content: center !important; cursor: pointer !important; z-index: 10 !important;">
+                <span style="font-size: 18px !important; font-weight: 900 !important; color: #065f46 !important; line-height: 1 !important;">M1</span>
+                <span style="font-size: 9px !important; font-weight: 800 !important; color: #059669 !important; text-transform: uppercase !important; margin-top: 2px !important;">Imperial</span>
+              </div>
+            </div>
+            <div style="width: 24px !important; height: 12px !important; background: #0284c7 !important; border-radius: 6px !important; display: flex !important; align-items: center !important; justify-content: center !important; color: #ffffff !important; font-size: 8px !important; font-weight: 900 !important; z-index: 15 !important;">🔗</div>
+            <div id="sub-box-2" style="position: relative !important; width: 220px !important; height: 210px !important; display: flex !important; align-items: center !important; justify-content: center !important;">
+              <div id="table-circle-2" class="table-square-fixed" style="width: 104px !important; height: 104px !important; border-radius: 16px !important; background: #fffbeb !important; border: 3px solid #f59e0b !important; display: flex !important; flex-direction: column !important; align-items: center !important; justify-content: center !important; cursor: pointer !important; z-index: 10 !important;">
+                <span style="font-size: 18px !important; font-weight: 900 !important; color: #92400e !important; line-height: 1 !important;">M2</span>
+                <span style="font-size: 9px !important; font-weight: 800 !important; color: #d97706 !important; text-transform: uppercase !important; margin-top: 2px !important;">Imperial</span>
+              </div>
+            </div>
+            <div style="width: 24px !important; height: 12px !important; background: #0284c7 !important; border-radius: 6px !important; display: flex !important; align-items: center !important; justify-content: center !important; color: #ffffff !important; font-size: 8px !important; font-weight: 900 !important; z-index: 15 !important;">🔗</div>
+            <div id="sub-box-3" style="position: relative !important; width: 220px !important; height: 210px !important; display: flex !important; align-items: center !important; justify-content: center !important;">
+              <div id="table-circle-3" class="table-square-fixed" style="width: 104px !important; height: 104px !important; border-radius: 16px !important; background: #fffbeb !important; border: 3px solid #f59e0b !important; display: flex !important; flex-direction: column !important; align-items: center !important; justify-content: center !important; cursor: pointer !important; z-index: 10 !important;">
+                <span style="font-size: 18px !important; font-weight: 900 !important; color: #92400e !important; line-height: 1 !important;">M3</span>
+                <span style="font-size: 9px !important; font-weight: 800 !important; color: #d97706 !important; text-transform: uppercase !important; margin-top: 2px !important;">Imperial</span>
+              </div>
+            </div>
+          `;
 
-        busy1 += renderChairBadge(1, 3, 'bottom: 2px; left: 16%; transform: translateX(-50%);', box1, true);
-        busy2 += renderChairBadge(2, 3, 'bottom: 2px; left: 36%; transform: translateX(-50%);', box1, true);
-        busy2 += renderChairBadge(2, 4, 'bottom: 2px; left: 56%; transform: translateX(-50%);', box1, true);
-        busy3 += renderChairBadge(3, 3, 'bottom: 2px; left: 76%; transform: translateX(-50%);', box1, true);
-        busy3 += renderChairBadge(3, 4, 'bottom: 2px; left: 90%; transform: translateX(-50%);', box1, true);
+          const sub1 = document.getElementById('sub-box-1');
+          const sub2 = document.getElementById('sub-box-2');
+          const sub3 = document.getElementById('sub-box-3');
 
-        busy1 += renderChairBadge(1, 4, 'left: 2px; top: 50%; transform: translateY(-50%);', box1, true);
-        busy3 += renderChairBadge(3, 2, 'right: 2px; top: 50%; transform: translateY(-50%);', box1, true);
+          let busy1 = 0, busy2 = 0, busy3 = 0;
+          if (sub1) {
+            busy1 += renderChairBadge(1, 1, 'top: 2px; left: 50%; transform: translateX(-50%);', sub1, true);
+            busy1 += renderChairBadge(1, 4, 'left: 2px; top: 50%; transform: translateY(-50%);', sub1, true);
+            busy1 += renderChairBadge(1, 3, 'bottom: 2px; left: 50%; transform: translateX(-50%);', sub1, true);
+            busy1 += renderChairBadge(1, 2, 'right: 2px; top: 12px;', sub1, true);
+          }
 
-        const totalBusyImperial = busy1 + busy2 + busy3;
-        if (label1) {
-          label1.style.color = totalBusyImperial > 0 ? '#d97706' : '#059669';
-          label1.innerHTML = totalBusyImperial > 0
-            ? `🟡 Ocupada (${totalBusyImperial} Comensales: ${busy1} de M1 + ${busy2} de M2 + ${busy3} de M3)`
-            : `🟢 Disponible (Banquete Imperial 12-14 Pax)`;
+          if (sub2) {
+            busy2 += renderChairBadge(2, 1, 'top: 2px; left: 50%; transform: translateX(-50%);', sub2, true);
+            busy2 += renderChairBadge(2, 3, 'bottom: 2px; left: 50%; transform: translateX(-50%);', sub2, true);
+            busy2 += renderChairBadge(2, 4, 'left: 2px; bottom: 12px;', sub2, true);
+            busy2 += renderChairBadge(2, 2, 'right: 2px; top: 12px;', sub2, true);
+
+            Object.keys(window.palapaState.cuentas).forEach(k => {
+              const parts = k.split('-');
+              if (parseInt(parts[0]) === 2 && parseInt(parts[1]) >= 5) {
+                const sn = parseInt(parts[1]);
+                const pos = window.palapaState.cuentas[k].posicionArrimada || 'top';
+                const offCss = pos === 'top' ? 'top: 2px; left: calc(50% + 56px);' : pos === 'bottom' ? 'bottom: 2px; left: calc(50% + 56px);' : pos === 'right' ? 'right: 2px; top: calc(50% - 44px);' : 'left: 2px; top: calc(50% - 44px);';
+                busy2 += renderChairBadge(2, sn, offCss, sub2, true);
+              }
+            });
+          }
+
+          if (sub3) {
+            busy3 += renderChairBadge(3, 1, 'top: 2px; left: 50%; transform: translateX(-50%);', sub3, true);
+            busy3 += renderChairBadge(3, 2, 'right: 2px; top: 50%; transform: translateY(-50%);', sub3, true);
+            busy3 += renderChairBadge(3, 3, 'bottom: 2px; left: 50%; transform: translateX(-50%);', sub3, true);
+            busy3 += renderChairBadge(3, 4, 'left: 2px; bottom: 12px;', sub3, true);
+          }
+
+          const totalBusyImperial = busy1 + busy2 + busy3;
+          if (label1) {
+            label1.style.color = totalBusyImperial > 0 ? '#d97706' : '#059669';
+            label1.innerHTML = totalBusyImperial > 0
+              ? `🟡 Ocupada (${totalBusyImperial} Comensales: ${busy1} de M1 + ${busy2} de M2 + ${busy3} de M3)`
+              : `🟢 Disponible (Banquete Imperial 12-14 Pax)`;
+          }
         }
 
         card2.style.setProperty('display', 'none', 'important');
         card3.style.setProperty('display', 'none', 'important');
 
-      // MODO 4: MESAS INDIVIDUALES ESTÁNDAR
+      // MODO 4: MESAS INDIVIDUALES ESTÁNDAR (TRES CUADRADOS INDEPENDIENTES)
       } else if (grid && card1 && card2 && card3) {
         grid.style.setProperty('grid-template-columns', 'repeat(3, 1fr)', 'important');
 
@@ -4182,52 +4304,58 @@
         if (head3) head3.innerHTML = 'Mesa 3 (Palapa)';
 
         [box1, box2, box3].forEach(b => {
-          if (b) { b.style.width = '250px'; b.style.height = '230px'; }
-        });
-
-        [circle1, circle2, circle3].forEach((circ, idx) => {
-          if (circ) {
-            const mNum = idx + 1;
-            circ.style.width = '104px';
-            circ.style.height = '104px';
-            circ.style.borderRadius = '16px';
-            circ.innerHTML = `<span style="font-size:18px; font-weight:900; line-height:1;">M${mNum}</span><span id="table-status-${mNum}" style="font-size:9px; font-weight:800; text-transform:uppercase; margin-top:2px;">Libre</span>`;
+          if (b) {
+            b.style.setProperty('width', '250px', 'important');
+            b.style.setProperty('height', '230px', 'important');
+            b.style.setProperty('display', 'flex', 'important');
+            b.style.setProperty('align-items', 'center', 'important');
+            b.style.setProperty('justify-content', 'center', 'important');
+            b.style.setProperty('gap', '0', 'important');
           }
         });
 
         for (let m = 1; m <= 3; m++) {
           const currentBox = document.getElementById(`table-box-${m}`);
           const currentLabel = document.getElementById(`table-label-${m}`);
-          const currentCircle = document.getElementById(`table-circle-${m}`);
-          const currentStatus = document.getElementById(`table-status-${m}`);
           let busyCount = 0;
           let arrimadasCount = 0;
 
           if (currentBox) {
+            currentBox.innerHTML = `
+              <div id="table-circle-${m}" class="table-square-fixed" style="width: 104px !important; height: 104px !important; border-radius: 16px !important; background: #ecfdf5 !important; border: 3px solid #10b981 !important; display: flex !important; flex-direction: column !important; align-items: center !important; justify-content: center !important; cursor: pointer !important; z-index: 10 !important;">
+                <span style="font-size: 18px !important; font-weight: 900 !important; color: #065f46 !important; line-height: 1 !important;">M${m}</span>
+                <span id="table-status-${m}" style="font-size: 9px !important; font-weight: 800 !important; color: #059669 !important; text-transform: uppercase !important; margin-top: 2px !important;">Libre</span>
+              </div>
+            `;
+
             // Sillas 1..4
             busyCount += renderChairBadge(m, 1, 'top: 2px; left: 50%; transform: translateX(-50%);', currentBox, false);
             busyCount += renderChairBadge(m, 2, 'right: 2px; top: 50%; transform: translateY(-50%);', currentBox, false);
             busyCount += renderChairBadge(m, 3, 'bottom: 2px; left: 50%; transform: translateX(-50%);', currentBox, false);
             busyCount += renderChairBadge(m, 4, 'left: 2px; top: 50%; transform: translateY(-50%);', currentBox, false);
 
-            // Sillas Arrimadas (S5+) ubicadas junto a la Silla 1 en la arista superior
+            // Sillas Arrimadas (S5+) ubicadas según su posicionArrimada
             Object.keys(window.palapaState.cuentas).forEach(k => {
               const parts = k.split('-');
               if (parseInt(parts[0]) === m) {
                 const sn = parseInt(parts[1]);
                 if (sn >= 5) {
                   arrimadasCount++;
-                  const offsetCss = sn === 5
+                  const pos = window.palapaState.cuentas[k].posicionArrimada || 'top';
+                  const offsetCss = pos === 'top'
                     ? 'top: 2px; left: calc(50% + 56px);'
-                    : sn === 6
-                    ? 'top: 2px; left: calc(50% - 56px);'
-                    : sn === 7
+                    : pos === 'bottom'
                     ? 'bottom: 2px; left: calc(50% + 56px);'
-                    : 'bottom: 2px; left: calc(50% - 56px);';
+                    : pos === 'right'
+                    ? 'right: 2px; top: calc(50% - 44px);'
+                    : 'left: 2px; top: calc(50% - 44px);';
                   busyCount += renderChairBadge(m, sn, offsetCss, currentBox, false);
                 }
               }
             });
+
+            const currentCircle = document.getElementById(`table-circle-${m}`);
+            const currentStatus = document.getElementById(`table-status-${m}`);
 
             if (currentCircle) {
               if (busyCount > 0) {
