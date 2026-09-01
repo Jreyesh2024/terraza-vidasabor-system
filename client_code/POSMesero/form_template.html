@@ -317,7 +317,7 @@
     <!-- AREA SELECTOR & MODULE SWITCHER -->
     <div
       style="display: flex !important; gap: 8px !important; background: #0f172a !important; padding: 6px !important; border-radius: 16px !important; border: 1px solid #1e293b !important; align-items: center !important;">
-      <button id="btn-area-palapa"
+      <button id="btn-area-palapa" onclick="if(window.anvilAppNav) window.anvilAppNav('pos_mesero');"
         style="padding: 8px 16px !important; font-size: 12px !important; font-weight: 700 !important; border-radius: 12px !important; background-color: #059669 !important; color: #ffffff !important; border: none !important; cursor: pointer !important; display: flex !important; align-items: center !important; gap: 6px !important;">
         <i class="fa-solid fa-umbrella-beach" style="color: #fcd34d !important;"></i> La Palapa (6x4m)
       </button>
@@ -325,11 +325,11 @@
         style="padding: 8px 14px !important; font-size: 12px !important; font-weight: 700 !important; border-radius: 12px !important; background: #1e293b !important; color: #38bdf8 !important; border: 1px solid #334155 !important; cursor: pointer !important; display: flex !important; align-items: center !important; gap: 6px !important;">
         <i class="fa-solid fa-rotate-right"></i> Reiniciar Demo
       </button>
-      <button id="btn-nav-cocina"
+      <button id="btn-nav-cocina" onclick="if(window.anvilAppNav) window.anvilAppNav('monitor_cocina');"
         style="padding: 8px 16px !important; font-size: 12px !important; font-weight: 600 !important; border-radius: 12px !important; background: transparent !important; color: #cbd5e1 !important; border: none !important; cursor: pointer !important; display: flex !important; align-items: center !important; gap: 6px !important;">
         <i class="fa-solid fa-fire" style="color: #f59e0b !important;"></i> Cocina KDS
       </button>
-      <button id="btn-nav-fiscal"
+      <button id="btn-nav-fiscal" onclick="if(window.anvilAppNav) window.anvilAppNav('monitor_fiscal');"
         style="padding: 8px 16px !important; font-size: 12px !important; font-weight: 600 !important; border-radius: 12px !important; background: transparent !important; color: #cbd5e1 !important; border: none !important; cursor: pointer !important; display: flex !important; align-items: center !important; gap: 6px !important;">
         <i class="fa-solid fa-chart-pie" style="color: #38bdf8 !important;"></i> Fiscal
       </button>
@@ -1725,23 +1725,83 @@
       }
     };
 
-    function saveStateToStorage() {
+    function getGlobalCache() {
       try {
-        localStorage.setItem('palapa_cuentas_v1', JSON.stringify(window.palapaState.cuentas));
+        if (typeof window !== 'undefined' && window._palapa_cuentas_v1_cache) {
+          return window._palapa_cuentas_v1_cache;
+        }
+        if (typeof window !== 'undefined' && window.top && window.top._palapa_cuentas_v1_cache) {
+          return window.top._palapa_cuentas_v1_cache;
+        }
+        if (typeof globalThis !== 'undefined' && globalThis._palapa_cuentas_v1_cache) {
+          return globalThis._palapa_cuentas_v1_cache;
+        }
+      } catch (e) {}
+      return null;
+    }
+
+    function setGlobalCache(val) {
+      try {
+        if (typeof window !== 'undefined') window._palapa_cuentas_v1_cache = val;
+        if (typeof window !== 'undefined' && window.top) window.top._palapa_cuentas_v1_cache = val;
+        if (typeof globalThis !== 'undefined') globalThis._palapa_cuentas_v1_cache = val;
+      } catch (e) {}
+    }
+
+    function saveStateToStorage() {
+      if (!window.palapaState || !window.palapaState.cuentas) return;
+      var data = window.palapaState.cuentas;
+      // 1. In-memory global cache (inmune a restricciones de iframe de Anvil)
+      setGlobalCache(JSON.parse(JSON.stringify(data)));
+
+      // 2. SessionStorage
+      try {
+        sessionStorage.setItem('palapa_cuentas_v1', JSON.stringify(data));
+      } catch (e) {}
+
+      // 3. LocalStorage
+      try {
+        localStorage.setItem('palapa_cuentas_v1', JSON.stringify(data));
       } catch (e) {}
     }
 
     function loadStateFromStorage() {
+      // 1. Intentar desde caché global en memoria
+      var cache = getGlobalCache();
+      if (cache && typeof cache === 'object' && Object.keys(cache).length > 0) {
+        return JSON.parse(JSON.stringify(cache));
+      }
+
+      // 2. Intentar desde sessionStorage
+      try {
+        var sess = sessionStorage.getItem('palapa_cuentas_v1');
+        if (sess) {
+          var parsedSess = JSON.parse(sess);
+          if (parsedSess && typeof parsedSess === 'object' && Object.keys(parsedSess).length > 0) {
+            setGlobalCache(parsedSess);
+            return parsedSess;
+          }
+        }
+      } catch (e) {}
+
+      // 3. Intentar desde localStorage
       try {
         var saved = localStorage.getItem('palapa_cuentas_v1');
         if (saved) {
           var parsed = JSON.parse(saved);
           if (parsed && typeof parsed === 'object' && Object.keys(parsed).length > 0) {
+            setGlobalCache(parsed);
             return parsed;
           }
         }
       } catch (e) {}
-      return JSON.parse(JSON.stringify(DEFAULT_CUENTAS));
+
+      // 4. Fallback a semilla inicial DEFAULT_CUENTAS (solo en el arranque limpio)
+      var initial = JSON.parse(JSON.stringify(DEFAULT_CUENTAS));
+      setGlobalCache(initial);
+      try { localStorage.setItem('palapa_cuentas_v1', JSON.stringify(initial)); } catch (e) {}
+      try { sessionStorage.setItem('palapa_cuentas_v1', JSON.stringify(initial)); } catch (e) {}
+      return initial;
     }
 
     window.palapaState = {
@@ -1755,10 +1815,14 @@
     };
 
     function resetDemoState() {
-      window.palapaState.cuentas = JSON.parse(JSON.stringify(DEFAULT_CUENTAS));
+      var initial = JSON.parse(JSON.stringify(DEFAULT_CUENTAS));
+      window.palapaState.cuentas = initial;
       window.palapaState.mesaSeleccionadaId = 3;
       window.palapaState.sillaSeleccionadaNum = 1;
       window.palapaState.modoComandaActiva = false;
+      setGlobalCache(initial);
+      try { localStorage.removeItem('palapa_cuentas_v1'); } catch (e) {}
+      try { sessionStorage.removeItem('palapa_cuentas_v1'); } catch (e) {}
       saveStateToStorage();
       cancelarModoMover();
       cerrarModalComanda();
