@@ -1871,7 +1871,7 @@
           }
         }
 
-        // 2. Hit on table box or table circle
+        // 2. Hit on table box, table circle or mesa container
         var tableBox = elem.closest ? elem.closest('.table-box-220') : null;
         var tableCircle = elem.closest ? elem.closest('.table-circle-fixed') : null;
         var mesaId = null;
@@ -1879,18 +1879,44 @@
           mesaId = parseInt(tableBox.id.replace('table-box-', ''));
         } else if (tableCircle && tableCircle.id) {
           mesaId = parseInt(tableCircle.id.replace('table-circle-', ''));
+        } else {
+          for (var m = 1; m <= 3; m++) {
+            var mBox = document.getElementById('table-box-' + m);
+            if (mBox) {
+              var r = mBox.getBoundingClientRect();
+              if (clientX >= r.left - 40 && clientX <= r.right + 40 && clientY >= r.top - 40 && clientY <= r.bottom + 40) {
+                mesaId = m;
+                break;
+              }
+            }
+          }
         }
 
-        if (mesaId) {
-          var closest = getClosestChair(mesaId, clientX, clientY, srcM, srcS);
-          if (closest) {
-            var cel = document.getElementById('chair-' + closest.mesa + '-' + closest.silla);
-            return { mesaId: closest.mesa, sillaNum: closest.silla, el: cel };
+        if (mesaId && mesaId !== srcM) {
+          // Buscar primero una silla libre en esa mesa
+          var freeSilla = null;
+          for (var fs = 1; fs <= 4; fs++) {
+            var fk = mesaId + '-' + fs;
+            var fc = window.palapaState.cuentas[fk];
+            if (!fc || (fc.estado !== 'ocupada' && (!fc.items || fc.items.length === 0))) {
+              freeSilla = fs;
+              break;
+            }
+          }
+          if (freeSilla !== null) {
+            var cel = document.getElementById('chair-' + mesaId + '-' + freeSilla);
+            return { mesaId: mesaId, sillaNum: freeSilla, el: cel };
+          } else {
+            var closest = getClosestChair(mesaId, clientX, clientY, srcM, srcS);
+            if (closest) {
+              var cel2 = document.getElementById('chair-' + closest.mesa + '-' + closest.silla);
+              return { mesaId: closest.mesa, sillaNum: closest.silla, el: cel2 };
+            }
           }
         }
       }
 
-      // 3. Proximity fallback: find closest chair within 150px
+      // 3. Proximity fallback: find closest chair within 220px
       var globalMinDist = Infinity;
       var globalClosest = null;
       for (var m = 1; m <= 3; m++) {
@@ -1902,7 +1928,7 @@
           var cx = rect.left + rect.width / 2;
           var cy = rect.top + rect.height / 2;
           var dist = Math.hypot(clientX - cx, clientY - cy);
-          if (dist < globalMinDist && dist < 150) {
+          if (dist < globalMinDist && dist < 220) {
             globalMinDist = dist;
             globalClosest = { mesaId: m, sillaNum: s, el: cel };
           }
@@ -2013,9 +2039,9 @@
         return;
       }
 
-      // ── Es un drag real: bloquear el click post-mouseup ──
+      // ── Es un drag real: bloquear el click post-mouseup para evitar abrir la comanda por accidente ──
       _wasDrag = true;
-      setTimeout(function () { _wasDrag = false; }, 80);
+      setTimeout(function () { _wasDrag = false; }, 350);
 
       // Resolver la silla destino
       var target = _resolveTargetChair(e.clientX, e.clientY, srcM, srcS);
@@ -2246,6 +2272,7 @@
 
       window.palapaState.modoMoverActivo = true;
       window.palapaState.sillaOrigenMover = { mesaId, sillaNum };
+      window.palapaState.modoComandaActiva = false; // Regresar a la vista de croquis panorámico para ver todas las mesas
 
       const bannerText = document.getElementById('bannerText');
       const btnCancel = document.getElementById('btnCancelMove');
@@ -2319,15 +2346,22 @@
       }
 
       var nowStr = (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-      if (sourceCuenta.items) {
-        sourceCuenta.items.forEach(function (i) {
-          if (i.mesaId === undefined) { i.mesaId = srcMesa; i.sillaNum = srcSilla; }
-        });
-      }
       sourceCuenta.historialUbicaciones = sourceCuenta.historialUbicaciones || [{ mesaId: srcMesa, sillaNum: srcSilla, hora: nowStr }];
       var yaExiste = sourceCuenta.historialUbicaciones.some(function (u) { return u.mesaId === targetMesaId && u.sillaNum === targetSillaNum; });
       if (!yaExiste) {
         sourceCuenta.historialUbicaciones.push({ mesaId: targetMesaId, sillaNum: targetSillaNum, hora: nowStr });
+      }
+
+      // Actualizar mesa y silla en los consumos del comensal
+      if (sourceCuenta.items) {
+        sourceCuenta.items.forEach(function (i) {
+          i.mesaId = targetMesaId;
+          i.sillaNum = targetSillaNum;
+        });
+      }
+      sourceCuenta.qrId = 'PV-0' + targetMesaId + targetSillaNum;
+      if (!sourceCuenta.comensalNombre || sourceCuenta.comensalNombre.indexOf('Comensal Silla') === 0) {
+        sourceCuenta.comensalNombre = 'Comensal Silla ' + targetSillaNum + (targetSillaNum > 4 ? ' (Arrimada)' : '');
       }
 
       var isTargetOccupied = !!(targetCuenta && (targetCuenta.estado === 'ocupada' || (targetCuenta.items && targetCuenta.items.length > 0)));
@@ -2342,6 +2376,7 @@
           delete window.palapaState.cuentas[sourceKey];
           window.palapaState.mesaSeleccionadaId = targetMesaId;
           window.palapaState.sillaSeleccionadaNum = targetSillaNum;
+          window.palapaState.modoComandaActiva = false;
           saveStateToStorage();
           cancelarModoMover();
           showDragToast('✅ Cuentas combinadas en Mesa ' + targetMesaId + ' Silla ' + targetSillaNum, 'ok');
@@ -2356,6 +2391,7 @@
         delete window.palapaState.cuentas[sourceKey];
         window.palapaState.mesaSeleccionadaId = targetMesaId;
         window.palapaState.sillaSeleccionadaNum = targetSillaNum;
+        window.palapaState.modoComandaActiva = false;
         saveStateToStorage();
         cancelarModoMover();
         showDragToast('✅ Comensal trasladado → Mesa ' + targetMesaId + ' Silla ' + targetSillaNum, 'ok');
@@ -3564,12 +3600,22 @@
       renderStateUI();
       const bannerText = document.getElementById('bannerText');
       if (bannerText) {
-        bannerText.innerHTML = `💡 Haz clic en cualquier <b>Mesa</b> o <b>Silla</b> para tomar su orden y abrir el catálogo de menú ampliado, o <b>arrastra con el mouse</b> para mover comensales.`;
+        if (window.palapaState.modoMoverActivo && window.palapaState.sillaOrigenMover) {
+          const src = window.palapaState.sillaOrigenMover;
+          bannerText.innerHTML = `<b style="color: #38bdf8;">MOVIENDO COMENSAL (Mesa ${src.mesaId} Silla ${src.sillaNum}):</b> Haz clic en la <b>Silla Destino</b> o en el <b>Centro de la Mesa</b>.`;
+        } else {
+          bannerText.innerHTML = `💡 Haz clic en cualquier <b>Mesa</b> o <b>Silla</b> para tomar su orden y abrir el catálogo de menú ampliado, o <b>arrastra con el mouse</b> para mover comensales.`;
+        }
       }
     };
 
     window.seleccionarSillaSidebar = function(sillaNum) {
       const mesaId = window.palapaState.mesaSeleccionadaId || 3;
+      if (window.palapaState.modoMoverActivo) {
+        completarMovimiento(mesaId, sillaNum);
+        return;
+      }
+
       const key = `${mesaId}-${sillaNum}`;
 
       if (!window.palapaState.cuentas[key]) {
@@ -3577,7 +3623,7 @@
         window.palapaState.cuentas[key] = {
           estado: 'ocupada',
           qrId: 'PV-0' + mesaId + sillaNum,
-          comensalNombre: 'Comensal Silla ' + sillaNum,
+          comensalNombre: 'Comensal Silla ' + sillaNum + (sillaNum > 4 ? ' (Arrimada)' : ''),
           items: [],
           historialUbicaciones: [{ mesaId: mesaId, sillaNum: sillaNum, hora: nowStr }],
           creadoPor: 'mesero_presencial',
