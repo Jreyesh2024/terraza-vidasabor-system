@@ -1,5 +1,4 @@
-<anvil-form container="HtmlTemplate" prop:html="
-<link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css&quot;>
+<anvil-form container="HtmlTemplate" prop:html="<link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css&quot;>
 <link rel=&quot;stylesheet&quot; href=&quot;https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css&quot;>
 <style>
   body,
@@ -94,14 +93,16 @@
   <!-- BARRA DE UBICACIÓN QR Y SELECTOR DE SILLA (SIMULACIÓN DE ESCANEO QR) -->
   <div class=&quot;bg-slate-900/90 border-b border-slate-800 px-6 py-2.5 flex flex-wrap justify-between items-center gap-3&quot;>
     <div class=&quot;flex items-center gap-2 text-xs&quot;>
-      <span class=&quot;inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-500/30&quot;>
+      <span
+        class=&quot;inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-500/30&quot;>
         <i class=&quot;fa-solid fa-qrcode text-emerald-400&quot;></i> Portavasos QR: <span id=&quot;lblQrActivo&quot;>PV-021</span>
       </span>
       <span class=&quot;text-slate-300 font-semibold&quot; id=&quot;lblUbicacionActiva&quot;>Mesa 2 • Silla 1 (Adulto 1 / Papá)</span>
     </div>
     <div class=&quot;flex items-center gap-2&quot;>
       <span class=&quot;text-xs text-slate-400 font-medium&quot;>Simular escaneo QR en:</span>
-      <select id=&quot;selSimularQr&quot; onchange=&quot;window.cambiarSimulacionQr(this.value)&quot; class=&quot;bg-slate-800 text-slate-200 text-xs font-bold px-3 py-1.5 rounded-xl border border-slate-700 focus:outline-none focus:border-emerald-500 cursor-pointer&quot;>
+      <select id=&quot;selSimularQr&quot; onchange=&quot;window.cambiarSimulacionQr(this.value)&quot;
+        class=&quot;bg-slate-800 text-slate-200 text-xs font-bold px-3 py-1.5 rounded-xl border border-slate-700 focus:outline-none focus:border-emerald-500 cursor-pointer&quot;>
         <optgroup label=&quot;Mesa 2 (Familia 2 adultos + 2 niños)&quot;>
           <option value=&quot;2-1&quot; selected>Mesa 2 · Silla 1 (Papá - $445.00)</option>
           <option value=&quot;2-2&quot;>Mesa 2 · Silla 2 (Mamá - $325.00)</option>
@@ -151,12 +152,14 @@
     </section>
 
     <!-- SECCIÓN DERECHA: SIDEBAR DE COMANDA Y COBRO AGRUPADO -->
-    <aside class=&quot;glass-card rounded-2xl p-6 flex flex-col justify-between h-full border border-slate-800 shadow-2xl gap-4&quot;>
+    <aside
+      class=&quot;glass-card rounded-2xl p-6 flex flex-col justify-between h-full border border-slate-800 shadow-2xl gap-4&quot;>
       <div>
         <div class=&quot;flex justify-between items-center pb-3 border-b border-slate-800 mb-3&quot;>
           <div>
             <h2 class=&quot;text-base font-bold text-white flex items-center gap-2&quot;>
-              <i class=&quot;fa-solid fa-receipt text-emerald-400&quot;></i> <span id=&quot;txtTituloComanda&quot;>Mi Comanda (Silla 1)</span>
+              <i class=&quot;fa-solid fa-receipt text-emerald-400&quot;></i> <span id=&quot;txtTituloComanda&quot;>Mi Comanda (Silla
+                1)</span>
             </h2>
             <p class=&quot;text-xs text-slate-400&quot; id=&quot;txtSubComanda&quot;>Mesa 2 • Portavasos #PV-021</p>
           </div>
@@ -179,7 +182,8 @@
             <span class=&quot;text-xs font-bold text-slate-200 flex items-center gap-1.5&quot;>
               <i class=&quot;fa-solid fa-users text-amber-400&quot;></i> Pagar por otros en mi mesa:
             </span>
-            <button onclick=&quot;window.seleccionarTodosAcompanantes()&quot; class=&quot;text-[10px] text-emerald-400 hover:underline font-semibold&quot;>Toda Mesa</button>
+            <button onclick=&quot;window.seleccionarTodosAcompanantes()&quot;
+              class=&quot;text-[10px] text-emerald-400 hover:underline font-semibold&quot;>Toda Mesa</button>
           </div>
 
           <div id=&quot;listaAcompanantesMesa&quot; class=&quot;space-y-1.5 max-h-36 overflow-y-auto pr-1 text-xs&quot;>
@@ -227,8 +231,11 @@
   </main>
 
   <!-- MODAL DE COBRO Y PRECUENTA DIGITAL CLIENTE QR -->
-  <div id=&quot;modalCobroCliente&quot; class=&quot;fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden items-center justify-center p-4&quot; onclick=&quot;if(event.target === this) window.cerrarModalCobroCliente();&quot;>
-    <div class=&quot;bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-md p-6 shadow-2xl flex flex-col gap-4 text-slate-100&quot;>
+  <div id=&quot;modalCobroCliente&quot;
+    class=&quot;fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden items-center justify-center p-4&quot;
+    onclick=&quot;if(event.target === this) window.cerrarModalCobroCliente();&quot;>
+    <div
+      class=&quot;bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-md p-6 shadow-2xl flex flex-col gap-4 text-slate-100&quot;>
       <div class=&quot;flex justify-between items-start border-b border-slate-800 pb-3&quot;>
         <div>
           <h3 class=&quot;text-base font-bold text-white flex items-center gap-2&quot;>
@@ -236,16 +243,23 @@
           </h3>
           <p class=&quot;text-xs text-slate-400&quot; id=&quot;modalCobroSubtitulo&quot;>Mesa 2 • Portavasos #PV-021</p>
         </div>
-        <button onclick=&quot;window.cerrarModalCobroCliente();&quot; class=&quot;text-slate-400 hover:text-white text-lg cursor-pointer&quot;>✕</button>
+        <button onclick=&quot;window.cerrarModalCobroCliente();&quot;
+          class=&quot;text-slate-400 hover:text-white text-lg cursor-pointer&quot;>✕</button>
       </div>
 
       <!-- SELECTOR DE ALCANCE DEL PAGO -->
       <div class=&quot;bg-slate-950/80 p-3 rounded-xl border border-slate-800/80 space-y-2&quot;>
-        <span class=&quot;text-xs font-bold text-slate-300 block&quot;><i class=&quot;fa-solid fa-hand-holding-dollar text-emerald-400 mr-1&quot;></i> ¿Qué deseas pagar?</span>
+        <span class=&quot;text-xs font-bold text-slate-300 block&quot;><i
+                                                               class=&quot;fa-solid fa-hand-holding-dollar text-emerald-400 mr-1&quot;></i> ¿Qué deseas pagar?</span>
         <div class=&quot;grid grid-cols-3 gap-1.5 text-[11px]&quot;>
-          <button type=&quot;button&quot; onclick=&quot;window.setModoPagoCliente('solo_yo')&quot; id=&quot;btnModoSoloYo&quot; class=&quot;p-2 rounded-lg font-bold border text-center transition bg-slate-800 text-slate-300 border-slate-700 cursor-pointer&quot;>Solo Mi Silla</button>
-          <button type=&quot;button&quot; onclick=&quot;window.setModoPagoCliente('incluir_ninos')&quot; id=&quot;btnModoNinos&quot; class=&quot;p-2 rounded-lg font-bold border text-center transition bg-emerald-600/30 text-emerald-300 border-emerald-500/50 cursor-pointer&quot;>Acompañantes</button>
-          <button type=&quot;button&quot; onclick=&quot;window.setModoPagoCliente('toda_mesa')&quot; id=&quot;btnModoTodaMesa&quot; class=&quot;p-2 rounded-lg font-bold border text-center transition bg-slate-800 text-slate-300 border-slate-700 cursor-pointer&quot;>Toda la Mesa</button>
+          <button type=&quot;button&quot; onclick=&quot;window.setModoPagoCliente('solo_yo')&quot; id=&quot;btnModoSoloYo&quot;
+            class=&quot;p-2 rounded-lg font-bold border text-center transition bg-slate-800 text-slate-300 border-slate-700 cursor-pointer&quot;>Solo
+            Mi Silla</button>
+          <button type=&quot;button&quot; onclick=&quot;window.setModoPagoCliente('incluir_ninos')&quot; id=&quot;btnModoNinos&quot;
+            class=&quot;p-2 rounded-lg font-bold border text-center transition bg-emerald-600/30 text-emerald-300 border-emerald-500/50 cursor-pointer&quot;>Acompañantes</button>
+          <button type=&quot;button&quot; onclick=&quot;window.setModoPagoCliente('toda_mesa')&quot; id=&quot;btnModoTodaMesa&quot;
+            class=&quot;p-2 rounded-lg font-bold border text-center transition bg-slate-800 text-slate-300 border-slate-700 cursor-pointer&quot;>Toda
+            la Mesa</button>
         </div>
       </div>
 
@@ -256,9 +270,12 @@
 
       <!-- TOTALES -->
       <div class=&quot;pt-3 border-t border-slate-800 space-y-1.5 text-xs&quot;>
-        <div class=&quot;flex justify-between text-slate-400&quot;><span>Subtotal Neto:</span><span id=&quot;modalSubtotal&quot; class=&quot;text-slate-200 font-bold&quot;>$0.00</span></div>
-        <div class=&quot;flex justify-between text-slate-400&quot;><span>IVA 16% Trasladado:</span><span id=&quot;modalIVA&quot; class=&quot;text-slate-200 font-bold&quot;>$0.00</span></div>
-        <div class=&quot;flex justify-between text-slate-400&quot;><span>Propina Sugerida (10%):</span><span id=&quot;modalPropina&quot; class=&quot;text-slate-200 font-bold&quot;>$0.00</span></div>
+        <div class=&quot;flex justify-between text-slate-400&quot;><span>Subtotal Neto:</span><span id=&quot;modalSubtotal&quot;
+                                                                                      class=&quot;text-slate-200 font-bold&quot;>$0.00</span></div>
+        <div class=&quot;flex justify-between text-slate-400&quot;><span>IVA 16% Trasladado:</span><span id=&quot;modalIVA&quot;
+                                                                                           class=&quot;text-slate-200 font-bold&quot;>$0.00</span></div>
+        <div class=&quot;flex justify-between text-slate-400&quot;><span>Propina Sugerida (10%):</span><span id=&quot;modalPropina&quot;
+                                                                                               class=&quot;text-slate-200 font-bold&quot;>$0.00</span></div>
         <div class=&quot;flex justify-between text-base font-black text-white pt-2 border-t border-slate-800&quot;>
           <span>Total Final a Liquidar:</span>
           <span id=&quot;modalTotal&quot; class=&quot;text-emerald-400 text-lg font-black&quot;>$0.00</span>
@@ -267,16 +284,86 @@
 
       <!-- BOTONES DE PROCESAR PAGO -->
       <div class=&quot;grid grid-cols-3 gap-1.5 pt-2&quot;>
-        <button onclick=&quot;window.ejecutarPagoFinal('mercadopago')&quot; class=&quot;py-2.5 px-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-[11px] font-bold shadow-lg shadow-emerald-600/30 flex flex-col items-center justify-center gap-1 cursor-pointer&quot;>
+        <button onclick=&quot;window.ejecutarPagoFinal('mercadopago')&quot;
+          class=&quot;py-2.5 px-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-[11px] font-bold shadow-lg shadow-emerald-600/30 flex flex-col items-center justify-center gap-1 cursor-pointer&quot;>
           <i class=&quot;fa-solid fa-mobile-screen&quot;></i> Mercado Pago
         </button>
-        <button onclick=&quot;window.ejecutarPagoFinal('santander')&quot; class=&quot;py-2.5 px-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-sky-400 text-[11px] font-bold border border-slate-700 flex flex-col items-center justify-center gap-1 cursor-pointer&quot;>
+        <button onclick=&quot;window.ejecutarPagoFinal('santander')&quot;
+          class=&quot;py-2.5 px-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-sky-400 text-[11px] font-bold border border-slate-700 flex flex-col items-center justify-center gap-1 cursor-pointer&quot;>
           <i class=&quot;fa-solid fa-credit-card&quot;></i> Santander
         </button>
-        <button onclick=&quot;window.ejecutarPagoFinal('efectivo')&quot; class=&quot;py-2.5 px-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-amber-300 text-[11px] font-bold border border-slate-700 flex flex-col items-center justify-center gap-1 cursor-pointer&quot;>
+        <button onclick=&quot;window.ejecutarPagoFinal('efectivo')&quot;
+          class=&quot;py-2.5 px-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-amber-300 text-[11px] font-bold border border-slate-700 flex flex-col items-center justify-center gap-1 cursor-pointer&quot;>
           <i class=&quot;fa-solid fa-money-bill-wave&quot;></i> Efectivo
         </button>
       </div>
+    </div>
+  </div>
+
+  <!-- MODAL DE FICHA TÉCNICA Y RECETA DE COCINA (CLIENTE QR) -->
+  <div id=&quot;modalRecetaClienteBackdrop&quot;
+    style=&quot;display: none !important; position: fixed !important; inset: 0 !important; z-index: 100000 !important; background: rgba(2, 6, 23, 0.85) !important; backdrop-filter: blur(12px) !important; align-items: center !important; justify-content: center !important; padding: 16px !important;&quot;
+    onclick=&quot;if(event.target === this) window.cerrarModalRecetaCliente();&quot;>
+    <div
+      style=&quot;background: #090d16 !important; border: 1px solid #334155 !important; border-radius: 20px !important; width: 100% !important; max-width: 540px !important; padding: 20px !important; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.8) !important; display: flex !important; flex-direction: column !important; gap: 12px !important; color: #f8fafc !important; max-height: 90vh !important; overflow-y: auto !important;&quot;>
+
+      <!-- HEADER -->
+      <div style=&quot;display: flex !important; justify-content: space-between !important; align-items: flex-start !important; border-bottom: 1px solid #1e293b !important; padding-bottom: 10px !important;&quot;>
+        <div style=&quot;display: flex; align-items: center; gap: 12px;&quot;>
+          <div id=&quot;cliRecetaIcono&quot; style=&quot;width: 44px; height: 44px; border-radius: 12px; background: #1e293b; display: flex; align-items: center; justify-content: center; font-size: 24px; border: 1px solid #334155;&quot;>🍳</div>
+          <div>
+            <span style=&quot;font-size: 10px; font-weight: 800; color: #38bdf8; text-transform: uppercase;&quot; id=&quot;cliRecetaCategoria&quot;>Especialidades</span>
+            <h2 style=&quot;font-size: 16px; font-weight: 900; color: #ffffff; margin: 0;&quot; id=&quot;cliRecetaTitulo&quot;>Platillo</h2>
+          </div>
+        </div>
+        <button onclick=&quot;window.cerrarModalRecetaCliente();&quot;
+          style=&quot;background: #1e293b !important; border: none !important; color: #94a3b8 !important; width: 30px !important; height: 30px !important; border-radius: 8px !important; font-weight: bold !important; cursor: pointer !important;&quot;>✕</button>
+      </div>
+
+      <!-- METRICS BAR -->
+      <div style=&quot;display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; background: #020617; padding: 10px; border-radius: 12px; border: 1px solid #1e293b; text-align: center;&quot;>
+        <div>
+          <span style=&quot;font-size: 10px; color: #94a3b8; display: block;&quot;>⏱️ Preparación</span>
+          <span id=&quot;cliRecetaTiempo&quot; style=&quot;font-size: 12px; font-weight: 800; color: #fbbf24;&quot;>15 min</span>
+        </div>
+        <div>
+          <span style=&quot;font-size: 10px; color: #94a3b8; display: block;&quot;>👤 Porción</span>
+          <span id=&quot;cliRecetaPorcion&quot; style=&quot;font-size: 12px; font-weight: 800; color: #38bdf8;&quot;>1 persona</span>
+        </div>
+        <div>
+          <span style=&quot;font-size: 10px; color: #94a3b8; display: block;&quot;>💲 Precio</span>
+          <span id=&quot;cliRecetaPrecio&quot; style=&quot;font-size: 12px; font-weight: 900; color: #34d399;&quot;>$0.00</span>
+        </div>
+      </div>
+
+      <!-- INGREDIENTES -->
+      <div style=&quot;background: #0f172a; border: 1px solid #1e293b; border-radius: 12px; padding: 12px;&quot;>
+        <span style=&quot;font-size: 11px; font-weight: 800; color: #38bdf8; display: block; margin-bottom: 6px;&quot;>
+          <i class=&quot;fa-solid fa-carrot&quot;></i> Ingredientes y Porciones:
+        </span>
+        <ul id=&quot;cliRecetaIngredientesList&quot; style=&quot;margin: 0; padding-left: 18px; font-size: 11px; color: #cbd5e1; display: flex; flex-direction: column; gap: 3px;&quot;></ul>
+      </div>
+
+      <!-- PREPARACIÓN -->
+      <div style=&quot;background: #0f172a; border: 1px solid #1e293b; border-radius: 12px; padding: 12px;&quot;>
+        <span style=&quot;font-size: 11px; font-weight: 800; color: #34d399; display: block; margin-bottom: 6px;&quot;>
+          <i class=&quot;fa-solid fa-fire&quot;></i> Preparación:
+        </span>
+        <ol id=&quot;cliRecetaPasosList&quot; style=&quot;margin: 0; padding-left: 18px; font-size: 11px; color: #e2e8f0; display: flex; flex-direction: column; gap: 4px;&quot;></ol>
+      </div>
+
+      <!-- ADICIONALES POR SEPARADO -->
+      <div id=&quot;boxCliRecetaAdicionales&quot; style=&quot;background: rgba(56,189,248,0.08); border: 1px solid rgba(56,189,248,0.25); border-radius: 12px; padding: 12px; display: none;&quot;>
+        <span style=&quot;font-size: 11px; font-weight: 800; color: #38bdf8; display: block; margin-bottom: 6px;&quot;>
+          <i class=&quot;fa-solid fa-circle-plus&quot;></i> Ingredientes Extras / Adicionales (Cobro por separado):
+        </span>
+        <div id=&quot;cliRecetaAdicionalesList&quot; style=&quot;display: flex; flex-wrap: wrap; gap: 6px;&quot;></div>
+      </div>
+
+      <button onclick=&quot;window.cerrarModalRecetaCliente();&quot;
+        style=&quot;padding: 10px !important; background: #1e293b !important; color: #f8fafc !important; border: 1px solid #334155 !important; border-radius: 10px !important; font-size: 12px !important; font-weight: 800 !important; cursor: pointer !important;&quot;>
+        Cerrar Detalle
+      </button>
     </div>
   </div>
 
@@ -284,28 +371,555 @@
 
 <script>
   window.vsMenuData = [
-    { id: 1, categoria_nombre: &quot;Barra de Café &amp; Infusiones&quot;, nombre: &quot;Café Capuchino Especial V&amp;S&quot;, descripcion: &quot;Espresso doble con leche cremada artesanal y toque de canela&quot;, precio_unitario: 68.00, estacion_preparacion: &quot;barra_cafe&quot;, icono: &quot;☕&quot; },
-    { id: 2, categoria_nombre: &quot;Barra de Café &amp; Infusiones&quot;, nombre: &quot;Espresso Italiano Robusto&quot;, descripcion: &quot;Grano seleccionado 100% arábica tostado de la casa&quot;, precio_unitario: 48.00, estacion_preparacion: &quot;barra_cafe&quot;, icono: &quot;☕&quot; },
-    { id: 3, categoria_nombre: &quot;Barra de Café &amp; Infusiones&quot;, nombre: &quot;Latte Machiatto Vainilla Bourbon&quot;, descripcion: &quot;Espresso con leche de almendra y jarabe natural de vainilla bourbon&quot;, precio_unitario: 75.00, estacion_preparacion: &quot;barra_cafe&quot;, icono: &quot;🥛&quot; },
-    { id: 4, categoria_nombre: &quot;Desayunos &amp; Brunch Gourmet&quot;, nombre: &quot;Chilaquiles Verdes con Pollo y Queso Gouda&quot;, descripcion: &quot;Totopos artesanos en salsa de tomatillo con pollo deshebrado y gouda&quot;, precio_unitario: 148.00, estacion_preparacion: &quot;cocina&quot;, icono: &quot;🥘&quot; },
-    { id: 5, categoria_nombre: &quot;Desayunos &amp; Brunch Gourmet&quot;, nombre: &quot;Omelette Supremo La Terraza&quot;, descripcion: &quot;3 huevos orgánicos rellenos de portobello, espinacas baby y queso asadero&quot;, precio_unitario: 155.00, estacion_preparacion: &quot;cocina&quot;, icono: &quot;🍳&quot; },
-    { id: 6, categoria_nombre: &quot;Desayunos &amp; Brunch Gourmet&quot;, nombre: &quot;Molletes de Masa Madre con Chorizo&quot;, descripcion: &quot;Pan artesano de masa madre con frijol negro, gouda y chorizo&quot;, precio_unitario: 125.00, estacion_preparacion: &quot;cocina&quot;, icono: &quot;🥖&quot; },
-    { id: 7, categoria_nombre: &quot;Especialidades Fuertes&quot;, nombre: &quot;Rib Eye Grill V&amp;S (350g)&quot;, descripcion: &quot;Corte de alta calidad a las brasas servido con papas gajo y espárragos&quot;, precio_unitario: 385.00, estacion_preparacion: &quot;cocina&quot;, icono: &quot;🥩&quot; },
-    { id: 8, categoria_nombre: &quot;Especialidades Fuertes&quot;, nombre: &quot;Pasta Fettuccine con Camarones al Trufado&quot;, descripcion: &quot;Pasta fresca hecha en casa con camarones u-15 y crema suave de trufa&quot;, precio_unitario: 265.00, estacion_preparacion: &quot;cocina&quot;, icono: &quot;🍝&quot; },
-    { id: 9, categoria_nombre: &quot;Repostería &amp; Postres de Autor&quot;, nombre: &quot;Pastel Supremo de Chocolate Valrhona&quot;, descripcion: &quot;Rebanada caliente de pastel de chocolate amargo con helado de vainilla&quot;, precio_unitario: 105.00, estacion_preparacion: &quot;reposteria&quot;, icono: &quot;🍰&quot; },
-    { id: 10, categoria_nombre: &quot;Bebidas &amp; Coctelería de Autor&quot;, nombre: &quot;Limonada Botánica de Hierbabuena &amp; Jengibre&quot;, descripcion: &quot;Agua mineral infucionada con jengibre fresco, limón eufrata y hierbabuena&quot;, precio_unitario: 60.00, estacion_preparacion: &quot;barra_cafe&quot;, icono: &quot;🍋&quot; }
+    // 1. BEBIDAS &amp; JUGOS
+    {
+      id: 501,
+      categoria_nombre: &quot;Bebidas &amp; Jugos&quot;,
+      nombre: &quot;Café Americano / de Olla&quot;,
+      descripcion: &quot;Café de altura recién tostado o receta tradicional con canela y piloncillo&quot;,
+      precio_unitario: 45.00,
+      estacion_preparacion: &quot;barra_cafe&quot;,
+      icono: &quot;☕&quot;,
+      tiempo: &quot;3–5 min&quot;,
+      porciones: &quot;1 taza (240ml)&quot;,
+      ingredientes: [&quot;15g café de grano arábica molido&quot;, &quot;240ml agua purificada a 90°C&quot;, &quot;Opción de olla: piloncillo y canela&quot;],
+      pasos: [&quot;Extraer en cafetera de goteo o hervir infusión de canela y piloncillo.&quot;, &quot;Servir bien caliente en taza precalentada.&quot;],
+      notas: &quot;Mantener café fresco en contenedor hermético.&quot;
+    },
+    {
+      id: 502,
+      categoria_nombre: &quot;Bebidas &amp; Jugos&quot;,
+      nombre: &quot;Café con Leche / Capuchino&quot;,
+      descripcion: &quot;Espresso doble con leche cremada artesanal al vapor&quot;,
+      precio_unitario: 68.00,
+      estacion_preparacion: &quot;barra_cafe&quot;,
+      icono: &quot;☕&quot;,
+      tiempo: &quot;4–6 min&quot;,
+      porciones: &quot;1 taza (240ml)&quot;,
+      ingredientes: [&quot;18g café espresso molido&quot;, &quot;60ml espresso doble&quot;, &quot;180ml leche cremada al vapor&quot;, &quot;Canela&quot;],
+      pasos: [&quot;Extraer espresso doble en taza.&quot;, &quot;Cremar leche con textura aterciopelada a 65°C.&quot;, &quot;Verter sobre espresso y decorar con canela.&quot;],
+      notas: &quot;Textura microespuma sedosa.&quot;
+    },
+    {
+      id: 503,
+      categoria_nombre: &quot;Bebidas &amp; Jugos&quot;,
+      nombre: &quot;Jugo de Naranja Natural&quot;,
+      descripcion: &quot;100% natural recién exprimido al momento&quot;,
+      precio_unitario: 55.00,
+      estacion_preparacion: &quot;barra_cafe&quot;,
+      icono: &quot;🍊&quot;,
+      tiempo: &quot;3–5 min&quot;,
+      porciones: &quot;1 vaso (300ml)&quot;,
+      ingredientes: [&quot;4–5 naranjas de jugo frescas (300ml)&quot;],
+      pasos: [&quot;Lavar naranjas, cortar y exprimir en extractor al momento.&quot;, &quot;Servir en vaso alto con hielo.&quot;],
+      notas: &quot;Exprimir al momento para evitar oxidación.&quot;
+    },
+    {
+      id: 504,
+      categoria_nombre: &quot;Bebidas &amp; Jugos&quot;,
+      nombre: &quot;Jugo Verde Energético&quot;,
+      descripcion: &quot;Nopal, apio, piña, perejil y jugo de naranja fresco&quot;,
+      precio_unitario: 60.00,
+      estacion_preparacion: &quot;barra_cafe&quot;,
+      icono: &quot;🥬&quot;,
+      tiempo: &quot;4–6 min&quot;,
+      porciones: &quot;1 vaso (350ml)&quot;,
+      ingredientes: [&quot;1/2 nopal tierno limpio&quot;, &quot;1 vara de apio fresco&quot;, &quot;60g piña en cubos&quot;, &quot;Ramita de perejil&quot;, &quot;180ml jugo de naranja natural&quot;],
+      pasos: [&quot;Licuar todos los ingredientes a alta velocidad durante 45s.&quot;, &quot;Servir de inmediato sin colar.&quot;],
+      notas: &quot;Bebida detox de alto valor nutricional.&quot;
+    },
+    {
+      id: 505,
+      categoria_nombre: &quot;Bebidas &amp; Jugos&quot;,
+      nombre: &quot;Chocolate Caliente Tradicional&quot;,
+      descripcion: &quot;Preparado con cacao criollo, canela y leche caliente&quot;,
+      precio_unitario: 55.00,
+      estacion_preparacion: &quot;barra_cafe&quot;,
+      icono: &quot;🍫&quot;,
+      tiempo: &quot;5–7 min&quot;,
+      porciones: &quot;1 taza (240ml)&quot;,
+      ingredientes: [&quot;40g tableta de chocolate de mesa con canela&quot;, &quot;240ml leche entera caliente&quot;],
+      pasos: [&quot;Disolver chocolate en leche caliente a fuego bajo.&quot;, &quot;Batir con molinillo tradicional hasta espuma espesa.&quot;],
+      notas: &quot;Tradición artesanal mexicana.&quot;
+    },
+    {
+      id: 506,
+      categoria_nombre: &quot;Bebidas &amp; Jugos&quot;,
+      nombre: &quot;Agua Fresca de Fruta del Día&quot;,
+      descripcion: &quot;Agua de fruta natural de temporada (500 ml)&quot;,
+      precio_unitario: 40.00,
+      estacion_preparacion: &quot;barra_cafe&quot;,
+      icono: &quot;🍉&quot;,
+      tiempo: &quot;2–3 min&quot;,
+      porciones: &quot;1 vaso (500ml)&quot;,
+      ingredientes: [&quot;500ml agua de fruta natural fresca (Jamaica, Horchata, Limón Chía)&quot;, &quot;Hielo al gusto&quot;],
+      pasos: [&quot;Servir en vaso con cubos de hielo.&quot;],
+      notas: &quot;Preparada diariamente.&quot;
+    },
+    {
+      id: 507,
+      categoria_nombre: &quot;Bebidas &amp; Jugos&quot;,
+      nombre: &quot;Refresco de Lata (355ml)&quot;,
+      descripcion: &quot;Variedad de refrescos fríos de lata&quot;,
+      precio_unitario: 38.00,
+      estacion_preparacion: &quot;barra_cafe&quot;,
+      icono: &quot;🥤&quot;,
+      tiempo: &quot;1–2 min&quot;,
+      porciones: &quot;1 lata (355ml)&quot;,
+      ingredientes: [&quot;1 lata 355ml surtida fría&quot;, &quot;Vaso con hielo y limón&quot;],
+      pasos: [&quot;Entregar lata cerrada con vaso de hielo.&quot;],
+      notas: &quot;Refrigerador a 3°C.&quot;
+    },
+
+    // 2. HUEVOS Y OMELETTES
+    {
+      id: 101,
+      categoria_nombre: &quot;Huevos &amp; Omelettes&quot;,
+      nombre: &quot;Huevos al Gusto&quot;,
+      descripcion: &quot;2 huevos (fritos, revueltos o estrellados) + frijoles + tortillas o pan&quot;,
+      precio_unitario: 90.00,
+      estacion_preparacion: &quot;cocina&quot;,
+      icono: &quot;🍳&quot;,
+      tiempo: &quot;8–10 min&quot;,
+      porciones: &quot;1 persona&quot;,
+      ingredientes: [&quot;2 huevos frescos&quot;, &quot;1 cda aceite o mantequilla&quot;, &quot;80g frijoles refritos&quot;, &quot;Tortillas o pan&quot;],
+      pasos: [&quot;Cocinar al término solicitado (revueltos, fritos, estrellados).&quot;, &quot;Acompañar con frijoles calientes y tortillas o pan.&quot;],
+      notas: &quot;Preguntar siempre término de yema.&quot;
+    },
+    {
+      id: 102,
+      categoria_nombre: &quot;Huevos &amp; Omelettes&quot;,
+      nombre: &quot;Huevos a la Mexicana&quot;,
+      descripcion: &quot;Huevos revueltos con jitomate, cebolla y chile + frijoles refritos&quot;,
+      precio_unitario: 95.00,
+      estacion_preparacion: &quot;cocina&quot;,
+      icono: &quot;🍳&quot;,
+      tiempo: &quot;8–10 min&quot;,
+      porciones: &quot;1 persona&quot;,
+      ingredientes: [&quot;2 huevos&quot;, &quot;40g jitomate picado&quot;, &quot;25g cebolla picada&quot;, &quot;10–15g chile serrano picado&quot;, &quot;10g cilantro&quot;, &quot;80g frijoles + tortillas&quot;],
+      pasos: [&quot;Sofríe cebolla, jitomate y chile 2–3 min.&quot;, &quot;Agrega los huevos batidos con sal y revuelve 3–4 min.&quot;, &quot;Ajusta sal y agrega cilantro al final.&quot;],
+      notas: &quot;Ajustar picante al gusto.&quot;
+    },
+    {
+      id: 103,
+      categoria_nombre: &quot;Huevos &amp; Omelettes&quot;,
+      nombre: &quot;Huevos Rancheros&quot;,
+      descripcion: &quot;Huevos estrellados sobre tortilla con salsa roja o verde + frijoles&quot;,
+      precio_unitario: 105.00,
+      estacion_preparacion: &quot;cocina&quot;,
+      icono: &quot;🍳&quot;,
+      tiempo: &quot;10–12 min&quot;,
+      porciones: &quot;1 persona&quot;,
+      ingredientes: [&quot;2 huevos&quot;, &quot;2 tortillas de maíz pasadas por aceite&quot;, &quot;120ml salsa roja o verde caliente&quot;, &quot;80g frijoles refritos&quot;, &quot;Queso y crema&quot;],
+      pasos: [&quot;Calienta tortillas y colócalas en plato.&quot;, &quot;Fríe huevos estrellados tiernos.&quot;, &quot;Coloca sobre tortillas, baña con salsa caliente y corona con queso, crema y frijoles.&quot;],
+      notas: &quot;Salsa hirviendo al servir.&quot;
+    },
+    {
+      id: 104,
+      categoria_nombre: &quot;Huevos &amp; Omelettes&quot;,
+      nombre: &quot;Huevos con Jamón / Tocino / Chorizo&quot;,
+      descripcion: &quot;Huevos al gusto + proteína a elegir + frijoles de la olla&quot;,
+      precio_unitario: 115.00,
+      estacion_preparacion: &quot;cocina&quot;,
+      icono: &quot;🥓&quot;,
+      tiempo: &quot;8–10 min&quot;,
+      porciones: &quot;1 persona&quot;,
+      ingredientes: [&quot;2 huevos&quot;, &quot;40–50g jamón, tocino o chorizo&quot;, &quot;80g frijoles + tortillas&quot;],
+      pasos: [&quot;Dorar proteína elegida, verter huevos batidos y cocinar al punto.&quot;, &quot;Servir con frijoles y tortillas.&quot;],
+      notas: &quot;Escurrir exceso de grasa.&quot;
+    },
+    {
+      id: 105,
+      categoria_nombre: &quot;Huevos &amp; Omelettes&quot;,
+      nombre: &quot;Omelette de Jamón y Queso&quot;,
+      descripcion: &quot;Omelette relleno con queso gouda y jamón + ensalada o frijoles&quot;,
+      precio_unitario: 125.00,
+      estacion_preparacion: &quot;cocina&quot;,
+      icono: &quot;🧀&quot;,
+      tiempo: &quot;7–9 min&quot;,
+      porciones: &quot;1 persona&quot;,
+      ingredientes: [&quot;3 huevos&quot;, &quot;40g jamón picado&quot;, &quot;40g queso manchego o Oaxaca&quot;, &quot;1 cda mantequilla&quot;],
+      pasos: [&quot;Batir huevos con sal y pimienta.&quot;, &quot;Cocinar en sartén con mantequilla a fuego medio.&quot;, &quot;Agregar jamón y queso, doblar y terminar 1–2 min.&quot;],
+      notas: &quot;Consistencia cremosa interior.&quot;
+    },
+    {
+      id: 106,
+      categoria_nombre: &quot;Huevos &amp; Omelettes&quot;,
+      nombre: &quot;Omelette Champiñones y Espinaca&quot;,
+      descripcion: &quot;Opción ligera con espinacas baby, champiñón fresco y queso&quot;,
+      precio_unitario: 130.00,
+      estacion_preparacion: &quot;cocina&quot;,
+      icono: &quot;🍄&quot;,
+      tiempo: &quot;8–10 min&quot;,
+      porciones: &quot;1 persona&quot;,
+      ingredientes: [&quot;3 huevos orgánicos&quot;, &quot;50g champiñones frescos&quot;, &quot;30g espinaca baby&quot;, &quot;30g queso panela&quot;],
+      pasos: [&quot;Saltear champiñones y espinaca 2 min.&quot;, &quot;Verter huevos batidos, rellenar con salteado y queso, doblar y servir.&quot;],
+      notas: &quot;Opción vegetariana.&quot;
+    },
+    {
+      id: 107,
+      categoria_nombre: &quot;Huevos &amp; Omelettes&quot;,
+      nombre: &quot;Machaca con Huevo Norteña&quot;,
+      descripcion: &quot;Clásico norteño de carne seca con huevo + frijoles y tortillas&quot;,
+      precio_unitario: 135.00,
+      estacion_preparacion: &quot;cocina&quot;,
+      icono: &quot;🥩&quot;,
+      tiempo: &quot;10–12 min&quot;,
+      porciones: &quot;1 persona&quot;,
+      ingredientes: [&quot;50g machaca de res sonorense&quot;, &quot;2 huevos&quot;, &quot;Jitomate y cebolla&quot;, &quot;80g frijoles + tortillas de harina&quot;],
+      pasos: [&quot;Sofríe verdura, añade machaca para hidratar.&quot;, &quot;Incorpora huevos batidos y revuelve bien.&quot;, &quot;Servir con frijoles y tortillas de harina.&quot;],
+      notas: &quot;Carne seca norteña artesanal.&quot;
+    },
+
+    // 3. ESPECIALIDADES MEXICANAS
+    {
+      id: 201,
+      categoria_nombre: &quot;Especialidades Mexicanas&quot;,
+      nombre: &quot;Chilaquiles Verdes o Rojos&quot;,
+      descripcion: &quot;Con crema, queso y cebolla. Acompañados con huevo o pollo&quot;,
+      precio_unitario: 145.00,
+      estacion_preparacion: &quot;cocina&quot;,
+      icono: &quot;🥘&quot;,
+      tiempo: &quot;15–18 min&quot;,
+      porciones: &quot;1 persona&quot;,
+      ingredientes: [&quot;80–90g totopos artesanos de maíz&quot;, &quot;180ml salsa verde o roja casera&quot;, &quot;50g pollo deshebrado o 1 huevo&quot;, &quot;30g crema mexicana&quot;, &quot;25g queso fresco desmoronado&quot;, &quot;15g cebolla en pluma&quot;, &quot;Cilantro fresco&quot;],
+      pasos: [&quot;Calentar salsa en sartén hondo (3–4 min).&quot;, &quot;Agregar totopos y mezclar solo hasta hidratar (1–2 min).&quot;, &quot;Servir en plato, coronar con pollo o huevo, crema, queso, cebolla y cilantro.&quot;],
+      adicionales: [&quot;Bistec de Res Extra (100g) +$45.00&quot;, &quot;Porción Extra de Pollo (50g) +$35.00&quot;, &quot;Huevo Extra al Gusto +$20.00&quot;, &quot;Aguacate en Rebanadas +$25.00&quot;, &quot;Queso Gratinado Extra +$25.00&quot;],
+      notas: &quot;Totopos crujientes previamente fritos en hermético.&quot;
+    },
+    {
+      id: 202,
+      categoria_nombre: &quot;Especialidades Mexicanas&quot;,
+      nombre: &quot;Chilaquiles con Bistec o Chorizo&quot;,
+      descripcion: &quot;Versión fuerte con bistec a la plancha o chorizo artesanal&quot;,
+      precio_unitario: 165.00,
+      estacion_preparacion: &quot;cocina&quot;,
+      icono: &quot;🥩&quot;,
+      tiempo: &quot;15–18 min&quot;,
+      porciones: &quot;1 persona&quot;,
+      ingredientes: [&quot;90g totopos artesanos de maíz&quot;, &quot;180ml salsa verde o roja&quot;, &quot;120g bistec plancha o 60g chorizo&quot;, &quot;30g crema&quot;, &quot;25g queso fresco&quot;, &quot;15g cebolla&quot;],
+      pasos: [&quot;Asar bistec al término.&quot;, &quot;Preparar chilaquiles en salsa hirviendo 1–2 min.&quot;, &quot;Montar chilaquiles con carne en tiras.&quot;],
+      adicionales: [&quot;Huevo Estrellado Extra +$20.00&quot;, &quot;Aguacate en Rebanadas +$25.00&quot;, &quot;Queso Gratinado Extra +$25.00&quot;],
+      notas: &quot;Platillo insignia fuerte.&quot;
+    },
+    {
+      id: 203,
+      categoria_nombre: &quot;Especialidades Mexicanas&quot;,
+      nombre: &quot;Enchiladas de Desayuno&quot;,
+      descripcion: &quot;Rojas o verdes, rellenas de pollo o queso + huevo estrellado encima&quot;,
+      precio_unitario: 145.00,
+      estacion_preparacion: &quot;cocina&quot;,
+      icono: &quot;🌶️&quot;,
+      tiempo: &quot;12–15 min&quot;,
+      porciones: &quot;1 persona (3 piezas)&quot;,
+      ingredientes: [&quot;3 tortillas maíz pasadas por aceite&quot;, &quot;100g pollo o queso&quot;, &quot;180ml salsa verde/roja caliente&quot;, &quot;1 huevo estrellado&quot;, &quot;30g crema&quot;, &quot;25g queso fresco&quot;],
+      pasos: [&quot;Rellenar tortillas con pollo/queso y enrollar.&quot;, &quot;Bañar con salsa caliente.&quot;, &quot;Coronar con huevo estrellado, crema y queso fresco.&quot;],
+      adicionales: [&quot;Porción Extra de Pollo +$35.00&quot;, &quot;Aguacate en Rebanadas +$25.00&quot;],
+      notas: &quot;Servir muy caliente.&quot;
+    },
+    {
+      id: 204,
+      categoria_nombre: &quot;Especialidades Mexicanas&quot;,
+      nombre: &quot;Molletes Tradicionales&quot;,
+      descripcion: &quot;Bolillo con frijoles refritos, queso gratinado y pico de gallo&quot;,
+      precio_unitario: 105.00,
+      estacion_preparacion: &quot;cocina&quot;,
+      icono: &quot;🥖&quot;,
+      tiempo: &quot;8–10 min&quot;,
+      porciones: &quot;1 persona (2 mitades)&quot;,
+      ingredientes: [&quot;1 bolillo artesano partido a la mitad&quot;, &quot;80g frijoles refritos&quot;, &quot;50–60g queso manchego o Oaxaca rallado&quot;, &quot;40g pico de gallo fresco&quot;],
+      pasos: [&quot;Abrir bolillo y tostar base.&quot;, &quot;Untar frijoles, cubrir con queso rallado.&quot;, &quot;Gratinar 3–4 min en horno.&quot;, &quot;Servir con pico de gallo.&quot;],
+      adicionales: [&quot;Porción de Chorizo Artesanal (40g) +$30.00&quot;, &quot;Porción de Tocino Dorado (30g) +$30.00&quot;, &quot;Huevo Estrellado encima +$20.00&quot;, &quot;Aguacate en Rebanadas +$25.00&quot;],
+      notas: &quot;Pan crujiente por fuera y suave por dentro.&quot;
+    },
+    {
+      id: 205,
+      categoria_nombre: &quot;Especialidades Mexicanas&quot;,
+      nombre: &quot;Tacos de Huevo al Gusto (3 pzas)&quot;,
+      descripcion: &quot;3 tacos de huevo con salsa a elegir y frijoles&quot;,
+      precio_unitario: 85.00,
+      estacion_preparacion: &quot;cocina&quot;,
+      icono: &quot;🌮&quot;,
+      tiempo: &quot;8–10 min&quot;,
+      porciones: &quot;1 persona (3 tacos)&quot;,
+      ingredientes: [&quot;3 tortillas calientes&quot;, &quot;2 huevos revueltos al gusto&quot;, &quot;Frijoles y salsas&quot;],
+      pasos: [&quot;Preparar huevo revuelto.&quot;, &quot;Montar en 3 tortillas con frijoles y salsa.&quot;],
+      notas: &quot;Rápido y económico.&quot;
+    },
+    {
+      id: 206,
+      categoria_nombre: &quot;Especialidades Mexicanas&quot;,
+      nombre: &quot;Tacos de Chorizo con Huevo (3 pzas)&quot;,
+      descripcion: &quot;Guisado tradicional en tortillas recién hechas&quot;,
+      precio_unitario: 95.00,
+      estacion_preparacion: &quot;cocina&quot;,
+      icono: &quot;🌮&quot;,
+      tiempo: &quot;8–10 min&quot;,
+      porciones: &quot;1 persona (3 tacos)&quot;,
+      ingredientes: [&quot;3 tortillas&quot;, &quot;50g chorizo artesanal&quot;, &quot;2 huevos&quot;, &quot;Cebolla y cilantro&quot;],
+      pasos: [&quot;Dorar chorizo 3 min, incorporar huevos y revolver.&quot;, &quot;Repartir en 3 tacos con cebolla y cilantro.&quot;],
+      notas: &quot;Sabor casero.&quot;
+    },
+
+    // 4. DULCES / AMERICANOS
+    {
+      id: 301,
+      categoria_nombre: &quot;Dulces &amp; Americanos&quot;,
+      nombre: &quot;Hotcakes Clásicos (3 pzas)&quot;,
+      descripcion: &quot;Con mantequilla de rancho y miel de maple o cajeta&quot;,
+      precio_unitario: 110.00,
+      estacion_preparacion: &quot;cocina&quot;,
+      icono: &quot;🥞&quot;,
+      tiempo: &quot;12–15 min&quot;,
+      porciones: &quot;1 persona (3 piezas)&quot;,
+      ingredientes: [&quot;120g harina hotcakes&quot;, &quot;1 huevo&quot;, &quot;150ml leche&quot;, &quot;15g azúcar&quot;, &quot;10g mantequilla derretida&quot;, &quot;Pizca sal&quot;, &quot;Miel y mantequilla&quot;],
+      pasos: [&quot;Mezclar ingredientes hasta masa uniforme.&quot;, &quot;Cocinar en sartén antiadherente a fuego medio (2 min por lado).&quot;, &quot;Servir torre de 3 con mantequilla y miel o cajeta.&quot;],
+      notas: &quot;Fuego medio parejo.&quot;
+    },
+    {
+      id: 302,
+      categoria_nombre: &quot;Dulces &amp; Americanos&quot;,
+      nombre: &quot;Hotcakes con Fruta Fresca&quot;,
+      descripcion: &quot;Acompañados de plátano, fresas de temporada o mixtas&quot;,
+      precio_unitario: 130.00,
+      estacion_preparacion: &quot;cocina&quot;,
+      icono: &quot;🍓&quot;,
+      tiempo: &quot;12–15 min&quot;,
+      porciones: &quot;1 persona (3 piezas)&quot;,
+      ingredientes: [&quot;3 hotcakes&quot;, &quot;40g plátano&quot;, &quot;40g fresas&quot;, &quot;Miel maple&quot;],
+      pasos: [&quot;Cocinar 3 hotcakes.&quot;, &quot;Montar intercalando fruta fresca y bañar con miel.&quot;],
+      notas: &quot;Favorito familiar.&quot;
+    },
+    {
+      id: 303,
+      categoria_nombre: &quot;Dulces &amp; Americanos&quot;,
+      nombre: &quot;Waffles Belgas con Frutas&quot;,
+      descripcion: &quot;Waffles dorados con fruta fresca y miel de abeja&quot;,
+      precio_unitario: 135.00,
+      estacion_preparacion: &quot;cocina&quot;,
+      icono: &quot;🧇&quot;,
+      tiempo: &quot;10–12 min&quot;,
+      porciones: &quot;1 persona&quot;,
+      ingredientes: [&quot;1 waffle belga dorado&quot;, &quot;Fresas, plátano y moras&quot;, &quot;Miel de abeja&quot;, &quot;Azúcar glass&quot;],
+      pasos: [&quot;Hornear en waflera 4 min.&quot;, &quot;Decorar con fruta fresca, azúcar glass y miel.&quot;],
+      notas: &quot;Exterior crujiente.&quot;
+    },
+    {
+      id: 304,
+      categoria_nombre: &quot;Dulces &amp; Americanos&quot;,
+      nombre: &quot;Orden de Fruta de Temporada&quot;,
+      descripcion: &quot;Papaya, melón y piña con yogurt natural o granola&quot;,
+      precio_unitario: 95.00,
+      estacion_preparacion: &quot;cocina&quot;,
+      icono: &quot;🍍&quot;,
+      tiempo: &quot;4–6 min&quot;,
+      porciones: &quot;1 persona&quot;,
+      ingredientes: [&quot;80g papaya&quot;, &quot;80g melón&quot;, &quot;80g piña&quot;, &quot;Yogurt o granola&quot;],
+      pasos: [&quot;Cortar fruta en cubos uniformes.&quot;, &quot;Servir con ramequín de yogurt o granola.&quot;],
+      notas: &quot;Fruta fresca del día.&quot;
+    },
+    {
+      id: 305,
+      categoria_nombre: &quot;Dulces &amp; Americanos&quot;,
+      nombre: &quot;Yogurt con Granola y Fruta&quot;,
+      descripcion: &quot;Bowl fresco con yogurt natural, granola artesanal y fruta&quot;,
+      precio_unitario: 90.00,
+      estacion_preparacion: &quot;cocina&quot;,
+      icono: &quot;🥣&quot;,
+      tiempo: &quot;4–6 min&quot;,
+      porciones: &quot;1 persona&quot;,
+      ingredientes: [&quot;150g yogurt griego&quot;, &quot;40g granola artesanal&quot;, &quot;Fresas, plátano y miel&quot;],
+      pasos: [&quot;Cama de yogurt en bowl.&quot;, &quot;Decorar con granola y frutas, bañar con miel.&quot;],
+      notas: &quot;Opción ligera.&quot;
+    },
+
+    // 5. COMBOS RECOMENDADOS
+    {
+      id: 401,
+      categoria_nombre: &quot;Combos Recomendados&quot;,
+      nombre: &quot;Combo Clásico Desayuno&quot;,
+      descripcion: &quot;Huevos al gusto + frijoles + jugo de naranja + café&quot;,
+      precio_unitario: 145.00,
+      estacion_preparacion: &quot;cocina&quot;,
+      icono: &quot;⭐&quot;,
+      tiempo: &quot;12–15 min&quot;,
+      porciones: &quot;1 persona&quot;,
+      ingredientes: [&quot;Huevos al gusto con frijoles y tortillas&quot;, &quot;Jugo naranja (240ml)&quot;, &quot;Café americano o de olla (240ml)&quot;],
+      pasos: [&quot;Servir café y jugo de inmediato.&quot;, &quot;Cocinar huevos y servir con guarnición.&quot;],
+      notas: &quot;Bebidas al inicio.&quot;
+    },
+    {
+      id: 402,
+      categoria_nombre: &quot;Combos Recomendados&quot;,
+      nombre: &quot;Combo Chilaquiles V&amp;S&quot;,
+      descripcion: &quot;Chilaquiles con huevo/pollo + jugo natural + café&quot;,
+      precio_unitario: 175.00,
+      estacion_preparacion: &quot;cocina&quot;,
+      icono: &quot;⭐&quot;,
+      tiempo: &quot;15–18 min&quot;,
+      porciones: &quot;1 persona&quot;,
+      ingredientes: [&quot;Chilaquiles verdes/rojos con huevo o pollo&quot;, &quot;Jugo naranja&quot;, &quot;Café americano o de olla&quot;],
+      pasos: [&quot;Entregar café y jugo.&quot;, &quot;Preparar chilaquiles y servir calientes.&quot;],
+      notas: &quot;Combo estrella matutino.&quot;
+    },
+    {
+      id: 403,
+      categoria_nombre: &quot;Combos Recomendados&quot;,
+      nombre: &quot;Combo Dulce Mañana&quot;,
+      descripcion: &quot;Hotcakes + jugo de naranja natural + café americano&quot;,
+      precio_unitario: 155.00,
+      estacion_preparacion: &quot;cocina&quot;,
+      icono: &quot;⭐&quot;,
+      tiempo: &quot;12–15 min&quot;,
+      porciones: &quot;1 persona&quot;,
+      ingredientes: [&quot;3 Hotcakes clásicos con mantequilla y miel&quot;, &quot;Jugo naranja&quot;, &quot;Café americano&quot;],
+      pasos: [&quot;Servir café y jugo.&quot;, &quot;Cocinar hotcakes y servir con miel.&quot;],
+      notas: &quot;Desayuno dulce.&quot;
+    },
+
+    // 6. MENÚ INFANTIL (KIDS)
+    {
+      id: 601,
+      categoria_nombre: &quot;Menú Infantil (Kids)&quot;,
+      nombre: &quot;Hotcakes Infantiles (2 piezas)&quot;,
+      descripcion: &quot;2 hotcakes suaves y esponjosos con mantequilla y miel o cajeta&quot;,
+      precio_unitario: 75.00,
+      estacion_preparacion: &quot;cocina&quot;,
+      icono: &quot;🥞&quot;,
+      tiempo: &quot;10–12 min&quot;,
+      porciones: &quot;1 niño (2 piezas)&quot;,
+      ingredientes: [&quot;80g harina para hotcakes&quot;, &quot;1 huevo chico&quot;, &quot;100ml leche&quot;, &quot;10g azúcar&quot;, &quot;8g mantequilla derretida&quot;, &quot;Pizca de sal&quot;, &quot;Miel o cajeta&quot;],
+      pasos: [&quot;Mezclar ingredientes hasta masa suave.&quot;, &quot;Cocinar a fuego medio (1.5–2 min por lado).&quot;, &quot;Servir con mantequilla y miel o cajeta.&quot;],
+      adicionales: [&quot;Fresas o Plátano Rebanado +$20.00&quot;, &quot;Chispas de Chocolate +$15.00&quot;],
+      notas: &quot;Porción infantil suave y esponjosa.&quot;
+    },
+    {
+      id: 602,
+      categoria_nombre: &quot;Menú Infantil (Kids)&quot;,
+      nombre: &quot;Huevito Feliz con Jamón&quot;,
+      descripcion: &quot;Huevo al gusto decorado con jamón en tiras, frijolitos y pan o tortilla&quot;,
+      precio_unitario: 65.00,
+      estacion_preparacion: &quot;cocina&quot;,
+      icono: &quot;🍳&quot;,
+      tiempo: &quot;7–8 min&quot;,
+      porciones: &quot;1 niño&quot;,
+      ingredientes: [&quot;1 huevo fresco&quot;, &quot;25g jamón en tiras&quot;, &quot;50g frijoles refritos suaves&quot;, &quot;1 tortilla de maíz o 1/2 bolillo&quot;, &quot;1 cdita mantequilla&quot;],
+      pasos: [&quot;Calentar jamón en sartén.&quot;, &quot;Cocinar huevo en forma de carita feliz.&quot;, &quot;Servir con frijoles y tortilla o pan.&quot;],
+      notas: &quot;Montaje divertido para niños.&quot;
+    },
+    {
+      id: 603,
+      categoria_nombre: &quot;Menú Infantil (Kids)&quot;,
+      nombre: &quot;Huevos con Jamón (Kids)&quot;,
+      descripcion: &quot;1 huevo revuelto suave con jamón picado y frijolitos&quot;,
+      precio_unitario: 65.00,
+      estacion_preparacion: &quot;cocina&quot;,
+      icono: &quot;🥓&quot;,
+      tiempo: &quot;7–8 min&quot;,
+      porciones: &quot;1 niño&quot;,
+      ingredientes: [&quot;1 huevo&quot;, &quot;30g jamón picado&quot;, &quot;50g frijoles refritos&quot;, &quot;1 tortilla o 1/2 pan&quot;, &quot;1 cdita mantequilla&quot;],
+      pasos: [&quot;Sofríe jamón ligeramente.&quot;, &quot;Agrega huevo y cocina revuelto suave.&quot;, &quot;Acompaña con frijoles y tortilla o pan.&quot;],
+      notas: &quot;Cocción suave.&quot;
+    },
+    {
+      id: 604,
+      categoria_nombre: &quot;Menú Infantil (Kids)&quot;,
+      nombre: &quot;Mollete Pequeño&quot;,
+      descripcion: &quot;1/2 bolillo con frijolitos, queso gratinado y pico de gallo suave&quot;,
+      precio_unitario: 55.00,
+      estacion_preparacion: &quot;cocina&quot;,
+      icono: &quot;🥖&quot;,
+      tiempo: &quot;7–9 min&quot;,
+      porciones: &quot;1 niño (1 mitad)&quot;,
+      ingredientes: [&quot;1/2 bolillo artesano&quot;, &quot;50g frijoles refritos&quot;, &quot;30g queso manchego o Oaxaca rallado&quot;, &quot;25g pico de gallo suave (sin picante)&quot;],
+      pasos: [&quot;Abre medio bolillo y calienta.&quot;, &quot;Unta frijoles, agrega queso y gratina 3–4 min.&quot;, &quot;Sirve con pico de gallo suave.&quot;],
+      adicionales: [&quot;Porción de Chorizo Infantil (20g) +$15.00&quot;, &quot;Porción de Tocino +$15.00&quot;],
+      notas: &quot;Pico de gallo 100% sin chile para niños.&quot;
+    },
+    {
+      id: 605,
+      categoria_nombre: &quot;Menú Infantil (Kids)&quot;,
+      nombre: &quot;Quesadilla de Queso con Frijolitos&quot;,
+      descripcion: &quot;Quesadilla doradita con queso manchego o Oaxaca fundido&quot;,
+      precio_unitario: 45.00,
+      estacion_preparacion: &quot;cocina&quot;,
+      icono: &quot;🧀&quot;,
+      tiempo: &quot;5–6 min&quot;,
+      porciones: &quot;1 niño&quot;,
+      ingredientes: [&quot;1 tortilla de harina o maíz&quot;, &quot;40g queso Oaxaca o manchego&quot;, &quot;40g frijoles refritos para acompañar&quot;],
+      pasos: [&quot;Coloca queso en tortilla y dobla.&quot;, &quot;Calienta en comal hasta fundir.&quot;, &quot;Sirve con frijoles.&quot;],
+      adicionales: [&quot;Jamón en Cubitos +$15.00&quot;],
+      notas: &quot;Queso bien fundido.&quot;
+    },
+    {
+      id: 606,
+      categoria_nombre: &quot;Menú Infantil (Kids)&quot;,
+      nombre: &quot;Fruta Fresca Infantil&quot;,
+      descripcion: &quot;Tazón con fruta de temporada picada en trozos pequeños&quot;,
+      precio_unitario: 50.00,
+      estacion_preparacion: &quot;cocina&quot;,
+      icono: &quot;🍉&quot;,
+      tiempo: &quot;3–4 min&quot;,
+      porciones: &quot;1 niño&quot;,
+      ingredientes: [&quot;120–140g fruta fresca de temporada en trozos regulares pequeños&quot;],
+      pasos: [&quot;Pica la fruta en trozos pequeños y limpios.&quot;, &quot;Sirve en tazón chico.&quot;],
+      notas: &quot;Corte adaptado para niños.&quot;
+    },
+    {
+      id: 607,
+      categoria_nombre: &quot;Menú Infantil (Kids)&quot;,
+      nombre: &quot;Yogurt con Granola y Fruta (Kids)&quot;,
+      descripcion: &quot;Tazón de yogurt natural o fresa con granola suave y fruta fresca&quot;,
+      precio_unitario: 50.00,
+      estacion_preparacion: &quot;cocina&quot;,
+      icono: &quot;🥣&quot;,
+      tiempo: &quot;2–3 min&quot;,
+      porciones: &quot;1 niño&quot;,
+      ingredientes: [&quot;120g yogurt natural o frutas&quot;, &quot;25g granola suave&quot;, &quot;40g plátano o fresas en rebanadas&quot;],
+      pasos: [&quot;Coloca yogurt en tazón.&quot;, &quot;Agrega granola y fruta fresca encima.&quot;],
+      notas: &quot;Desayuno nutritivo.&quot;
+    },
+    {
+      id: 608,
+      categoria_nombre: &quot;Menú Infantil (Kids)&quot;,
+      nombre: &quot;Mini Chilaquiles Suaves (Kids)&quot;,
+      descripcion: &quot;Totopitos con salsa suave de tomate sin picante, crema y queso fresco&quot;,
+      precio_unitario: 85.00,
+      estacion_preparacion: &quot;cocina&quot;,
+      icono: &quot;🥘&quot;,
+      tiempo: &quot;10–12 min&quot;,
+      porciones: &quot;1 niño&quot;,
+      ingredientes: [&quot;50–55g totopos&quot;, &quot;100ml salsa roja suave de tomate (sin picante)&quot;, &quot;20g crema&quot;, &quot;20g queso fresco&quot;, &quot;10g cebolla suave&quot;],
+      pasos: [&quot;Calienta salsa suave.&quot;, &quot;Agrega totopos y mezcla 1 min hasta hidratar.&quot;, &quot;Sirve con crema y queso fresco.&quot;],
+      adicionales: [&quot;Pollo Deshebrado (30g) +$20.00&quot;, &quot;Huevo Revuelto +$15.00&quot;],
+      notas: &quot;Salsa 100% sin chile para niños.&quot;
+    },
+    {
+      id: 609,
+      categoria_nombre: &quot;Menú Infantil (Kids)&quot;,
+      nombre: &quot;Chocolate con Pan Tostado&quot;,
+      descripcion: &quot;Chocolate caliente espumoso con pan tostado con mantequilla&quot;,
+      precio_unitario: 45.00,
+      estacion_preparacion: &quot;barra_cafe&quot;,
+      icono: &quot;🍫&quot;,
+      tiempo: &quot;5–6 min&quot;,
+      porciones: &quot;1 niño&quot;,
+      ingredientes: [&quot;200ml leche tibia&quot;, &quot;20–25g chocolate de mesa&quot;, &quot;1/2 bolillo o 1 rebanada de pan tostado&quot;, &quot;5g mantequilla&quot;],
+      pasos: [&quot;Calienta leche con chocolate hasta disolver.&quot;, &quot;Tuesta pan y unta mantequilla.&quot;, &quot;Sirve juntos a temperatura tibia.&quot;],
+      notas: &quot;Temperatura tibia agradable.&quot;
+    }
   ];
 
   window.vsCategoriasData = [
-    { id: 1, nombre: &quot;Barra de Café &amp; Infusiones&quot;, icono: &quot;☕&quot; },
-    { id: 2, nombre: &quot;Desayunos &amp; Brunch Gourmet&quot;, icono: &quot;🍳&quot; },
-    { id: 3, nombre: &quot;Entradas &amp; Tapas de la Terraza&quot;, icono: &quot;🥗&quot; },
-    { id: 4, nombre: &quot;Especialidades Fuertes&quot;, icono: &quot;🥩&quot; },
-    { id: 5, nombre: &quot;Repostería &amp; Postres de Autor&quot;, icono: &quot;🍰&quot; },
-    { id: 6, nombre: &quot;Bebidas &amp; Coctelería de Autor&quot;, icono: &quot;🍹&quot; }
+    { id: 1, nombre: &quot;Bebidas &amp; Jugos&quot;, icono: &quot;☕&quot; },
+    { id: 2, nombre: &quot;Huevos &amp; Omelettes&quot;, icono: &quot;🍳&quot; },
+    { id: 3, nombre: &quot;Especialidades Mexicanas&quot;, icono: &quot;🥘&quot; },
+    { id: 4, nombre: &quot;Dulces &amp; Americanos&quot;, icono: &quot;🥞&quot; },
+    { id: 5, nombre: &quot;Combos Recomendados&quot;, icono: &quot;⭐&quot; },
+    { id: 6, nombre: &quot;Menú Infantil (Kids)&quot;, icono: &quot;👶&quot; }
   ];
 
-  window.categoriaActual = &quot;Todos&quot;;
+  window.categoriaActual = &quot;Bebidas &amp; Jugos&quot;;
   window.simMesaId = 2;
   window.simSillaNum = 1;
   window.sillasAcompanantesSeleccionadas = [3, 4]; // Por defecto, Papá (Silla 1) incluye a los niños (3 y 4)
@@ -314,17 +928,17 @@
     try {
       var raw = localStorage.getItem('palapa_cuentas_v1');
       if (raw) return JSON.parse(raw);
-    } catch(e) {}
+    } catch (e) { }
     return {};
   }
 
   function saveStorageCuentas(cuentas) {
     try {
       localStorage.setItem('palapa_cuentas_v1', JSON.stringify(cuentas));
-    } catch(e) {}
+    } catch (e) { }
   }
 
-  window.cambiarSimulacionQr = function(keyStr) {
+  window.cambiarSimulacionQr = function (keyStr) {
     var parts = keyStr.split('-');
     window.simMesaId = parseInt(parts[0]);
     window.simSillaNum = parseInt(parts[1]);
@@ -339,7 +953,7 @@
     window.sincronizarCuentaDesdeStorage();
   };
 
-  window.sincronizarCuentaDesdeStorage = function() {
+  window.sincronizarCuentaDesdeStorage = function () {
     var cuentas = getStorageCuentas();
     var key = window.simMesaId + '-' + window.simSillaNum;
     var cuentaActual = cuentas[key];
@@ -379,12 +993,12 @@
         const row = document.createElement('div');
         row.className = 'flex justify-between items-center bg-slate-900/80 p-2.5 rounded-xl border border-slate-800 text-xs';
         row.innerHTML = `
-          <div>
-            <span class=&quot;font-bold text-white&quot;>${item.nombre} x${item.cantidad}</span>
-            <span class=&quot;block text-[10px] text-slate-400&quot;>${item.notas ? item.notas + ' • ' : ''}$${Number(item.precio).toFixed(2)} c/u</span>
-          </div>
-          <span class=&quot;font-black text-emerald-400&quot;>$${itemSubtotal.toFixed(2)}</span>
-        `;
+            <div>
+              <span class=&quot;font-bold text-white&quot;>${item.nombre} x${item.cantidad}</span>
+              <span class=&quot;block text-[10px] text-slate-400&quot;>${item.notas ? item.notas + ' • ' : ''}$${Number(item.precio).toFixed(2)} c/u</span>
+            </div>
+            <span class=&quot;font-black text-emerald-400&quot;>$${itemSubtotal.toFixed(2)}</span>
+          `;
         container.appendChild(row);
       });
     }
@@ -392,7 +1006,7 @@
     window.recalcularTotalesCompletos();
   };
 
-  window.renderAcompanantesMesa = function() {
+  window.renderAcompanantesMesa = function () {
     const container = document.getElementById('listaAcompanantesMesa');
     if (!container) return;
     container.innerHTML = '';
@@ -408,7 +1022,7 @@
         var c = cuentas[k];
         if (c &amp;&amp; c.items &amp;&amp; c.items.length > 0) {
           var tot = 0;
-          c.items.forEach(function(i) { tot += i.precio * i.cantidad; });
+          c.items.forEach(function (i) { tot += i.precio * i.cantidad; });
           otrasSillas.push({ sillaNum: s, cuenta: c, total: tot });
         }
       }
@@ -425,20 +1039,20 @@
       var row = document.createElement('label');
       row.className = `flex items-center justify-between p-2 rounded-xl border cursor-pointer transition select-none ${isChecked ? 'bg-emerald-950/40 border-emerald-500/50' : 'bg-slate-900/60 border-slate-800 hover:border-slate-700'}`;
       row.innerHTML = `
-        <div class=&quot;flex items-center gap-2&quot;>
-          <input type=&quot;checkbox&quot; value=&quot;${s}&quot; ${isChecked ? 'checked' : ''} onchange=&quot;window.toggleAcompanante(${s})&quot; class=&quot;accent-emerald-500 rounded&quot;>
-          <div>
-            <span class=&quot;font-bold text-slate-100 block&quot;>Silla ${s} <span class=&quot;text-slate-400 font-normal&quot;>(${obj.cuenta.comensalNombre || 'Comensal'})</span></span>
-            <span class=&quot;text-[10px] text-slate-400&quot;>${obj.cuenta.items.length} consumos</span>
+          <div class=&quot;flex items-center gap-2&quot;>
+            <input type=&quot;checkbox&quot; value=&quot;${s}&quot; ${isChecked ? 'checked' : ''} onchange=&quot;window.toggleAcompanante(${s})&quot; class=&quot;accent-emerald-500 rounded&quot;>
+            <div>
+              <span class=&quot;font-bold text-slate-100 block&quot;>Silla ${s} <span class=&quot;text-slate-400 font-normal&quot;>(${obj.cuenta.comensalNombre || 'Comensal'})</span></span>
+              <span class=&quot;text-[10px] text-slate-400&quot;>${obj.cuenta.items.length} consumos</span>
+            </div>
           </div>
-        </div>
-        <span class=&quot;font-bold text-amber-400&quot;>$${obj.total.toFixed(2)}</span>
-      `;
+          <span class=&quot;font-bold text-amber-400&quot;>$${obj.total.toFixed(2)}</span>
+        `;
       container.appendChild(row);
     });
   };
 
-  window.toggleAcompanante = function(sillaNum) {
+  window.toggleAcompanante = function (sillaNum) {
     var idx = window.sillasAcompanantesSeleccionadas.indexOf(sillaNum);
     if (idx === -1) {
       window.sillasAcompanantesSeleccionadas.push(sillaNum);
@@ -449,7 +1063,7 @@
     window.recalcularTotalesCompletos();
   };
 
-  window.seleccionarTodosAcompanantes = function() {
+  window.seleccionarTodosAcompanantes = function () {
     var cuentas = getStorageCuentas();
     var mesaId = window.simMesaId;
     var miSilla = window.simSillaNum;
@@ -463,7 +1077,7 @@
     window.recalcularTotalesCompletos();
   };
 
-  window.recalcularTotalesCompletos = function() {
+  window.recalcularTotalesCompletos = function () {
     var cuentas = getStorageCuentas();
     var mesaId = window.simMesaId;
     var miSilla = window.simSillaNum;
@@ -471,14 +1085,14 @@
     var subtotalPropio = 0;
     var cPropia = cuentas[mesaId + '-' + miSilla];
     if (cPropia &amp;&amp; cPropia.items) {
-      cPropia.items.forEach(function(i) { subtotalPropio += (i.precio * i.cantidad); });
+      cPropia.items.forEach(function (i) { subtotalPropio += (i.precio * i.cantidad); });
     }
 
     var subtotalAcompanantes = 0;
-    window.sillasAcompanantesSeleccionadas.forEach(function(sNum) {
+    window.sillasAcompanantesSeleccionadas.forEach(function (sNum) {
       var cAcomp = cuentas[mesaId + '-' + sNum];
       if (cAcomp &amp;&amp; cAcomp.items) {
-        cAcomp.items.forEach(function(i) { subtotalAcompanantes += (i.precio * i.cantidad); });
+        cAcomp.items.forEach(function (i) { subtotalAcompanantes += (i.precio * i.cantidad); });
       }
     });
 
@@ -544,7 +1158,7 @@
 
   window.modoPagoCliente = 'incluir_ninos'; // 'solo_yo' | 'incluir_ninos' | 'toda_mesa'
 
-  window.abrirModalCobroCliente = function(metodo) {
+  window.abrirModalCobroCliente = function (metodo) {
     const modal = document.getElementById('modalCobroCliente');
     if (!modal) return;
     window.renderModalCobroDetalle();
@@ -552,7 +1166,7 @@
     modal.style.display = 'flex';
   };
 
-  window.cerrarModalCobroCliente = function() {
+  window.cerrarModalCobroCliente = function () {
     const modal = document.getElementById('modalCobroCliente');
     if (modal) {
       modal.classList.add('hidden');
@@ -560,7 +1174,7 @@
     }
   };
 
-  window.setModoPagoCliente = function(modo) {
+  window.setModoPagoCliente = function (modo) {
     window.modoPagoCliente = modo;
     var btnSolo = document.getElementById('btnModoSoloYo');
     var btnNinos = document.getElementById('btnModoNinos');
@@ -583,7 +1197,7 @@
     window.renderModalCobroDetalle();
   };
 
-  window.renderModalCobroDetalle = function() {
+  window.renderModalCobroDetalle = function () {
     var cuentas = getStorageCuentas();
     var mesaId = window.simMesaId;
     var miSilla = window.simSillaNum;
@@ -629,7 +1243,7 @@
 
       var h = document.createElement('div');
       h.className = 'flex justify-between items-center font-bold text-emerald-400 mb-1';
-      h.innerHTML = `<span>Silla ${sNum} ${c.comensalNombre ? '• ' + c.comensalNombre : ''}</span><span class=&quot;text-[10px] text-slate-500&quot;>QR: #${c.qrId || 'PV-0'+mesaId+sNum}</span>`;
+      h.innerHTML = `<span>Silla ${sNum} ${c.comensalNombre ? '• ' + c.comensalNombre : ''}</span><span class=&quot;text-[10px] text-slate-500&quot;>QR: #${c.qrId || 'PV-0' + mesaId + sNum}</span>`;
       block.appendChild(h);
 
       c.items.forEach(it => {
@@ -660,7 +1274,7 @@
     if (totalEl) totalEl.innerText = `$${granTotal.toFixed(2)}`;
   };
 
-  window.ejecutarPagoFinal = function(metodo) {
+  window.ejecutarPagoFinal = function (metodo) {
     var cuentas = getStorageCuentas();
     var mesaId = window.simMesaId;
     var miSilla = window.simSillaNum;
@@ -680,10 +1294,10 @@
 
     sillasAIncluir = sillasAIncluir.filter((v, i, a) => a.indexOf(v) === i);
     var totalText = document.getElementById('modalTotal') ? document.getElementById('modalTotal').innerText : '$0.00';
-    var sillasStr = sillasAIncluir.map(function(s) { return 'Silla ' + s; }).join(', ');
+    var sillasStr = sillasAIncluir.map(function (s) { return 'Silla ' + s; }).join(', ');
 
     if (confirm(`¿Confirmar liquidación vía ${metodo.toUpperCase()} para Mesa ${mesaId} (${sillasStr}) por ${totalText}?`)) {
-      sillasAIncluir.forEach(function(sNum) {
+      sillasAIncluir.forEach(function (sNum) {
         delete cuentas[mesaId + '-' + sNum];
       });
       saveStorageCuentas(cuentas);
@@ -704,7 +1318,7 @@
   window.renderCategoriasChips = function (categorias) {
     const container = document.getElementById('categoriesChips');
     if (!container) return;
-    container.innerHTML = `<button onclick=&quot;window.seleccionarCategoria('Todos')&quot; class=&quot;cat-chip ${window.categoriaActual === 'Todos' ? 'active bg-emerald-500 text-white' : 'bg-slate-800/80 text-slate-400'} px-4 py-2 text-xs font-bold rounded-xl whitespace-nowrap transition&quot;>Todos</button>`;
+    container.innerHTML = '';
 
     categorias.forEach(cat => {
       const btn = document.createElement('button');
@@ -718,8 +1332,7 @@
 
   window.seleccionarCategoria = function (catNombre) {
     window.categoriaActual = catNombre;
-    const chips = document.querySelectorAll('.cat-chip');
-    chips.forEach(c => c.classList.remove('active', 'bg-emerald-500', 'text-white'));
+    window.renderCategoriasChips(window.vsCategoriasData);
     window.renderProductos();
   };
 
@@ -730,15 +1343,15 @@
   window.renderProductos = function () {
     const container = document.getElementById('productsGridContainer');
     if (!container) return;
-    const searchInput = document.getElementById('searchInput');
-    const searchVal = searchInput ? (searchInput.value || '').toLowerCase() : '';
     container.innerHTML = '';
 
-    const list = window.vsMenuData || [];
-    const filtrados = list.filter(p => {
-      const matchCat = window.categoriaActual === 'Todos' || p.categoria_nombre === window.categoriaActual;
-      const matchSearch = p.nombre.toLowerCase().includes(searchVal) || (p.descripcion &amp;&amp; p.descripcion.toLowerCase().includes(searchVal));
-      return matchCat &amp;&amp; matchSearch;
+    const catActual = window.categoriaActual;
+    const query = document.getElementById('searchInput') ? document.getElementById('searchInput').value.toLowerCase().trim() : '';
+
+    const filtrados = (window.vsMenuData || []).filter(prod => {
+      const matchCat = (!catActual || catActual === 'Todos' || prod.categoria_nombre === catActual);
+      const matchText = prod.nombre.toLowerCase().includes(query) || (prod.descripcion &amp;&amp; prod.descripcion.toLowerCase().includes(query));
+      return matchCat &amp;&amp; matchText;
     });
 
     if (filtrados.length === 0) {
@@ -748,26 +1361,97 @@
 
     filtrados.forEach(prod => {
       const card = document.createElement('div');
-      card.className = 'glass-card p-4 rounded-2xl flex justify-between items-center hover:border-emerald-500/50 transition cursor-pointer group';
-      card.onclick = () => window.agregarAlCarrito(prod);
+      card.className = 'glass-card p-4 rounded-2xl flex flex-col justify-between hover:border-emerald-500/50 transition gap-3';
 
       card.innerHTML = `
-        <div class=&quot;flex items-center gap-3&quot;>
-          <div class=&quot;w-12 h-12 rounded-xl bg-slate-800 flex items-center justify-center text-2xl group-hover:scale-110 transition&quot;>
-            ${prod.icono || '🍲'}
+          <div class=&quot;flex items-start gap-3 cursor-pointer&quot; onclick=&quot;window.abrirModalRecetaCliente(${prod.id});&quot;>
+            <div class=&quot;w-12 h-12 rounded-xl bg-slate-800/90 border border-slate-700 flex items-center justify-center text-2xl flex-shrink-0&quot;>
+              ${prod.icono || '🍲'}
+            </div>
+            <div class=&quot;flex-1 min-w-0&quot;>
+              <div class=&quot;flex justify-between items-start&quot;>
+                <h3 class=&quot;text-sm font-bold text-white tracking-tight truncate&quot;>${prod.nombre}</h3>
+                <span class=&quot;text-sm font-black text-emerald-400 ml-2&quot;>$${Number(prod.precio_unitario).toFixed(2)}</span>
+              </div>
+              <p class=&quot;text-[11px] text-slate-400 mt-1 line-clamp-2&quot;>${prod.descripcion || ''}</p>
+              <div class=&quot;flex items-center gap-2 mt-2&quot;>
+                <span class=&quot;text-[10px] text-sky-400 font-bold bg-sky-500/10 px-2 py-0.5 rounded-md border border-sky-500/20&quot;>⏱️ ${prod.tiempo || '8–10 min'}</span>
+                <span class=&quot;text-[10px] text-slate-400 font-semibold&quot;>${prod.porciones || '1 persona'}</span>
+              </div>
+            </div>
           </div>
-          <div>
-            <h3 class=&quot;text-sm font-bold text-white group-hover:text-emerald-400 transition&quot;>${prod.nombre}</h3>
-            <p class=&quot;text-xs text-slate-400 line-clamp-1&quot;>${prod.descripcion || ''}</p>
+          <div class=&quot;flex items-center justify-between gap-2 pt-2 border-t border-slate-800/80&quot;>
+            <button onclick=&quot;window.abrirModalRecetaCliente(${prod.id});&quot; class=&quot;py-1.5 px-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-sky-400 border border-slate-700 text-xs font-bold transition flex items-center gap-1 cursor-pointer&quot;>
+              <i class=&quot;fa-solid fa-book-open&quot;></i> Receta
+            </button>
+            <button onclick=&quot;window.agregarAlCarritoDirecto(${prod.id})&quot; class=&quot;flex-1 py-1.5 px-3 rounded-xl bg-emerald-600/30 hover:bg-emerald-500/40 text-emerald-300 border border-emerald-500/30 text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer&quot;>
+              <i class=&quot;fa-solid fa-plus text-emerald-400&quot;></i> Agregar a mi Silla
+            </button>
           </div>
-        </div>
-        <div class=&quot;text-right&quot;>
-          <span class=&quot;text-sm font-black text-emerald-400 block&quot;>$${Number(prod.precio_unitario).toFixed(2)}</span>
-          <span class=&quot;text-[10px] text-slate-500 font-semibold uppercase&quot;>${prod.estacion_preparacion || 'cocina'}</span>
-        </div>
-      `;
+        `;
       container.appendChild(card);
     });
+  };
+
+  window.abrirModalRecetaCliente = function(prodId) {
+    const prod = (window.vsMenuData || []).find(p => p.id === prodId);
+    if (!prod) return;
+
+    document.getElementById('cliRecetaIcono').innerText = prod.icono || '🍳';
+    document.getElementById('cliRecetaCategoria').innerText = prod.categoria_nombre || 'Desayuno';
+    document.getElementById('cliRecetaTitulo').innerText = prod.nombre;
+    document.getElementById('cliRecetaTiempo').innerText = prod.tiempo || '8–10 min';
+    document.getElementById('cliRecetaPorcion').innerText = prod.porciones || '1 persona';
+    document.getElementById('cliRecetaPrecio').innerText = `$${Number(prod.precio_unitario).toFixed(2)}`;
+
+    const listIng = document.getElementById('cliRecetaIngredientesList');
+    if (listIng) {
+      listIng.innerHTML = '';
+      (prod.ingredientes || ['Ingredientes frescos según receta']).forEach(ing => {
+        const li = document.createElement('li');
+        li.innerText = ing;
+        listIng.appendChild(li);
+      });
+    }
+
+    const listPasos = document.getElementById('cliRecetaPasosList');
+    if (listPasos) {
+      listPasos.innerHTML = '';
+      (prod.pasos || ['Preparar al momento siguiendo receta']).forEach(paso => {
+        const li = document.createElement('li');
+        li.innerText = paso;
+        listPasos.appendChild(li);
+      });
+    }
+
+    const boxAdic = document.getElementById('boxCliRecetaAdicionales');
+    const listAdic = document.getElementById('cliRecetaAdicionalesList');
+    if (boxAdic &amp;&amp; listAdic) {
+      if (prod.adicionales &amp;&amp; prod.adicionales.length > 0) {
+        boxAdic.style.display = 'block';
+        listAdic.innerHTML = '';
+        prod.adicionales.forEach(adic => {
+          const chip = document.createElement('span');
+          chip.style.cssText = 'background: #020617; border: 1px solid #0284c7; color: #7dd3fc; font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 6px;';
+          chip.innerText = `+ ${adic}`;
+          listAdic.appendChild(chip);
+        });
+      } else {
+        boxAdic.style.display = 'none';
+      }
+    }
+
+    const modal = document.getElementById('modalRecetaClienteBackdrop');
+    if (modal) {
+      modal.style.display = 'flex';
+    }
+  };
+
+  window.cerrarModalRecetaCliente = function() {
+    const modal = document.getElementById('modalRecetaClienteBackdrop');
+    if (modal) {
+      modal.style.display = 'none';
+    }
   };
 
   window.navMenu = function (modulo) {
