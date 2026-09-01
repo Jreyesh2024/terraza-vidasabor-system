@@ -2539,19 +2539,49 @@
         items: [],
         comensalNombre: 'Comensal Silla ' + srcSilla
       };
+      var targetCuenta = window.palapaState.cuentas[targetKey];
+      var isTargetOccupied = !!(targetCuenta && (targetCuenta.estado === 'ocupada' || (targetCuenta.items && targetCuenta.items.length > 0)));
 
-      // ── CASO ESPECIAL: Si es arrimada (S5+) y se arrastra sobre una silla de la misma mesa, cambiar su lado (top/right/bottom/left) ──
-      if (srcMesa === targetMesaId && srcSilla > 4) {
+      // ── CASO 1: Si se arrastra a una silla estándar (1..4) que está LIBRE ──
+      // El comensal pasa a ocupar la silla estándar y la silla origen (arrimada S5 o de otra mesa) SE ELIMINA
+      if (!isTargetOccupied && typeof targetSillaNum === 'number' && targetSillaNum <= 4) {
+        sourceCuenta.esArrimada = false;
+        delete sourceCuenta.posicionArrimada;
+        sourceCuenta.comensalNombre = 'Comensal Silla ' + targetSillaNum;
+        sourceCuenta.qrId = 'PV-0' + targetMesaId + targetSillaNum;
+        if (sourceCuenta.items) {
+          sourceCuenta.items.forEach(function (i) {
+            i.mesaId = targetMesaId;
+            i.sillaNum = targetSillaNum;
+          });
+        }
+        var nowStr = (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        sourceCuenta.historialUbicaciones = sourceCuenta.historialUbicaciones || [{ mesaId: srcMesa, sillaNum: srcSilla, hora: nowStr }];
+        sourceCuenta.historialUbicaciones.push({ mesaId: targetMesaId, sillaNum: targetSillaNum, hora: nowStr });
+
+        window.palapaState.cuentas[targetKey] = sourceCuenta;
+        delete window.palapaState.cuentas[sourceKey];
+
+        window.palapaState.mesaSeleccionadaId = targetMesaId;
+        window.palapaState.sillaSeleccionadaNum = targetSillaNum;
+        window.palapaState.modoComandaActiva = false;
+        saveStateToStorage();
+        cancelarModoMover();
+        renderStateUI();
+        showDragToast('✅ Comensal reubicado a Silla ' + targetSillaNum + ' disponible de Mesa ' + targetMesaId, 'ok');
+        return;
+      }
+
+      // ── CASO 2: Si es arrimada (S5+) y se arrastra sobre una silla OCUPADA de la misma mesa, reubicar su lado (top/right/bottom/left) ──
+      if (srcMesa === targetMesaId && srcSilla > 4 && isTargetOccupied) {
         var lado = targetSillaNum === 1 ? 'top' : targetSillaNum === 2 ? 'right' : targetSillaNum === 3 ? 'bottom' : 'left';
         sourceCuenta.posicionArrimada = lado;
         saveStateToStorage();
         cancelarModoMover();
         renderStateUI();
-        showDragToast('🪑 Silla ' + srcSilla + ' reubicada junto a Silla ' + targetSillaNum + ' en Mesa ' + srcMesa, 'ok');
+        showDragToast('🪑 Silla ' + srcSilla + ' (Arrimada) colocada junto a Silla ' + targetSillaNum + ' en Mesa ' + srcMesa, 'ok');
         return;
       }
-
-      var targetCuenta = window.palapaState.cuentas[targetKey];
 
       var nowStr = (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
       sourceCuenta.historialUbicaciones = sourceCuenta.historialUbicaciones || [{ mesaId: srcMesa, sillaNum: srcSilla, hora: nowStr }];
