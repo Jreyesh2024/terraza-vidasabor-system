@@ -443,21 +443,10 @@
                 <span id="table-status-1"
                   style="font-size: 9px !important; font-weight: 800 !important; color: #059669 !important; text-transform: uppercase !important; margin-top: 2px !important;">Libre</span>
               </div>
-
-              <div id="chair-1-1" class="chair-btn-fixed chair-pos-top chair-state-free" draggable="false"
-                title="Mesa 1 Silla 1 (Disponible)">Silla 1</div>
-              <div id="chair-1-2" class="chair-btn-fixed chair-pos-right chair-state-free" draggable="false"
-                title="Mesa 1 Silla 2 (Disponible)">Silla 2</div>
-              <div id="chair-1-3" class="chair-btn-fixed chair-pos-bottom chair-state-free" draggable="false"
-                title="Mesa 1 Silla 3 (Disponible)">Silla 3</div>
-              <div id="chair-1-4" class="chair-btn-fixed chair-pos-left chair-state-free" draggable="false"
-                title="Mesa 1 Silla 4 (Disponible)">Silla 4</div>
             </div>
 
             <span id="table-label-1"
               style="font-size: 12px !important; font-weight: 700 !important; color: #059669 !important;">🟢 Disponible</span>
-            <!-- CONTENEDOR DEDICADO DE SILLAS ARRIMADAS (SIN TRASLAPE) -->
-            <div id="table-arrimadas-container-1" style="display: flex !important; gap: 8px !important; align-items: center !important; justify-content: center !important; flex-wrap: wrap !important; min-height: 24px !important;"></div>
           </div>
 
           <!-- MESA 2 -->
@@ -475,21 +464,10 @@
                 <span id="table-status-2"
                   style="font-size: 9px !important; font-weight: 800 !important; color: #059669 !important; text-transform: uppercase !important; margin-top: 2px !important;">Libre</span>
               </div>
-
-              <div id="chair-2-1" class="chair-btn-fixed chair-pos-top chair-state-free" draggable="false"
-                title="Mesa 2 Silla 1 (Disponible)">Silla 1</div>
-              <div id="chair-2-2" class="chair-btn-fixed chair-pos-right chair-state-free" draggable="false"
-                title="Mesa 2 Silla 2 (Disponible)">Silla 2</div>
-              <div id="chair-2-3" class="chair-btn-fixed chair-pos-bottom chair-state-free" draggable="false"
-                title="Mesa 2 Silla 3 (Disponible)">Silla 3</div>
-              <div id="chair-2-4" class="chair-btn-fixed chair-pos-left chair-state-free" draggable="false"
-                title="Mesa 2 Silla 4 (Disponible)">Silla 4</div>
             </div>
 
             <span id="table-label-2"
               style="font-size: 12px !important; font-weight: 700 !important; color: #059669 !important;">🟢 Disponible</span>
-            <!-- CONTENEDOR DEDICADO DE SILLAS ARRIMADAS (SIN TRASLAPE) -->
-            <div id="table-arrimadas-container-2" style="display: flex !important; gap: 8px !important; align-items: center !important; justify-content: center !important; flex-wrap: wrap !important; min-height: 24px !important;"></div>
           </div>
 
           <!-- MESA 3 -->
@@ -507,21 +485,10 @@
                 <span id="table-status-3"
                   style="font-size: 9px !important; font-weight: 800 !important; color: #d97706 !important; text-transform: uppercase !important; margin-top: 2px !important;">2 Ocupadas</span>
               </div>
-
-              <div id="chair-3-1" class="chair-btn-fixed chair-pos-top chair-state-busy" draggable="true"
-                title="Mesa 3 Silla 1 (Ocupada) • Arrastra para mover">Silla 1</div>
-              <div id="chair-3-2" class="chair-btn-fixed chair-pos-right chair-state-busy" draggable="true"
-                title="Mesa 3 Silla 2 (Ocupada) • Arrastra para mover">Silla 2</div>
-              <div id="chair-3-3" class="chair-btn-fixed chair-pos-bottom chair-state-free" draggable="false"
-                title="Mesa 3 Silla 3 (Disponible)">Silla 3</div>
-              <div id="chair-3-4" class="chair-btn-fixed chair-pos-left chair-state-free" draggable="false"
-                title="Mesa 3 Silla 4 (Disponible)">Silla 4</div>
             </div>
 
             <span id="table-label-3"
               style="font-size: 12px !important; font-weight: 700 !important; color: #d97706 !important;">🟡 Ocupada (2 Comensales)</span>
-            <!-- CONTENEDOR DEDICADO DE SILLAS ARRIMADAS (SIN TRASLAPE) -->
-            <div id="table-arrimadas-container-3" style="display: flex !important; gap: 8px !important; align-items: center !important; justify-content: center !important; flex-wrap: wrap !important; min-height: 24px !important;"></div>
           </div>
 
         </div>
@@ -3938,121 +3905,6 @@
       if (panelMenu) panelMenu.style.setProperty('display', isComandaMode ? 'flex' : 'none', 'important');
 
       // 2. Renderizar Mesas y Sillas en el Croquis Panorámico
-      for (let m = 1; m <= 3; m++) {
-        let busyCount = 0;
-        let arrimadasCount = 0;
-
-        // Limpiar sillas dinámicas arrimadas previas en este tableBox
-        const tableBox = document.getElementById(`table-box-${m}`);
-        if (tableBox) {
-          tableBox.querySelectorAll('.chair-arrimada-item').forEach(el => el.remove());
-        }
-
-        // A. Sillas base estándar (1..4)
-        for (let s = 1; s <= 4; s++) {
-          const key = `${m}-${s}`;
-          let chairEl = document.getElementById(`chair-${m}-${s}`);
-          const cuenta = window.palapaState.cuentas[key];
-          const isOccupied = !!(cuenta && (cuenta.estado === 'ocupada' || (cuenta.items && cuenta.items.length > 0)));
-
-          if (isOccupied) busyCount++;
-
-          if (chairEl) {
-            const posClass = s === 1 ? 'chair-pos-top' : s === 2 ? 'chair-pos-right' : s === 3 ? 'chair-pos-bottom' : 'chair-pos-left';
-
-            chairEl.setAttribute('draggable', 'true');
-            const numItems = (cuenta && cuenta.items) ? cuenta.items.length : 0;
-            chairEl.setAttribute('title', isOccupied
-              ? `Mesa ${m} Silla ${s} (Ocupada${numItems > 0 ? ' · ' + numItems + ' consumos' : ' · Sin consumos'}) • Arrastra para mover o clic para comanda`
-              : `Mesa ${m} Silla ${s} (Disponible) • Arrastra a otra mesa o haz clic para comanda`);
-
-            if (isMoveMode && origen && origen.mesaId === m && origen.sillaNum === s) {
-              chairEl.className = `chair-btn-fixed ${posClass} chair-moving-source`;
-            } else if (isMoveMode) {
-              chairEl.className = `chair-btn-fixed ${posClass} chair-moving-target ${isOccupied ? 'chair-state-busy' : 'chair-state-free'}`;
-            } else {
-              chairEl.className = `chair-btn-fixed ${posClass} ${isOccupied ? 'chair-state-busy' : 'chair-state-free'}`;
-            }
-          }
-        }
-
-        // B. Sillas Arrimadas Extras (s >= 5) — Renderizado limpio en contenedor dedicado (CERO TRASLAPE)
-        const arrimadasBox = document.getElementById(`table-arrimadas-container-${m}`);
-        if (arrimadasBox) {
-          arrimadasBox.innerHTML = '';
-        }
-
-        Object.keys(window.palapaState.cuentas).forEach(k => {
-          const parts = k.split('-');
-          if (parseInt(parts[0]) === m) {
-            const sn = parseInt(parts[1]);
-            if (sn >= 5) {
-              const cuentaArrimada = window.palapaState.cuentas[k];
-              const isOccupied = !!(cuentaArrimada && (cuentaArrimada.estado === 'ocupada' || (cuentaArrimada.items && cuentaArrimada.items.length > 0)));
-              if (isOccupied) {
-                busyCount++;
-                arrimadasCount++;
-
-                if (arrimadasBox) {
-                  const arrEl = document.createElement('div');
-                  arrEl.id = `chair-${m}-${sn}`;
-                  arrEl.className = `chair-btn-fixed chair-state-busy chair-arrimada-item`;
-                  arrEl.setAttribute('draggable', 'true');
-                  arrEl.setAttribute('title', `Mesa ${m} Silla ${sn} (Arrimada) • Arrastra para mover o clic para comanda`);
-                  arrEl.style.cssText = 'padding: 6px 14px !important; font-size: 11px !important; font-weight: 800 !important; border-radius: 10px !important; cursor: pointer !important; display: flex !important; align-items: center !important; gap: 6px !important; box-shadow: 0 2px 6px rgba(0,0,0,0.1) !important;';
-                  arrEl.innerHTML = `🪑 Silla ${sn} <span style="font-size:9px; opacity:0.85; background: rgba(0,0,0,0.08); padding: 2px 6px; border-radius: 6px;">Arrimada</span>`;
-
-                  arrEl.addEventListener('mousedown', function(e) {
-                    _chairMousedown(e, m, sn);
-                  });
-
-                  if (isMoveMode && origen && origen.mesaId === m && origen.sillaNum === sn) {
-                    arrEl.className = `chair-btn-fixed chair-moving-source chair-arrimada-item`;
-                  }
-
-                  arrimadasBox.appendChild(arrEl);
-                }
-              }
-            }
-          }
-        });
-
-        const circle = document.getElementById(`table-circle-${m}`);
-        const statusText = document.getElementById(`table-status-${m}`);
-        const labelText = document.getElementById(`table-label-${m}`);
-
-        if (circle) {
-          if (busyCount > 0) {
-            circle.style.background = "#fffbeb";
-            circle.style.border = "3px solid #f59e0b";
-            circle.style.color = "#92400e";
-            circle.style.boxShadow = "0 2px 8px rgba(245, 158, 11, 0.2)";
-            if (statusText) {
-              statusText.innerText = `${busyCount} Ocupada${busyCount > 1 ? 's' : ''}`;
-              statusText.style.color = "#d97706";
-            }
-            if (labelText) {
-              labelText.style.color = "#d97706";
-              labelText.innerText = `🟡 Ocupada (${busyCount} Comensal${busyCount > 1 ? 'es' : ''}${arrimadasCount > 0 ? ' · ' + arrimadasCount + ' Arrimada' + (arrimadasCount > 1 ? 's' : '') : ''})`;
-            }
-          } else {
-            circle.style.background = "#ecfdf5";
-            circle.style.border = "3px solid #10b981";
-            circle.style.color = "#065f46";
-            circle.style.boxShadow = "0 2px 8px rgba(16, 185, 129, 0.2)";
-            if (statusText) {
-              statusText.innerText = `Libre`;
-              statusText.style.color = "#059669";
-            }
-            if (labelText) {
-              labelText.style.color = "#059669";
-              labelText.innerText = `🟢 Disponible`;
-            }
-          }
-        }
-      }
-
-      // 2.1 Transformación Física y Visual de Mesas Unidas / Grupos Modulares
       const unidas = window.palapaState.mesasUnidas;
       const btnSep = document.getElementById('btnSeparateTables');
       const btn12 = document.getElementById('btnJoin12');
@@ -4085,118 +3937,326 @@
       const head1 = document.getElementById('table-header-title-1');
       const head2 = document.getElementById('table-header-title-2');
       const head3 = document.getElementById('table-header-title-3');
+      const label1 = document.getElementById('table-label-1');
+      const label2 = document.getElementById('table-label-2');
+      const label3 = document.getElementById('table-label-3');
 
-      if (grid && card1 && card2 && card3) {
-        if (unidas === '1-2') {
-          // Fusión física Mesa 1 + 2 (8 Pax)
-          grid.style.setProperty('grid-template-columns', '2fr 1fr', 'important');
-          card1.style.setProperty('display', 'flex', 'important');
-          card1.style.setProperty('border', '2.5px solid #0284c7', 'important');
-          card1.style.setProperty('background', '#f0f9ff', 'important');
-          card1.style.setProperty('box-shadow', '0 8px 25px rgba(2, 132, 199, 0.15)', 'important');
-          if (head1) head1.innerHTML = '🔗 MESA 1 + MESA 2 UNIDAS <span style="font-size:11px;color:#0284c7;">(GRUPO MODULAR 8 PAX)</span>';
+      // Helper para renderizar una silla interactiva (click y drag)
+      function renderChairBadge(m, s, posCss, container, isJoinedMode) {
+        const key = `${m}-${s}`;
+        const cuenta = window.palapaState.cuentas[key];
+        const isOccupied = !!(cuenta && (cuenta.estado === 'ocupada' || (cuenta.items && cuenta.items.length > 0)));
+        const isSource = isMoveMode && origen && origen.mesaId === m && origen.sillaNum === s;
+        const isArrimada = (s >= 5) || (cuenta && cuenta.esArrimada);
+        const numItems = (cuenta && cuenta.items) ? cuenta.items.length : 0;
 
-          if (box1) { box1.style.width = '360px'; box1.style.height = '230px'; }
-          if (circle1) {
-            circle1.style.width = '240px';
-            circle1.style.height = '104px';
-            circle1.innerHTML = `<span style="font-size:18px; font-weight:900; color:#0369a1;">M1 + M2 (UNIDAS)</span><span style="font-size:10px; font-weight:800; color:#0284c7; text-transform:uppercase;">Grupo Modular 8 Lugares</span>`;
-          }
+        const chairEl = document.createElement('div');
+        chairEl.id = `chair-${m}-${s}`;
+        chairEl.setAttribute('draggable', 'true');
 
-          card2.style.setProperty('display', 'none', 'important');
+        let stateClass = isOccupied ? 'chair-state-busy' : 'chair-state-free';
+        if (isSource) stateClass = 'chair-moving-source';
+        else if (isMoveMode) stateClass = `chair-moving-target ${stateClass}`;
 
-          card3.style.setProperty('display', 'flex', 'important');
-          card3.style.setProperty('border', '1px solid #dce8f5', 'important');
-          card3.style.setProperty('background', '#f8fbff', 'important');
-          card3.style.setProperty('box-shadow', 'none', 'important');
-          if (head3) head3.innerHTML = 'Mesa 3 (Palapa)';
-          if (box3) { box3.style.width = '250px'; box3.style.height = '230px'; }
-          if (circle3) {
-            circle3.style.width = '104px';
-            circle3.style.height = '104px';
-          }
+        chairEl.className = `chair-btn-fixed ${stateClass}`;
+        chairEl.style.cssText = `position: absolute !important; ${posCss} z-index: 25 !important; cursor: pointer !important; white-space: nowrap !important;`;
 
-        } else if (unidas === '2-3') {
-          // Fusión física Mesa 2 + 3 (8 Pax)
-          grid.style.setProperty('grid-template-columns', '1fr 2fr', 'important');
-          card1.style.setProperty('display', 'flex', 'important');
-          card1.style.setProperty('border', '1px solid #dce8f5', 'important');
-          card1.style.setProperty('background', '#f8fbff', 'important');
-          card1.style.setProperty('box-shadow', 'none', 'important');
-          if (head1) head1.innerHTML = 'Mesa 1 (Palapa)';
-          if (box1) { box1.style.width = '250px'; box1.style.height = '230px'; }
-          if (circle1) {
-            circle1.style.width = '104px';
-            circle1.style.height = '104px';
-          }
-
-          card2.style.setProperty('display', 'flex', 'important');
-          card2.style.setProperty('border', '2.5px solid #0284c7', 'important');
-          card2.style.setProperty('background', '#f0f9ff', 'important');
-          card2.style.setProperty('box-shadow', '0 8px 25px rgba(2, 132, 199, 0.15)', 'important');
-          if (head2) head2.innerHTML = '🔗 MESA 2 + MESA 3 UNIDAS <span style="font-size:11px;color:#0284c7;">(GRUPO MODULAR 8 PAX)</span>';
-
-          if (box2) { box2.style.width = '360px'; box2.style.height = '230px'; }
-          if (circle2) {
-            circle2.style.width = '240px';
-            circle2.style.height = '104px';
-            circle2.innerHTML = `<span style="font-size:18px; font-weight:900; color:#0369a1;">M2 + M3 (UNIDAS)</span><span style="font-size:10px; font-weight:800; color:#0284c7; text-transform:uppercase;">Grupo Modular 8 Lugares</span>`;
-          }
-
-          card3.style.setProperty('display', 'none', 'important');
-
-        } else if (unidas === '1-2-3') {
-          // Gran Mesa Imperial (M1 + M2 + M3)
-          grid.style.setProperty('grid-template-columns', '1fr', 'important');
-          card1.style.setProperty('display', 'flex', 'important');
-          card1.style.setProperty('border', '2.5px solid #0284c7', 'important');
-          card1.style.setProperty('background', '#f0f9ff', 'important');
-          card1.style.setProperty('box-shadow', '0 10px 30px rgba(2, 132, 199, 0.2)', 'important');
-          if (head1) head1.innerHTML = '👑 GRAN MESA IMPERIAL PALAPA (M1 + M2 + M3) • 10 A 12 PERSONAS';
-
-          if (box1) { box1.style.width = '560px'; box1.style.height = '230px'; }
-          if (circle1) {
-            circle1.style.width = '420px';
-            circle1.style.height = '104px';
-            circle1.innerHTML = `<span style="font-size:18px; font-weight:900; color:#0369a1;">👑 M1 + M2 + M3 • BANQUETE IMPERIAL</span><span style="font-size:10px; font-weight:800; color:#0284c7; text-transform:uppercase;">Reservado Palapa 10 a 12 Lugares</span>`;
-          }
-
-          card2.style.setProperty('display', 'none', 'important');
-          card3.style.setProperty('display', 'none', 'important');
-
+        if (isJoinedMode) {
+          chairEl.innerHTML = isArrimada ? `🪑 M${m}-S${s}` : `M${m}-S${s}`;
         } else {
-          // Mesas Individuales Estándar
-          grid.style.setProperty('grid-template-columns', 'repeat(3, 1fr)', 'important');
-          [card1, card2, card3].forEach((c, idx) => {
-            const mesaNum = idx + 1;
-            c.style.setProperty('display', 'flex', 'important');
-            c.style.setProperty('border', '1px solid #dce8f5', 'important');
-            c.style.setProperty('background', '#f8fbff', 'important');
-            c.style.setProperty('box-shadow', 'none', 'important');
-          });
+          chairEl.innerHTML = isArrimada ? `🪑 S${s}` : `Silla ${s}`;
+        }
 
-          if (head1) head1.innerHTML = 'Mesa 1 (Palapa)';
-          if (head2) head2.innerHTML = 'Mesa 2 (Palapa)';
-          if (head3) head3.innerHTML = 'Mesa 3 (Palapa)';
+        chairEl.setAttribute('title', isOccupied
+          ? `Mesa ${m} Silla ${s} (Ocupada${numItems > 0 ? ' · ' + numItems + ' consumos' : ''}) • Arrastra para mover o clic para comanda`
+          : `Mesa ${m} Silla ${s} (Disponible) • Arrastra para trasladar o clic para comanda`);
 
-          if (box1) { box1.style.width = '250px'; box1.style.height = '230px'; }
-          if (box2) { box2.style.width = '250px'; box2.style.height = '230px'; }
-          if (box3) { box3.style.width = '250px'; box3.style.height = '230px'; }
+        chairEl.addEventListener('mousedown', function(e) {
+          _chairMousedown(e, m, s);
+        });
 
-          if (circle1) {
-            circle1.style.width = '104px';
-            circle1.style.height = '104px';
-            circle1.innerHTML = `<span style="font-size:18px; font-weight:900; color:#065f46; line-height:1;">M1</span><span id="table-status-1" style="font-size:9px; font-weight:800; color:#059669; text-transform:uppercase; margin-top:2px;">Libre</span>`;
+        container.appendChild(chairEl);
+        return isOccupied ? 1 : 0;
+      }
+
+      // Limpiar sillas existentes de los 3 boxes
+      [box1, box2, box3].forEach(box => {
+        if (box) {
+          box.querySelectorAll('.chair-btn-fixed').forEach(el => el.remove());
+        }
+      });
+
+      // MODO 1: GRUPO MODULAR MESA 1 + MESA 2 UNIDAS
+      if (unidas === '1-2' && grid && card1 && card2 && card3) {
+        grid.style.setProperty('grid-template-columns', '2fr 1fr', 'important');
+        card1.style.setProperty('display', 'flex', 'important');
+        card1.style.setProperty('border', '2.5px solid #0284c7', 'important');
+        card1.style.setProperty('background', '#f0f9ff', 'important');
+        card1.style.setProperty('box-shadow', '0 8px 25px rgba(2, 132, 199, 0.15)', 'important');
+        if (head1) head1.innerHTML = '🔗 MESA 1 + MESA 2 UNIDAS <span style="font-size:11px;color:#0284c7;">(GRUPO MODULAR 8 A 10 PAX)</span>';
+        if (box1) { box1.style.width = '520px'; box1.style.height = '230px'; }
+        if (circle1) {
+          circle1.style.width = '380px';
+          circle1.style.height = '104px';
+          circle1.style.borderRadius = '18px';
+          circle1.innerHTML = `<span style="font-size:18px; font-weight:900; color:#0369a1;">M1 + M2 (UNIDAS)</span><span style="font-size:10px; font-weight:800; color:#0284c7; text-transform:uppercase;">Grupo Modular 8 a 10 Lugares</span>`;
+        }
+
+        // Renderizar sillas perimetrales de M1 y M2
+        let busyM1 = 0, busyM2 = 0;
+        busyM1 += renderChairBadge(1, 1, 'top: 2px; left: 22%; transform: translateX(-50%);', box1, true);
+        busyM1 += renderChairBadge(1, 2, 'top: 2px; left: 42%; transform: translateX(-50%);', box1, true);
+        busyM2 += renderChairBadge(2, 1, 'top: 2px; left: 62%; transform: translateX(-50%);', box1, true);
+        
+        // Revisar arrimadas de M2 (S5)
+        if (window.palapaState.cuentas['2-5']) {
+          busyM2 += renderChairBadge(2, 5, 'top: 2px; left: 82%; transform: translateX(-50%);', box1, true);
+        }
+
+        busyM1 += renderChairBadge(1, 3, 'bottom: 2px; left: 26%; transform: translateX(-50%);', box1, true);
+        busyM2 += renderChairBadge(2, 3, 'bottom: 2px; left: 56%; transform: translateX(-50%);', box1, true);
+        busyM2 += renderChairBadge(2, 4, 'bottom: 2px; left: 80%; transform: translateX(-50%);', box1, true);
+
+        busyM1 += renderChairBadge(1, 4, 'left: 2px; top: 50%; transform: translateY(-50%);', box1, true);
+        busyM2 += renderChairBadge(2, 2, 'right: 2px; top: 50%; transform: translateY(-50%);', box1, true);
+
+        const totalBusyJoined = busyM1 + busyM2;
+        if (label1) {
+          label1.style.color = totalBusyJoined > 0 ? '#d97706' : '#059669';
+          label1.innerHTML = totalBusyJoined > 0
+            ? `🟡 Ocupada (${totalBusyJoined} Comensales Unidos: ${busyM1} de M1 + ${busyM2} de M2)`
+            : `🟢 Disponible (8 Lugares)`;
+        }
+
+        card2.style.setProperty('display', 'none', 'important');
+
+        // Mesa 3 Individual a la derecha
+        card3.style.setProperty('display', 'flex', 'important');
+        card3.style.setProperty('border', '1px solid #dce8f5', 'important');
+        card3.style.setProperty('background', '#f8fbff', 'important');
+        card3.style.setProperty('box-shadow', 'none', 'important');
+        if (head3) head3.innerHTML = 'Mesa 3 (Palapa)';
+        if (box3) { box3.style.width = '250px'; box3.style.height = '230px'; }
+        if (circle3) {
+          circle3.style.width = '104px';
+          circle3.style.height = '104px';
+          circle3.innerHTML = `<span style="font-size:18px; font-weight:900; color:#92400e; line-height:1;">M3</span><span id="table-status-3" style="font-size:9px; font-weight:800; color:#d97706; text-transform:uppercase; margin-top:2px;">Ocupada</span>`;
+        }
+
+        let busy3 = 0;
+        busy3 += renderChairBadge(3, 1, 'top: 2px; left: 50%; transform: translateX(-50%);', box3, false);
+        busy3 += renderChairBadge(3, 2, 'right: 2px; top: 50%; transform: translateY(-50%);', box3, false);
+        busy3 += renderChairBadge(3, 3, 'bottom: 2px; left: 50%; transform: translateX(-50%);', box3, false);
+        busy3 += renderChairBadge(3, 4, 'left: 2px; top: 50%; transform: translateY(-50%);', box3, false);
+        if (label3) {
+          label3.style.color = busy3 > 0 ? '#d97706' : '#059669';
+          label3.innerHTML = busy3 > 0 ? `🟡 Ocupada (${busy3} Comensal${busy3 > 1 ? 'es' : ''})` : `🟢 Disponible`;
+        }
+
+      // MODO 2: GRUPO MODULAR MESA 2 + MESA 3 UNIDAS
+      } else if (unidas === '2-3' && grid && card1 && card2 && card3) {
+        grid.style.setProperty('grid-template-columns', '1fr 2fr', 'important');
+        
+        // Mesa 1 Individual a la izquierda
+        card1.style.setProperty('display', 'flex', 'important');
+        card1.style.setProperty('border', '1px solid #dce8f5', 'important');
+        card1.style.setProperty('background', '#f8fbff', 'important');
+        card1.style.setProperty('box-shadow', 'none', 'important');
+        if (head1) head1.innerHTML = 'Mesa 1 (Palapa)';
+        if (box1) { box1.style.width = '250px'; box1.style.height = '230px'; }
+        if (circle1) {
+          circle1.style.width = '104px';
+          circle1.style.height = '104px';
+          circle1.innerHTML = `<span style="font-size:18px; font-weight:900; color:#065f46; line-height:1;">M1</span><span id="table-status-1" style="font-size:9px; font-weight:800; color:#059669; text-transform:uppercase; margin-top:2px;">Libre</span>`;
+        }
+
+        let busy1 = 0;
+        busy1 += renderChairBadge(1, 1, 'top: 2px; left: 50%; transform: translateX(-50%);', box1, false);
+        busy1 += renderChairBadge(1, 2, 'right: 2px; top: 50%; transform: translateY(-50%);', box1, false);
+        busy1 += renderChairBadge(1, 3, 'bottom: 2px; left: 50%; transform: translateX(-50%);', box1, false);
+        busy1 += renderChairBadge(1, 4, 'left: 2px; top: 50%; transform: translateY(-50%);', box1, false);
+        if (label1) {
+          label1.style.color = busy1 > 0 ? '#d97706' : '#059669';
+          label1.innerHTML = busy1 > 0 ? `🟡 Ocupada (${busy1} Comensal${busy1 > 1 ? 'es' : ''})` : `🟢 Disponible`;
+        }
+
+        // Mesa 2 + 3 Unidas
+        card2.style.setProperty('display', 'flex', 'important');
+        card2.style.setProperty('border', '2.5px solid #0284c7', 'important');
+        card2.style.setProperty('background', '#f0f9ff', 'important');
+        card2.style.setProperty('box-shadow', '0 8px 25px rgba(2, 132, 199, 0.15)', 'important');
+        if (head2) head2.innerHTML = '🔗 MESA 2 + MESA 3 UNIDAS <span style="font-size:11px;color:#0284c7;">(GRUPO MODULAR 8 A 10 PAX)</span>';
+        if (box2) { box2.style.width = '520px'; box2.style.height = '230px'; }
+        if (circle2) {
+          circle2.style.width = '380px';
+          circle2.style.height = '104px';
+          circle2.style.borderRadius = '18px';
+          circle2.innerHTML = `<span style="font-size:18px; font-weight:900; color:#0369a1;">M2 + M3 (UNIDAS)</span><span style="font-size:10px; font-weight:800; color:#0284c7; text-transform:uppercase;">Grupo Modular 8 a 10 Lugares</span>`;
+        }
+
+        let busyM2 = 0, busyM3 = 0;
+        busyM2 += renderChairBadge(2, 1, 'top: 2px; left: 22%; transform: translateX(-50%);', box2, true);
+        if (window.palapaState.cuentas['2-5']) {
+          busyM2 += renderChairBadge(2, 5, 'top: 2px; left: 42%; transform: translateX(-50%);', box2, true);
+        }
+        busyM3 += renderChairBadge(3, 1, 'top: 2px; left: 62%; transform: translateX(-50%);', box2, true);
+        busyM3 += renderChairBadge(3, 2, 'top: 2px; left: 82%; transform: translateX(-50%);', box2, true);
+
+        busyM2 += renderChairBadge(2, 3, 'bottom: 2px; left: 26%; transform: translateX(-50%);', box2, true);
+        busyM2 += renderChairBadge(2, 4, 'bottom: 2px; left: 56%; transform: translateX(-50%);', box2, true);
+        busyM3 += renderChairBadge(3, 3, 'bottom: 2px; left: 80%; transform: translateX(-50%);', box2, true);
+
+        busyM2 += renderChairBadge(2, 2, 'left: 2px; top: 50%; transform: translateY(-50%);', box2, true);
+        busyM3 += renderChairBadge(3, 4, 'right: 2px; top: 50%; transform: translateY(-50%);', box2, true);
+
+        const totalBusyJoined23 = busyM2 + busyM3;
+        if (label2) {
+          label2.style.color = totalBusyJoined23 > 0 ? '#d97706' : '#059669';
+          label2.innerHTML = totalBusyJoined23 > 0
+            ? `🟡 Ocupada (${totalBusyJoined23} Comensales Unidos: ${busyM2} de M2 + ${busyM3} de M3)`
+            : `🟢 Disponible (8 Lugares)`;
+        }
+
+        card3.style.setProperty('display', 'none', 'important');
+
+      // MODO 3: GRAN MESA IMPERIAL (M1 + M2 + M3)
+      } else if (unidas === '1-2-3' && grid && card1 && card2 && card3) {
+        grid.style.setProperty('grid-template-columns', '1fr', 'important');
+        card1.style.setProperty('display', 'flex', 'important');
+        card1.style.setProperty('border', '2.5px solid #0284c7', 'important');
+        card1.style.setProperty('background', '#f0f9ff', 'important');
+        card1.style.setProperty('box-shadow', '0 10px 30px rgba(2, 132, 199, 0.2)', 'important');
+        if (head1) head1.innerHTML = '👑 GRAN MESA IMPERIAL PALAPA (M1 + M2 + M3) • 10 A 14 PERSONAS';
+        if (box1) { box1.style.width = '740px'; box1.style.height = '230px'; }
+        if (circle1) {
+          circle1.style.width = '620px';
+          circle1.style.height = '104px';
+          circle1.style.borderRadius = '18px';
+          circle1.innerHTML = `<span style="font-size:18px; font-weight:900; color:#0369a1;">👑 M1 + M2 + M3 • BANQUETE IMPERIAL PALAPA</span><span style="font-size:10px; font-weight:800; color:#0284c7; text-transform:uppercase;">Reservado Especial 10 a 14 Lugares</span>`;
+        }
+
+        let busy1 = 0, busy2 = 0, busy3 = 0;
+        busy1 += renderChairBadge(1, 1, 'top: 2px; left: 14%; transform: translateX(-50%);', box1, true);
+        busy1 += renderChairBadge(1, 2, 'top: 2px; left: 28%; transform: translateX(-50%);', box1, true);
+        busy2 += renderChairBadge(2, 1, 'top: 2px; left: 42%; transform: translateX(-50%);', box1, true);
+        if (window.palapaState.cuentas['2-5']) {
+          busy2 += renderChairBadge(2, 5, 'top: 2px; left: 56%; transform: translateX(-50%);', box1, true);
+        }
+        busy3 += renderChairBadge(3, 1, 'top: 2px; left: 70%; transform: translateX(-50%);', box1, true);
+        busy3 += renderChairBadge(3, 2, 'top: 2px; left: 84%; transform: translateX(-50%);', box1, true);
+
+        busy1 += renderChairBadge(1, 3, 'bottom: 2px; left: 16%; transform: translateX(-50%);', box1, true);
+        busy2 += renderChairBadge(2, 3, 'bottom: 2px; left: 36%; transform: translateX(-50%);', box1, true);
+        busy2 += renderChairBadge(2, 4, 'bottom: 2px; left: 56%; transform: translateX(-50%);', box1, true);
+        busy3 += renderChairBadge(3, 3, 'bottom: 2px; left: 76%; transform: translateX(-50%);', box1, true);
+        busy3 += renderChairBadge(3, 4, 'bottom: 2px; left: 90%; transform: translateX(-50%);', box1, true);
+
+        busy1 += renderChairBadge(1, 4, 'left: 2px; top: 50%; transform: translateY(-50%);', box1, true);
+        busy3 += renderChairBadge(3, 2, 'right: 2px; top: 50%; transform: translateY(-50%);', box1, true);
+
+        const totalBusyImperial = busy1 + busy2 + busy3;
+        if (label1) {
+          label1.style.color = totalBusyImperial > 0 ? '#d97706' : '#059669';
+          label1.innerHTML = totalBusyImperial > 0
+            ? `🟡 Ocupada (${totalBusyImperial} Comensales: ${busy1} de M1 + ${busy2} de M2 + ${busy3} de M3)`
+            : `🟢 Disponible (Banquete Imperial 12-14 Pax)`;
+        }
+
+        card2.style.setProperty('display', 'none', 'important');
+        card3.style.setProperty('display', 'none', 'important');
+
+      // MODO 4: MESAS INDIVIDUALES ESTÁNDAR
+      } else if (grid && card1 && card2 && card3) {
+        grid.style.setProperty('grid-template-columns', 'repeat(3, 1fr)', 'important');
+
+        [card1, card2, card3].forEach(c => {
+          c.style.setProperty('display', 'flex', 'important');
+          c.style.setProperty('border', '1px solid #dce8f5', 'important');
+          c.style.setProperty('background', '#f8fbff', 'important');
+          c.style.setProperty('box-shadow', 'none', 'important');
+        });
+
+        if (head1) head1.innerHTML = 'Mesa 1 (Palapa)';
+        if (head2) head2.innerHTML = 'Mesa 2 (Palapa)';
+        if (head3) head3.innerHTML = 'Mesa 3 (Palapa)';
+
+        [box1, box2, box3].forEach(b => {
+          if (b) { b.style.width = '250px'; b.style.height = '230px'; }
+        });
+
+        [circle1, circle2, circle3].forEach((circ, idx) => {
+          if (circ) {
+            const mNum = idx + 1;
+            circ.style.width = '104px';
+            circ.style.height = '104px';
+            circ.style.borderRadius = '16px';
+            circ.innerHTML = `<span style="font-size:18px; font-weight:900; line-height:1;">M${mNum}</span><span id="table-status-${mNum}" style="font-size:9px; font-weight:800; text-transform:uppercase; margin-top:2px;">Libre</span>`;
           }
-          if (circle2) {
-            circle2.style.width = '104px';
-            circle2.style.height = '104px';
-            circle2.innerHTML = `<span style="font-size:18px; font-weight:900; color:#065f46; line-height:1;">M2</span><span id="table-status-2" style="font-size:9px; font-weight:800; color:#059669; text-transform:uppercase; margin-top:2px;">Libre</span>`;
-          }
-          if (circle3) {
-            circle3.style.width = '104px';
-            circle3.style.height = '104px';
-            circle3.innerHTML = `<span style="font-size:18px; font-weight:900; color:#92400e; line-height:1;">M3</span><span id="table-status-3" style="font-size:9px; font-weight:800; color:#d97706; text-transform:uppercase; margin-top:2px;">2 Ocupadas</span>`;
+        });
+
+        for (let m = 1; m <= 3; m++) {
+          const currentBox = document.getElementById(`table-box-${m}`);
+          const currentLabel = document.getElementById(`table-label-${m}`);
+          const currentCircle = document.getElementById(`table-circle-${m}`);
+          const currentStatus = document.getElementById(`table-status-${m}`);
+          let busyCount = 0;
+          let arrimadasCount = 0;
+
+          if (currentBox) {
+            // Sillas 1..4
+            busyCount += renderChairBadge(m, 1, 'top: 2px; left: 50%; transform: translateX(-50%);', currentBox, false);
+            busyCount += renderChairBadge(m, 2, 'right: 2px; top: 50%; transform: translateY(-50%);', currentBox, false);
+            busyCount += renderChairBadge(m, 3, 'bottom: 2px; left: 50%; transform: translateX(-50%);', currentBox, false);
+            busyCount += renderChairBadge(m, 4, 'left: 2px; top: 50%; transform: translateY(-50%);', currentBox, false);
+
+            // Sillas Arrimadas (S5+) ubicadas junto a la Silla 1 en la arista superior
+            Object.keys(window.palapaState.cuentas).forEach(k => {
+              const parts = k.split('-');
+              if (parseInt(parts[0]) === m) {
+                const sn = parseInt(parts[1]);
+                if (sn >= 5) {
+                  arrimadasCount++;
+                  const offsetCss = sn === 5
+                    ? 'top: 2px; left: calc(50% + 56px);'
+                    : sn === 6
+                    ? 'top: 2px; left: calc(50% - 56px);'
+                    : sn === 7
+                    ? 'bottom: 2px; left: calc(50% + 56px);'
+                    : 'bottom: 2px; left: calc(50% - 56px);';
+                  busyCount += renderChairBadge(m, sn, offsetCss, currentBox, false);
+                }
+              }
+            });
+
+            if (currentCircle) {
+              if (busyCount > 0) {
+                currentCircle.style.background = "#fffbeb";
+                currentCircle.style.border = "3px solid #f59e0b";
+                currentCircle.style.color = "#92400e";
+                currentCircle.style.boxShadow = "0 2px 8px rgba(245, 158, 11, 0.2)";
+                if (currentStatus) {
+                  currentStatus.innerText = `${busyCount} Ocupada${busyCount > 1 ? 's' : ''}`;
+                  currentStatus.style.color = "#d97706";
+                }
+                if (currentLabel) {
+                  currentLabel.style.color = "#d97706";
+                  currentLabel.innerText = `🟡 Ocupada (${busyCount} Comensal${busyCount > 1 ? 'es' : ''}${arrimadasCount > 0 ? ' • ' + arrimadasCount + ' Arrimada' : ''})`;
+                }
+              } else {
+                currentCircle.style.background = "#ecfdf5";
+                currentCircle.style.border = "3px solid #10b981";
+                currentCircle.style.color = "#065f46";
+                currentCircle.style.boxShadow = "0 2px 8px rgba(16, 185, 129, 0.2)";
+                if (currentStatus) {
+                  currentStatus.innerText = `Libre`;
+                  currentStatus.style.color = "#059669";
+                }
+                if (currentLabel) {
+                  currentLabel.style.color = "#059669";
+                  currentLabel.innerText = `🟢 Disponible`;
+                }
+              }
+            }
           }
         }
       }
