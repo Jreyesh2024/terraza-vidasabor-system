@@ -9,25 +9,39 @@ html, body, .anvil-container, div[anvil-slot] {
   padding: 0 !important;
 }
 
-/* Immutable Table Circle CSS */
-.table-circle-fixed {
-  width: 96px !important;
-  height: 96px !important;
-  border-radius: 50% !important;
+/* Immutable Table Square CSS (Mesas Cuadradas Modulares) */
+.table-square-fixed {
+  width: 104px !important;
+  height: 104px !important;
+  border-radius: 16px !important;
   display: flex !important;
   flex-direction: column !important;
   align-items: center !important;
   justify-content: center !important;
   cursor: pointer !important;
   z-index: 10 !important;
-  transition: all 0.2s ease !important;
+  transition: all 0.25s ease !important;
+}
+
+/* Backward compatibility */
+.table-circle-fixed {
+  width: 104px !important;
+  height: 104px !important;
+  border-radius: 16px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+  z-index: 10 !important;
+  transition: all 0.25s ease !important;
 }
 
 /* Immutable Table Box Container */
 .table-box-220 {
   position: relative !important;
-  width: 220px !important;
-  height: 220px !important;
+  width: 250px !important;
+  height: 230px !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
@@ -37,7 +51,7 @@ html, body, .anvil-container, div[anvil-slot] {
 /* Immutable Chair Nodes Positions */
 .chair-pos-top {
   position: absolute !important;
-  top: 4px !important;
+  top: 2px !important;
   left: 50% !important;
   transform: translateX(-50%) !important;
   z-index: 20 !important;
@@ -45,7 +59,7 @@ html, body, .anvil-container, div[anvil-slot] {
 
 .chair-pos-right {
   position: absolute !important;
-  right: 4px !important;
+  right: 2px !important;
   top: 50% !important;
   transform: translateY(-50%) !important;
   z-index: 20 !important;
@@ -53,7 +67,7 @@ html, body, .anvil-container, div[anvil-slot] {
 
 .chair-pos-bottom {
   position: absolute !important;
-  bottom: 4px !important;
+  bottom: 2px !important;
   left: 50% !important;
   transform: translateX(-50%) !important;
   z-index: 20 !important;
@@ -61,9 +75,38 @@ html, body, .anvil-container, div[anvil-slot] {
 
 .chair-pos-left {
   position: absolute !important;
-  left: 4px !important;
+  left: 2px !important;
   top: 50% !important;
   transform: translateY(-50%) !important;
+  z-index: 20 !important;
+}
+
+/* Diagonal positions for extra/arrimada chairs (S5+) - Clean non-overlapping offset */
+.chair-pos-diag-tr {
+  position: absolute !important;
+  top: 6px !important;
+  right: 6px !important;
+  z-index: 20 !important;
+}
+
+.chair-pos-diag-tl {
+  position: absolute !important;
+  top: 6px !important;
+  left: 6px !important;
+  z-index: 20 !important;
+}
+
+.chair-pos-diag-br {
+  position: absolute !important;
+  bottom: 6px !important;
+  right: 6px !important;
+  z-index: 20 !important;
+}
+
+.chair-pos-diag-bl {
+  position: absolute !important;
+  bottom: 6px !important;
+  left: 6px !important;
   z-index: 20 !important;
 }
 

@@ -398,20 +398,47 @@
           </div>
         </div>
 
-        <!-- 3 CIRCULAR TABLES WITH 4 CHAIRS EACH -->
-        <div
-          style="display: grid !important; grid-template-columns: repeat(3, 1fr) !important; gap: 20px !important; margin: auto 0 !important; padding: 20px 0 !important;">
+        <!-- BARRA DE AGRUPACIÓN / UNIÓN DE MESAS (GRUPOS 8 - 12 PAX) -->
+        <div id="joinTablesControlBar"
+          style="display: flex !important; flex-wrap: wrap !important; justify-content: space-between !important; align-items: center !important; gap: 10px !important; background: #e0f2fe !important; border: 1.5px solid #bae6fd !important; border-radius: 14px !important; padding: 8px 16px !important;">
+          <div style="display: flex !important; align-items: center !important; gap: 8px !important; font-size: 11px !important; font-weight: 800 !important; color: #0369a1 !important;">
+            <i class="fa-solid fa-link" style="color: #0284c7;"></i>
+            <span>Unión Modular de Mesas:</span>
+          </div>
+          <div style="display: flex !important; gap: 8px !important; align-items: center !important; flex-wrap: wrap !important;">
+            <button id="btnJoin12" onclick="window.unirMesas('1-2');" type="button"
+              style="padding: 6px 12px !important; font-size: 11px !important; font-weight: 800 !important; border-radius: 8px !important; background: #ffffff !important; color: #0284c7 !important; border: 1.5px solid #0284c7 !important; cursor: pointer !important; display: flex !important; align-items: center !important; gap: 6px !important; box-shadow: 0 2px 4px rgba(2, 132, 199, 0.1) !important;">
+              🔗 Juntar M1 + M2 (8 Pax)
+            </button>
+            <button id="btnJoin23" onclick="window.unirMesas('2-3');" type="button"
+              style="padding: 6px 12px !important; font-size: 11px !important; font-weight: 800 !important; border-radius: 8px !important; background: #ffffff !important; color: #0284c7 !important; border: 1.5px solid #0284c7 !important; cursor: pointer !important; display: flex !important; align-items: center !important; gap: 6px !important; box-shadow: 0 2px 4px rgba(2, 132, 199, 0.1) !important;">
+              🔗 Juntar M2 + M3 (8 Pax)
+            </button>
+            <button id="btnJoinAll" onclick="window.unirMesas('1-2-3');" type="button"
+              style="padding: 6px 12px !important; font-size: 11px !important; font-weight: 800 !important; border-radius: 8px !important; background: linear-gradient(135deg, #0284c7, #0369a1) !important; color: #ffffff !important; border: none !important; cursor: pointer !important; display: flex !important; align-items: center !important; gap: 6px !important; box-shadow: 0 2px 6px rgba(2, 132, 199, 0.25) !important;">
+              👑 Juntar Todas M1+M2+M3 (Imperial 10-12 Pax)
+            </button>
+            <button id="btnSeparateTables" onclick="window.separarMesas();" type="button"
+              style="display: none !important; padding: 6px 12px !important; font-size: 11px !important; font-weight: 800 !important; border-radius: 8px !important; background: #fef2f2 !important; color: #dc2626 !important; border: 1.5px solid #f87171 !important; cursor: pointer !important; align-items: center !important; gap: 6px !important;">
+              ✂ Separar a Mesas Individuales
+            </button>
+          </div>
+        </div>
+
+        <!-- 3 SQUARE MODULAR TABLES WITH ZERO OVERLAP CHAIRS -->
+        <div id="floorplanTablesGrid"
+          style="display: grid !important; grid-template-columns: repeat(3, 1fr) !important; gap: 20px !important; margin: auto 0 !important; padding: 14px 0 !important;">
 
           <!-- MESA 1 -->
-          <div
-            style="display: flex !important; flex-direction: column !important; align-items: center !important; gap: 12px !important; background: #f8fbff !important; border: 1px solid #dce8f5 !important; border-radius: 16px !important; padding: 16px !important;">
-            <span
+          <div id="table-card-container-1"
+            style="display: flex !important; flex-direction: column !important; align-items: center !important; gap: 12px !important; background: #f8fbff !important; border: 1px solid #dce8f5 !important; border-radius: 16px !important; padding: 16px !important; transition: all 0.3s ease !important;">
+            <span id="table-header-title-1"
               style="font-size: 13px !important; font-weight: 800 !important; color: #1e3a5f !important; text-transform: uppercase !important; letter-spacing: 0.5px !important;">Mesa 1 (Palapa)</span>
 
             <div id="table-box-1" class="table-box-220"
-              style="position: relative !important; width: 220px !important; height: 220px !important; display: flex !important; align-items: center !important; justify-content: center !important; margin: 0 auto !important;">
-              <div id="table-circle-1" class="table-circle-fixed"
-                style="width: 96px !important; height: 96px !important; border-radius: 50% !important; background: #ecfdf5 !important; border: 3px solid #10b981 !important; box-shadow: 0 2px 8px rgba(16, 185, 129, 0.2) !important; display: flex !important; flex-direction: column !important; align-items: center !important; justify-content: center !important; cursor: pointer !important; z-index: 10 !important;">
+              style="position: relative !important; width: 250px !important; height: 230px !important; display: flex !important; align-items: center !important; justify-content: center !important; margin: 0 auto !important;">
+              <div id="table-circle-1" class="table-square-fixed"
+                style="width: 104px !important; height: 104px !important; border-radius: 16px !important; background: #ecfdf5 !important; border: 3px solid #10b981 !important; box-shadow: 0 2px 8px rgba(16, 185, 129, 0.2) !important; display: flex !important; flex-direction: column !important; align-items: center !important; justify-content: center !important; cursor: pointer !important; z-index: 10 !important;">
                 <span
                   style="font-size: 18px !important; font-weight: 900 !important; color: #065f46 !important; margin: 0 !important; line-height: 1 !important;">M1</span>
                 <span id="table-status-1"
@@ -433,15 +460,15 @@
           </div>
 
           <!-- MESA 2 -->
-          <div
-            style="display: flex !important; flex-direction: column !important; align-items: center !important; gap: 12px !important; background: #f8fbff !important; border: 1px solid #dce8f5 !important; border-radius: 16px !important; padding: 16px !important;">
-            <span
+          <div id="table-card-container-2"
+            style="display: flex !important; flex-direction: column !important; align-items: center !important; gap: 12px !important; background: #f8fbff !important; border: 1px solid #dce8f5 !important; border-radius: 16px !important; padding: 16px !important; transition: all 0.3s ease !important;">
+            <span id="table-header-title-2"
               style="font-size: 13px !important; font-weight: 800 !important; color: #1e3a5f !important; text-transform: uppercase !important; letter-spacing: 0.5px !important;">Mesa 2 (Palapa)</span>
 
             <div id="table-box-2" class="table-box-220"
-              style="position: relative !important; width: 220px !important; height: 220px !important; display: flex !important; align-items: center !important; justify-content: center !important; margin: 0 auto !important;">
-              <div id="table-circle-2" class="table-circle-fixed"
-                style="width: 96px !important; height: 96px !important; border-radius: 50% !important; background: #ecfdf5 !important; border: 3px solid #10b981 !important; box-shadow: 0 2px 8px rgba(16, 185, 129, 0.2) !important; display: flex !important; flex-direction: column !important; align-items: center !important; justify-content: center !important; cursor: pointer !important; z-index: 10 !important;">
+              style="position: relative !important; width: 250px !important; height: 230px !important; display: flex !important; align-items: center !important; justify-content: center !important; margin: 0 auto !important;">
+              <div id="table-circle-2" class="table-square-fixed"
+                style="width: 104px !important; height: 104px !important; border-radius: 16px !important; background: #ecfdf5 !important; border: 3px solid #10b981 !important; box-shadow: 0 2px 8px rgba(16, 185, 129, 0.2) !important; display: flex !important; flex-direction: column !important; align-items: center !important; justify-content: center !important; cursor: pointer !important; z-index: 10 !important;">
                 <span
                   style="font-size: 18px !important; font-weight: 900 !important; color: #065f46 !important; margin: 0 !important; line-height: 1 !important;">M2</span>
                 <span id="table-status-2"
@@ -463,15 +490,15 @@
           </div>
 
           <!-- MESA 3 -->
-          <div
-            style="display: flex !important; flex-direction: column !important; align-items: center !important; gap: 12px !important; background: #f8fbff !important; border: 1px solid #dce8f5 !important; border-radius: 16px !important; padding: 16px !important;">
-            <span
+          <div id="table-card-container-3"
+            style="display: flex !important; flex-direction: column !important; align-items: center !important; gap: 12px !important; background: #f8fbff !important; border: 1px solid #dce8f5 !important; border-radius: 16px !important; padding: 16px !important; transition: all 0.3s ease !important;">
+            <span id="table-header-title-3"
               style="font-size: 13px !important; font-weight: 800 !important; color: #92400e !important; text-transform: uppercase !important; letter-spacing: 0.5px !important;">Mesa 3 (Palapa)</span>
 
             <div id="table-box-3" class="table-box-220"
-              style="position: relative !important; width: 220px !important; height: 220px !important; display: flex !important; align-items: center !important; justify-content: center !important; margin: 0 auto !important;">
-              <div id="table-circle-3" class="table-circle-fixed"
-                style="width: 96px !important; height: 96px !important; border-radius: 50% !important; background: #fffbeb !important; border: 3px solid #f59e0b !important; box-shadow: 0 2px 8px rgba(245, 158, 11, 0.2) !important; display: flex !important; flex-direction: column !important; align-items: center !important; justify-content: center !important; cursor: pointer !important; z-index: 10 !important;">
+              style="position: relative !important; width: 250px !important; height: 230px !important; display: flex !important; align-items: center !important; justify-content: center !important; margin: 0 auto !important;">
+              <div id="table-circle-3" class="table-square-fixed"
+                style="width: 104px !important; height: 104px !important; border-radius: 16px !important; background: #fffbeb !important; border: 3px solid #f59e0b !important; box-shadow: 0 2px 8px rgba(245, 158, 11, 0.2) !important; display: flex !important; flex-direction: column !important; align-items: center !important; justify-content: center !important; cursor: pointer !important; z-index: 10 !important;">
                 <span
                   style="font-size: 18px !important; font-weight: 900 !important; color: #92400e !important; margin: 0 !important; line-height: 1 !important;">M3</span>
                 <span id="table-status-3"
@@ -2374,6 +2401,26 @@
       showDragToast(`🪑 Silla ${nuevaSillaNum} (Extra Arrimada) incorporada a Mesa ${mesaId}`, 'ok');
     };
 
+    window.unirMesas = function(tipo) {
+      window.palapaState.mesasUnidas = tipo;
+      saveStateToStorage();
+      renderStateUI();
+      if (tipo === '1-2') {
+        showDragToast('🔗 Mesas 1 y 2 unidas en un solo grupo modular (8 Lugares)', 'ok');
+      } else if (tipo === '2-3') {
+        showDragToast('🔗 Mesas 2 y 3 unidas en un solo grupo modular (8 Lugares)', 'ok');
+      } else if (tipo === '1-2-3') {
+        showDragToast('👑 Mesas 1, 2 y 3 agrupadas en Gran Mesa Imperial (10 a 12 Lugares)', 'ok');
+      }
+    };
+
+    window.separarMesas = function() {
+      window.palapaState.mesasUnidas = null;
+      saveStateToStorage();
+      renderStateUI();
+      showDragToast('✂ Mesas separadas a configuración individual estándar', 'info');
+    };
+
     window.iniciarModoMover = function() {
       const mesaId = window.palapaState.mesaSeleccionadaId;
       const sillaNum = window.palapaState.sillaSeleccionadaNum;
@@ -3991,6 +4038,50 @@
               labelText.style.color = "#059669";
               labelText.innerText = `🟢 Disponible`;
             }
+          }
+        }
+      }
+
+      // 2.1 Renderizar Efecto Visual de Mesas Unidas / Grupos Modulares
+      const unidas = window.palapaState.mesasUnidas;
+      const btnSep = document.getElementById('btnSeparateTables');
+      const btn12 = document.getElementById('btnJoin12');
+      const btn23 = document.getElementById('btnJoin23');
+      const btnAll = document.getElementById('btnJoinAll');
+
+      if (btnSep) btnSep.style.setProperty('display', unidas ? 'flex' : 'none', 'important');
+      if (btn12) btn12.style.background = unidas === '1-2' ? '#0284c7' : '#ffffff';
+      if (btn12) btn12.style.color = unidas === '1-2' ? '#ffffff' : '#0284c7';
+      if (btn23) btn23.style.background = unidas === '2-3' ? '#0284c7' : '#ffffff';
+      if (btn23) btn23.style.color = unidas === '2-3' ? '#ffffff' : '#0284c7';
+      if (btnAll) btnAll.style.background = unidas === '1-2-3' ? '#0369a1' : 'linear-gradient(135deg, #0284c7, #0369a1)';
+
+      for (let m = 1; m <= 3; m++) {
+        const card = document.getElementById(`table-card-container-${m}`);
+        const headerTitle = document.getElementById(`table-header-title-${m}`);
+        const isJoined = unidas === '1-2-3' || (unidas === '1-2' && (m === 1 || m === 2)) || (unidas === '2-3' && (m === 2 || m === 3));
+
+        if (card) {
+          if (isJoined) {
+            card.style.border = '2px solid #0284c7';
+            card.style.background = '#f0f9ff';
+            card.style.boxShadow = '0 6px 20px rgba(2, 132, 199, 0.15)';
+          } else {
+            card.style.border = '1px solid #dce8f5';
+            card.style.background = '#f8fbff';
+            card.style.boxShadow = 'none';
+          }
+        }
+
+        if (headerTitle) {
+          if (unidas === '1-2-3') {
+            headerTitle.innerHTML = `👑 Mesa ${m} <span style="font-size:10px; color:#0284c7;">(Imperial 10-12 Pax)</span>`;
+          } else if (unidas === '1-2' && (m === 1 || m === 2)) {
+            headerTitle.innerHTML = `🔗 Mesa ${m} <span style="font-size:10px; color:#0284c7;">(Grupo M1+M2)</span>`;
+          } else if (unidas === '2-3' && (m === 2 || m === 3)) {
+            headerTitle.innerHTML = `🔗 Mesa ${m} <span style="font-size:10px; color:#0284c7;">(Grupo M2+M3)</span>`;
+          } else {
+            headerTitle.innerHTML = `Mesa ${m} (Palapa)`;
           }
         }
       }
