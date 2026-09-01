@@ -5,331 +5,331 @@
   html,
   body,
   .anvil-container {
-    background-color: #090d16 !important;
-    color: #f8fafc !important;
-    font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
-    margin: 0 !important;
-    padding: 0 !important;
+  background-color: #090d16 !important;
+  color: #f8fafc !important;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
+  margin: 0 !important;
+  padding: 0 !important;
   }
 
   /* ── Drag &amp; Drop Visual Styles (HTML5 native dragstart/dragover/drop) ── */
   .chair-btn-fixed[draggable=&quot;true&quot;] {
-    cursor: grab !important;
-    user-select: none !important;
-    touch-action: none !important;
+  cursor: grab !important;
+  user-select: none !important;
+  touch-action: none !important;
   }
 
   .chair-btn-fixed.chair-dragging {
-    opacity: 0.35 !important;
-    transform: scale(1.12) !important;
-    border: 2px dashed #38bdf8 !important;
-    box-shadow: 0 0 22px rgba(56, 189, 248, 0.85) !important;
-    cursor: grabbing !important;
-    z-index: 5 !important;
+  opacity: 0.35 !important;
+  transform: scale(1.12) !important;
+  border: 2px dashed #38bdf8 !important;
+  box-shadow: 0 0 22px rgba(56, 189, 248, 0.85) !important;
+  cursor: grabbing !important;
+  z-index: 5 !important;
   }
 
   .chair-btn-fixed.chair-drag-target-valid {
-    border: 2px solid #38bdf8 !important;
-    box-shadow: 0 0 22px #38bdf8, inset 0 0 12px rgba(56, 189, 248, 0.5) !important;
-    transform: scale(1.2) !important;
-    transition: transform 0.12s ease, box-shadow 0.12s ease !important;
-    background: rgba(56, 189, 248, 0.18) !important;
+  border: 2px solid #38bdf8 !important;
+  box-shadow: 0 0 22px #38bdf8, inset 0 0 12px rgba(56, 189, 248, 0.5) !important;
+  transform: scale(1.2) !important;
+  transition: transform 0.12s ease, box-shadow 0.12s ease !important;
+  background: rgba(56, 189, 248, 0.18) !important;
   }
 
   .chair-btn-fixed.chair-drag-target-combine {
-    border: 2px solid #f59e0b !important;
-    box-shadow: 0 0 22px #f59e0b, inset 0 0 12px rgba(245, 158, 11, 0.5) !important;
-    transform: scale(1.2) !important;
-    transition: transform 0.12s ease, box-shadow 0.12s ease !important;
-    background: rgba(245, 158, 11, 0.18) !important;
+  border: 2px solid #f59e0b !important;
+  box-shadow: 0 0 22px #f59e0b, inset 0 0 12px rgba(245, 158, 11, 0.5) !important;
+  transform: scale(1.2) !important;
+  transition: transform 0.12s ease, box-shadow 0.12s ease !important;
+  background: rgba(245, 158, 11, 0.18) !important;
   }
 
   /* ── Silla ORIGEN en modo mover (click o drag iniciado) ── */
   .chair-btn-fixed.chair-moving-source {
-    border: 2px solid #38bdf8 !important;
-    box-shadow: 0 0 18px rgba(56, 189, 248, 0.9) !important;
-    animation: pulse-glow-cyan 1s ease-in-out infinite !important;
-    opacity: 0.85 !important;
+  border: 2px solid #38bdf8 !important;
+  box-shadow: 0 0 18px rgba(56, 189, 248, 0.9) !important;
+  animation: pulse-glow-cyan 1s ease-in-out infinite !important;
+  opacity: 0.85 !important;
   }
 
   /* ── Sillas DESTINO disponibles en modo mover ── */
   .chair-btn-fixed.chair-moving-target.chair-state-free {
-    border: 2px dashed #10b981 !important;
-    box-shadow: 0 0 12px rgba(16, 185, 129, 0.5) !important;
-    animation: pulse-glow-green 1.2s ease-in-out infinite !important;
+  border: 2px dashed #10b981 !important;
+  box-shadow: 0 0 12px rgba(16, 185, 129, 0.5) !important;
+  animation: pulse-glow-green 1.2s ease-in-out infinite !important;
   }
 
   .chair-btn-fixed.chair-moving-target.chair-state-busy {
-    border: 2px dashed #f59e0b !important;
-    box-shadow: 0 0 12px rgba(245, 158, 11, 0.5) !important;
-    animation: pulse-glow-amber 1.2s ease-in-out infinite !important;
+  border: 2px dashed #f59e0b !important;
+  box-shadow: 0 0 12px rgba(245, 158, 11, 0.5) !important;
+  animation: pulse-glow-amber 1.2s ease-in-out infinite !important;
   }
 
   @keyframes pulse-glow-cyan {
 
-    0%,
-    100% {
-      box-shadow: 0 0 10px rgba(56, 189, 248, 0.6);
-    }
+  0%,
+  100% {
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.6);
+  }
 
-    50% {
-      box-shadow: 0 0 28px rgba(56, 189, 248, 1.0);
-    }
+  50% {
+  box-shadow: 0 0 28px rgba(56, 189, 248, 1.0);
+  }
   }
 
   @keyframes pulse-glow-green {
 
-    0%,
-    100% {
-      box-shadow: 0 0 6px rgba(16, 185, 129, 0.4);
-    }
+  0%,
+  100% {
+  box-shadow: 0 0 6px rgba(16, 185, 129, 0.4);
+  }
 
-    50% {
-      box-shadow: 0 0 20px rgba(16, 185, 129, 0.9);
-    }
+  50% {
+  box-shadow: 0 0 20px rgba(16, 185, 129, 0.9);
+  }
   }
 
   @keyframes pulse-glow-amber {
 
-    0%,
-    100% {
-      box-shadow: 0 0 6px rgba(245, 158, 11, 0.4);
-    }
+  0%,
+  100% {
+  box-shadow: 0 0 6px rgba(245, 158, 11, 0.4);
+  }
 
-    50% {
-      box-shadow: 0 0 20px rgba(245, 158, 11, 0.9);
-    }
+  50% {
+  box-shadow: 0 0 20px rgba(245, 158, 11, 0.9);
+  }
   }
 
   /* ── Toast de notificación drag ── */
   #dragToast {
-    position: fixed;
-    bottom: 28px;
-    left: 50%;
-    transform: translateX(-50%) translateY(80px);
-    background: #0f172a;
-    color: #f8fafc;
-    border: 1px solid #334155;
-    padding: 12px 22px;
-    border-radius: 16px;
-    font-size: 13px;
-    font-weight: 700;
-    white-space: nowrap;
-    z-index: 9999;
-    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.7);
-    transition: transform 0.28s cubic-bezier(.34, 1.56, .64, 1), opacity 0.28s ease;
-    opacity: 0;
-    pointer-events: none;
+  position: fixed;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%) translateY(80px);
+  background: #0f172a;
+  color: #f8fafc;
+  border: 1px solid #334155;
+  padding: 12px 22px;
+  border-radius: 16px;
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+  z-index: 9999;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.7);
+  transition: transform 0.28s cubic-bezier(.34, 1.56, .64, 1), opacity 0.28s ease;
+  opacity: 0;
+  pointer-events: none;
   }
 
   #dragToast.show {
-    transform: translateX(-50%) translateY(0);
-    opacity: 1;
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
   }
 
   #dragToast.toast-ok {
-    border-color: #10b981;
-    color: #34d399;
+  border-color: #10b981;
+  color: #34d399;
   }
 
   #dragToast.toast-warn {
-    border-color: #f59e0b;
-    color: #fbbf24;
+  border-color: #f59e0b;
+  color: #fbbf24;
   }
 
   #dragToast.toast-err {
-    border-color: #ef4444;
-    color: #f87171;
+  border-color: #ef4444;
+  color: #f87171;
   }
 
   /* ── Mini-modal confirmación combinación ── */
   #combineConfirmBackdrop {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.7);
-    z-index: 9998;
-    align-items: center;
-    justify-content: center;
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 9998;
+  align-items: center;
+  justify-content: center;
   }
 
   #combineConfirmBackdrop.show {
-    display: flex;
+  display: flex;
   }
 
   /* ── Modal Comanda / Ticket por Silla ── */
   #modalComandaBackdrop {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.75);
-    z-index: 9990;
-    align-items: center;
-    justify-content: center;
-    backdrop-filter: blur(4px);
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  z-index: 9990;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(4px);
   }
 
   #modalComandaBackdrop.show {
-    display: flex !important;
+  display: flex !important;
   }
 
   /* ── Modal Precuenta Térmica Formal ── */
   #modalPrecuentaBackdrop {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.8);
-    z-index: 9995;
-    align-items: center;
-    justify-content: center;
-    backdrop-filter: blur(5px);
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.8);
+  z-index: 9995;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(5px);
   }
 
   #modalPrecuentaBackdrop.show {
-    display: flex !important;
+  display: flex !important;
   }
 
   /* ── Modal Pasarela de Cobro y Liquidación Multi-Método ── */
   #modalPasarelaCobroBackdrop {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.85);
-    z-index: 9998;
-    align-items: center;
-    justify-content: center;
-    backdrop-filter: blur(6px);
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  z-index: 9998;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(6px);
   }
 
   #modalPasarelaCobroBackdrop.show {
-    display: flex !important;
+  display: flex !important;
   }
 
   #combineConfirmBox {
-    background: #0f172a;
-    border: 1px solid #334155;
-    border-radius: 18px;
-    padding: 28px 32px;
-    min-width: 320px;
-    max-width: 420px;
-    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.8);
-    display: flex;
-    flex-direction: column;
-    gap: 18px;
-    animation: slideUp 0.22s cubic-bezier(.34, 1.56, .64, 1);
+  background: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 18px;
+  padding: 28px 32px;
+  min-width: 320px;
+  max-width: 420px;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.8);
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  animation: slideUp 0.22s cubic-bezier(.34, 1.56, .64, 1);
   }
 
   /* ── Durante drag: bajar z-index de círculos para que no bloqueen el drop ── */
   body.drag-active .table-circle-fixed {
-    pointer-events: none !important;
-    z-index: 1 !important;
+  pointer-events: none !important;
+  z-index: 1 !important;
   }
 
   /* Asegurar que sillas reciban eventos durante drag ── */
   body.drag-active .chair-btn-fixed {
-    pointer-events: auto !important;
+  pointer-events: auto !important;
   }
 
   /* Área completa de mesa como zona de drop activa */
   .table-box-220.drop-zone-active {
-    outline: 2px dashed rgba(56, 189, 248, 0.35) !important;
-    outline-offset: 4px !important;
-    border-radius: 12px !important;
+  outline: 2px dashed rgba(56, 189, 248, 0.35) !important;
+  outline-offset: 4px !important;
+  border-radius: 12px !important;
   }
 
   /* Dual-mode layout transition (Overview vs Comanda &amp; Wide Menu) */
   #mainCanvasGrid.mode-overview {
-    display: grid !important;
-    grid-template-columns: 1fr !important;
-    gap: 20px !important;
-    flex: 1 !important;
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  gap: 20px !important;
+  flex: 1 !important;
   }
   #mainCanvasGrid.mode-overview #panelCroquisMesas {
-    width: 100% !important;
-    max-width: 100% !important;
+  width: 100% !important;
+  max-width: 100% !important;
   }
   #mainCanvasGrid.mode-overview #panelMenuCatalogo {
-    display: none !important;
+  display: none !important;
   }
   #mainCanvasGrid.mode-overview #viewOverviewCroquis {
-    display: flex !important;
+  display: flex !important;
   }
   #mainCanvasGrid.mode-overview #viewSidebarComanda {
-    display: none !important;
+  display: none !important;
   }
 
   #mainCanvasGrid.mode-comanda {
-    display: grid !important;
-    grid-template-columns: 420px 1fr !important;
-    gap: 20px !important;
-    flex: 1 !important;
+  display: grid !important;
+  grid-template-columns: 420px 1fr !important;
+  gap: 20px !important;
+  flex: 1 !important;
   }
   #mainCanvasGrid.mode-comanda #panelCroquisMesas {
-    width: 420px !important;
-    max-width: 420px !important;
-    padding: 16px !important;
+  width: 420px !important;
+  max-width: 420px !important;
+  padding: 16px !important;
   }
   #mainCanvasGrid.mode-comanda #viewOverviewCroquis {
-    display: none !important;
+  display: none !important;
   }
   #mainCanvasGrid.mode-comanda #viewSidebarComanda {
-    display: flex !important;
+  display: flex !important;
   }
   #mainCanvasGrid.mode-comanda #panelMenuCatalogo {
-    display: flex !important;
+  display: flex !important;
   }
 
   @keyframes slideUp {
-    from {
-      transform: translateY(30px);
-      opacity: 0;
-    }
+  from {
+  transform: translateY(30px);
+  opacity: 0;
+  }
 
-    to {
-      transform: translateY(0);
-      opacity: 1;
-    }
+  to {
+  transform: translateY(0);
+  opacity: 1;
+  }
   }
 </style>
 
 <div
-  style=&quot;background-color: #090d16 !important; color: #f8fafc !important; font-family: 'Inter', system-ui, sans-serif !important; min-height: 100vh !important; padding: 20px !important; box-sizing: border-box !important; display: flex !important; flex-direction: column !important; gap: 20px !important;&quot;>
+  style=&quot;background-color: #eaf2fb !important; color: #1e293b !important; font-family: 'Inter', system-ui, sans-serif !important; min-height: 100vh !important; padding: 75px 20px 24px 20px !important; box-sizing: border-box !important; display: flex !important; flex-direction: column !important; gap: 16px !important;&quot;>
 
-  <!-- HEADER BAR &amp; AREA SWITCHER -->
+  <!-- HEADER BAR &amp; AREA SWITCHER (CARD DESTACADA INMUNE AL BANNER) -->
   <div
-    style=&quot;display: flex !important; flex-wrap: wrap !important; justify-content: space-between !important; align-items: center !important; gap: 15px !important; padding-bottom: 15px !important; border-bottom: 1px solid #1e293b !important;&quot;>
-    <div style=&quot;display: flex !important; align-items: center !important; gap: 12px !important;&quot;>
+    style=&quot;display: flex !important; flex-wrap: wrap !important; justify-content: space-between !important; align-items: center !important; gap: 14px !important; background: #1e3a5f !important; padding: 14px 20px !important; border-radius: 16px !important; box-shadow: 0 4px 16px rgba(30, 58, 95, 0.15) !important;&quot;>
+    <div style=&quot;display: flex !important; align-items: center !important; gap: 14px !important;&quot;>
       <div
-        style=&quot;width: 48px !important; height: 48px !important; border-radius: 16px !important; background: linear-gradient(135deg, #10b981, #0f766e) !important; display: flex !important; align-items: center !important; justify-content: center !important; font-size: 22px !important; font-weight: 900 !important; color: #ffffff !important; box-shadow: 0 0 20px rgba(16, 185, 129, 0.4) !important;&quot;>
+        style=&quot;width: 44px !important; height: 44px !important; border-radius: 12px !important; background: linear-gradient(135deg, #0284c7, #0f766e) !important; display: flex !important; align-items: center !important; justify-content: center !important; font-size: 20px !important; font-weight: 900 !important; color: #ffffff !important; box-shadow: 0 2px 10px rgba(2, 132, 199, 0.3) !important;&quot;>
         V&amp;S
       </div>
       <div>
         <h1
-          style=&quot;font-size: 20px !important; font-weight: 800 !important; color: #ffffff !important; margin: 0 !important;&quot;>
-          Plano Gráfico 2D • La Terraza de Vida &amp; Sabor</h1>
+          style=&quot;font-size: 18px !important; font-weight: 800 !important; color: #ffffff !important; margin: 0 !important;&quot;>
+          Plano Gráfico de Mesas • La Terraza de Vida &amp; Sabor</h1>
         <p
-          style=&quot;font-size: 12px !important; font-weight: 600 !important; color: #34d399 !important; margin: 2px 0 0 0 !important;&quot;>
-          Gestión Espacial de Mesas Circulares (Área Palapa 6.00m x 4.00m)</p>
+          style=&quot;font-size: 11px !important; font-weight: 600 !important; color: #7dd3fc !important; margin: 2px 0 0 0 !important;&quot;>
+          Área 1: La Palapa (6.00m x 4.00m) • Arrastra las sillas con el mouse para mover comensales</p>
       </div>
     </div>
 
     <!-- AREA SELECTOR &amp; MODULE SWITCHER -->
     <div
-      style=&quot;display: flex !important; gap: 8px !important; background: #0f172a !important; padding: 6px !important; border-radius: 16px !important; border: 1px solid #1e293b !important; align-items: center !important;&quot;>
-      <button id=&quot;btn-area-palapa&quot; onclick=&quot;if(window.anvilAppNav) window.anvilAppNav('pos_mesero');&quot;
-        style=&quot;padding: 8px 16px !important; font-size: 12px !important; font-weight: 700 !important; border-radius: 12px !important; background-color: #059669 !important; color: #ffffff !important; border: none !important; cursor: pointer !important; display: flex !important; align-items: center !important; gap: 6px !important;&quot;>
+      style=&quot;display: flex !important; flex-wrap: wrap !important; gap: 8px !important; background: #0f2744 !important; padding: 6px 10px !important; border-radius: 12px !important; border: 1px solid rgba(255,255,255,0.12) !important; align-items: center !important;&quot;>
+      <button id=&quot;btn-area-palapa&quot; onclick=&quot;window.volverAlCroquisGeneral(); if(window.anvilAppNav) window.anvilAppNav('pos_mesero');&quot;
+        style=&quot;padding: 7px 14px !important; font-size: 11px !important; font-weight: 700 !important; border-radius: 8px !important; background-color: #059669 !important; color: #ffffff !important; border: none !important; cursor: pointer !important; display: flex !important; align-items: center !important; gap: 6px !important; box-shadow: 0 2px 6px rgba(5,150,105,0.4) !important;&quot;>
         <i class=&quot;fa-solid fa-umbrella-beach&quot; style=&quot;color: #fcd34d !important;&quot;></i> La Palapa (6x4m)
       </button>
       <button id=&quot;btnResetDemo&quot; title=&quot;Reinicia la posición inicial de las sillas demo&quot;
-        style=&quot;padding: 8px 14px !important; font-size: 12px !important; font-weight: 700 !important; border-radius: 12px !important; background: #1e293b !important; color: #38bdf8 !important; border: 1px solid #334155 !important; cursor: pointer !important; display: flex !important; align-items: center !important; gap: 6px !important;&quot;>
+        style=&quot;padding: 7px 12px !important; font-size: 11px !important; font-weight: 700 !important; border-radius: 8px !important; background: #1e3a5f !important; color: #38bdf8 !important; border: 1px solid rgba(56, 189, 248, 0.4) !important; cursor: pointer !important; display: flex !important; align-items: center !important; gap: 6px !important;&quot;>
         <i class=&quot;fa-solid fa-rotate-right&quot;></i> Reiniciar Demo
       </button>
       <button id=&quot;btn-nav-cocina&quot; onclick=&quot;if(window.anvilAppNav) window.anvilAppNav('monitor_cocina');&quot;
-        style=&quot;padding: 8px 16px !important; font-size: 12px !important; font-weight: 600 !important; border-radius: 12px !important; background: transparent !important; color: #cbd5e1 !important; border: none !important; cursor: pointer !important; display: flex !important; align-items: center !important; gap: 6px !important;&quot;>
+        style=&quot;padding: 7px 14px !important; font-size: 11px !important; font-weight: 600 !important; border-radius: 8px !important; background: transparent !important; color: #e2e8f0 !important; border: 1px solid transparent !important; cursor: pointer !important; display: flex !important; align-items: center !important; gap: 6px !important;&quot;>
         <i class=&quot;fa-solid fa-fire&quot; style=&quot;color: #f59e0b !important;&quot;></i> Cocina KDS
       </button>
       <button id=&quot;btn-nav-fiscal&quot; onclick=&quot;if(window.anvilAppNav) window.anvilAppNav('monitor_fiscal');&quot;
-        style=&quot;padding: 8px 16px !important; font-size: 12px !important; font-weight: 600 !important; border-radius: 12px !important; background: transparent !important; color: #cbd5e1 !important; border: none !important; cursor: pointer !important; display: flex !important; align-items: center !important; gap: 6px !important;&quot;>
+        style=&quot;padding: 7px 14px !important; font-size: 11px !important; font-weight: 600 !important; border-radius: 8px !important; background: transparent !important; color: #e2e8f0 !important; border: 1px solid transparent !important; cursor: pointer !important; display: flex !important; align-items: center !important; gap: 6px !important;&quot;>
         <i class=&quot;fa-solid fa-chart-pie&quot; style=&quot;color: #38bdf8 !important;&quot;></i> Fiscal
       </button>
     </div>
@@ -337,11 +337,11 @@
 
   <!-- ACTION INSTRUCTION BANNER -->
   <div id=&quot;moveInstructionBanner&quot;
-    style=&quot;display: flex !important; background: #0f172a !important; border: 1px solid #1e293b !important; color: #cbd5e1 !important; padding: 12px 18px !important; border-radius: 14px !important; font-size: 12px !important; font-weight: 600 !important; justify-content: space-between !important; align-items: center !important;&quot;>
+    style=&quot;display: flex !important; background: #dbeafe !important; border: 1px solid #bfdbfe !important; color: #1e40af !important; padding: 10px 16px !important; border-radius: 12px !important; font-size: 12px !important; font-weight: 600 !important; justify-content: space-between !important; align-items: center !important;&quot;>
     <div style=&quot;display: flex !important; align-items: center !important; gap: 10px !important;&quot;>
       <i id=&quot;bannerIcon&quot; class=&quot;fa-solid fa-hand-pointer&quot;
-        style=&quot;color: #38bdf8 !important; font-size: 16px !important;&quot;></i>
-      <span id=&quot;bannerText&quot;>Haz clic en cualquier <b>Mesa</b> o <b>Silla</b> para tomar su orden y abrir el catálogo de menú ampliado, o <b>arrastra con el mouse</b> para mover comensales.</span>
+        style=&quot;color: #0284c7 !important; font-size: 15px !important;&quot;></i>
+      <span id=&quot;bannerText&quot;>Haz clic en una <b>Silla</b> para tomar su orden de alimentos, o <b>arrastra la silla con el mouse</b> para mover al comensal de mesa directamente.</span>
     </div>
     <button id=&quot;btnCancelMove&quot;
       style=&quot;display: none !important; padding: 4px 12px !important; background: #ef4444 !important; color: #ffffff !important; border-radius: 8px !important; border: none !important; font-weight: 800 !important; cursor: pointer !important;&quot;>
@@ -355,44 +355,93 @@
 
     <!-- PANEL CROQUIS / SIDEBAR DE COMANDA -->
     <div id=&quot;panelCroquisMesas&quot;
-      style=&quot;background: rgba(15, 23, 42, 0.95) !important; border: 1px solid #1e293b !important; border-radius: 20px !important; padding: 20px !important; display: flex !important; flex-direction: column !important; justify-content: space-between !important; min-height: 540px !important; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5) !important;&quot;>
+      style=&quot;background: #ffffff !important; border: 1.5px solid #cbdde9 !important; border-radius: 18px !important; padding: 20px !important; display: flex !important; flex-direction: column !important; justify-content: space-between !important; min-height: 540px !important; box-shadow: 0 4px 20px rgba(30, 58, 95, 0.06) !important;&quot;>
 
       <!-- VISTA 1: MODO CROQUIS PANORÁMICO (3 MESAS GRANDES A PANTALLA COMPLETA) -->
       <div id=&quot;viewOverviewCroquis&quot; style=&quot;flex-direction: column !important; justify-content: space-between !important; height: 100% !important; gap: 16px !important;&quot;>
-        <!-- PARED POSTERIOR BARRA -->
+        <!-- PARED POSTERIOR BARRA &amp; RESERVA DE SILLAS EXTRAS -->
         <div
-          style=&quot;background: rgba(30, 41, 59, 0.9) !important; border: 1px solid rgba(16, 185, 129, 0.3) !important; border-radius: 12px !important; padding: 12px 16px !important; display: flex !important; flex-wrap: wrap !important; justify-content: space-between !important; align-items: center !important; gap: 10px !important;&quot;>
+          style=&quot;background: #f0f6fc !important; border: 1px solid #d0e1f3 !important; border-radius: 14px !important; padding: 10px 16px !important; display: flex !important; flex-wrap: wrap !important; justify-content: space-between !important; align-items: center !important; gap: 12px !important;&quot;>
           <div
-            style=&quot;display: flex !important; align-items: center !important; gap: 8px !important; font-size: 12px !important; font-weight: 700 !important; color: #34d399 !important;&quot;>
-            <i class=&quot;fa-solid fa-mug-hot&quot; style=&quot;color: #fbbf24 !important; font-size: 16px !important;&quot;></i>
-            <span>Mueble de Servicio &amp; Barra de Café (Pared Posterior 6.00m)</span>
+            style=&quot;display: flex !important; align-items: center !important; gap: 8px !important; font-size: 12px !important; font-weight: 700 !important; color: #1e3a5f !important;&quot;>
+            <i class=&quot;fa-solid fa-mug-hot&quot; style=&quot;color: #d97706 !important; font-size: 15px !important;&quot;></i>
+            <span>Mueble de Servicio &amp; Barra de Café (6.00m)</span>
           </div>
+
+          <!-- RESERVA DE SILLAS EXTRAS / ARRINCONADAS DISPONIBLES -->
+          <div style=&quot;display: flex !important; align-items: center !important; gap: 8px !important; background: #ffffff !important; border: 1.5px dashed #0284c7 !important; border-radius: 12px !important; padding: 4px 12px !important; box-shadow: 0 2px 6px rgba(2, 132, 199, 0.08) !important;&quot;>
+            <span style=&quot;font-size: 11px !important; font-weight: 800 !important; color: #0284c7 !important; display: flex !important; align-items: center !important; gap: 4px !important;&quot;>
+              <i class=&quot;fa-solid fa-chair&quot;></i> Reserva Sillas:
+            </span>
+            <div id=&quot;extraChairsReserveGroup&quot; style=&quot;display: flex !important; gap: 6px !important; align-items: center !important;&quot;>
+              <div id=&quot;chair-extra-1&quot; class=&quot;chair-btn-fixed chair-state-free chair-extra-draggable&quot; draggable=&quot;true&quot; title=&quot;Arrastra esta silla a cualquier mesa para arrimar un comensal extra&quot;
+                style=&quot;background: #e0f2fe !important; color: #0369a1 !important; border: 1.5px solid #38bdf8 !important; cursor: grab !important; font-size: 11px !important; font-weight: 800 !important; padding: 4px 10px !important;&quot;>
+                🪑 + Silla Extra 1
+              </div>
+              <div id=&quot;chair-extra-2&quot; class=&quot;chair-btn-fixed chair-state-free chair-extra-draggable&quot; draggable=&quot;true&quot; title=&quot;Arrastra esta silla a cualquier mesa para arrimar un comensal extra&quot;
+                style=&quot;background: #e0f2fe !important; color: #0369a1 !important; border: 1.5px solid #38bdf8 !important; cursor: grab !important; font-size: 11px !important; font-weight: 800 !important; padding: 4px 10px !important;&quot;>
+                🪑 + Silla Extra 2
+              </div>
+              <div id=&quot;chair-extra-3&quot; class=&quot;chair-btn-fixed chair-state-free chair-extra-draggable&quot; draggable=&quot;true&quot; title=&quot;Arrastra esta silla a cualquier mesa para arrimar un comensal extra&quot;
+                style=&quot;background: #e0f2fe !important; color: #0369a1 !important; border: 1.5px solid #38bdf8 !important; cursor: grab !important; font-size: 11px !important; font-weight: 800 !important; padding: 4px 10px !important;&quot;>
+                🪑 + Silla Extra 3
+              </div>
+            </div>
+          </div>
+
           <div
-            style=&quot;display: flex !important; gap: 16px !important; font-size: 11px !important; color: #94a3b8 !important; font-weight: 600 !important;&quot;>
-            <span><i class=&quot;fa-solid fa-wine-glass&quot; style=&quot;color: #c084fc !important; margin-right: 4px !important;&quot;></i> Cristalería</span>
-            <span><i class=&quot;fa-solid fa-fire&quot; style=&quot;color: #fbbf24 !important; margin-right: 4px !important;&quot;></i> Espresso</span>
-            <span><i class=&quot;fa-solid fa-sink&quot; style=&quot;color: #38bdf8 !important; margin-right: 4px !important;&quot;></i> Insumos</span>
+            style=&quot;display: flex !important; gap: 14px !important; font-size: 11px !important; color: #64748b !important; font-weight: 600 !important;&quot;>
+            <span><i class=&quot;fa-solid fa-wine-glass&quot; style=&quot;color: #7c3aed !important; margin-right: 4px !important;&quot;></i> Cristalería</span>
+            <span><i class=&quot;fa-solid fa-fire&quot; style=&quot;color: #d97706 !important; margin-right: 4px !important;&quot;></i> Espresso</span>
+            <span><i class=&quot;fa-solid fa-sink&quot; style=&quot;color: #0284c7 !important; margin-right: 4px !important;&quot;></i> Insumos</span>
           </div>
         </div>
 
-        <!-- 3 CIRCULAR TABLES WITH 4 CHAIRS EACH -->
-        <div
-          style=&quot;display: grid !important; grid-template-columns: repeat(3, 1fr) !important; gap: 20px !important; margin: auto 0 !important; padding: 20px 0 !important;&quot;>
+        <!-- BARRA DE AGRUPACIÓN / UNIÓN DE MESAS (GRUPOS 8 - 12 PAX) -->
+        <div id=&quot;joinTablesControlBar&quot;
+          style=&quot;display: flex !important; flex-wrap: wrap !important; justify-content: space-between !important; align-items: center !important; gap: 10px !important; background: #e0f2fe !important; border: 1.5px solid #bae6fd !important; border-radius: 14px !important; padding: 8px 16px !important;&quot;>
+          <div style=&quot;display: flex !important; align-items: center !important; gap: 8px !important; font-size: 11px !important; font-weight: 800 !important; color: #0369a1 !important;&quot;>
+            <i class=&quot;fa-solid fa-link&quot; style=&quot;color: #0284c7;&quot;></i>
+            <span>Unión Modular de Mesas:</span>
+          </div>
+          <div style=&quot;display: flex !important; gap: 8px !important; align-items: center !important; flex-wrap: wrap !important;&quot;>
+            <button id=&quot;btnJoin12&quot; onclick=&quot;window.unirMesas('1-2');&quot; type=&quot;button&quot;
+              style=&quot;padding: 6px 12px !important; font-size: 11px !important; font-weight: 800 !important; border-radius: 8px !important; background: #ffffff !important; color: #0284c7 !important; border: 1.5px solid #0284c7 !important; cursor: pointer !important; display: flex !important; align-items: center !important; gap: 6px !important; box-shadow: 0 2px 4px rgba(2, 132, 199, 0.1) !important;&quot;>
+              🔗 Juntar M1 + M2 (8 Pax)
+            </button>
+            <button id=&quot;btnJoin23&quot; onclick=&quot;window.unirMesas('2-3');&quot; type=&quot;button&quot;
+              style=&quot;padding: 6px 12px !important; font-size: 11px !important; font-weight: 800 !important; border-radius: 8px !important; background: #ffffff !important; color: #0284c7 !important; border: 1.5px solid #0284c7 !important; cursor: pointer !important; display: flex !important; align-items: center !important; gap: 6px !important; box-shadow: 0 2px 4px rgba(2, 132, 199, 0.1) !important;&quot;>
+              🔗 Juntar M2 + M3 (8 Pax)
+            </button>
+            <button id=&quot;btnJoinAll&quot; onclick=&quot;window.unirMesas('1-2-3');&quot; type=&quot;button&quot;
+              style=&quot;padding: 6px 12px !important; font-size: 11px !important; font-weight: 800 !important; border-radius: 8px !important; background: linear-gradient(135deg, #0284c7, #0369a1) !important; color: #ffffff !important; border: none !important; cursor: pointer !important; display: flex !important; align-items: center !important; gap: 6px !important; box-shadow: 0 2px 6px rgba(2, 132, 199, 0.25) !important;&quot;>
+              👑 Juntar Todas M1+M2+M3 (Imperial 10-12 Pax)
+            </button>
+            <button id=&quot;btnSeparateTables&quot; onclick=&quot;window.separarMesas();&quot; type=&quot;button&quot;
+              style=&quot;display: none !important; padding: 6px 12px !important; font-size: 11px !important; font-weight: 800 !important; border-radius: 8px !important; background: #fef2f2 !important; color: #dc2626 !important; border: 1.5px solid #f87171 !important; cursor: pointer !important; align-items: center !important; gap: 6px !important;&quot;>
+              ✂ Separar a Mesas Individuales
+            </button>
+          </div>
+        </div>
+
+        <!-- 3 SQUARE MODULAR TABLES WITH ZERO OVERLAP CHAIRS -->
+        <div id=&quot;floorplanTablesGrid&quot;
+          style=&quot;display: grid !important; grid-template-columns: repeat(3, 1fr) !important; gap: 20px !important; margin: auto 0 !important; padding: 14px 0 !important;&quot;>
 
           <!-- MESA 1 -->
-          <div
-            style=&quot;display: flex !important; flex-direction: column !important; align-items: center !important; gap: 12px !important;&quot;>
-            <span
-              style=&quot;font-size: 12px !important; font-weight: 900 !important; color: #cbd5e1 !important; text-transform: uppercase !important; letter-spacing: 1px !important;&quot;>Mesa 1 (Palapa)</span>
+          <div id=&quot;table-card-container-1&quot;
+            style=&quot;display: flex !important; flex-direction: column !important; align-items: center !important; gap: 12px !important; background: #f8fbff !important; border: 1px solid #dce8f5 !important; border-radius: 16px !important; padding: 16px !important; transition: all 0.3s ease !important;&quot;>
+            <span id=&quot;table-header-title-1&quot;
+              style=&quot;font-size: 13px !important; font-weight: 800 !important; color: #1e3a5f !important; text-transform: uppercase !important; letter-spacing: 0.5px !important;&quot;>Mesa 1 (Palapa)</span>
 
             <div id=&quot;table-box-1&quot; class=&quot;table-box-220&quot;
-              style=&quot;position: relative !important; width: 220px !important; height: 220px !important; display: flex !important; align-items: center !important; justify-content: center !important; margin: 0 auto !important;&quot;>
-              <div id=&quot;table-circle-1&quot; class=&quot;table-circle-fixed&quot;
-                style=&quot;width: 96px !important; height: 96px !important; border-radius: 50% !important; background: #064e3b !important; border: 4px solid #10b981 !important; box-shadow: 0 0 25px rgba(16, 185, 129, 0.4) !important; display: flex !important; flex-direction: column !important; align-items: center !important; justify-content: center !important; cursor: pointer !important; z-index: 10 !important;&quot;>
+              style=&quot;position: relative !important; width: 250px !important; height: 230px !important; display: flex !important; align-items: center !important; justify-content: center !important; margin: 0 auto !important;&quot;>
+              <div id=&quot;table-circle-1&quot; class=&quot;table-square-fixed&quot;
+                style=&quot;width: 104px !important; height: 104px !important; border-radius: 16px !important; background: #ecfdf5 !important; border: 3px solid #10b981 !important; box-shadow: 0 2px 8px rgba(16, 185, 129, 0.2) !important; display: flex !important; flex-direction: column !important; align-items: center !important; justify-content: center !important; cursor: pointer !important; z-index: 10 !important;&quot;>
                 <span
-                  style=&quot;font-size: 18px !important; font-weight: 900 !important; color: #ffffff !important; margin: 0 !important; line-height: 1 !important;&quot;>M1</span>
+                  style=&quot;font-size: 18px !important; font-weight: 900 !important; color: #065f46 !important; margin: 0 !important; line-height: 1 !important;&quot;>M1</span>
                 <span id=&quot;table-status-1&quot;
-                  style=&quot;font-size: 9px !important; font-weight: 800 !important; color: #6ee7b7 !important; text-transform: uppercase !important; margin-top: 2px !important;&quot;>Libre</span>
+                  style=&quot;font-size: 9px !important; font-weight: 800 !important; color: #059669 !important; text-transform: uppercase !important; margin-top: 2px !important;&quot;>Libre</span>
               </div>
 
               <div id=&quot;chair-1-1&quot; class=&quot;chair-btn-fixed chair-pos-top chair-state-free&quot; draggable=&quot;false&quot;
@@ -406,23 +455,25 @@
             </div>
 
             <span id=&quot;table-label-1&quot;
-              style=&quot;font-size: 12px !important; font-weight: 700 !important; color: #34d399 !important;&quot;>🟢 Disponible</span>
+              style=&quot;font-size: 12px !important; font-weight: 700 !important; color: #059669 !important;&quot;>🟢 Disponible</span>
+            <!-- CONTENEDOR DEDICADO DE SILLAS ARRIMADAS (SIN TRASLAPE) -->
+            <div id=&quot;table-arrimadas-container-1&quot; style=&quot;display: flex !important; gap: 8px !important; align-items: center !important; justify-content: center !important; flex-wrap: wrap !important; min-height: 24px !important;&quot;></div>
           </div>
 
           <!-- MESA 2 -->
-          <div
-            style=&quot;display: flex !important; flex-direction: column !important; align-items: center !important; gap: 12px !important;&quot;>
-            <span
-              style=&quot;font-size: 12px !important; font-weight: 900 !important; color: #cbd5e1 !important; text-transform: uppercase !important; letter-spacing: 1px !important;&quot;>Mesa 2 (Palapa)</span>
+          <div id=&quot;table-card-container-2&quot;
+            style=&quot;display: flex !important; flex-direction: column !important; align-items: center !important; gap: 12px !important; background: #f8fbff !important; border: 1px solid #dce8f5 !important; border-radius: 16px !important; padding: 16px !important; transition: all 0.3s ease !important;&quot;>
+            <span id=&quot;table-header-title-2&quot;
+              style=&quot;font-size: 13px !important; font-weight: 800 !important; color: #1e3a5f !important; text-transform: uppercase !important; letter-spacing: 0.5px !important;&quot;>Mesa 2 (Palapa)</span>
 
             <div id=&quot;table-box-2&quot; class=&quot;table-box-220&quot;
-              style=&quot;position: relative !important; width: 220px !important; height: 220px !important; display: flex !important; align-items: center !important; justify-content: center !important; margin: 0 auto !important;&quot;>
-              <div id=&quot;table-circle-2&quot; class=&quot;table-circle-fixed&quot;
-                style=&quot;width: 96px !important; height: 96px !important; border-radius: 50% !important; background: #064e3b !important; border: 4px solid #10b981 !important; box-shadow: 0 0 25px rgba(16, 185, 129, 0.4) !important; display: flex !important; flex-direction: column !important; align-items: center !important; justify-content: center !important; cursor: pointer !important; z-index: 10 !important;&quot;>
+              style=&quot;position: relative !important; width: 250px !important; height: 230px !important; display: flex !important; align-items: center !important; justify-content: center !important; margin: 0 auto !important;&quot;>
+              <div id=&quot;table-circle-2&quot; class=&quot;table-square-fixed&quot;
+                style=&quot;width: 104px !important; height: 104px !important; border-radius: 16px !important; background: #ecfdf5 !important; border: 3px solid #10b981 !important; box-shadow: 0 2px 8px rgba(16, 185, 129, 0.2) !important; display: flex !important; flex-direction: column !important; align-items: center !important; justify-content: center !important; cursor: pointer !important; z-index: 10 !important;&quot;>
                 <span
-                  style=&quot;font-size: 18px !important; font-weight: 900 !important; color: #ffffff !important; margin: 0 !important; line-height: 1 !important;&quot;>M2</span>
+                  style=&quot;font-size: 18px !important; font-weight: 900 !important; color: #065f46 !important; margin: 0 !important; line-height: 1 !important;&quot;>M2</span>
                 <span id=&quot;table-status-2&quot;
-                  style=&quot;font-size: 9px !important; font-weight: 800 !important; color: #6ee7b7 !important; text-transform: uppercase !important; margin-top: 2px !important;&quot;>Libre</span>
+                  style=&quot;font-size: 9px !important; font-weight: 800 !important; color: #059669 !important; text-transform: uppercase !important; margin-top: 2px !important;&quot;>Libre</span>
               </div>
 
               <div id=&quot;chair-2-1&quot; class=&quot;chair-btn-fixed chair-pos-top chair-state-free&quot; draggable=&quot;false&quot;
@@ -436,23 +487,25 @@
             </div>
 
             <span id=&quot;table-label-2&quot;
-              style=&quot;font-size: 12px !important; font-weight: 700 !important; color: #34d399 !important;&quot;>🟢 Disponible</span>
+              style=&quot;font-size: 12px !important; font-weight: 700 !important; color: #059669 !important;&quot;>🟢 Disponible</span>
+            <!-- CONTENEDOR DEDICADO DE SILLAS ARRIMADAS (SIN TRASLAPE) -->
+            <div id=&quot;table-arrimadas-container-2&quot; style=&quot;display: flex !important; gap: 8px !important; align-items: center !important; justify-content: center !important; flex-wrap: wrap !important; min-height: 24px !important;&quot;></div>
           </div>
 
           <!-- MESA 3 -->
-          <div
-            style=&quot;display: flex !important; flex-direction: column !important; align-items: center !important; gap: 12px !important;&quot;>
-            <span
-              style=&quot;font-size: 12px !important; font-weight: 900 !important; color: #fbbf24 !important; text-transform: uppercase !important; letter-spacing: 1px !important;&quot;>Mesa 3 (Palapa)</span>
+          <div id=&quot;table-card-container-3&quot;
+            style=&quot;display: flex !important; flex-direction: column !important; align-items: center !important; gap: 12px !important; background: #f8fbff !important; border: 1px solid #dce8f5 !important; border-radius: 16px !important; padding: 16px !important; transition: all 0.3s ease !important;&quot;>
+            <span id=&quot;table-header-title-3&quot;
+              style=&quot;font-size: 13px !important; font-weight: 800 !important; color: #92400e !important; text-transform: uppercase !important; letter-spacing: 0.5px !important;&quot;>Mesa 3 (Palapa)</span>
 
             <div id=&quot;table-box-3&quot; class=&quot;table-box-220&quot;
-              style=&quot;position: relative !important; width: 220px !important; height: 220px !important; display: flex !important; align-items: center !important; justify-content: center !important; margin: 0 auto !important;&quot;>
-              <div id=&quot;table-circle-3&quot; class=&quot;table-circle-fixed&quot;
-                style=&quot;width: 96px !important; height: 96px !important; border-radius: 50% !important; background: #78350f !important; border: 4px solid #f59e0b !important; box-shadow: 0 0 25px rgba(245, 158, 11, 0.4) !important; display: flex !important; flex-direction: column !important; align-items: center !important; justify-content: center !important; cursor: pointer !important; z-index: 10 !important;&quot;>
+              style=&quot;position: relative !important; width: 250px !important; height: 230px !important; display: flex !important; align-items: center !important; justify-content: center !important; margin: 0 auto !important;&quot;>
+              <div id=&quot;table-circle-3&quot; class=&quot;table-square-fixed&quot;
+                style=&quot;width: 104px !important; height: 104px !important; border-radius: 16px !important; background: #fffbeb !important; border: 3px solid #f59e0b !important; box-shadow: 0 2px 8px rgba(245, 158, 11, 0.2) !important; display: flex !important; flex-direction: column !important; align-items: center !important; justify-content: center !important; cursor: pointer !important; z-index: 10 !important;&quot;>
                 <span
-                  style=&quot;font-size: 18px !important; font-weight: 900 !important; color: #fef3c7 !important; margin: 0 !important; line-height: 1 !important;&quot;>M3</span>
+                  style=&quot;font-size: 18px !important; font-weight: 900 !important; color: #92400e !important; margin: 0 !important; line-height: 1 !important;&quot;>M3</span>
                 <span id=&quot;table-status-3&quot;
-                  style=&quot;font-size: 9px !important; font-weight: 800 !important; color: #fde68a !important; text-transform: uppercase !important; margin-top: 2px !important;&quot;>2 Ocupadas</span>
+                  style=&quot;font-size: 9px !important; font-weight: 800 !important; color: #d97706 !important; text-transform: uppercase !important; margin-top: 2px !important;&quot;>2 Ocupadas</span>
               </div>
 
               <div id=&quot;chair-3-1&quot; class=&quot;chair-btn-fixed chair-pos-top chair-state-busy&quot; draggable=&quot;true&quot;
@@ -466,16 +519,18 @@
             </div>
 
             <span id=&quot;table-label-3&quot;
-              style=&quot;font-size: 12px !important; font-weight: 700 !important; color: #fbbf24 !important;&quot;>🟡 Ocupada (2 Comensales)</span>
+              style=&quot;font-size: 12px !important; font-weight: 700 !important; color: #d97706 !important;&quot;>🟡 Ocupada (2 Comensales)</span>
+            <!-- CONTENEDOR DEDICADO DE SILLAS ARRIMADAS (SIN TRASLAPE) -->
+            <div id=&quot;table-arrimadas-container-3&quot; style=&quot;display: flex !important; gap: 8px !important; align-items: center !important; justify-content: center !important; flex-wrap: wrap !important; min-height: 24px !important;&quot;></div>
           </div>
 
         </div>
 
         <!-- FOOTER INFO PASILLO -->
         <div
-          style=&quot;padding-top: 16px !important; border-top: 1px solid #1e293b !important; display: flex !important; justify-content: space-between !important; align-items: center !important; font-size: 12px !important; color: #94a3b8 !important; font-weight: 500 !important;&quot;>
-          <span><i class=&quot;fa-solid fa-door-open&quot; style=&quot;color: #34d399 !important; margin-right: 6px !important;&quot;></i> Entrada Frontal &amp; Pasillos de Circulación</span>
-          <span style=&quot;color: #34d399 !important; font-weight: 700 !important;&quot;>Área 1: La Palapa (6.00m x 4.00m)</span>
+          style=&quot;padding-top: 14px !important; border-top: 1px solid #d0e1f3 !important; display: flex !important; justify-content: space-between !important; align-items: center !important; font-size: 11px !important; color: #64748b !important; font-weight: 500 !important;&quot;>
+          <span><i class=&quot;fa-solid fa-door-open&quot; style=&quot;color: #0284c7 !important; margin-right: 6px !important;&quot;></i> Entrada Frontal &amp; Pasillos de Circulación</span>
+          <span style=&quot;color: #0284c7 !important; font-weight: 700 !important;&quot;>Área 1: La Palapa (6.00m x 4.00m)</span>
         </div>
       </div>
 
@@ -545,18 +600,14 @@
         </div>
 
         <!-- Action Buttons -->
-        <div style=&quot;display: flex !important; gap: 6px !important;&quot;>
+        <div style=&quot;display: flex !important; gap: 8px !important;&quot;>
           <button onclick=&quot;window.abrirModalComandaActual();&quot;
-            style=&quot;flex: 1 !important; padding: 9px !important; background: #059669 !important; color: #ffffff !important; border: none !important; border-radius: 10px !important; font-size: 11px !important; font-weight: 800 !important; cursor: pointer !important; display: flex !important; align-items: center !important; justify-content: center !important; gap: 4px !important;&quot;>
+            style=&quot;flex: 1 !important; padding: 10px !important; background: #059669 !important; color: #ffffff !important; border: none !important; border-radius: 10px !important; font-size: 11px !important; font-weight: 800 !important; cursor: pointer !important; display: flex !important; align-items: center !important; justify-content: center !important; gap: 6px !important; box-shadow: 0 2px 8px rgba(5,150,105,0.3) !important;&quot;>
             <i class=&quot;fa-solid fa-credit-card&quot;></i> Cobrar Silla
           </button>
           <button onclick=&quot;window.verTodaLaMesaEnColumnas();&quot;
-            style=&quot;padding: 9px 10px !important; background: #1e293b !important; color: #fbbf24 !important; border: 1px solid #334155 !important; border-radius: 10px !important; font-size: 11px !important; font-weight: 800 !important; cursor: pointer !important;&quot; title=&quot;Ver resumen de toda la mesa&quot;>
-            <i class=&quot;fa-solid fa-table&quot;></i> Toda Mesa
-          </button>
-          <button onclick=&quot;window.iniciarModoMover();&quot;
-            style=&quot;padding: 9px 10px !important; background: #1e293b !important; color: #38bdf8 !important; border: 1px solid #334155 !important; border-radius: 10px !important; font-size: 11px !important; font-weight: 800 !important; cursor: pointer !important;&quot;>
-            <i class=&quot;fa-solid fa-arrows-split-up-and-left&quot;></i> Mover
+            style=&quot;flex: 1 !important; padding: 10px !important; background: #1e293b !important; color: #fbbf24 !important; border: 1px solid #334155 !important; border-radius: 10px !important; font-size: 11px !important; font-weight: 800 !important; cursor: pointer !important; display: flex !important; align-items: center !important; justify-content: center !important; gap: 6px !important;&quot; title=&quot;Ver resumen de toda la mesa&quot;>
+            <i class=&quot;fa-solid fa-table&quot;></i> Toda la Mesa
           </button>
         </div>
       </div>
@@ -615,14 +666,10 @@
 
       <!-- FOOTER QUICK BUTTONS -->
       <div
-        style=&quot;display: flex !important; gap: 10px !important; padding-top: 12px !important; border-top: 1px solid #1e293b !important;&quot;>
+        style=&quot;display: flex !important; gap: 10px !important; padding-top: 12px !important; border-top: 1px solid #334155 !important;&quot;>
         <button id=&quot;btnVerComandaActiva&quot; onclick=&quot;window.abrirModalComandaActual();&quot;
-          style=&quot;flex: 1 !important; padding: 12px !important; background: linear-gradient(135deg, #059669, #0d9488) !important; color: #ffffff !important; font-weight: 900 !important; font-size: 12px !important; border-radius: 12px !important; border: none !important; cursor: pointer !important; box-shadow: 0 10px 15px -3px rgba(5, 150, 105, 0.4) !important; display: flex !important; align-items: center !important; justify-content: center !important; gap: 8px !important;&quot;>
-          <i class=&quot;fa-solid fa-receipt&quot;></i> Ver Comanda Completa
-        </button>
-        <button id=&quot;btnMoverComensalMain&quot; onclick=&quot;window.iniciarModoMover();&quot;
-          style=&quot;flex: 1 !important; padding: 12px !important; background: #0284c7 !important; color: #ffffff !important; font-weight: 900 !important; font-size: 12px !important; border-radius: 12px !important; border: none !important; cursor: pointer !important; display: flex !important; align-items: center !important; justify-content: center !important; gap: 8px !important;&quot;>
-          <i class=&quot;fa-solid fa-arrow-right-arrow-left&quot;></i> Mover Comensal
+          style=&quot;width: 100% !important; padding: 12px !important; background: linear-gradient(135deg, #059669, #0d9488) !important; color: #ffffff !important; font-weight: 900 !important; font-size: 12px !important; border-radius: 12px !important; border: none !important; cursor: pointer !important; box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3) !important; display: flex !important; align-items: center !important; justify-content: center !important; gap: 8px !important;&quot;>
+          <i class=&quot;fa-solid fa-receipt&quot;></i> Ver Comanda Completa &amp; Cobrar
         </button>
       </div>
 
@@ -766,12 +813,8 @@
         </button>
       </div>
       <div style=&quot;display: flex !important; gap: 10px !important;&quot;>
-        <button id=&quot;btnMoverDesdeModal&quot;
-          style=&quot;flex: 1 !important; padding: 10px !important; background: #0284c7 !important; color: #ffffff !important; font-weight: 800 !important; font-size: 11px !important; border-radius: 10px !important; border: none !important; cursor: pointer !important; display: flex !important; align-items: center !important; justify-content: center !important; gap: 6px !important;&quot;>
-          <i class=&quot;fa-solid fa-arrow-right-arrow-left&quot;></i> Mover Cuenta
-        </button>
         <button id=&quot;btnLiberarSilla&quot; onclick=&quot;window.liberarSillaActual();&quot;
-          style=&quot;padding: 10px 14px !important; background: rgba(220, 38, 38, 0.2) !important; color: #f87171 !important; font-weight: 800 !important; font-size: 11px !important; border-radius: 10px !important; border: 1px solid rgba(239, 68, 68, 0.4) !important; cursor: pointer !important; display: flex !important; align-items: center !important; justify-content: center !important; gap: 6px !important;&quot;>
+          style=&quot;padding: 10px 14px !important; background: rgba(220, 38, 38, 0.15) !important; color: #f87171 !important; font-weight: 800 !important; font-size: 11px !important; border-radius: 10px !important; border: 1px solid rgba(239, 68, 68, 0.3) !important; cursor: pointer !important; display: flex !important; align-items: center !important; justify-content: center !important; gap: 6px !important;&quot;>
           <i class=&quot;fa-solid fa-user-slash&quot;></i> Liberar Silla
         </button>
         <button id=&quot;btnCerrarModalBottom&quot; onclick=&quot;window.cerrarModalComanda(); window.volverAlCroquisGeneral();&quot;
@@ -1931,12 +1974,14 @@
   // 1. Direct hit on chair
   if (elem) {
   var chairEl = elem.closest ? elem.closest('.chair-btn-fixed') : null;
-  if (chairEl) {
+  if (chairEl &amp;&amp; chairEl.id &amp;&amp; chairEl.id.indexOf('chair-extra-') === -1) {
   var p = chairEl.id.split('-');
+  if (p.length === 3) {
   var tM = parseInt(p[1]);
   var tS = parseInt(p[2]);
   if (!(tM === srcM &amp;&amp; tS === srcS)) {
   return { mesaId: tM, sillaNum: tS, el: chairEl };
+  }
   }
   }
 
@@ -1961,8 +2006,8 @@
   }
   }
 
-  if (mesaId &amp;&amp; mesaId !== srcM) {
-  // Buscar primero una silla libre en esa mesa
+  if (mesaId &amp;&amp; (srcM === 'extra' || mesaId !== srcM)) {
+  // Buscar primero una silla libre estándar (1..4) si no es arrimar forzado
   var freeSilla = null;
   for (var fs = 1; fs <= 4; fs++) {
   var fk = mesaId + '-' + fs;
@@ -1972,15 +2017,13 @@
   break;
   }
   }
-  if (freeSilla !== null) {
+  if (freeSilla !== null &amp;&amp; srcM !== 'extra') {
   var cel = document.getElementById('chair-' + mesaId + '-' + freeSilla);
   return { mesaId: mesaId, sillaNum: freeSilla, el: cel };
   } else {
-  var closest = getClosestChair(mesaId, clientX, clientY, srcM, srcS);
-  if (closest) {
-  var cel2 = document.getElementById('chair-' + closest.mesa + '-' + closest.silla);
-  return { mesaId: closest.mesa, sillaNum: closest.silla, el: cel2 };
-  }
+  // Mesa llena o arrastre desde reserva extra: arrimar nueva silla
+  var celCircle = document.getElementById('table-circle-' + mesaId);
+  return { mesaId: mesaId, sillaNum: 'arrimar_nueva', el: celCircle };
   }
   }
   }
@@ -2008,12 +2051,22 @@
   }
 
   function _chairMousedown(e, mesaId, sillaNum) {
-  // Solo button izquierdo y solo sillas con cuenta u ocupadas
   if (e.button !== 0) return;
+
+  if (mesaId === 'extra') {
+  _ms.active = true;
+  _ms.dragging = false;
+  _ms.srcMesa = 'extra';
+  _ms.srcSilla = sillaNum;
+  _ms.startX = e.clientX;
+  _ms.startY = e.clientY;
+  document.addEventListener('mousemove', _chairMousemove);
+  document.addEventListener('mouseup', _chairMouseup);
+  return;
+  }
+
   var key = mesaId + '-' + sillaNum;
   var cuenta = window.palapaState.cuentas[key];
-  var isOccupied = !!(cuenta &amp;&amp; (cuenta.estado === 'ocupada' || (cuenta.items &amp;&amp; cuenta.items.length > 0)));
-  if (!cuenta || !isOccupied) return;
 
   _ms.active = true;
   _ms.dragging = false;
@@ -2040,32 +2093,50 @@
   window.palapaState.sillaOrigenMover = { mesaId: _ms.srcMesa, sillaNum: _ms.srcSilla };
 
   // Marcar silla origen
+  if (_ms.srcMesa === 'extra') {
+  var srcEx = document.getElementById('chair-extra-' + _ms.srcSilla);
+  if (srcEx) srcEx.classList.add('chair-dragging');
+  } else {
   var srcEl = document.getElementById('chair-' + _ms.srcMesa + '-' + _ms.srcSilla);
   if (srcEl) srcEl.classList.add('chair-dragging');
+  }
 
   // Ghost que sigue al cursor (pointer-events:none → no bloquea elementFromPoint)
   var ghost = document.createElement('div');
   ghost.style.cssText = [
   'position:fixed', 'z-index:99999', 'pointer-events:none',
-  'padding:8px 18px', 'background:#0f172a', 'color:#38bdf8',
+  'padding:8px 18px', 'background:#1e3a5f', 'color:#ffffff',
   'font-size:13px', 'font-weight:800', 'border-radius:12px',
   'border:2px solid #38bdf8', 'white-space:nowrap',
-  'box-shadow:0 8px 28px rgba(0,0,0,0.85)',
+  'box-shadow:0 8px 28px rgba(0,0,0,0.4)',
   'transform:translate(-50%,-130%)',
   'left:' + e.clientX + 'px', 'top:' + e.clientY + 'px'
   ].join(';') + ';';
+
+  if (_ms.srcMesa === 'extra') {
+  ghost.innerHTML = '🪑 <b>+ Arrimar Silla Extra ' + _ms.srcSilla + '</b>';
+  } else {
   var key = _ms.srcMesa + '-' + _ms.srcSilla;
   var cuenta = window.palapaState.cuentas[key] || { items: [] };
   var total = 0;
-  cuenta.items.forEach(function (i) { total += i.precio * i.cantidad; });
-  ghost.textContent = '\uD83E\uDE91 M' + _ms.srcMesa + ' \u00b7 S' + _ms.srcSilla + '  $' + total.toFixed(2);
+  if (cuenta.items) cuenta.items.forEach(function (i) { total += i.precio * i.cantidad; });
+  var isOcc = !!(cuenta &amp;&amp; (cuenta.estado === 'ocupada' || (cuenta.items &amp;&amp; cuenta.items.length > 0)));
+  ghost.innerHTML = '🪑 M' + _ms.srcMesa + ' · S' + _ms.srcSilla + (isOcc ? (' <b>$' + total.toFixed(2) + '</b>') : ' (Libre)');
+  }
+
   document.body.appendChild(ghost);
   _ms.ghost = ghost;
 
   // Banner
   var bt = document.getElementById('bannerText');
   var bc = document.getElementById('btnCancelMove');
-  if (bt) bt.innerHTML = '\uD83E\uDE91 <b style=&quot;color:#38bdf8;&quot;>ARRASTRANDO</b> Mesa ' + _ms.srcMesa + ' Silla ' + _ms.srcSilla + ' \u2014 Suelta sobre la silla destino (misma o diferente mesa).';
+  if (bt) {
+  if (_ms.srcMesa === 'extra') {
+  bt.innerHTML = '🪑 <b style=&quot;color:#0284c7;&quot;>ARRIMANDO SILLA EXTRA:</b> Suelta sobre cualquier <b>Mesa</b> (se integrará como 5º lugar o comensal extra).';
+  } else {
+  bt.innerHTML = '🪑 <b style=&quot;color:#0284c7;&quot;>ARRASTRANDO</b> Mesa ' + _ms.srcMesa + ' Silla ' + _ms.srcSilla + ' — Suelta sobre otra silla o centro de mesa para moverla o arrimarla.';
+  }
+  }
   if (bc) bc.style.setProperty('display', 'block', 'important');
   }
 
@@ -2078,15 +2149,19 @@
   }
 
   // ── Highlight silla destino detectada ──
-  document.querySelectorAll('.chair-btn-fixed').forEach(function (c) {
+  document.querySelectorAll('.chair-btn-fixed, .table-circle-fixed').forEach(function (c) {
   c.classList.remove('chair-drag-target-valid', 'chair-drag-target-combine');
   });
 
   var target = _resolveTargetChair(e.clientX, e.clientY, _ms.srcMesa, _ms.srcSilla);
   if (target &amp;&amp; target.el) {
+  if (target.sillaNum === 'arrimar_nueva') {
+  target.el.classList.add('chair-drag-target-valid');
+  } else {
   var tgt = window.palapaState.cuentas[target.mesaId + '-' + target.sillaNum];
   var busy = tgt &amp;&amp; tgt.items &amp;&amp; tgt.items.length > 0;
   target.el.classList.add(busy ? 'chair-drag-target-combine' : 'chair-drag-target-valid');
+  }
   }
   }
 
@@ -2118,13 +2193,12 @@
   completarMovimiento(target.mesaId, target.sillaNum, srcM, srcS);
   } else {
   cancelarModoMover();
-  showDragToast('\u26a0 Suelta sobre una silla o mesa para mover la cuenta', 'warn');
+  showDragToast('⚠ Suelta sobre una silla o mesa para mover o arrimar', 'warn');
   }
   }
 
   function setupDragListeners() {
-  // Asignar mousedown a TODAS las sillas (no solo ocupadas).
-  // _chairMousedown ya verifica si tiene cuenta antes de activar.
+  // 1. Asignar mousedown a todas las sillas estándar (1..4)
   for (var m = 1; m <= 3; m++) {
   for (var s = 1; s <= 4; s++) {
   (function (mesaId, sillaNum) {
@@ -2135,6 +2209,17 @@
   });
   })(m, s);
   }
+  }
+
+  // 2. Asignar mousedown a las sillas de Reserva Extras
+  for (var ex = 1; ex <= 3; ex++) {
+  (function (extraNum) {
+  var exEl = document.getElementById('chair-extra-' + extraNum);
+  if (!exEl) return;
+  exEl.addEventListener('mousedown', function (e) {
+  _chairMousedown(e, 'extra', extraNum);
+  });
+  })(ex);
   }
   }
 
@@ -2321,6 +2406,26 @@
   showDragToast(`🪑 Silla ${nuevaSillaNum} (Extra Arrimada) incorporada a Mesa ${mesaId}`, 'ok');
   };
 
+  window.unirMesas = function(tipo) {
+  window.palapaState.mesasUnidas = tipo;
+  saveStateToStorage();
+  renderStateUI();
+  if (tipo === '1-2') {
+  showDragToast('🔗 Mesas 1 y 2 unidas en un solo grupo modular (8 Lugares)', 'ok');
+  } else if (tipo === '2-3') {
+  showDragToast('🔗 Mesas 2 y 3 unidas en un solo grupo modular (8 Lugares)', 'ok');
+  } else if (tipo === '1-2-3') {
+  showDragToast('👑 Mesas 1, 2 y 3 agrupadas en Gran Mesa Imperial (10 a 12 Lugares)', 'ok');
+  }
+  };
+
+  window.separarMesas = function() {
+  window.palapaState.mesasUnidas = null;
+  saveStateToStorage();
+  renderStateUI();
+  showDragToast('✂ Mesas separadas a configuración individual estándar', 'info');
+  };
+
   window.iniciarModoMover = function() {
   const mesaId = window.palapaState.mesaSeleccionadaId;
   const sillaNum = window.palapaState.sillaSeleccionadaNum;
@@ -2403,23 +2508,74 @@
   window.palapaState.sillaOrigenMover = { mesaId: srcMesa, sillaNum: srcSilla };
   }
 
+  // ── CASO A: Arrimar desde la Reserva de Sillas Extras ──
+  if (srcMesa === 'extra') {
+  let maxS = 4;
+  Object.keys(window.palapaState.cuentas).forEach(function (k) {
+  var p = k.split('-');
+  if (parseInt(p[0]) === targetMesaId) {
+  var sn = parseInt(p[1]);
+  if (sn > maxS) maxS = sn;
+  }
+  });
+
+  var nuevaSillaNum = maxS + 1;
+  if (targetSillaNum !== 'arrimar_nueva' &amp;&amp; typeof targetSillaNum === 'number' &amp;&amp; targetSillaNum <= 4) {
+  var tk = targetMesaId + '-' + targetSillaNum;
+  var tc = window.palapaState.cuentas[tk];
+  if (!tc || (tc.estado !== 'ocupada' &amp;&amp; (!tc.items || tc.items.length === 0))) {
+  nuevaSillaNum = targetSillaNum;
+  }
+  }
+
+  var key = targetMesaId + '-' + nuevaSillaNum;
+  var nowStr = (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+  window.palapaState.cuentas[key] = {
+  estado: 'ocupada',
+  esArrimada: nuevaSillaNum > 4,
+  qrId: 'PV-0' + targetMesaId + nuevaSillaNum,
+  comensalNombre: 'Comensal Silla ' + nuevaSillaNum + (nuevaSillaNum > 4 ? ' (Arrimada)' : ''),
+  items: [],
+  historialUbicaciones: [{ mesaId: targetMesaId, sillaNum: nuevaSillaNum, hora: nowStr }],
+  creadoPor: 'mesero_presencial',
+  horaLlegada: nowStr
+  };
+
+  window.palapaState.mesaSeleccionadaId = targetMesaId;
+  window.palapaState.sillaSeleccionadaNum = nuevaSillaNum;
+  window.palapaState.modoComandaActiva = false;
+  saveStateToStorage();
+  cancelarModoMover();
+  showDragToast('🪑 Silla Extra arrimada con éxito a Mesa ' + targetMesaId + ' (Silla ' + nuevaSillaNum + ')', 'ok');
+  return;
+  }
+
+  // ── CASO B: Arrimar a una mesa llena desde otra mesa (o mover cuenta) ──
+  if (targetSillaNum === 'arrimar_nueva') {
+  let maxS = 4;
+  Object.keys(window.palapaState.cuentas).forEach(function (k) {
+  var p = k.split('-');
+  if (parseInt(p[0]) === targetMesaId) {
+  var sn = parseInt(p[1]);
+  if (sn > maxS) maxS = sn;
+  }
+  });
+  targetSillaNum = maxS + 1;
+  }
+
   var sourceKey = srcMesa + '-' + srcSilla;
   var targetKey = targetMesaId + '-' + targetSillaNum;
-  var sourceCuenta = window.palapaState.cuentas[sourceKey];
+  var sourceCuenta = window.palapaState.cuentas[sourceKey] || {
+  estado: 'ocupada',
+  items: [],
+  comensalNombre: 'Comensal Silla ' + srcSilla
+  };
   var targetCuenta = window.palapaState.cuentas[targetKey];
-  var isSourceOccupied = !!(sourceCuenta &amp;&amp; (sourceCuenta.estado === 'ocupada' || (sourceCuenta.items &amp;&amp; sourceCuenta.items.length > 0)));
-
-  if (!isSourceOccupied) {
-  showDragToast('⚠ La silla origen ya no está ocupada', 'warn');
-  cancelarModoMover(); return;
-  }
 
   var nowStr = (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   sourceCuenta.historialUbicaciones = sourceCuenta.historialUbicaciones || [{ mesaId: srcMesa, sillaNum: srcSilla, hora: nowStr }];
-  var yaExiste = sourceCuenta.historialUbicaciones.some(function (u) { return u.mesaId === targetMesaId &amp;&amp; u.sillaNum === targetSillaNum; });
-  if (!yaExiste) {
   sourceCuenta.historialUbicaciones.push({ mesaId: targetMesaId, sillaNum: targetSillaNum, hora: nowStr });
-  }
 
   // Actualizar mesa y silla en los consumos del comensal
   if (sourceCuenta.items) {
@@ -2432,6 +2588,9 @@
   if (!sourceCuenta.comensalNombre || sourceCuenta.comensalNombre.indexOf('Comensal Silla') === 0) {
   sourceCuenta.comensalNombre = 'Comensal Silla ' + targetSillaNum + (targetSillaNum > 4 ? ' (Arrimada)' : '');
   }
+  if (targetSillaNum > 4) {
+  sourceCuenta.esArrimada = true;
+  }
 
   var isTargetOccupied = !!(targetCuenta &amp;&amp; (targetCuenta.estado === 'ocupada' || (targetCuenta.items &amp;&amp; targetCuenta.items.length > 0)));
   var targetHasItems = targetCuenta &amp;&amp; targetCuenta.items &amp;&amp; targetCuenta.items.length > 0;
@@ -2440,7 +2599,6 @@
   if (isTargetOccupied &amp;&amp; (targetHasItems || sourceHasItems)) {
   // Silla destino ocupada y con consumos — pedir confirmación sin alert()
   showCombineConfirm(srcMesa, srcSilla, targetMesaId, targetSillaNum, function () {
-  // onYes: combinar
   targetCuenta.items = (targetCuenta.items || []).concat(sourceCuenta.items || []);
   delete window.palapaState.cuentas[sourceKey];
   window.palapaState.mesaSeleccionadaId = targetMesaId;
@@ -2451,19 +2609,14 @@
   showDragToast('✅ Cuentas combinadas en Mesa ' + targetMesaId + ' Silla ' + targetSillaNum, 'ok');
   });
   } else {
-  // Silla destino libre o sin consumos — mover comensal/cuenta
-  if (targetCuenta &amp;&amp; targetCuenta.items &amp;&amp; targetCuenta.items.length > 0) {
-  // Destino tiene items, origen estaba vacía
-  } else {
   window.palapaState.cuentas[targetKey] = sourceCuenta;
-  }
   delete window.palapaState.cuentas[sourceKey];
   window.palapaState.mesaSeleccionadaId = targetMesaId;
   window.palapaState.sillaSeleccionadaNum = targetSillaNum;
   window.palapaState.modoComandaActiva = false;
   saveStateToStorage();
   cancelarModoMover();
-  showDragToast('✅ Comensal trasladado → Mesa ' + targetMesaId + ' Silla ' + targetSillaNum, 'ok');
+  showDragToast('✅ Silla trasladada → Mesa ' + targetMesaId + ' Silla ' + targetSillaNum + (targetSillaNum > 4 ? ' (Arrimada)' : ''), 'ok');
   }
   }
 
@@ -3787,6 +3940,15 @@
   // 2. Renderizar Mesas y Sillas en el Croquis Panorámico
   for (let m = 1; m <= 3; m++) {
   let busyCount = 0;
+  let arrimadasCount = 0;
+
+  // Limpiar sillas dinámicas arrimadas previas en este tableBox
+  const tableBox = document.getElementById(`table-box-${m}`);
+  if (tableBox) {
+  tableBox.querySelectorAll('.chair-arrimada-item').forEach(el => el.remove());
+  }
+
+  // A. Sillas base estándar (1..4)
   for (let s = 1; s <= 4; s++) {
   const key = `${m}-${s}`;
   let chairEl = document.getElementById(`chair-${m}-${s}`);
@@ -3798,11 +3960,11 @@
   if (chairEl) {
   const posClass = s === 1 ? 'chair-pos-top' : s === 2 ? 'chair-pos-right' : s === 3 ? 'chair-pos-bottom' : 'chair-pos-left';
 
-  chairEl.setAttribute('draggable', isOccupied ? 'true' : 'false');
+  chairEl.setAttribute('draggable', 'true');
   const numItems = (cuenta &amp;&amp; cuenta.items) ? cuenta.items.length : 0;
   chairEl.setAttribute('title', isOccupied
   ? `Mesa ${m} Silla ${s} (Ocupada${numItems > 0 ? ' · ' + numItems + ' consumos' : ' · Sin consumos'}) • Arrastra para mover o clic para comanda`
-  : `Mesa ${m} Silla ${s} (Disponible) • Haz clic para ubicar comensal y tomar orden`);
+  : `Mesa ${m} Silla ${s} (Disponible) • Arrastra a otra mesa o haz clic para comanda`);
 
   if (isMoveMode &amp;&amp; origen &amp;&amp; origen.mesaId === m &amp;&amp; origen.sillaNum === s) {
   chairEl.className = `chair-btn-fixed ${posClass} chair-moving-source`;
@@ -3814,27 +3976,227 @@
   }
   }
 
+  // B. Sillas Arrimadas Extras (s >= 5) — Renderizado limpio en contenedor dedicado (CERO TRASLAPE)
+  const arrimadasBox = document.getElementById(`table-arrimadas-container-${m}`);
+  if (arrimadasBox) {
+  arrimadasBox.innerHTML = '';
+  }
+
+  Object.keys(window.palapaState.cuentas).forEach(k => {
+  const parts = k.split('-');
+  if (parseInt(parts[0]) === m) {
+  const sn = parseInt(parts[1]);
+  if (sn >= 5) {
+  const cuentaArrimada = window.palapaState.cuentas[k];
+  const isOccupied = !!(cuentaArrimada &amp;&amp; (cuentaArrimada.estado === 'ocupada' || (cuentaArrimada.items &amp;&amp; cuentaArrimada.items.length > 0)));
+  if (isOccupied) {
+  busyCount++;
+  arrimadasCount++;
+
+  if (arrimadasBox) {
+  const arrEl = document.createElement('div');
+  arrEl.id = `chair-${m}-${sn}`;
+  arrEl.className = `chair-btn-fixed chair-state-busy chair-arrimada-item`;
+  arrEl.setAttribute('draggable', 'true');
+  arrEl.setAttribute('title', `Mesa ${m} Silla ${sn} (Arrimada) • Arrastra para mover o clic para comanda`);
+  arrEl.style.cssText = 'padding: 6px 14px !important; font-size: 11px !important; font-weight: 800 !important; border-radius: 10px !important; cursor: pointer !important; display: flex !important; align-items: center !important; gap: 6px !important; box-shadow: 0 2px 6px rgba(0,0,0,0.1) !important;';
+  arrEl.innerHTML = `🪑 Silla ${sn} <span style=&quot;font-size:9px; opacity:0.85; background: rgba(0,0,0,0.08); padding: 2px 6px; border-radius: 6px;&quot;>Arrimada</span>`;
+
+  arrEl.addEventListener('mousedown', function(e) {
+  _chairMousedown(e, m, sn);
+  });
+
+  if (isMoveMode &amp;&amp; origen &amp;&amp; origen.mesaId === m &amp;&amp; origen.sillaNum === sn) {
+  arrEl.className = `chair-btn-fixed chair-moving-source chair-arrimada-item`;
+  }
+
+  arrimadasBox.appendChild(arrEl);
+  }
+  }
+  }
+  }
+  });
+
   const circle = document.getElementById(`table-circle-${m}`);
   const statusText = document.getElementById(`table-status-${m}`);
   const labelText = document.getElementById(`table-label-${m}`);
 
   if (circle) {
   if (busyCount > 0) {
-  circle.style.background = &quot;#78350f&quot;;
-  circle.style.border = &quot;4px solid #f59e0b&quot;;
-  if (statusText) statusText.innerText = `${busyCount} Ocupada${busyCount > 1 ? 's' : ''}`;
+  circle.style.background = &quot;#fffbeb&quot;;
+  circle.style.border = &quot;3px solid #f59e0b&quot;;
+  circle.style.color = &quot;#92400e&quot;;
+  circle.style.boxShadow = &quot;0 2px 8px rgba(245, 158, 11, 0.2)&quot;;
+  if (statusText) {
+  statusText.innerText = `${busyCount} Ocupada${busyCount > 1 ? 's' : ''}`;
+  statusText.style.color = &quot;#d97706&quot;;
+  }
   if (labelText) {
-  labelText.style.color = &quot;#fbbf24&quot;;
-  labelText.innerText = `🟡 Ocupada (${busyCount} Comensal${busyCount > 1 ? 'es' : ''})`;
+  labelText.style.color = &quot;#d97706&quot;;
+  labelText.innerText = `🟡 Ocupada (${busyCount} Comensal${busyCount > 1 ? 'es' : ''}${arrimadasCount > 0 ? ' · ' + arrimadasCount + ' Arrimada' + (arrimadasCount > 1 ? 's' : '') : ''})`;
   }
   } else {
-  circle.style.background = &quot;#064e3b&quot;;
-  circle.style.border = &quot;4px solid #10b981&quot;;
-  if (statusText) statusText.innerText = `Libre`;
+  circle.style.background = &quot;#ecfdf5&quot;;
+  circle.style.border = &quot;3px solid #10b981&quot;;
+  circle.style.color = &quot;#065f46&quot;;
+  circle.style.boxShadow = &quot;0 2px 8px rgba(16, 185, 129, 0.2)&quot;;
+  if (statusText) {
+  statusText.innerText = `Libre`;
+  statusText.style.color = &quot;#059669&quot;;
+  }
   if (labelText) {
-  labelText.style.color = &quot;#34d399&quot;;
+  labelText.style.color = &quot;#059669&quot;;
   labelText.innerText = `🟢 Disponible`;
   }
+  }
+  }
+  }
+
+  // 2.1 Transformación Física y Visual de Mesas Unidas / Grupos Modulares
+  const unidas = window.palapaState.mesasUnidas;
+  const btnSep = document.getElementById('btnSeparateTables');
+  const btn12 = document.getElementById('btnJoin12');
+  const btn23 = document.getElementById('btnJoin23');
+  const btnAll = document.getElementById('btnJoinAll');
+
+  if (btnSep) btnSep.style.setProperty('display', unidas ? 'flex' : 'none', 'important');
+  if (btn12) {
+  btn12.style.background = unidas === '1-2' ? '#0284c7' : '#ffffff';
+  btn12.style.color = unidas === '1-2' ? '#ffffff' : '#0284c7';
+  }
+  if (btn23) {
+  btn23.style.background = unidas === '2-3' ? '#0284c7' : '#ffffff';
+  btn23.style.color = unidas === '2-3' ? '#ffffff' : '#0284c7';
+  }
+  if (btnAll) {
+  btnAll.style.background = unidas === '1-2-3' ? '#0369a1' : 'linear-gradient(135deg, #0284c7, #0369a1)';
+  }
+
+  const grid = document.getElementById('floorplanTablesGrid');
+  const card1 = document.getElementById('table-card-container-1');
+  const card2 = document.getElementById('table-card-container-2');
+  const card3 = document.getElementById('table-card-container-3');
+  const box1 = document.getElementById('table-box-1');
+  const box2 = document.getElementById('table-box-2');
+  const box3 = document.getElementById('table-box-3');
+  const circle1 = document.getElementById('table-circle-1');
+  const circle2 = document.getElementById('table-circle-2');
+  const circle3 = document.getElementById('table-circle-3');
+  const head1 = document.getElementById('table-header-title-1');
+  const head2 = document.getElementById('table-header-title-2');
+  const head3 = document.getElementById('table-header-title-3');
+
+  if (grid &amp;&amp; card1 &amp;&amp; card2 &amp;&amp; card3) {
+  if (unidas === '1-2') {
+  // Fusión física Mesa 1 + 2 (8 Pax)
+  grid.style.setProperty('grid-template-columns', '2fr 1fr', 'important');
+  card1.style.setProperty('display', 'flex', 'important');
+  card1.style.setProperty('border', '2.5px solid #0284c7', 'important');
+  card1.style.setProperty('background', '#f0f9ff', 'important');
+  card1.style.setProperty('box-shadow', '0 8px 25px rgba(2, 132, 199, 0.15)', 'important');
+  if (head1) head1.innerHTML = '🔗 MESA 1 + MESA 2 UNIDAS <span style=&quot;font-size:11px;color:#0284c7;&quot;>(GRUPO MODULAR 8 PAX)</span>';
+
+  if (box1) { box1.style.width = '360px'; box1.style.height = '230px'; }
+  if (circle1) {
+  circle1.style.width = '240px';
+  circle1.style.height = '104px';
+  circle1.innerHTML = `<span style=&quot;font-size:18px; font-weight:900; color:#0369a1;&quot;>M1 + M2 (UNIDAS)</span><span style=&quot;font-size:10px; font-weight:800; color:#0284c7; text-transform:uppercase;&quot;>Grupo Modular 8 Lugares</span>`;
+  }
+
+  card2.style.setProperty('display', 'none', 'important');
+
+  card3.style.setProperty('display', 'flex', 'important');
+  card3.style.setProperty('border', '1px solid #dce8f5', 'important');
+  card3.style.setProperty('background', '#f8fbff', 'important');
+  card3.style.setProperty('box-shadow', 'none', 'important');
+  if (head3) head3.innerHTML = 'Mesa 3 (Palapa)';
+  if (box3) { box3.style.width = '250px'; box3.style.height = '230px'; }
+  if (circle3) {
+  circle3.style.width = '104px';
+  circle3.style.height = '104px';
+  }
+
+  } else if (unidas === '2-3') {
+  // Fusión física Mesa 2 + 3 (8 Pax)
+  grid.style.setProperty('grid-template-columns', '1fr 2fr', 'important');
+  card1.style.setProperty('display', 'flex', 'important');
+  card1.style.setProperty('border', '1px solid #dce8f5', 'important');
+  card1.style.setProperty('background', '#f8fbff', 'important');
+  card1.style.setProperty('box-shadow', 'none', 'important');
+  if (head1) head1.innerHTML = 'Mesa 1 (Palapa)';
+  if (box1) { box1.style.width = '250px'; box1.style.height = '230px'; }
+  if (circle1) {
+  circle1.style.width = '104px';
+  circle1.style.height = '104px';
+  }
+
+  card2.style.setProperty('display', 'flex', 'important');
+  card2.style.setProperty('border', '2.5px solid #0284c7', 'important');
+  card2.style.setProperty('background', '#f0f9ff', 'important');
+  card2.style.setProperty('box-shadow', '0 8px 25px rgba(2, 132, 199, 0.15)', 'important');
+  if (head2) head2.innerHTML = '🔗 MESA 2 + MESA 3 UNIDAS <span style=&quot;font-size:11px;color:#0284c7;&quot;>(GRUPO MODULAR 8 PAX)</span>';
+
+  if (box2) { box2.style.width = '360px'; box2.style.height = '230px'; }
+  if (circle2) {
+  circle2.style.width = '240px';
+  circle2.style.height = '104px';
+  circle2.innerHTML = `<span style=&quot;font-size:18px; font-weight:900; color:#0369a1;&quot;>M2 + M3 (UNIDAS)</span><span style=&quot;font-size:10px; font-weight:800; color:#0284c7; text-transform:uppercase;&quot;>Grupo Modular 8 Lugares</span>`;
+  }
+
+  card3.style.setProperty('display', 'none', 'important');
+
+  } else if (unidas === '1-2-3') {
+  // Gran Mesa Imperial (M1 + M2 + M3)
+  grid.style.setProperty('grid-template-columns', '1fr', 'important');
+  card1.style.setProperty('display', 'flex', 'important');
+  card1.style.setProperty('border', '2.5px solid #0284c7', 'important');
+  card1.style.setProperty('background', '#f0f9ff', 'important');
+  card1.style.setProperty('box-shadow', '0 10px 30px rgba(2, 132, 199, 0.2)', 'important');
+  if (head1) head1.innerHTML = '👑 GRAN MESA IMPERIAL PALAPA (M1 + M2 + M3) • 10 A 12 PERSONAS';
+
+  if (box1) { box1.style.width = '560px'; box1.style.height = '230px'; }
+  if (circle1) {
+  circle1.style.width = '420px';
+  circle1.style.height = '104px';
+  circle1.innerHTML = `<span style=&quot;font-size:18px; font-weight:900; color:#0369a1;&quot;>👑 M1 + M2 + M3 • BANQUETE IMPERIAL</span><span style=&quot;font-size:10px; font-weight:800; color:#0284c7; text-transform:uppercase;&quot;>Reservado Palapa 10 a 12 Lugares</span>`;
+  }
+
+  card2.style.setProperty('display', 'none', 'important');
+  card3.style.setProperty('display', 'none', 'important');
+
+  } else {
+  // Mesas Individuales Estándar
+  grid.style.setProperty('grid-template-columns', 'repeat(3, 1fr)', 'important');
+  [card1, card2, card3].forEach((c, idx) => {
+  const mesaNum = idx + 1;
+  c.style.setProperty('display', 'flex', 'important');
+  c.style.setProperty('border', '1px solid #dce8f5', 'important');
+  c.style.setProperty('background', '#f8fbff', 'important');
+  c.style.setProperty('box-shadow', 'none', 'important');
+  });
+
+  if (head1) head1.innerHTML = 'Mesa 1 (Palapa)';
+  if (head2) head2.innerHTML = 'Mesa 2 (Palapa)';
+  if (head3) head3.innerHTML = 'Mesa 3 (Palapa)';
+
+  if (box1) { box1.style.width = '250px'; box1.style.height = '230px'; }
+  if (box2) { box2.style.width = '250px'; box2.style.height = '230px'; }
+  if (box3) { box3.style.width = '250px'; box3.style.height = '230px'; }
+
+  if (circle1) {
+  circle1.style.width = '104px';
+  circle1.style.height = '104px';
+  circle1.innerHTML = `<span style=&quot;font-size:18px; font-weight:900; color:#065f46; line-height:1;&quot;>M1</span><span id=&quot;table-status-1&quot; style=&quot;font-size:9px; font-weight:800; color:#059669; text-transform:uppercase; margin-top:2px;&quot;>Libre</span>`;
+  }
+  if (circle2) {
+  circle2.style.width = '104px';
+  circle2.style.height = '104px';
+  circle2.innerHTML = `<span style=&quot;font-size:18px; font-weight:900; color:#065f46; line-height:1;&quot;>M2</span><span id=&quot;table-status-2&quot; style=&quot;font-size:9px; font-weight:800; color:#059669; text-transform:uppercase; margin-top:2px;&quot;>Libre</span>`;
+  }
+  if (circle3) {
+  circle3.style.width = '104px';
+  circle3.style.height = '104px';
+  circle3.innerHTML = `<span style=&quot;font-size:18px; font-weight:900; color:#92400e; line-height:1;&quot;>M3</span><span id=&quot;table-status-3&quot; style=&quot;font-size:9px; font-weight:800; color:#d97706; text-transform:uppercase; margin-top:2px;&quot;>2 Ocupadas</span>`;
   }
   }
   }
