@@ -470,22 +470,18 @@
           </span>
         </div>
 
-        <!-- CATEGORY CHIPS -->
-        <div style="display: flex !important; gap: 8px !important; flex-wrap: wrap !important;" id="waiterCatChips">
-          <button data-cat="Todos" id="wchip-Todos"
-            style="padding: 6px 14px !important; font-size: 11px !important; font-weight: 700 !important; border-radius: 10px !important; border: 1px solid #34d399 !important; background: #059669 !important; color: #ffffff !important; cursor: pointer !important;">Todos</button>
-          <button data-cat="Barra de Café & Infusiones" id="wchip-Cafe"
-            style="padding: 6px 14px !important; font-size: 11px !important; font-weight: 700 !important; border-radius: 10px !important; border: 1px solid #334155 !important; background: #1e293b !important; color: #cbd5e1 !important; cursor: pointer !important;">☕
-            Café</button>
-          <button data-cat="Desayunos & Brunch Gourmet" id="wchip-Des"
-            style="padding: 6px 14px !important; font-size: 11px !important; font-weight: 700 !important; border-radius: 10px !important; border: 1px solid #334155 !important; background: #1e293b !important; color: #cbd5e1 !important; cursor: pointer !important;">🍳
-            Desayunos</button>
-          <button data-cat="Especialidades Fuertes" id="wchip-Car"
-            style="padding: 6px 14px !important; font-size: 11px !important; font-weight: 700 !important; border-radius: 10px !important; border: 1px solid #334155 !important; background: #1e293b !important; color: #cbd5e1 !important; cursor: pointer !important;">🥩
-            Carnes</button>
-          <button data-cat="Repostería & Postres de Autor" id="wchip-Pos"
-            style="padding: 6px 14px !important; font-size: 11px !important; font-weight: 700 !important; border-radius: 10px !important; border: 1px solid #334155 !important; background: #1e293b !important; color: #cbd5e1 !important; cursor: pointer !important;">🍰
-            Postres</button>
+        <!-- CATEGORY CHIPS (DESAYUNOS ESTRUCTURADOS) -->
+        <div style="display: flex !important; gap: 6px !important; flex-wrap: wrap !important;" id="waiterCatChips">
+          <button data-cat="Huevos & Omelettes" id="wchip-Huevos"
+            style="padding: 6px 11px !important; font-size: 11px !important; font-weight: 800 !important; border-radius: 10px !important; border: 1px solid #34d399 !important; background: #059669 !important; color: #ffffff !important; cursor: pointer !important;">🍳 Huevos & Omelettes</button>
+          <button data-cat="Especialidades Mexicanas" id="wchip-Mex"
+            style="padding: 6px 11px !important; font-size: 11px !important; font-weight: 800 !important; border-radius: 10px !important; border: 1px solid #334155 !important; background: #1e293b !important; color: #cbd5e1 !important; cursor: pointer !important;">🥘 Mexicanas</button>
+          <button data-cat="Dulces & Americanos" id="wchip-Dulces"
+            style="padding: 6px 11px !important; font-size: 11px !important; font-weight: 800 !important; border-radius: 10px !important; border: 1px solid #334155 !important; background: #1e293b !important; color: #cbd5e1 !important; cursor: pointer !important;">🥞 Dulces</button>
+          <button data-cat="Combos Recomendados" id="wchip-Combos"
+            style="padding: 6px 11px !important; font-size: 11px !important; font-weight: 800 !important; border-radius: 10px !important; border: 1px solid #334155 !important; background: #1e293b !important; color: #cbd5e1 !important; cursor: pointer !important;">⭐ Combos</button>
+          <button data-cat="Bebidas & Jugos" id="wchip-Bebidas"
+            style="padding: 6px 11px !important; font-size: 11px !important; font-weight: 800 !important; border-radius: 10px !important; border: 1px solid #334155 !important; background: #1e293b !important; color: #cbd5e1 !important; cursor: pointer !important;">☕ Bebidas</button>
         </div>
 
         <!-- MENU ITEMS GRID -->
@@ -978,15 +974,43 @@
 <script>
   (function () {
     window.catalogProducts = [
-      { id: 1, categoria_nombre: "Barra de Café & Infusiones", nombre: "Capuchino Especial V&S", precio: 68.00, icono: "☕" },
-      { id: 2, categoria_nombre: "Barra de Café & Infusiones", nombre: "Espresso Italiano", precio: 48.00, icono: "☕" },
-      { id: 4, categoria_nombre: "Desayunos & Brunch Gourmet", nombre: "Chilaquiles Verdes Pollo", precio: 148.00, icono: "🥘" },
-      { id: 5, categoria_nombre: "Desayunos & Brunch Gourmet", nombre: "Omelette Supremo", precio: 155.00, icono: "🍳" },
-      { id: 6, categoria_nombre: "Desayunos & Brunch Gourmet", nombre: "Molletes Masa Madre", precio: 125.00, icono: "🥖" },
-      { id: 7, categoria_nombre: "Especialidades Fuertes", nombre: "Rib Eye Grill V&S", precio: 385.00, icono: "🥩" },
-      { id: 8, categoria_nombre: "Especialidades Fuertes", nombre: "Pasta Fettuccine Trufado", precio: 265.00, icono: "🍝" },
-      { id: 9, categoria_nombre: "Repostería & Postres de Autor", nombre: "Pastel Chocolate Valrhona", precio: 105.00, icono: "🍰" },
-      { id: 10, categoria_nombre: "Bebidas & Coctelería de Autor", nombre: "Limonada Botánica", precio: 60.00, icono: "🍋" }
+      // 1. HUEVOS Y OMELETTES
+      { id: 101, categoria_nombre: "Huevos & Omelettes", nombre: "Huevos al Gusto", descripcion: "2 huevos (fritos, revueltos o estrellados) + frijoles + tortillas o pan", precio: 90.00, icono: "🍳" },
+      { id: 102, categoria_nombre: "Huevos & Omelettes", nombre: "Huevos a la Mexicana", descripcion: "Huevos revueltos con jitomate, cebolla y chile + frijoles refritos", precio: 95.00, icono: "🍳" },
+      { id: 103, categoria_nombre: "Huevos & Omelettes", nombre: "Huevos Rancheros", descripcion: "Huevos estrellados sobre tortilla con salsa roja o verde + frijoles", precio: 105.00, icono: "🍳" },
+      { id: 104, categoria_nombre: "Huevos & Omelettes", nombre: "Huevos con Jamón / Tocino / Chorizo", descripcion: "Huevos al gusto + proteína a elegir + frijoles de la olla", precio: 115.00, icono: "🥓" },
+      { id: 105, categoria_nombre: "Huevos & Omelettes", nombre: "Omelette de Jamón y Queso", descripcion: "Omelette relleno con queso gouda y jamón + ensalada o frijoles", precio: 125.00, icono: "🧀" },
+      { id: 106, categoria_nombre: "Huevos & Omelettes", nombre: "Omelette Champiñones y Espinaca", descripcion: "Opción ligera con espinacas baby, champiñón fresco y queso", precio: 130.00, icono: "🍄" },
+      { id: 107, categoria_nombre: "Huevos & Omelettes", nombre: "Machaca con Huevo Norteña", descripcion: "Clásico norteño de carne seca con huevo + frijoles y tortillas", precio: 135.00, icono: "🥩" },
+
+      // 2. ESPECIALIDADES MEXICANAS
+      { id: 201, categoria_nombre: "Especialidades Mexicanas", nombre: "Chilaquiles Verdes o Rojos", descripcion: "Con crema, queso y cebolla. Acompañados con huevo o pollo", precio: 145.00, icono: "🥘" },
+      { id: 202, categoria_nombre: "Especialidades Mexicanas", nombre: "Chilaquiles con Bistec o Chorizo", descripcion: "Versión fuerte con bistec a la plancha o chorizo artesanal", precio: 165.00, icono: "🥩" },
+      { id: 203, categoria_nombre: "Especialidades Mexicanas", nombre: "Enchiladas de Desayuno", descripcion: "Rojas o verdes, rellenas de pollo o queso + huevo estrellado encima", precio: 145.00, icono: "🌶️" },
+      { id: 204, categoria_nombre: "Especialidades Mexicanas", nombre: "Molletes Tradicionales", descripcion: "Bolillo con frijoles refritos, queso gratinado y pico de gallo", precio: 105.00, icono: "🥖" },
+      { id: 205, categoria_nombre: "Especialidades Mexicanas", nombre: "Tacos de Huevo al Gusto (3 pzas)", descripcion: "3 tacos de huevo con salsa a elegir y frijoles", precio: 85.00, icono: "🌮" },
+      { id: 206, categoria_nombre: "Especialidades Mexicanas", nombre: "Tacos de Chorizo con Huevo (3 pzas)", descripcion: "Guisado tradicional en tortillas recién hechas", precio: 95.00, icono: "🌮" },
+
+      // 3. DULCES / AMERICANOS
+      { id: 301, categoria_nombre: "Dulces & Americanos", nombre: "Hotcakes Clásicos (3 pzas)", descripcion: "Con mantequilla de rancho y miel de maple o cajeta", precio: 110.00, icono: "🥞" },
+      { id: 302, categoria_nombre: "Dulces & Americanos", nombre: "Hotcakes con Fruta Fresca", descripcion: "Acompañados de plátano, fresas de temporada o mixtas", precio: 130.00, icono: "🍓" },
+      { id: 303, categoria_nombre: "Dulces & Americanos", nombre: "Waffles Belgas con Frutas", descripcion: "Waffles dorados con fruta fresca y miel de abeja", precio: 135.00, icono: "🧇" },
+      { id: 304, categoria_nombre: "Dulces & Americanos", nombre: "Orden de Fruta de Temporada", descripcion: "Papaya, melón y piña con yogurt natural o granola", precio: 95.00, icono: "🍍" },
+      { id: 305, categoria_nombre: "Dulces & Americanos", nombre: "Yogurt con Granola y Fruta", descripcion: "Bowl fresco con yogurt natural, granola artesanal y fruta", precio: 90.00, icono: "🥣" },
+
+      // 4. COMBOS RECOMENDADOS
+      { id: 401, categoria_nombre: "Combos Recomendados", nombre: "Combo Clásico Desayuno", descripcion: "Huevos al gusto + frijoles + jugo de naranja + café", precio: 145.00, icono: "⭐" },
+      { id: 402, categoria_nombre: "Combos Recomendados", nombre: "Combo Chilaquiles V&S", descripcion: "Chilaquiles con huevo/pollo + jugo natural + café", precio: 175.00, icono: "⭐" },
+      { id: 403, categoria_nombre: "Combos Recomendados", nombre: "Combo Dulce Mañana", descripcion: "Hotcakes + jugo de naranja natural + café americano", precio: 155.00, icono: "⭐" },
+
+      // 5. BEBIDAS & JUGOS
+      { id: 501, categoria_nombre: "Bebidas & Jugos", nombre: "Café Americano / de Olla", descripcion: "Café de altura recién tostado o receta tradicional con canela y piloncillo", precio: 45.00, icono: "☕" },
+      { id: 502, categoria_nombre: "Bebidas & Jugos", nombre: "Café con Leche / Capuchino", descripcion: "Espresso doble con leche cremada al vapor", precio: 68.00, icono: "☕" },
+      { id: 503, categoria_nombre: "Bebidas & Jugos", nombre: "Jugo de Naranja Natural", descripcion: "100% natural recién exprimido al momento", precio: 55.00, icono: "🍊" },
+      { id: 504, categoria_nombre: "Bebidas & Jugos", nombre: "Jugo Verde Energético", descripcion: "Nopal, apio, piña, perejil y jugo de naranja fresco", precio: 60.00, icono: "🥬" },
+      { id: 505, categoria_nombre: "Bebidas & Jugos", nombre: "Chocolate Caliente Tradicional", descripcion: "Preparado con cacao criollo, canela y leche caliente", precio: 55.00, icono: "🍫" },
+      { id: 506, categoria_nombre: "Bebidas & Jugos", nombre: "Agua Fresca de Fruta del Día", descripcion: "Agua de fruta natural de temporada (500 ml)", precio: 40.00, icono: "🍉" },
+      { id: 507, categoria_nombre: "Bebidas & Jugos", nombre: "Refresco de Lata (355ml)", descripcion: "Variedad de refrescos fríos de lata", precio: 38.00, icono: "🥤" }
     ];
 
     var DEFAULT_CUENTAS = {
@@ -996,10 +1020,10 @@
         qrId: 'PV-031',
         comensalNombre: 'Comensal Silla 1',
         items: [
-          { id: 4, nombre: 'Chilaquiles Verdes Pollo', notas: 'Sin cebolla • Salsa aparte', precio: 148.00, cantidad: 1, mesaId: 3, sillaNum: 1, hora: '12:15 PM', enviadoCocina: true }
+          { id: 201, nombre: 'Chilaquiles Verdes o Rojos', notas: 'Con pollo • Salsa verde', precio: 145.00, cantidad: 1, mesaId: 3, sillaNum: 1, hora: '09:15 AM' }
         ],
         historialUbicaciones: [
-          { mesaId: 3, sillaNum: 1, hora: '12:10 PM' }
+          { mesaId: 3, sillaNum: 1, hora: '09:10 AM' }
         ]
       },
       '3-2': {
@@ -1007,59 +1031,58 @@
         qrId: 'PV-032',
         comensalNombre: 'Comensal Silla 2',
         items: [
-          { id: 1, nombre: 'Capuchino Especial V&S', notas: 'Leche de almendras', precio: 68.00, cantidad: 1, mesaId: 3, sillaNum: 2, hora: '12:20 PM', enviadoCocina: true }
+          { id: 502, nombre: 'Café con Leche / Capuchino', notas: 'Con canela', precio: 68.00, cantidad: 1, mesaId: 3, sillaNum: 2, hora: '09:20 AM' }
         ],
         historialUbicaciones: [
-          { mesaId: 3, sillaNum: 2, hora: '12:20 PM' }
+          { mesaId: 3, sillaNum: 2, hora: '09:20 AM' }
         ]
       },
 
-      // MESA 2: 4 comensales
+      // MESA 2: Familia (2 adultos + 2 niños)
       '2-1': {
         estado: 'ocupada',
         qrId: 'PV-021',
-        comensalNombre: 'Comensal Silla 1',
+        comensalNombre: 'Adulto 1 (Papá)',
         items: [
-          { id: 7, nombre: 'Rib Eye Grill V&S', notas: 'Término medio • Papas gajo', precio: 385.00, cantidad: 1, mesaId: 2, sillaNum: 1, hora: '12:40 PM', enviadoCocina: true },
-          { id: 10, nombre: 'Limonada Botánica', notas: 'Con hierbabuena', precio: 60.00, cantidad: 1, mesaId: 2, sillaNum: 1, hora: '12:42 PM', enviadoCocina: true }
+          { id: 402, nombre: 'Combo Chilaquiles V&S', notas: 'Con huevo estrellado y café de olla', precio: 175.00, cantidad: 1, mesaId: 2, sillaNum: 1, hora: '09:30 AM' }
         ],
         historialUbicaciones: [
-          { mesaId: 2, sillaNum: 1, hora: '12:35 PM' }
+          { mesaId: 2, sillaNum: 1, hora: '09:25 AM' }
         ]
       },
       '2-2': {
         estado: 'ocupada',
         qrId: 'PV-022',
-        comensalNombre: 'Comensal Silla 2',
+        comensalNombre: 'Adulto 2 (Mamá)',
         items: [
-          { id: 8, nombre: 'Pasta Fettuccine Trufado', notas: 'Poco queso', precio: 265.00, cantidad: 1, mesaId: 2, sillaNum: 2, hora: '12:41 PM', enviadoCocina: true },
-          { id: 10, nombre: 'Limonada Botánica', notas: 'Sin hielo', precio: 60.00, cantidad: 1, mesaId: 2, sillaNum: 2, hora: '12:43 PM', enviadoCocina: true }
+          { id: 106, nombre: 'Omelette Champiñones y Espinaca', notas: 'Con frijoles refritos', precio: 130.00, cantidad: 1, mesaId: 2, sillaNum: 2, hora: '09:31 AM' },
+          { id: 504, nombre: 'Jugo Verde Energético', notas: 'Sin azúcar', precio: 60.00, cantidad: 1, mesaId: 2, sillaNum: 2, hora: '09:33 AM' }
         ],
         historialUbicaciones: [
-          { mesaId: 2, sillaNum: 2, hora: '12:35 PM' }
+          { mesaId: 2, sillaNum: 2, hora: '09:25 AM' }
         ]
       },
       '2-3': {
         estado: 'ocupada',
         qrId: 'PV-023',
-        comensalNombre: 'Comensal Silla 3',
+        comensalNombre: 'Niño 1',
         items: [
-          { id: 6, nombre: 'Molletes Masa Madre', notas: 'Bien doraditos', precio: 125.00, cantidad: 1, mesaId: 2, sillaNum: 3, hora: '12:42 PM', enviadoCocina: true },
-          { id: 10, nombre: 'Limonada Botánica', notas: 'Poco dulce', precio: 60.00, cantidad: 1, mesaId: 2, sillaNum: 3, hora: '12:44 PM', enviadoCocina: true }
+          { id: 302, nombre: 'Hotcakes con Fruta Fresca', notas: 'Con fresas y miel', precio: 130.00, cantidad: 1, mesaId: 2, sillaNum: 3, hora: '09:32 AM' },
+          { id: 505, nombre: 'Chocolate Caliente Tradicional', notas: 'Tibio', precio: 55.00, cantidad: 1, mesaId: 2, sillaNum: 3, hora: '09:34 AM' }
         ],
         historialUbicaciones: [
-          { mesaId: 2, sillaNum: 3, hora: '12:35 PM' }
+          { mesaId: 2, sillaNum: 3, hora: '09:25 AM' }
         ]
       },
       '2-4': {
         estado: 'ocupada',
         qrId: 'PV-024',
-        comensalNombre: 'Comensal Silla 4',
+        comensalNombre: 'Niño 2',
         items: [
-          { id: 9, nombre: 'Pastel Chocolate Valrhona', notas: 'Con helado de vainilla', precio: 105.00, cantidad: 1, mesaId: 2, sillaNum: 4, hora: '12:45 PM', enviadoCocina: true }
+          { id: 301, nombre: 'Hotcakes Clásicos (3 pzas)', notas: 'Con miel de maple', precio: 110.00, cantidad: 1, mesaId: 2, sillaNum: 4, hora: '09:35 AM' }
         ],
         historialUbicaciones: [
-          { mesaId: 2, sillaNum: 4, hora: '12:35 PM' }
+          { mesaId: 2, sillaNum: 4, hora: '09:25 AM' }
         ]
       }
     };
@@ -2894,23 +2917,24 @@
       if (!grid) return;
       grid.innerHTML = '';
 
-      const catFiltro = window.palapaState.categoriaFiltro || 'Todos';
-      const filtrados = window.catalogProducts.filter(p => catFiltro === 'Todos' || p.categoria_nombre === catFiltro);
+      const catFiltro = window.palapaState.categoriaFiltro || 'Huevos & Omelettes';
+      const filtrados = window.catalogProducts.filter(p => p.categoria_nombre === catFiltro);
 
       filtrados.forEach(prod => {
         const card = document.createElement('div');
-        card.style.cssText = 'background: #0f172a !important; border: 1px solid #1e293b !important; border-radius: 12px !important; padding: 12px !important; display: flex !important; justify-content: space-between !important; align-items: center !important; cursor: pointer !important;';
+        card.style.cssText = 'background: #0f172a !important; border: 1px solid #1e293b !important; border-radius: 12px !important; padding: 10px 12px !important; display: flex !important; justify-content: space-between !important; align-items: center !important; cursor: pointer !important; transition: all 0.2s ease !important;';
         card.onclick = () => agregarPlatilloDirecto(prod);
 
         card.innerHTML = `
-          <div style="display: flex; align-items: center; gap: 8px;">
-            <span style="font-size: 20px;">${prod.icono}</span>
-            <div>
-              <span style="font-size: 11px; font-weight: 700; color: #ffffff; display: block; line-height: 1.2;">${prod.nombre}</span>
-              <span style="font-size: 11px; font-weight: 900; color: #34d399;">$${prod.precio.toFixed(2)}</span>
+          <div style="display: flex; align-items: center; gap: 10px; flex: 1; padding-right: 8px;">
+            <span style="font-size: 22px;">${prod.icono}</span>
+            <div style="flex: 1;">
+              <span style="font-size: 11px; font-weight: 800; color: #ffffff; display: block; line-height: 1.2;">${prod.nombre}</span>
+              <span style="font-size: 10px; color: #94a3b8; display: block; line-height: 1.2; margin-top: 2px;">${prod.descripcion || ''}</span>
+              <span style="font-size: 12px; font-weight: 900; color: #34d399; display: block; margin-top: 3px;">$${prod.precio.toFixed(2)}</span>
             </div>
           </div>
-          <button style="padding: 6px 12px; background: #059669; color: #ffffff; font-size: 11px; font-weight: 900; border-radius: 8px; border: none; cursor: pointer;">
+          <button style="padding: 6px 12px; background: #059669; color: #ffffff; font-size: 11px; font-weight: 900; border-radius: 8px; border: none; cursor: pointer; white-space: nowrap;">
             + Agregar
           </button>
         `;
@@ -2940,12 +2964,10 @@
 
       const nowStr = (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
       const items = window.palapaState.cuentas[key].items;
-      // Si ya hay un item idéntico que todavía NO se ha enviado a cocina, le incrementamos cantidad
-      const existingUnsent = items.find(i => i.id === prod.id && i.mesaId === mesaId && i.sillaNum === sillaNum && !i.enviadoCocina);
-      if (existingUnsent) {
-        existingUnsent.cantidad += 1;
+      const existing = items.find(i => i.id === prod.id && i.mesaId === mesaId && i.sillaNum === sillaNum);
+      if (existing) {
+        existing.cantidad += 1;
       } else {
-        // Entra como nuevo item pendiente de enviar a cocina
         items.push({
           id: prod.id,
           nombre: prod.nombre,
@@ -2954,8 +2976,7 @@
           cantidad: 1,
           mesaId: mesaId,
           sillaNum: sillaNum,
-          hora: nowStr,
-          enviadoCocina: false
+          hora: nowStr
         });
       }
 
@@ -2965,21 +2986,24 @@
       if (modalBackdrop && modalBackdrop.classList.contains('show')) {
         abrirModalComandaActual();
       }
-      showDragToast(`➕ ${prod.nombre} agregado a Silla ${sillaNum} (Pendiente enviar a cocina)`, 'ok');
+      showDragToast(`➕ ${prod.nombre} agregado a Silla ${sillaNum}`, 'ok');
     }
 
     function filtrarCategoria(catNombre) {
       window.palapaState.categoriaFiltro = catNombre;
 
-      const chipKeys = ['Todos', 'Cafe', 'Des', 'Car', 'Pos'];
-      chipKeys.forEach(k => {
-        const el = document.getElementById(`wchip-${k}`);
+      const chipMap = [
+        { id: 'wchip-Huevos', cat: 'Huevos & Omelettes' },
+        { id: 'wchip-Mex', cat: 'Especialidades Mexicanas' },
+        { id: 'wchip-Dulces', cat: 'Dulces & Americanos' },
+        { id: 'wchip-Combos', cat: 'Combos Recomendados' },
+        { id: 'wchip-Bebidas', cat: 'Bebidas & Jugos' }
+      ];
+
+      chipMap.forEach(item => {
+        const el = document.getElementById(item.id);
         if (el) {
-          if ((k === 'Todos' && catNombre === 'Todos') ||
-            (k === 'Cafe' && catNombre === 'Barra de Café & Infusiones') ||
-            (k === 'Des' && catNombre === 'Desayunos & Brunch Gourmet') ||
-            (k === 'Car' && catNombre === 'Especialidades Fuertes') ||
-            (k === 'Pos' && catNombre === 'Repostería & Postres de Autor')) {
+          if (item.cat === catNombre) {
             el.style.background = "#059669";
             el.style.color = "#ffffff";
             el.style.border = "1px solid #34d399";

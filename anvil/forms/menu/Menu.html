@@ -304,28 +304,54 @@
 
 <script>
   window.vsMenuData = [
-    { id: 1, categoria_nombre: "Barra de Café & Infusiones", nombre: "Café Capuchino Especial V&S", descripcion: "Espresso doble con leche cremada artesanal y toque de canela", precio_unitario: 68.00, estacion_preparacion: "barra_cafe", icono: "☕" },
-    { id: 2, categoria_nombre: "Barra de Café & Infusiones", nombre: "Espresso Italiano Robusto", descripcion: "Grano seleccionado 100% arábica tostado de la casa", precio_unitario: 48.00, estacion_preparacion: "barra_cafe", icono: "☕" },
-    { id: 3, categoria_nombre: "Barra de Café & Infusiones", nombre: "Latte Machiatto Vainilla Bourbon", descripcion: "Espresso con leche de almendra y jarabe natural de vainilla bourbon", precio_unitario: 75.00, estacion_preparacion: "barra_cafe", icono: "🥛" },
-    { id: 4, categoria_nombre: "Desayunos & Brunch Gourmet", nombre: "Chilaquiles Verdes con Pollo y Queso Gouda", descripcion: "Totopos artesanos en salsa de tomatillo con pollo deshebrado y gouda", precio_unitario: 148.00, estacion_preparacion: "cocina", icono: "🥘" },
-    { id: 5, categoria_nombre: "Desayunos & Brunch Gourmet", nombre: "Omelette Supremo La Terraza", descripcion: "3 huevos orgánicos rellenos de portobello, espinacas baby y queso asadero", precio_unitario: 155.00, estacion_preparacion: "cocina", icono: "🍳" },
-    { id: 6, categoria_nombre: "Desayunos & Brunch Gourmet", nombre: "Molletes de Masa Madre con Chorizo", descripcion: "Pan artesano de masa madre con frijol negro, gouda y chorizo", precio_unitario: 125.00, estacion_preparacion: "cocina", icono: "🥖" },
-    { id: 7, categoria_nombre: "Especialidades Fuertes", nombre: "Rib Eye Grill V&S (350g)", descripcion: "Corte de alta calidad a las brasas servido con papas gajo y espárragos", precio_unitario: 385.00, estacion_preparacion: "cocina", icono: "🥩" },
-    { id: 8, categoria_nombre: "Especialidades Fuertes", nombre: "Pasta Fettuccine con Camarones al Trufado", descripcion: "Pasta fresca hecha en casa con camarones u-15 y crema suave de trufa", precio_unitario: 265.00, estacion_preparacion: "cocina", icono: "🍝" },
-    { id: 9, categoria_nombre: "Repostería & Postres de Autor", nombre: "Pastel Supremo de Chocolate Valrhona", descripcion: "Rebanada caliente de pastel de chocolate amargo con helado de vainilla", precio_unitario: 105.00, estacion_preparacion: "reposteria", icono: "🍰" },
-    { id: 10, categoria_nombre: "Bebidas & Coctelería de Autor", nombre: "Limonada Botánica de Hierbabuena & Jengibre", descripcion: "Agua mineral infucionada con jengibre fresco, limón eufrata y hierbabuena", precio_unitario: 60.00, estacion_preparacion: "barra_cafe", icono: "🍋" }
+    // 1. HUEVOS Y OMELETTES
+    { id: 101, categoria_nombre: "Huevos & Omelettes", nombre: "Huevos al Gusto", descripcion: "2 huevos (fritos, revueltos o estrellados) + frijoles + tortillas o pan", precio_unitario: 90.00, estacion_preparacion: "cocina", icono: "🍳" },
+    { id: 102, categoria_nombre: "Huevos & Omelettes", nombre: "Huevos a la Mexicana", descripcion: "Huevos revueltos con jitomate, cebolla y chile + frijoles refritos", precio_unitario: 95.00, estacion_preparacion: "cocina", icono: "🍳" },
+    { id: 103, categoria_nombre: "Huevos & Omelettes", nombre: "Huevos Rancheros", descripcion: "Huevos estrellados sobre tortilla con salsa roja o verde + frijoles", precio_unitario: 105.00, estacion_preparacion: "cocina", icono: "🍳" },
+    { id: 104, categoria_nombre: "Huevos & Omelettes", nombre: "Huevos con Jamón / Tocino / Chorizo", descripcion: "Huevos al gusto + proteína a elegir + frijoles de la olla", precio_unitario: 115.00, estacion_preparacion: "cocina", icono: "🥓" },
+    { id: 105, categoria_nombre: "Huevos & Omelettes", nombre: "Omelette de Jamón y Queso", descripcion: "Omelette relleno con queso gouda y jamón + ensalada o frijoles", precio_unitario: 125.00, estacion_preparacion: "cocina", icono: "🧀" },
+    { id: 106, categoria_nombre: "Huevos & Omelettes", nombre: "Omelette Champiñones y Espinaca", descripcion: "Opción ligera con espinacas baby, champiñón fresco y queso", precio_unitario: 130.00, estacion_preparacion: "cocina", icono: "🍄" },
+    { id: 107, categoria_nombre: "Huevos & Omelettes", nombre: "Machaca con Huevo Norteña", descripcion: "Clásico norteño de carne seca con huevo + frijoles y tortillas", precio_unitario: 135.00, estacion_preparacion: "cocina", icono: "🥩" },
+
+    // 2. ESPECIALIDADES MEXICANAS
+    { id: 201, categoria_nombre: "Especialidades Mexicanas", nombre: "Chilaquiles Verdes o Rojos", descripcion: "Con crema, queso y cebolla. Acompañados con huevo o pollo", precio_unitario: 145.00, estacion_preparacion: "cocina", icono: "🥘" },
+    { id: 202, categoria_nombre: "Especialidades Mexicanas", nombre: "Chilaquiles con Bistec o Chorizo", descripcion: "Versión fuerte con bistec a la plancha o chorizo artesanal", precio_unitario: 165.00, estacion_preparacion: "cocina", icono: "🥩" },
+    { id: 203, categoria_nombre: "Especialidades Mexicanas", nombre: "Enchiladas de Desayuno", descripcion: "Rojas o verdes, rellenas de pollo o queso + huevo estrellado encima", precio_unitario: 145.00, estacion_preparacion: "cocina", icono: "🌶️" },
+    { id: 204, categoria_nombre: "Especialidades Mexicanas", nombre: "Molletes Tradicionales", descripcion: "Bolillo con frijoles refritos, queso gratinado y pico de gallo", precio_unitario: 105.00, estacion_preparacion: "cocina", icono: "🥖" },
+    { id: 205, categoria_nombre: "Especialidades Mexicanas", nombre: "Tacos de Huevo al Gusto (3 pzas)", descripcion: "3 tacos de huevo con salsa a elegir y frijoles", precio_unitario: 85.00, estacion_preparacion: "cocina", icono: "🌮" },
+    { id: 206, categoria_nombre: "Especialidades Mexicanas", nombre: "Tacos de Chorizo con Huevo (3 pzas)", descripcion: "Guisado tradicional en tortillas recién hechas", precio_unitario: 95.00, estacion_preparacion: "cocina", icono: "🌮" },
+
+    // 3. DULCES / AMERICANOS
+    { id: 301, categoria_nombre: "Dulces & Americanos", nombre: "Hotcakes Clásicos (3 pzas)", descripcion: "Con mantequilla de rancho y miel de maple o cajeta", precio_unitario: 110.00, estacion_preparacion: "cocina", icono: "🥞" },
+    { id: 302, categoria_nombre: "Dulces & Americanos", nombre: "Hotcakes con Fruta Fresca", descripcion: "Acompañados de plátano, fresas de temporada o mixtas", precio_unitario: 130.00, estacion_preparacion: "cocina", icono: "🍓" },
+    { id: 303, categoria_nombre: "Dulces & Americanos", nombre: "Waffles Belgas con Frutas", descripcion: "Waffles dorados con fruta fresca y miel de abeja", precio_unitario: 135.00, estacion_preparacion: "cocina", icono: "🧇" },
+    { id: 304, categoria_nombre: "Dulces & Americanos", nombre: "Orden de Fruta de Temporada", descripcion: "Papaya, melón y piña con yogurt natural o granola", precio_unitario: 95.00, estacion_preparacion: "cocina", icono: "🍍" },
+    { id: 305, categoria_nombre: "Dulces & Americanos", nombre: "Yogurt con Granola y Fruta", descripcion: "Bowl fresco con yogurt natural, granola artesanal y fruta", precio_unitario: 90.00, estacion_preparacion: "cocina", icono: "🥣" },
+
+    // 4. COMBOS RECOMENDADOS
+    { id: 401, categoria_nombre: "Combos Recomendados", nombre: "Combo Clásico Desayuno", descripcion: "Huevos al gusto + frijoles + jugo de naranja + café", precio_unitario: 145.00, estacion_preparacion: "cocina", icono: "⭐" },
+    { id: 402, categoria_nombre: "Combos Recomendados", nombre: "Combo Chilaquiles V&S", descripcion: "Chilaquiles con huevo/pollo + jugo natural + café", precio_unitario: 175.00, estacion_preparacion: "cocina", icono: "⭐" },
+    { id: 403, categoria_nombre: "Combos Recomendados", nombre: "Combo Dulce Mañana", descripcion: "Hotcakes + jugo de naranja natural + café americano", precio_unitario: 155.00, estacion_preparacion: "cocina", icono: "⭐" },
+
+    // 5. BEBIDAS & JUGOS
+    { id: 501, categoria_nombre: "Bebidas & Jugos", nombre: "Café Americano / de Olla", descripcion: "Café de altura recién tostado o receta tradicional con canela y piloncillo", precio_unitario: 45.00, estacion_preparacion: "barra_cafe", icono: "☕" },
+    { id: 502, categoria_nombre: "Bebidas & Jugos", nombre: "Café con Leche / Capuchino", descripcion: "Espresso doble con leche cremada al vapor", precio_unitario: 68.00, estacion_preparacion: "barra_cafe", icono: "☕" },
+    { id: 503, categoria_nombre: "Bebidas & Jugos", nombre: "Jugo de Naranja Natural", descripcion: "100% natural recién exprimido al momento", precio_unitario: 55.00, estacion_preparacion: "barra_cafe", icono: "🍊" },
+    { id: 504, categoria_nombre: "Bebidas & Jugos", nombre: "Jugo Verde Energético", descripcion: "Nopal, apio, piña, perejil y jugo de naranja fresco", precio_unitario: 60.00, estacion_preparacion: "barra_cafe", icono: "🥬" },
+    { id: 505, categoria_nombre: "Bebidas & Jugos", nombre: "Chocolate Caliente Tradicional", descripcion: "Preparado con cacao criollo, canela y leche caliente", precio_unitario: 55.00, estacion_preparacion: "barra_cafe", icono: "🍫" },
+    { id: 506, categoria_nombre: "Bebidas & Jugos", nombre: "Agua Fresca de Fruta del Día", descripcion: "Agua de fruta natural de temporada (500 ml)", precio_unitario: 40.00, estacion_preparacion: "barra_cafe", icono: "🍉" },
+    { id: 507, categoria_nombre: "Bebidas & Jugos", nombre: "Refresco de Lata (355ml)", descripcion: "Variedad de refrescos fríos de lata", precio_unitario: 38.00, estacion_preparacion: "barra_cafe", icono: "🥤" }
   ];
 
   window.vsCategoriasData = [
-    { id: 1, nombre: "Barra de Café & Infusiones", icono: "☕" },
-    { id: 2, nombre: "Desayunos & Brunch Gourmet", icono: "🍳" },
-    { id: 3, nombre: "Entradas & Tapas de la Terraza", icono: "🥗" },
-    { id: 4, nombre: "Especialidades Fuertes", icono: "🥩" },
-    { id: 5, nombre: "Repostería & Postres de Autor", icono: "🍰" },
-    { id: 6, nombre: "Bebidas & Coctelería de Autor", icono: "🍹" }
+    { id: 1, nombre: "Huevos & Omelettes", icono: "🍳" },
+    { id: 2, nombre: "Especialidades Mexicanas", icono: "🥘" },
+    { id: 3, nombre: "Dulces & Americanos", icono: "🥞" },
+    { id: 4, nombre: "Combos Recomendados", icono: "⭐" },
+    { id: 5, nombre: "Bebidas & Jugos", icono: "☕" }
   ];
 
-  window.categoriaActual = "Todos";
+  window.categoriaActual = "Huevos & Omelettes";
   window.simMesaId = 2;
   window.simSillaNum = 1;
   window.sillasAcompanantesSeleccionadas = [3, 4]; // Por defecto, Papá (Silla 1) incluye a los niños (3 y 4)
@@ -724,7 +750,7 @@
   window.renderCategoriasChips = function (categorias) {
     const container = document.getElementById('categoriesChips');
     if (!container) return;
-    container.innerHTML = `<button onclick="window.seleccionarCategoria('Todos')" class="cat-chip ${window.categoriaActual === 'Todos' ? 'active bg-emerald-500 text-white' : 'bg-slate-800/80 text-slate-400'} px-4 py-2 text-xs font-bold rounded-xl whitespace-nowrap transition">Todos</button>`;
+    container.innerHTML = '';
 
     categorias.forEach(cat => {
       const btn = document.createElement('button');
@@ -738,8 +764,7 @@
 
   window.seleccionarCategoria = function (catNombre) {
     window.categoriaActual = catNombre;
-    const chips = document.querySelectorAll('.cat-chip');
-    chips.forEach(c => c.classList.remove('active', 'bg-emerald-500', 'text-white'));
+    window.renderCategoriasChips(window.vsCategoriasData);
     window.renderProductos();
   };
 
@@ -750,15 +775,15 @@
   window.renderProductos = function () {
     const container = document.getElementById('productsGridContainer');
     if (!container) return;
-    const searchInput = document.getElementById('searchInput');
-    const searchVal = searchInput ? (searchInput.value || '').toLowerCase() : '';
     container.innerHTML = '';
 
-    const list = window.vsMenuData || [];
-    const filtrados = list.filter(p => {
-      const matchCat = window.categoriaActual === 'Todos' || p.categoria_nombre === window.categoriaActual;
-      const matchSearch = p.nombre.toLowerCase().includes(searchVal) || (p.descripcion && p.descripcion.toLowerCase().includes(searchVal));
-      return matchCat && matchSearch;
+    const catActual = window.categoriaActual;
+    const query = document.getElementById('searchInput') ? document.getElementById('searchInput').value.toLowerCase().trim() : '';
+
+    const filtrados = (window.vsMenuData || []).filter(prod => {
+      const matchCat = (!catActual || catActual === 'Todos' || prod.categoria_nombre === catActual);
+      const matchText = prod.nombre.toLowerCase().includes(query) || (prod.descripcion && prod.descripcion.toLowerCase().includes(query));
+      return matchCat && matchText;
     });
 
     if (filtrados.length === 0) {
