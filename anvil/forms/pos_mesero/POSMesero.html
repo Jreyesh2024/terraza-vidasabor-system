@@ -1026,6 +1026,16 @@
       </ol>
     </div>
 
+    <!-- ADICIONALES / MODIFICADORES PERMITIDOS (MANEJADOS POR SEPARADO) -->
+    <div id="boxRecetaAdicionales" style="background: rgba(56,189,248,0.08); border: 1px solid rgba(56,189,248,0.25); border-radius: 12px; padding: 12px; display: none;">
+      <span style="font-size: 11px; font-weight: 800; color: #38bdf8; display: block; margin-bottom: 6px;">
+        <i class="fa-solid fa-circle-plus"></i> Ingredientes Adicionales Permitidos (Cobro y comanda por separado):
+      </span>
+      <div id="recetaAdicionalesList" style="display: flex; flex-wrap: wrap; gap: 6px;">
+        <!-- Dynamic chips with price -->
+      </div>
+    </div>
+
     <!-- NOTAS DE COCINA -->
     <div id="boxRecetaNotas" style="background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.3); border-radius: 10px; padding: 10px; font-size: 11px; color: #fde68a;">
       <i class="fa-solid fa-lightbulb"></i> <b>Nota de Cocina:</b> <span id="recetaNotasTexto"></span>
@@ -1238,8 +1248,9 @@
         icono: "🥘",
         tiempo: "15–18 min",
         porciones: "1 persona",
-        ingredientes: ["80–90g totopos artesanos de maíz", "180ml salsa verde o roja casera", "1 huevo frito/estrellado o 40g pollo deshebrado", "30g crema mexicana", "25g queso fresco desmoronado", "15g cebolla en pluma", "Cilantro fresco al gusto"],
+        ingredientes: ["80–90g totopos artesanos de maíz", "180ml salsa verde o roja casera", "50g pollo deshebrado o 1 huevo", "30g crema mexicana", "25g queso fresco desmoronado", "15g cebolla en pluma", "Cilantro fresco al gusto"],
         pasos: ["Calienta la salsa en un sartén hondo (3–4 min).", "Agrega los totopos y mezcla solo hasta que se hidraten (1–2 min). No dejarlos de más para que no se hagan papilla.", "Sirve en plato, agrega pollo o huevo encima, crema, queso fresco, cebolla en pluma y cilantro."],
+        adicionales: ["Bistec de Res Extra (100g) +$45.00", "Porción Extra de Pollo (50g) +$35.00", "Huevo Extra al Gusto +$20.00", "Aguacate en Rebanadas +$25.00", "Queso Gratinado Extra +$25.00"],
         notas: "Los totopos se tienen fritos en recipiente hermético. La salsa debe hervir antes de añadir totopos."
       },
       {
@@ -1251,8 +1262,9 @@
         icono: "🥩",
         tiempo: "15–18 min",
         porciones: "1 persona",
-        ingredientes: ["90g totopos", "180ml salsa verde/roja caliente", "120g bistec de res a la plancha o 60g chorizo frito", "Crema, queso fresco, cebolla y cilantro"],
+        ingredientes: ["90g totopos artesanos de maíz", "180ml salsa verde o roja caliente", "120g bistec de res a la plancha o 60g chorizo frito", "30g crema mexicana", "25g queso fresco desmoronado", "15g cebolla en pluma", "Cilantro fresco"],
         pasos: ["Asa el bistec a la plancha al término deseado con sal y pimienta.", "Prepara los chilaquiles hidratando totopos en salsa caliente 1–2 min.", "Monta los chilaquiles y corona con el bistec en fajitas o chorizo dorado."],
+        adicionales: ["Huevo Estrellado Extra +$20.00", "Aguacate en Rebanadas +$25.00", "Queso Gratinado Extra +$25.00"],
         notas: "Platillo de alto ticket y gran satisfacción."
       },
       {
@@ -1264,8 +1276,9 @@
         icono: "🌶️",
         tiempo: "12–15 min",
         porciones: "1 persona (3 enchiladas)",
-        ingredientes: ["3 tortillas de maíz pasadas por aceite", "100g pollo deshebrado o queso", "180ml salsa verde o roja caliente", "1 huevo estrellado encima", "Crema, queso fresco y cebolla"],
+        ingredientes: ["3 tortillas de maíz pasadas por aceite", "100g pollo deshebrado o queso", "180ml salsa verde o roja caliente", "1 huevo estrellado encima", "30g crema mexicana", "25g queso fresco", "15g cebolla en pluma"],
         pasos: ["Rellena las tortillas con pollo o queso y enrolla.", "Baña con abundante salsa caliente.", "Corona con huevo estrellado, crema, queso fresco y cebolla en pluma."],
+        adicionales: ["Porción Extra de Pollo +$35.00", "Aguacate en Rebanadas +$25.00"],
         notas: "Platillo insignia de desayuno mexicano."
       },
       {
@@ -1277,8 +1290,9 @@
         icono: "🥖",
         tiempo: "8–10 min",
         porciones: "1 persona (2 mitades de bolillo)",
-        ingredientes: ["1 bolillo artesano partido a la mitad", "80g frijoles refritos", "50–60g queso manchego o Oaxaca rallado", "40g pico de gallo fresco (jitomate, cebolla, cilantro, limón y sal)", "Opcional: 30g chorizo dorado"],
-        pasos: ["Abre el bolillo y tuesta ligeramente la base.", "Unta los frijoles refritos, agrega el queso rallado (y chorizo si aplica).", "Gratina en horno o salamandra 3–4 minutos.", "Sirve con pico de gallo fresco encima."],
+        ingredientes: ["1 bolillo artesano partido a la mitad", "80g frijoles refritos", "50–60g queso manchego o Oaxaca rallado", "40g pico de gallo fresco (jitomate, cebolla, cilantro, limón y sal)"],
+        pasos: ["Abre el bolillo y tuesta ligeramente la base.", "Unta los frijoles refritos y cubre uniformemente con queso rallado.", "Gratina en horno o salamandra 3–4 minutos.", "Sirve con pico de gallo fresco encima."],
+        adicionales: ["Porción de Chorizo Artesanal (40g) +$30.00", "Porción de Tocino Dorado (30g) +$30.00", "Huevo Estrellado encima +$20.00", "Aguacate en Rebanadas +$25.00"],
         notas: "El pan debe quedar crujiente por fuera y suave por dentro."
       },
       {
@@ -3387,6 +3401,23 @@
           li.innerText = paso;
           listPasos.appendChild(li);
         });
+      }
+
+      const boxAdic = document.getElementById('boxRecetaAdicionales');
+      const listAdic = document.getElementById('recetaAdicionalesList');
+      if (boxAdic && listAdic) {
+        if (prod.adicionales && prod.adicionales.length > 0) {
+          boxAdic.style.display = 'block';
+          listAdic.innerHTML = '';
+          prod.adicionales.forEach(adic => {
+            const chip = document.createElement('span');
+            chip.style.cssText = 'background: #020617; border: 1px solid #0284c7; color: #7dd3fc; font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 6px;';
+            chip.innerText = `+ ${adic}`;
+            listAdic.appendChild(chip);
+          });
+        } else {
+          boxAdic.style.display = 'none';
+        }
       }
 
       const boxNotas = document.getElementById('boxRecetaNotas');

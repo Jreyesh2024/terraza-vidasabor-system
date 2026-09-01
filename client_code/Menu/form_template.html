@@ -353,6 +353,14 @@
         <ol id="cliRecetaPasosList" style="margin: 0; padding-left: 18px; font-size: 11px; color: #e2e8f0; display: flex; flex-direction: column; gap: 4px;"></ol>
       </div>
 
+      <!-- ADICIONALES POR SEPARADO -->
+      <div id="boxCliRecetaAdicionales" style="background: rgba(56,189,248,0.08); border: 1px solid rgba(56,189,248,0.25); border-radius: 12px; padding: 12px; display: none;">
+        <span style="font-size: 11px; font-weight: 800; color: #38bdf8; display: block; margin-bottom: 6px;">
+          <i class="fa-solid fa-circle-plus"></i> Ingredientes Extras / Adicionales (Cobro por separado):
+        </span>
+        <div id="cliRecetaAdicionalesList" style="display: flex; flex-wrap: wrap; gap: 6px;"></div>
+      </div>
+
       <button onclick="window.cerrarModalRecetaCliente();"
         style="padding: 10px !important; background: #1e293b !important; color: #f8fafc !important; border: 1px solid #334155 !important; border-radius: 10px !important; font-size: 12px !important; font-weight: 800 !important; cursor: pointer !important;">
         Cerrar Detalle
@@ -575,8 +583,9 @@
       icono: "🥘",
       tiempo: "15–18 min",
       porciones: "1 persona",
-      ingredientes: ["80–90g totopos artesanos", "180ml salsa verde/roja casera", "1 huevo o 40g pollo deshebrado", "30g crema", "25g queso fresco", "15g cebolla en pluma", "Cilantro"],
-      pasos: ["Calentar salsa en sartén hondo (3–4 min).", "Agregar totopos y mezclar solo hasta hidratar (1–2 min).", "Servir en plato, coronar con pollo/huevo, crema, queso, cebolla y cilantro."],
+      ingredientes: ["80–90g totopos artesanos de maíz", "180ml salsa verde o roja casera", "50g pollo deshebrado o 1 huevo", "30g crema mexicana", "25g queso fresco desmoronado", "15g cebolla en pluma", "Cilantro fresco"],
+      pasos: ["Calentar salsa en sartén hondo (3–4 min).", "Agregar totopos y mezclar solo hasta hidratar (1–2 min).", "Servir en plato, coronar con pollo o huevo, crema, queso, cebolla y cilantro."],
+      adicionales: ["Bistec de Res Extra (100g) +$45.00", "Porción Extra de Pollo (50g) +$35.00", "Huevo Extra al Gusto +$20.00", "Aguacate en Rebanadas +$25.00", "Queso Gratinado Extra +$25.00"],
       notas: "Totopos crujientes previamente fritos en hermético."
     },
     {
@@ -589,8 +598,9 @@
       icono: "🥩",
       tiempo: "15–18 min",
       porciones: "1 persona",
-      ingredientes: ["90g totopos", "180ml salsa verde/roja", "120g bistec plancha o 60g chorizo", "Crema, queso, cebolla"],
+      ingredientes: ["90g totopos artesanos de maíz", "180ml salsa verde o roja", "120g bistec plancha o 60g chorizo", "30g crema", "25g queso fresco", "15g cebolla"],
       pasos: ["Asar bistec al término.", "Preparar chilaquiles en salsa hirviendo 1–2 min.", "Montar chilaquiles con carne en tiras."],
+      adicionales: ["Huevo Estrellado Extra +$20.00", "Aguacate en Rebanadas +$25.00", "Queso Gratinado Extra +$25.00"],
       notas: "Platillo insignia fuerte."
     },
     {
@@ -603,8 +613,9 @@
       icono: "🌶️",
       tiempo: "12–15 min",
       porciones: "1 persona (3 piezas)",
-      ingredientes: ["3 tortillas maíz", "100g pollo o queso", "180ml salsa verde/roja caliente", "1 huevo estrellado", "Crema y queso"],
+      ingredientes: ["3 tortillas maíz pasadas por aceite", "100g pollo o queso", "180ml salsa verde/roja caliente", "1 huevo estrellado", "30g crema", "25g queso fresco"],
       pasos: ["Rellenar tortillas con pollo/queso y enrollar.", "Bañar con salsa caliente.", "Coronar con huevo estrellado, crema y queso fresco."],
+      adicionales: ["Porción Extra de Pollo +$35.00", "Aguacate en Rebanadas +$25.00"],
       notas: "Servir muy caliente."
     },
     {
@@ -617,8 +628,9 @@
       icono: "🥖",
       tiempo: "8–10 min",
       porciones: "1 persona (2 mitades)",
-      ingredientes: ["1 bolillo artesano", "80g frijoles refritos", "50–60g queso manchego/Oaxaca", "40g pico de gallo fresco", "Opcional: 30g chorizo"],
-      pasos: ["Abrir bolillo y tostar base.", "Untar frijoles, cubrir con queso rallado (y chorizo).", "Gratinar 3–4 min en horno.", "Servir con pico de gallo."],
+      ingredientes: ["1 bolillo artesano partido a la mitad", "80g frijoles refritos", "50–60g queso manchego o Oaxaca rallado", "40g pico de gallo fresco"],
+      pasos: ["Abrir bolillo y tostar base.", "Untar frijoles, cubrir con queso rallado.", "Gratinar 3–4 min en horno.", "Servir con pico de gallo."],
+      adicionales: ["Porción de Chorizo Artesanal (40g) +$30.00", "Porción de Tocino Dorado (30g) +$30.00", "Huevo Estrellado encima +$20.00", "Aguacate en Rebanadas +$25.00"],
       notas: "Pan crujiente por fuera y suave por dentro."
     },
     {
@@ -1278,6 +1290,23 @@
         li.innerText = paso;
         listPasos.appendChild(li);
       });
+    }
+
+    const boxAdic = document.getElementById('boxCliRecetaAdicionales');
+    const listAdic = document.getElementById('cliRecetaAdicionalesList');
+    if (boxAdic && listAdic) {
+      if (prod.adicionales && prod.adicionales.length > 0) {
+        boxAdic.style.display = 'block';
+        listAdic.innerHTML = '';
+        prod.adicionales.forEach(adic => {
+          const chip = document.createElement('span');
+          chip.style.cssText = 'background: #020617; border: 1px solid #0284c7; color: #7dd3fc; font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 6px;';
+          chip.innerText = `+ ${adic}`;
+          listAdic.appendChild(chip);
+        });
+      } else {
+        boxAdic.style.display = 'none';
+      }
     }
 
     const modal = document.getElementById('modalRecetaClienteBackdrop');
