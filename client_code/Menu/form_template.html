@@ -1,792 +1,792 @@
 <anvil-form container="HtmlTemplate" prop:html="
-  <link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css&quot;>
-  <link rel=&quot;stylesheet&quot; href=&quot;https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css&quot;>
-  <style>
-    body,
-    html {
-      background-color: #090d16 !important;
-      color: #f8fafc !important;
-    }
+<link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css&quot;>
+<link rel=&quot;stylesheet&quot; href=&quot;https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css&quot;>
+<style>
+  body,
+  html {
+    background-color: #090d16 !important;
+    color: #f8fafc !important;
+  }
 
-    .glass-card {
-      background: rgba(22, 30, 46, 0.85) !important;
-      border: 1px solid rgba(255, 255, 255, 0.12) !important;
-    }
-  </style>
-
-
+  .glass-card {
+    background: rgba(22, 30, 46, 0.85) !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  }
+</style>
 
 
-  <!-- TAILWIND CSS CDN INJECTION &amp; FONTS -->
-  <script src=&quot;https://cdn.tailwindcss.com&quot;></script>
-  <link rel=&quot;preconnect&quot; href=&quot;https://fonts.googleapis.com&quot;>
-  <link rel=&quot;preconnect&quot; href=&quot;https://fonts.gstatic.com&quot; crossorigin>
-  <link href=&quot;https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;display=swap&quot;
-    rel=&quot;stylesheet&quot;>
-  <link rel=&quot;stylesheet&quot; href=&quot;https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css&quot;>
 
-  <style>
-    body,
-    .anvil-container {
-      font-family: 'Inter', sans-serif;
-      background-color: #090d16;
-      color: #f8fafc;
-    }
 
-    .glass-card {
-      background: rgba(22, 30, 46, 0.75);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-    }
+<!-- TAILWIND CSS CDN INJECTION &amp; FONTS -->
+<script src=&quot;https://cdn.tailwindcss.com&quot;></script>
+<link rel=&quot;preconnect&quot; href=&quot;https://fonts.googleapis.com&quot;>
+<link rel=&quot;preconnect&quot; href=&quot;https://fonts.gstatic.com&quot; crossorigin>
+<link href=&quot;https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;display=swap&quot;
+  rel=&quot;stylesheet&quot;>
+<link rel=&quot;stylesheet&quot; href=&quot;https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css&quot;>
 
-    .glass-nav {
-      background: rgba(15, 23, 42, 0.85);
-      backdrop-filter: blur(20px);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    }
+<style>
+  body,
+  .anvil-container {
+    font-family: 'Inter', sans-serif;
+    background-color: #090d16;
+    color: #f8fafc;
+  }
 
-    .brand-glow {
-      box-shadow: 0 0 25px rgba(16, 185, 129, 0.3);
-    }
-  </style>
+  .glass-card {
+    background: rgba(22, 30, 46, 0.75);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
 
-  <div class=&quot;min-h-screen bg-[#090d16] text-slate-100 flex flex-col font-sans&quot;>
+  .glass-nav {
+    background: rgba(15, 23, 42, 0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
 
-    <!-- HEADER BAR / BRANDING V&amp;S -->
-    <header class=&quot;glass-nav sticky top-0 z-50 px-6 py-4 flex items-center justify-between&quot;>
-      <div class=&quot;flex items-center gap-3&quot;>
-        <div
-          class=&quot;w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-700 flex items-center justify-center font-black text-xl text-white shadow-lg brand-glow&quot;>
-          V&amp;S
-        </div>
-        <div>
-          <h1 class=&quot;text-lg font-bold tracking-tight text-white&quot;>La Terraza de Vida &amp; Sabor</h1>
-          <p class=&quot;text-xs text-slate-400 font-medium&quot;>Menú Digital &amp; Comandas en Mesa</p>
-        </div>
+  .brand-glow {
+    box-shadow: 0 0 25px rgba(16, 185, 129, 0.3);
+  }
+</style>
+
+<div class=&quot;min-h-screen bg-[#090d16] text-slate-100 flex flex-col font-sans&quot;>
+
+  <!-- HEADER BAR / BRANDING V&amp;S -->
+  <header class=&quot;glass-nav sticky top-0 z-50 px-6 py-4 flex items-center justify-between&quot;>
+    <div class=&quot;flex items-center gap-3&quot;>
+      <div
+        class=&quot;w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-700 flex items-center justify-center font-black text-xl text-white shadow-lg brand-glow&quot;>
+        V&amp;S
       </div>
-
-      <!-- BOTONES DE NAVEGACIÓN Y MÓDULOS DEL SISTEMA -->
-      <div class=&quot;flex flex-wrap items-center gap-2&quot;>
-        <button onclick=&quot;window.navMenu &amp;&amp; window.navMenu('menu')&quot;
-          class=&quot;px-3 py-1.5 text-xs font-bold rounded-xl bg-emerald-600/30 border border-emerald-500/50 text-emerald-300 transition flex items-center gap-1.5&quot;>
-          <i class=&quot;fa-solid fa-mobile-screen-button text-emerald-400&quot;></i> 📱 Cliente QR
-        </button>
-        <button onclick=&quot;window.navMenu &amp;&amp; window.navMenu('pos_mesero')&quot;
-          class=&quot;px-3 py-1.5 text-xs font-bold rounded-xl glass-card text-amber-300 border-amber-500/30 hover:bg-amber-500/10 transition flex items-center gap-1.5&quot;>
-          <i class=&quot;fa-solid fa-chair text-amber-400&quot;></i> 📲 POS Croquis
-        </button>
-        <button onclick=&quot;window.navMenu &amp;&amp; window.navMenu('monitor_cocina')&quot;
-          class=&quot;px-3 py-1.5 text-xs font-bold rounded-xl glass-card text-sky-300 border-sky-500/30 hover:bg-sky-500/10 transition flex items-center gap-1.5&quot;>
-          <i class=&quot;fa-solid fa-fire text-amber-400&quot;></i> 👨‍🍳 Cocina KDS
-        </button>
-        <button onclick=&quot;window.navMenu &amp;&amp; window.navMenu('monitor_fiscal')&quot;
-          class=&quot;px-3 py-1.5 text-xs font-bold rounded-xl glass-card text-slate-300 border-slate-700 hover:bg-slate-800 transition flex items-center gap-1.5&quot;>
-          <i class=&quot;fa-solid fa-chart-pie text-sky-400&quot;></i> 🧾 Fiscal
-        </button>
-        <button onclick=&quot;window.navMenu &amp;&amp; window.navMenu('clientes_lealtad')&quot;
-          class=&quot;px-3 py-1.5 text-xs font-bold rounded-xl glass-card text-purple-300 border-purple-500/30 hover:bg-purple-500/10 transition flex items-center gap-1.5&quot;>
-          <i class=&quot;fa-solid fa-award text-purple-400&quot;></i> 💳 Rewards
-        </button>
-      </div>
-    </header>
-
-    <!-- BARRA DE UBICACIÓN QR Y SELECTOR DE SILLA (SIMULACIÓN DE ESCANEO QR) -->
-    <div class=&quot;bg-slate-900/90 border-b border-slate-800 px-6 py-2.5 flex flex-wrap justify-between items-center gap-3&quot;>
-      <div class=&quot;flex items-center gap-2 text-xs&quot;>
-        <span class=&quot;inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-500/30&quot;>
-          <i class=&quot;fa-solid fa-qrcode text-emerald-400&quot;></i> Portavasos QR: <span id=&quot;lblQrActivo&quot;>PV-021</span>
-        </span>
-        <span class=&quot;text-slate-300 font-semibold&quot; id=&quot;lblUbicacionActiva&quot;>Mesa 2 • Silla 1 (Adulto 1 / Papá)</span>
-      </div>
-      <div class=&quot;flex items-center gap-2&quot;>
-        <span class=&quot;text-xs text-slate-400 font-medium&quot;>Simular escaneo QR en:</span>
-        <select id=&quot;selSimularQr&quot; onchange=&quot;window.cambiarSimulacionQr(this.value)&quot; class=&quot;bg-slate-800 text-slate-200 text-xs font-bold px-3 py-1.5 rounded-xl border border-slate-700 focus:outline-none focus:border-emerald-500 cursor-pointer&quot;>
-          <optgroup label=&quot;Mesa 2 (Familia 2 adultos + 2 niños)&quot;>
-            <option value=&quot;2-1&quot; selected>Mesa 2 · Silla 1 (Papá - $445.00)</option>
-            <option value=&quot;2-2&quot;>Mesa 2 · Silla 2 (Mamá - $325.00)</option>
-            <option value=&quot;2-3&quot;>Mesa 2 · Silla 3 (Niño 1 - $185.00)</option>
-            <option value=&quot;2-4&quot;>Mesa 2 · Silla 4 (Niño 2 - $105.00)</option>
-          </optgroup>
-          <optgroup label=&quot;Mesa 3 (2 Comensales)&quot;>
-            <option value=&quot;3-1&quot;>Mesa 3 · Silla 1 (Adulto 1 - $148.00)</option>
-            <option value=&quot;3-2&quot;>Mesa 3 · Silla 2 (Adulto 2 - $68.00)</option>
-          </optgroup>
-        </select>
+      <div>
+        <h1 class=&quot;text-lg font-bold tracking-tight text-white&quot;>La Terraza de Vida &amp; Sabor</h1>
+        <p class=&quot;text-xs text-slate-400 font-medium&quot;>Menú Digital &amp; Comandas en Mesa</p>
       </div>
     </div>
 
-    <!-- CONTENIDO PRINCIPAL DEL MENÚ DIGITAL -->
-    <main class=&quot;flex-1 max-w-7xl w-full mx-auto p-6 grid grid-cols-1 lg:grid-cols-3 gap-6&quot;>
-
-      <!-- SECCIÓN IZQUIERDA: CATÁLOGO Y PRODUCTOS -->
-      <section class=&quot;lg:col-span-2 flex flex-col gap-6&quot;>
-
-        <!-- BUSCADOR &amp; BARRA DE CATEGORÍAS -->
-        <div class=&quot;flex flex-col sm:flex-row gap-4 justify-between items-center&quot;>
-          <div class=&quot;relative w-full sm:w-80&quot;>
-            <i class=&quot;fa-solid fa-magnifying-glass absolute left-3.5 top-3.5 text-slate-500 text-sm&quot;></i>
-            <input type=&quot;text&quot; id=&quot;searchInput&quot; placeholder=&quot;Buscar platillos o bebidas...&quot;
-              oninput=&quot;window.filtrarProductos()&quot;
-              class=&quot;w-full pl-10 pr-4 py-2.5 bg-slate-900/80 border border-slate-700/80 rounded-xl text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-emerald-500 transition&quot;>
-          </div>
-
-          <!-- CHIPS DE CATEGORÍAS -->
-          <div class=&quot;flex gap-2 overflow-x-auto w-full sm:w-auto pb-1&quot; id=&quot;categoriesChips&quot;>
-            <button onclick=&quot;window.seleccionarCategoria('Todos')&quot;
-              class=&quot;cat-chip active px-4 py-2 text-xs font-bold rounded-xl bg-emerald-500 text-white shadow-md shadow-emerald-500/20 whitespace-nowrap transition&quot;>
-              Todos
-            </button>
-          </div>
-        </div>
-
-        <!-- GRID DE TARJETAS DE PLATILLOS -->
-        <div class=&quot;grid grid-cols-1 md:grid-cols-2 gap-4&quot; id=&quot;productsGridContainer&quot;>
-          <div class=&quot;text-center py-12 text-slate-500 col-span-2&quot;>
-            <i class=&quot;fa-solid fa-spinner animate-spin text-2xl text-emerald-500 mb-2&quot;></i>
-            <p>Cargando menú de La Terraza V&amp;S...</p>
-          </div>
-        </div>
-
-      </section>
-
-      <!-- SECCIÓN DERECHA: SIDEBAR DE COMANDA Y COBRO AGRUPADO -->
-      <aside class=&quot;glass-card rounded-2xl p-6 flex flex-col justify-between h-full border border-slate-800 shadow-2xl gap-4&quot;>
-        <div>
-          <div class=&quot;flex justify-between items-center pb-3 border-b border-slate-800 mb-3&quot;>
-            <div>
-              <h2 class=&quot;text-base font-bold text-white flex items-center gap-2&quot;>
-                <i class=&quot;fa-solid fa-receipt text-emerald-400&quot;></i> <span id=&quot;txtTituloComanda&quot;>Mi Comanda (Silla 1)</span>
-              </h2>
-              <p class=&quot;text-xs text-slate-400&quot; id=&quot;txtSubComanda&quot;>Mesa 2 • Portavasos #PV-021</p>
-            </div>
-            <span
-              class=&quot;px-2.5 py-1 text-[10px] font-black rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 uppercase&quot;>
-              Activa
-            </span>
-          </div>
-
-          <!-- LISTA DE ITEMS REGISTRADOS DE MI SILLA -->
-          <div class=&quot;space-y-2.5 max-h-56 overflow-y-auto pr-1&quot; id=&quot;cartItemsList&quot;>
-            <div class=&quot;text-center py-6 text-slate-500 text-xs&quot;>
-              No hay consumos agregados a esta silla.
-            </div>
-          </div>
-
-          <!-- SECCIÓN: PAGAR POR ACOMPAÑANTES / NIÑOS EN MI MESA -->
-          <div class=&quot;mt-4 pt-3 border-t border-slate-800/80&quot;>
-            <div class=&quot;flex justify-between items-center mb-2&quot;>
-              <span class=&quot;text-xs font-bold text-slate-200 flex items-center gap-1.5&quot;>
-                <i class=&quot;fa-solid fa-users text-amber-400&quot;></i> Pagar por otros en mi mesa:
-              </span>
-              <button onclick=&quot;window.seleccionarTodosAcompanantes()&quot; class=&quot;text-[10px] text-emerald-400 hover:underline font-semibold&quot;>Toda Mesa</button>
-            </div>
-
-            <div id=&quot;listaAcompanantesMesa&quot; class=&quot;space-y-1.5 max-h-36 overflow-y-auto pr-1 text-xs&quot;>
-              <!-- Checklist populated dynamically -->
-            </div>
-          </div>
-        </div>
-
-        <!-- TOTALES Y ACCIONES DE COBRO CONSOLIDADAS -->
-        <div class=&quot;pt-3 border-t border-slate-800 space-y-3&quot;>
-          <div class=&quot;space-y-1.5 text-xs&quot;>
-            <div class=&quot;flex justify-between text-slate-400&quot;>
-              <span id=&quot;lblSubtotalDetalle&quot;>Subtotal (Mi Silla + Acompañantes):</span>
-              <span class=&quot;font-semibold text-slate-200&quot; id=&quot;txtSubtotal&quot;>$0.00</span>
-            </div>
-            <div class=&quot;flex justify-between text-slate-400&quot;>
-              <span>IVA 16% Trasladado:</span>
-              <span class=&quot;font-semibold text-slate-200&quot; id=&quot;txtIVA&quot;>$0.00</span>
-            </div>
-            <div class=&quot;flex justify-between text-slate-400&quot;>
-              <span>Propina Sugerida (10%):</span>
-              <span class=&quot;font-semibold text-slate-200&quot; id=&quot;txtPropina&quot;>$0.00</span>
-            </div>
-            <div class=&quot;flex justify-between text-base font-black text-white pt-2 border-t border-slate-800&quot;>
-              <span id=&quot;lblTotalCobro&quot;>Total a Pagar:</span>
-              <span class=&quot;text-emerald-400 text-lg font-black&quot; id=&quot;txtTotal&quot;>$0.00</span>
-            </div>
-          </div>
-
-          <!-- BOTONES DE COBRO MULTICANAL -->
-          <div class=&quot;grid grid-cols-2 gap-2&quot;>
-            <button onclick=&quot;window.abrirModalCobroCliente('santander')&quot;
-              class=&quot;py-3 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-100 text-xs font-bold border border-slate-700 transition flex items-center justify-center gap-1.5 cursor-pointer&quot;>
-              <i class=&quot;fa-solid fa-credit-card text-sky-400&quot;></i> Santander
-            </button>
-            <button onclick=&quot;window.abrirModalCobroCliente('tarjeta')&quot;
-              class=&quot;py-3 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold shadow-lg shadow-emerald-600/30 transition flex items-center justify-center gap-1.5 cursor-pointer&quot;>
-              <i class=&quot;fa-solid fa-check-double&quot;></i> Pagar / Ticket (<span id=&quot;txtBtnPagarMonto&quot;>$0.00</span>)
-            </button>
-          </div>
-        </div>
-
-      </aside>
-
-    </main>
-
-    <!-- MODAL DE COBRO Y PRECUENTA DIGITAL CLIENTE QR -->
-    <div id=&quot;modalCobroCliente&quot; class=&quot;fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden items-center justify-center p-4&quot; onclick=&quot;if(event.target === this) window.cerrarModalCobroCliente();&quot;>
-      <div class=&quot;bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-md p-6 shadow-2xl flex flex-col gap-4 text-slate-100&quot;>
-        <div class=&quot;flex justify-between items-start border-b border-slate-800 pb-3&quot;>
-          <div>
-            <h3 class=&quot;text-base font-bold text-white flex items-center gap-2&quot;>
-              <i class=&quot;fa-solid fa-receipt text-emerald-400&quot;></i> Precuenta y Pago Digital
-            </h3>
-            <p class=&quot;text-xs text-slate-400&quot; id=&quot;modalCobroSubtitulo&quot;>Mesa 2 • Portavasos #PV-021</p>
-          </div>
-          <button onclick=&quot;window.cerrarModalCobroCliente();&quot; class=&quot;text-slate-400 hover:text-white text-lg cursor-pointer&quot;>✕</button>
-        </div>
-
-        <!-- SELECTOR DE ALCANCE DEL PAGO -->
-        <div class=&quot;bg-slate-950/80 p-3 rounded-xl border border-slate-800/80 space-y-2&quot;>
-          <span class=&quot;text-xs font-bold text-slate-300 block&quot;><i class=&quot;fa-solid fa-hand-holding-dollar text-emerald-400 mr-1&quot;></i> ¿Qué deseas pagar?</span>
-          <div class=&quot;grid grid-cols-3 gap-1.5 text-[11px]&quot;>
-            <button type=&quot;button&quot; onclick=&quot;window.setModoPagoCliente('solo_yo')&quot; id=&quot;btnModoSoloYo&quot; class=&quot;p-2 rounded-lg font-bold border text-center transition bg-slate-800 text-slate-300 border-slate-700 cursor-pointer&quot;>Solo Mi Silla</button>
-            <button type=&quot;button&quot; onclick=&quot;window.setModoPagoCliente('incluir_ninos')&quot; id=&quot;btnModoNinos&quot; class=&quot;p-2 rounded-lg font-bold border text-center transition bg-emerald-600/30 text-emerald-300 border-emerald-500/50 cursor-pointer&quot;>Acompañantes</button>
-            <button type=&quot;button&quot; onclick=&quot;window.setModoPagoCliente('toda_mesa')&quot; id=&quot;btnModoTodaMesa&quot; class=&quot;p-2 rounded-lg font-bold border text-center transition bg-slate-800 text-slate-300 border-slate-700 cursor-pointer&quot;>Toda la Mesa</button>
-          </div>
-        </div>
-
-        <!-- DESGLOSE DE CUENTAS INCLUIDAS -->
-        <div id=&quot;modalCobroDetalleTramos&quot; class=&quot;space-y-2 max-h-56 overflow-y-auto pr-1 text-xs&quot;>
-          <!-- Generado dinámicamente -->
-        </div>
-
-        <!-- TOTALES -->
-        <div class=&quot;pt-3 border-t border-slate-800 space-y-1.5 text-xs&quot;>
-          <div class=&quot;flex justify-between text-slate-400&quot;><span>Subtotal Neto:</span><span id=&quot;modalSubtotal&quot; class=&quot;text-slate-200 font-bold&quot;>$0.00</span></div>
-          <div class=&quot;flex justify-between text-slate-400&quot;><span>IVA 16% Trasladado:</span><span id=&quot;modalIVA&quot; class=&quot;text-slate-200 font-bold&quot;>$0.00</span></div>
-          <div class=&quot;flex justify-between text-slate-400&quot;><span>Propina Sugerida (10%):</span><span id=&quot;modalPropina&quot; class=&quot;text-slate-200 font-bold&quot;>$0.00</span></div>
-          <div class=&quot;flex justify-between text-base font-black text-white pt-2 border-t border-slate-800&quot;>
-            <span>Total Final a Liquidar:</span>
-            <span id=&quot;modalTotal&quot; class=&quot;text-emerald-400 text-lg font-black&quot;>$0.00</span>
-          </div>
-        </div>
-
-        <!-- BOTONES DE PROCESAR PAGO -->
-        <div class=&quot;grid grid-cols-3 gap-1.5 pt-2&quot;>
-          <button onclick=&quot;window.ejecutarPagoFinal('mercadopago')&quot; class=&quot;py-2.5 px-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-[11px] font-bold shadow-lg shadow-emerald-600/30 flex flex-col items-center justify-center gap-1 cursor-pointer&quot;>
-            <i class=&quot;fa-solid fa-mobile-screen&quot;></i> Mercado Pago
-          </button>
-          <button onclick=&quot;window.ejecutarPagoFinal('santander')&quot; class=&quot;py-2.5 px-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-sky-400 text-[11px] font-bold border border-slate-700 flex flex-col items-center justify-center gap-1 cursor-pointer&quot;>
-            <i class=&quot;fa-solid fa-credit-card&quot;></i> Santander
-          </button>
-          <button onclick=&quot;window.ejecutarPagoFinal('efectivo')&quot; class=&quot;py-2.5 px-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-amber-300 text-[11px] font-bold border border-slate-700 flex flex-col items-center justify-center gap-1 cursor-pointer&quot;>
-            <i class=&quot;fa-solid fa-money-bill-wave&quot;></i> Efectivo
-          </button>
-        </div>
-      </div>
+    <!-- BOTONES DE NAVEGACIÓN Y MÓDULOS DEL SISTEMA -->
+    <div class=&quot;flex flex-wrap items-center gap-2&quot;>
+      <button onclick=&quot;window.navMenu &amp;&amp; window.navMenu('menu')&quot;
+        class=&quot;px-3 py-1.5 text-xs font-bold rounded-xl bg-emerald-600/30 border border-emerald-500/50 text-emerald-300 transition flex items-center gap-1.5&quot;>
+        <i class=&quot;fa-solid fa-mobile-screen-button text-emerald-400&quot;></i> 📱 Cliente QR
+      </button>
+      <button onclick=&quot;window.navMenu &amp;&amp; window.navMenu('pos_mesero')&quot;
+        class=&quot;px-3 py-1.5 text-xs font-bold rounded-xl glass-card text-amber-300 border-amber-500/30 hover:bg-amber-500/10 transition flex items-center gap-1.5&quot;>
+        <i class=&quot;fa-solid fa-chair text-amber-400&quot;></i> 📲 POS Croquis
+      </button>
+      <button onclick=&quot;window.navMenu &amp;&amp; window.navMenu('monitor_cocina')&quot;
+        class=&quot;px-3 py-1.5 text-xs font-bold rounded-xl glass-card text-sky-300 border-sky-500/30 hover:bg-sky-500/10 transition flex items-center gap-1.5&quot;>
+        <i class=&quot;fa-solid fa-fire text-amber-400&quot;></i> 👨‍🍳 Cocina KDS
+      </button>
+      <button onclick=&quot;window.navMenu &amp;&amp; window.navMenu('monitor_fiscal')&quot;
+        class=&quot;px-3 py-1.5 text-xs font-bold rounded-xl glass-card text-slate-300 border-slate-700 hover:bg-slate-800 transition flex items-center gap-1.5&quot;>
+        <i class=&quot;fa-solid fa-chart-pie text-sky-400&quot;></i> 🧾 Fiscal
+      </button>
+      <button onclick=&quot;window.navMenu &amp;&amp; window.navMenu('clientes_lealtad')&quot;
+        class=&quot;px-3 py-1.5 text-xs font-bold rounded-xl glass-card text-purple-300 border-purple-500/30 hover:bg-purple-500/10 transition flex items-center gap-1.5&quot;>
+        <i class=&quot;fa-solid fa-award text-purple-400&quot;></i> 💳 Rewards
+      </button>
     </div>
+  </header>
 
+  <!-- BARRA DE UBICACIÓN QR Y SELECTOR DE SILLA (SIMULACIÓN DE ESCANEO QR) -->
+  <div class=&quot;bg-slate-900/90 border-b border-slate-800 px-6 py-2.5 flex flex-wrap justify-between items-center gap-3&quot;>
+    <div class=&quot;flex items-center gap-2 text-xs&quot;>
+      <span class=&quot;inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-500/30&quot;>
+        <i class=&quot;fa-solid fa-qrcode text-emerald-400&quot;></i> Portavasos QR: <span id=&quot;lblQrActivo&quot;>PV-021</span>
+      </span>
+      <span class=&quot;text-slate-300 font-semibold&quot; id=&quot;lblUbicacionActiva&quot;>Mesa 2 • Silla 1 (Adulto 1 / Papá)</span>
+    </div>
+    <div class=&quot;flex items-center gap-2&quot;>
+      <span class=&quot;text-xs text-slate-400 font-medium&quot;>Simular escaneo QR en:</span>
+      <select id=&quot;selSimularQr&quot; onchange=&quot;window.cambiarSimulacionQr(this.value)&quot; class=&quot;bg-slate-800 text-slate-200 text-xs font-bold px-3 py-1.5 rounded-xl border border-slate-700 focus:outline-none focus:border-emerald-500 cursor-pointer&quot;>
+        <optgroup label=&quot;Mesa 2 (Familia 2 adultos + 2 niños)&quot;>
+          <option value=&quot;2-1&quot; selected>Mesa 2 · Silla 1 (Papá - $445.00)</option>
+          <option value=&quot;2-2&quot;>Mesa 2 · Silla 2 (Mamá - $325.00)</option>
+          <option value=&quot;2-3&quot;>Mesa 2 · Silla 3 (Niño 1 - $185.00)</option>
+          <option value=&quot;2-4&quot;>Mesa 2 · Silla 4 (Niño 2 - $105.00)</option>
+        </optgroup>
+        <optgroup label=&quot;Mesa 3 (2 Comensales)&quot;>
+          <option value=&quot;3-1&quot;>Mesa 3 · Silla 1 (Adulto 1 - $148.00)</option>
+          <option value=&quot;3-2&quot;>Mesa 3 · Silla 2 (Adulto 2 - $68.00)</option>
+        </optgroup>
+      </select>
+    </div>
   </div>
 
-  <script>
-    window.vsMenuData = [
-      { id: 1, categoria_nombre: &quot;Barra de Café &amp; Infusiones&quot;, nombre: &quot;Café Capuchino Especial V&amp;S&quot;, descripcion: &quot;Espresso doble con leche cremada artesanal y toque de canela&quot;, precio_unitario: 68.00, estacion_preparacion: &quot;barra_cafe&quot;, icono: &quot;☕&quot; },
-      { id: 2, categoria_nombre: &quot;Barra de Café &amp; Infusiones&quot;, nombre: &quot;Espresso Italiano Robusto&quot;, descripcion: &quot;Grano seleccionado 100% arábica tostado de la casa&quot;, precio_unitario: 48.00, estacion_preparacion: &quot;barra_cafe&quot;, icono: &quot;☕&quot; },
-      { id: 3, categoria_nombre: &quot;Barra de Café &amp; Infusiones&quot;, nombre: &quot;Latte Machiatto Vainilla Bourbon&quot;, descripcion: &quot;Espresso con leche de almendra y jarabe natural de vainilla bourbon&quot;, precio_unitario: 75.00, estacion_preparacion: &quot;barra_cafe&quot;, icono: &quot;🥛&quot; },
-      { id: 4, categoria_nombre: &quot;Desayunos &amp; Brunch Gourmet&quot;, nombre: &quot;Chilaquiles Verdes con Pollo y Queso Gouda&quot;, descripcion: &quot;Totopos artesanos en salsa de tomatillo con pollo deshebrado y gouda&quot;, precio_unitario: 148.00, estacion_preparacion: &quot;cocina&quot;, icono: &quot;🥘&quot; },
-      { id: 5, categoria_nombre: &quot;Desayunos &amp; Brunch Gourmet&quot;, nombre: &quot;Omelette Supremo La Terraza&quot;, descripcion: &quot;3 huevos orgánicos rellenos de portobello, espinacas baby y queso asadero&quot;, precio_unitario: 155.00, estacion_preparacion: &quot;cocina&quot;, icono: &quot;🍳&quot; },
-      { id: 6, categoria_nombre: &quot;Desayunos &amp; Brunch Gourmet&quot;, nombre: &quot;Molletes de Masa Madre con Chorizo&quot;, descripcion: &quot;Pan artesano de masa madre con frijol negro, gouda y chorizo&quot;, precio_unitario: 125.00, estacion_preparacion: &quot;cocina&quot;, icono: &quot;🥖&quot; },
-      { id: 7, categoria_nombre: &quot;Especialidades Fuertes&quot;, nombre: &quot;Rib Eye Grill V&amp;S (350g)&quot;, descripcion: &quot;Corte de alta calidad a las brasas servido con papas gajo y espárragos&quot;, precio_unitario: 385.00, estacion_preparacion: &quot;cocina&quot;, icono: &quot;🥩&quot; },
-      { id: 8, categoria_nombre: &quot;Especialidades Fuertes&quot;, nombre: &quot;Pasta Fettuccine con Camarones al Trufado&quot;, descripcion: &quot;Pasta fresca hecha en casa con camarones u-15 y crema suave de trufa&quot;, precio_unitario: 265.00, estacion_preparacion: &quot;cocina&quot;, icono: &quot;🍝&quot; },
-      { id: 9, categoria_nombre: &quot;Repostería &amp; Postres de Autor&quot;, nombre: &quot;Pastel Supremo de Chocolate Valrhona&quot;, descripcion: &quot;Rebanada caliente de pastel de chocolate amargo con helado de vainilla&quot;, precio_unitario: 105.00, estacion_preparacion: &quot;reposteria&quot;, icono: &quot;🍰&quot; },
-      { id: 10, categoria_nombre: &quot;Bebidas &amp; Coctelería de Autor&quot;, nombre: &quot;Limonada Botánica de Hierbabuena &amp; Jengibre&quot;, descripcion: &quot;Agua mineral infucionada con jengibre fresco, limón eufrata y hierbabuena&quot;, precio_unitario: 60.00, estacion_preparacion: &quot;barra_cafe&quot;, icono: &quot;🍋&quot; }
-    ];
+  <!-- CONTENIDO PRINCIPAL DEL MENÚ DIGITAL -->
+  <main class=&quot;flex-1 max-w-7xl w-full mx-auto p-6 grid grid-cols-1 lg:grid-cols-3 gap-6&quot;>
 
-    window.vsCategoriasData = [
-      { id: 1, nombre: &quot;Barra de Café &amp; Infusiones&quot;, icono: &quot;☕&quot; },
-      { id: 2, nombre: &quot;Desayunos &amp; Brunch Gourmet&quot;, icono: &quot;🍳&quot; },
-      { id: 3, nombre: &quot;Entradas &amp; Tapas de la Terraza&quot;, icono: &quot;🥗&quot; },
-      { id: 4, nombre: &quot;Especialidades Fuertes&quot;, icono: &quot;🥩&quot; },
-      { id: 5, nombre: &quot;Repostería &amp; Postres de Autor&quot;, icono: &quot;🍰&quot; },
-      { id: 6, nombre: &quot;Bebidas &amp; Coctelería de Autor&quot;, icono: &quot;🍹&quot; }
-    ];
+    <!-- SECCIÓN IZQUIERDA: CATÁLOGO Y PRODUCTOS -->
+    <section class=&quot;lg:col-span-2 flex flex-col gap-6&quot;>
 
-    window.categoriaActual = &quot;Todos&quot;;
-    window.simMesaId = 2;
-    window.simSillaNum = 1;
-    window.sillasAcompanantesSeleccionadas = [3, 4]; // Por defecto, Papá (Silla 1) incluye a los niños (3 y 4)
+      <!-- BUSCADOR &amp; BARRA DE CATEGORÍAS -->
+      <div class=&quot;flex flex-col sm:flex-row gap-4 justify-between items-center&quot;>
+        <div class=&quot;relative w-full sm:w-80&quot;>
+          <i class=&quot;fa-solid fa-magnifying-glass absolute left-3.5 top-3.5 text-slate-500 text-sm&quot;></i>
+          <input type=&quot;text&quot; id=&quot;searchInput&quot; placeholder=&quot;Buscar platillos o bebidas...&quot;
+            oninput=&quot;window.filtrarProductos()&quot;
+            class=&quot;w-full pl-10 pr-4 py-2.5 bg-slate-900/80 border border-slate-700/80 rounded-xl text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-emerald-500 transition&quot;>
+        </div>
 
-    function getStorageCuentas() {
-      try {
-        var raw = localStorage.getItem('palapa_cuentas_v1');
-        if (raw) return JSON.parse(raw);
-      } catch(e) {}
-      return {};
-    }
+        <!-- CHIPS DE CATEGORÍAS -->
+        <div class=&quot;flex gap-2 overflow-x-auto w-full sm:w-auto pb-1&quot; id=&quot;categoriesChips&quot;>
+          <button onclick=&quot;window.seleccionarCategoria('Todos')&quot;
+            class=&quot;cat-chip active px-4 py-2 text-xs font-bold rounded-xl bg-emerald-500 text-white shadow-md shadow-emerald-500/20 whitespace-nowrap transition&quot;>
+            Todos
+          </button>
+        </div>
+      </div>
 
-    function saveStorageCuentas(cuentas) {
-      try {
-        localStorage.setItem('palapa_cuentas_v1', JSON.stringify(cuentas));
-      } catch(e) {}
-    }
+      <!-- GRID DE TARJETAS DE PLATILLOS -->
+      <div class=&quot;grid grid-cols-1 md:grid-cols-2 gap-4&quot; id=&quot;productsGridContainer&quot;>
+        <div class=&quot;text-center py-12 text-slate-500 col-span-2&quot;>
+          <i class=&quot;fa-solid fa-spinner animate-spin text-2xl text-emerald-500 mb-2&quot;></i>
+          <p>Cargando menú de La Terraza V&amp;S...</p>
+        </div>
+      </div>
 
-    window.cambiarSimulacionQr = function(keyStr) {
-      var parts = keyStr.split('-');
-      window.simMesaId = parseInt(parts[0]);
-      window.simSillaNum = parseInt(parts[1]);
+    </section>
 
-      // Si es Mesa 2 Silla 1 (Papá), sugerir niños seleccionados (3 y 4)
-      if (window.simMesaId === 2 &amp;&amp; window.simSillaNum === 1) {
-        window.sillasAcompanantesSeleccionadas = [3, 4];
-      } else {
-        window.sillasAcompanantesSeleccionadas = [];
-      }
-
-      window.sincronizarCuentaDesdeStorage();
-    };
-
-    window.sincronizarCuentaDesdeStorage = function() {
-      var cuentas = getStorageCuentas();
-      var key = window.simMesaId + '-' + window.simSillaNum;
-      var cuentaActual = cuentas[key];
-
-      var qrId = (cuentaActual &amp;&amp; cuentaActual.qrId) ? cuentaActual.qrId : ('PV-0' + window.simMesaId + window.simSillaNum);
-      var comensalNom = (cuentaActual &amp;&amp; cuentaActual.comensalNombre) ? cuentaActual.comensalNombre : ('Comensal Silla ' + window.simSillaNum);
-
-      var lblQr = document.getElementById('lblQrActivo');
-      var lblUbicacion = document.getElementById('lblUbicacionActiva');
-      var txtTitulo = document.getElementById('txtTituloComanda');
-      var txtSub = document.getElementById('txtSubComanda');
-
-      if (lblQr) lblQr.innerText = qrId;
-      if (lblUbicacion) lblUbicacion.innerText = `Mesa ${window.simMesaId} • Silla ${window.simSillaNum} (${comensalNom})`;
-      if (txtTitulo) txtTitulo.innerText = `Mi Comanda (Silla ${window.simSillaNum})`;
-      if (txtSub) txtSub.innerText = `Mesa ${window.simMesaId} • Portavasos #${qrId}`;
-
-      window.renderCarrito();
-      window.renderAcompanantesMesa();
-    };
-
-    window.renderCarrito = function () {
-      const container = document.getElementById('cartItemsList');
-      if (!container) return;
-      container.innerHTML = '';
-
-      var cuentas = getStorageCuentas();
-      var key = window.simMesaId + '-' + window.simSillaNum;
-      var cuentaActual = cuentas[key] || { items: [] };
-      var items = cuentaActual.items || [];
-
-      if (items.length === 0) {
-        container.innerHTML = `<div class=&quot;text-center py-6 text-slate-500 text-xs&quot;>No hay consumos registrados en tu silla.</div>`;
-      } else {
-        items.forEach((item, idx) => {
-          const itemSubtotal = item.precio * item.cantidad;
-          const row = document.createElement('div');
-          row.className = 'flex justify-between items-center bg-slate-900/80 p-2.5 rounded-xl border border-slate-800 text-xs';
-          row.innerHTML = `
-            <div>
-              <span class=&quot;font-bold text-white&quot;>${item.nombre} x${item.cantidad}</span>
-              <span class=&quot;block text-[10px] text-slate-400&quot;>${item.notas ? item.notas + ' • ' : ''}$${Number(item.precio).toFixed(2)} c/u</span>
-            </div>
-            <span class=&quot;font-black text-emerald-400&quot;>$${itemSubtotal.toFixed(2)}</span>
-          `;
-          container.appendChild(row);
-        });
-      }
-
-      window.recalcularTotalesCompletos();
-    };
-
-    window.renderAcompanantesMesa = function() {
-      const container = document.getElementById('listaAcompanantesMesa');
-      if (!container) return;
-      container.innerHTML = '';
-
-      var cuentas = getStorageCuentas();
-      var mesaId = window.simMesaId;
-      var miSilla = window.simSillaNum;
-
-      var otrasSillas = [];
-      for (var s = 1; s <= 10; s++) {
-        if (s !== miSilla) {
-          var k = mesaId + '-' + s;
-          var c = cuentas[k];
-          if (c &amp;&amp; c.items &amp;&amp; c.items.length > 0) {
-            var tot = 0;
-            c.items.forEach(function(i) { tot += i.precio * i.cantidad; });
-            otrasSillas.push({ sillaNum: s, cuenta: c, total: tot });
-          }
-        }
-      }
-
-      if (otrasSillas.length === 0) {
-        container.innerHTML = '<div class=&quot;text-slate-500 text-[11px] py-1 italic&quot;>No hay otros comensales con cuenta en esta mesa.</div>';
-        return;
-      }
-
-      otrasSillas.forEach(obj => {
-        var s = obj.sillaNum;
-        var isChecked = window.sillasAcompanantesSeleccionadas.indexOf(s) !== -1;
-        var row = document.createElement('label');
-        row.className = `flex items-center justify-between p-2 rounded-xl border cursor-pointer transition select-none ${isChecked ? 'bg-emerald-950/40 border-emerald-500/50' : 'bg-slate-900/60 border-slate-800 hover:border-slate-700'}`;
-        row.innerHTML = `
-          <div class=&quot;flex items-center gap-2&quot;>
-            <input type=&quot;checkbox&quot; value=&quot;${s}&quot; ${isChecked ? 'checked' : ''} onchange=&quot;window.toggleAcompanante(${s})&quot; class=&quot;accent-emerald-500 rounded&quot;>
-            <div>
-              <span class=&quot;font-bold text-slate-100 block&quot;>Silla ${s} <span class=&quot;text-slate-400 font-normal&quot;>(${obj.cuenta.comensalNombre || 'Comensal'})</span></span>
-              <span class=&quot;text-[10px] text-slate-400&quot;>${obj.cuenta.items.length} consumos</span>
-            </div>
+    <!-- SECCIÓN DERECHA: SIDEBAR DE COMANDA Y COBRO AGRUPADO -->
+    <aside class=&quot;glass-card rounded-2xl p-6 flex flex-col justify-between h-full border border-slate-800 shadow-2xl gap-4&quot;>
+      <div>
+        <div class=&quot;flex justify-between items-center pb-3 border-b border-slate-800 mb-3&quot;>
+          <div>
+            <h2 class=&quot;text-base font-bold text-white flex items-center gap-2&quot;>
+              <i class=&quot;fa-solid fa-receipt text-emerald-400&quot;></i> <span id=&quot;txtTituloComanda&quot;>Mi Comanda (Silla 1)</span>
+            </h2>
+            <p class=&quot;text-xs text-slate-400&quot; id=&quot;txtSubComanda&quot;>Mesa 2 • Portavasos #PV-021</p>
           </div>
-          <span class=&quot;font-bold text-amber-400&quot;>$${obj.total.toFixed(2)}</span>
+          <span
+            class=&quot;px-2.5 py-1 text-[10px] font-black rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 uppercase&quot;>
+            Activa
+          </span>
+        </div>
+
+        <!-- LISTA DE ITEMS REGISTRADOS DE MI SILLA -->
+        <div class=&quot;space-y-2.5 max-h-56 overflow-y-auto pr-1&quot; id=&quot;cartItemsList&quot;>
+          <div class=&quot;text-center py-6 text-slate-500 text-xs&quot;>
+            No hay consumos agregados a esta silla.
+          </div>
+        </div>
+
+        <!-- SECCIÓN: PAGAR POR ACOMPAÑANTES / NIÑOS EN MI MESA -->
+        <div class=&quot;mt-4 pt-3 border-t border-slate-800/80&quot;>
+          <div class=&quot;flex justify-between items-center mb-2&quot;>
+            <span class=&quot;text-xs font-bold text-slate-200 flex items-center gap-1.5&quot;>
+              <i class=&quot;fa-solid fa-users text-amber-400&quot;></i> Pagar por otros en mi mesa:
+            </span>
+            <button onclick=&quot;window.seleccionarTodosAcompanantes()&quot; class=&quot;text-[10px] text-emerald-400 hover:underline font-semibold&quot;>Toda Mesa</button>
+          </div>
+
+          <div id=&quot;listaAcompanantesMesa&quot; class=&quot;space-y-1.5 max-h-36 overflow-y-auto pr-1 text-xs&quot;>
+            <!-- Checklist populated dynamically -->
+          </div>
+        </div>
+      </div>
+
+      <!-- TOTALES Y ACCIONES DE COBRO CONSOLIDADAS -->
+      <div class=&quot;pt-3 border-t border-slate-800 space-y-3&quot;>
+        <div class=&quot;space-y-1.5 text-xs&quot;>
+          <div class=&quot;flex justify-between text-slate-400&quot;>
+            <span id=&quot;lblSubtotalDetalle&quot;>Subtotal (Mi Silla + Acompañantes):</span>
+            <span class=&quot;font-semibold text-slate-200&quot; id=&quot;txtSubtotal&quot;>$0.00</span>
+          </div>
+          <div class=&quot;flex justify-between text-slate-400&quot;>
+            <span>IVA 16% Trasladado:</span>
+            <span class=&quot;font-semibold text-slate-200&quot; id=&quot;txtIVA&quot;>$0.00</span>
+          </div>
+          <div class=&quot;flex justify-between text-slate-400&quot;>
+            <span>Propina Sugerida (10%):</span>
+            <span class=&quot;font-semibold text-slate-200&quot; id=&quot;txtPropina&quot;>$0.00</span>
+          </div>
+          <div class=&quot;flex justify-between text-base font-black text-white pt-2 border-t border-slate-800&quot;>
+            <span id=&quot;lblTotalCobro&quot;>Total a Pagar:</span>
+            <span class=&quot;text-emerald-400 text-lg font-black&quot; id=&quot;txtTotal&quot;>$0.00</span>
+          </div>
+        </div>
+
+        <!-- BOTONES DE COBRO MULTICANAL -->
+        <div class=&quot;grid grid-cols-2 gap-2&quot;>
+          <button onclick=&quot;window.abrirModalCobroCliente('santander')&quot;
+            class=&quot;py-3 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-100 text-xs font-bold border border-slate-700 transition flex items-center justify-center gap-1.5 cursor-pointer&quot;>
+            <i class=&quot;fa-solid fa-credit-card text-sky-400&quot;></i> Santander
+          </button>
+          <button onclick=&quot;window.abrirModalCobroCliente('tarjeta')&quot;
+            class=&quot;py-3 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold shadow-lg shadow-emerald-600/30 transition flex items-center justify-center gap-1.5 cursor-pointer&quot;>
+            <i class=&quot;fa-solid fa-check-double&quot;></i> Pagar / Ticket (<span id=&quot;txtBtnPagarMonto&quot;>$0.00</span>)
+          </button>
+        </div>
+      </div>
+
+    </aside>
+
+  </main>
+
+  <!-- MODAL DE COBRO Y PRECUENTA DIGITAL CLIENTE QR -->
+  <div id=&quot;modalCobroCliente&quot; class=&quot;fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden items-center justify-center p-4&quot; onclick=&quot;if(event.target === this) window.cerrarModalCobroCliente();&quot;>
+    <div class=&quot;bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-md p-6 shadow-2xl flex flex-col gap-4 text-slate-100&quot;>
+      <div class=&quot;flex justify-between items-start border-b border-slate-800 pb-3&quot;>
+        <div>
+          <h3 class=&quot;text-base font-bold text-white flex items-center gap-2&quot;>
+            <i class=&quot;fa-solid fa-receipt text-emerald-400&quot;></i> Precuenta y Pago Digital
+          </h3>
+          <p class=&quot;text-xs text-slate-400&quot; id=&quot;modalCobroSubtitulo&quot;>Mesa 2 • Portavasos #PV-021</p>
+        </div>
+        <button onclick=&quot;window.cerrarModalCobroCliente();&quot; class=&quot;text-slate-400 hover:text-white text-lg cursor-pointer&quot;>✕</button>
+      </div>
+
+      <!-- SELECTOR DE ALCANCE DEL PAGO -->
+      <div class=&quot;bg-slate-950/80 p-3 rounded-xl border border-slate-800/80 space-y-2&quot;>
+        <span class=&quot;text-xs font-bold text-slate-300 block&quot;><i class=&quot;fa-solid fa-hand-holding-dollar text-emerald-400 mr-1&quot;></i> ¿Qué deseas pagar?</span>
+        <div class=&quot;grid grid-cols-3 gap-1.5 text-[11px]&quot;>
+          <button type=&quot;button&quot; onclick=&quot;window.setModoPagoCliente('solo_yo')&quot; id=&quot;btnModoSoloYo&quot; class=&quot;p-2 rounded-lg font-bold border text-center transition bg-slate-800 text-slate-300 border-slate-700 cursor-pointer&quot;>Solo Mi Silla</button>
+          <button type=&quot;button&quot; onclick=&quot;window.setModoPagoCliente('incluir_ninos')&quot; id=&quot;btnModoNinos&quot; class=&quot;p-2 rounded-lg font-bold border text-center transition bg-emerald-600/30 text-emerald-300 border-emerald-500/50 cursor-pointer&quot;>Acompañantes</button>
+          <button type=&quot;button&quot; onclick=&quot;window.setModoPagoCliente('toda_mesa')&quot; id=&quot;btnModoTodaMesa&quot; class=&quot;p-2 rounded-lg font-bold border text-center transition bg-slate-800 text-slate-300 border-slate-700 cursor-pointer&quot;>Toda la Mesa</button>
+        </div>
+      </div>
+
+      <!-- DESGLOSE DE CUENTAS INCLUIDAS -->
+      <div id=&quot;modalCobroDetalleTramos&quot; class=&quot;space-y-2 max-h-56 overflow-y-auto pr-1 text-xs&quot;>
+        <!-- Generado dinámicamente -->
+      </div>
+
+      <!-- TOTALES -->
+      <div class=&quot;pt-3 border-t border-slate-800 space-y-1.5 text-xs&quot;>
+        <div class=&quot;flex justify-between text-slate-400&quot;><span>Subtotal Neto:</span><span id=&quot;modalSubtotal&quot; class=&quot;text-slate-200 font-bold&quot;>$0.00</span></div>
+        <div class=&quot;flex justify-between text-slate-400&quot;><span>IVA 16% Trasladado:</span><span id=&quot;modalIVA&quot; class=&quot;text-slate-200 font-bold&quot;>$0.00</span></div>
+        <div class=&quot;flex justify-between text-slate-400&quot;><span>Propina Sugerida (10%):</span><span id=&quot;modalPropina&quot; class=&quot;text-slate-200 font-bold&quot;>$0.00</span></div>
+        <div class=&quot;flex justify-between text-base font-black text-white pt-2 border-t border-slate-800&quot;>
+          <span>Total Final a Liquidar:</span>
+          <span id=&quot;modalTotal&quot; class=&quot;text-emerald-400 text-lg font-black&quot;>$0.00</span>
+        </div>
+      </div>
+
+      <!-- BOTONES DE PROCESAR PAGO -->
+      <div class=&quot;grid grid-cols-3 gap-1.5 pt-2&quot;>
+        <button onclick=&quot;window.ejecutarPagoFinal('mercadopago')&quot; class=&quot;py-2.5 px-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-[11px] font-bold shadow-lg shadow-emerald-600/30 flex flex-col items-center justify-center gap-1 cursor-pointer&quot;>
+          <i class=&quot;fa-solid fa-mobile-screen&quot;></i> Mercado Pago
+        </button>
+        <button onclick=&quot;window.ejecutarPagoFinal('santander')&quot; class=&quot;py-2.5 px-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-sky-400 text-[11px] font-bold border border-slate-700 flex flex-col items-center justify-center gap-1 cursor-pointer&quot;>
+          <i class=&quot;fa-solid fa-credit-card&quot;></i> Santander
+        </button>
+        <button onclick=&quot;window.ejecutarPagoFinal('efectivo')&quot; class=&quot;py-2.5 px-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-amber-300 text-[11px] font-bold border border-slate-700 flex flex-col items-center justify-center gap-1 cursor-pointer&quot;>
+          <i class=&quot;fa-solid fa-money-bill-wave&quot;></i> Efectivo
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  window.vsMenuData = [
+    { id: 1, categoria_nombre: &quot;Barra de Café &amp; Infusiones&quot;, nombre: &quot;Café Capuchino Especial V&amp;S&quot;, descripcion: &quot;Espresso doble con leche cremada artesanal y toque de canela&quot;, precio_unitario: 68.00, estacion_preparacion: &quot;barra_cafe&quot;, icono: &quot;☕&quot; },
+    { id: 2, categoria_nombre: &quot;Barra de Café &amp; Infusiones&quot;, nombre: &quot;Espresso Italiano Robusto&quot;, descripcion: &quot;Grano seleccionado 100% arábica tostado de la casa&quot;, precio_unitario: 48.00, estacion_preparacion: &quot;barra_cafe&quot;, icono: &quot;☕&quot; },
+    { id: 3, categoria_nombre: &quot;Barra de Café &amp; Infusiones&quot;, nombre: &quot;Latte Machiatto Vainilla Bourbon&quot;, descripcion: &quot;Espresso con leche de almendra y jarabe natural de vainilla bourbon&quot;, precio_unitario: 75.00, estacion_preparacion: &quot;barra_cafe&quot;, icono: &quot;🥛&quot; },
+    { id: 4, categoria_nombre: &quot;Desayunos &amp; Brunch Gourmet&quot;, nombre: &quot;Chilaquiles Verdes con Pollo y Queso Gouda&quot;, descripcion: &quot;Totopos artesanos en salsa de tomatillo con pollo deshebrado y gouda&quot;, precio_unitario: 148.00, estacion_preparacion: &quot;cocina&quot;, icono: &quot;🥘&quot; },
+    { id: 5, categoria_nombre: &quot;Desayunos &amp; Brunch Gourmet&quot;, nombre: &quot;Omelette Supremo La Terraza&quot;, descripcion: &quot;3 huevos orgánicos rellenos de portobello, espinacas baby y queso asadero&quot;, precio_unitario: 155.00, estacion_preparacion: &quot;cocina&quot;, icono: &quot;🍳&quot; },
+    { id: 6, categoria_nombre: &quot;Desayunos &amp; Brunch Gourmet&quot;, nombre: &quot;Molletes de Masa Madre con Chorizo&quot;, descripcion: &quot;Pan artesano de masa madre con frijol negro, gouda y chorizo&quot;, precio_unitario: 125.00, estacion_preparacion: &quot;cocina&quot;, icono: &quot;🥖&quot; },
+    { id: 7, categoria_nombre: &quot;Especialidades Fuertes&quot;, nombre: &quot;Rib Eye Grill V&amp;S (350g)&quot;, descripcion: &quot;Corte de alta calidad a las brasas servido con papas gajo y espárragos&quot;, precio_unitario: 385.00, estacion_preparacion: &quot;cocina&quot;, icono: &quot;🥩&quot; },
+    { id: 8, categoria_nombre: &quot;Especialidades Fuertes&quot;, nombre: &quot;Pasta Fettuccine con Camarones al Trufado&quot;, descripcion: &quot;Pasta fresca hecha en casa con camarones u-15 y crema suave de trufa&quot;, precio_unitario: 265.00, estacion_preparacion: &quot;cocina&quot;, icono: &quot;🍝&quot; },
+    { id: 9, categoria_nombre: &quot;Repostería &amp; Postres de Autor&quot;, nombre: &quot;Pastel Supremo de Chocolate Valrhona&quot;, descripcion: &quot;Rebanada caliente de pastel de chocolate amargo con helado de vainilla&quot;, precio_unitario: 105.00, estacion_preparacion: &quot;reposteria&quot;, icono: &quot;🍰&quot; },
+    { id: 10, categoria_nombre: &quot;Bebidas &amp; Coctelería de Autor&quot;, nombre: &quot;Limonada Botánica de Hierbabuena &amp; Jengibre&quot;, descripcion: &quot;Agua mineral infucionada con jengibre fresco, limón eufrata y hierbabuena&quot;, precio_unitario: 60.00, estacion_preparacion: &quot;barra_cafe&quot;, icono: &quot;🍋&quot; }
+  ];
+
+  window.vsCategoriasData = [
+    { id: 1, nombre: &quot;Barra de Café &amp; Infusiones&quot;, icono: &quot;☕&quot; },
+    { id: 2, nombre: &quot;Desayunos &amp; Brunch Gourmet&quot;, icono: &quot;🍳&quot; },
+    { id: 3, nombre: &quot;Entradas &amp; Tapas de la Terraza&quot;, icono: &quot;🥗&quot; },
+    { id: 4, nombre: &quot;Especialidades Fuertes&quot;, icono: &quot;🥩&quot; },
+    { id: 5, nombre: &quot;Repostería &amp; Postres de Autor&quot;, icono: &quot;🍰&quot; },
+    { id: 6, nombre: &quot;Bebidas &amp; Coctelería de Autor&quot;, icono: &quot;🍹&quot; }
+  ];
+
+  window.categoriaActual = &quot;Todos&quot;;
+  window.simMesaId = 2;
+  window.simSillaNum = 1;
+  window.sillasAcompanantesSeleccionadas = [3, 4]; // Por defecto, Papá (Silla 1) incluye a los niños (3 y 4)
+
+  function getStorageCuentas() {
+    try {
+      var raw = localStorage.getItem('palapa_cuentas_v1');
+      if (raw) return JSON.parse(raw);
+    } catch(e) {}
+    return {};
+  }
+
+  function saveStorageCuentas(cuentas) {
+    try {
+      localStorage.setItem('palapa_cuentas_v1', JSON.stringify(cuentas));
+    } catch(e) {}
+  }
+
+  window.cambiarSimulacionQr = function(keyStr) {
+    var parts = keyStr.split('-');
+    window.simMesaId = parseInt(parts[0]);
+    window.simSillaNum = parseInt(parts[1]);
+
+    // Si es Mesa 2 Silla 1 (Papá), sugerir niños seleccionados (3 y 4)
+    if (window.simMesaId === 2 &amp;&amp; window.simSillaNum === 1) {
+      window.sillasAcompanantesSeleccionadas = [3, 4];
+    } else {
+      window.sillasAcompanantesSeleccionadas = [];
+    }
+
+    window.sincronizarCuentaDesdeStorage();
+  };
+
+  window.sincronizarCuentaDesdeStorage = function() {
+    var cuentas = getStorageCuentas();
+    var key = window.simMesaId + '-' + window.simSillaNum;
+    var cuentaActual = cuentas[key];
+
+    var qrId = (cuentaActual &amp;&amp; cuentaActual.qrId) ? cuentaActual.qrId : ('PV-0' + window.simMesaId + window.simSillaNum);
+    var comensalNom = (cuentaActual &amp;&amp; cuentaActual.comensalNombre) ? cuentaActual.comensalNombre : ('Comensal Silla ' + window.simSillaNum);
+
+    var lblQr = document.getElementById('lblQrActivo');
+    var lblUbicacion = document.getElementById('lblUbicacionActiva');
+    var txtTitulo = document.getElementById('txtTituloComanda');
+    var txtSub = document.getElementById('txtSubComanda');
+
+    if (lblQr) lblQr.innerText = qrId;
+    if (lblUbicacion) lblUbicacion.innerText = `Mesa ${window.simMesaId} • Silla ${window.simSillaNum} (${comensalNom})`;
+    if (txtTitulo) txtTitulo.innerText = `Mi Comanda (Silla ${window.simSillaNum})`;
+    if (txtSub) txtSub.innerText = `Mesa ${window.simMesaId} • Portavasos #${qrId}`;
+
+    window.renderCarrito();
+    window.renderAcompanantesMesa();
+  };
+
+  window.renderCarrito = function () {
+    const container = document.getElementById('cartItemsList');
+    if (!container) return;
+    container.innerHTML = '';
+
+    var cuentas = getStorageCuentas();
+    var key = window.simMesaId + '-' + window.simSillaNum;
+    var cuentaActual = cuentas[key] || { items: [] };
+    var items = cuentaActual.items || [];
+
+    if (items.length === 0) {
+      container.innerHTML = `<div class=&quot;text-center py-6 text-slate-500 text-xs&quot;>No hay consumos registrados en tu silla.</div>`;
+    } else {
+      items.forEach((item, idx) => {
+        const itemSubtotal = item.precio * item.cantidad;
+        const row = document.createElement('div');
+        row.className = 'flex justify-between items-center bg-slate-900/80 p-2.5 rounded-xl border border-slate-800 text-xs';
+        row.innerHTML = `
+          <div>
+            <span class=&quot;font-bold text-white&quot;>${item.nombre} x${item.cantidad}</span>
+            <span class=&quot;block text-[10px] text-slate-400&quot;>${item.notas ? item.notas + ' • ' : ''}$${Number(item.precio).toFixed(2)} c/u</span>
+          </div>
+          <span class=&quot;font-black text-emerald-400&quot;>$${itemSubtotal.toFixed(2)}</span>
         `;
         container.appendChild(row);
       });
-    };
-
-    window.toggleAcompanante = function(sillaNum) {
-      var idx = window.sillasAcompanantesSeleccionadas.indexOf(sillaNum);
-      if (idx === -1) {
-        window.sillasAcompanantesSeleccionadas.push(sillaNum);
-      } else {
-        window.sillasAcompanantesSeleccionadas.splice(idx, 1);
-      }
-      window.renderAcompanantesMesa();
-      window.recalcularTotalesCompletos();
-    };
-
-    window.seleccionarTodosAcompanantes = function() {
-      var cuentas = getStorageCuentas();
-      var mesaId = window.simMesaId;
-      var miSilla = window.simSillaNum;
-      window.sillasAcompanantesSeleccionadas = [];
-      for (var s = 1; s <= 10; s++) {
-        if (s !== miSilla &amp;&amp; cuentas[mesaId + '-' + s]) {
-          window.sillasAcompanantesSeleccionadas.push(s);
-        }
-      }
-      window.renderAcompanantesMesa();
-      window.recalcularTotalesCompletos();
-    };
-
-    window.recalcularTotalesCompletos = function() {
-      var cuentas = getStorageCuentas();
-      var mesaId = window.simMesaId;
-      var miSilla = window.simSillaNum;
-
-      var subtotalPropio = 0;
-      var cPropia = cuentas[mesaId + '-' + miSilla];
-      if (cPropia &amp;&amp; cPropia.items) {
-        cPropia.items.forEach(function(i) { subtotalPropio += (i.precio * i.cantidad); });
-      }
-
-      var subtotalAcompanantes = 0;
-      window.sillasAcompanantesSeleccionadas.forEach(function(sNum) {
-        var cAcomp = cuentas[mesaId + '-' + sNum];
-        if (cAcomp &amp;&amp; cAcomp.items) {
-          cAcomp.items.forEach(function(i) { subtotalAcompanantes += (i.precio * i.cantidad); });
-        }
-      });
-
-      var subtotalNeto = subtotalPropio + subtotalAcompanantes;
-      var iva = subtotalNeto * 0.16;
-      var propina = subtotalNeto * 0.10;
-      var total = subtotalNeto + iva;
-
-      var txtSubtotal = document.getElementById('txtSubtotal');
-      var txtIVA = document.getElementById('txtIVA');
-      var txtPropina = document.getElementById('txtPropina');
-      var txtTotal = document.getElementById('txtTotal');
-      var txtBtnPagar = document.getElementById('txtBtnPagarMonto');
-      var lblSubtotalDetalle = document.getElementById('lblSubtotalDetalle');
-
-      if (lblSubtotalDetalle) {
-        if (window.sillasAcompanantesSeleccionadas.length > 0) {
-          lblSubtotalDetalle.innerText = `Subtotal (Silla ${miSilla} + ${window.sillasAcompanantesSeleccionadas.length} Acompañantes):`;
-        } else {
-          lblSubtotalDetalle.innerText = `Subtotal (Solo Silla ${miSilla}):`;
-        }
-      }
-
-      if (txtSubtotal) txtSubtotal.innerText = `$${subtotalNeto.toFixed(2)}`;
-      if (txtIVA) txtIVA.innerText = `$${iva.toFixed(2)}`;
-      if (txtPropina) txtPropina.innerText = `$${propina.toFixed(2)}`;
-      if (txtTotal) txtTotal.innerText = `$${total.toFixed(2)}`;
-      if (txtBtnPagar) txtBtnPagar.innerText = `$${total.toFixed(2)}`;
-    };
-
-    window.agregarAlCarrito = function (prod) {
-      var cuentas = getStorageCuentas();
-      var key = window.simMesaId + '-' + window.simSillaNum;
-      if (!cuentas[key]) {
-        cuentas[key] = {
-          estado: 'ocupada',
-          qrId: 'PV-0' + window.simMesaId + window.simSillaNum,
-          comensalNombre: 'Comensal Silla ' + window.simSillaNum,
-          items: [],
-          historialUbicaciones: [{ mesaId: window.simMesaId, sillaNum: window.simSillaNum, hora: (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }]
-        };
-      }
-
-      var items = cuentas[key].items;
-      var existing = items.find(i => i.id === prod.id);
-      if (existing) {
-        existing.cantidad += 1;
-      } else {
-        items.push({
-          id: prod.id,
-          nombre: prod.nombre,
-          precio: prod.precio_unitario,
-          cantidad: 1,
-          mesaId: window.simMesaId,
-          sillaNum: window.simSillaNum,
-          hora: (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-        });
-      }
-
-      saveStorageCuentas(cuentas);
-      window.sincronizarCuentaDesdeStorage();
-    };
-
-    window.modoPagoCliente = 'incluir_ninos'; // 'solo_yo' | 'incluir_ninos' | 'toda_mesa'
-
-    window.abrirModalCobroCliente = function(metodo) {
-      const modal = document.getElementById('modalCobroCliente');
-      if (!modal) return;
-      window.renderModalCobroDetalle();
-      modal.classList.remove('hidden');
-      modal.style.display = 'flex';
-    };
-
-    window.cerrarModalCobroCliente = function() {
-      const modal = document.getElementById('modalCobroCliente');
-      if (modal) {
-        modal.classList.add('hidden');
-        modal.style.display = 'none';
-      }
-    };
-
-    window.setModoPagoCliente = function(modo) {
-      window.modoPagoCliente = modo;
-      var btnSolo = document.getElementById('btnModoSoloYo');
-      var btnNinos = document.getElementById('btnModoNinos');
-      var btnToda = document.getElementById('btnModoTodaMesa');
-
-      [btnSolo, btnNinos, btnToda].forEach(b => {
-        if (b) {
-          b.className = 'p-2 rounded-lg font-bold border text-center transition bg-slate-800 text-slate-300 border-slate-700 cursor-pointer';
-        }
-      });
-
-      if (modo === 'solo_yo' &amp;&amp; btnSolo) {
-        btnSolo.className = 'p-2 rounded-lg font-bold border text-center transition bg-emerald-600/30 text-emerald-300 border-emerald-500/50 cursor-pointer';
-      } else if (modo === 'incluir_ninos' &amp;&amp; btnNinos) {
-        btnNinos.className = 'p-2 rounded-lg font-bold border text-center transition bg-emerald-600/30 text-emerald-300 border-emerald-500/50 cursor-pointer';
-      } else if (modo === 'toda_mesa' &amp;&amp; btnToda) {
-        btnToda.className = 'p-2 rounded-lg font-bold border text-center transition bg-emerald-600/30 text-emerald-300 border-emerald-500/50 cursor-pointer';
-      }
-
-      window.renderModalCobroDetalle();
-    };
-
-    window.renderModalCobroDetalle = function() {
-      var cuentas = getStorageCuentas();
-      var mesaId = window.simMesaId;
-      var miSilla = window.simSillaNum;
-      var container = document.getElementById('modalCobroDetalleTramos');
-      var subtotalEl = document.getElementById('modalSubtotal');
-      var ivaEl = document.getElementById('modalIVA');
-      var propinaEl = document.getElementById('modalPropina');
-      var totalEl = document.getElementById('modalTotal');
-      var subtituloEl = document.getElementById('modalCobroSubtitulo');
-
-      if (!container) return;
-      container.innerHTML = '';
-
-      var sillasAIncluir = [];
-      if (window.modoPagoCliente === 'solo_yo') {
-        sillasAIncluir = [miSilla];
-      } else if (window.modoPagoCliente === 'incluir_ninos') {
-        sillasAIncluir = [miSilla].concat(window.sillasAcompanantesSeleccionadas);
-      } else if (window.modoPagoCliente === 'toda_mesa') {
-        for (var s = 1; s <= 10; s++) {
-          if (cuentas[mesaId + '-' + s]) {
-            sillasAIncluir.push(s);
-          }
-        }
-      }
-
-      // Eliminar duplicados
-      sillasAIncluir = sillasAIncluir.filter((v, i, a) => a.indexOf(v) === i).sort();
-
-      if (subtituloEl) {
-        subtituloEl.innerText = `Mesa ${mesaId} • ${sillasAIncluir.length} Cuenta${sillasAIncluir.length > 1 ? 's' : ''} Seleccionada${sillasAIncluir.length > 1 ? 's' : ''}`;
-      }
-
-      var totalNeto = 0;
-
-      sillasAIncluir.forEach(sNum => {
-        var c = cuentas[mesaId + '-' + sNum];
-        if (!c || !c.items || c.items.length === 0) return;
-
-        var subSilla = 0;
-        var block = document.createElement('div');
-        block.className = 'p-2.5 rounded-xl bg-slate-950/60 border border-slate-800/80 mb-2';
-
-        var h = document.createElement('div');
-        h.className = 'flex justify-between items-center font-bold text-emerald-400 mb-1';
-        h.innerHTML = `<span>Silla ${sNum} ${c.comensalNombre ? '• ' + c.comensalNombre : ''}</span><span class=&quot;text-[10px] text-slate-500&quot;>QR: #${c.qrId || 'PV-0'+mesaId+sNum}</span>`;
-        block.appendChild(h);
-
-        c.items.forEach(it => {
-          var itTotal = it.precio * it.cantidad;
-          subSilla += itTotal;
-          totalNeto += itTotal;
-          var row = document.createElement('div');
-          row.className = 'flex justify-between text-slate-300 py-0.5';
-          row.innerHTML = `<span>${it.cantidad}x ${it.nombre}</span><span>$${itTotal.toFixed(2)}</span>`;
-          block.appendChild(row);
-        });
-
-        var subRow = document.createElement('div');
-        subRow.className = 'flex justify-between text-slate-400 font-bold pt-1 mt-1 border-t border-slate-900 text-[11px]';
-        subRow.innerHTML = `<span>Subtotal Silla ${sNum}:</span><span class=&quot;text-amber-400&quot;>$${subSilla.toFixed(2)}</span>`;
-        block.appendChild(subRow);
-
-        container.appendChild(block);
-      });
-
-      var iva = totalNeto * 0.16;
-      var propina = totalNeto * 0.10;
-      var granTotal = totalNeto + iva;
-
-      if (subtotalEl) subtotalEl.innerText = `$${totalNeto.toFixed(2)}`;
-      if (ivaEl) ivaEl.innerText = `$${iva.toFixed(2)}`;
-      if (propinaEl) propinaEl.innerText = `$${propina.toFixed(2)}`;
-      if (totalEl) totalEl.innerText = `$${granTotal.toFixed(2)}`;
-    };
-
-    window.ejecutarPagoFinal = function(metodo) {
-      var cuentas = getStorageCuentas();
-      var mesaId = window.simMesaId;
-      var miSilla = window.simSillaNum;
-
-      var sillasAIncluir = [];
-      if (window.modoPagoCliente === 'solo_yo') {
-        sillasAIncluir = [miSilla];
-      } else if (window.modoPagoCliente === 'incluir_ninos') {
-        sillasAIncluir = [miSilla].concat(window.sillasAcompanantesSeleccionadas);
-      } else if (window.modoPagoCliente === 'toda_mesa') {
-        for (var s = 1; s <= 10; s++) {
-          if (cuentas[mesaId + '-' + s]) {
-            sillasAIncluir.push(s);
-          }
-        }
-      }
-
-      sillasAIncluir = sillasAIncluir.filter((v, i, a) => a.indexOf(v) === i);
-      var totalText = document.getElementById('modalTotal') ? document.getElementById('modalTotal').innerText : '$0.00';
-      var sillasStr = sillasAIncluir.map(function(s) { return 'Silla ' + s; }).join(', ');
-
-      if (confirm(`¿Confirmar liquidación vía ${metodo.toUpperCase()} para Mesa ${mesaId} (${sillasStr}) por ${totalText}?`)) {
-        sillasAIncluir.forEach(function(sNum) {
-          delete cuentas[mesaId + '-' + sNum];
-        });
-        saveStorageCuentas(cuentas);
-        window.cerrarModalCobroCliente();
-        alert(`🎉 ¡Pago completado con éxito vía ${metodo.toUpperCase()}!\nSe han liberado las cuentas de Mesa ${mesaId} (${sillasStr}).`);
-        window.sincronizarCuentaDesdeStorage();
-      }
-    };
-
-    window.cargarDatosMenu = function (productos, categorias) {
-      if (productos &amp;&amp; productos.length > 0) window.vsMenuData = productos;
-      if (categorias &amp;&amp; categorias.length > 0) window.vsCategoriasData = categorias;
-      window.renderCategoriasChips(window.vsCategoriasData);
-      window.renderProductos();
-      window.sincronizarCuentaDesdeStorage();
-    };
-
-    window.renderCategoriasChips = function (categorias) {
-      const container = document.getElementById('categoriesChips');
-      if (!container) return;
-      container.innerHTML = `<button onclick=&quot;window.seleccionarCategoria('Todos')&quot; class=&quot;cat-chip ${window.categoriaActual === 'Todos' ? 'active bg-emerald-500 text-white' : 'bg-slate-800/80 text-slate-400'} px-4 py-2 text-xs font-bold rounded-xl whitespace-nowrap transition&quot;>Todos</button>`;
-
-      categorias.forEach(cat => {
-        const btn = document.createElement('button');
-        const isActive = window.categoriaActual === cat.nombre;
-        btn.className = `cat-chip ${isActive ? 'active bg-emerald-500 text-white shadow-md shadow-emerald-500/20' : 'bg-slate-800/80 text-slate-400 hover:text-white'} px-4 py-2 text-xs font-bold rounded-xl whitespace-nowrap transition`;
-        btn.innerText = `${cat.icono || '🍽️'} ${cat.nombre}`;
-        btn.onclick = () => window.seleccionarCategoria(cat.nombre);
-        container.appendChild(btn);
-      });
-    };
-
-    window.seleccionarCategoria = function (catNombre) {
-      window.categoriaActual = catNombre;
-      const chips = document.querySelectorAll('.cat-chip');
-      chips.forEach(c => c.classList.remove('active', 'bg-emerald-500', 'text-white'));
-      window.renderProductos();
-    };
-
-    window.filtrarProductos = function () {
-      window.renderProductos();
-    };
-
-    window.renderProductos = function () {
-      const container = document.getElementById('productsGridContainer');
-      if (!container) return;
-      const searchInput = document.getElementById('searchInput');
-      const searchVal = searchInput ? (searchInput.value || '').toLowerCase() : '';
-      container.innerHTML = '';
-
-      const list = window.vsMenuData || [];
-      const filtrados = list.filter(p => {
-        const matchCat = window.categoriaActual === 'Todos' || p.categoria_nombre === window.categoriaActual;
-        const matchSearch = p.nombre.toLowerCase().includes(searchVal) || (p.descripcion &amp;&amp; p.descripcion.toLowerCase().includes(searchVal));
-        return matchCat &amp;&amp; matchSearch;
-      });
-
-      if (filtrados.length === 0) {
-        container.innerHTML = `<div class=&quot;text-center py-12 text-slate-500 text-sm col-span-2&quot;>No se encontraron platillos o bebidas disponibles</div>`;
-        return;
-      }
-
-      filtrados.forEach(prod => {
-        const card = document.createElement('div');
-        card.className = 'glass-card p-4 rounded-2xl flex justify-between items-center hover:border-emerald-500/50 transition cursor-pointer group';
-        card.onclick = () => window.agregarAlCarrito(prod);
-
-        card.innerHTML = `
-          <div class=&quot;flex items-center gap-3&quot;>
-            <div class=&quot;w-12 h-12 rounded-xl bg-slate-800 flex items-center justify-center text-2xl group-hover:scale-110 transition&quot;>
-              ${prod.icono || '🍲'}
-            </div>
-            <div>
-              <h3 class=&quot;text-sm font-bold text-white group-hover:text-emerald-400 transition&quot;>${prod.nombre}</h3>
-              <p class=&quot;text-xs text-slate-400 line-clamp-1&quot;>${prod.descripcion || ''}</p>
-            </div>
-          </div>
-          <div class=&quot;text-right&quot;>
-            <span class=&quot;text-sm font-black text-emerald-400 block&quot;>$${Number(prod.precio_unitario).toFixed(2)}</span>
-            <span class=&quot;text-[10px] text-slate-500 font-semibold uppercase&quot;>${prod.estacion_preparacion || 'cocina'}</span>
-          </div>
-        `;
-        container.appendChild(card);
-      });
-    };
-
-    window.navMenu = function (modulo) {
-      if (window.anvilAppNav) {
-        window.anvilAppNav(modulo);
-      } else {
-        alert(`Navegación a módulo: ${modulo}`);
-      }
-    };
-
-    function initImmediate() {
-      window.cargarDatosMenu(window.vsMenuData, window.vsCategoriasData);
     }
 
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initImmediate);
+    window.recalcularTotalesCompletos();
+  };
+
+  window.renderAcompanantesMesa = function() {
+    const container = document.getElementById('listaAcompanantesMesa');
+    if (!container) return;
+    container.innerHTML = '';
+
+    var cuentas = getStorageCuentas();
+    var mesaId = window.simMesaId;
+    var miSilla = window.simSillaNum;
+
+    var otrasSillas = [];
+    for (var s = 1; s <= 10; s++) {
+      if (s !== miSilla) {
+        var k = mesaId + '-' + s;
+        var c = cuentas[k];
+        if (c &amp;&amp; c.items &amp;&amp; c.items.length > 0) {
+          var tot = 0;
+          c.items.forEach(function(i) { tot += i.precio * i.cantidad; });
+          otrasSillas.push({ sillaNum: s, cuenta: c, total: tot });
+        }
+      }
+    }
+
+    if (otrasSillas.length === 0) {
+      container.innerHTML = '<div class=&quot;text-slate-500 text-[11px] py-1 italic&quot;>No hay otros comensales con cuenta en esta mesa.</div>';
+      return;
+    }
+
+    otrasSillas.forEach(obj => {
+      var s = obj.sillaNum;
+      var isChecked = window.sillasAcompanantesSeleccionadas.indexOf(s) !== -1;
+      var row = document.createElement('label');
+      row.className = `flex items-center justify-between p-2 rounded-xl border cursor-pointer transition select-none ${isChecked ? 'bg-emerald-950/40 border-emerald-500/50' : 'bg-slate-900/60 border-slate-800 hover:border-slate-700'}`;
+      row.innerHTML = `
+        <div class=&quot;flex items-center gap-2&quot;>
+          <input type=&quot;checkbox&quot; value=&quot;${s}&quot; ${isChecked ? 'checked' : ''} onchange=&quot;window.toggleAcompanante(${s})&quot; class=&quot;accent-emerald-500 rounded&quot;>
+          <div>
+            <span class=&quot;font-bold text-slate-100 block&quot;>Silla ${s} <span class=&quot;text-slate-400 font-normal&quot;>(${obj.cuenta.comensalNombre || 'Comensal'})</span></span>
+            <span class=&quot;text-[10px] text-slate-400&quot;>${obj.cuenta.items.length} consumos</span>
+          </div>
+        </div>
+        <span class=&quot;font-bold text-amber-400&quot;>$${obj.total.toFixed(2)}</span>
+      `;
+      container.appendChild(row);
+    });
+  };
+
+  window.toggleAcompanante = function(sillaNum) {
+    var idx = window.sillasAcompanantesSeleccionadas.indexOf(sillaNum);
+    if (idx === -1) {
+      window.sillasAcompanantesSeleccionadas.push(sillaNum);
     } else {
-      initImmediate();
+      window.sillasAcompanantesSeleccionadas.splice(idx, 1);
     }
-    setTimeout(initImmediate, 10);
-    setTimeout(initImmediate, 100);
-  </script>"></anvil-form>
+    window.renderAcompanantesMesa();
+    window.recalcularTotalesCompletos();
+  };
+
+  window.seleccionarTodosAcompanantes = function() {
+    var cuentas = getStorageCuentas();
+    var mesaId = window.simMesaId;
+    var miSilla = window.simSillaNum;
+    window.sillasAcompanantesSeleccionadas = [];
+    for (var s = 1; s <= 10; s++) {
+      if (s !== miSilla &amp;&amp; cuentas[mesaId + '-' + s]) {
+        window.sillasAcompanantesSeleccionadas.push(s);
+      }
+    }
+    window.renderAcompanantesMesa();
+    window.recalcularTotalesCompletos();
+  };
+
+  window.recalcularTotalesCompletos = function() {
+    var cuentas = getStorageCuentas();
+    var mesaId = window.simMesaId;
+    var miSilla = window.simSillaNum;
+
+    var subtotalPropio = 0;
+    var cPropia = cuentas[mesaId + '-' + miSilla];
+    if (cPropia &amp;&amp; cPropia.items) {
+      cPropia.items.forEach(function(i) { subtotalPropio += (i.precio * i.cantidad); });
+    }
+
+    var subtotalAcompanantes = 0;
+    window.sillasAcompanantesSeleccionadas.forEach(function(sNum) {
+      var cAcomp = cuentas[mesaId + '-' + sNum];
+      if (cAcomp &amp;&amp; cAcomp.items) {
+        cAcomp.items.forEach(function(i) { subtotalAcompanantes += (i.precio * i.cantidad); });
+      }
+    });
+
+    var subtotalNeto = subtotalPropio + subtotalAcompanantes;
+    var iva = subtotalNeto * 0.16;
+    var propina = subtotalNeto * 0.10;
+    var total = subtotalNeto + iva;
+
+    var txtSubtotal = document.getElementById('txtSubtotal');
+    var txtIVA = document.getElementById('txtIVA');
+    var txtPropina = document.getElementById('txtPropina');
+    var txtTotal = document.getElementById('txtTotal');
+    var txtBtnPagar = document.getElementById('txtBtnPagarMonto');
+    var lblSubtotalDetalle = document.getElementById('lblSubtotalDetalle');
+
+    if (lblSubtotalDetalle) {
+      if (window.sillasAcompanantesSeleccionadas.length > 0) {
+        lblSubtotalDetalle.innerText = `Subtotal (Silla ${miSilla} + ${window.sillasAcompanantesSeleccionadas.length} Acompañantes):`;
+      } else {
+        lblSubtotalDetalle.innerText = `Subtotal (Solo Silla ${miSilla}):`;
+      }
+    }
+
+    if (txtSubtotal) txtSubtotal.innerText = `$${subtotalNeto.toFixed(2)}`;
+    if (txtIVA) txtIVA.innerText = `$${iva.toFixed(2)}`;
+    if (txtPropina) txtPropina.innerText = `$${propina.toFixed(2)}`;
+    if (txtTotal) txtTotal.innerText = `$${total.toFixed(2)}`;
+    if (txtBtnPagar) txtBtnPagar.innerText = `$${total.toFixed(2)}`;
+  };
+
+  window.agregarAlCarrito = function (prod) {
+    var cuentas = getStorageCuentas();
+    var key = window.simMesaId + '-' + window.simSillaNum;
+    if (!cuentas[key]) {
+      cuentas[key] = {
+        estado: 'ocupada',
+        qrId: 'PV-0' + window.simMesaId + window.simSillaNum,
+        comensalNombre: 'Comensal Silla ' + window.simSillaNum,
+        items: [],
+        historialUbicaciones: [{ mesaId: window.simMesaId, sillaNum: window.simSillaNum, hora: (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }]
+      };
+    }
+
+    var items = cuentas[key].items;
+    var existing = items.find(i => i.id === prod.id);
+    if (existing) {
+      existing.cantidad += 1;
+    } else {
+      items.push({
+        id: prod.id,
+        nombre: prod.nombre,
+        precio: prod.precio_unitario,
+        cantidad: 1,
+        mesaId: window.simMesaId,
+        sillaNum: window.simSillaNum,
+        hora: (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      });
+    }
+
+    saveStorageCuentas(cuentas);
+    window.sincronizarCuentaDesdeStorage();
+  };
+
+  window.modoPagoCliente = 'incluir_ninos'; // 'solo_yo' | 'incluir_ninos' | 'toda_mesa'
+
+  window.abrirModalCobroCliente = function(metodo) {
+    const modal = document.getElementById('modalCobroCliente');
+    if (!modal) return;
+    window.renderModalCobroDetalle();
+    modal.classList.remove('hidden');
+    modal.style.display = 'flex';
+  };
+
+  window.cerrarModalCobroCliente = function() {
+    const modal = document.getElementById('modalCobroCliente');
+    if (modal) {
+      modal.classList.add('hidden');
+      modal.style.display = 'none';
+    }
+  };
+
+  window.setModoPagoCliente = function(modo) {
+    window.modoPagoCliente = modo;
+    var btnSolo = document.getElementById('btnModoSoloYo');
+    var btnNinos = document.getElementById('btnModoNinos');
+    var btnToda = document.getElementById('btnModoTodaMesa');
+
+    [btnSolo, btnNinos, btnToda].forEach(b => {
+      if (b) {
+        b.className = 'p-2 rounded-lg font-bold border text-center transition bg-slate-800 text-slate-300 border-slate-700 cursor-pointer';
+      }
+    });
+
+    if (modo === 'solo_yo' &amp;&amp; btnSolo) {
+      btnSolo.className = 'p-2 rounded-lg font-bold border text-center transition bg-emerald-600/30 text-emerald-300 border-emerald-500/50 cursor-pointer';
+    } else if (modo === 'incluir_ninos' &amp;&amp; btnNinos) {
+      btnNinos.className = 'p-2 rounded-lg font-bold border text-center transition bg-emerald-600/30 text-emerald-300 border-emerald-500/50 cursor-pointer';
+    } else if (modo === 'toda_mesa' &amp;&amp; btnToda) {
+      btnToda.className = 'p-2 rounded-lg font-bold border text-center transition bg-emerald-600/30 text-emerald-300 border-emerald-500/50 cursor-pointer';
+    }
+
+    window.renderModalCobroDetalle();
+  };
+
+  window.renderModalCobroDetalle = function() {
+    var cuentas = getStorageCuentas();
+    var mesaId = window.simMesaId;
+    var miSilla = window.simSillaNum;
+    var container = document.getElementById('modalCobroDetalleTramos');
+    var subtotalEl = document.getElementById('modalSubtotal');
+    var ivaEl = document.getElementById('modalIVA');
+    var propinaEl = document.getElementById('modalPropina');
+    var totalEl = document.getElementById('modalTotal');
+    var subtituloEl = document.getElementById('modalCobroSubtitulo');
+
+    if (!container) return;
+    container.innerHTML = '';
+
+    var sillasAIncluir = [];
+    if (window.modoPagoCliente === 'solo_yo') {
+      sillasAIncluir = [miSilla];
+    } else if (window.modoPagoCliente === 'incluir_ninos') {
+      sillasAIncluir = [miSilla].concat(window.sillasAcompanantesSeleccionadas);
+    } else if (window.modoPagoCliente === 'toda_mesa') {
+      for (var s = 1; s <= 10; s++) {
+        if (cuentas[mesaId + '-' + s]) {
+          sillasAIncluir.push(s);
+        }
+      }
+    }
+
+    // Eliminar duplicados
+    sillasAIncluir = sillasAIncluir.filter((v, i, a) => a.indexOf(v) === i).sort();
+
+    if (subtituloEl) {
+      subtituloEl.innerText = `Mesa ${mesaId} • ${sillasAIncluir.length} Cuenta${sillasAIncluir.length > 1 ? 's' : ''} Seleccionada${sillasAIncluir.length > 1 ? 's' : ''}`;
+    }
+
+    var totalNeto = 0;
+
+    sillasAIncluir.forEach(sNum => {
+      var c = cuentas[mesaId + '-' + sNum];
+      if (!c || !c.items || c.items.length === 0) return;
+
+      var subSilla = 0;
+      var block = document.createElement('div');
+      block.className = 'p-2.5 rounded-xl bg-slate-950/60 border border-slate-800/80 mb-2';
+
+      var h = document.createElement('div');
+      h.className = 'flex justify-between items-center font-bold text-emerald-400 mb-1';
+      h.innerHTML = `<span>Silla ${sNum} ${c.comensalNombre ? '• ' + c.comensalNombre : ''}</span><span class=&quot;text-[10px] text-slate-500&quot;>QR: #${c.qrId || 'PV-0'+mesaId+sNum}</span>`;
+      block.appendChild(h);
+
+      c.items.forEach(it => {
+        var itTotal = it.precio * it.cantidad;
+        subSilla += itTotal;
+        totalNeto += itTotal;
+        var row = document.createElement('div');
+        row.className = 'flex justify-between text-slate-300 py-0.5';
+        row.innerHTML = `<span>${it.cantidad}x ${it.nombre}</span><span>$${itTotal.toFixed(2)}</span>`;
+        block.appendChild(row);
+      });
+
+      var subRow = document.createElement('div');
+      subRow.className = 'flex justify-between text-slate-400 font-bold pt-1 mt-1 border-t border-slate-900 text-[11px]';
+      subRow.innerHTML = `<span>Subtotal Silla ${sNum}:</span><span class=&quot;text-amber-400&quot;>$${subSilla.toFixed(2)}</span>`;
+      block.appendChild(subRow);
+
+      container.appendChild(block);
+    });
+
+    var iva = totalNeto * 0.16;
+    var propina = totalNeto * 0.10;
+    var granTotal = totalNeto + iva;
+
+    if (subtotalEl) subtotalEl.innerText = `$${totalNeto.toFixed(2)}`;
+    if (ivaEl) ivaEl.innerText = `$${iva.toFixed(2)}`;
+    if (propinaEl) propinaEl.innerText = `$${propina.toFixed(2)}`;
+    if (totalEl) totalEl.innerText = `$${granTotal.toFixed(2)}`;
+  };
+
+  window.ejecutarPagoFinal = function(metodo) {
+    var cuentas = getStorageCuentas();
+    var mesaId = window.simMesaId;
+    var miSilla = window.simSillaNum;
+
+    var sillasAIncluir = [];
+    if (window.modoPagoCliente === 'solo_yo') {
+      sillasAIncluir = [miSilla];
+    } else if (window.modoPagoCliente === 'incluir_ninos') {
+      sillasAIncluir = [miSilla].concat(window.sillasAcompanantesSeleccionadas);
+    } else if (window.modoPagoCliente === 'toda_mesa') {
+      for (var s = 1; s <= 10; s++) {
+        if (cuentas[mesaId + '-' + s]) {
+          sillasAIncluir.push(s);
+        }
+      }
+    }
+
+    sillasAIncluir = sillasAIncluir.filter((v, i, a) => a.indexOf(v) === i);
+    var totalText = document.getElementById('modalTotal') ? document.getElementById('modalTotal').innerText : '$0.00';
+    var sillasStr = sillasAIncluir.map(function(s) { return 'Silla ' + s; }).join(', ');
+
+    if (confirm(`¿Confirmar liquidación vía ${metodo.toUpperCase()} para Mesa ${mesaId} (${sillasStr}) por ${totalText}?`)) {
+      sillasAIncluir.forEach(function(sNum) {
+        delete cuentas[mesaId + '-' + sNum];
+      });
+      saveStorageCuentas(cuentas);
+      window.cerrarModalCobroCliente();
+      alert(`🎉 ¡Pago completado con éxito vía ${metodo.toUpperCase()}!\nSe han liberado las cuentas de Mesa ${mesaId} (${sillasStr}).`);
+      window.sincronizarCuentaDesdeStorage();
+    }
+  };
+
+  window.cargarDatosMenu = function (productos, categorias) {
+    if (productos &amp;&amp; productos.length > 0) window.vsMenuData = productos;
+    if (categorias &amp;&amp; categorias.length > 0) window.vsCategoriasData = categorias;
+    window.renderCategoriasChips(window.vsCategoriasData);
+    window.renderProductos();
+    window.sincronizarCuentaDesdeStorage();
+  };
+
+  window.renderCategoriasChips = function (categorias) {
+    const container = document.getElementById('categoriesChips');
+    if (!container) return;
+    container.innerHTML = `<button onclick=&quot;window.seleccionarCategoria('Todos')&quot; class=&quot;cat-chip ${window.categoriaActual === 'Todos' ? 'active bg-emerald-500 text-white' : 'bg-slate-800/80 text-slate-400'} px-4 py-2 text-xs font-bold rounded-xl whitespace-nowrap transition&quot;>Todos</button>`;
+
+    categorias.forEach(cat => {
+      const btn = document.createElement('button');
+      const isActive = window.categoriaActual === cat.nombre;
+      btn.className = `cat-chip ${isActive ? 'active bg-emerald-500 text-white shadow-md shadow-emerald-500/20' : 'bg-slate-800/80 text-slate-400 hover:text-white'} px-4 py-2 text-xs font-bold rounded-xl whitespace-nowrap transition`;
+      btn.innerText = `${cat.icono || '🍽️'} ${cat.nombre}`;
+      btn.onclick = () => window.seleccionarCategoria(cat.nombre);
+      container.appendChild(btn);
+    });
+  };
+
+  window.seleccionarCategoria = function (catNombre) {
+    window.categoriaActual = catNombre;
+    const chips = document.querySelectorAll('.cat-chip');
+    chips.forEach(c => c.classList.remove('active', 'bg-emerald-500', 'text-white'));
+    window.renderProductos();
+  };
+
+  window.filtrarProductos = function () {
+    window.renderProductos();
+  };
+
+  window.renderProductos = function () {
+    const container = document.getElementById('productsGridContainer');
+    if (!container) return;
+    const searchInput = document.getElementById('searchInput');
+    const searchVal = searchInput ? (searchInput.value || '').toLowerCase() : '';
+    container.innerHTML = '';
+
+    const list = window.vsMenuData || [];
+    const filtrados = list.filter(p => {
+      const matchCat = window.categoriaActual === 'Todos' || p.categoria_nombre === window.categoriaActual;
+      const matchSearch = p.nombre.toLowerCase().includes(searchVal) || (p.descripcion &amp;&amp; p.descripcion.toLowerCase().includes(searchVal));
+      return matchCat &amp;&amp; matchSearch;
+    });
+
+    if (filtrados.length === 0) {
+      container.innerHTML = `<div class=&quot;text-center py-12 text-slate-500 text-sm col-span-2&quot;>No se encontraron platillos o bebidas disponibles</div>`;
+      return;
+    }
+
+    filtrados.forEach(prod => {
+      const card = document.createElement('div');
+      card.className = 'glass-card p-4 rounded-2xl flex justify-between items-center hover:border-emerald-500/50 transition cursor-pointer group';
+      card.onclick = () => window.agregarAlCarrito(prod);
+
+      card.innerHTML = `
+        <div class=&quot;flex items-center gap-3&quot;>
+          <div class=&quot;w-12 h-12 rounded-xl bg-slate-800 flex items-center justify-center text-2xl group-hover:scale-110 transition&quot;>
+            ${prod.icono || '🍲'}
+          </div>
+          <div>
+            <h3 class=&quot;text-sm font-bold text-white group-hover:text-emerald-400 transition&quot;>${prod.nombre}</h3>
+            <p class=&quot;text-xs text-slate-400 line-clamp-1&quot;>${prod.descripcion || ''}</p>
+          </div>
+        </div>
+        <div class=&quot;text-right&quot;>
+          <span class=&quot;text-sm font-black text-emerald-400 block&quot;>$${Number(prod.precio_unitario).toFixed(2)}</span>
+          <span class=&quot;text-[10px] text-slate-500 font-semibold uppercase&quot;>${prod.estacion_preparacion || 'cocina'}</span>
+        </div>
+      `;
+      container.appendChild(card);
+    });
+  };
+
+  window.navMenu = function (modulo) {
+    if (window.anvilAppNav) {
+      window.anvilAppNav(modulo);
+    } else {
+      alert(`Navegación a módulo: ${modulo}`);
+    }
+  };
+
+  function initImmediate() {
+    window.cargarDatosMenu(window.vsMenuData, window.vsCategoriasData);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initImmediate);
+  } else {
+    initImmediate();
+  }
+  setTimeout(initImmediate, 10);
+  setTimeout(initImmediate, 100);
+</script>"></anvil-form>
