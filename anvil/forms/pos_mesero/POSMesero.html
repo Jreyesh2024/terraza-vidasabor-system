@@ -1808,8 +1808,8 @@
             var btnCard = document.createElement('button');
             btnCard.type = 'button';
             btnCard.onclick = function() { window.seleccionarSillaDesdeMesa(s); };
-            btnCard.style.cssText = 'width: 100% !important; padding: 8px !important; background: rgba(56, 189, 248, 0.15) !important; color: #38bdf8 !important; border: 1px solid rgba(56, 189, 248, 0.3) !important; border-radius: 8px !important; font-size: 11px !important; font-weight: 800 !important; cursor: pointer !important; display: flex !important; align-items: center !important; justify-content: center !important; gap: 6px !important; transition: all 0.2s ease !important;';
-            btnCard.innerHTML = `<i class="fa-solid fa-receipt"></i> Atender / Cobrar Silla ${s}`;
+            btnCard.style.cssText = 'width: 100% !important; padding: 7px 10px !important; background: rgba(56, 189, 248, 0.12) !important; color: #38bdf8 !important; border: 1px solid rgba(56, 189, 248, 0.25) !important; border-radius: 8px !important; font-size: 11px !important; font-weight: 700 !important; cursor: pointer !important; display: flex !important; align-items: center !important; justify-content: center !important; gap: 6px !important; transition: all 0.2s ease !important;';
+            btnCard.innerHTML = `<i class="fa-solid fa-arrow-right"></i> Abrir Comanda Silla ${s}`;
             card.appendChild(btnCard);
 
             container.appendChild(card);
@@ -1975,6 +1975,9 @@
 
       // 8. Botones de acción
       const btnEnviarCocina = document.getElementById('btnEnviarCocina');
+      const btnPrecuenta = document.getElementById('btnPrecuenta');
+      const btnCerrarBottom = document.getElementById('btnCerrarModalBottom');
+
       if (sillaNum === null) {
         // EN PANORAMA GENERAL (Centro de Mesa): Vista 100% informativa
         // NO se muestra botón de cobro aquí porque todo cobro requiere un comensal titular solicitante.
@@ -1982,8 +1985,19 @@
         if (btnEnviarCocina) btnEnviarCocina.style.display = 'none';
         if (btnMover) btnMover.style.display = 'none';
         if (btnLiberar) btnLiberar.style.display = 'none';
+        if (btnPrecuenta) btnPrecuenta.style.display = 'none';
+        if (btnCerrarBottom) {
+          btnCerrarBottom.style.flex = '1';
+          btnCerrarBottom.innerHTML = '<i class="fa-solid fa-arrow-left"></i> Regresar al Croquis de Mesas';
+        }
       } else {
         // EN COBRO POR COMENSAL:
+        if (btnPrecuenta) btnPrecuenta.style.display = 'flex';
+        if (btnCerrarBottom) {
+          btnCerrarBottom.style.flex = '1';
+          btnCerrarBottom.innerHTML = '<i class="fa-solid fa-arrow-left"></i> Regresar a Mesas';
+        }
+
         if (btnCobrarDirecto) {
           btnCobrarDirecto.style.display = (totalNeto > 0) ? 'flex' : 'none';
           var labelCobro = (seleccionadas.length > 1) ? `Sillas ${seleccionadas.join(', ')}` : `Silla ${sillaNum}`;
