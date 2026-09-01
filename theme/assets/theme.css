@@ -67,6 +67,35 @@ html, body, .anvil-container, div[anvil-slot] {
   z-index: 20 !important;
 }
 
+/* Diagonal positions for extra/arrimada chairs (S5+) */
+.chair-pos-diag-tr {
+  position: absolute !important;
+  top: 10px !important;
+  right: 10px !important;
+  z-index: 20 !important;
+}
+
+.chair-pos-diag-tl {
+  position: absolute !important;
+  top: 10px !important;
+  left: 10px !important;
+  z-index: 20 !important;
+}
+
+.chair-pos-diag-br {
+  position: absolute !important;
+  bottom: 10px !important;
+  right: 10px !important;
+  z-index: 20 !important;
+}
+
+.chair-pos-diag-bl {
+  position: absolute !important;
+  bottom: 10px !important;
+  left: 10px !important;
+  z-index: 20 !important;
+}
+
 /* Immutable Chair Base Button */
 .chair-btn-fixed {
   padding: 6px 14px !important;

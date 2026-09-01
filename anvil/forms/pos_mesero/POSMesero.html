@@ -359,16 +359,38 @@
 
       <!-- VISTA 1: MODO CROQUIS PANORÁMICO (3 MESAS GRANDES A PANTALLA COMPLETA) -->
       <div id="viewOverviewCroquis" style="flex-direction: column !important; justify-content: space-between !important; height: 100% !important; gap: 16px !important;">
-        <!-- PARED POSTERIOR BARRA -->
+        <!-- PARED POSTERIOR BARRA & RESERVA DE SILLAS EXTRAS -->
         <div
-          style="background: #f0f6fc !important; border: 1px solid #d0e1f3 !important; border-radius: 12px !important; padding: 10px 16px !important; display: flex !important; flex-wrap: wrap !important; justify-content: space-between !important; align-items: center !important; gap: 10px !important;">
+          style="background: #f0f6fc !important; border: 1px solid #d0e1f3 !important; border-radius: 14px !important; padding: 10px 16px !important; display: flex !important; flex-wrap: wrap !important; justify-content: space-between !important; align-items: center !important; gap: 12px !important;">
           <div
             style="display: flex !important; align-items: center !important; gap: 8px !important; font-size: 12px !important; font-weight: 700 !important; color: #1e3a5f !important;">
             <i class="fa-solid fa-mug-hot" style="color: #d97706 !important; font-size: 15px !important;"></i>
-            <span>Mueble de Servicio & Barra de Café (Pared Posterior 6.00m)</span>
+            <span>Mueble de Servicio & Barra de Café (6.00m)</span>
           </div>
+
+          <!-- RESERVA DE SILLAS EXTRAS / ARRINCONADAS DISPONIBLES -->
+          <div style="display: flex !important; align-items: center !important; gap: 8px !important; background: #ffffff !important; border: 1.5px dashed #0284c7 !important; border-radius: 12px !important; padding: 4px 12px !important; box-shadow: 0 2px 6px rgba(2, 132, 199, 0.08) !important;">
+            <span style="font-size: 11px !important; font-weight: 800 !important; color: #0284c7 !important; display: flex !important; align-items: center !important; gap: 4px !important;">
+              <i class="fa-solid fa-chair"></i> Reserva Sillas:
+            </span>
+            <div id="extraChairsReserveGroup" style="display: flex !important; gap: 6px !important; align-items: center !important;">
+              <div id="chair-extra-1" class="chair-btn-fixed chair-state-free chair-extra-draggable" draggable="true" title="Arrastra esta silla a cualquier mesa para arrimar un comensal extra"
+                style="background: #e0f2fe !important; color: #0369a1 !important; border: 1.5px solid #38bdf8 !important; cursor: grab !important; font-size: 11px !important; font-weight: 800 !important; padding: 4px 10px !important;">
+                🪑 + Silla Extra 1
+              </div>
+              <div id="chair-extra-2" class="chair-btn-fixed chair-state-free chair-extra-draggable" draggable="true" title="Arrastra esta silla a cualquier mesa para arrimar un comensal extra"
+                style="background: #e0f2fe !important; color: #0369a1 !important; border: 1.5px solid #38bdf8 !important; cursor: grab !important; font-size: 11px !important; font-weight: 800 !important; padding: 4px 10px !important;">
+                🪑 + Silla Extra 2
+              </div>
+              <div id="chair-extra-3" class="chair-btn-fixed chair-state-free chair-extra-draggable" draggable="true" title="Arrastra esta silla a cualquier mesa para arrimar un comensal extra"
+                style="background: #e0f2fe !important; color: #0369a1 !important; border: 1.5px solid #38bdf8 !important; cursor: grab !important; font-size: 11px !important; font-weight: 800 !important; padding: 4px 10px !important;">
+                🪑 + Silla Extra 3
+              </div>
+            </div>
+          </div>
+
           <div
-            style="display: flex !important; gap: 16px !important; font-size: 11px !important; color: #64748b !important; font-weight: 600 !important;">
+            style="display: flex !important; gap: 14px !important; font-size: 11px !important; color: #64748b !important; font-weight: 600 !important;">
             <span><i class="fa-solid fa-wine-glass" style="color: #7c3aed !important; margin-right: 4px !important;"></i> Cristalería</span>
             <span><i class="fa-solid fa-fire" style="color: #d97706 !important; margin-right: 4px !important;"></i> Espresso</span>
             <span><i class="fa-solid fa-sink" style="color: #0284c7 !important; margin-right: 4px !important;"></i> Insumos</span>
@@ -1919,12 +1941,14 @@
       // 1. Direct hit on chair
       if (elem) {
         var chairEl = elem.closest ? elem.closest('.chair-btn-fixed') : null;
-        if (chairEl) {
+        if (chairEl && chairEl.id && chairEl.id.indexOf('chair-extra-') === -1) {
           var p = chairEl.id.split('-');
-          var tM = parseInt(p[1]);
-          var tS = parseInt(p[2]);
-          if (!(tM === srcM && tS === srcS)) {
-            return { mesaId: tM, sillaNum: tS, el: chairEl };
+          if (p.length === 3) {
+            var tM = parseInt(p[1]);
+            var tS = parseInt(p[2]);
+            if (!(tM === srcM && tS === srcS)) {
+              return { mesaId: tM, sillaNum: tS, el: chairEl };
+            }
           }
         }
 
@@ -1949,8 +1973,8 @@
           }
         }
 
-        if (mesaId && mesaId !== srcM) {
-          // Buscar primero una silla libre en esa mesa
+        if (mesaId && (srcM === 'extra' || mesaId !== srcM)) {
+          // Buscar primero una silla libre estándar (1..4) si no es arrimar forzado
           var freeSilla = null;
           for (var fs = 1; fs <= 4; fs++) {
             var fk = mesaId + '-' + fs;
@@ -1960,15 +1984,13 @@
               break;
             }
           }
-          if (freeSilla !== null) {
+          if (freeSilla !== null && srcM !== 'extra') {
             var cel = document.getElementById('chair-' + mesaId + '-' + freeSilla);
             return { mesaId: mesaId, sillaNum: freeSilla, el: cel };
           } else {
-            var closest = getClosestChair(mesaId, clientX, clientY, srcM, srcS);
-            if (closest) {
-              var cel2 = document.getElementById('chair-' + closest.mesa + '-' + closest.silla);
-              return { mesaId: closest.mesa, sillaNum: closest.silla, el: cel2 };
-            }
+            // Mesa llena o arrastre desde reserva extra: arrimar nueva silla
+            var celCircle = document.getElementById('table-circle-' + mesaId);
+            return { mesaId: mesaId, sillaNum: 'arrimar_nueva', el: celCircle };
           }
         }
       }
@@ -1996,12 +2018,22 @@
     }
 
     function _chairMousedown(e, mesaId, sillaNum) {
-      // Solo button izquierdo y solo sillas con cuenta u ocupadas
       if (e.button !== 0) return;
+
+      if (mesaId === 'extra') {
+        _ms.active = true;
+        _ms.dragging = false;
+        _ms.srcMesa = 'extra';
+        _ms.srcSilla = sillaNum;
+        _ms.startX = e.clientX;
+        _ms.startY = e.clientY;
+        document.addEventListener('mousemove', _chairMousemove);
+        document.addEventListener('mouseup', _chairMouseup);
+        return;
+      }
+
       var key = mesaId + '-' + sillaNum;
       var cuenta = window.palapaState.cuentas[key];
-      var isOccupied = !!(cuenta && (cuenta.estado === 'ocupada' || (cuenta.items && cuenta.items.length > 0)));
-      if (!cuenta || !isOccupied) return;
 
       _ms.active = true;
       _ms.dragging = false;
@@ -2028,32 +2060,50 @@
         window.palapaState.sillaOrigenMover = { mesaId: _ms.srcMesa, sillaNum: _ms.srcSilla };
 
         // Marcar silla origen
-        var srcEl = document.getElementById('chair-' + _ms.srcMesa + '-' + _ms.srcSilla);
-        if (srcEl) srcEl.classList.add('chair-dragging');
+        if (_ms.srcMesa === 'extra') {
+          var srcEx = document.getElementById('chair-extra-' + _ms.srcSilla);
+          if (srcEx) srcEx.classList.add('chair-dragging');
+        } else {
+          var srcEl = document.getElementById('chair-' + _ms.srcMesa + '-' + _ms.srcSilla);
+          if (srcEl) srcEl.classList.add('chair-dragging');
+        }
 
         // Ghost que sigue al cursor (pointer-events:none → no bloquea elementFromPoint)
         var ghost = document.createElement('div');
         ghost.style.cssText = [
           'position:fixed', 'z-index:99999', 'pointer-events:none',
-          'padding:8px 18px', 'background:#0f172a', 'color:#38bdf8',
+          'padding:8px 18px', 'background:#1e3a5f', 'color:#ffffff',
           'font-size:13px', 'font-weight:800', 'border-radius:12px',
           'border:2px solid #38bdf8', 'white-space:nowrap',
-          'box-shadow:0 8px 28px rgba(0,0,0,0.85)',
+          'box-shadow:0 8px 28px rgba(0,0,0,0.4)',
           'transform:translate(-50%,-130%)',
           'left:' + e.clientX + 'px', 'top:' + e.clientY + 'px'
         ].join(';') + ';';
-        var key = _ms.srcMesa + '-' + _ms.srcSilla;
-        var cuenta = window.palapaState.cuentas[key] || { items: [] };
-        var total = 0;
-        cuenta.items.forEach(function (i) { total += i.precio * i.cantidad; });
-        ghost.textContent = '\uD83E\uDE91 M' + _ms.srcMesa + ' \u00b7 S' + _ms.srcSilla + '  $' + total.toFixed(2);
+
+        if (_ms.srcMesa === 'extra') {
+          ghost.innerHTML = '🪑 <b>+ Arrimar Silla Extra ' + _ms.srcSilla + '</b>';
+        } else {
+          var key = _ms.srcMesa + '-' + _ms.srcSilla;
+          var cuenta = window.palapaState.cuentas[key] || { items: [] };
+          var total = 0;
+          if (cuenta.items) cuenta.items.forEach(function (i) { total += i.precio * i.cantidad; });
+          var isOcc = !!(cuenta && (cuenta.estado === 'ocupada' || (cuenta.items && cuenta.items.length > 0)));
+          ghost.innerHTML = '🪑 M' + _ms.srcMesa + ' · S' + _ms.srcSilla + (isOcc ? (' <b>$' + total.toFixed(2) + '</b>') : ' (Libre)');
+        }
+
         document.body.appendChild(ghost);
         _ms.ghost = ghost;
 
         // Banner
         var bt = document.getElementById('bannerText');
         var bc = document.getElementById('btnCancelMove');
-        if (bt) bt.innerHTML = '\uD83E\uDE91 <b style="color:#38bdf8;">ARRASTRANDO</b> Mesa ' + _ms.srcMesa + ' Silla ' + _ms.srcSilla + ' \u2014 Suelta sobre la silla destino (misma o diferente mesa).';
+        if (bt) {
+          if (_ms.srcMesa === 'extra') {
+            bt.innerHTML = '🪑 <b style="color:#0284c7;">ARRIMANDO SILLA EXTRA:</b> Suelta sobre cualquier <b>Mesa</b> (se integrará como 5º lugar o comensal extra).';
+          } else {
+            bt.innerHTML = '🪑 <b style="color:#0284c7;">ARRASTRANDO</b> Mesa ' + _ms.srcMesa + ' Silla ' + _ms.srcSilla + ' — Suelta sobre otra silla o centro de mesa para moverla o arrimarla.';
+          }
+        }
         if (bc) bc.style.setProperty('display', 'block', 'important');
       }
 
@@ -2066,15 +2116,19 @@
       }
 
       // ── Highlight silla destino detectada ──
-      document.querySelectorAll('.chair-btn-fixed').forEach(function (c) {
+      document.querySelectorAll('.chair-btn-fixed, .table-circle-fixed').forEach(function (c) {
         c.classList.remove('chair-drag-target-valid', 'chair-drag-target-combine');
       });
 
       var target = _resolveTargetChair(e.clientX, e.clientY, _ms.srcMesa, _ms.srcSilla);
       if (target && target.el) {
-        var tgt = window.palapaState.cuentas[target.mesaId + '-' + target.sillaNum];
-        var busy = tgt && tgt.items && tgt.items.length > 0;
-        target.el.classList.add(busy ? 'chair-drag-target-combine' : 'chair-drag-target-valid');
+        if (target.sillaNum === 'arrimar_nueva') {
+          target.el.classList.add('chair-drag-target-valid');
+        } else {
+          var tgt = window.palapaState.cuentas[target.mesaId + '-' + target.sillaNum];
+          var busy = tgt && tgt.items && tgt.items.length > 0;
+          target.el.classList.add(busy ? 'chair-drag-target-combine' : 'chair-drag-target-valid');
+        }
       }
     }
 
@@ -2106,13 +2160,12 @@
         completarMovimiento(target.mesaId, target.sillaNum, srcM, srcS);
       } else {
         cancelarModoMover();
-        showDragToast('\u26a0 Suelta sobre una silla o mesa para mover la cuenta', 'warn');
+        showDragToast('⚠ Suelta sobre una silla o mesa para mover o arrimar', 'warn');
       }
     }
 
     function setupDragListeners() {
-      // Asignar mousedown a TODAS las sillas (no solo ocupadas).
-      // _chairMousedown ya verifica si tiene cuenta antes de activar.
+      // 1. Asignar mousedown a todas las sillas estándar (1..4)
       for (var m = 1; m <= 3; m++) {
         for (var s = 1; s <= 4; s++) {
           (function (mesaId, sillaNum) {
@@ -2123,6 +2176,17 @@
             });
           })(m, s);
         }
+      }
+
+      // 2. Asignar mousedown a las sillas de Reserva Extras
+      for (var ex = 1; ex <= 3; ex++) {
+        (function (extraNum) {
+          var exEl = document.getElementById('chair-extra-' + extraNum);
+          if (!exEl) return;
+          exEl.addEventListener('mousedown', function (e) {
+            _chairMousedown(e, 'extra', extraNum);
+          });
+        })(ex);
       }
     }
 
@@ -2391,23 +2455,74 @@
         window.palapaState.sillaOrigenMover = { mesaId: srcMesa, sillaNum: srcSilla };
       }
 
+      // ── CASO A: Arrimar desde la Reserva de Sillas Extras ──
+      if (srcMesa === 'extra') {
+        let maxS = 4;
+        Object.keys(window.palapaState.cuentas).forEach(function (k) {
+          var p = k.split('-');
+          if (parseInt(p[0]) === targetMesaId) {
+            var sn = parseInt(p[1]);
+            if (sn > maxS) maxS = sn;
+          }
+        });
+
+        var nuevaSillaNum = maxS + 1;
+        if (targetSillaNum !== 'arrimar_nueva' && typeof targetSillaNum === 'number' && targetSillaNum <= 4) {
+          var tk = targetMesaId + '-' + targetSillaNum;
+          var tc = window.palapaState.cuentas[tk];
+          if (!tc || (tc.estado !== 'ocupada' && (!tc.items || tc.items.length === 0))) {
+            nuevaSillaNum = targetSillaNum;
+          }
+        }
+
+        var key = targetMesaId + '-' + nuevaSillaNum;
+        var nowStr = (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+        window.palapaState.cuentas[key] = {
+          estado: 'ocupada',
+          esArrimada: nuevaSillaNum > 4,
+          qrId: 'PV-0' + targetMesaId + nuevaSillaNum,
+          comensalNombre: 'Comensal Silla ' + nuevaSillaNum + (nuevaSillaNum > 4 ? ' (Arrimada)' : ''),
+          items: [],
+          historialUbicaciones: [{ mesaId: targetMesaId, sillaNum: nuevaSillaNum, hora: nowStr }],
+          creadoPor: 'mesero_presencial',
+          horaLlegada: nowStr
+        };
+
+        window.palapaState.mesaSeleccionadaId = targetMesaId;
+        window.palapaState.sillaSeleccionadaNum = nuevaSillaNum;
+        window.palapaState.modoComandaActiva = false;
+        saveStateToStorage();
+        cancelarModoMover();
+        showDragToast('🪑 Silla Extra arrimada con éxito a Mesa ' + targetMesaId + ' (Silla ' + nuevaSillaNum + ')', 'ok');
+        return;
+      }
+
+      // ── CASO B: Arrimar a una mesa llena desde otra mesa (o mover cuenta) ──
+      if (targetSillaNum === 'arrimar_nueva') {
+        let maxS = 4;
+        Object.keys(window.palapaState.cuentas).forEach(function (k) {
+          var p = k.split('-');
+          if (parseInt(p[0]) === targetMesaId) {
+            var sn = parseInt(p[1]);
+            if (sn > maxS) maxS = sn;
+          }
+        });
+        targetSillaNum = maxS + 1;
+      }
+
       var sourceKey = srcMesa + '-' + srcSilla;
       var targetKey = targetMesaId + '-' + targetSillaNum;
-      var sourceCuenta = window.palapaState.cuentas[sourceKey];
+      var sourceCuenta = window.palapaState.cuentas[sourceKey] || {
+        estado: 'ocupada',
+        items: [],
+        comensalNombre: 'Comensal Silla ' + srcSilla
+      };
       var targetCuenta = window.palapaState.cuentas[targetKey];
-      var isSourceOccupied = !!(sourceCuenta && (sourceCuenta.estado === 'ocupada' || (sourceCuenta.items && sourceCuenta.items.length > 0)));
-
-      if (!isSourceOccupied) {
-        showDragToast('⚠ La silla origen ya no está ocupada', 'warn');
-        cancelarModoMover(); return;
-      }
 
       var nowStr = (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
       sourceCuenta.historialUbicaciones = sourceCuenta.historialUbicaciones || [{ mesaId: srcMesa, sillaNum: srcSilla, hora: nowStr }];
-      var yaExiste = sourceCuenta.historialUbicaciones.some(function (u) { return u.mesaId === targetMesaId && u.sillaNum === targetSillaNum; });
-      if (!yaExiste) {
-        sourceCuenta.historialUbicaciones.push({ mesaId: targetMesaId, sillaNum: targetSillaNum, hora: nowStr });
-      }
+      sourceCuenta.historialUbicaciones.push({ mesaId: targetMesaId, sillaNum: targetSillaNum, hora: nowStr });
 
       // Actualizar mesa y silla en los consumos del comensal
       if (sourceCuenta.items) {
@@ -2420,6 +2535,9 @@
       if (!sourceCuenta.comensalNombre || sourceCuenta.comensalNombre.indexOf('Comensal Silla') === 0) {
         sourceCuenta.comensalNombre = 'Comensal Silla ' + targetSillaNum + (targetSillaNum > 4 ? ' (Arrimada)' : '');
       }
+      if (targetSillaNum > 4) {
+        sourceCuenta.esArrimada = true;
+      }
 
       var isTargetOccupied = !!(targetCuenta && (targetCuenta.estado === 'ocupada' || (targetCuenta.items && targetCuenta.items.length > 0)));
       var targetHasItems = targetCuenta && targetCuenta.items && targetCuenta.items.length > 0;
@@ -2428,7 +2546,6 @@
       if (isTargetOccupied && (targetHasItems || sourceHasItems)) {
         // Silla destino ocupada y con consumos — pedir confirmación sin alert()
         showCombineConfirm(srcMesa, srcSilla, targetMesaId, targetSillaNum, function () {
-          // onYes: combinar
           targetCuenta.items = (targetCuenta.items || []).concat(sourceCuenta.items || []);
           delete window.palapaState.cuentas[sourceKey];
           window.palapaState.mesaSeleccionadaId = targetMesaId;
@@ -2439,19 +2556,14 @@
           showDragToast('✅ Cuentas combinadas en Mesa ' + targetMesaId + ' Silla ' + targetSillaNum, 'ok');
         });
       } else {
-        // Silla destino libre o sin consumos — mover comensal/cuenta
-        if (targetCuenta && targetCuenta.items && targetCuenta.items.length > 0) {
-          // Destino tiene items, origen estaba vacía
-        } else {
-          window.palapaState.cuentas[targetKey] = sourceCuenta;
-        }
+        window.palapaState.cuentas[targetKey] = sourceCuenta;
         delete window.palapaState.cuentas[sourceKey];
         window.palapaState.mesaSeleccionadaId = targetMesaId;
         window.palapaState.sillaSeleccionadaNum = targetSillaNum;
         window.palapaState.modoComandaActiva = false;
         saveStateToStorage();
         cancelarModoMover();
-        showDragToast('✅ Comensal trasladado → Mesa ' + targetMesaId + ' Silla ' + targetSillaNum, 'ok');
+        showDragToast('✅ Silla trasladada → Mesa ' + targetMesaId + ' Silla ' + targetSillaNum + (targetSillaNum > 4 ? ' (Arrimada)' : ''), 'ok');
       }
     }
 
@@ -3775,6 +3887,15 @@
       // 2. Renderizar Mesas y Sillas en el Croquis Panorámico
       for (let m = 1; m <= 3; m++) {
         let busyCount = 0;
+        let arrimadasCount = 0;
+
+        // Limpiar sillas dinámicas arrimadas previas en este tableBox
+        const tableBox = document.getElementById(`table-box-${m}`);
+        if (tableBox) {
+          tableBox.querySelectorAll('.chair-arrimada-item').forEach(el => el.remove());
+        }
+
+        // A. Sillas base estándar (1..4)
         for (let s = 1; s <= 4; s++) {
           const key = `${m}-${s}`;
           let chairEl = document.getElementById(`chair-${m}-${s}`);
@@ -3786,11 +3907,11 @@
           if (chairEl) {
             const posClass = s === 1 ? 'chair-pos-top' : s === 2 ? 'chair-pos-right' : s === 3 ? 'chair-pos-bottom' : 'chair-pos-left';
 
-            chairEl.setAttribute('draggable', isOccupied ? 'true' : 'false');
+            chairEl.setAttribute('draggable', 'true');
             const numItems = (cuenta && cuenta.items) ? cuenta.items.length : 0;
             chairEl.setAttribute('title', isOccupied
               ? `Mesa ${m} Silla ${s} (Ocupada${numItems > 0 ? ' · ' + numItems + ' consumos' : ' · Sin consumos'}) • Arrastra para mover o clic para comanda`
-              : `Mesa ${m} Silla ${s} (Disponible) • Haz clic para ubicar comensal y tomar orden`);
+              : `Mesa ${m} Silla ${s} (Disponible) • Arrastra a otra mesa o haz clic para comanda`);
 
             if (isMoveMode && origen && origen.mesaId === m && origen.sillaNum === s) {
               chairEl.className = `chair-btn-fixed ${posClass} chair-moving-source`;
@@ -3801,6 +3922,42 @@
             }
           }
         }
+
+        // B. Sillas Arrimadas Extras (s >= 5)
+        Object.keys(window.palapaState.cuentas).forEach(k => {
+          const parts = k.split('-');
+          if (parseInt(parts[0]) === m) {
+            const sn = parseInt(parts[1]);
+            if (sn >= 5) {
+              const cuentaArrimada = window.palapaState.cuentas[k];
+              const isOccupied = !!(cuentaArrimada && (cuentaArrimada.estado === 'ocupada' || (cuentaArrimada.items && cuentaArrimada.items.length > 0)));
+              if (isOccupied) {
+                busyCount++;
+                arrimadasCount++;
+
+                if (tableBox) {
+                  const posClass = sn === 5 ? 'chair-pos-diag-tr' : sn === 6 ? 'chair-pos-diag-tl' : sn === 7 ? 'chair-pos-diag-br' : 'chair-pos-diag-bl';
+                  const arrEl = document.createElement('div');
+                  arrEl.id = `chair-${m}-${sn}`;
+                  arrEl.className = `chair-btn-fixed ${posClass} chair-state-busy chair-arrimada-item`;
+                  arrEl.setAttribute('draggable', 'true');
+                  arrEl.setAttribute('title', `Mesa ${m} Silla ${sn} (Arrimada) • Arrastra para mover o clic para comanda`);
+                  arrEl.innerHTML = `🪑 S${sn} <span style="font-size:9px;opacity:0.85;">(Arrimada)</span>`;
+
+                  arrEl.addEventListener('mousedown', function(e) {
+                    _chairMousedown(e, m, sn);
+                  });
+
+                  if (isMoveMode && origen && origen.mesaId === m && origen.sillaNum === sn) {
+                    arrEl.className = `chair-btn-fixed ${posClass} chair-moving-source chair-arrimada-item`;
+                  }
+
+                  tableBox.appendChild(arrEl);
+                }
+              }
+            }
+          }
+        });
 
         const circle = document.getElementById(`table-circle-${m}`);
         const statusText = document.getElementById(`table-status-${m}`);
@@ -3818,7 +3975,7 @@
             }
             if (labelText) {
               labelText.style.color = "#d97706";
-              labelText.innerText = `🟡 Ocupada (${busyCount} Comensal${busyCount > 1 ? 'es' : ''})`;
+              labelText.innerText = `🟡 Ocupada (${busyCount} Comensal${busyCount > 1 ? 'es' : ''}${arrimadasCount > 0 ? ' · ' + arrimadasCount + ' Arrimada' + (arrimadasCount > 1 ? 's' : '') : ''})`;
             }
           } else {
             circle.style.background = "#ecfdf5";
