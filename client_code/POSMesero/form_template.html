@@ -1820,8 +1820,13 @@
                 <div style="font-size: 13px !important; font-weight: 800 !important; color: #ffffff !important;">Comensal Ubicado en Silla ${sillaNum}</div>
                 <div style="font-size: 11px !important; color: #94a3b8 !important; margin-top: 3px !important;">La silla está registrada como <b style="color: #fbbf24;">OCUPADA</b> (ubicación presencial).</div>
               </div>
-              <div style="font-size: 11px !important; color: #34d399 !important; font-weight: 700 !important; background: rgba(5, 150, 105, 0.15) !important; padding: 4px 12px !important; border-radius: 20px !important; border: 1px solid rgba(52, 211, 153, 0.3) !important; margin-top: 4px !important;">
-                👉 Selecciona platillos del catálogo a la derecha para iniciar la orden
+              <div style="display: flex; gap: 8px; justify-content: center; align-items: center; margin-top: 6px; flex-wrap: wrap;">
+                <span style="font-size: 11px !important; color: #34d399 !important; font-weight: 700 !important; background: rgba(5, 150, 105, 0.15) !important; padding: 5px 12px !important; border-radius: 20px !important; border: 1px solid rgba(52, 211, 153, 0.3) !important;">
+                  👉 Selecciona platillos del catálogo a la derecha
+                </span>
+                <button type="button" onclick="window.liberarSillaActual()" style="padding: 5px 12px !important; font-size: 11px !important; font-weight: 800 !important; background: rgba(239, 68, 68, 0.2) !important; color: #f87171 !important; border: 1px solid rgba(239, 68, 68, 0.4) !important; border-radius: 20px !important; cursor: pointer !important; display: inline-flex !important; align-items: center !important; gap: 4px !important;">
+                  <i class="fa-solid fa-user-slash"></i> Desocupar / Liberar Silla
+                </button>
               </div>
             </div>
           `;
