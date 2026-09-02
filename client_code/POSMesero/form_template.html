@@ -2871,7 +2871,7 @@
           bannerPaid.innerHTML = `
             <div>
               <div style="font-size: 13px !important; font-weight: 800 !important; color: #38bdf8 !important;">
-                <i class="fa-solid fa-circle-check"></i> CUENTA PAGADA ($${(cuenta.montoPagado || totalHistorico * 1.16).toFixed(2)}) • Saldo: $0.00
+                <i class="fa-solid fa-circle-check"></i> CUENTA PAGADA ($${(cuenta.montoPagado || totalHistorico).toFixed(2)}) • Saldo: $0.00
               </div>
               <div style="font-size: 11px !important; color: #94a3b8 !important; margin-top: 2px !important;">
                 ${cuenta.metodoPago ? `Liquidado vía <b>${cuenta.metodoPago}</b> (${cuenta.horaPago || ''}) • ` : ''}Comensal disfrutando de <b>Sobremesa</b>.
@@ -3009,16 +3009,17 @@
         });
       }
 
-      var iva = totalNeto * 0.16;
+      var subtotalBase = totalNeto / 1.16;
+      var iva = totalNeto - subtotalBase;
       var propina = totalNeto * 0.10;
-      var granTotal = totalNeto + iva;
+      var granTotal = totalNeto;
 
       if (lblSubtotal) {
         lblSubtotal.innerText = (totalNeto === 0)
-          ? `Subtotal Pendiente de Pago:`
+          ? `Subtotal (Base s/IVA):`
           : ((sillaNum === null)
-            ? `Subtotal Acumulado (Toda la Mesa):`
-            : `Subtotal (${seleccionadas.length} Silla${seleccionadas.length !== 1 ? 's' : ''}):`);
+            ? `Subtotal Base (Toda la Mesa):`
+            : `Subtotal Base (${seleccionadas.length} Silla${seleccionadas.length !== 1 ? 's' : ''}):`);
       }
       if (totalLabelEl) {
         if (totalNeto === 0) {
@@ -3032,7 +3033,7 @@
         }
       }
 
-      if (subtotalMontoEl) subtotalMontoEl.innerText = `$${totalNeto.toFixed(2)}`;
+      if (subtotalMontoEl) subtotalMontoEl.innerText = `$${subtotalBase.toFixed(2)}`;
       if (ivaMontoEl) ivaMontoEl.innerText = `$${iva.toFixed(2)}`;
       if (propinaMontoEl) propinaMontoEl.innerText = `$${propina.toFixed(2)}`;
       if (totalMontoEl) totalMontoEl.innerText = `$${granTotal.toFixed(2)}`;
@@ -3042,7 +3043,7 @@
       if (alertPendientes && txtPendientes) {
         if (sillaNum !== null && sillasPendientes.length > 0 && totalNeto > 0) {
           alertPendientes.style.display = 'block';
-          txtPendientes.innerHTML = `<b>Quedará pendiente en la mesa:</b> ${sillasPendientes.join(', ')} por <b>$${(totalPendiente * 1.16).toFixed(2)}</b> (no se cobrará en este ticket).`;
+          txtPendientes.innerHTML = `<b>Quedará pendiente en la mesa:</b> ${sillasPendientes.join(', ')} por <b>$${totalPendiente.toFixed(2)}</b> (no se cobrará en este ticket).`;
         } else {
           alertPendientes.style.display = 'none';
         }
@@ -3226,23 +3227,27 @@
         return;
       }
 
-      // Calcular consumo de las sillas seleccionadas
-      var consumoNeto = 0;
+      // Calcular consumo de las sillas seleccionadas (Precios con IVA incluido)
+      var totalVenta = 0;
       sillasArray.forEach(function(s) {
         var c = window.palapaState.cuentas[mesaId + '-' + s];
         if (c && c.items) {
           c.items.forEach(function(it) {
-            consumoNeto += (it.precio || 0) * (it.cantidad || 1);
+            if (!it.pagado) {
+              totalVenta += (it.precio || 0) * (it.cantidad || 1);
+            }
           });
         }
       });
 
-      var iva = consumoNeto * 0.16;
-      var subtotalConIva = consumoNeto + iva;
+      var subtotalBase = totalVenta / 1.16;
+      var iva = totalVenta - subtotalBase;
+      var subtotalConIva = totalVenta;
 
       pasarelaState.mesaId = mesaId;
       pasarelaState.sillas = sillasArray;
-      pasarelaState.consumoNeto = consumoNeto;
+      pasarelaState.consumoNeto = totalVenta;
+      pasarelaState.subtotalBase = subtotalBase;
       pasarelaState.iva = iva;
       pasarelaState.subtotalConIva = subtotalConIva;
       pasarelaState.tipPct = 10;
@@ -3270,19 +3275,21 @@
           var c = window.palapaState.cuentas[mesaId + '-' + s];
           if (c && c.items && c.items.length > 0) {
             c.items.forEach(function(it) {
-              totalItemsCount += (it.cantidad || 1);
-              var itSub = (it.precio || 0) * (it.cantidad || 1);
-              var row = document.createElement('div');
-              row.style.cssText = 'display: flex !important; justify-content: space-between !important; align-items: center !important; padding: 2px 4px !important; border-bottom: 1px dashed #1e293b !important; color: #e2e8f0 !important; font-size: 11px !important;';
-              row.innerHTML = `
-                <div style="flex: 1; padding-right: 6px;">
-                  <span style="font-weight: 800; color: #38bdf8;">Silla ${s}:</span>
-                  <span style="color: #ffffff;">${it.cantidad}x ${it.nombre}</span>
-                  ${it.notas ? `<span style="font-size: 9px; color: #94a3b8; font-style: italic;">(${it.notas})</span>` : ''}
-                </div>
-                <span style="font-weight: 900; color: #34d399;">$${itSub.toFixed(2)}</span>
-              `;
-              itemsListWrap.appendChild(row);
+              if (!it.pagado) {
+                totalItemsCount += (it.cantidad || 1);
+                var itSub = (it.precio || 0) * (it.cantidad || 1);
+                var row = document.createElement('div');
+                row.style.cssText = 'display: flex !important; justify-content: space-between !important; align-items: center !important; padding: 2px 4px !important; border-bottom: 1px dashed #1e293b !important; color: #e2e8f0 !important; font-size: 11px !important;';
+                row.innerHTML = `
+                  <div style="flex: 1; padding-right: 6px;">
+                    <span style="font-weight: 800; color: #38bdf8;">Silla ${s}:</span>
+                    <span style="color: #ffffff;">${it.cantidad}x ${it.nombre}</span>
+                    ${it.notas ? `<span style="font-size: 9px; color: #94a3b8; font-style: italic;">(${it.notas})</span>` : ''}
+                  </div>
+                  <span style="font-weight: 900; color: #34d399;">$${itSub.toFixed(2)}</span>
+                `;
+                itemsListWrap.appendChild(row);
+              }
             });
           }
         });
@@ -3293,7 +3300,7 @@
       var elConsumo = document.getElementById('pasarelaMontoConsumo');
       var elIva = document.getElementById('pasarelaMontoIva');
       var elSubIva = document.getElementById('pasarelaMontoSubtotalIva');
-      if (elConsumo) elConsumo.innerText = `$${consumoNeto.toFixed(2)}`;
+      if (elConsumo) elConsumo.innerText = `$${subtotalBase.toFixed(2)}`;
       if (elIva) elIva.innerText = `$${iva.toFixed(2)}`;
       if (elSubIva) elSubIva.innerText = `$${subtotalConIva.toFixed(2)}`;
 
@@ -3838,11 +3845,12 @@
         listContainer.appendChild(chairBlock);
       });
 
-      var ivaVal = totalNeto * 0.16;
+      var subtotalBase = totalNeto / 1.16;
+      var ivaVal = totalNeto - subtotalBase;
       var propinaVal = totalNeto * 0.10;
-      var granTotal = totalNeto + ivaVal;
+      var granTotal = totalNeto;
 
-      if (subtotalEl) subtotalEl.innerText = `$${totalNeto.toFixed(2)}`;
+      if (subtotalEl) subtotalEl.innerText = `$${subtotalBase.toFixed(2)}`;
       if (ivaEl) ivaEl.innerText = `$${ivaVal.toFixed(2)}`;
       if (propinaEl) propinaEl.innerText = `$${propinaVal.toFixed(2)}`;
       if (totalEl) totalEl.innerText = `$${granTotal.toFixed(2)}`;
@@ -4817,13 +4825,14 @@
           }
         }
 
-        const iva = saldoPendiente * 0.16;
-        const total = saldoPendiente + iva;
+        const subtotalBase = saldoPendiente / 1.16;
+        const iva = saldoPendiente - subtotalBase;
+        const total = saldoPendiente;
 
         const subtotalEl = document.getElementById('sidebarSubtotal');
         const ivaEl = document.getElementById('sidebarIva');
         const totalEl = document.getElementById('sidebarTotal');
-        if (subtotalEl) subtotalEl.innerText = `$${saldoPendiente.toFixed(2)}`;
+        if (subtotalEl) subtotalEl.innerText = `$${subtotalBase.toFixed(2)}`;
         if (ivaEl) ivaEl.innerText = `$${iva.toFixed(2)}`;
         if (totalEl) totalEl.innerText = `$${total.toFixed(2)}`;
 
