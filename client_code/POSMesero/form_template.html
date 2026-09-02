@@ -4130,11 +4130,25 @@
       function renderChairBadge(m, s, posCss, container, isJoinedMode) {
         const key = `${m}-${s}`;
         const cuenta = window.palapaState.cuentas[key];
-        const isPaid = !!(cuenta && (cuenta.estado === 'pagada' || cuenta.pagado));
-        const isOccupied = !!(cuenta && (cuenta.estado === 'ocupada' || isPaid || (cuenta.items && cuenta.items.length > 0)));
+        let numItems = 0;
+        let saldoPendiente = 0;
+        let hasPaidItems = false;
+
+        if (cuenta && cuenta.items) {
+          numItems = cuenta.items.length;
+          cuenta.items.forEach(it => {
+            if (it.pagado) hasPaidItems = true;
+            else saldoPendiente += (it.precio * it.cantidad);
+          });
+        }
+
+        // Si todos los consumos están pagados -> AZUL (Sobremesa)
+        // Si hay consumos nuevos/pendientes de cobro -> NARANJA (Ocupada)
+        // Si no hay comensal -> VERDE (Disponible)
+        const isPaid = (hasPaidItems && saldoPendiente === 0);
+        const isOccupied = (saldoPendiente > 0) || (cuenta && (cuenta.estado === 'ocupada' || isPaid || numItems > 0));
         const isSource = isMoveMode && origen && origen.mesaId === m && origen.sillaNum === s;
         const isArrimada = (s >= 5) || (cuenta && cuenta.esArrimada);
-        const numItems = (cuenta && cuenta.items) ? cuenta.items.length : 0;
 
         const chairEl = document.createElement('div');
         chairEl.id = `chair-${m}-${s}`;
@@ -4157,7 +4171,7 @@
         chairEl.setAttribute('title', isPaid
           ? `Mesa ${m} Silla ${s} (Cuenta Pagada / Sobremesa) • Clic para ver o liberar`
           : (isOccupied
-            ? `Mesa ${m} Silla ${s} (Ocupada${numItems > 0 ? ' · ' + numItems + ' consumos' : ''}) • Arrastra para mover o clic para comanda`
+            ? `Mesa ${m} Silla ${s} (Ocupada${saldoPendiente > 0 ? ' · $' + saldoPendiente.toFixed(2) + ' pend.' : ''}) • Arrastra para mover o clic para comanda`
             : `Mesa ${m} Silla ${s} (Disponible) • Arrastra para trasladar o clic para comanda`));
 
         chairEl.addEventListener('mousedown', function(e) {
@@ -4982,11 +4996,15 @@
           items: [],
           historialUbicaciones: [{ mesaId: mesaId, sillaNum: sillaNum, hora: (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }]
         };
+      } else {
+        // Si estaba pagada en sobremesa, al pedir nuevo consumo pasa a estado ocupada con saldo pendiente
+        window.palapaState.cuentas[key].estado = 'ocupada';
+        window.palapaState.cuentas[key].pagado = false;
       }
 
       const nowStr = (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
       const items = window.palapaState.cuentas[key].items;
-      const existing = items.find(i => i.id === prod.id && i.mesaId === mesaId && i.sillaNum === sillaNum && !i.enviadoCocina);
+      const existing = items.find(i => i.id === prod.id && i.mesaId === mesaId && i.sillaNum === sillaNum && !i.enviadoCocina && !i.pagado);
       if (existing) {
         existing.cantidad += 1;
       } else {
@@ -4999,7 +5017,8 @@
           mesaId: mesaId,
           sillaNum: sillaNum,
           hora: nowStr,
-          enviadoCocina: false
+          enviadoCocina: false,
+          pagado: false
         });
       }
 
