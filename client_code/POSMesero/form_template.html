@@ -799,7 +799,7 @@
       <div style="display: flex !important; gap: 10px !important;">
         <button id="btnCobrarModalDirecto" onclick="window.cobrarSeleccionadasDesdeComanda();"
           style="display: none !important; flex: 1.4 !important; padding: 12px !important; background: linear-gradient(135deg, #059669, #10b981) !important; color: #ffffff !important; font-weight: 900 !important; font-size: 12px !important; border-radius: 10px !important; border: none !important; cursor: pointer !important; align-items: center !important; justify-content: center !important; gap: 6px !important; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4) !important;">
-          <i class="fa-solid fa-credit-card"></i> Cobrar y Liquidar (<span id="txtBtnCobrarModal">$0.00</span>)
+          <i class="fa-solid fa-credit-card"></i> Cobrar Cuenta (<span id="txtBtnCobrarModal">$0.00</span>)
         </button>
         <button id="btnPrecuenta" onclick="window.abrirPrecuenta();"
           style="flex: 1 !important; padding: 10px !important; background: #1e293b !important; color: #cbd5e1 !important; font-weight: 700 !important; font-size: 11px !important; border-radius: 10px !important; border: 1px solid #334155 !important; cursor: pointer !important; display: flex !important; align-items: center !important; justify-content: center !important; gap: 6px !important;">
@@ -809,7 +809,7 @@
       <div style="display: flex !important; gap: 10px !important;">
         <button id="btnLiberarSilla" onclick="window.liberarSillaActual();"
           style="padding: 10px 14px !important; background: rgba(220, 38, 38, 0.15) !important; color: #f87171 !important; font-weight: 800 !important; font-size: 11px !important; border-radius: 10px !important; border: 1px solid rgba(239, 68, 68, 0.3) !important; cursor: pointer !important; display: flex !important; align-items: center !important; justify-content: center !important; gap: 6px !important;">
-          <i class="fa-solid fa-user-slash"></i> Liberar Silla
+          <i class="fa-solid fa-broom"></i> Desocupar Silla
         </button>
         <button id="btnCerrarModalBottom" onclick="window.cerrarModalComanda(); window.volverAlCroquisGeneral();"
           style="flex: 1.2 !important; padding: 10px !important; background: #1e293b !important; color: #38bdf8 !important; border: 1px solid #334155 !important; font-weight: 800 !important; font-size: 11px !important; border-radius: 10px !important; cursor: pointer !important; display: flex !important; align-items: center !important; justify-content: center !important; gap: 6px !important;">
@@ -1105,7 +1105,7 @@
     <!-- Resumen de Balance Final -->
     <div style="background: #020617 !important; border: 1px solid #1e293b !important; border-radius: 12px !important; padding: 12px 14px !important; display: flex !important; justify-content: space-between !important; align-items: center !important;">
       <div>
-        <span style="font-size: 10px !important; color: #94a3b8 !important; display: block !important;">Gran Total a Liquidar:</span>
+        <span style="font-size: 10px !important; color: #94a3b8 !important; display: block !important;">Gran Total a Cobrar:</span>
         <span id="pasarelaGranTotalLiquidar" style="font-size: 18px !important; font-weight: 900 !important; color: #34d399 !important;">$0.00</span>
       </div>
       <div style="text-align: right !important;">
@@ -1119,7 +1119,7 @@
     <div style="display: flex !important; gap: 8px !important;">
       <button onclick="window.ejecutarLiquidacionPasarela();" id="btnPasarelaConfirmarCobro"
         style="flex: 1.5 !important; padding: 12px !important; background: linear-gradient(135deg, #059669, #10b981) !important; color: #ffffff !important; border: none !important; border-radius: 10px !important; font-size: 12px !important; font-weight: 900 !important; cursor: pointer !important; display: flex !important; align-items: center !important; justify-content: center !important; gap: 6px !important; box-shadow: 0 4px 12px rgba(16,185,129,0.4) !important;">
-        <i class="fa-solid fa-check-circle"></i> Confirmar Pago y Liberar Sillas
+        <i class="fa-solid fa-check-circle"></i> Confirmar y Registrar Pago
       </button>
       <button onclick="window.cerrarModalPasarelaCobro();"
         style="flex: 0.8 !important; padding: 12px !important; background: #1e293b !important; color: #cbd5e1 !important; border: 1px solid #334155 !important; border-radius: 10px !important; font-size: 12px !important; font-weight: 700 !important; cursor: pointer !important;">
@@ -3036,7 +3036,7 @@
         if (btnCobrarDirecto) {
           btnCobrarDirecto.style.display = (totalNeto > 0) ? 'flex' : 'none';
           var labelCobro = (seleccionadas.length > 1) ? `Sillas ${seleccionadas.join(', ')}` : `Silla ${sillaNum}`;
-          btnCobrarDirecto.innerHTML = `<i class="fa-solid fa-credit-card"></i> Cobrar y Liquidar ${labelCobro} (<span id="txtBtnCobrarMonto">$${granTotal.toFixed(2)}</span>)`;
+          btnCobrarDirecto.innerHTML = `<i class="fa-solid fa-credit-card"></i> Cobrar ${labelCobro} (<span id="txtBtnCobrarMonto">$${granTotal.toFixed(2)}</span>)`;
         }
 
         // Control dinámico de Enviar a Cocina (KDS)
