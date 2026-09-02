@@ -95,36 +95,97 @@
       </div>
     </div>
 
-    <!-- STATION SELECTOR CHIPS &amp; STATS -->
-    <div style=&quot;display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;&quot;>
-      <div style=&quot;display: flex; gap: 8px; flex-wrap: wrap;&quot; id=&quot;kdsStationChips&quot;>
-        <button onclick=&quot;window.filtrarEstacionKDS('TODAS');&quot; id=&quot;chipKDS-TODAS&quot;
-          style=&quot;padding: 8px 16px; font-size: 12px; font-weight: 800; border-radius: 12px; border: 1px solid #f59e0b; background: #f59e0b; color: #0f172a; cursor: pointer; display: flex; align-items: center; gap: 6px;&quot;>
-          <i class=&quot;fa-solid fa-utensils&quot;></i> Toda la Cocina (Expeditor) <span id=&quot;badgeCountTODAS&quot; style=&quot;padding: 2px 7px; background: #0f172a; color: #fbbf24; border-radius: 8px; font-size: 11px; font-weight: 900;&quot;>0</span>
-        </button>
+    <!-- MULTI-LEVEL FILTER BAR: ÁREAS, MESAS &amp; CATEGORÍAS/ESTACIONES -->
+    <div style=&quot;background: #090d16; border: 1px solid #1e293b; border-radius: 16px; padding: 14px 18px; display: flex; flex-direction: column; gap: 12px;&quot;>
 
-        <button onclick=&quot;window.filtrarEstacionKDS('COCINA');&quot; id=&quot;chipKDS-COCINA&quot;
-          style=&quot;padding: 8px 16px; font-size: 12px; font-weight: 800; border-radius: 12px; border: 1px solid #334155; background: #0f172a; color: #cbd5e1; cursor: pointer; display: flex; align-items: center; gap: 6px;&quot;>
-          <i class=&quot;fa-solid fa-fire-burner&quot; style=&quot;color: #f59e0b;&quot;></i> Cocina Caliente <span id=&quot;badgeCountCOCINA&quot; style=&quot;padding: 2px 7px; background: #1e293b; color: #cbd5e1; border-radius: 8px; font-size: 11px; font-weight: 900;&quot;>0</span>
-        </button>
+      <!-- LEVEL 1: ÁREAS DEL RESTAURANTE -->
+      <div style=&quot;display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; border-bottom: 1px solid #1e293b; padding-bottom: 10px;&quot;>
+        <div style=&quot;display: flex; align-items: center; gap: 8px; flex-wrap: wrap;&quot;>
+          <span style=&quot;font-size: 11px; font-weight: 900; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 5px;&quot;>
+            <i class=&quot;fa-solid fa-map-location-dot&quot; style=&quot;color: #38bdf8;&quot;></i> Área:
+          </span>
+          <div style=&quot;display: flex; gap: 6px; flex-wrap: wrap;&quot; id=&quot;kdsAreaChips&quot;>
+            <button onclick=&quot;window.filtrarAreaKDS('TODAS');&quot; id=&quot;chipArea-TODAS&quot;
+              style=&quot;padding: 5px 12px; font-size: 11px; font-weight: 800; border-radius: 8px; border: 1px solid #38bdf8; background: #38bdf8; color: #0f172a; cursor: pointer; display: flex; align-items: center; gap: 4px;&quot;>
+              🏢 Todas las Áreas
+            </button>
+            <button onclick=&quot;window.filtrarAreaKDS('PALAPA');&quot; id=&quot;chipArea-PALAPA&quot;
+              style=&quot;padding: 5px 12px; font-size: 11px; font-weight: 800; border-radius: 8px; border: 1px solid #334155; background: #0f172a; color: #cbd5e1; cursor: pointer; display: flex; align-items: center; gap: 4px;&quot;>
+              🌴 La Palapa (M1-M3)
+            </button>
+            <button onclick=&quot;window.filtrarAreaKDS('PATIO');&quot; id=&quot;chipArea-PATIO&quot;
+              style=&quot;padding: 5px 12px; font-size: 11px; font-weight: 800; border-radius: 8px; border: 1px solid #334155; background: #0f172a; color: #cbd5e1; cursor: pointer; display: flex; align-items: center; gap: 4px;&quot;>
+              🌿 Terraza / Patio (M4-M6)
+            </button>
+            <button onclick=&quot;window.filtrarAreaKDS('CHIMENEA');&quot; id=&quot;chipArea-CHIMENEA&quot;
+              style=&quot;padding: 5px 12px; font-size: 11px; font-weight: 800; border-radius: 8px; border: 1px solid #334155; background: #0f172a; color: #cbd5e1; cursor: pointer; display: flex; align-items: center; gap: 4px;&quot;>
+              🔥 Chimenea (M7-M9)
+            </button>
+          </div>
+        </div>
 
-        <button onclick=&quot;window.filtrarEstacionKDS('BARRA');&quot; id=&quot;chipKDS-BARRA&quot;
-          style=&quot;padding: 8px 16px; font-size: 12px; font-weight: 800; border-radius: 12px; border: 1px solid #334155; background: #0f172a; color: #cbd5e1; cursor: pointer; display: flex; align-items: center; gap: 6px;&quot;>
-          <i class=&quot;fa-solid fa-mug-hot&quot; style=&quot;color: #38bdf8;&quot;></i> Barra de Café &amp; Bebidas <span id=&quot;badgeCountBARRA&quot; style=&quot;padding: 2px 7px; background: #1e293b; color: #cbd5e1; border-radius: 8px; font-size: 11px; font-weight: 900;&quot;>0</span>
-        </button>
-
-        <button onclick=&quot;window.filtrarEstacionKDS('REPOSTERIA');&quot; id=&quot;chipKDS-REPOSTERIA&quot;
-          style=&quot;padding: 8px 16px; font-size: 12px; font-weight: 800; border-radius: 12px; border: 1px solid #334155; background: #0f172a; color: #cbd5e1; cursor: pointer; display: flex; align-items: center; gap: 6px;&quot;>
-          <i class=&quot;fa-solid fa-cake-candles&quot; style=&quot;color: #c084fc;&quot;></i> Repostería &amp; Fríos <span id=&quot;badgeCountREPOSTERIA&quot; style=&quot;padding: 2px 7px; background: #1e293b; color: #cbd5e1; border-radius: 8px; font-size: 11px; font-weight: 900;&quot;>0</span>
-        </button>
+        <!-- SEMAPHORE LEGEND -->
+        <div style=&quot;display: flex; align-items: center; gap: 12px; font-size: 10px; color: #94a3b8; font-weight: 800;&quot;>
+          <span style=&quot;display: flex; align-items: center; gap: 4px;&quot;><span style=&quot;width: 8px; height: 8px; border-radius: 50%; background: #10b981; display: inline-block;&quot;></span> 🟢 Recibido</span>
+          <span style=&quot;display: flex; align-items: center; gap: 4px;&quot;><span style=&quot;width: 8px; height: 8px; border-radius: 50%; background: #f59e0b; display: inline-block;&quot;></span> 🟡 En Fuego (&amp;lt;14m)</span>
+          <span style=&quot;display: flex; align-items: center; gap: 4px;&quot;><span style=&quot;width: 8px; height: 8px; border-radius: 50%; background: #ef4444; display: inline-block;&quot;></span> 🔴 Demorado (&amp;ge;14m)</span>
+        </div>
       </div>
 
-      <!-- SEMAPHORE LEGEND -->
-      <div style=&quot;display: flex; align-items: center; gap: 14px; font-size: 11px; color: #94a3b8; font-weight: 700;&quot;>
-        <span style=&quot;display: flex; align-items: center; gap: 5px;&quot;><span style=&quot;width: 10px; height: 10px; border-radius: 50%; background: #10b981; display: inline-block;&quot;></span> 🟢 Recibido (En Espera)</span>
-        <span style=&quot;display: flex; align-items: center; gap: 5px;&quot;><span style=&quot;width: 10px; height: 10px; border-radius: 50%; background: #f59e0b; display: inline-block;&quot;></span> 🟡 En Fuego / Cocinando (&amp;lt;14 min)</span>
-        <span style=&quot;display: flex; align-items: center; gap: 5px;&quot;><span style=&quot;width: 10px; height: 10px; border-radius: 50%; background: #ef4444; display: inline-block;&quot;></span> 🔴 Demorado (&amp;ge;14 min)</span>
+      <!-- LEVEL 2: SELECTOR DIRECTO DE MESA (1 A 9) -->
+      <div style=&quot;display: flex; align-items: center; gap: 8px; flex-wrap: wrap; border-bottom: 1px solid #1e293b; padding-bottom: 10px;&quot;>
+        <span style=&quot;font-size: 11px; font-weight: 900; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 5px;&quot;>
+          <i class=&quot;fa-solid fa-chair&quot; style=&quot;color: #fbbf24;&quot;></i> Mesa:
+        </span>
+        <div style=&quot;display: flex; gap: 6px; flex-wrap: wrap;&quot; id=&quot;kdsMesaChips&quot;>
+          <button onclick=&quot;window.filtrarMesaKDS('TODAS');&quot; id=&quot;chipMesa-TODAS&quot;
+            style=&quot;padding: 4px 10px; font-size: 11px; font-weight: 800; border-radius: 8px; border: 1px solid #f59e0b; background: #f59e0b; color: #0f172a; cursor: pointer;&quot;>
+            Todas
+          </button>
+          <!-- Mesas 1 a 9 chips generated dynamically -->
+        </div>
       </div>
+
+      <!-- LEVEL 3: ESTACIONES / CATEGORÍAS (COMIDAS, BEBIDAS, POSTRES, NIÑOS) -->
+      <div style=&quot;display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;&quot;>
+        <div style=&quot;display: flex; gap: 6px; flex-wrap: wrap;&quot; id=&quot;kdsStationChips&quot;>
+          <button onclick=&quot;window.filtrarEstacionKDS('TODAS');&quot; id=&quot;chipKDS-TODAS&quot;
+            style=&quot;padding: 6px 14px; font-size: 11px; font-weight: 800; border-radius: 10px; border: 1px solid #f59e0b; background: #f59e0b; color: #0f172a; cursor: pointer; display: flex; align-items: center; gap: 6px;&quot;>
+            <i class=&quot;fa-solid fa-utensils&quot;></i> Toda la Cocina (Expeditor) <span id=&quot;badgeCountTODAS&quot; style=&quot;padding: 1px 6px; background: #0f172a; color: #fbbf24; border-radius: 6px; font-size: 10px; font-weight: 900;&quot;>0</span>
+          </button>
+
+          <button onclick=&quot;window.filtrarEstacionKDS('COCINA');&quot; id=&quot;chipKDS-COCINA&quot;
+            style=&quot;padding: 6px 14px; font-size: 11px; font-weight: 800; border-radius: 10px; border: 1px solid #334155; background: #0f172a; color: #cbd5e1; cursor: pointer; display: flex; align-items: center; gap: 6px;&quot;>
+            <i class=&quot;fa-solid fa-fire-burner&quot; style=&quot;color: #f59e0b;&quot;></i> Cocina Caliente (Comidas) <span id=&quot;badgeCountCOCINA&quot; style=&quot;padding: 1px 6px; background: #1e293b; color: #cbd5e1; border-radius: 6px; font-size: 10px; font-weight: 900;&quot;>0</span>
+          </button>
+
+          <button onclick=&quot;window.filtrarEstacionKDS('BARRA');&quot; id=&quot;chipKDS-BARRA&quot;
+            style=&quot;padding: 6px 14px; font-size: 11px; font-weight: 800; border-radius: 10px; border: 1px solid #334155; background: #0f172a; color: #cbd5e1; cursor: pointer; display: flex; align-items: center; gap: 6px;&quot;>
+            <i class=&quot;fa-solid fa-mug-hot&quot; style=&quot;color: #38bdf8;&quot;></i> Barra &amp; Bebidas <span id=&quot;badgeCountBARRA&quot; style=&quot;padding: 1px 6px; background: #1e293b; color: #cbd5e1; border-radius: 6px; font-size: 10px; font-weight: 900;&quot;>0</span>
+          </button>
+
+          <button onclick=&quot;window.filtrarEstacionKDS('REPOSTERIA');&quot; id=&quot;chipKDS-REPOSTERIA&quot;
+            style=&quot;padding: 6px 14px; font-size: 11px; font-weight: 800; border-radius: 10px; border: 1px solid #334155; background: #0f172a; color: #cbd5e1; cursor: pointer; display: flex; align-items: center; gap: 6px;&quot;>
+            <i class=&quot;fa-solid fa-cake-candles&quot; style=&quot;color: #c084fc;&quot;></i> Repostería &amp; Postres <span id=&quot;badgeCountREPOSTERIA&quot; style=&quot;padding: 1px 6px; background: #1e293b; color: #cbd5e1; border-radius: 6px; font-size: 10px; font-weight: 900;&quot;>0</span>
+          </button>
+
+          <button onclick=&quot;window.filtrarEstacionKDS('INFANTIL');&quot; id=&quot;chipKDS-INFANTIL&quot;
+            style=&quot;padding: 6px 14px; font-size: 11px; font-weight: 800; border-radius: 10px; border: 1px solid #334155; background: #0f172a; color: #cbd5e1; cursor: pointer; display: flex; align-items: center; gap: 6px;&quot;>
+            <i class=&quot;fa-solid fa-child&quot; style=&quot;color: #4ade80;&quot;></i> Menú Infantil / Niños <span id=&quot;badgeCountINFANTIL&quot; style=&quot;padding: 1px 6px; background: #1e293b; color: #cbd5e1; border-radius: 6px; font-size: 10px; font-weight: 900;&quot;>0</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ACTIVE FILTER BANNER (If specific table is selected) -->
+    <div id=&quot;kdsFocusBanner&quot; style=&quot;display: none; background: rgba(2, 132, 199, 0.15); border: 1px solid #0284c7; border-radius: 12px; padding: 10px 16px; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;&quot;>
+      <div style=&quot;display: flex; align-items: center; gap: 8px;&quot;>
+        <span style=&quot;font-size: 16px;&quot;>📍</span>
+        <span id=&quot;kdsFocusText&quot; style=&quot;font-size: 13px; font-weight: 800; color: #38bdf8;&quot;>Enfocando Mesa 2</span>
+      </div>
+      <button onclick=&quot;window.filtrarMesaKDS('TODAS');&quot; style=&quot;background: #0f172a; color: #cbd5e1; border: 1px solid #334155; padding: 4px 10px; border-radius: 8px; font-size: 11px; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 4px;&quot;>
+        ✕ Mostrar Todas las Mesas
+      </button>
     </div>
 
     <!-- KDS TICKETS GRID -->
@@ -365,9 +426,11 @@
         }
       };
 
-      // 2. ESTADO LOCAL DEL KDS
+      // 2. ESTADO LOCAL DEL KDS (ÁREAS, MESAS Y ESTACIONES)
       window.kdsState = {
-        estacionFiltro: 'TODAS', // TODAS, COCINA, BARRA, REPOSTERIA
+        areaFiltro: 'TODAS', // TODAS, PALAPA, PATIO, CHIMENEA
+        mesaFiltro: 'TODAS', // TODAS, '1', '2', '3', etc.
+        estacionFiltro: 'TODAS', // TODAS, COCINA, BARRA, REPOSTERIA, INFANTIL
         tickets: []
       };
 
@@ -382,10 +445,21 @@
       setInterval(updateClock, 1000);
       updateClock();
 
-      // Determinar estación de cada producto según su nombre/categoría
+      // Mapeo de Mesas a Áreas del Restaurante
+      function getTableArea(mesaId) {
+        const id = parseInt(mesaId);
+        if (id >= 1 &amp;&amp; id <= 3) return { id: 'PALAPA', nombre: 'La Palapa' };
+        if (id >= 4 &amp;&amp; id <= 6) return { id: 'PATIO', nombre: 'Terraza / Patio' };
+        if (id >= 7 &amp;&amp; id <= 9) return { id: 'CHIMENEA', nombre: 'La Chimenea' };
+        return { id: 'PALAPA', nombre: 'Área General' };
+      }
+
+      // Determinar estación/categoría de cada producto
       function getProductStation(nombre) {
         const n = (nombre || '').toLowerCase();
-        if (n.includes('café') || n.includes('capuchino') || n.includes('espresso') || n.includes('jugo') || n.includes('limonada') || n.includes('té') || n.includes('refresco') || n.includes('bebida') || n.includes('agua')) {
+        if (n.includes('infantil') || n.includes('niño') || n.includes('kids') || n.includes('mini')) {
+          return 'INFANTIL';
+        } else if (n.includes('café') || n.includes('capuchino') || n.includes('espresso') || n.includes('jugo') || n.includes('limonada') || n.includes('té') || n.includes('refresco') || n.includes('bebida') || n.includes('agua') || n.includes('chocolate')) {
           return 'BARRA';
         } else if (n.includes('waffle') || n.includes('hotcake') || n.includes('crepa') || n.includes('pastel') || n.includes('fruta') || n.includes('dulce')) {
           return 'REPOSTERIA';
@@ -399,6 +473,12 @@
         // Sincronizar estado global
         if (typeof window.syncStorageWithGlobal === 'function') {
           window.syncStorageWithGlobal();
+        }
+
+        // Si viene una mesa solicitada desde el POS (ej. Mesa 2)
+        var requestedMesa = localStorage.getItem('kds_filtro_mesa');
+        if (requestedMesa &amp;&amp; requestedMesa !== 'TODAS') {
+          window.kdsState.mesaFiltro = requestedMesa;
         }
 
         var raw = localStorage.getItem('palapa_croquis_state_v1');
@@ -425,14 +505,17 @@
                 var parts = key.split('-');
                 var mesaId = parts[0] || '1';
                 var sillaNum = parts[1] || '1';
+                var areaInfo = getTableArea(mesaId);
 
                 // Agrupar por mesa para el ticket KDS
                 var ticketKey = 'MESA-' + mesaId;
                 if (!ticketsMap[ticketKey]) {
                   ticketsMap[ticketKey] = {
                     id: 'T-' + mesaId,
-                    mesaId: mesaId,
-                    mesaNombre: (mesaId == '1' || mesaId == '2' || mesaId == '3') ? `Mesa ${mesaId} (Palapa)` : `Mesa ${mesaId}`,
+                    mesaId: mesaId.toString(),
+                    mesaNombre: `Mesa ${mesaId} (${areaInfo.nombre})`,
+                    areaId: areaInfo.id,
+                    areaNombre: areaInfo.nombre,
                     horaEnvio: enviados[0].horaEnvioCocina || enviados[0].hora || '09:00 AM',
                     timestampEnvio: enviados[0].timestampEnvioCocina || (Date.now() - (6 * 60 * 1000)),
                     items: []
@@ -469,7 +552,9 @@
             {
               id: 'T-2',
               mesaId: '2',
-              mesaNombre: 'Mesa 2 (Palapa)',
+              mesaNombre: 'Mesa 2 (La Palapa)',
+              areaId: 'PALAPA',
+              areaNombre: 'La Palapa',
               horaEnvio: '09:05 AM',
               timestampEnvio: Date.now() - (4 * 60 * 1000),
               items: [
@@ -482,13 +567,28 @@
             {
               id: 'T-3',
               mesaId: '3',
-              mesaNombre: 'Mesa 3 (Palapa)',
+              mesaNombre: 'Mesa 3 (La Palapa)',
+              areaId: 'PALAPA',
+              areaNombre: 'La Palapa',
               horaEnvio: '08:48 AM',
               timestampEnvio: Date.now() - (16 * 60 * 1000),
               items: [
                 { id: 'p5', nombre: 'Huevos Rancheros al Albañil', cantidad: 2, notas: 'Tortillas bien doradas, salsa aparte', sillaNum: 1, keyCuenta: '3-1', idxInCuenta: 0, estacion: 'COCINA', estado: 'preparando', timestampInicio: Date.now() - (15 * 60 * 1000) },
                 { id: 'p6', nombre: 'Chilaquiles Verdes con Pollo', cantidad: 2, notas: 'Pollo bien deshebrado', sillaNum: 2, keyCuenta: '3-2', idxInCuenta: 0, estacion: 'COCINA', estado: 'preparando', timestampInicio: Date.now() - (15 * 60 * 1000) },
                 { id: 'p7', nombre: 'Café Americano de Altura', cantidad: 2, notas: 'Agua bien caliente', sillaNum: 1, keyCuenta: '3-1', idxInCuenta: 1, estacion: 'BARRA', estado: 'listo', timestampInicio: Date.now() - (15 * 60 * 1000) }
+              ]
+            },
+            {
+              id: 'T-5',
+              mesaId: '5',
+              mesaNombre: 'Mesa 5 (Terraza / Patio)',
+              areaId: 'PATIO',
+              areaNombre: 'Terraza / Patio',
+              horaEnvio: '09:12 AM',
+              timestampEnvio: Date.now() - (2 * 60 * 1000),
+              items: [
+                { id: 'p8', nombre: 'Hotcakes Infantiles con Chispas', cantidad: 1, notas: 'Con carita feliz de chocolate', sillaNum: 2, keyCuenta: '5-2', idxInCuenta: 0, estacion: 'INFANTIL', estado: 'recibido', timestampEnvio: Date.now() - (2 * 60 * 1000) },
+                { id: 'p9', nombre: 'Jugo Verde Desintoxicante', cantidad: 1, notas: 'Sin hielo', sillaNum: 1, keyCuenta: '5-1', idxInCuenta: 0, estacion: 'BARRA', estado: 'recibido', timestampEnvio: Date.now() - (2 * 60 * 1000) }
               ]
             }
           ];
@@ -498,29 +598,39 @@
         renderKDSUI();
       };
 
-      // 4. RENDERIZAR INTERFAZ DEL KDS CON EL SEMÁFORO INTERACTIVO
+      // 4. RENDERIZAR INTERFAZ DEL KDS CON LOS 3 NIVELES DE FILTRADO
       function renderKDSUI() {
         const container = document.getElementById('kdsTicketsGrid');
         const batchContainer = document.getElementById('kdsBatchContainer');
+        const mesaChipsContainer = document.getElementById('kdsMesaChips');
+        const focusBanner = document.getElementById('kdsFocusBanner');
+        const focusText = document.getElementById('kdsFocusText');
+
+        const currentArea = window.kdsState.areaFiltro;
+        const currentMesa = window.kdsState.mesaFiltro;
         const currentStation = window.kdsState.estacionFiltro;
 
         if (!container) return;
         container.innerHTML = '';
 
-        // Contadores por estación
+        // Contadores por estación y mesas activas
         let countTodas = 0;
         let countCocina = 0;
         let countBarra = 0;
         let countReposteria = 0;
+        let countInfantil = 0;
         let batchMap = {};
+        let activeTablesSet = {};
 
         window.kdsState.tickets.forEach(ticket => {
+          activeTablesSet[ticket.mesaId] = (activeTablesSet[ticket.mesaId] || 0) + 1;
           ticket.items.forEach(it => {
             if (it.estado !== 'servido') {
               countTodas += it.cantidad;
               if (it.estacion === 'COCINA') countCocina += it.cantidad;
               if (it.estacion === 'BARRA') countBarra += it.cantidad;
               if (it.estacion === 'REPOSTERIA') countReposteria += it.cantidad;
+              if (it.estacion === 'INFANTIL') countInfantil += it.cantidad;
 
               // Agrupar en lote de fuego (platillos activados en preparación)
               if (it.estado === 'preparando') {
@@ -530,15 +640,80 @@
           });
         });
 
-        // Actualizar badges
+        // Actualizar badges de estaciones
         const bT = document.getElementById('badgeCountTODAS');
         const bC = document.getElementById('badgeCountCOCINA');
         const bB = document.getElementById('badgeCountBARRA');
         const bR = document.getElementById('badgeCountREPOSTERIA');
+        const bI = document.getElementById('badgeCountINFANTIL');
         if (bT) bT.innerText = countTodas;
         if (bC) bC.innerText = countCocina;
         if (bB) bB.innerText = countBarra;
         if (bR) bR.innerText = countReposteria;
+        if (bI) bI.innerText = countInfantil;
+
+        // Renderizar Selector Dinámico de Mesas 1 a 9
+        if (mesaChipsContainer) {
+          mesaChipsContainer.innerHTML = '';
+
+          // Chip 'Todas'
+          const isAllSelected = (currentMesa === 'TODAS');
+          const btnAll = document.createElement('button');
+          btnAll.id = 'chipMesa-TODAS';
+          btnAll.onclick = function() { window.filtrarMesaKDS('TODAS'); };
+          btnAll.style.cssText = `padding: 4px 12px; font-size: 11px; font-weight: 800; border-radius: 8px; border: 1px solid ${isAllSelected ? '#f59e0b' : '#334155'}; background: ${isAllSelected ? '#f59e0b' : '#0f172a'}; color: ${isAllSelected ? '#0f172a' : '#cbd5e1'}; cursor: pointer;`;
+          btnAll.innerHTML = `Todas las Mesas (${window.kdsState.tickets.length})`;
+          mesaChipsContainer.appendChild(btnAll);
+
+          // Mesas 1 a 9
+          for (let m = 1; m <= 9; m++) {
+            const mStr = m.toString();
+            const isSelected = (currentMesa === mStr);
+            const hasOrders = !!activeTablesSet[mStr];
+            const areaObj = getTableArea(m);
+
+            // Si hay filtro de área activo y esta mesa no pertenece al área, ocultar
+            if (currentArea !== 'TODAS' &amp;&amp; areaObj.id !== currentArea) {
+              continue;
+            }
+
+            const btnM = document.createElement('button');
+            btnM.id = 'chipMesa-' + mStr;
+            btnM.onclick = (function(mesaNum) {
+              return function() { window.filtrarMesaKDS(mesaNum); };
+            })(mStr);
+
+            let btnBg = '#0f172a';
+            let btnColor = '#cbd5e1';
+            let btnBorder = '#334155';
+            if (isSelected) {
+              btnBg = '#0284c7';
+              btnColor = '#ffffff';
+              btnBorder = '#38bdf8';
+            } else if (hasOrders) {
+              btnBorder = '#f59e0b';
+              btnColor = '#fbbf24';
+            }
+
+            btnM.style.cssText = `padding: 4px 10px; font-size: 11px; font-weight: 800; border-radius: 8px; border: 1px solid ${btnBorder}; background: ${btnBg}; color: ${btnColor}; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;`;
+            btnM.innerHTML = `Mesa ${m} ${hasOrders ? `<span style=&quot;width: 6px; height: 6px; border-radius: 50%; background: #f59e0b; display: inline-block;&quot;></span>` : ''}`;
+            mesaChipsContainer.appendChild(btnM);
+          }
+        }
+
+        // Actualizar Banner de Enfoque
+        if (focusBanner &amp;&amp; focusText) {
+          if (currentMesa !== 'TODAS') {
+            const areaObj = getTableArea(currentMesa);
+            focusText.innerHTML = `Visualizando comandas exclusivamente de: <b>Mesa ${currentMesa} (${areaObj.nombre})</b>`;
+            focusBanner.style.display = 'flex';
+          } else if (currentArea !== 'TODAS') {
+            focusText.innerHTML = `Visualizando área: <b>${currentArea === 'PALAPA' ? 'La Palapa (Mesas 1-3)' : (currentArea === 'PATIO' ? 'Terraza / Patio (Mesas 4-6)' : 'La Chimenea (Mesas 7-9)')}</b>`;
+            focusBanner.style.display = 'flex';
+          } else {
+            focusBanner.style.display = 'none';
+          }
+        }
 
         // Renderizar Lote en Fuego (Batch Cooking Pills)
         if (batchContainer) {
@@ -562,6 +737,16 @@
         const now = Date.now();
 
         window.kdsState.tickets.forEach((ticket, tIdx) => {
+          // Filtro por Área
+          if (currentArea !== 'TODAS' &amp;&amp; ticket.areaId !== currentArea) {
+            return;
+          }
+
+          // Filtro por Mesa
+          if (currentMesa !== 'TODAS' &amp;&amp; ticket.mesaId !== currentMesa) {
+            return;
+          }
+
           // Filtrar items según la estación activa
           const visibleItems = ticket.items.filter(it => {
             if (it.estado === 'servido') return false;
@@ -572,11 +757,7 @@
           if (visibleItems.length === 0) return;
           renderedTicketsCount++;
 
-          // Determinar estado dominante y semáforo del ticket:
-          // 1. Si algún ítem en preparación lleva >= 14 min -> ROJO URGENTE
-          // 2. Si hay ítems en preparación (< 14 min) -> ÁMBAR
-          // 3. Si todos están listos -> AZUL/ESMERALDA
-          // 4. Si están recién recibidos -> VERDE
+          // Determinar estado dominante y semáforo del ticket
           let hasDelayedItem = false;
           let hasPreparingItem = false;
           let hasReceivedItem = false;
@@ -660,91 +841,92 @@
         `;
           card.appendChild(header);
 
-          // Lista de Platillos
+          // Lista de Platillos agrupados por Silla
           const itemsWrap = document.createElement('div');
           itemsWrap.style.cssText = 'display: flex; flex-direction: column; gap: 8px; padding: 8px 6px; border-top: 1px solid #1e293b; border-bottom: 1px solid #1e293b;';
 
           visibleItems.forEach((it, iIdx) => {
-          let stBadgeBg = '#1e293b';
-          let stBadgeColor = '#38bdf8';
-          let stLabel = 'Cocina';
-          if (it.estacion === 'BARRA') { stBadgeBg = 'rgba(56,189,248,0.15)'; stBadgeColor = '#38bdf8'; stLabel = 'Barra'; }
-          if (it.estacion === 'REPOSTERIA') { stBadgeBg = 'rgba(192,132,252,0.15)'; stBadgeColor = '#c084fc'; stLabel = 'Postres'; }
+            let stBadgeBg = '#1e293b';
+            let stBadgeColor = '#38bdf8';
+            let stLabel = 'Cocina';
+            if (it.estacion === 'BARRA') { stBadgeBg = 'rgba(56,189,248,0.15)'; stBadgeColor = '#38bdf8'; stLabel = 'Barra &amp; Café'; }
+            if (it.estacion === 'REPOSTERIA') { stBadgeBg = 'rgba(192,132,252,0.15)'; stBadgeColor = '#c084fc'; stLabel = 'Postres'; }
+            if (it.estacion === 'INFANTIL') { stBadgeBg = 'rgba(74,222,128,0.15)'; stBadgeColor = '#4ade80'; stLabel = 'Infantil'; }
 
-          // Estado y semáforo individual del platillo
-          let itemStateBadge = '';
-          let itemBg = '#070b14';
-          let itemBorder = '#1e293b';
-          let actionButtonHtml = '';
+            // Estado y semáforo individual del platillo
+            let itemStateBadge = '';
+            let itemBg = '#070b14';
+            let itemBorder = '#1e293b';
+            let actionButtonHtml = '';
 
-          const itemElapsedMins = it.timestampInicio ? Math.floor((now - it.timestampInicio) / 60000) : 0;
+            const itemElapsedMins = it.timestampInicio ? Math.floor((now - it.timestampInicio) / 60000) : 0;
 
-          if (it.estado === 'recibido') {
-          itemStateBadge = `<span style=&quot;font-size: 9px; font-weight: 800; background: rgba(16,185,129,0.15); color: #34d399; border: 1px solid rgba(16,185,129,0.4); padding: 2px 6px; border-radius: 4px;&quot;>🟢 En Espera</span>`;
-          itemBorder = 'rgba(16,185,129,0.3)';
-          actionButtonHtml = `
-          <button onclick=&quot;window.iniciarAtencionItemKDS(${tIdx}, ${iIdx});&quot; style=&quot;padding: 4px 10px; font-size: 10px; font-weight: 900; border-radius: 6px; border: none; cursor: pointer; background: linear-gradient(135deg, #f59e0b, #d97706); color: #0f172a; display: flex; align-items: center; gap: 4px; box-shadow: 0 2px 8px rgba(245,158,11,0.25);&quot;>
-          <i class=&quot;fa-solid fa-fire&quot;></i> Iniciar Fuego
-          </button>
+            if (it.estado === 'recibido') {
+              itemStateBadge = `<span style=&quot;font-size: 9px; font-weight: 800; background: rgba(16,185,129,0.15); color: #34d399; border: 1px solid rgba(16,185,129,0.4); padding: 2px 6px; border-radius: 4px;&quot;>🟢 En Espera</span>`;
+              itemBorder = 'rgba(16,185,129,0.3)';
+              actionButtonHtml = `
+              <button onclick=&quot;window.iniciarAtencionItemKDS(${tIdx}, ${iIdx});&quot; style=&quot;padding: 4px 10px; font-size: 10px; font-weight: 900; border-radius: 6px; border: none; cursor: pointer; background: linear-gradient(135deg, #f59e0b, #d97706); color: #0f172a; display: flex; align-items: center; gap: 4px; box-shadow: 0 2px 8px rgba(245,158,11,0.25);&quot;>
+                <i class=&quot;fa-solid fa-fire&quot;></i> Iniciar Fuego
+              </button>
+            `;
+            } else if (it.estado === 'preparando') {
+              if (itemElapsedMins >= 14) {
+                itemStateBadge = `<span style=&quot;font-size: 9px; font-weight: 900; background: rgba(239,68,68,0.2); color: #f87171; border: 1px solid #ef4444; padding: 2px 6px; border-radius: 4px; animation: urgentPulse 1.8s infinite;&quot;><i class=&quot;fa-solid fa-triangle-exclamation&quot;></i> 🔴 Retraso (${itemElapsedMins} min)</span>`;
+                itemBorder = '#ef4444';
+                itemBg = 'rgba(239,68,68,0.08)';
+              } else {
+                itemStateBadge = `<span style=&quot;font-size: 9px; font-weight: 800; background: rgba(245,158,11,0.2); color: #fbbf24; border: 1px solid rgba(245,158,11,0.4); padding: 2px 6px; border-radius: 4px;&quot;><i class=&quot;fa-solid fa-fire-burner&quot;></i> 🟡 En Fuego (${itemElapsedMins}m)</span>`;
+                itemBorder = '#f59e0b';
+              }
+              actionButtonHtml = `
+              <button onclick=&quot;window.marcarListoItemKDS(${tIdx}, ${iIdx});&quot; style=&quot;padding: 4px 10px; font-size: 10px; font-weight: 900; border-radius: 6px; border: none; cursor: pointer; background: linear-gradient(135deg, #059669, #10b981); color: #ffffff; display: flex; align-items: center; gap: 4px; box-shadow: 0 2px 8px rgba(16,185,129,0.3);&quot;>
+                <i class=&quot;fa-solid fa-check&quot;></i> Marcar Listo
+              </button>
+            `;
+            } else if (it.estado === 'listo') {
+              itemStateBadge = `<span style=&quot;font-size: 9px; font-weight: 800; background: rgba(2,132,199,0.25); color: #38bdf8; border: 1px solid #0284c7; padding: 2px 6px; border-radius: 4px;&quot;><i class=&quot;fa-solid fa-circle-check&quot;></i> Listo en Pase</span>`;
+              itemBorder = '#0284c7';
+              itemBg = 'rgba(2,132,199,0.1)';
+              actionButtonHtml = `
+              <button onclick=&quot;window.iniciarAtencionItemKDS(${tIdx}, ${iIdx});&quot; style=&quot;padding: 3px 8px; font-size: 9px; font-weight: 700; border-radius: 6px; border: 1px solid #334155; cursor: pointer; background: #0f172a; color: #94a3b8; display: flex; align-items: center; gap: 3px;&quot;>
+                <i class=&quot;fa-solid fa-rotate-left&quot;></i> Reabrir
+              </button>
+            `;
+            }
+
+            const row = document.createElement('div');
+            row.style.cssText = `background: ${itemBg}; border: 1px solid ${itemBorder}; border-radius: 10px; padding: 8px 10px; display: flex; flex-direction: column; gap: 4px;`;
+            row.innerHTML = `
+            <div style=&quot;display: flex; justify-content: space-between; align-items: center;&quot;>
+              <div style=&quot;display: flex; align-items: center; gap: 6px;&quot;>
+                <span style=&quot;font-size: 13px; font-weight: 900; color: ${it.estado === 'listo' ? '#38bdf8' : '#ffffff'};&quot;>
+                  ${it.cantidad}x ${it.nombre}
+                </span>
+                <span style=&quot;font-size: 9px; font-weight: 800; background: #0f172a; color: #fbbf24; border: 1px solid #334155; padding: 1px 5px; border-radius: 4px;&quot;>Silla ${it.sillaNum}</span>
+              </div>
+              <div style=&quot;display: flex; align-items: center; gap: 4px;&quot;>
+                ${itemStateBadge}
+                <span style=&quot;font-size: 9px; font-weight: 800; background: ${stBadgeBg}; color: ${stBadgeColor}; padding: 2px 6px; border-radius: 4px; border: 1px solid ${stBadgeColor};&quot;>
+                  ${stLabel}
+                </span>
+              </div>
+            </div>
+
+            ${it.notas ? `<div style=&quot;font-size: 11px; color: #fde047; background: rgba(234,179,8,0.1); border: 1px dashed rgba(234,179,8,0.3); border-radius: 6px; padding: 4px 8px; font-style: italic;&quot;><i class=&quot;fa-solid fa-note-sticky&quot;></i> ${it.notas}</div>` : ''}
+
+            <!-- Botones de Acción por Platillo: Ficha de Receta y Cambio de Estado -->
+            <div style=&quot;display: flex; justify-content: space-between; align-items: center; margin-top: 4px; pt-1;&quot;>
+              <button onclick=&quot;window.abrirFichaReceta('${it.nombre.replace(/'/g, &quot;\\'&quot;)}');&quot; style=&quot;background: transparent; border: none; color: #38bdf8; font-size: 10px; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 4px; padding: 2px;&quot; title=&quot;Ver gramajes exactos e instrucciones de preparación&quot;>
+                <i class=&quot;fa-solid fa-book-open&quot;></i> Ficha Técnica
+              </button>
+
+              <div>
+                ${actionButtonHtml}
+              </div>
+            </div>
           `;
-        } else if (it.estado === 'preparando') {
-          if (itemElapsedMins >= 14) {
-          itemStateBadge = `<span style=&quot;font-size: 9px; font-weight: 900; background: rgba(239,68,68,0.2); color: #f87171; border: 1px solid #ef4444; padding: 2px 6px; border-radius: 4px; animation: urgentPulse 1.8s infinite;&quot;><i class=&quot;fa-solid fa-triangle-exclamation&quot;></i> 🔴 Retraso (${itemElapsedMins} min)</span>`;
-          itemBorder = '#ef4444';
-          itemBg = 'rgba(239,68,68,0.08)';
-        } else {
-          itemStateBadge = `<span style=&quot;font-size: 9px; font-weight: 800; background: rgba(245,158,11,0.2); color: #fbbf24; border: 1px solid rgba(245,158,11,0.4); padding: 2px 6px; border-radius: 4px;&quot;><i class=&quot;fa-solid fa-fire-burner&quot;></i> 🟡 En Fuego (${itemElapsedMins}m)</span>`;
-          itemBorder = '#f59e0b';
-        }
-          actionButtonHtml = `
-          <button onclick=&quot;window.marcarListoItemKDS(${tIdx}, ${iIdx});&quot; style=&quot;padding: 4px 10px; font-size: 10px; font-weight: 900; border-radius: 6px; border: none; cursor: pointer; background: linear-gradient(135deg, #059669, #10b981); color: #ffffff; display: flex; align-items: center; gap: 4px; box-shadow: 0 2px 8px rgba(16,185,129,0.3);&quot;>
-          <i class=&quot;fa-solid fa-check&quot;></i> Marcar Listo
-          </button>
-          `;
-        } else if (it.estado === 'listo') {
-          itemStateBadge = `<span style=&quot;font-size: 9px; font-weight: 800; background: rgba(2,132,199,0.25); color: #38bdf8; border: 1px solid #0284c7; padding: 2px 6px; border-radius: 4px;&quot;><i class=&quot;fa-solid fa-circle-check&quot;></i> Listo en Pase</span>`;
-          itemBorder = '#0284c7';
-          itemBg = 'rgba(2,132,199,0.1)';
-          actionButtonHtml = `
-          <button onclick=&quot;window.iniciarAtencionItemKDS(${tIdx}, ${iIdx});&quot; style=&quot;padding: 3px 8px; font-size: 9px; font-weight: 700; border-radius: 6px; border: 1px solid #334155; cursor: pointer; background: #0f172a; color: #94a3b8; display: flex; align-items: center; gap: 3px;&quot;>
-          <i class=&quot;fa-solid fa-rotate-left&quot;></i> Reabrir
-          </button>
-          `;
-        }
-
-          const row = document.createElement('div');
-          row.style.cssText = `background: ${itemBg}; border: 1px solid ${itemBorder}; border-radius: 10px; padding: 8px 10px; display: flex; flex-direction: column; gap: 4px;`;
-          row.innerHTML = `
-          <div style=&quot;display: flex; justify-content: space-between; align-items: center;&quot;>
-          <div style=&quot;display: flex; align-items: center; gap: 6px;&quot;>
-          <span style=&quot;font-size: 13px; font-weight: 900; color: ${it.estado === 'listo' ? '#38bdf8' : '#ffffff'};&quot;>
-          ${it.cantidad}x ${it.nombre}
-          </span>
-          <span style=&quot;font-size: 9px; font-weight: 800; background: #0f172a; color: #fbbf24; border: 1px solid #334155; padding: 1px 5px; border-radius: 4px;&quot;>Silla ${it.sillaNum}</span>
-          </div>
-          <div style=&quot;display: flex; align-items: center; gap: 4px;&quot;>
-          ${itemStateBadge}
-          <span style=&quot;font-size: 9px; font-weight: 800; background: ${stBadgeBg}; color: ${stBadgeColor}; padding: 2px 6px; border-radius: 4px; border: 1px solid ${stBadgeColor};&quot;>
-          ${stLabel}
-          </span>
-          </div>
-          </div>
-
-          ${it.notas ? `<div style=&quot;font-size: 11px; color: #fde047; background: rgba(234,179,8,0.1); border: 1px dashed rgba(234,179,8,0.3); border-radius: 6px; padding: 4px 8px; font-style: italic;&quot;><i class=&quot;fa-solid fa-note-sticky&quot;></i> ${it.notas}</div>` : ''}
-
-          <!-- Botones de Acción por Platillo: Ficha de Receta y Cambio de Estado -->
-          <div style=&quot;display: flex; justify-content: space-between; align-items: center; margin-top: 4px; pt-1;&quot;>
-          <button onclick=&quot;window.abrirFichaReceta('${it.nombre.replace(/'/g, &quot;\\'&quot;)}');&quot; style=&quot;background: transparent; border: none; color: #38bdf8; font-size: 10px; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 4px; padding: 2px;&quot; title=&quot;Ver gramajes exactos e instrucciones de preparación&quot;>
-          <i class=&quot;fa-solid fa-book-open&quot;></i> Ficha Técnica
-          </button>
-
-          <div>
-          ${actionButtonHtml}
-          </div>
-          </div>
-          `;
-          itemsWrap.appendChild(row);
-        });
+            itemsWrap.appendChild(row);
+          });
           card.appendChild(itemsWrap);
 
           // Footer del Ticket: Botón Marcar Mesa Completa Lista
@@ -752,264 +934,301 @@
           footer.style.cssText = 'padding-left: 6px; display: flex; gap: 8px;';
           footer.innerHTML = `
           <button onclick=&quot;window.despacharTicketCompletoKDS(${tIdx});&quot; style=&quot;flex: 1; padding: 10px; background: linear-gradient(135deg, #059669, #10b981); color: #ffffff; border: none; border-radius: 12px; font-size: 12px; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; box-shadow: 0 4px 12px rgba(16,185,129,0.3);&quot;>
-          <i class=&quot;fa-solid fa-bell-concierge&quot;></i> ${allItemsReady ? '🔔 Pase / Entregar a Mesero' : '✅ Marcar Todo Listo (Pase)'}
+            <i class=&quot;fa-solid fa-bell-concierge&quot;></i> ${allItemsReady ? '🔔 Pase / Entregar a Mesero' : '✅ Marcar Todo Listo (Pase)'}
           </button>
-          `;
+        `;
           card.appendChild(footer);
 
           container.appendChild(card);
         });
 
-          if (renderedTicketsCount === 0) {
+        if (renderedTicketsCount === 0) {
           container.innerHTML = `
           <div style=&quot;grid-column: 1 / -1; background: #0d1322; border: 1px dashed #1e293b; border-radius: 20px; padding: 50px 20px; text-align: center;&quot;>
-          <div style=&quot;width: 60px; height: 60px; border-radius: 50%; background: rgba(16,185,129,0.15); color: #34d399; font-size: 26px; display: flex; align-items: center; justify-content: center; margin: 0 auto 12px;&quot;>
-          <i class=&quot;fa-solid fa-check-double&quot;></i>
+            <div style=&quot;width: 60px; height: 60px; border-radius: 50%; background: rgba(16,185,129,0.15); color: #34d399; font-size: 26px; display: flex; align-items: center; justify-content: center; margin: 0 auto 12px;&quot;>
+              <i class=&quot;fa-solid fa-check-double&quot;></i>
+            </div>
+            <h3 style=&quot;font-size: 16px; font-weight: 900; color: #ffffff; margin: 0;&quot;>¡Cocina y Barra al Día!</h3>
+            <p style=&quot;font-size: 12px; color: #94a3b8; margin: 4px 0 0 0;&quot;>No hay comandas pendientes para el filtro seleccionado (${currentArea !== 'TODAS' ? currentArea + ' • ' : ''}${currentMesa !== 'TODAS' ? 'Mesa ' + currentMesa + ' • ' : ''}${currentStation}).</p>
           </div>
-          <h3 style=&quot;font-size: 16px; font-weight: 900; color: #ffffff; margin: 0;&quot;>¡Cocina y Barra al Día!</h3>
-          <p style=&quot;font-size: 12px; color: #94a3b8; margin: 4px 0 0 0;&quot;>No hay comandas pendientes para la estación seleccionada.</p>
-          </div>
-          `;
+        `;
         }
-        };
+      };
 
-          // 5. CAMBIO DE ESTACIÓN / FILTROS
-          window.filtrarEstacionKDS = function(estacion) {
-          window.kdsState.estacionFiltro = estacion;
+      // 5. FUNCIONES DE FILTRADO (ÁREAS, MESAS Y ESTACIONES)
+      window.filtrarAreaKDS = function(area) {
+        window.kdsState.areaFiltro = area;
+        if (area !== 'TODAS') {
+          localStorage.setItem('kds_filtro_area', area);
+        } else {
+          localStorage.removeItem('kds_filtro_area');
+        }
 
-          const chips = ['TODAS', 'COCINA', 'BARRA', 'REPOSTERIA'];
-          chips.forEach(c => {
+        const chips = ['TODAS', 'PALAPA', 'PATIO', 'CHIMENEA'];
+        chips.forEach(a => {
+          const btn = document.getElementById('chipArea-' + a);
+          if (btn) {
+            if (a === area) {
+              btn.style.background = '#38bdf8';
+              btn.style.color = '#0f172a';
+              btn.style.border = '1px solid #38bdf8';
+            } else {
+              btn.style.background = '#0f172a';
+              btn.style.color = '#cbd5e1';
+              btn.style.border = '1px solid #334155';
+            }
+          }
+        });
+
+        renderKDSUI();
+      };
+
+      window.filtrarMesaKDS = function(mesaId) {
+        window.kdsState.mesaFiltro = mesaId.toString();
+        if (mesaId !== 'TODAS') {
+          localStorage.setItem('kds_filtro_mesa', mesaId.toString());
+        } else {
+          localStorage.removeItem('kds_filtro_mesa');
+        }
+        renderKDSUI();
+      };
+
+      window.filtrarEstacionKDS = function(estacion) {
+        window.kdsState.estacionFiltro = estacion;
+
+        const chips = ['TODAS', 'COCINA', 'BARRA', 'REPOSTERIA', 'INFANTIL'];
+        chips.forEach(c => {
           const btn = document.getElementById('chipKDS-' + c);
           if (btn) {
-          if (c === estacion) {
-          btn.style.background = '#f59e0b';
-          btn.style.color = '#0f172a';
-          btn.style.border = '1px solid #f59e0b';
-        } else {
-          btn.style.background = '#0f172a';
-          btn.style.color = '#cbd5e1';
-          btn.style.border = '1px solid #334155';
-        }
-        }
+            if (c === estacion) {
+              btn.style.background = '#f59e0b';
+              btn.style.color = '#0f172a';
+              btn.style.border = '1px solid #f59e0b';
+            } else {
+              btn.style.background = '#0f172a';
+              btn.style.color = '#cbd5e1';
+              btn.style.border = '1px solid #334155';
+            }
+          }
         });
 
-          renderKDSUI();
-        };
+        renderKDSUI();
+      };
 
-          // 6. ACCIONES DE COCINA: INICIAR ATENCIÓN / FUEGO (VERDE -> ÁMBAR)
-          window.iniciarAtencionItemKDS = function(ticketIdx, itemIdx) {
-          const ticket = window.kdsState.tickets[ticketIdx];
-          if (!ticket || !ticket.items[itemIdx]) return;
+      // 6. ACCIONES DE COCINA: INICIAR ATENCIÓN / FUEGO (VERDE -> ÁMBAR)
+      window.iniciarAtencionItemKDS = function(ticketIdx, itemIdx) {
+        const ticket = window.kdsState.tickets[ticketIdx];
+        if (!ticket || !ticket.items[itemIdx]) return;
 
-          const it = ticket.items[itemIdx];
-          it.estado = 'preparando';
-          it.timestampInicio = Date.now();
+        const it = ticket.items[itemIdx];
+        it.estado = 'preparando';
+        it.timestampInicio = Date.now();
 
-          // Sincronizar con cuenta en storage
-          if (it.keyCuenta) {
+        // Sincronizar con cuenta en storage
+        if (it.keyCuenta) {
           var raw = localStorage.getItem('palapa_croquis_state_v1');
           if (raw) {
-          try {
-          var state = JSON.parse(raw);
-          if (state &amp;&amp; state.cuentas &amp;&amp; state.cuentas[it.keyCuenta]) {
-          var cItems = state.cuentas[it.keyCuenta].items;
-          if (cItems &amp;&amp; cItems[it.idxInCuenta]) {
-          cItems[it.idxInCuenta].estadoCocina = 'preparando';
-          cItems[it.idxInCuenta].timestampInicioCocina = it.timestampInicio;
-          localStorage.setItem('palapa_croquis_state_v1', JSON.stringify(state));
-        }
-        }
-        } catch(e) {}
-        }
+            try {
+              var state = JSON.parse(raw);
+              if (state &amp;&amp; state.cuentas &amp;&amp; state.cuentas[it.keyCuenta]) {
+                var cItems = state.cuentas[it.keyCuenta].items;
+                if (cItems &amp;&amp; cItems[it.idxInCuenta]) {
+                  cItems[it.idxInCuenta].estadoCocina = 'preparando';
+                  cItems[it.idxInCuenta].timestampInicioCocina = it.timestampInicio;
+                  localStorage.setItem('palapa_croquis_state_v1', JSON.stringify(state));
+                }
+              }
+            } catch(e) {}
+          }
         }
 
-          renderKDSUI();
-        };
+        renderKDSUI();
+      };
 
-          // INICIAR ATENCIÓN DE TODOS LOS PLATILLOS DEL TICKET
-          window.atenderTicketCompletoKDS = function(ticketIdx) {
-          const ticket = window.kdsState.tickets[ticketIdx];
-          if (!ticket) return;
+      // INICIAR ATENCIÓN DE TODOS LOS PLATILLOS DEL TICKET
+      window.atenderTicketCompletoKDS = function(ticketIdx) {
+        const ticket = window.kdsState.tickets[ticketIdx];
+        if (!ticket) return;
 
-          const now = Date.now();
-          ticket.items.forEach(it => {
+        const now = Date.now();
+        ticket.items.forEach(it => {
           if (it.estado === 'recibido') {
-          it.estado = 'preparando';
-          it.timestampInicio = now;
-          if (it.keyCuenta) {
-          var raw = localStorage.getItem('palapa_croquis_state_v1');
-          if (raw) {
-          try {
-          var state = JSON.parse(raw);
-          if (state &amp;&amp; state.cuentas &amp;&amp; state.cuentas[it.keyCuenta]) {
-          var cItems = state.cuentas[it.keyCuenta].items;
-          if (cItems &amp;&amp; cItems[it.idxInCuenta]) {
-          cItems[it.idxInCuenta].estadoCocina = 'preparando';
-          cItems[it.idxInCuenta].timestampInicioCocina = now;
-          localStorage.setItem('palapa_croquis_state_v1', JSON.stringify(state));
-        }
-        }
-        } catch(e) {}
-        }
-        }
-        }
+            it.estado = 'preparando';
+            it.timestampInicio = now;
+            if (it.keyCuenta) {
+              var raw = localStorage.getItem('palapa_croquis_state_v1');
+              if (raw) {
+                try {
+                  var state = JSON.parse(raw);
+                  if (state &amp;&amp; state.cuentas &amp;&amp; state.cuentas[it.keyCuenta]) {
+                    var cItems = state.cuentas[it.keyCuenta].items;
+                    if (cItems &amp;&amp; cItems[it.idxInCuenta]) {
+                      cItems[it.idxInCuenta].estadoCocina = 'preparando';
+                      cItems[it.idxInCuenta].timestampInicioCocina = now;
+                      localStorage.setItem('palapa_croquis_state_v1', JSON.stringify(state));
+                    }
+                  }
+                } catch(e) {}
+              }
+            }
+          }
         });
 
-          renderKDSUI();
-        };
+        renderKDSUI();
+      };
 
-          // MARCAR PLATILLO LISTO (ÁMBAR/ROJO -> LISTO)
-          window.marcarListoItemKDS = function(ticketIdx, itemIdx) {
-          const ticket = window.kdsState.tickets[ticketIdx];
-          if (!ticket || !ticket.items[itemIdx]) return;
+      // MARCAR PLATILLO LISTO (ÁMBAR/ROJO -> LISTO)
+      window.marcarListoItemKDS = function(ticketIdx, itemIdx) {
+        const ticket = window.kdsState.tickets[ticketIdx];
+        if (!ticket || !ticket.items[itemIdx]) return;
 
-          const it = ticket.items[itemIdx];
-          it.estado = 'listo';
+        const it = ticket.items[itemIdx];
+        it.estado = 'listo';
 
-          if (it.keyCuenta) {
+        if (it.keyCuenta) {
           var raw = localStorage.getItem('palapa_croquis_state_v1');
           if (raw) {
-          try {
-          var state = JSON.parse(raw);
-          if (state &amp;&amp; state.cuentas &amp;&amp; state.cuentas[it.keyCuenta]) {
-          var cItems = state.cuentas[it.keyCuenta].items;
-          if (cItems &amp;&amp; cItems[it.idxInCuenta]) {
-          cItems[it.idxInCuenta].estadoCocina = 'listo';
-          localStorage.setItem('palapa_croquis_state_v1', JSON.stringify(state));
-        }
-        }
-        } catch(e) {}
-        }
+            try {
+              var state = JSON.parse(raw);
+              if (state &amp;&amp; state.cuentas &amp;&amp; state.cuentas[it.keyCuenta]) {
+                var cItems = state.cuentas[it.keyCuenta].items;
+                if (cItems &amp;&amp; cItems[it.idxInCuenta]) {
+                  cItems[it.idxInCuenta].estadoCocina = 'listo';
+                  localStorage.setItem('palapa_croquis_state_v1', JSON.stringify(state));
+                }
+              }
+            } catch(e) {}
+          }
         }
 
-          renderKDSUI();
-        };
+        renderKDSUI();
+      };
 
-          // 7. DESPACHAR TICKET COMPLETO (PASE / SERVIDO)
-          window.despacharTicketCompletoKDS = function(ticketIdx) {
-          const ticket = window.kdsState.tickets[ticketIdx];
-          if (!ticket) return;
+      // 7. DESPACHAR TICKET COMPLETO (PASE / SERVIDO)
+      window.despacharTicketCompletoKDS = function(ticketIdx) {
+        const ticket = window.kdsState.tickets[ticketIdx];
+        if (!ticket) return;
 
-          ticket.items.forEach(it => {
+        ticket.items.forEach(it => {
           it.estado = 'servido';
           if (it.keyCuenta) {
-          var raw = localStorage.getItem('palapa_croquis_state_v1');
-          if (raw) {
-          try {
-          var state = JSON.parse(raw);
-          if (state &amp;&amp; state.cuentas &amp;&amp; state.cuentas[it.keyCuenta]) {
-          var cItems = state.cuentas[it.keyCuenta].items;
-          if (cItems &amp;&amp; cItems[it.idxInCuenta]) {
-          cItems[it.idxInCuenta].estadoCocina = 'servido';
-          localStorage.setItem('palapa_croquis_state_v1', JSON.stringify(state));
-        }
-        }
-        } catch(e) {}
-        }
-        }
+            var raw = localStorage.getItem('palapa_croquis_state_v1');
+            if (raw) {
+              try {
+                var state = JSON.parse(raw);
+                if (state &amp;&amp; state.cuentas &amp;&amp; state.cuentas[it.keyCuenta]) {
+                  var cItems = state.cuentas[it.keyCuenta].items;
+                  if (cItems &amp;&amp; cItems[it.idxInCuenta]) {
+                    cItems[it.idxInCuenta].estadoCocina = 'servido';
+                    localStorage.setItem('palapa_croquis_state_v1', JSON.stringify(state));
+                  }
+                }
+              } catch(e) {}
+            }
+          }
         });
 
-          // Efecto de sonido sintético de campana de pase
-          playKitchenBell();
-          window.cargarKDS();
-        };
+        // Efecto de sonido sintético de campana de pase
+        playKitchenBell();
+        window.cargarKDS();
+      };
 
-          // 8. MODAL DE FICHA TÉCNICA DE RECETA
-          window.abrirFichaReceta = function(nombrePlatillo) {
-          const modal = document.getElementById('modalFichaRecetaBackdrop');
-          const titulo = document.getElementById('fichaRecetaTitulo');
-          const categoria = document.getElementById('fichaRecetaCategoria');
-          const icon = document.getElementById('fichaRecetaIcon');
-          const tiempo = document.getElementById('fichaRecetaTiempo');
-          const equipo = document.getElementById('fichaRecetaEquipo');
-          const temp = document.getElementById('fichaRecetaTemp');
-          const ingredientesContainer = document.getElementById('fichaRecetaIngredientes');
-          const pasosContainer = document.getElementById('fichaRecetaPasos');
-          const montaje = document.getElementById('fichaRecetaMontaje');
+      // 8. MODAL DE FICHA TÉCNICA DE RECETA
+      window.abrirFichaReceta = function(nombrePlatillo) {
+        const modal = document.getElementById('modalFichaRecetaBackdrop');
+        const titulo = document.getElementById('fichaRecetaTitulo');
+        const categoria = document.getElementById('fichaRecetaCategoria');
+        const icon = document.getElementById('fichaRecetaIcon');
+        const tiempo = document.getElementById('fichaRecetaTiempo');
+        const equipo = document.getElementById('fichaRecetaEquipo');
+        const temp = document.getElementById('fichaRecetaTemp');
+        const ingredientesContainer = document.getElementById('fichaRecetaIngredientes');
+        const pasosContainer = document.getElementById('fichaRecetaPasos');
+        const montaje = document.getElementById('fichaRecetaMontaje');
 
-          // Buscar receta en recetario o generar ficha estándar por defecto
-          let receta = RECETARIO_ESTANDARIZADO[nombrePlatillo];
-          if (!receta) {
+        // Buscar receta en recetario o generar ficha estándar por defecto
+        let receta = RECETARIO_ESTANDARIZADO[nombrePlatillo];
+        if (!receta) {
           receta = {
-          icon: '🍲',
-          categoria: 'Especialidad de la Casa • Cocina Caliente',
-          tiempo: '6-8 min',
-          equipo: 'Línea de Fuego / Quemador',
-          temp: 'Caliente (>75°C)',
-          ingredientes: [
-          { item: 'Porción base del platillo', cant: '1 porción estándar', dosificador: 'Bolsa dosificada #1' },
-          { item: 'Guarnición caliente', cant: '80 g', dosificador: '1 Cucharón' },
-          { item: 'Salsas y aderezos', cant: '30 ml', dosificador: 'Dosificador calibrado' }
-          ],
-          pasos: [
-          '1. Tomar los ingredientes porcionados del refrigerador de línea.',
-          '2. Saltear o calentar a fuego medio-alto durante el tiempo estándar indicado.',
-          '3. Emplatar en vajilla caliente y verificar temperatura antes de enviar a pase.'
-          ],
-          montaje: 'Vajilla estándar de La Terraza con guarnición y pase inmediato.'
-        };
+            icon: '🍲',
+            categoria: 'Especialidad de la Casa • Cocina Caliente',
+            tiempo: '6-8 min',
+            equipo: 'Línea de Fuego / Quemador',
+            temp: 'Caliente (>75°C)',
+            ingredientes: [
+              { item: 'Porción base del platillo', cant: '1 porción estándar', dosificador: 'Bolsa dosificada #1' },
+              { item: 'Guarnición caliente', cant: '80 g', dosificador: '1 Cucharón' },
+              { item: 'Salsas y aderezos', cant: '30 ml', dosificador: 'Dosificador calibrado' }
+            ],
+            pasos: [
+              '1. Tomar los ingredientes porcionados del refrigerador de línea.',
+              '2. Saltear o calentar a fuego medio-alto durante el tiempo estándar indicado.',
+              '3. Emplatar en vajilla caliente y verificar temperatura antes de enviar a pase.'
+            ],
+            montaje: 'Vajilla estándar de La Terraza con guarnición y pase inmediato.'
+          };
         }
 
-          if (titulo) titulo.innerText = nombrePlatillo;
-          if (categoria) categoria.innerText = receta.categoria;
-          if (icon) icon.innerText = receta.icon;
-          if (tiempo) tiempo.innerText = receta.tiempo;
-          if (equipo) equipo.innerText = receta.equipo;
-          if (temp) temp.innerText = receta.temp;
-          if (montaje) montaje.innerText = receta.montaje;
+        if (titulo) titulo.innerText = nombrePlatillo;
+        if (categoria) categoria.innerText = receta.categoria;
+        if (icon) icon.innerText = receta.icon;
+        if (tiempo) tiempo.innerText = receta.tiempo;
+        if (equipo) equipo.innerText = receta.equipo;
+        if (temp) temp.innerText = receta.temp;
+        if (montaje) montaje.innerText = receta.montaje;
 
-          if (ingredientesContainer) {
+        if (ingredientesContainer) {
           ingredientesContainer.innerHTML = '';
           receta.ingredientes.forEach(ing => {
-          const row = document.createElement('div');
-          row.style.cssText = 'display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed #1e293b; padding-bottom: 3px;';
-          row.innerHTML = `
-          <div>
-          <span style=&quot;color: #ffffff; font-weight: 700;&quot;>${ing.item}</span>
-          <span style=&quot;font-size: 10px; color: #94a3b8; margin-left: 4px;&quot;>(${ing.dosificador})</span>
-          </div>
-          <span style=&quot;font-weight: 900; color: #34d399;&quot;>${ing.cant}</span>
+            const row = document.createElement('div');
+            row.style.cssText = 'display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed #1e293b; padding-bottom: 3px;';
+            row.innerHTML = `
+            <div>
+              <span style=&quot;color: #ffffff; font-weight: 700;&quot;>${ing.item}</span>
+              <span style=&quot;font-size: 10px; color: #94a3b8; margin-left: 4px;&quot;>(${ing.dosificador})</span>
+            </div>
+            <span style=&quot;font-weight: 900; color: #34d399;&quot;>${ing.cant}</span>
           `;
-          ingredientesContainer.appendChild(row);
-        });
+            ingredientesContainer.appendChild(row);
+          });
         }
 
-          if (pasosContainer) {
+        if (pasosContainer) {
           pasosContainer.innerHTML = '';
           receta.pasos.forEach(p => {
-          const pEl = document.createElement('div');
-          pEl.style.cssText = 'background: #020617; border: 1px solid #1e293b; border-radius: 8px; padding: 6px 10px;';
-          pEl.innerText = p;
-          pasosContainer.appendChild(pEl);
-        });
+            const pEl = document.createElement('div');
+            pEl.style.cssText = 'background: #020617; border: 1px solid #1e293b; border-radius: 8px; padding: 6px 10px;';
+            pEl.innerText = p;
+            pasosContainer.appendChild(pEl);
+          });
         }
 
-          if (modal) {
+        if (modal) {
           modal.style.display = 'flex';
         }
-        };
+      };
 
-          window.cerrarFichaReceta = function() {
-          const modal = document.getElementById('modalFichaRecetaBackdrop');
-          if (modal) {
+      window.cerrarFichaReceta = function() {
+        const modal = document.getElementById('modalFichaRecetaBackdrop');
+        if (modal) {
           modal.style.display = 'none';
         }
-        };
+      };
 
-          // Navegación
-          window.navMenu = function(modulo) {
-          if (window.anvilAppNav) {
+      // Navegación
+      window.navMenu = function(modulo) {
+        if (window.anvilAppNav) {
           window.anvilAppNav(modulo);
         } else if (typeof window.parent !== 'undefined' &amp;&amp; window.parent.anvilAppNav) {
           window.parent.anvilAppNav(modulo);
         } else {
           alert('Navegando a: ' + modulo);
         }
-        };
+      };
 
-          // Sonido de Campana de Cocina con Web Audio API (Sin archivos externos)
-          function playKitchenBell() {
-          try {
+      // Sonido de Campana de Cocina con Web Audio API (Sin archivos externos)
+      function playKitchenBell() {
+        try {
           const AudioContext = window.AudioContext || window.webkitAudioContext;
           if (!AudioContext) return;
           const ctx = new AudioContext();
@@ -1029,17 +1248,17 @@
           osc.start();
           osc.stop(ctx.currentTime + 0.8);
         } catch(e) {}
-        }
+      }
 
-          // Inicializar KDS y configurar polling automático cada 4 segundos
-          setTimeout(function() {
-          window.cargarKDS();
-        }, 100);
+      // Inicializar KDS y configurar polling automático cada 4 segundos
+      setTimeout(function() {
+        window.cargarKDS();
+      }, 100);
 
-          setInterval(function() {
-          window.cargarKDS();
-        }, 4000);
+      setInterval(function() {
+        window.cargarKDS();
+      }, 4000);
 
-        })();
-          </script>
+    })();
+  </script>
 </anvil-form>"></anvil-form>
