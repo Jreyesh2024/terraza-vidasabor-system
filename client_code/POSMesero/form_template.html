@@ -146,30 +146,30 @@
     transition: transform 0.28s cubic-bezier(.34, 1.56, .64, 1), opacity 0.28s ease;
     opacity: 0;
     pointer-events: none;
-  }
+    }
 
-  #dragToast.show {
+    #dragToast.show {
     transform: translateX(-50%) translateY(0);
     opacity: 1;
-  }
+    }
 
-  #dragToast.toast-ok {
+    #dragToast.toast-ok {
     border-color: #10b981;
     color: #34d399;
-  }
+    }
 
-  #dragToast.toast-warn {
+    #dragToast.toast-warn {
     border-color: #f59e0b;
     color: #fbbf24;
-  }
+    }
 
-  #dragToast.toast-err {
+    #dragToast.toast-err {
     border-color: #ef4444;
     color: #f87171;
-  }
+    }
 
-  /* ── Mini-modal confirmación combinación ── */
-  #combineConfirmBackdrop {
+    /* ── Mini-modal confirmación combinación ── */
+    #combineConfirmBackdrop {
     display: none;
     position: fixed;
     inset: 0;
@@ -177,14 +177,14 @@
     z-index: 9998;
     align-items: center;
     justify-content: center;
-  }
+    }
 
-  #combineConfirmBackdrop.show {
+    #combineConfirmBackdrop.show {
     display: flex;
-  }
+    }
 
-  /* ── Modal Comanda / Ticket por Silla ── */
-  #modalComandaBackdrop {
+    /* ── Modal Comanda / Ticket por Silla ── */
+    #modalComandaBackdrop {
     display: none;
     position: fixed;
     inset: 0;
@@ -193,14 +193,14 @@
     align-items: center;
     justify-content: center;
     backdrop-filter: blur(4px);
-  }
+    }
 
-  #modalComandaBackdrop.show {
+    #modalComandaBackdrop.show {
     display: flex !important;
-  }
+    }
 
-  /* ── Modal Precuenta Térmica Formal ── */
-  #modalPrecuentaBackdrop {
+    /* ── Modal Precuenta Térmica Formal ── */
+    #modalPrecuentaBackdrop {
     display: none;
     position: fixed;
     inset: 0;
@@ -209,14 +209,14 @@
     align-items: center;
     justify-content: center;
     backdrop-filter: blur(5px);
-  }
+    }
 
-  #modalPrecuentaBackdrop.show {
+    #modalPrecuentaBackdrop.show {
     display: flex !important;
-  }
+    }
 
-  /* ── Modal Pasarela de Cobro y Liquidación Multi-Método ── */
-  #modalPasarelaCobroBackdrop {
+    /* ── Modal Pasarela de Cobro y Liquidación Multi-Método ── */
+    #modalPasarelaCobroBackdrop {
     display: none;
     position: fixed;
     inset: 0;
@@ -225,13 +225,13 @@
     align-items: center;
     justify-content: center;
     backdrop-filter: blur(6px);
-  }
+    }
 
-  #modalPasarelaCobroBackdrop.show {
+    #modalPasarelaCobroBackdrop.show {
     display: flex !important;
-  }
+    }
 
-  #combineConfirmBox {
+    #combineConfirmBox {
     background: #0f172a;
     border: 1px solid #334155;
     border-radius: 18px;
@@ -243,80 +243,80 @@
     flex-direction: column;
     gap: 18px;
     animation: slideUp 0.22s cubic-bezier(.34, 1.56, .64, 1);
-  }
+    }
 
-  /* ── Durante drag: bajar z-index de círculos para que no bloqueen el drop ── */
-  body.drag-active .table-circle-fixed {
+    /* ── Durante drag: bajar z-index de círculos para que no bloqueen el drop ── */
+    body.drag-active .table-circle-fixed {
     pointer-events: none !important;
     z-index: 1 !important;
-  }
+    }
 
-  /* Asegurar que sillas reciban eventos durante drag ── */
-  body.drag-active .chair-btn-fixed {
+    /* Asegurar que sillas reciban eventos durante drag ── */
+    body.drag-active .chair-btn-fixed {
     pointer-events: auto !important;
-  }
+    }
 
-  /* Área completa de mesa como zona de drop activa */
-  .table-box-220.drop-zone-active {
+    /* Área completa de mesa como zona de drop activa */
+    .table-box-220.drop-zone-active {
     outline: 2px dashed rgba(56, 189, 248, 0.35) !important;
     outline-offset: 4px !important;
     border-radius: 12px !important;
-  }
+    }
 
-  /* Dual-mode layout transition (Overview vs Comanda &amp; Wide Menu) */
-  #mainCanvasGrid.mode-overview {
+    /* Dual-mode layout transition (Overview vs Comanda &amp; Wide Menu) */
+    #mainCanvasGrid.mode-overview {
     display: grid !important;
     grid-template-columns: 1fr !important;
     gap: 20px !important;
     flex: 1 !important;
-  }
-  #mainCanvasGrid.mode-overview #panelCroquisMesas {
+    }
+    #mainCanvasGrid.mode-overview #panelCroquisMesas {
     width: 100% !important;
     max-width: 100% !important;
-  }
-  #mainCanvasGrid.mode-overview #panelMenuCatalogo {
+    }
+    #mainCanvasGrid.mode-overview #panelMenuCatalogo {
     display: none !important;
-  }
-  #mainCanvasGrid.mode-overview #viewOverviewCroquis {
+    }
+    #mainCanvasGrid.mode-overview #viewOverviewCroquis {
     display: flex !important;
-  }
-  #mainCanvasGrid.mode-overview #viewSidebarComanda {
+    }
+    #mainCanvasGrid.mode-overview #viewSidebarComanda {
     display: none !important;
-  }
+    }
 
-  #mainCanvasGrid.mode-comanda {
+    #mainCanvasGrid.mode-comanda {
     display: grid !important;
     grid-template-columns: 420px 1fr !important;
     gap: 20px !important;
     flex: 1 !important;
-  }
-  #mainCanvasGrid.mode-comanda #panelCroquisMesas {
+    }
+    #mainCanvasGrid.mode-comanda #panelCroquisMesas {
     width: 420px !important;
     max-width: 420px !important;
     padding: 16px !important;
-  }
-  #mainCanvasGrid.mode-comanda #viewOverviewCroquis {
+    }
+    #mainCanvasGrid.mode-comanda #viewOverviewCroquis {
     display: none !important;
-  }
-  #mainCanvasGrid.mode-comanda #viewSidebarComanda {
+    }
+    #mainCanvasGrid.mode-comanda #viewSidebarComanda {
     display: flex !important;
-  }
-  #mainCanvasGrid.mode-comanda #panelMenuCatalogo {
+    }
+    #mainCanvasGrid.mode-comanda #panelMenuCatalogo {
     display: flex !important;
-  }
+    }
 
-  @keyframes slideUp {
+    @keyframes slideUp {
     from {
-      transform: translateY(30px);
-      opacity: 0;
+    transform: translateY(30px);
+    opacity: 0;
     }
 
     to {
-      transform: translateY(0);
-      opacity: 1;
+    transform: translateY(0);
+    opacity: 1;
     }
-  }
-</style>
+    }
+    </style>
 
 <div
   style=&quot;background-color: #eaf2fb !important; color: #1e293b !important; font-family: 'Inter', system-ui, sans-serif !important; min-height: 100vh !important; padding: 75px 20px 24px 20px !important; box-sizing: border-box !important; display: flex !important; flex-direction: column !important; gap: 16px !important;&quot;>
@@ -2870,7 +2870,7 @@
   bannerPaid.innerHTML = `
   <div>
   <div style=&quot;font-size: 13px !important; font-weight: 800 !important; color: #38bdf8 !important;&quot;>
-  <i class=&quot;fa-solid fa-circle-check&quot;></i> CUENTA PAGADA ($${(cuenta.montoPagado || totalHistorico * 1.16).toFixed(2)}) • Saldo: $0.00
+  <i class=&quot;fa-solid fa-circle-check&quot;></i> CUENTA PAGADA ($${(cuenta.montoPagado || totalHistorico).toFixed(2)}) • Saldo: $0.00
 </div>
   <div style=&quot;font-size: 11px !important; color: #94a3b8 !important; margin-top: 2px !important;&quot;>
   ${cuenta.metodoPago ? `Liquidado vía <b>${cuenta.metodoPago}</b> (${cuenta.horaPago || ''}) • ` : ''}Comensal disfrutando de <b>Sobremesa</b>.
@@ -3008,16 +3008,17 @@
   });
   }
 
-  var iva = totalNeto * 0.16;
+  var subtotalBase = totalNeto / 1.16;
+  var iva = totalNeto - subtotalBase;
   var propina = totalNeto * 0.10;
-  var granTotal = totalNeto + iva;
+  var granTotal = totalNeto;
 
   if (lblSubtotal) {
   lblSubtotal.innerText = (totalNeto === 0)
-  ? `Subtotal Pendiente de Pago:`
+  ? `Subtotal (Base s/IVA):`
   : ((sillaNum === null)
-  ? `Subtotal Acumulado (Toda la Mesa):`
-  : `Subtotal (${seleccionadas.length} Silla${seleccionadas.length !== 1 ? 's' : ''}):`);
+  ? `Subtotal Base (Toda la Mesa):`
+  : `Subtotal Base (${seleccionadas.length} Silla${seleccionadas.length !== 1 ? 's' : ''}):`);
   }
   if (totalLabelEl) {
   if (totalNeto === 0) {
@@ -3031,7 +3032,7 @@
   }
   }
 
-  if (subtotalMontoEl) subtotalMontoEl.innerText = `$${totalNeto.toFixed(2)}`;
+  if (subtotalMontoEl) subtotalMontoEl.innerText = `$${subtotalBase.toFixed(2)}`;
   if (ivaMontoEl) ivaMontoEl.innerText = `$${iva.toFixed(2)}`;
   if (propinaMontoEl) propinaMontoEl.innerText = `$${propina.toFixed(2)}`;
   if (totalMontoEl) totalMontoEl.innerText = `$${granTotal.toFixed(2)}`;
@@ -3041,7 +3042,7 @@
   if (alertPendientes &amp;&amp; txtPendientes) {
   if (sillaNum !== null &amp;&amp; sillasPendientes.length > 0 &amp;&amp; totalNeto > 0) {
   alertPendientes.style.display = 'block';
-  txtPendientes.innerHTML = `<b>Quedará pendiente en la mesa:</b> ${sillasPendientes.join(', ')} por <b>$${(totalPendiente * 1.16).toFixed(2)}</b> (no se cobrará en este ticket).`;
+  txtPendientes.innerHTML = `<b>Quedará pendiente en la mesa:</b> ${sillasPendientes.join(', ')} por <b>$${totalPendiente.toFixed(2)}</b> (no se cobrará en este ticket).`;
   } else {
   alertPendientes.style.display = 'none';
   }
@@ -3225,23 +3226,27 @@
   return;
   }
 
-  // Calcular consumo de las sillas seleccionadas
-  var consumoNeto = 0;
+  // Calcular consumo de las sillas seleccionadas (Precios con IVA incluido)
+  var totalVenta = 0;
   sillasArray.forEach(function(s) {
   var c = window.palapaState.cuentas[mesaId + '-' + s];
   if (c &amp;&amp; c.items) {
   c.items.forEach(function(it) {
-  consumoNeto += (it.precio || 0) * (it.cantidad || 1);
+  if (!it.pagado) {
+  totalVenta += (it.precio || 0) * (it.cantidad || 1);
+  }
   });
   }
   });
 
-  var iva = consumoNeto * 0.16;
-  var subtotalConIva = consumoNeto + iva;
+  var subtotalBase = totalVenta / 1.16;
+  var iva = totalVenta - subtotalBase;
+  var subtotalConIva = totalVenta;
 
   pasarelaState.mesaId = mesaId;
   pasarelaState.sillas = sillasArray;
-  pasarelaState.consumoNeto = consumoNeto;
+  pasarelaState.consumoNeto = totalVenta;
+  pasarelaState.subtotalBase = subtotalBase;
   pasarelaState.iva = iva;
   pasarelaState.subtotalConIva = subtotalConIva;
   pasarelaState.tipPct = 10;
@@ -3269,6 +3274,7 @@
   var c = window.palapaState.cuentas[mesaId + '-' + s];
   if (c &amp;&amp; c.items &amp;&amp; c.items.length > 0) {
   c.items.forEach(function(it) {
+  if (!it.pagado) {
   totalItemsCount += (it.cantidad || 1);
   var itSub = (it.precio || 0) * (it.cantidad || 1);
   var row = document.createElement('div');
@@ -3282,6 +3288,7 @@
   <span style=&quot;font-weight: 900; color: #34d399;&quot;>$${itSub.toFixed(2)}</span>
   `;
   itemsListWrap.appendChild(row);
+  }
   });
   }
   });
@@ -3292,7 +3299,7 @@
   var elConsumo = document.getElementById('pasarelaMontoConsumo');
   var elIva = document.getElementById('pasarelaMontoIva');
   var elSubIva = document.getElementById('pasarelaMontoSubtotalIva');
-  if (elConsumo) elConsumo.innerText = `$${consumoNeto.toFixed(2)}`;
+  if (elConsumo) elConsumo.innerText = `$${subtotalBase.toFixed(2)}`;
   if (elIva) elIva.innerText = `$${iva.toFixed(2)}`;
   if (elSubIva) elSubIva.innerText = `$${subtotalConIva.toFixed(2)}`;
 
@@ -3837,11 +3844,12 @@
   listContainer.appendChild(chairBlock);
   });
 
-  var ivaVal = totalNeto * 0.16;
+  var subtotalBase = totalNeto / 1.16;
+  var ivaVal = totalNeto - subtotalBase;
   var propinaVal = totalNeto * 0.10;
-  var granTotal = totalNeto + ivaVal;
+  var granTotal = totalNeto;
 
-  if (subtotalEl) subtotalEl.innerText = `$${totalNeto.toFixed(2)}`;
+  if (subtotalEl) subtotalEl.innerText = `$${subtotalBase.toFixed(2)}`;
   if (ivaEl) ivaEl.innerText = `$${ivaVal.toFixed(2)}`;
   if (propinaEl) propinaEl.innerText = `$${propinaVal.toFixed(2)}`;
   if (totalEl) totalEl.innerText = `$${granTotal.toFixed(2)}`;
@@ -4816,13 +4824,14 @@
   }
   }
 
-  const iva = saldoPendiente * 0.16;
-  const total = saldoPendiente + iva;
+  const subtotalBase = saldoPendiente / 1.16;
+  const iva = saldoPendiente - subtotalBase;
+  const total = saldoPendiente;
 
   const subtotalEl = document.getElementById('sidebarSubtotal');
   const ivaEl = document.getElementById('sidebarIva');
   const totalEl = document.getElementById('sidebarTotal');
-  if (subtotalEl) subtotalEl.innerText = `$${saldoPendiente.toFixed(2)}`;
+  if (subtotalEl) subtotalEl.innerText = `$${subtotalBase.toFixed(2)}`;
   if (ivaEl) ivaEl.innerText = `$${iva.toFixed(2)}`;
   if (totalEl) totalEl.innerText = `$${total.toFixed(2)}`;
 
