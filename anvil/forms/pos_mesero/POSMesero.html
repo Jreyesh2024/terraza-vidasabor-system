@@ -2689,12 +2689,26 @@
       for (let s = 1; s <= 10; s++) {
         const key = `${mesaId}-${s}`;
         const cuenta = window.palapaState.cuentas[key];
-        if (cuenta && (cuenta.estado === 'ocupada' || (cuenta.items && cuenta.items.length > 0))) {
+        const isPaid = !!(cuenta && (cuenta.estado === 'pagada' || cuenta.pagado));
+        if (cuenta && (cuenta.estado === 'ocupada' || isPaid || (cuenta.items && cuenta.items.length > 0))) {
           var subChair = 0;
+          var saldoChair = 0;
           if (cuenta.items) {
-            cuenta.items.forEach(it => { subChair += (it.precio * it.cantidad); });
+            cuenta.items.forEach(it => {
+              var itSub = (it.precio * it.cantidad);
+              subChair += itSub;
+              if (!it.pagado && !isPaid) {
+                saldoChair += itSub;
+              }
+            });
           }
-          sillasOcupadas.push({ sillaNum: s, cuenta: cuenta, subtotal: subChair });
+          sillasOcupadas.push({
+            sillaNum: s,
+            cuenta: cuenta,
+            subtotal: subChair,
+            saldoPendiente: saldoChair,
+            isPaid: isPaid && (saldoChair === 0)
+          });
         }
       }
 
@@ -2846,6 +2860,28 @@
         container.style.cssText = 'display: flex !important; flex-direction: column !important; gap: 8px !important; max-height: 320px !important; overflow-y: auto !important;';
         const key = `${mesaId}-${sillaNum}`;
         const cuenta = window.palapaState.cuentas[key] || { items: [] };
+        const isPaid = !!(cuenta && (cuenta.estado === 'pagada' || cuenta.pagado));
+        const saldoChair = (cuenta.items || []).reduce((acc, it) => acc + ((!it.pagado && !isPaid) ? (it.precio * it.cantidad) : 0), 0);
+        const totalHistorico = (cuenta.items || []).reduce((acc, it) => acc + (it.precio * it.cantidad), 0);
+
+        if (isPaid && saldoChair === 0) {
+          const bannerPaid = document.createElement('div');
+          bannerPaid.style.cssText = 'background: rgba(2, 132, 199, 0.18) !important; border: 1.5px solid #0284c7 !important; border-radius: 12px !important; padding: 12px 16px !important; display: flex !important; align-items: center !important; justify-content: space-between !important; margin-bottom: 6px !important;';
+          bannerPaid.innerHTML = `
+            <div>
+              <div style="font-size: 13px !important; font-weight: 800 !important; color: #38bdf8 !important;">
+                <i class="fa-solid fa-circle-check"></i> CUENTA PAGADA ($${(cuenta.montoPagado || totalHistorico * 1.16).toFixed(2)}) • Saldo: $0.00
+              </div>
+              <div style="font-size: 11px !important; color: #94a3b8 !important; margin-top: 2px !important;">
+                ${cuenta.metodoPago ? `Liquidado vía <b>${cuenta.metodoPago}</b> (${cuenta.horaPago || ''}) • ` : ''}Comensal disfrutando de <b>Sobremesa</b>.
+              </div>
+            </div>
+            <button type="button" onclick="window.liberarSillaActual()" style="padding: 6px 14px !important; background: #ef4444 !important; color: #ffffff !important; border: none !important; border-radius: 8px !important; font-size: 11px !important; font-weight: 800 !important; cursor: pointer !important; display: inline-flex !important; align-items: center !important; gap: 5px !important; white-space: nowrap !important;">
+              <i class="fa-solid fa-broom"></i> Desocupar Silla
+            </button>
+          `;
+          container.appendChild(bannerPaid);
+        }
 
         if (!cuenta.items || cuenta.items.length === 0) {
           container.innerHTML = `
@@ -2862,7 +2898,7 @@
                   👉 Selecciona platillos del catálogo a la derecha
                 </span>
                 <button type="button" onclick="window.liberarSillaActual()" style="padding: 5px 12px !important; font-size: 11px !important; font-weight: 800 !important; background: rgba(239, 68, 68, 0.2) !important; color: #f87171 !important; border: 1px solid rgba(239, 68, 68, 0.4) !important; border-radius: 20px !important; cursor: pointer !important; display: inline-flex !important; align-items: center !important; gap: 4px !important;">
-                  <i class="fa-solid fa-user-slash"></i> Desocupar / Liberar Silla
+                  <i class="fa-solid fa-broom"></i> Desocupar Silla
                 </button>
               </div>
             </div>
@@ -2870,6 +2906,7 @@
         } else {
           cuenta.items.forEach((it, idx) => {
             var itSub = it.precio * it.cantidad;
+            var isItPaid = !!(it.pagado || isPaid);
             var row = document.createElement('div');
             row.style.cssText = 'display: flex !important; justify-content: space-between !important; align-items: center !important; background: #0f172a !important; padding: 8px 12px !important; border-radius: 10px !important; border: 1px solid #1e293b !important; font-size: 12px !important;';
             row.innerHTML = `
@@ -2880,10 +2917,12 @@
                 <span style="font-size: 10px; color: #94a3b8; font-style: italic;">${it.notas ? it.notas + ' • ' : ''}${it.hora || ''}</span>
               </div>
               <div style="display: flex; align-items: center; gap: 8px;">
-                <span style="font-weight: 900; color: #34d399; font-size: 12px;">$${itSub.toFixed(2)}</span>
-                ${it.enviadoCocina
-                  ? `<span style="font-size: 9px; color: #34d399; font-weight: 800; background: rgba(5,150,105,0.2) !important; border: 1px solid rgba(52,211,153,0.3) !important; padding: 2px 6px !important; border-radius: 4px !important; display: inline-flex !important; align-items: center !important; gap: 3px !important;"><i class="fa-solid fa-fire"></i> En Cocina</span>`
-                  : `<button onclick="window.eliminarItemModal('${key}', ${idx})" style="background: transparent; border: none; color: #f87171; cursor: pointer; padding: 2px;" title="Eliminar (No enviado)"><i class="fa-solid fa-trash-can" style="font-size: 11px;"></i></button>`}
+                <span style="font-weight: 900; color: ${isItPaid ? '#94a3b8' : '#34d399'}; font-size: 12px;">$${itSub.toFixed(2)}</span>
+                ${isItPaid
+                  ? `<span style="font-size: 9px; color: #38bdf8; font-weight: 800; background: rgba(2,132,199,0.2) !important; border: 1px solid rgba(56,189,248,0.4) !important; padding: 2px 6px !important; border-radius: 4px !important; display: inline-flex !important; align-items: center !important; gap: 3px !important;"><i class="fa-solid fa-circle-check"></i> Pagado</span>`
+                  : (it.enviadoCocina
+                    ? `<span style="font-size: 9px; color: #34d399; font-weight: 800; background: rgba(5,150,105,0.2) !important; border: 1px solid rgba(52,211,153,0.3) !important; padding: 2px 6px !important; border-radius: 4px !important; display: inline-flex !important; align-items: center !important; gap: 3px !important;"><i class="fa-solid fa-fire"></i> En Cocina</span>`
+                    : `<button onclick="window.eliminarItemModal('${key}', ${idx})" style="background: transparent; border: none; color: #f87171; cursor: pointer; padding: 2px;" title="Eliminar (No enviado)"><i class="fa-solid fa-trash-can" style="font-size: 11px;"></i></button>`)}
               </div>
             `;
             container.appendChild(row);
@@ -2897,8 +2936,10 @@
           var chairObj = sillasOcupadas.find(o => o.sillaNum === s);
           var c = chairObj ? chairObj.cuenta : (window.palapaState.cuentas[`${mesaId}-${s}`] || { items: [] });
           var sub = chairObj ? chairObj.subtotal : 0;
+          var saldo = chairObj ? chairObj.saldoPendiente : 0;
           var qrId = c.qrId || ('PV-0' + mesaId + s);
           var isTitular = (sillaNum !== null && s === sillaNum);
+          var isPaidCard = !!(chairObj && chairObj.isPaid);
 
           var card = document.createElement('div');
           card.style.cssText = 'background: ' + (isTitular ? '#042f2e' : '#0b2921') + ' !important; border: 2px solid ' + (isTitular ? '#059669' : '#10b981') + ' !important; border-radius: 12px !important; padding: 10px 12px !important; display: flex !important; flex-direction: column !important; justify-content: space-between !important; gap: 8px !important; box-shadow: 0 0 12px rgba(16,185,129,0.2) !important;';
@@ -2908,12 +2949,12 @@
           cardHeader.innerHTML = `
             <div>
               <span style="font-weight: 900; color: ${isTitular ? '#34d399' : '#a7f3d0'}; font-size: 12px; display: block;">
-                <i class="fa-solid fa-receipt"></i> Silla ${s} ${isTitular ? '(Titular)' : '(Anexada)'}
+                <i class="fa-solid fa-receipt"></i> Silla ${s} ${isTitular ? '(Titular)' : '(Anexada)'} ${isPaidCard ? '✓' : ''}
               </span>
               <span style="font-size: 10px; color: #94a3b8;">Portavasos #${qrId}</span>
             </div>
             <div style="display: flex; align-items: center; gap: 6px;">
-              <span style="font-weight: 900; color: #fbbf24; font-size: 12px;">$${sub.toFixed(2)}</span>
+              <span style="font-weight: 900; color: ${isPaidCard ? '#38bdf8' : '#fbbf24'}; font-size: 12px;">${isPaidCard ? 'PAGADO' : '$' + saldo.toFixed(2)}</span>
               ${!isTitular ? `<button onclick="window.toggleSillaAdicional(${s})" style="background: rgba(239, 68, 68, 0.2); border: 1px solid rgba(239, 68, 68, 0.4); color: #f87171; border-radius: 4px; padding: 2px 6px; font-size: 10px; font-weight: bold; cursor: pointer;" title="Quitar de este cobro">✕</button>` : ''}
             </div>
           `;
@@ -2927,13 +2968,14 @@
           } else {
             c.items.forEach((it) => {
               var itSub = it.precio * it.cantidad;
+              var isItPaid = !!(it.pagado || isPaidCard);
               var row = document.createElement('div');
               row.style.cssText = 'display: flex !important; justify-content: space-between !important; align-items: center !important; background: #020617 !important; padding: 4px 6px !important; border-radius: 6px !important; font-size: 10px !important;';
               row.innerHTML = `
                 <div style="flex: 1; padding-right: 4px;">
                   <span style="font-weight: 700; color: #ffffff;">${it.cantidad}x ${it.nombre}</span>
                 </div>
-                <span style="font-weight: 900; color: #34d399;">$${itSub.toFixed(2)}</span>
+                <span style="font-weight: 900; color: ${isItPaid ? '#94a3b8' : '#34d399'};">${isItPaid ? 'Pagado' : '$' + itSub.toFixed(2)}</span>
               `;
               itemsWrap.appendChild(row);
             });
@@ -2943,23 +2985,25 @@
         });
       }
 
-      // 6. Cálculo de Totales Consolidados
+      // 6. Cálculo de Totales Consolidados (SOLO SALDOS PENDIENTES)
       var totalNeto = 0;
       var totalPendiente = 0;
       var sillasPendientes = [];
 
       if (sillaNum === null) {
-        // En panorama general, el total es el acumulado de toda la mesa
+        // En panorama general, el total neto es el saldo pendiente acumulado de la mesa
         sillasOcupadas.forEach(obj => {
-          totalNeto += obj.subtotal;
+          totalNeto += obj.saldoPendiente;
         });
       } else {
         sillasOcupadas.forEach(obj => {
           if (seleccionadas.indexOf(obj.sillaNum) !== -1) {
-            totalNeto += obj.subtotal;
+            totalNeto += obj.saldoPendiente;
           } else {
-            totalPendiente += obj.subtotal;
-            sillasPendientes.push(`Silla ${obj.sillaNum}`);
+            totalPendiente += obj.saldoPendiente;
+            if (obj.saldoPendiente > 0) {
+              sillasPendientes.push(`Silla ${obj.sillaNum}`);
+            }
           }
         });
       }
@@ -2969,12 +3013,16 @@
       var granTotal = totalNeto + iva;
 
       if (lblSubtotal) {
-        lblSubtotal.innerText = (sillaNum === null)
-          ? `Subtotal Acumulado (Toda la Mesa):`
-          : `Subtotal (${seleccionadas.length} Silla${seleccionadas.length !== 1 ? 's' : ''}):`;
+        lblSubtotal.innerText = (totalNeto === 0)
+          ? `Subtotal Pendiente de Pago:`
+          : ((sillaNum === null)
+            ? `Subtotal Acumulado (Toda la Mesa):`
+            : `Subtotal (${seleccionadas.length} Silla${seleccionadas.length !== 1 ? 's' : ''}):`);
       }
       if (totalLabelEl) {
-        if (sillaNum === null) {
+        if (totalNeto === 0) {
+          totalLabelEl.innerText = `Saldo Pendiente a Cobrar:`;
+        } else if (sillaNum === null) {
           totalLabelEl.innerText = `Total Acumulado de la Mesa:`;
         } else if (seleccionadas.length === sillasOcupadas.length && sillasOcupadas.length > 0) {
           totalLabelEl.innerText = `Total a Pagar (Toda la Mesa):`;
@@ -4656,13 +4704,28 @@
 
         // Lista de items de la comanda en tiempo real
         const itemsList = document.getElementById('sidebarComandaItemsList');
-        let subtotal = 0;
+        let totalConsumos = 0;
+        let saldoPendiente = 0;
         let pendientesCount = 0;
+        const isPaidAccount = !!(cuenta.pagado || cuenta.estado === 'pagada');
 
         if (itemsList) {
           itemsList.innerHTML = '';
+          if (isPaidAccount) {
+            const bannerSobremesa = document.createElement('div');
+            bannerSobremesa.style.cssText = 'background: rgba(2, 132, 199, 0.18) !important; border: 1.5px solid #0284c7 !important; border-radius: 10px !important; padding: 10px !important; margin-bottom: 8px !important; text-align: center !important;';
+            bannerSobremesa.innerHTML = `
+              <div style="font-size: 11px !important; font-weight: 900 !important; color: #38bdf8 !important;"><i class="fa-solid fa-circle-check"></i> Cuenta Pagada • Sobremesa</div>
+              <div style="font-size: 10px !important; color: #cbd5e1 !important; margin-top: 2px !important;">Saldo pendiente: <b style="color: #34d399;">$0.00</b></div>
+              <button onclick="window.liberarSillaActual();" style="margin-top: 6px !important; padding: 5px 12px !important; background: #ef4444 !important; color: #ffffff !important; border: none !important; border-radius: 6px !important; font-size: 10px !important; font-weight: 800 !important; cursor: pointer !important; display: inline-flex !important; align-items: center !important; gap: 4px !important;">
+                <i class="fa-solid fa-broom"></i> Desocupar Silla (Se retiró)
+              </button>
+            `;
+            itemsList.appendChild(bannerSobremesa);
+          }
+
           if (!cuenta.items || cuenta.items.length === 0) {
-            itemsList.innerHTML = `
+            itemsList.innerHTML += `
               <div style="text-align: center; color: #64748b; font-size: 11px; padding: 25px 0;">
                 <i class="fa-solid fa-utensils" style="font-size: 20px; display: block; margin-bottom: 6px; opacity: 0.5;"></i>
                 No hay consumos en Silla ${sillaNum}.<br>Selecciona platillos del catálogo a la derecha.
@@ -4671,7 +4734,11 @@
           } else {
             cuenta.items.forEach((it, idx) => {
               const itTotal = (it.precio || 0) * (it.cantidad || 1);
-              subtotal += itTotal;
+              totalConsumos += itTotal;
+              const isItPaid = !!(it.pagado || isPaidAccount);
+              if (!isItPaid) {
+                saldoPendiente += itTotal;
+              }
               if (!it.enviadoCocina) pendientesCount++;
 
               const row = document.createElement('div');
@@ -4682,31 +4749,33 @@
                     <span style="font-weight: 800; color: #ffffff;">${it.cantidad}x ${it.nombre}</span>
                   </div>
                   <div style="display: flex; align-items: center; gap: 6px; margin-top: 3px;">
-                    <span style="font-size: 11px; font-weight: 900; color: #34d399;">$${itTotal.toFixed(2)}</span>
-                    ${it.enviadoCocina
-                      ? `<span style="background: rgba(5,150,105,0.25); border: 1px solid #10b981; color: #34d399; font-size: 9px; font-weight: 800; padding: 1px 5px; border-radius: 4px;"><i class="fa-solid fa-fire"></i> En Cocina (${it.horaEnvioCocina || it.hora || ''})</span>`
-                      : `<div style="display: flex; align-items: center; gap: 4px;">
-                          <span style="background: rgba(245,158,11,0.25); border: 1px solid #f59e0b; color: #fbbf24; font-size: 9px; font-weight: 800; padding: 1px 5px; border-radius: 4px;"><i class="fa-solid fa-clock"></i> Pendiente</span>
-                          <button onclick="window.enviarItemIndividualACocina(${idx});" style="background: #f59e0b; color: #0f172a; border: none; padding: 2px 6px; border-radius: 4px; font-size: 9px; font-weight: 900; cursor: pointer; display: flex; align-items: center; gap: 2px;" title="Enviar este producto a cocina ahora">🚀 Enviar</button>
-                        </div>`}
+                    <span style="font-size: 11px; font-weight: 900; color: ${isItPaid ? '#94a3b8' : '#34d399'};">$${itTotal.toFixed(2)}</span>
+                    ${isItPaid
+                      ? `<span style="background: rgba(2,132,199,0.25); border: 1px solid #0284c7; color: #38bdf8; font-size: 9px; font-weight: 800; padding: 1px 5px; border-radius: 4px;"><i class="fa-solid fa-check"></i> Pagado</span>`
+                      : (it.enviadoCocina
+                        ? `<span style="background: rgba(5,150,105,0.25); border: 1px solid #10b981; color: #34d399; font-size: 9px; font-weight: 800; padding: 1px 5px; border-radius: 4px;"><i class="fa-solid fa-fire"></i> En Cocina (${it.horaEnvioCocina || it.hora || ''})</span>`
+                        : `<div style="display: flex; align-items: center; gap: 4px;">
+                            <span style="background: rgba(245,158,11,0.25); border: 1px solid #f59e0b; color: #fbbf24; font-size: 9px; font-weight: 800; padding: 1px 5px; border-radius: 4px;"><i class="fa-solid fa-clock"></i> Pendiente</span>
+                            <button onclick="window.enviarItemIndividualACocina(${idx});" style="background: #f59e0b; color: #0f172a; border: none; padding: 2px 6px; border-radius: 4px; font-size: 9px; font-weight: 900; cursor: pointer; display: flex; align-items: center; gap: 2px;" title="Enviar este producto a cocina ahora">🚀 Enviar</button>
+                          </div>`)}
                   </div>
                 </div>
-                ${!it.enviadoCocina
+                ${!isItPaid && !it.enviadoCocina
                   ? `<button onclick="window.eliminarItemSidebar(${idx});" style="background: transparent; border: none; color: #f87171; cursor: pointer; padding: 2px 4px; font-size: 12px;" title="Eliminar (Pendiente)">✕</button>`
-                  : `<span style="color: #64748b; font-size: 10px; padding: 2px 4px;" title="En preparación en cocina (No eliminable)"><i class="fa-solid fa-lock" style="font-size: 10px; opacity: 0.5;"></i></span>`}
+                  : `<span style="color: #64748b; font-size: 10px; padding: 2px 4px;" title="${isItPaid ? 'Cuenta pagada' : 'En preparación en cocina'}"><i class="fa-solid fa-lock" style="font-size: 10px; opacity: 0.5;"></i></span>`}
               `;
               itemsList.appendChild(row);
             });
           }
         }
 
-        const iva = subtotal * 0.16;
-        const total = subtotal + iva;
+        const iva = saldoPendiente * 0.16;
+        const total = saldoPendiente + iva;
 
         const subtotalEl = document.getElementById('sidebarSubtotal');
         const ivaEl = document.getElementById('sidebarIva');
         const totalEl = document.getElementById('sidebarTotal');
-        if (subtotalEl) subtotalEl.innerText = `$${subtotal.toFixed(2)}`;
+        if (subtotalEl) subtotalEl.innerText = `$${saldoPendiente.toFixed(2)}`;
         if (ivaEl) ivaEl.innerText = `$${iva.toFixed(2)}`;
         if (totalEl) totalEl.innerText = `$${total.toFixed(2)}`;
 
