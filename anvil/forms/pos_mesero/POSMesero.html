@@ -52,6 +52,26 @@
     opacity: 0.85 !important;
   }
 
+  /* ── Sillas Estados Base ── */
+  .chair-btn-fixed.chair-state-free {
+    background: #059669 !important;
+    border: 2px solid #10b981 !important;
+    color: #ffffff !important;
+    box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3) !important;
+  }
+  .chair-btn-fixed.chair-state-busy {
+    background: #d97706 !important;
+    border: 2px solid #f59e0b !important;
+    color: #ffffff !important;
+    box-shadow: 0 4px 10px rgba(245, 158, 11, 0.3) !important;
+  }
+  .chair-btn-fixed.chair-state-paid {
+    background: #0284c7 !important;
+    border: 2px solid #38bdf8 !important;
+    color: #ffffff !important;
+    box-shadow: 0 4px 12px rgba(56, 189, 248, 0.4) !important;
+  }
+
   /* ── Sillas DESTINO disponibles en modo mover ── */
   .chair-btn-fixed.chair-moving-target.chair-state-free {
     border: 2px dashed #10b981 !important;
@@ -63,6 +83,12 @@
     border: 2px dashed #f59e0b !important;
     box-shadow: 0 0 12px rgba(245, 158, 11, 0.5) !important;
     animation: pulse-glow-amber 1.2s ease-in-out infinite !important;
+  }
+
+  .chair-btn-fixed.chair-moving-target.chair-state-paid {
+    border: 2px dashed #38bdf8 !important;
+    box-shadow: 0 0 12px rgba(56, 189, 248, 0.6) !important;
+    animation: pulse-glow-cyan 1.2s ease-in-out infinite !important;
   }
 
   @keyframes pulse-glow-cyan {
@@ -2979,13 +3005,16 @@
       const btnCerrarBottom = document.getElementById('btnCerrarModalBottom');
 
       if (sillaNum === null) {
-        // EN PANORAMA GENERAL (Centro de Mesa): Vista 100% informativa
-        // NO se muestra botón de cobro aquí porque todo cobro requiere un comensal titular solicitante.
+        // EN PANORAMA GENERAL (Centro de Mesa): Vista informativa de supervisión
         if (btnCobrarDirecto) btnCobrarDirecto.style.display = 'none';
         if (btnEnviarCocina) btnEnviarCocina.style.display = 'none';
         if (btnMover) btnMover.style.display = 'none';
-        if (btnLiberar) btnLiberar.style.display = 'none';
         if (btnPrecuenta) btnPrecuenta.style.display = 'none';
+        if (btnLiberar) {
+          btnLiberar.style.display = (sillasOcupadas.length > 0) ? 'inline-flex' : 'none';
+          btnLiberar.onclick = function() { window.liberarMesaCompleta(mesaId); };
+          btnLiberar.innerHTML = '<i class="fa-solid fa-broom"></i> Desocupar Toda la Mesa';
+        }
         if (btnCerrarBottom) {
           btnCerrarBottom.style.flex = '1';
           btnCerrarBottom.innerHTML = '<i class="fa-solid fa-arrow-left"></i> Regresar al Croquis de Mesas';
@@ -2993,6 +3022,11 @@
       } else {
         // EN COBRO POR COMENSAL:
         if (btnPrecuenta) btnPrecuenta.style.display = 'flex';
+        if (btnLiberar) {
+          btnLiberar.style.display = 'inline-flex';
+          btnLiberar.onclick = function() { window.liberarSillaActual(); };
+          btnLiberar.innerHTML = '<i class="fa-solid fa-broom"></i> Desocupar Silla';
+        }
         if (btnCerrarBottom) {
           btnCerrarBottom.style.flex = '1';
           btnCerrarBottom.innerHTML = '<i class="fa-solid fa-arrow-left"></i> Regresar a Mesas';
@@ -3517,9 +3551,20 @@
       var metodoNombre = metodoLabels[metodo] || metodo;
       var sillasStr = sillas.map(function(s) { return 'Silla ' + s; }).join(', ');
 
-      // Liberar sillas en memoria y guardar historial
+      // Marcar sillas como pagadas (permanecen en la mesa en sobremesa)
+      var nowStr = (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
       sillas.forEach(function(sNum) {
-        delete window.palapaState.cuentas[mesaId + '-' + sNum];
+        var k = mesaId + '-' + sNum;
+        if (window.palapaState.cuentas[k]) {
+          window.palapaState.cuentas[k].estado = 'pagada';
+          window.palapaState.cuentas[k].pagado = true;
+          window.palapaState.cuentas[k].horaPago = nowStr;
+          window.palapaState.cuentas[k].metodoPago = metodoNombre;
+          window.palapaState.cuentas[k].montoPagado = granTotal;
+          if (window.palapaState.cuentas[k].items) {
+            window.palapaState.cuentas[k].items.forEach(function(it) { it.pagado = true; });
+          }
+        }
       });
 
       window.palapaState.sillasSeleccionadasCobro = [];
@@ -3527,7 +3572,7 @@
       renderStateUI();
       window.cerrarModalPasarelaCobro();
 
-      showDragToast(`💳 ¡Liquidación exitosa de Mesa ${mesaId} (${sillasStr}) por $${granTotal.toFixed(2)} vía ${metodoNombre}! Sillas liberadas.`, 'ok');
+      showDragToast(`💳 ¡Liquidación exitosa de Mesa ${mesaId} (${sillasStr}) por $${granTotal.toFixed(2)} (${metodoNombre})! Cuenta saldada. Comensales continúan en sobremesa.`, 'ok');
     };
 
     window.enviarCocinaActual = function() {
@@ -3803,8 +3848,9 @@
       const key = `${mesaId}-${sillaNum}`;
       const cuenta = window.palapaState.cuentas[key];
       if (cuenta) {
-        if (cuenta.items && cuenta.items.length > 0) {
-          if (!confirm(`La Silla ${sillaNum} de Mesa ${mesaId} tiene ${cuenta.items.length} consumos registrados. ¿Deseas liberar la silla y eliminar la cuenta?`)) {
+        // Solo pedir confirmación si tiene consumos pendientes no pagados
+        if (!cuenta.pagado && cuenta.estado !== 'pagada' && cuenta.items && cuenta.items.length > 0) {
+          if (!confirm(`La Silla ${sillaNum} de Mesa ${mesaId} tiene consumos pendientes de cobro. ¿Deseas desocupar la silla de todos modos?`)) {
             return;
           }
         }
@@ -3812,8 +3858,44 @@
         saveStateToStorage();
         renderStateUI();
         cerrarModalComanda();
-        showDragToast(`🟢 Silla ${sillaNum} de Mesa ${mesaId} liberada y disponible`, 'ok');
+        showDragToast(`🟢 Silla ${sillaNum} de Mesa ${mesaId} desocupada y disponible`, 'ok');
       }
+    };
+
+    window.liberarMesaCompleta = function (mesaId) {
+      mesaId = mesaId || window.palapaState.mesaSeleccionadaId;
+      if (!mesaId) return;
+
+      var unpaidCount = 0;
+      Object.keys(window.palapaState.cuentas).forEach(function(k) {
+        var p = k.split('-');
+        if (parseInt(p[0]) === mesaId) {
+          var c = window.palapaState.cuentas[k];
+          if (c && !c.pagado && c.estado !== 'pagada' && c.items && c.items.length > 0) {
+            unpaidCount++;
+          }
+        }
+      });
+
+      if (unpaidCount > 0) {
+        if (!confirm(`Hay ${unpaidCount} comensal(es) con consumos no pagados en Mesa ${mesaId}. ¿Seguro que deseas desocupar y poner libre toda la mesa?`)) {
+          return;
+        }
+      }
+
+      var count = 0;
+      Object.keys(window.palapaState.cuentas).forEach(function(k) {
+        var p = k.split('-');
+        if (parseInt(p[0]) === mesaId) {
+          delete window.palapaState.cuentas[k];
+          count++;
+        }
+      });
+
+      saveStateToStorage();
+      renderStateUI();
+      cerrarModalComanda();
+      showDragToast(`🟢 Mesa ${mesaId} desocupada completamente (${count} sillas liberadas)`, 'ok');
     };
 
     window.eliminarItemModal = function (key, idx) {
@@ -3999,7 +4081,8 @@
       function renderChairBadge(m, s, posCss, container, isJoinedMode) {
         const key = `${m}-${s}`;
         const cuenta = window.palapaState.cuentas[key];
-        const isOccupied = !!(cuenta && (cuenta.estado === 'ocupada' || (cuenta.items && cuenta.items.length > 0)));
+        const isPaid = !!(cuenta && (cuenta.estado === 'pagada' || cuenta.pagado));
+        const isOccupied = !!(cuenta && (cuenta.estado === 'ocupada' || isPaid || (cuenta.items && cuenta.items.length > 0)));
         const isSource = isMoveMode && origen && origen.mesaId === m && origen.sillaNum === s;
         const isArrimada = (s >= 5) || (cuenta && cuenta.esArrimada);
         const numItems = (cuenta && cuenta.items) ? cuenta.items.length : 0;
@@ -4008,22 +4091,25 @@
         chairEl.id = `chair-${m}-${s}`;
         chairEl.setAttribute('draggable', 'true');
 
-        let stateClass = isOccupied ? 'chair-state-busy' : 'chair-state-free';
+        let stateClass = isPaid ? 'chair-state-paid' : (isOccupied ? 'chair-state-busy' : 'chair-state-free');
         if (isSource) stateClass = 'chair-moving-source';
         else if (isMoveMode) stateClass = `chair-moving-target ${stateClass}`;
 
         chairEl.className = `chair-btn-fixed ${stateClass}`;
         chairEl.style.cssText = `position: absolute !important; ${posCss} z-index: 25 !important; cursor: pointer !important; white-space: nowrap !important;`;
 
+        const paidCheck = isPaid ? ' ✓' : '';
         if (isJoinedMode) {
-          chairEl.innerHTML = isArrimada ? `🪑 M${m}-S${s}` : `M${m}-S${s}`;
+          chairEl.innerHTML = isArrimada ? `🪑 M${m}-S${s}${paidCheck}` : `M${m}-S${s}${paidCheck}`;
         } else {
-          chairEl.innerHTML = isArrimada ? `🪑 S${s}` : `Silla ${s}`;
+          chairEl.innerHTML = isArrimada ? `🪑 S${s}${paidCheck}` : `Silla ${s}${paidCheck}`;
         }
 
-        chairEl.setAttribute('title', isOccupied
-          ? `Mesa ${m} Silla ${s} (Ocupada${numItems > 0 ? ' · ' + numItems + ' consumos' : ''}) • Arrastra para mover o clic para comanda`
-          : `Mesa ${m} Silla ${s} (Disponible) • Arrastra para trasladar o clic para comanda`);
+        chairEl.setAttribute('title', isPaid
+          ? `Mesa ${m} Silla ${s} (Cuenta Pagada / Sobremesa) • Clic para ver o liberar`
+          : (isOccupied
+            ? `Mesa ${m} Silla ${s} (Ocupada${numItems > 0 ? ' · ' + numItems + ' consumos' : ''}) • Arrastra para mover o clic para comanda`
+            : `Mesa ${m} Silla ${s} (Disponible) • Arrastra para trasladar o clic para comanda`));
 
         chairEl.addEventListener('mousedown', function(e) {
           _chairMousedown(e, m, s);
