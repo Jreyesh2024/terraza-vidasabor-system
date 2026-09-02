@@ -4663,39 +4663,72 @@
           sillasDeEstaMesa.forEach(s => {
             const sKey = `${mesaId}-${s}`;
             const sCta = window.palapaState.cuentas[sKey];
-            const sOcc = !!(sCta &amp;&amp; (sCta.estado === 'ocupada' || (sCta.items &amp;&amp; sCta.items.length > 0)));
+            const isPaidSilla = !!(sCta &amp;&amp; (sCta.estado === 'pagada' || sCta.pagado));
+            const sOcc = !!(sCta &amp;&amp; (sCta.estado === 'ocupada' || isPaidSilla || (sCta.items &amp;&amp; sCta.items.length > 0)));
             const isCurrent = (s === sillaNum);
             const isExtra = (s > 4);
 
             let subSilla = 0;
+            let saldoSilla = 0;
             let numItems = 0;
             if (sCta &amp;&amp; sCta.items) {
               numItems = sCta.items.length;
-              sCta.items.forEach(i => { subSilla += (i.precio * i.cantidad); });
+              sCta.items.forEach(i => {
+                const itSub = (i.precio * i.cantidad);
+                subSilla += itSub;
+                if (!i.pagado &amp;&amp; !isPaidSilla) saldoSilla += itSub;
+              });
+            }
+
+            // Colores temáticos 100% consistentes con el plano de mesas
+            let bgCard, borderCard, titleColor, badgeBg, badgeColor, badgeTxt, montoColor, montoTxt;
+
+            if (isPaidSilla) {
+              // AZUL: Cuenta Pagada / Sobremesa
+              bgCard = isCurrent ? 'rgba(2, 132, 199, 0.28)' : 'rgba(2, 132, 199, 0.15)';
+              borderCard = isCurrent ? '2px solid #38bdf8' : '1.5px solid #0284c7';
+              titleColor = '#38bdf8';
+              badgeBg = '#0284c7';
+              badgeColor = '#ffffff';
+              badgeTxt = isCurrent ? '● ATENDIENDO (PAGADA)' : '🔵 PAGADA ✓';
+              montoColor = '#38bdf8';
+              montoTxt = (saldoSilla === 0) ? '$0.00 pend.' : `$${saldoSilla.toFixed(2)}`;
+            } else if (sOcc) {
+              // NARANJA: Ocupada / Consumiendo
+              bgCard = isCurrent ? 'rgba(245, 158, 11, 0.25)' : 'rgba(245, 158, 11, 0.12)';
+              borderCard = isCurrent ? '2px solid #fbbf24' : '1.5px solid #f59e0b';
+              titleColor = '#fbbf24';
+              badgeBg = '#d97706';
+              badgeColor = '#ffffff';
+              badgeTxt = isCurrent ? '● ATENDIENDO' : '🟠 OCUPADA';
+              montoColor = '#fbbf24';
+              montoTxt = `$${subSilla.toFixed(2)}`;
+            } else {
+              // VERDE: Disponible / Libre
+              bgCard = isCurrent ? 'rgba(5, 150, 105, 0.25)' : 'rgba(5, 150, 105, 0.12)';
+              borderCard = isCurrent ? '2px solid #34d399' : '1.5px solid #10b981';
+              titleColor = '#34d399';
+              badgeBg = '#059669';
+              badgeColor = '#ffffff';
+              badgeTxt = isCurrent ? '● ATENDIENDO' : '🟢 LIBRE';
+              montoColor = '#64748b';
+              montoTxt = '$0.00';
             }
 
             const card = document.createElement('div');
             card.onclick = (function(sn) { return function() { window.seleccionarSillaSidebar(sn); }; })(s);
-            card.style.cssText = `padding: 8px 10px !important; border-radius: 10px !important; cursor: pointer !important; transition: all 0.2s !important; display: flex !important; flex-direction: column !important; gap: 2px !important; ${
-              isCurrent
-                ? 'background: rgba(5, 150, 105, 0.25) !important; border: 2px solid #34d399 !important; box-shadow: 0 0 12px rgba(52,211,153,0.3) !important;'
-                : (sOcc ? 'background: #0f172a !important; border: 1px solid #f59e0b !important;' : 'background: #090d16 !important; border: 1px solid #1e293b !important; opacity: 0.7 !important;')
-            }`;
+            card.style.cssText = `padding: 8px 10px !important; border-radius: 10px !important; cursor: pointer !important; transition: all 0.2s !important; display: flex !important; flex-direction: column !important; gap: 2px !important; background: ${bgCard} !important; border: ${borderCard} !important; ${isCurrent ? 'box-shadow: 0 0 14px rgba(56, 189, 248, 0.35) !important;' : ''}`;
 
             card.innerHTML = `
               <div style=&quot;display: flex; justify-content: space-between; align-items: center;&quot;>
-                <span style=&quot;font-weight: 900; font-size: 11px; color: ${isCurrent ? '#34d399' : (sOcc ? '#fbbf24' : '#cbd5e1')};&quot;>
+                <span style=&quot;font-weight: 900; font-size: 11px; color: ${titleColor};&quot;>
                   Silla ${s} ${isExtra ? '<span style=&quot;font-size: 9px; color: #38bdf8; font-weight: 800;&quot;>(Extra 🪑)</span>' : ''}
                 </span>
-                <span style=&quot;font-size: 9px; font-weight: 800; padding: 1px 5px; border-radius: 4px; ${
-                  isCurrent
-                    ? 'background: #059669; color: #ffffff;'
-                    : (sOcc ? 'background: #78350f; color: #fde68a;' : 'background: #1e293b; color: #64748b;')
-                }&quot;>${isCurrent ? '● ATENDIENDO' : (sOcc ? '🟡 OCUPADA' : '⚪ LIBRE')}</span>
+                <span style=&quot;font-size: 9px; font-weight: 900; padding: 2px 6px; border-radius: 4px; background: ${badgeBg}; color: ${badgeColor};&quot;>${badgeTxt}</span>
               </div>
               <div style=&quot;display: flex; justify-content: space-between; align-items: center; margin-top: 2px;&quot;>
-                <span style=&quot;font-size: 9px; color: #94a3b8;&quot;>${sOcc ? `${numItems} prod.` : 'Sin comensal'}</span>
-                <span style=&quot;font-size: 11px; font-weight: 900; color: ${sOcc ? '#34d399' : '#64748b'};&quot;>$${subSilla.toFixed(2)}</span>
+                <span style=&quot;font-size: 9px; color: #94a3b8;&quot;>${isPaidSilla ? 'En Sobremesa' : (sOcc ? `${numItems} prod.` : 'Disponible')}</span>
+                <span style=&quot;font-size: 11px; font-weight: 900; color: ${montoColor};&quot;>${montoTxt}</span>
               </div>
             `;
             cardsGrid.appendChild(card);
