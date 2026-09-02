@@ -529,16 +529,15 @@
 
       <!-- VISTA 2: SIDEBAR COMPACTO DE COMANDA & GESTIÓN DE MESA -->
       <div id="viewSidebarComanda" style="flex-direction: column !important; justify-content: space-between !important; height: 100% !important; gap: 12px !important;">
-        <!-- Top Back Button & Table Info Header -->
-        <div style="display: flex !important; justify-content: space-between !important; align-items: center !important; border-bottom: 1px solid #1e293b !important; padding-bottom: 10px !important;">
-          <button onclick="window.volverAlCroquisGeneral();"
-            style="background: linear-gradient(135deg, #0284c7, #0369a1) !important; color: #ffffff !important; border: none !important; border-radius: 12px !important; padding: 10px 18px !important; font-size: 13px !important; font-weight: 900 !important; cursor: pointer !important; display: flex !important; align-items: center !important; gap: 8px !important; box-shadow: 0 4px 14px rgba(2, 132, 199, 0.4) !important;">
-            <i class="fa-solid fa-arrow-left"></i> ⬅ VOLVER AL PLANO DE MESAS
-          </button>
-          <div style="text-align: right !important;">
-            <span id="sidebarTableTitle" style="font-size: 14px !important; font-weight: 900 !important; color: #fbbf24 !important; display: block !important;">MESA 3 (PALAPA)</span>
-            <span id="sidebarTableOccupiedCount" style="font-size: 10px !important; color: #94a3b8 !important; font-weight: 700 !important;">2 Comensales Ubicados</span>
+        <!-- Top Table Info Header (Comanda focused) -->
+        <div style="display: flex !important; justify-content: space-between !important; align-items: center !important; border-bottom: 1px solid #1e293b !important; padding-bottom: 8px !important;">
+          <div>
+            <span id="sidebarTableTitle" style="font-size: 15px !important; font-weight: 900 !important; color: #fbbf24 !important; display: block !important;">MESA 3 (PALAPA)</span>
+            <span id="sidebarTableOccupiedCount" style="font-size: 11px !important; color: #94a3b8 !important; font-weight: 700 !important;">2 Comensales Ubicados</span>
           </div>
+          <span style="font-size: 11px !important; font-weight: 800 !important; background: rgba(5,150,105,0.2) !important; color: #34d399 !important; border: 1px solid rgba(5,150,105,0.4) !important; padding: 4px 10px !important; border-radius: 8px !important; display: inline-flex !important; align-items: center !important; gap: 5px !important;">
+            <i class="fa-solid fa-receipt"></i> Comanda de Mesa
+          </span>
         </div>
 
         <!-- CHAIRS SELECTOR GRID (ESTÁNDAR + ARRIMADAS) -->
@@ -582,10 +581,10 @@
         <!-- Totals Summary -->
         <div style="background: #020617 !important; border: 1px solid #1e293b !important; border-radius: 12px !important; padding: 10px 14px !important;">
           <div style="display: flex !important; justify-content: space-between !important; font-size: 11px !important; color: #94a3b8 !important; margin-bottom: 2px !important;">
-            <span>Subtotal Silla:</span><span id="sidebarSubtotal">$0.00</span>
+            <span>Subtotal (Base s/IVA):</span><span id="sidebarSubtotal">$0.00</span>
           </div>
           <div style="display: flex !important; justify-content: space-between !important; font-size: 11px !important; color: #94a3b8 !important; margin-bottom: 4px !important;">
-            <span>IVA (16%):</span><span id="sidebarIva">$0.00</span>
+            <span>IVA (16% Incluido):</span><span id="sidebarIva">$0.00</span>
           </div>
           <div style="display: flex !important; justify-content: space-between !important; font-size: 13px !important; font-weight: 900 !important; color: #34d399 !important; border-top: 1px solid #1e293b !important; padding-top: 4px !important;">
             <span>Total a Pagar Silla:</span><span id="sidebarTotal">$0.00</span>
@@ -622,15 +621,15 @@
             <p style="font-size: 11px !important; color: #94a3b8 !important; margin: 2px 0 0 0 !important;">Marcado
               rápido de platillos & bebidas para cocina KDS</p>
           </div>
-          <div style="display: flex !important; align-items: center !important; gap: 8px !important;">
-            <button onclick="window.volverAlCroquisGeneral();"
-              style="background: #1e293b !important; color: #38bdf8 !important; border: 1px solid #334155 !important; border-radius: 10px !important; padding: 6px 12px !important; font-size: 11px !important; font-weight: 800 !important; cursor: pointer !important; display: flex !important; align-items: center !important; gap: 6px !important;">
-              <i class="fa-solid fa-table-cells-large"></i> ⬅ Plano de Mesas
-            </button>
+          <div style="display: flex !important; align-items: center !important; gap: 10px !important;">
             <span id="activeTargetBadge"
-              style="padding: 6px 14px !important; background: rgba(5, 150, 105, 0.2) !important; color: #34d399 !important; border: 1px solid rgba(5, 150, 105, 0.4) !important; border-radius: 12px !important; font-size: 13px !important; font-weight: 900 !important;">
+              style="padding: 7px 14px !important; background: rgba(5, 150, 105, 0.2) !important; color: #34d399 !important; border: 1px solid rgba(5, 150, 105, 0.4) !important; border-radius: 12px !important; font-size: 13px !important; font-weight: 900 !important;">
               Mesa 2 • Silla 1
             </span>
+            <button onclick="window.volverAlCroquisGeneral();"
+              style="background: linear-gradient(135deg, #0284c7, #0369a1) !important; color: #ffffff !important; border: none !important; border-radius: 12px !important; padding: 8px 16px !important; font-size: 12px !important; font-weight: 900 !important; cursor: pointer !important; display: flex !important; align-items: center !important; gap: 8px !important; box-shadow: 0 4px 12px rgba(2, 132, 199, 0.35) !important;">
+              <i class="fa-solid fa-arrow-left"></i> ⬅ Volver al Plano de Mesas
+            </button>
           </div>
         </div>
 
@@ -661,8 +660,12 @@
       <div
         style="display: flex !important; gap: 10px !important; padding-top: 12px !important; border-top: 1px solid #334155 !important;">
         <button id="btnVerComandaActiva" onclick="window.abrirModalComandaActual();"
-          style="width: 100% !important; padding: 12px !important; background: linear-gradient(135deg, #059669, #0d9488) !important; color: #ffffff !important; font-weight: 900 !important; font-size: 12px !important; border-radius: 12px !important; border: none !important; cursor: pointer !important; box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3) !important; display: flex !important; align-items: center !important; justify-content: center !important; gap: 8px !important;">
+          style="flex: 2 !important; padding: 12px !important; background: linear-gradient(135deg, #059669, #0d9488) !important; color: #ffffff !important; font-weight: 900 !important; font-size: 12px !important; border-radius: 12px !important; border: none !important; cursor: pointer !important; box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3) !important; display: flex !important; align-items: center !important; justify-content: center !important; gap: 8px !important;">
           <i class="fa-solid fa-receipt"></i> Ver Comanda Completa & Cobrar
+        </button>
+        <button onclick="window.volverAlCroquisGeneral();"
+          style="flex: 1 !important; padding: 12px !important; background: #1e293b !important; color: #38bdf8 !important; border: 1px solid #334155 !important; font-weight: 900 !important; font-size: 12px !important; border-radius: 12px !important; cursor: pointer !important; display: flex !important; align-items: center !important; justify-content: center !important; gap: 8px !important;">
+          <i class="fa-solid fa-table-cells-large"></i> ⬅ Volver al Plano
         </button>
       </div>
 
