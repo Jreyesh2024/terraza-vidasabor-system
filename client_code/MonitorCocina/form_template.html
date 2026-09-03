@@ -45,7 +45,7 @@
 </style>
 
 <div id=&quot;kdsRootContainer&quot; style=&quot;box-sizing: border-box !important; width: 100% !important; min-height: 100vh !important; background: #060911 !important; color: #f8fafc !important; padding: 75px 24px 48px 24px !important; display: flex !important; flex-direction: column !important; gap: 16px !important; position: relative !important; z-index: 1 !important;&quot;>
-  
+
   <!-- TOP BAR: HEADER, LIVE CLOCK &amp; NAVIGATION -->
   <div style=&quot;display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1e293b; padding-bottom: 14px; flex-wrap: wrap; gap: 12px;&quot;>
     <div style=&quot;display: flex; align-items: center; gap: 14px;&quot;>
@@ -101,7 +101,7 @@
 
   <!-- MULTI-LEVEL FILTER BAR: ÁREAS, MESAS &amp; CATEGORÍAS/ESTACIONES -->
   <div style=&quot;background: #090d16; border: 1px solid #1e293b; border-radius: 16px; padding: 14px 18px; display: flex; flex-direction: column; gap: 12px;&quot;>
-    
+
     <!-- LEVEL 1: ÁREAS DEL RESTAURANTE -->
     <div style=&quot;display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; border-bottom: 1px solid #1e293b; padding-bottom: 10px;&quot;>
       <div style=&quot;display: flex; align-items: center; gap: 8px; flex-wrap: wrap;&quot;>
@@ -204,7 +204,7 @@
   style=&quot;display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(8px); z-index: 100; align-items: center; justify-content: center; padding: 16px;&quot;>
   <div id=&quot;modalFichaRecetaCard&quot;
     style=&quot;background: #090d16; border: 1px solid #1e293b; border-radius: 20px; width: 100%; max-width: 540px; max-height: 90vh; overflow-y: auto; box-shadow: 0 25px 50px rgba(0, 0, 0, 0.9); color: #f8fafc; padding: 22px; display: flex; flex-direction: column; gap: 16px;&quot;>
-    
+
     <!-- Modal Header -->
     <div style=&quot;display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid #1e293b; padding-bottom: 12px;&quot;>
       <div>
@@ -509,17 +509,19 @@
               var parts = key.split('-');
               var mesaId = parts[0] || '1';
               var sillaNum = parts[1] || '1';
+              var isMesaCentro = (sillaNum === '0' || cta.es_cuenta_mesa);
               var areaInfo = getTableArea(mesaId);
 
-              // CADA SILLA / COMENSAL TIENE SU PROPIA COLUMNA DE COMANDA EN EL KDS
-              var ticketKey = 'MESA-' + mesaId + '-S-' + sillaNum;
+              // CADA SILLA / COMENSAL O CUENTA DE MESA TIENE SU PROPIA COLUMNA DE COMANDA EN EL KDS
+              var ticketKey = isMesaCentro ? ('MESA-' + mesaId + '-CENTRO') : ('MESA-' + mesaId + '-S-' + sillaNum);
               if (!ticketsMap[ticketKey]) {
                 ticketsMap[ticketKey] = {
-                  id: 'T-' + mesaId + '-' + sillaNum,
+                  id: isMesaCentro ? ('T-' + mesaId + '-CENTRO') : ('T-' + mesaId + '-' + sillaNum),
                   mesaId: mesaId.toString(),
                   sillaNum: sillaNum.toString(),
-                  mesaNombre: `Mesa ${mesaId} • Silla ${sillaNum}`,
-                  comensalNombre: cta.comensalNombre || `Comensal Silla ${sillaNum}`,
+                  es_cuenta_mesa: isMesaCentro,
+                  mesaNombre: isMesaCentro ? `⭐ Mesa ${mesaId} • AL CENTRO` : `Mesa ${mesaId} • Silla ${sillaNum}`,
+                  comensalNombre: isMesaCentro ? `⭐ PLATILLOS AL CENTRO` : (cta.comensalNombre || `Comensal Silla ${sillaNum}`),
                   areaId: areaInfo.id,
                   areaNombre: areaInfo.nombre,
                   horaEnvio: enviados[0].horaEnvioCocina || enviados[0].hora || '09:00 AM',
@@ -783,7 +785,7 @@
       // Renderizar Selector Dinámico de Mesas 1 a 9
       if (mesaChipsContainer) {
         mesaChipsContainer.innerHTML = '';
-        
+
         // Chip 'Todas'
         const isAllSelected = (currentMesa === 'TODAS');
         const btnAll = document.createElement('button');
@@ -1034,7 +1036,7 @@
                 <span style=&quot;font-size: 13px; font-weight: 900; color: ${it.estado === 'listo' ? '#38bdf8' : '#ffffff'};&quot;>
                   ${it.cantidad}x ${it.nombre}
                 </span>
-                <span style=&quot;font-size: 9px; font-weight: 800; background: #0f172a; color: #fbbf24; border: 1px solid #334155; padding: 1px 5px; border-radius: 4px;&quot;>Silla ${it.sillaNum}</span>
+                <span style=&quot;font-size: 9px; font-weight: 800; background: #0f172a; color: ${(it.sillaNum === '0' || it.sillaNum === 0) ? '#38bdf8' : '#fbbf24'}; border: 1px solid #334155; padding: 1px 5px; border-radius: 4px;&quot;>${(it.sillaNum === '0' || it.sillaNum === 0) ? '⭐ Al Centro' : ('Silla ' + it.sillaNum)}</span>
               </div>
               <div style=&quot;display: flex; align-items: center; gap: 4px;&quot;>
                 ${itemStateBadge}
@@ -1184,33 +1186,33 @@
 
       const now = Date.now();
       ticket.items.forEach(it => {
-        if (it.estado === 'recibido') {
-          it.estado = 'preparando';
-          it.timestampInicio = now;
-          if (it.keyCuenta) {
-            var raw = localStorage.getItem('palapa_croquis_state_v1');
-            if (raw) {
-              try {
-                var state = JSON.parse(raw);
-                if (state &amp;&amp; state.cuentas &amp;&amp; state.cuentas[it.keyCuenta]) {
-                  var cItems = state.cuentas[it.keyCuenta].items;
-                  if (cItems &amp;&amp; cItems[it.idxInCuenta]) {
-                    cItems[it.idxInCuenta].estadoCocina = 'preparando';
-                    cItems[it.idxInCuenta].timestampInicioCocina = now;
-                    localStorage.setItem('palapa_croquis_state_v1', JSON.stringify(state));
-                  }
-                }
-              } catch(e) {}
-            }
-          }
-        }
+      if (it.estado === 'recibido') {
+      it.estado = 'preparando';
+      it.timestampInicio = now;
+      if (it.keyCuenta) {
+      var raw = localStorage.getItem('palapa_croquis_state_v1');
+      if (raw) {
+      try {
+      var state = JSON.parse(raw);
+      if (state &amp;&amp; state.cuentas &amp;&amp; state.cuentas[it.keyCuenta]) {
+      var cItems = state.cuentas[it.keyCuenta].items;
+      if (cItems &amp;&amp; cItems[it.idxInCuenta]) {
+      cItems[it.idxInCuenta].estadoCocina = 'preparando';
+      cItems[it.idxInCuenta].timestampInicioCocina = now;
+      localStorage.setItem('palapa_croquis_state_v1', JSON.stringify(state));
+      }
+      }
+      } catch(e) {}
+      }
+      }
+      }
       });
 
       renderKDSUI();
-    };
+      };
 
-    // MARCAR PLATILLO LISTO (ÁMBAR/ROJO -> LISTO)
-    window.marcarListoItemKDS = function(ticketIdx, itemIdx) {
+      // MARCAR PLATILLO LISTO (ÁMBAR/ROJO -> LISTO)
+      window.marcarListoItemKDS = function(ticketIdx, itemIdx) {
       const ticket = window.kdsState.tickets[ticketIdx];
       if (!ticket || !ticket.items[itemIdx]) return;
 
@@ -1218,55 +1220,55 @@
       it.estado = 'listo';
 
       if (it.keyCuenta) {
-        var raw = localStorage.getItem('palapa_croquis_state_v1');
-        if (raw) {
-          try {
-            var state = JSON.parse(raw);
-            if (state &amp;&amp; state.cuentas &amp;&amp; state.cuentas[it.keyCuenta]) {
-              var cItems = state.cuentas[it.keyCuenta].items;
-              if (cItems &amp;&amp; cItems[it.idxInCuenta]) {
-                cItems[it.idxInCuenta].estadoCocina = 'listo';
-                localStorage.setItem('palapa_croquis_state_v1', JSON.stringify(state));
-              }
-            }
-          } catch(e) {}
-        }
+      var raw = localStorage.getItem('palapa_croquis_state_v1');
+      if (raw) {
+      try {
+      var state = JSON.parse(raw);
+      if (state &amp;&amp; state.cuentas &amp;&amp; state.cuentas[it.keyCuenta]) {
+      var cItems = state.cuentas[it.keyCuenta].items;
+      if (cItems &amp;&amp; cItems[it.idxInCuenta]) {
+      cItems[it.idxInCuenta].estadoCocina = 'listo';
+      localStorage.setItem('palapa_croquis_state_v1', JSON.stringify(state));
+      }
+      }
+      } catch(e) {}
+      }
       }
 
       renderKDSUI();
-    };
+      };
 
-    // 7. DESPACHAR TICKET COMPLETO (PASE / SERVIDO)
-    window.despacharTicketCompletoKDS = function(ticketIdx) {
+      // 7. DESPACHAR TICKET COMPLETO (PASE / SERVIDO)
+      window.despacharTicketCompletoKDS = function(ticketIdx) {
       const ticket = window.kdsState.tickets[ticketIdx];
       if (!ticket) return;
 
       ticket.items.forEach(it => {
-        it.estado = 'servido';
-        if (it.keyCuenta) {
-          var raw = localStorage.getItem('palapa_croquis_state_v1');
-          if (raw) {
-            try {
-              var state = JSON.parse(raw);
-              if (state &amp;&amp; state.cuentas &amp;&amp; state.cuentas[it.keyCuenta]) {
-                var cItems = state.cuentas[it.keyCuenta].items;
-                if (cItems &amp;&amp; cItems[it.idxInCuenta]) {
-                  cItems[it.idxInCuenta].estadoCocina = 'servido';
-                  localStorage.setItem('palapa_croquis_state_v1', JSON.stringify(state));
-                }
-              }
-            } catch(e) {}
-          }
-        }
+      it.estado = 'servido';
+      if (it.keyCuenta) {
+      var raw = localStorage.getItem('palapa_croquis_state_v1');
+      if (raw) {
+      try {
+      var state = JSON.parse(raw);
+      if (state &amp;&amp; state.cuentas &amp;&amp; state.cuentas[it.keyCuenta]) {
+      var cItems = state.cuentas[it.keyCuenta].items;
+      if (cItems &amp;&amp; cItems[it.idxInCuenta]) {
+      cItems[it.idxInCuenta].estadoCocina = 'servido';
+      localStorage.setItem('palapa_croquis_state_v1', JSON.stringify(state));
+      }
+      }
+      } catch(e) {}
+      }
+      }
       });
 
       // Efecto de sonido sintético de campana de pase
       playKitchenBell();
       window.cargarKDS();
-    };
+      };
 
-    // 8. MODAL DE FICHA TÉCNICA DE RECETA
-    window.abrirFichaReceta = function(nombrePlatillo) {
+      // 8. MODAL DE FICHA TÉCNICA DE RECETA
+      window.abrirFichaReceta = function(nombrePlatillo) {
       const modal = document.getElementById('modalFichaRecetaBackdrop');
       const titulo = document.getElementById('fichaRecetaTitulo');
       const categoria = document.getElementById('fichaRecetaCategoria');
@@ -1281,24 +1283,24 @@
       // Buscar receta en recetario o generar ficha estándar por defecto
       let receta = RECETARIO_ESTANDARIZADO[nombrePlatillo];
       if (!receta) {
-        receta = {
-          icon: '🍲',
-          categoria: 'Especialidad de la Casa • Cocina Caliente',
-          tiempo: '6-8 min',
-          equipo: 'Línea de Fuego / Quemador',
-          temp: 'Caliente (>75°C)',
-          ingredientes: [
-            { item: 'Porción base del platillo', cant: '1 porción estándar', dosificador: 'Bolsa dosificada #1' },
-            { item: 'Guarnición caliente', cant: '80 g', dosificador: '1 Cucharón' },
-            { item: 'Salsas y aderezos', cant: '30 ml', dosificador: 'Dosificador calibrado' }
-          ],
-          pasos: [
-            '1. Tomar los ingredientes porcionados del refrigerador de línea.',
-            '2. Saltear o calentar a fuego medio-alto durante el tiempo estándar indicado.',
-            '3. Emplatar en vajilla caliente y verificar temperatura antes de enviar a pase.'
-          ],
-          montaje: 'Vajilla estándar de La Terraza con guarnición y pase inmediato.'
-        };
+      receta = {
+      icon: '🍲',
+      categoria: 'Especialidad de la Casa • Cocina Caliente',
+      tiempo: '6-8 min',
+      equipo: 'Línea de Fuego / Quemador',
+      temp: 'Caliente (>75°C)',
+      ingredientes: [
+    { item: 'Porción base del platillo', cant: '1 porción estándar', dosificador: 'Bolsa dosificada #1' },
+    { item: 'Guarnición caliente', cant: '80 g', dosificador: '1 Cucharón' },
+    { item: 'Salsas y aderezos', cant: '30 ml', dosificador: 'Dosificador calibrado' }
+      ],
+      pasos: [
+      '1. Tomar los ingredientes porcionados del refrigerador de línea.',
+      '2. Saltear o calentar a fuego medio-alto durante el tiempo estándar indicado.',
+      '3. Emplatar en vajilla caliente y verificar temperatura antes de enviar a pase.'
+      ],
+      montaje: 'Vajilla estándar de La Terraza con guarnición y pase inmediato.'
+      };
       }
 
       if (titulo) titulo.innerText = nombrePlatillo;
@@ -1310,91 +1312,91 @@
       if (montaje) montaje.innerText = receta.montaje;
 
       if (ingredientesContainer) {
-        ingredientesContainer.innerHTML = '';
-        receta.ingredientes.forEach(ing => {
-          const row = document.createElement('div');
-          row.style.cssText = 'display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed #1e293b; padding-bottom: 3px;';
-          row.innerHTML = `
-            <div>
-              <span style=&quot;color: #ffffff; font-weight: 700;&quot;>${ing.item}</span>
-              <span style=&quot;font-size: 10px; color: #94a3b8; margin-left: 4px;&quot;>(${ing.dosificador})</span>
-            </div>
-            <span style=&quot;font-weight: 900; color: #34d399;&quot;>${ing.cant}</span>
-          `;
-          ingredientesContainer.appendChild(row);
-        });
+      ingredientesContainer.innerHTML = '';
+      receta.ingredientes.forEach(ing => {
+      const row = document.createElement('div');
+      row.style.cssText = 'display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed #1e293b; padding-bottom: 3px;';
+      row.innerHTML = `
+      <div>
+      <span style=&quot;color: #ffffff; font-weight: 700;&quot;>${ing.item}</span>
+      <span style=&quot;font-size: 10px; color: #94a3b8; margin-left: 4px;&quot;>(${ing.dosificador})</span>
+      </div>
+      <span style=&quot;font-weight: 900; color: #34d399;&quot;>${ing.cant}</span>
+      `;
+      ingredientesContainer.appendChild(row);
+      });
       }
 
       if (pasosContainer) {
-        pasosContainer.innerHTML = '';
-        receta.pasos.forEach(p => {
-          const pEl = document.createElement('div');
-          pEl.style.cssText = 'background: #020617; border: 1px solid #1e293b; border-radius: 8px; padding: 6px 10px;';
-          pEl.innerText = p;
-          pasosContainer.appendChild(pEl);
-        });
+      pasosContainer.innerHTML = '';
+      receta.pasos.forEach(p => {
+      const pEl = document.createElement('div');
+      pEl.style.cssText = 'background: #020617; border: 1px solid #1e293b; border-radius: 8px; padding: 6px 10px;';
+      pEl.innerText = p;
+      pasosContainer.appendChild(pEl);
+      });
       }
 
       if (modal) {
-        modal.style.display = 'flex';
+      modal.style.display = 'flex';
       }
-    };
+      };
 
-    window.cerrarFichaReceta = function() {
+      window.cerrarFichaReceta = function() {
       const modal = document.getElementById('modalFichaRecetaBackdrop');
       if (modal) {
-        modal.style.display = 'none';
+      modal.style.display = 'none';
       }
-    };
+      };
 
-    // Navegación
-    window.navMenu = function(modulo) {
+      // Navegación
+      window.navMenu = function(modulo) {
       if (window.anvilAppNav) {
-        window.anvilAppNav(modulo);
+      window.anvilAppNav(modulo);
       } else if (typeof window.parent !== 'undefined' &amp;&amp; window.parent.anvilAppNav) {
-        window.parent.anvilAppNav(modulo);
+      window.parent.anvilAppNav(modulo);
       } else {
-        alert('Navegando a: ' + modulo);
+      alert('Navegando a: ' + modulo);
       }
-    };
+      };
 
-    // Sonido de Campana de Cocina con Web Audio API (Sin archivos externos)
-    function playKitchenBell() {
+      // Sonido de Campana de Cocina con Web Audio API (Sin archivos externos)
+      function playKitchenBell() {
       try {
-        const AudioContext = window.AudioContext || window.webkitAudioContext;
-        if (!AudioContext) return;
-        const ctx = new AudioContext();
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      if (!AudioContext) return;
+      const ctx = new AudioContext();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
 
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(880, ctx.currentTime); // Nota La (A5)
-        osc.frequency.exponentialRampToValueAtTime(1760, ctx.currentTime + 0.1);
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(880, ctx.currentTime); // Nota La (A5)
+      osc.frequency.exponentialRampToValueAtTime(1760, ctx.currentTime + 0.1);
 
-        gain.gain.setValueAtTime(0.3, ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.8);
+      gain.gain.setValueAtTime(0.3, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.8);
 
-        osc.connect(gain);
-        gain.connect(ctx.destination);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
 
-        osc.start();
-        osc.stop(ctx.currentTime + 0.8);
+      osc.start();
+      osc.stop(ctx.currentTime + 0.8);
       } catch(e) {}
-    }
+      }
 
-    // Inicializar KDS y configurar polling automático cada 4 segundos
-    setTimeout(function() {
+      // Inicializar KDS y configurar polling automático cada 4 segundos
+      setTimeout(function() {
       try {
-        window.scrollTo(0, 0);
-        if (document.documentElement) document.documentElement.scrollTop = 0;
-        if (document.body) document.body.scrollTop = 0;
+      window.scrollTo(0, 0);
+      if (document.documentElement) document.documentElement.scrollTop = 0;
+      if (document.body) document.body.scrollTop = 0;
       } catch(e) {}
       window.cargarKDS();
-    }, 50);
+      }, 50);
 
-    setInterval(function() {
+      setInterval(function() {
       window.cargarKDS();
-    }, 4000);
+      }, 4000);
 
-  })();
-</script>"></anvil-form>
+      })();
+      </script>"></anvil-form>
