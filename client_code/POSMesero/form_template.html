@@ -5,326 +5,326 @@
   html,
   body,
   .anvil-container {
-    background-color: #090d16 !important;
-    color: #f8fafc !important;
-    font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
-    margin: 0 !important;
-    padding: 0 !important;
+  background-color: #090d16 !important;
+  color: #f8fafc !important;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
+  margin: 0 !important;
+  padding: 0 !important;
   }
 
   /* ── Drag &amp; Drop Visual Styles (HTML5 native dragstart/dragover/drop) ── */
   .chair-btn-fixed[draggable=&quot;true&quot;] {
-    cursor: grab !important;
-    user-select: none !important;
-    touch-action: none !important;
+  cursor: grab !important;
+  user-select: none !important;
+  touch-action: none !important;
   }
 
   .chair-btn-fixed.chair-dragging {
-    opacity: 0.35 !important;
-    transform: scale(1.12) !important;
-    border: 2px dashed #38bdf8 !important;
-    box-shadow: 0 0 22px rgba(56, 189, 248, 0.85) !important;
-    cursor: grabbing !important;
-    z-index: 5 !important;
+  opacity: 0.35 !important;
+  transform: scale(1.12) !important;
+  border: 2px dashed #38bdf8 !important;
+  box-shadow: 0 0 22px rgba(56, 189, 248, 0.85) !important;
+  cursor: grabbing !important;
+  z-index: 5 !important;
   }
 
   .chair-btn-fixed.chair-drag-target-valid {
-    border: 2px solid #38bdf8 !important;
-    box-shadow: 0 0 22px #38bdf8, inset 0 0 12px rgba(56, 189, 248, 0.5) !important;
-    transform: scale(1.2) !important;
-    transition: transform 0.12s ease, box-shadow 0.12s ease !important;
-    background: rgba(56, 189, 248, 0.18) !important;
+  border: 2px solid #38bdf8 !important;
+  box-shadow: 0 0 22px #38bdf8, inset 0 0 12px rgba(56, 189, 248, 0.5) !important;
+  transform: scale(1.2) !important;
+  transition: transform 0.12s ease, box-shadow 0.12s ease !important;
+  background: rgba(56, 189, 248, 0.18) !important;
   }
 
   .chair-btn-fixed.chair-drag-target-combine {
-    border: 2px solid #f59e0b !important;
-    box-shadow: 0 0 22px #f59e0b, inset 0 0 12px rgba(245, 158, 11, 0.5) !important;
-    transform: scale(1.2) !important;
-    transition: transform 0.12s ease, box-shadow 0.12s ease !important;
-    background: rgba(245, 158, 11, 0.18) !important;
+  border: 2px solid #f59e0b !important;
+  box-shadow: 0 0 22px #f59e0b, inset 0 0 12px rgba(245, 158, 11, 0.5) !important;
+  transform: scale(1.2) !important;
+  transition: transform 0.12s ease, box-shadow 0.12s ease !important;
+  background: rgba(245, 158, 11, 0.18) !important;
   }
 
   /* ── Silla ORIGEN en modo mover (click o drag iniciado) ── */
   .chair-btn-fixed.chair-moving-source {
-    border: 2px solid #38bdf8 !important;
-    box-shadow: 0 0 18px rgba(56, 189, 248, 0.9) !important;
-    animation: pulse-glow-cyan 1s ease-in-out infinite !important;
-    opacity: 0.85 !important;
+  border: 2px solid #38bdf8 !important;
+  box-shadow: 0 0 18px rgba(56, 189, 248, 0.9) !important;
+  animation: pulse-glow-cyan 1s ease-in-out infinite !important;
+  opacity: 0.85 !important;
   }
 
   /* ── Sillas Estados Base ── */
   .chair-btn-fixed.chair-state-free {
-    background: #059669 !important;
-    border: 2px solid #10b981 !important;
-    color: #ffffff !important;
-    box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3) !important;
+  background: #059669 !important;
+  border: 2px solid #10b981 !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3) !important;
   }
 
   .chair-btn-fixed.chair-state-busy {
-    background: #d97706 !important;
-    border: 2px solid #f59e0b !important;
-    color: #ffffff !important;
-    box-shadow: 0 4px 10px rgba(245, 158, 11, 0.3) !important;
+  background: #d97706 !important;
+  border: 2px solid #f59e0b !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 10px rgba(245, 158, 11, 0.3) !important;
   }
 
   .chair-btn-fixed.chair-state-paid {
-    background: #0284c7 !important;
-    border: 2px solid #38bdf8 !important;
-    color: #ffffff !important;
-    box-shadow: 0 4px 12px rgba(56, 189, 248, 0.4) !important;
+  background: #0284c7 !important;
+  border: 2px solid #38bdf8 !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 12px rgba(56, 189, 248, 0.4) !important;
   }
 
   /* ── Sillas DESTINO disponibles en modo mover ── */
   .chair-btn-fixed.chair-moving-target.chair-state-free {
-    border: 2px dashed #10b981 !important;
-    box-shadow: 0 0 12px rgba(16, 185, 129, 0.5) !important;
-    animation: pulse-glow-green 1.2s ease-in-out infinite !important;
+  border: 2px dashed #10b981 !important;
+  box-shadow: 0 0 12px rgba(16, 185, 129, 0.5) !important;
+  animation: pulse-glow-green 1.2s ease-in-out infinite !important;
   }
 
   .chair-btn-fixed.chair-moving-target.chair-state-busy {
-    border: 2px dashed #f59e0b !important;
-    box-shadow: 0 0 12px rgba(245, 158, 11, 0.5) !important;
-    animation: pulse-glow-amber 1.2s ease-in-out infinite !important;
+  border: 2px dashed #f59e0b !important;
+  box-shadow: 0 0 12px rgba(245, 158, 11, 0.5) !important;
+  animation: pulse-glow-amber 1.2s ease-in-out infinite !important;
   }
 
   .chair-btn-fixed.chair-moving-target.chair-state-paid {
-    border: 2px dashed #38bdf8 !important;
-    box-shadow: 0 0 12px rgba(56, 189, 248, 0.6) !important;
-    animation: pulse-glow-cyan 1.2s ease-in-out infinite !important;
+  border: 2px dashed #38bdf8 !important;
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.6) !important;
+  animation: pulse-glow-cyan 1.2s ease-in-out infinite !important;
   }
 
   @keyframes pulse-glow-cyan {
 
-    0%,
-    100% {
-      box-shadow: 0 0 10px rgba(56, 189, 248, 0.6);
-    }
+  0%,
+  100% {
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.6);
+  }
 
-    50% {
-      box-shadow: 0 0 28px rgba(56, 189, 248, 1.0);
-    }
+  50% {
+  box-shadow: 0 0 28px rgba(56, 189, 248, 1.0);
+  }
   }
 
   @keyframes pulse-glow-green {
 
-    0%,
-    100% {
-      box-shadow: 0 0 6px rgba(16, 185, 129, 0.4);
-    }
+  0%,
+  100% {
+  box-shadow: 0 0 6px rgba(16, 185, 129, 0.4);
+  }
 
-    50% {
-      box-shadow: 0 0 20px rgba(16, 185, 129, 0.9);
-    }
+  50% {
+  box-shadow: 0 0 20px rgba(16, 185, 129, 0.9);
+  }
   }
 
   @keyframes pulse-glow-amber {
 
-    0%,
-    100% {
-      box-shadow: 0 0 6px rgba(245, 158, 11, 0.4);
-    }
+  0%,
+  100% {
+  box-shadow: 0 0 6px rgba(245, 158, 11, 0.4);
+  }
 
-    50% {
-      box-shadow: 0 0 20px rgba(245, 158, 11, 0.9);
-    }
+  50% {
+  box-shadow: 0 0 20px rgba(245, 158, 11, 0.9);
+  }
   }
 
   /* ── Toast de notificación drag ── */
   #dragToast {
-    position: fixed;
-    bottom: 28px;
-    left: 50%;
-    transform: translateX(-50%) translateY(80px);
-    background: #0f172a;
-    color: #f8fafc;
-    border: 1px solid #334155;
-    padding: 12px 22px;
-    border-radius: 16px;
-    font-size: 13px;
-    font-weight: 700;
-    white-space: nowrap;
-    z-index: 9999;
-    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.7);
-    transition: transform 0.28s cubic-bezier(.34, 1.56, .64, 1), opacity 0.28s ease;
-    opacity: 0;
-    pointer-events: none;
+  position: fixed;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%) translateY(80px);
+  background: #0f172a;
+  color: #f8fafc;
+  border: 1px solid #334155;
+  padding: 12px 22px;
+  border-radius: 16px;
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+  z-index: 9999;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.7);
+  transition: transform 0.28s cubic-bezier(.34, 1.56, .64, 1), opacity 0.28s ease;
+  opacity: 0;
+  pointer-events: none;
   }
 
   #dragToast.show {
-    transform: translateX(-50%) translateY(0);
-    opacity: 1;
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
   }
 
   #dragToast.toast-ok {
-    border-color: #10b981;
-    color: #34d399;
+  border-color: #10b981;
+  color: #34d399;
   }
 
   #dragToast.toast-warn {
-    border-color: #f59e0b;
-    color: #fbbf24;
+  border-color: #f59e0b;
+  color: #fbbf24;
   }
 
   #dragToast.toast-err {
-    border-color: #ef4444;
-    color: #f87171;
+  border-color: #ef4444;
+  color: #f87171;
   }
 
   /* ── Mini-modal confirmación combinación ── */
   #combineConfirmBackdrop {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.7);
-    z-index: 9998;
-    align-items: center;
-    justify-content: center;
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 9998;
+  align-items: center;
+  justify-content: center;
   }
 
   #combineConfirmBackdrop.show {
-    display: flex;
+  display: flex;
   }
 
   /* ── Modal Comanda / Ticket por Silla ── */
   #modalComandaBackdrop {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.75);
-    z-index: 9990;
-    align-items: center;
-    justify-content: center;
-    backdrop-filter: blur(4px);
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  z-index: 9990;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(4px);
   }
 
   #modalComandaBackdrop.show {
-    display: flex !important;
+  display: flex !important;
   }
 
   /* ── Modal Precuenta Térmica Formal ── */
   #modalPrecuentaBackdrop {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.8);
-    z-index: 9995;
-    align-items: center;
-    justify-content: center;
-    backdrop-filter: blur(5px);
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.8);
+  z-index: 9995;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(5px);
   }
 
   #modalPrecuentaBackdrop.show {
-    display: flex !important;
+  display: flex !important;
   }
 
   /* ── Modal Pasarela de Cobro y Liquidación Multi-Método ── */
   #modalPasarelaCobroBackdrop {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.85);
-    z-index: 9998;
-    align-items: center;
-    justify-content: center;
-    backdrop-filter: blur(6px);
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  z-index: 9998;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(6px);
   }
 
   #modalPasarelaCobroBackdrop.show {
-    display: flex !important;
+  display: flex !important;
   }
 
   #combineConfirmBox {
-    background: #0f172a;
-    border: 1px solid #334155;
-    border-radius: 18px;
-    padding: 28px 32px;
-    min-width: 320px;
-    max-width: 420px;
-    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.8);
-    display: flex;
-    flex-direction: column;
-    gap: 18px;
-    animation: slideUp 0.22s cubic-bezier(.34, 1.56, .64, 1);
+  background: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 18px;
+  padding: 28px 32px;
+  min-width: 320px;
+  max-width: 420px;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.8);
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  animation: slideUp 0.22s cubic-bezier(.34, 1.56, .64, 1);
   }
 
   /* ── Durante drag: bajar z-index de círculos para que no bloqueen el drop ── */
   body.drag-active .table-circle-fixed {
-    pointer-events: none !important;
-    z-index: 1 !important;
+  pointer-events: none !important;
+  z-index: 1 !important;
   }
 
   /* Asegurar que sillas reciban eventos durante drag ── */
   body.drag-active .chair-btn-fixed {
-    pointer-events: auto !important;
+  pointer-events: auto !important;
   }
 
   /* Área completa de mesa como zona de drop activa */
   .table-box-220.drop-zone-active {
-    outline: 2px dashed rgba(56, 189, 248, 0.35) !important;
-    outline-offset: 4px !important;
-    border-radius: 12px !important;
+  outline: 2px dashed rgba(56, 189, 248, 0.35) !important;
+  outline-offset: 4px !important;
+  border-radius: 12px !important;
   }
 
   /* Dual-mode layout transition (Overview vs Comanda &amp; Wide Menu) */
   #mainCanvasGrid.mode-overview {
-    display: grid !important;
-    grid-template-columns: 1fr !important;
-    gap: 20px !important;
-    flex: 1 !important;
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  gap: 20px !important;
+  flex: 1 !important;
   }
 
   #mainCanvasGrid.mode-overview #panelCroquisMesas {
-    width: 100% !important;
-    max-width: 100% !important;
+  width: 100% !important;
+  max-width: 100% !important;
   }
 
   #mainCanvasGrid.mode-overview #panelMenuCatalogo {
-    display: none !important;
+  display: none !important;
   }
 
   #mainCanvasGrid.mode-overview #viewOverviewCroquis {
-    display: flex !important;
+  display: flex !important;
   }
 
   #mainCanvasGrid.mode-overview #viewSidebarComanda {
-    display: none !important;
+  display: none !important;
   }
 
   #mainCanvasGrid.mode-comanda {
-    display: grid !important;
-    grid-template-columns: 420px 1fr !important;
-    gap: 20px !important;
-    flex: 1 !important;
+  display: grid !important;
+  grid-template-columns: 420px 1fr !important;
+  gap: 20px !important;
+  flex: 1 !important;
   }
 
   #mainCanvasGrid.mode-comanda #panelCroquisMesas {
-    width: 420px !important;
-    max-width: 420px !important;
-    padding: 16px !important;
+  width: 420px !important;
+  max-width: 420px !important;
+  padding: 16px !important;
   }
 
   #mainCanvasGrid.mode-comanda #viewOverviewCroquis {
-    display: none !important;
+  display: none !important;
   }
 
   #mainCanvasGrid.mode-comanda #viewSidebarComanda {
-    display: flex !important;
+  display: flex !important;
   }
 
   #mainCanvasGrid.mode-comanda #panelMenuCatalogo {
-    display: flex !important;
+  display: flex !important;
   }
 
   @keyframes slideUp {
-    from {
-      transform: translateY(30px);
-      opacity: 0;
-    }
+  from {
+  transform: translateY(30px);
+  opacity: 0;
+  }
 
-    to {
-      transform: translateY(0);
-      opacity: 1;
-    }
+  to {
+  transform: translateY(0);
+  opacity: 1;
+  }
   }
 </style>
 
@@ -929,49 +929,87 @@
 
     <!-- Resumen Financiero &amp; Comensales de la Mesa -->
     <div
-      style=&quot;background: #020617 !important; border: 1px solid #1e293b !important; border-radius: 14px !important; padding: 14px !important; display: flex !important; flex-direction: column !important; gap: 10px !important;&quot;>
+      style=&quot;background: #020617 !important; border: 1px solid #1e293b !important; border-radius: 14px !important; padding: 12px 14px !important; display: flex !important; flex-direction: column !important; gap: 8px !important;&quot;>
       <div style=&quot;display: flex !important; justify-content: space-between !important; align-items: center !important;&quot;>
         <span
-          style=&quot;font-size: 11px !important; font-weight: 800 !important; color: #94a3b8 !important; text-transform: uppercase !important;&quot;>Total
-          Cuenta de la Mesa:</span>
+          style=&quot;font-size: 11px !important; font-weight: 800 !important; color: #94a3b8 !important; text-transform: uppercase !important;&quot;>Total Cuenta de la Mesa:</span>
         <span id=&quot;popMenuMesaTotal&quot;
           style=&quot;font-size: 22px !important; font-weight: 900 !important; color: #34d399 !important;&quot;>$0.00</span>
       </div>
       <div
         style=&quot;display: grid !important; grid-template-columns: repeat(2, 1fr) !important; gap: 8px !important; font-size: 11px !important;&quot;>
         <div
-          style=&quot;background: #090d16 !important; padding: 8px 10px !important; border-radius: 8px !important; border: 1px solid #1e293b !important;&quot;>
-          <span style=&quot;color: #94a3b8 !important; display: block !important; font-size: 10px !important;&quot;>Saldo
-            Pendiente:</span>
+          style=&quot;background: #090d16 !important; padding: 6px 10px !important; border-radius: 8px !important; border: 1px solid #1e293b !important;&quot;>
+          <span style=&quot;color: #94a3b8 !important; display: block !important; font-size: 10px !important;&quot;>Saldo Pendiente:</span>
           <span id=&quot;popMenuMesaSaldo&quot;
             style=&quot;color: #fbbf24 !important; font-weight: 900 !important; font-size: 13px !important;&quot;>$0.00</span>
         </div>
         <div
-          style=&quot;background: #090d16 !important; padding: 8px 10px !important; border-radius: 8px !important; border: 1px solid #1e293b !important;&quot;>
+          style=&quot;background: #090d16 !important; padding: 6px 10px !important; border-radius: 8px !important; border: 1px solid #1e293b !important;&quot;>
           <span
             style=&quot;color: #94a3b8 !important; display: block !important; font-size: 10px !important;&quot;>Comensales:</span>
           <span id=&quot;popMenuMesaComensales&quot;
             style=&quot;color: #38bdf8 !important; font-weight: 800 !important; font-size: 13px !important;&quot;>4 Sillas</span>
         </div>
       </div>
-      <div id=&quot;popMenuMesaPlatillosResumen&quot;
-        style=&quot;font-size: 11px !important; color: #cbd5e1 !important; border-top: 1px dashed #1e293b !important; padding-top: 8px !important; max-height: 120px !important; overflow-y: auto !important; display: flex !important; flex-direction: column !important; gap: 4px !important;&quot;>
-        <!-- Resumen de platillos -->
+    </div>
+
+    <!-- SECCIÓN 1: ⭐ COMANDA / PLATILLOS AL CENTRO (MESA) -->
+    <div id=&quot;popMenuMesaSeccionCentro&quot;
+      style=&quot;background: rgba(234, 179, 8, 0.08) !important; border: 1.5px solid #ca8a04 !important; border-radius: 14px !important; padding: 12px 14px !important; display: flex !important; flex-direction: column !important; gap: 8px !important;&quot;>
+      <div style=&quot;display: flex !important; justify-content: space-between !important; align-items: center !important;&quot;>
+        <span style=&quot;font-weight: 900; font-size: 12px; color: #fbbf24; display: flex; align-items: center; gap: 6px;&quot;>
+          <span style=&quot;font-size: 15px;&quot;>⭐</span>
+          <span>Platillos al Centro (Comanda de Mesa)</span>
+        </span>
+        <span id=&quot;popMenuMesaCentroTotalBadge&quot; style=&quot;font-weight: 900; font-size: 13px; color: #fde047;&quot;>$0.00</span>
+      </div>
+      <div id=&quot;popMenuMesaCentroItemsList&quot; style=&quot;display: flex; flex-direction: column; gap: 4px; font-size: 11px; max-height: 110px; overflow-y: auto;&quot;>
+        <!-- Lista de platillos al centro -->
+      </div>
+      <div id=&quot;popMenuMesaCentroActions&quot; style=&quot;display: flex; flex-wrap: wrap; gap: 6px; align-items: center; border-top: 1px dashed rgba(234,179,8,0.3); padding-top: 8px;&quot;>
+        <!-- Botonera de acciones para centro -->
+      </div>
+    </div>
+
+    <!-- SECCIÓN 2: 🪑 RESUMEN DE CUENTAS INDIVIDUALES POR SILLA -->
+    <div
+      style=&quot;background: #020617 !important; border: 1px solid #1e293b !important; border-radius: 14px !important; padding: 12px 14px !important; display: flex !important; flex-direction: column !important; gap: 8px !important;&quot;>
+      <div style=&quot;display: flex !important; justify-content: space-between !important; align-items: center !important;&quot;>
+        <span style=&quot;font-weight: 900; font-size: 12px; color: #38bdf8; display: flex; align-items: center; gap: 6px;&quot;>
+          <i class=&quot;fa-solid fa-chair&quot;></i>
+          <span>Cuentas por Silla (Comensales)</span>
+        </span>
+        <span style=&quot;font-size: 9px; color: #64748b;&quot;>(Clic para abrir silla)</span>
+      </div>
+      <div id=&quot;popMenuMesaSillasGrid&quot;
+        style=&quot;display: grid !important; grid-template-columns: repeat(2, 1fr) !important; gap: 6px !important;&quot;>
+        <!-- Botones de sillas con totales -->
       </div>
     </div>
 
     <!-- Opciones del Pop-Menu -->
     <div style=&quot;display: flex !important; flex-direction: column !important; gap: 8px !important;&quot;>
+      <!-- Opción 0: Pedir / Agregar al Centro (Mesa) -->
+      <button id=&quot;btnPopMenuPedirAlCentro&quot; onclick=&quot;window.popMenuAccionPedirAlCentro();&quot;
+        style=&quot;width: 100% !important; padding: 13px 16px !important; background: linear-gradient(135deg, #d97706, #b45309) !important; color: #ffffff !important; border: 1px solid #f59e0b !important; border-radius: 12px !important; font-size: 13px !important; font-weight: 900 !important; cursor: pointer !important; display: flex !important; align-items: center !important; justify-content: space-between !important; box-shadow: 0 4px 14px rgba(217, 119, 6, 0.4) !important;&quot;>
+        <span style=&quot;display: flex !important; align-items: center !important; gap: 8px !important;&quot;>
+          <span style=&quot;font-size: 17px !important;&quot;>⭐</span>
+          <span>🥘 Pedir / Agregar al Centro (Mesa)</span>
+        </span>
+        <span
+          style=&quot;font-size: 10px !important; background: rgba(0, 0, 0, 0.35) !important; padding: 3px 8px !important; border-radius: 6px !important; font-weight: 800 !important; color: #fde047 !important;&quot;>Para Compartir</span>
+      </button>
+
       <!-- Opción 1: Checar en Cocina (KDS) -->
       <button id=&quot;btnPopMenuChecarCocina&quot; onclick=&quot;window.popMenuAccionChecarCocina();&quot;
-        style=&quot;width: 100% !important; padding: 13px 16px !important; background: linear-gradient(135deg, #f59e0b, #d97706) !important; color: #0f172a !important; border: none !important; border-radius: 12px !important; font-size: 13px !important; font-weight: 900 !important; cursor: pointer !important; display: flex !important; align-items: center !important; justify-content: space-between !important; box-shadow: 0 4px 14px rgba(245, 158, 11, 0.35) !important;&quot;>
+        style=&quot;width: 100% !important; padding: 11px 16px !important; background: #0f172a !important; color: #f8fafc !important; border: 1px solid #334155 !important; border-radius: 12px !important; font-size: 12px !important; font-weight: 800 !important; cursor: pointer !important; display: flex !important; align-items: center !important; justify-content: space-between !important;&quot;>
         <span style=&quot;display: flex !important; align-items: center !important; gap: 8px !important;&quot;>
-          <i class=&quot;fa-solid fa-fire-burner&quot; style=&quot;font-size: 16px !important;&quot;></i>
+          <i class=&quot;fa-solid fa-fire-burner&quot; style=&quot;font-size: 15px !important; color: #f59e0b !important;&quot;></i>
           <span>🍳 Checar en Cocina (KDS)</span>
         </span>
         <span
-          style=&quot;font-size: 10px !important; background: rgba(15, 23, 42, 0.3) !important; padding: 3px 8px !important; border-radius: 6px !important; font-weight: 800 !important;&quot;>Ver
-          Comandas</span>
+          style=&quot;font-size: 10px !important; background: rgba(15, 23, 42, 0.6) !important; padding: 2px 7px !important; border-radius: 6px !important; font-weight: 800 !important; color: #94a3b8 !important;&quot;>Ver KDS</span>
       </button>
 
       <!-- Opción 2: Abrir Comanda / Pedir -->
@@ -2668,6 +2706,77 @@
   abrirPopMenuMesa(mesaId);
   }
 
+  // PRORRATEAR CUENTA DE MESA (AL CENTRO) ENTRE LAS SILLAS ACTIVAS
+  window.prorratearCuentaMesaEntreSillas = function (mesaId) {
+  mesaId = mesaId || window.palapaState.mesaSeleccionadaId || 2;
+  const keyMesa = `${mesaId}-0`;
+  const ctaMesa = window.palapaState.cuentas[keyMesa];
+
+  if (!ctaMesa || !ctaMesa.items || ctaMesa.items.length === 0) {
+  showDragToast('ℹ No hay platillos al centro para prorratear.', 'warn');
+  return;
+  }
+
+  const unpaids = ctaMesa.items.filter(it => !it.pagado);
+  if (unpaids.length === 0) {
+  showDragToast('ℹ Todos los platillos al centro ya han sido liquidados.', 'info');
+  return;
+  }
+
+  // Encontrar sillas activas / ocupadas
+  const sillasActivas = [];
+  for (let s = 1; s <= 10; s++) {
+  const k = `${mesaId}-${s}`;
+  const c = window.palapaState.cuentas[k];
+  if (c &amp;&amp; (c.estado === 'ocupada' || (c.items &amp;&amp; c.items.length > 0))) {
+  sillasActivas.push(s);
+  }
+  }
+
+  if (sillasActivas.length === 0) {
+  showDragToast('⚠ No hay comensales activos en la mesa para prorratear.', 'warn');
+  return;
+  }
+
+  const totalCentro = unpaids.reduce((sum, it) => sum + (it.precio || 0) * (it.cantidad || 1), 0);
+  const cuotaPorSilla = Number((totalCentro / sillasActivas.length).toFixed(2));
+
+  sillasActivas.forEach(sNum => {
+  const k = `${mesaId}-${sNum}`;
+  if (!window.palapaState.cuentas[k]) {
+  window.palapaState.cuentas[k] = {
+  estado: 'ocupada',
+  qrId: `PV-0${mesaId}${sNum}`,
+  comensalNombre: `Comensal Silla ${sNum}`,
+  items: [],
+  historialUbicaciones: [{ mesaId: mesaId, sillaNum: sNum, hora: (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }]
+  };
+  }
+  window.palapaState.cuentas[k].items.push({
+  id: Date.now() + Math.floor(Math.random() * 1000),
+  nombre: `Cuota Al Centro (1/${sillasActivas.length} de $${totalCentro.toFixed(2)})`,
+  precio: cuotaPorSilla,
+  cantidad: 1,
+  tipo_consumo: 'comida',
+  es_cuenta_mesa: false,
+  enviadoCocina: true,
+  estadoCocina: 'servido',
+  notas: 'Prorrateo de Cuenta de Mesa'
+  });
+  });
+
+  // Limpiar items no pagados de la mesa
+  ctaMesa.items = ctaMesa.items.filter(it => it.pagado);
+  if (ctaMesa.items.length === 0) {
+  ctaMesa.estado = 'disponible';
+  }
+
+  saveStateToStorage();
+  renderStateUI();
+  window.abrirPopMenuMesa(mesaId);
+  showDragToast(`⚖️ ¡$${totalCentro.toFixed(2)} de platillos al centro prorrateados entre ${sillasActivas.length} sillas ($${cuotaPorSilla.toFixed(2)} c/u)!`, 'ok');
+  };
+
   // ABRIR POP-MENU CONTEXTUAL DE MESA
   window.abrirPopMenuMesa = function (mesaId) {
   mesaId = mesaId || window.palapaState.mesaSeleccionadaId || 2;
@@ -2680,47 +2789,58 @@
   const totalEl = document.getElementById('popMenuMesaTotal');
   const saldoEl = document.getElementById('popMenuMesaSaldo');
   const comensalesEl = document.getElementById('popMenuMesaComensales');
-  const resumenItemsEl = document.getElementById('popMenuMesaPlatillosResumen');
 
-  // Calcular comensales, total y platillos de toda la mesa
+  const centroTotalEl = document.getElementById('popMenuMesaCentroTotalBadge');
+  const centroItemsEl = document.getElementById('popMenuMesaCentroItemsList');
+  const centroActionsEl = document.getElementById('popMenuMesaCentroActions');
+  const sillasGridEl = document.getElementById('popMenuMesaSillasGrid');
+
+  // 1. Recolectar datos financieros y de comensales
   let totalMesa = 0;
   let totalSaldoPendiente = 0;
-  let totalPagado = 0;
   let sillasOcupadasCount = 0;
-  let itemsList = [];
+  const sillasActivas = [];
 
-  Object.keys(window.palapaState.cuentas).forEach(key => {
-  const parts = key.split('-');
-  if (parseInt(parts[0]) === mesaId) {
-  const sNum = parseInt(parts[1]);
-  const cta = window.palapaState.cuentas[key];
-  if (cta &amp;&amp; (cta.estado === 'ocupada' || (cta.items &amp;&amp; cta.items.length > 0))) {
-  sillasOcupadasCount++;
-  if (cta.items) {
+  // Platillos al centro (silla 0 / Cuenta de Mesa)
+  const ctaMesa = window.palapaState.cuentas[`${mesaId}-0`];
+  const itemsCentro = (ctaMesa &amp;&amp; ctaMesa.items) ? ctaMesa.items.filter(it => !it.pagado) : [];
+  const totalCentro = itemsCentro.reduce((sum, it) => sum + (it.precio || 0) * (it.cantidad || 1), 0);
+  totalMesa += totalCentro;
+  totalSaldoPendiente += totalCentro;
+
+  // Sillas 1..10
+  for (let s = 1; s <= 10; s++) {
+  const k = `${mesaId}-${s}`;
+  const cta = window.palapaState.cuentas[k];
+  if (cta &amp;&amp; (cta.estado === 'ocupada' || (cta.items &amp;&amp; cta.items.length > 0) || s <= 4)) {
+  let sTot = 0;
+  let sPend = 0;
+  let sCount = 0;
+  if (cta &amp;&amp; cta.items) {
   cta.items.forEach(it => {
   const itTot = (it.precio || 0) * (it.cantidad || 1);
-  totalMesa += itTot;
-  if (cta.pagado) {
-  totalPagado += itTot;
-  } else {
-  totalSaldoPendiente += itTot;
-  }
-  itemsList.push({
-  ...it,
-  sillaNum: sNum,
-  isPaid: !!cta.pagado
-  });
+  sTot += itTot;
+  sCount += (it.cantidad || 1);
+  if (!it.pagado) sPend += itTot;
   });
   }
+  if (cta &amp;&amp; (cta.estado === 'ocupada' || (cta.items &amp;&amp; cta.items.length > 0))) {
+  sillasOcupadasCount++;
+  sillasActivas.push({ sillaNum: s, cuenta: cta, total: sTot, saldo: sPend, itemsCount: sCount });
+  } else if (s <= 4) {
+  sillasActivas.push({ sillaNum: s, cuenta: cta || { estado: 'disponible' }, total: 0, saldo: 0, itemsCount: 0 });
+  }
+  totalMesa += sTot;
+  totalSaldoPendiente += sPend;
   }
   }
-  });
 
+  // 2. Llenar Encabezados
   if (iconEl) iconEl.innerText = `M${mesaId}`;
   if (tituloEl) tituloEl.innerText = `Mesa ${mesaId} (La Palapa)`;
   if (estadoEl) {
   if (sillasOcupadasCount > 0) {
-  estadoEl.innerHTML = `🟡 <b>${sillasOcupadasCount} Comensal(es) Ocupados</b> • ${itemsList.length} Platillos`;
+  estadoEl.innerHTML = `🟡 <b>${sillasOcupadasCount} Comensal(es) Ocupados</b> • Total $${totalMesa.toFixed(2)}`;
   estadoEl.style.color = '#fbbf24';
   } else {
   estadoEl.innerHTML = `🟢 <b>Mesa Disponible / Libre</b>`;
@@ -2731,41 +2851,102 @@
   if (saldoEl) saldoEl.innerText = `$${totalSaldoPendiente.toFixed(2)}`;
   if (comensalesEl) comensalesEl.innerText = `${sillasOcupadasCount} Ocupadas (de 4)`;
 
-  if (resumenItemsEl) {
-  resumenItemsEl.innerHTML = '';
-  if (itemsList.length === 0) {
-  resumenItemsEl.innerHTML = `<span style=&quot;color: #64748b; font-style: italic;&quot;>Sin comandas registradas en esta mesa.</span>`;
+  // 3. Renderizar SECCIÓN 1: PLATILLOS AL CENTRO (MESA)
+  if (centroTotalEl) centroTotalEl.innerText = `$${totalCentro.toFixed(2)}`;
+  if (centroItemsEl) {
+  centroItemsEl.innerHTML = '';
+  if (itemsCentro.length === 0) {
+  centroItemsEl.innerHTML = `<span style=&quot;color: #94a3b8; font-style: italic; font-size: 11px;&quot;>Sin platillos al centro pendientes (o ya trasladados).</span>`;
   } else {
-  itemsList.forEach(it => {
+  itemsCentro.forEach(it => {
   const row = document.createElement('div');
-  row.style.cssText = 'display: flex; justify-content: space-between; align-items: center; padding: 3px 0; border-bottom: 1px dashed rgba(255,255,255,0.05);';
+  row.style.cssText = 'display: flex; justify-content: space-between; align-items: center; padding: 3px 6px; background: rgba(0,0,0,0.25); border-radius: 6px; border: 1px dashed rgba(234,179,8,0.2);';
 
-  let statusBadge = '';
-  if (it.isPaid) {
-  statusBadge = `<span style=&quot;color: #38bdf8; font-size: 9px; font-weight: 800;&quot;>✓ Pagado</span>`;
-  } else if (it.estadoCocina === 'listo') {
-  statusBadge = `<span style=&quot;color: #38bdf8; font-size: 9px; font-weight: 800;&quot;>🔔 Listo</span>`;
-  } else if (it.estadoCocina === 'preparando') {
-  statusBadge = `<span style=&quot;color: #fbbf24; font-size: 9px; font-weight: 800;&quot;>🔥 En Fuego</span>`;
-  } else if (it.enviadoCocina) {
-  statusBadge = `<span style=&quot;color: #34d399; font-size: 9px; font-weight: 800;&quot;>🟢 Recibido</span>`;
-  } else {
-  statusBadge = `<span style=&quot;color: #f59e0b; font-size: 9px; font-weight: 800;&quot;>⏳ Pendiente</span>`;
-  }
+  let statusBadge = it.enviadoCocina ? `<span style=&quot;color: #34d399; font-size: 9px; font-weight: 800;&quot;>🟢 ${it.estadoCocina || 'Recibido'}</span>` : `<span style=&quot;color: #f59e0b; font-size: 9px; font-weight: 800;&quot;>⏳ Por Enviar</span>`;
 
   row.innerHTML = `
   <div style=&quot;display: flex; align-items: center; gap: 6px;&quot;>
-  <span style=&quot;font-weight: 800; color: #ffffff;&quot;>${it.cantidad}x ${it.nombre}</span>
-  <span style=&quot;color: #94a3b8; font-size: 9px;&quot;>(Silla ${it.sillaNum})</span>
+  <span style=&quot;font-weight: 800; color: #fde047;&quot;>${it.cantidad}x ${it.nombre}</span>
 </div>
-  <div style=&quot;display: flex; align-items: center; gap: 8px;&quot;>
+  <div style=&quot;display: flex; align-items: center; gap: 6px;&quot;>
   <span style=&quot;font-weight: 900; color: #34d399; font-size: 11px;&quot;>$${((it.precio || 0) * (it.cantidad || 1)).toFixed(2)}</span>
   ${statusBadge}
 </div>
   `;
-  resumenItemsEl.appendChild(row);
+  centroItemsEl.appendChild(row);
   });
   }
+  }
+
+  if (centroActionsEl) {
+  centroActionsEl.innerHTML = '';
+  const activeChairs = sillasActivas.filter(sa => sa.cuenta &amp;&amp; sa.cuenta.estado === 'ocupada');
+
+  if (itemsCentro.length > 0) {
+  const optsHtml = activeChairs.map(sa => `<option value=&quot;${sa.sillaNum}&quot;>Silla ${sa.sillaNum} (${sa.cuenta.comensalNombre || 'Comensal'})</option>`).join('');
+
+  centroActionsEl.innerHTML = `
+  <div style=&quot;display: flex; gap: 4px; align-items: center; flex: 1.2;&quot;>
+  <select id=&quot;popMenuSelTrasladarSilla&quot; style=&quot;font-size: 10px; font-weight: bold; padding: 4px 6px; border-radius: 6px; border: 1px solid #ca8a04; background: #0f172a; color: #fde047;&quot;>
+  ${optsHtml || '<option value=&quot;1&quot;>Silla 1</option>'}
+</select>
+  <button type=&quot;button&quot; onclick=&quot;window.trasladarCuentaMesaASilla(document.getElementById('popMenuSelTrasladarSilla').value);&quot;
+  style=&quot;padding: 4px 8px; font-size: 10px; font-weight: 800; background: #d97706; color: #ffffff; border: none; border-radius: 6px; cursor: pointer; white-space: nowrap;&quot;>
+  ➡️ Trasladar
+</button>
+</div>
+  <button type=&quot;button&quot; onclick=&quot;window.prorratearCuentaMesaEntreSillas(${mesaId});&quot;
+  style=&quot;padding: 4px 8px; font-size: 10px; font-weight: 800; background: #059669; color: #ffffff; border: none; border-radius: 6px; cursor: pointer; white-space: nowrap;&quot;>
+  ⚖️ Prorratear
+</button>
+  <button type=&quot;button&quot; onclick=&quot;window.popMenuAccionPedirAlCentro();&quot;
+  style=&quot;padding: 4px 8px; font-size: 10px; font-weight: 800; background: #1e293b; color: #fde047; border: 1px solid #ca8a04; border-radius: 6px; cursor: pointer;&quot;>
+  ➕ Pedir Más
+</button>
+  `;
+  } else {
+  centroActionsEl.innerHTML = `
+  <button type=&quot;button&quot; onclick=&quot;window.popMenuAccionPedirAlCentro();&quot;
+  style=&quot;width: 100%; padding: 6px 12px; font-size: 11px; font-weight: 900; background: linear-gradient(135deg, #d97706, #b45309); color: #ffffff; border: none; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;&quot;>
+  <span>⭐</span> <span>Pedir Platillo / Entrada al Centro</span>
+</button>
+  `;
+  }
+  }
+
+  // 4. Renderizar SECCIÓN 2: LISTA DE SILLAS CON TOTALES
+  if (sillasGridEl) {
+  sillasGridEl.innerHTML = '';
+  sillasActivas.forEach(sa => {
+  const sNum = sa.sillaNum;
+  const isOcupada = sa.cuenta &amp;&amp; (sa.cuenta.estado === 'ocupada' || (sa.cuenta.items &amp;&amp; sa.cuenta.items.length > 0));
+  const btnSilla = document.createElement('button');
+  btnSilla.type = 'button';
+  btnSilla.onclick = function () {
+  window.cerrarPopMenuMesa();
+  window.seleccionarSillaDesdeMesa(sNum);
+  };
+
+  btnSilla.style.cssText = `background: ${isOcupada ? '#0f172a' : 'rgba(15,23,42,0.5)'} !important; border: 1.5px solid ${isOcupada ? '#10b981' : '#334155'} !important; border-radius: 10px !important; padding: 8px 10px !important; text-align: left !important; cursor: pointer !important; display: flex !important; justify-content: space-between !important; align-items: center !important; transition: all 0.2s ease !important;`;
+
+  btnSilla.innerHTML = `
+  <div style=&quot;display: flex; flex-direction: column; line-height: 1.2;&quot;>
+  <span style=&quot;font-weight: 900; font-size: 11px; color: ${isOcupada ? '#38bdf8' : '#94a3b8'};&quot;>
+  🪑 Silla ${sNum} ${sNum > 4 ? '(Arrimada)' : ''}
+</span>
+  <span style=&quot;font-size: 9px; color: ${isOcupada ? '#cbd5e1' : '#64748b'};&quot;>
+  ${isOcupada ? (sa.cuenta.comensalNombre || 'Comensal') : 'Disponible / Libre'}
+</span>
+</div>
+  <div style=&quot;text-align: right; line-height: 1.2;&quot;>
+  <span style=&quot;font-weight: 900; font-size: 12px; color: ${isOcupada &amp;&amp; sa.total > 0 ? '#34d399' : '#64748b'};&quot;>
+  $${sa.total.toFixed(2)}
+</span>
+  ${sa.itemsCount > 0 ? `<span style=&quot;display: block; font-size: 8px; color: #94a3b8;&quot;>${sa.itemsCount} prod.</span>` : ''}
+</div>
+  `;
+  sillasGridEl.appendChild(btnSilla);
+  });
   }
 
   if (modal) {
@@ -2776,6 +2957,35 @@
   window.cerrarPopMenuMesa = function () {
   const modal = document.getElementById('modalPopMenuMesaBackdrop');
   if (modal) modal.style.display = 'none';
+  };
+
+  window.popMenuAccionPedirAlCentro = function () {
+  const mesaId = window.palapaState.mesaSeleccionadaId || 2;
+  window.cerrarPopMenuMesa();
+
+  const key = `${mesaId}-0`;
+  if (!window.palapaState.cuentas[key]) {
+  const nowStr = (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  window.palapaState.cuentas[key] = {
+  estado: 'ocupada',
+  qrId: `MESA-0${mesaId}`,
+  comensalNombre: '⭐ Cuenta de MESA (Al Centro)',
+  es_cuenta_mesa: true,
+  items: [],
+  historialUbicaciones: [{ mesaId: mesaId, sillaNum: 0, hora: nowStr }],
+  creadoPor: 'mesero_presencial',
+  horaLlegada: nowStr
+  };
+  } else {
+  window.palapaState.cuentas[key].estado = 'ocupada';
+  window.palapaState.cuentas[key].es_cuenta_mesa = true;
+  }
+
+  window.palapaState.sillaSeleccionadaNum = 0;
+  window.palapaState.modoComandaActiva = true;
+  saveStateToStorage();
+  renderStateUI();
+  showDragToast(`⭐ Comanda de Mesa ${mesaId} activada para Platillos al Centro (compartidos)`, 'ok');
   };
 
   window.popMenuAccionChecarCocina = function () {
@@ -4097,7 +4307,7 @@
   };
 
   window.trasladarCuentaMesaASilla = function (targetSillaNum) {
-  var mesaId = _precuentaMesaId;
+  var mesaId = _precuentaMesaId || window.palapaState.mesaSeleccionadaId || 2;
   var mesaKey = `${mesaId}-0`;
   var targetKey = `${mesaId}-${targetSillaNum}`;
 
@@ -4123,6 +4333,7 @@
   itemsTrasladados++;
   it.notas = (it.notas ? it.notas + ' • ' : '') + 'Trasladado de Cuenta de Mesa';
   it.sillaNum = parseInt(targetSillaNum);
+  it.es_cuenta_mesa = false;
   window.palapaState.cuentas[targetKey].items.push(it);
   }
   });
@@ -4136,6 +4347,12 @@
   saveStateToStorage();
   renderStateUI();
   recalcularPrecuenta();
+
+  const modalPop = document.getElementById('modalPopMenuMesaBackdrop');
+  if (modalPop &amp;&amp; modalPop.style.display === 'flex') {
+  window.abrirPopMenuMesa(mesaId);
+  }
+
   showDragToast(`✨ ¡${itemsTrasladados} platillo(s) al centro trasladados con éxito a la Silla ${targetSillaNum}!`, 'ok');
   };
 
@@ -5445,8 +5662,8 @@
 
   // 3. Renderizar Sidebar de Comanda (si está en modo comanda activa)
   if (isComandaMode) {
-  const mesaId = window.palapaState.mesaSeleccionadaId || 3;
-  const sillaNum = window.palapaState.sillaSeleccionadaNum || 1;
+  const mesaId = window.palapaState.mesaSeleccionadaId || 2;
+  const sillaNum = (window.palapaState.sillaSeleccionadaNum !== null &amp;&amp; window.palapaState.sillaSeleccionadaNum !== undefined) ? window.palapaState.sillaSeleccionadaNum : 1;
   const key = `${mesaId}-${sillaNum}`;
   const cuenta = window.palapaState.cuentas[key] || { items: [] };
 
@@ -5737,7 +5954,7 @@
 
   const catFiltro = window.palapaState.categoriaFiltro || 'Bebidas &amp; Jugos';
   const filtrados = window.catalogProducts.filter(p => p.categoria_nombre === catFiltro);
-  const sillaNum = window.palapaState.sillaSeleccionadaNum || 1;
+  const sillaNum = (window.palapaState.sillaSeleccionadaNum !== null &amp;&amp; window.palapaState.sillaSeleccionadaNum !== undefined) ? window.palapaState.sillaSeleccionadaNum : 1;
 
   filtrados.forEach(prod => {
   const card = document.createElement('div');
@@ -5759,8 +5976,8 @@
 </div>
   <div style=&quot;display: flex; gap: 6px; border-top: 1px solid #1e293b; padding-top: 8px;&quot;>
   <button onclick=&quot;window.agregarPlatilloDirectoById(${prod.id});&quot;
-  style=&quot;flex: 1; padding: 7px 10px; background: #059669; color: #ffffff; font-size: 11px; font-weight: 900; border-radius: 8px; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 4px;&quot;>
-  <i class=&quot;fa-solid fa-plus&quot;></i> Silla ${sillaNum}
+  style=&quot;flex: 1; padding: 7px 10px; background: ${sillaNum === 0 ? 'linear-gradient(135deg, #d97706, #b45309)' : '#059669'}; color: #ffffff; font-size: 11px; font-weight: 900; border-radius: 8px; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 4px; box-shadow: ${sillaNum === 0 ? '0 2px 8px rgba(217,119,6,0.4)' : 'none'};&quot;>
+  ${sillaNum === 0 ? '<i class=&quot;fa-solid fa-plus&quot;></i> ⭐ Al Centro (Mesa)' : ('<i class=&quot;fa-solid fa-plus&quot;></i> Silla ' + sillaNum)}
 </button>
   <button onclick=&quot;event.stopPropagation(); window.abrirModalReceta(${prod.id});&quot;
   style=&quot;padding: 7px 10px; background: #1e293b; color: #38bdf8; font-size: 10px; font-weight: 700; border-radius: 8px; border: 1px solid #334155; cursor: pointer; white-space: nowrap;&quot;>
