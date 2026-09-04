@@ -1,4 +1,5 @@
 from ._anvil_designer import MonitorFiscalTemplate
+import anvil.server
 import anvil
 import anvil.js
 
