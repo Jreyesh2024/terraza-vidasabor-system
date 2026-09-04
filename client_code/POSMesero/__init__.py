@@ -12,17 +12,20 @@ class POSMesero(POSMeseroTemplate):
 
     try:
       url_hash = anvil.get_url_hash()
-      abrir_pos = False
+      # Solo redirigir a Menu si la URL trae explícitamente parámetros de comensal/QR/mesa
       if isinstance(url_hash, str) and url_hash:
         url_lower = url_hash.lower()
-        if 'pos_mesero' in url_lower or 'croquis' in url_lower or 'admin' in url_lower:
-          abrir_pos = True
-      elif isinstance(url_hash, dict) and url_hash.get('form') in ['pos_mesero', 'croquis', 'admin']:
-        abrir_pos = True
-
-      # Si NO es mesero/admin explícito, mandar directo a Menu del Comensal
-      if not abrir_pos:
-        anvil.open_form('Menu')
+        if 'menu' in url_lower or 'qr' in url_lower or 'mesa=' in url_lower or 'silla=' in url_lower or 'pv-' in url_lower or 'cliente' in url_lower:
+          anvil.open_form('Menu')
+        elif 'monitor_cocina' in url_lower or 'kds' in url_lower:
+          anvil.open_form('MonitorCocina')
+        elif 'monitor_fiscal' in url_lower or 'fiscal' in url_lower:
+          anvil.open_form('MonitorFiscal')
+        elif 'clientes_lealtad' in url_lower or 'rewards' in url_lower:
+          anvil.open_form('ClientesLealtad')
+      elif isinstance(url_hash, dict) and url_hash:
+        if url_hash.get('form') in ['menu', 'cliente_qr'] or 'mesa' in url_hash or 'qr' in url_hash:
+          anvil.open_form('Menu')
     except Exception as e:
       print(f"Error procesando enrutamiento QR: {e}")
 

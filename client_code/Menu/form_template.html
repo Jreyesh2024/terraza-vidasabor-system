@@ -1,4 +1,4 @@
-<anvil-form container="HtmlTemplate" prop:html="
+<anvil-form container="HtmlTemplate" prop:html="<anvil-form container=&quot;HtmlTemplate&quot; prop:html=&quot;&quot;>
 <link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css&quot;>
 <link rel=&quot;stylesheet&quot; href=&quot;https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css&quot;>
 <style>
@@ -81,7 +81,7 @@
 
   <!-- PANTALLA PRINCIPAL: HUB DE BIENVENIDA A TU MESA -->
   <div id=&quot;vistaHubMesa&quot; class=&quot;flex-1 max-w-4xl w-full mx-auto p-4 sm:p-6 flex flex-col gap-6&quot;>
-
+    
     <!-- TARJETA HERO: BIENVENIDA Y LUGAR ASIGNADO -->
     <div class=&quot;glass-card p-6 sm:p-8 rounded-3xl border border-slate-700/80 shadow-2xl relative overflow-hidden text-center flex flex-col items-center gap-4&quot;>
       <div class=&quot;absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-emerald-500 via-teal-500 to-amber-500&quot;></div>
@@ -123,7 +123,7 @@
 
     <!-- TARJETAS DE ACCIÓN PRINCIPALES DEL COMENSAL -->
     <div class=&quot;grid grid-cols-1 sm:grid-cols-2 gap-4&quot;>
-
+      
       <!-- 1. ORDENAR PARA MI SILLA -->
       <button type=&quot;button&quot; onclick=&quot;window.abrirCatalogoConDestino('mi_silla')&quot;
         class=&quot;glass-card p-5 rounded-2xl border border-emerald-500/40 hover:border-emerald-400 hover:bg-emerald-950/20 text-left transition flex items-center gap-4 cursor-pointer shadow-lg group&quot;>
@@ -190,7 +190,7 @@
 
   <!-- VISTA DEL CATÁLOGO DE PLATILLOS (SE MUESTRA AL ELEGIR ORDENAR) -->
   <main id=&quot;vistaCatalogoPlatillos&quot; class=&quot;flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 grid grid-cols-1 lg:grid-cols-3 gap-6 hidden&quot;>
-
+    
     <!-- BARRA SUPERIOR DE NAVEGACIÓN DENTRO DEL CATÁLOGO -->
     <div class=&quot;lg:col-span-3 flex flex-wrap justify-between items-center bg-slate-900/90 p-3 sm:p-4 rounded-2xl border border-slate-800 gap-3&quot;>
       <div class=&quot;flex items-center gap-3&quot;>
@@ -321,87 +321,6 @@
     </aside>
 
   </main>
-  <div>
-    <div class=&quot;flex justify-between items-center pb-3 border-b border-slate-800 mb-3&quot;>
-      <div>
-        <h2 class=&quot;text-base font-bold text-white flex items-center gap-2&quot;>
-          <i class=&quot;fa-solid fa-receipt text-emerald-400&quot;></i> <span id=&quot;txtTituloComanda&quot;>Mi Comanda (Silla
-            1)</span>
-        </h2>
-        <p class=&quot;text-xs text-slate-400&quot; id=&quot;txtSubComanda&quot;>Mesa 2 • Portavasos #PV-021</p>
-      </div>
-      <span
-        class=&quot;px-2.5 py-1 text-[10px] font-black rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 uppercase&quot;>
-        Activa
-      </span>
-    </div>
-
-    <!-- LISTA DE ITEMS REGISTRADOS DE MI SILLA -->
-    <div class=&quot;space-y-2.5 max-h-56 overflow-y-auto pr-1&quot; id=&quot;cartItemsList&quot;>
-      <div class=&quot;text-center py-6 text-slate-500 text-xs&quot;>
-        No hay consumos agregados a esta silla.
-      </div>
-    </div>
-
-    <!-- SECCIÓN: PAGAR POR ACOMPAÑANTES / NIÑOS EN MI MESA -->
-    <div class=&quot;mt-4 pt-3 border-t border-slate-800/80&quot;>
-      <div class=&quot;flex justify-between items-center mb-2&quot;>
-        <span class=&quot;text-xs font-bold text-slate-200 flex items-center gap-1.5&quot;>
-          <i class=&quot;fa-solid fa-users text-amber-400&quot;></i> Pagar por otros en mi mesa:
-        </span>
-        <button onclick=&quot;window.seleccionarTodosAcompanantes()&quot;
-          class=&quot;text-[10px] text-emerald-400 hover:underline font-semibold&quot;>Toda Mesa</button>
-      </div>
-
-      <div id=&quot;listaAcompanantesMesa&quot; class=&quot;space-y-1.5 max-h-36 overflow-y-auto pr-1 text-xs&quot;>
-        <!-- Checklist populated dynamically -->
-      </div>
-    </div>
-  </div>
-
-  <!-- TOTALES Y ACCIONES DE COBRO CONSOLIDADAS -->
-  <div class=&quot;pt-3 border-t border-slate-800 space-y-3&quot;>
-    <div class=&quot;space-y-1.5 text-xs&quot;>
-      <div class=&quot;flex justify-between text-slate-400&quot;>
-        <span id=&quot;lblSubtotalDetalle&quot;>Subtotal (Mi Silla + Acompañantes):</span>
-        <span class=&quot;font-semibold text-slate-200&quot; id=&quot;txtSubtotal&quot;>$0.00</span>
-      </div>
-      <div class=&quot;flex justify-between text-slate-400&quot;>
-        <span>IVA 16% Trasladado:</span>
-        <span class=&quot;font-semibold text-slate-200&quot; id=&quot;txtIVA&quot;>$0.00</span>
-      </div>
-      <div class=&quot;flex justify-between text-slate-400&quot;>
-        <span>Propina Sugerida (10%):</span>
-        <span class=&quot;font-semibold text-slate-200&quot; id=&quot;txtPropina&quot;>$0.00</span>
-      </div>
-      <div class=&quot;flex justify-between text-base font-black text-white pt-2 border-t border-slate-800&quot;>
-        <span id=&quot;lblTotalCobro&quot;>Total a Pagar:</span>
-        <span class=&quot;text-emerald-400 text-lg font-black&quot; id=&quot;txtTotal&quot;>$0.00</span>
-      </div>
-    </div>
-
-    <!-- BOTÓN ENVIAR A COCINA / BARRA (POR TRAMOS) -->
-    <button id=&quot;btnClienteEnviarCocina&quot; onclick=&quot;window.enviarPedidoClienteCocina();&quot;
-      class=&quot;w-full py-2.5 px-3 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-xs shadow-lg shadow-amber-500/20 transition flex items-center justify-center gap-2 cursor-pointer&quot;>
-      <i class=&quot;fa-solid fa-fire&quot;></i> <span id=&quot;btnClienteEnviarCocinaTxt&quot;>Enviar a Cocina / Barra</span>
-    </button>
-
-    <!-- BOTONES DE COBRO MULTICANAL -->
-    <div class=&quot;grid grid-cols-2 gap-2&quot;>
-      <button onclick=&quot;window.abrirModalCobroCliente('santander')&quot;
-        class=&quot;py-3 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-100 text-xs font-bold border border-slate-700 transition flex items-center justify-center gap-1.5 cursor-pointer&quot;>
-        <i class=&quot;fa-solid fa-credit-card text-sky-400&quot;></i> Santander
-      </button>
-      <button onclick=&quot;window.abrirModalCobroCliente('tarjeta')&quot;
-        class=&quot;py-3 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold shadow-lg shadow-emerald-600/30 transition flex items-center justify-center gap-1.5 cursor-pointer&quot;>
-        <i class=&quot;fa-solid fa-check-double&quot;></i> Pagar / Ticket (<span id=&quot;txtBtnPagarMonto&quot;>$0.00</span>)
-      </button>
-    </div>
-  </div>
-
-</aside>
-
-</main>
 
   <!-- MODAL DE COBRO Y PRECUENTA DIGITAL CLIENTE QR -->
   <div id=&quot;modalCobroCliente&quot;
@@ -423,7 +342,7 @@
       <!-- SELECTOR DE ALCANCE DEL PAGO -->
       <div class=&quot;bg-slate-950/80 p-3 rounded-xl border border-slate-800/80 space-y-2&quot;>
         <span class=&quot;text-xs font-bold text-slate-300 block&quot;><i
-                                                               class=&quot;fa-solid fa-hand-holding-dollar text-emerald-400 mr-1&quot;></i> ¿Qué deseas pagar?</span>
+            class=&quot;fa-solid fa-hand-holding-dollar text-emerald-400 mr-1&quot;></i> ¿Qué deseas pagar?</span>
         <div class=&quot;grid grid-cols-3 gap-1.5 text-[11px]&quot;>
           <button type=&quot;button&quot; onclick=&quot;window.setModoPagoCliente('solo_yo')&quot; id=&quot;btnModoSoloYo&quot;
             class=&quot;p-2 rounded-lg font-bold border text-center transition bg-slate-800 text-slate-300 border-slate-700 cursor-pointer&quot;>Solo
@@ -444,11 +363,11 @@
       <!-- TOTALES -->
       <div class=&quot;pt-3 border-t border-slate-800 space-y-1.5 text-xs&quot;>
         <div class=&quot;flex justify-between text-slate-400&quot;><span>Subtotal Neto:</span><span id=&quot;modalSubtotal&quot;
-                                                                                      class=&quot;text-slate-200 font-bold&quot;>$0.00</span></div>
+            class=&quot;text-slate-200 font-bold&quot;>$0.00</span></div>
         <div class=&quot;flex justify-between text-slate-400&quot;><span>IVA 16% Trasladado:</span><span id=&quot;modalIVA&quot;
-                                                                                           class=&quot;text-slate-200 font-bold&quot;>$0.00</span></div>
+            class=&quot;text-slate-200 font-bold&quot;>$0.00</span></div>
         <div class=&quot;flex justify-between text-slate-400&quot;><span>Propina Sugerida (10%):</span><span id=&quot;modalPropina&quot;
-                                                                                               class=&quot;text-slate-200 font-bold&quot;>$0.00</span></div>
+            class=&quot;text-slate-200 font-bold&quot;>$0.00</span></div>
         <div class=&quot;flex justify-between text-base font-black text-white pt-2 border-t border-slate-800&quot;>
           <span>Total Final a Liquidar:</span>
           <span id=&quot;modalTotal&quot; class=&quot;text-emerald-400 text-lg font-black&quot;>$0.00</span>
@@ -479,7 +398,7 @@
     onclick=&quot;if(event.target === this) window.cerrarModalRecetaCliente();&quot;>
     <div
       style=&quot;background: #090d16 !important; border: 1px solid #334155 !important; border-radius: 20px !important; width: 100% !important; max-width: 540px !important; padding: 20px !important; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.8) !important; display: flex !important; flex-direction: column !important; gap: 12px !important; color: #f8fafc !important; max-height: 90vh !important; overflow-y: auto !important;&quot;>
-
+      
       <!-- HEADER -->
       <div style=&quot;display: flex !important; justify-content: space-between !important; align-items: flex-start !important; border-bottom: 1px solid #1e293b !important; padding-bottom: 10px !important;&quot;>
         <div style=&quot;display: flex; align-items: center; gap: 12px;&quot;>
@@ -1166,7 +1085,7 @@
     var cat = document.getElementById('vistaCatalogoPlatillos');
     if (hub) hub.classList.add('hidden');
     if (cat) cat.classList.remove('hidden');
-
+    
     var badge = document.getElementById('lblCatalogoDestinoBadge');
     if (badge) {
       badge.innerHTML = `🧾 <span class=&quot;text-sky-400 font-black&quot;>Revisando Comanda &amp; Cuenta</span>`;
@@ -1423,19 +1342,19 @@
           const row = document.createElement('div');
           row.className = 'flex justify-between items-center bg-slate-900/80 p-2.5 rounded-xl border border-slate-800 text-xs mb-1.5';
           row.innerHTML = `
-            <div>
-              <div class=&quot;flex items-center gap-1.5&quot;>
-                <span class=&quot;font-bold text-white&quot;>${item.nombre} x${item.cantidad}</span>
+              <div>
+                <div class=&quot;flex items-center gap-1.5&quot;>
+                  <span class=&quot;font-bold text-white&quot;>${item.nombre} x${item.cantidad}</span>
+                </div>
+                <div class=&quot;flex items-center gap-2 mt-1&quot;>
+                  <span class=&quot;text-[10px] text-slate-400&quot;>${item.notas ? item.notas + ' • ' : ''}$${Number(item.precio).toFixed(2)} c/u</span>
+                  ${item.enviadoCocina
+                    ? `<span class=&quot;bg-emerald-950/60 text-emerald-300 border border-emerald-500/40 text-[9px] font-bold px-1.5 py-0.5 rounded flex items-center gap-1&quot;><i class=&quot;fa-solid fa-fire text-emerald-400&quot;></i> En Cocina (${item.horaEnvioCocina || item.hora || ''})</span>`
+                    : `<span class=&quot;bg-amber-950/60 text-amber-300 border border-amber-500/40 text-[9px] font-bold px-1.5 py-0.5 rounded flex items-center gap-1&quot;><i class=&quot;fa-solid fa-clock text-amber-400&quot;></i> Pendiente</span>`}
+                </div>
               </div>
-              <div class=&quot;flex items-center gap-2 mt-1&quot;>
-                <span class=&quot;text-[10px] text-slate-400&quot;>${item.notas ? item.notas + ' • ' : ''}$${Number(item.precio).toFixed(2)} c/u</span>
-                ${item.enviadoCocina
-                  ? `<span class=&quot;bg-emerald-950/60 text-emerald-300 border border-emerald-500/40 text-[9px] font-bold px-1.5 py-0.5 rounded flex items-center gap-1&quot;><i class=&quot;fa-solid fa-fire text-emerald-400&quot;></i> En Cocina (${item.horaEnvioCocina || item.hora || ''})</span>`
-                  : `<span class=&quot;bg-amber-950/60 text-amber-300 border border-amber-500/40 text-[9px] font-bold px-1.5 py-0.5 rounded flex items-center gap-1&quot;><i class=&quot;fa-solid fa-clock text-amber-400&quot;></i> Pendiente</span>`}
-              </div>
-            </div>
-            <span class=&quot;font-black text-emerald-400&quot;>$${itemSubtotal.toFixed(2)}</span>
-          `;
+              <span class=&quot;font-black text-emerald-400&quot;>$${itemSubtotal.toFixed(2)}</span>
+            `;
           container.appendChild(row);
         });
       }
@@ -1454,20 +1373,20 @@
           const row = document.createElement('div');
           row.className = 'flex justify-between items-center bg-amber-950/20 p-2.5 rounded-xl border border-amber-500/30 text-xs mb-1.5';
           row.innerHTML = `
-            <div>
-              <div class=&quot;flex items-center gap-1.5&quot;>
-                <span class=&quot;font-bold text-amber-200&quot;>${item.nombre} x${item.cantidad}</span>
-                <span class=&quot;text-[9px] font-bold bg-amber-500/20 text-amber-300 px-1.5 py-0.5 rounded&quot;>Centro</span>
+              <div>
+                <div class=&quot;flex items-center gap-1.5&quot;>
+                  <span class=&quot;font-bold text-amber-200&quot;>${item.nombre} x${item.cantidad}</span>
+                  <span class=&quot;text-[9px] font-bold bg-amber-500/20 text-amber-300 px-1.5 py-0.5 rounded&quot;>Centro</span>
+                </div>
+                <div class=&quot;flex items-center gap-2 mt-1&quot;>
+                  <span class=&quot;text-[10px] text-slate-400&quot;>${item.notas ? item.notas + ' • ' : ''}$${Number(item.precio).toFixed(2)} c/u</span>
+                  ${item.enviadoCocina
+                    ? `<span class=&quot;bg-emerald-950/60 text-emerald-300 border border-emerald-500/40 text-[9px] font-bold px-1.5 py-0.5 rounded flex items-center gap-1&quot;><i class=&quot;fa-solid fa-fire text-emerald-400&quot;></i> En Cocina (${item.horaEnvioCocina || item.hora || ''})</span>`
+                    : `<span class=&quot;bg-amber-950/60 text-amber-300 border border-amber-500/40 text-[9px] font-bold px-1.5 py-0.5 rounded flex items-center gap-1&quot;><i class=&quot;fa-solid fa-clock text-amber-400&quot;></i> Pendiente</span>`}
+                </div>
               </div>
-              <div class=&quot;flex items-center gap-2 mt-1&quot;>
-                <span class=&quot;text-[10px] text-slate-400&quot;>${item.notas ? item.notas + ' • ' : ''}$${Number(item.precio).toFixed(2)} c/u</span>
-                ${item.enviadoCocina
-                  ? `<span class=&quot;bg-emerald-950/60 text-emerald-300 border border-emerald-500/40 text-[9px] font-bold px-1.5 py-0.5 rounded flex items-center gap-1&quot;><i class=&quot;fa-solid fa-fire text-emerald-400&quot;></i> En Cocina (${item.horaEnvioCocina || item.hora || ''})</span>`
-                  : `<span class=&quot;bg-amber-950/60 text-amber-300 border border-amber-500/40 text-[9px] font-bold px-1.5 py-0.5 rounded flex items-center gap-1&quot;><i class=&quot;fa-solid fa-clock text-amber-400&quot;></i> Pendiente</span>`}
-              </div>
-            </div>
-            <span class=&quot;font-black text-amber-400&quot;>$${itemSubtotal.toFixed(2)}</span>
-          `;
+              <span class=&quot;font-black text-amber-400&quot;>$${itemSubtotal.toFixed(2)}</span>
+            `;
           container.appendChild(row);
         });
       }
@@ -1569,12 +1488,12 @@
       row.className = `flex items-center justify-between p-2 rounded-xl border transition cursor-pointer ${isSelected ? 'bg-emerald-950/40 border-emerald-500/40 text-emerald-300' : 'bg-slate-900/60 border-slate-800 text-slate-400'}`;
 
       row.innerHTML = `
-        <div class=&quot;flex items-center gap-2&quot;>
-          <input type=&quot;checkbox&quot; onchange=&quot;window.toggleAcompanante(${item.sillaNum})&quot; ${isSelected ? 'checked' : ''} class=&quot;rounded text-emerald-500 focus:ring-0&quot;>
-          <span class=&quot;font-bold text-xs&quot;>Silla ${item.sillaNum} ${item.cuenta.comensalNombre ? '(' + item.cuenta.comensalNombre + ')' : ''}</span>
-        </div>
-        <span class=&quot;font-bold text-xs text-white&quot;>$${item.total.toFixed(2)}</span>
-      `;
+          <div class=&quot;flex items-center gap-2&quot;>
+            <input type=&quot;checkbox&quot; onchange=&quot;window.toggleAcompanante(${item.sillaNum})&quot; ${isSelected ? 'checked' : ''} class=&quot;rounded text-emerald-500 focus:ring-0&quot;>
+            <span class=&quot;font-bold text-xs&quot;>Silla ${item.sillaNum} ${item.cuenta.comensalNombre ? '(' + item.cuenta.comensalNombre + ')' : ''}</span>
+          </div>
+          <span class=&quot;font-bold text-xs text-white&quot;>$${item.total.toFixed(2)}</span>
+        `;
       container.appendChild(row);
     });
   };
@@ -1852,168 +1771,169 @@
 
     const isCentro = (window.destinoPedido === 'centro');
     const destSilla = (window.destinoPedido === 'mi_silla' || !window.destinoPedido) ? window.simSillaNum : window.destinoPedido;
-                       const btnTxt = isCentro
-                       ? '<i class=&quot;fa-solid fa-utensils text-amber-400&quot;></i> Al Centro (Compartir)'
-                       : `<i class=&quot;fa-solid fa-plus text-emerald-400&quot;></i> Agregar a Silla ${destSilla}`;
-                       const btnClass = isCentro
-                       ? 'flex-1 py-2 px-3 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer shadow-sm'
-                       : 'flex-1 py-2 px-3 rounded-xl bg-emerald-600/30 hover:bg-emerald-500/40 text-emerald-300 border border-emerald-500/30 text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer shadow-sm';
+    const btnTxt = isCentro
+      ? '<i class=&quot;fa-solid fa-utensils text-amber-400&quot;></i> Al Centro (Compartir)'
+      : `<i class=&quot;fa-solid fa-plus text-emerald-400&quot;></i> Agregar a Silla ${destSilla}`;
+    const btnClass = isCentro
+      ? 'flex-1 py-2 px-3 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer shadow-sm'
+      : 'flex-1 py-2 px-3 rounded-xl bg-emerald-600/30 hover:bg-emerald-500/40 text-emerald-300 border border-emerald-500/30 text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer shadow-sm';
 
-                       filtrados.forEach(prod => {
-                       const card = document.createElement('div');
-                       card.className = 'glass-card p-4 rounded-2xl flex flex-col justify-between hover:border-emerald-500/50 transition gap-3';
+    filtrados.forEach(prod => {
+      const card = document.createElement('div');
+      card.className = 'glass-card p-4 rounded-2xl flex flex-col justify-between hover:border-emerald-500/50 transition gap-3';
 
-                       card.innerHTML = `
-                       <div class=&quot;flex items-start gap-3 cursor-pointer&quot; onclick=&quot;window.abrirModalRecetaCliente(${prod.id});&quot;>
-                       <div class=&quot;w-12 h-12 rounded-xl bg-slate-800/90 border border-slate-700 flex items-center justify-center text-2xl flex-shrink-0&quot;>
-                       ${prod.icono || '🍲'}
-                       </div>
-                       <div class=&quot;flex-1 min-w-0&quot;>
-                       <div class=&quot;flex justify-between items-start&quot;>
-                       <h3 class=&quot;text-sm font-bold text-white tracking-tight truncate&quot;>${prod.nombre}</h3>
-                       <span class=&quot;text-sm font-black text-emerald-400 ml-2&quot;>$${Number(prod.precio_unitario).toFixed(2)}</span>
-                       </div>
-                       <p class=&quot;text-[11px] text-slate-400 mt-1 line-clamp-2&quot;>${prod.descripcion || ''}</p>
-                       <div class=&quot;flex items-center gap-2 mt-2&quot;>
-                       <span class=&quot;text-[10px] text-sky-400 font-bold bg-sky-500/10 px-2 py-0.5 rounded-md border border-sky-500/20&quot;>⏱️ ${prod.tiempo || '8–10 min'}</span>
-                       <span class=&quot;text-[10px] text-slate-400 font-semibold&quot;>${prod.porciones || '1 persona'}</span>
-                       </div>
-                       </div>
-                       </div>
-                       <div class=&quot;flex items-center justify-between gap-2 pt-2 border-t border-slate-800/80&quot;>
-                       <button onclick=&quot;window.abrirModalRecetaCliente(${prod.id});&quot; class=&quot;py-2 px-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-sky-400 border border-slate-700 text-xs font-bold transition flex items-center gap-1 cursor-pointer&quot;>
-                       <i class=&quot;fa-solid fa-book-open&quot;></i> Receta
-                       </button>
-                       <button onclick=&quot;window.agregarAlCarritoDirecto(${prod.id})&quot; class=&quot;${btnClass}&quot;>
-                       ${btnTxt}
-                       </button>
-                       </div>
-                       `;
-                       container.appendChild(card);
-                       });
-                       };
+      card.innerHTML = `
+          <div class=&quot;flex items-start gap-3 cursor-pointer&quot; onclick=&quot;window.abrirModalRecetaCliente(${prod.id});&quot;>
+            <div class=&quot;w-12 h-12 rounded-xl bg-slate-800/90 border border-slate-700 flex items-center justify-center text-2xl flex-shrink-0&quot;>
+              ${prod.icono || '🍲'}
+            </div>
+            <div class=&quot;flex-1 min-w-0&quot;>
+              <div class=&quot;flex justify-between items-start&quot;>
+                <h3 class=&quot;text-sm font-bold text-white tracking-tight truncate&quot;>${prod.nombre}</h3>
+                <span class=&quot;text-sm font-black text-emerald-400 ml-2&quot;>$${Number(prod.precio_unitario).toFixed(2)}</span>
+              </div>
+              <p class=&quot;text-[11px] text-slate-400 mt-1 line-clamp-2&quot;>${prod.descripcion || ''}</p>
+              <div class=&quot;flex items-center gap-2 mt-2&quot;>
+                <span class=&quot;text-[10px] text-sky-400 font-bold bg-sky-500/10 px-2 py-0.5 rounded-md border border-sky-500/20&quot;>⏱️ ${prod.tiempo || '8–10 min'}</span>
+                <span class=&quot;text-[10px] text-slate-400 font-semibold&quot;>${prod.porciones || '1 persona'}</span>
+              </div>
+            </div>
+          </div>
+          <div class=&quot;flex items-center justify-between gap-2 pt-2 border-t border-slate-800/80&quot;>
+            <button onclick=&quot;window.abrirModalRecetaCliente(${prod.id});&quot; class=&quot;py-2 px-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-sky-400 border border-slate-700 text-xs font-bold transition flex items-center gap-1 cursor-pointer&quot;>
+              <i class=&quot;fa-solid fa-book-open&quot;></i> Receta
+            </button>
+            <button onclick=&quot;window.agregarAlCarritoDirecto(${prod.id})&quot; class=&quot;${btnClass}&quot;>
+              ${btnTxt}
+            </button>
+          </div>
+        `;
+      container.appendChild(card);
+    });
+  };
 
-                       window.abrirModalRecetaCliente = function(prodId) {
-                       const prod = (window.vsMenuData || []).find(p => p.id === prodId);
-                       if (!prod) return;
+  window.abrirModalRecetaCliente = function(prodId) {
+    const prod = (window.vsMenuData || []).find(p => p.id === prodId);
+    if (!prod) return;
 
-                       document.getElementById('cliRecetaIcono').innerText = prod.icono || '🍳';
-                       document.getElementById('cliRecetaCategoria').innerText = prod.categoria_nombre || 'Desayuno';
-                       document.getElementById('cliRecetaTitulo').innerText = prod.nombre;
-                       document.getElementById('cliRecetaTiempo').innerText = prod.tiempo || '8–10 min';
-                       document.getElementById('cliRecetaPorcion').innerText = prod.porciones || '1 persona';
-                       document.getElementById('cliRecetaPrecio').innerText = `$${Number(prod.precio_unitario).toFixed(2)}`;
+    document.getElementById('cliRecetaIcono').innerText = prod.icono || '🍳';
+    document.getElementById('cliRecetaCategoria').innerText = prod.categoria_nombre || 'Desayuno';
+    document.getElementById('cliRecetaTitulo').innerText = prod.nombre;
+    document.getElementById('cliRecetaTiempo').innerText = prod.tiempo || '8–10 min';
+    document.getElementById('cliRecetaPorcion').innerText = prod.porciones || '1 persona';
+    document.getElementById('cliRecetaPrecio').innerText = `$${Number(prod.precio_unitario).toFixed(2)}`;
 
-                       const listIng = document.getElementById('cliRecetaIngredientesList');
-                       if (listIng) {
-                       listIng.innerHTML = '';
-                       (prod.ingredientes || ['Ingredientes frescos según receta']).forEach(ing => {
-                       const li = document.createElement('li');
-                       li.innerText = ing;
-                       listIng.appendChild(li);
-                       });
-                       }
+    const listIng = document.getElementById('cliRecetaIngredientesList');
+    if (listIng) {
+      listIng.innerHTML = '';
+      (prod.ingredientes || ['Ingredientes frescos según receta']).forEach(ing => {
+        const li = document.createElement('li');
+        li.innerText = ing;
+        listIng.appendChild(li);
+      });
+    }
 
-                       const listPasos = document.getElementById('cliRecetaPasosList');
-                       if (listPasos) {
-                       listPasos.innerHTML = '';
-                       (prod.pasos || ['Preparar al momento siguiendo receta']).forEach(paso => {
-                       const li = document.createElement('li');
-                       li.innerText = paso;
-                       listPasos.appendChild(li);
-                       });
-                       }
+    const listPasos = document.getElementById('cliRecetaPasosList');
+    if (listPasos) {
+      listPasos.innerHTML = '';
+      (prod.pasos || ['Preparar al momento siguiendo receta']).forEach(paso => {
+        const li = document.createElement('li');
+        li.innerText = paso;
+        listPasos.appendChild(li);
+      });
+    }
 
-                       const boxAdic = document.getElementById('boxCliRecetaAdicionales');
-                       const listAdic = document.getElementById('cliRecetaAdicionalesList');
-                       if (boxAdic &amp;&amp; listAdic) {
-                       if (prod.adicionales &amp;&amp; prod.adicionales.length > 0) {
-                       boxAdic.style.display = 'block';
-                       listAdic.innerHTML = '';
-                       prod.adicionales.forEach(adic => {
-                       const chip = document.createElement('span');
-                       chip.style.cssText = 'background: #020617; border: 1px solid #0284c7; color: #7dd3fc; font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 6px;';
-                       chip.innerText = `+ ${adic}`;
-                       listAdic.appendChild(chip);
-                       });
-                       } else {
-                       boxAdic.style.display = 'none';
-                       }
-                       }
+    const boxAdic = document.getElementById('boxCliRecetaAdicionales');
+    const listAdic = document.getElementById('cliRecetaAdicionalesList');
+    if (boxAdic &amp;&amp; listAdic) {
+      if (prod.adicionales &amp;&amp; prod.adicionales.length > 0) {
+        boxAdic.style.display = 'block';
+        listAdic.innerHTML = '';
+        prod.adicionales.forEach(adic => {
+          const chip = document.createElement('span');
+          chip.style.cssText = 'background: #020617; border: 1px solid #0284c7; color: #7dd3fc; font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 6px;';
+          chip.innerText = `+ ${adic}`;
+          listAdic.appendChild(chip);
+        });
+      } else {
+        boxAdic.style.display = 'none';
+      }
+    }
 
-                       const modal = document.getElementById('modalRecetaClienteBackdrop');
-                       if (modal) {
-                       modal.style.display = 'flex';
-                       }
-                       };
+    const modal = document.getElementById('modalRecetaClienteBackdrop');
+    if (modal) {
+      modal.style.display = 'flex';
+    }
+  };
 
-                       window.cerrarModalRecetaCliente = function() {
-                       const modal = document.getElementById('modalRecetaClienteBackdrop');
-                       if (modal) {
-                       modal.style.display = 'none';
-                       }
-                       };
+  window.cerrarModalRecetaCliente = function() {
+    const modal = document.getElementById('modalRecetaClienteBackdrop');
+    if (modal) {
+      modal.style.display = 'none';
+    }
+  };
 
-                       window.navMenu = function (modulo) {
-                       if (window.anvilAppNav) {
-                       window.anvilAppNav(modulo);
-                       } else {
-                       alert(`Navegación a módulo: ${modulo}`);
-                       }
-                       };
+  window.navMenu = function (modulo) {
+    if (window.anvilAppNav) {
+      window.anvilAppNav(modulo);
+    } else {
+      alert(`Navegación a módulo: ${modulo}`);
+    }
+  };
 
-                       window.detectarParametrosQrUrl = function() {
-                       try {
-                       var params = new URLSearchParams(window.location.search);
-                       var hash = window.location.hash || '';
+  window.detectarParametrosQrUrl = function() {
+    try {
+      var params = new URLSearchParams(window.location.search);
+      var hash = window.location.hash || '';
 
-                       if (hash.includes('?')) {
-                       var hashQuery = hash.substring(hash.indexOf('?') + 1);
-                       var hashParams = new URLSearchParams(hashQuery);
-                       hashParams.forEach(function(val, key) {
-                       params.set(key, val);
-                       });
-                       } else if (hash.startsWith('#PV-') || hash.startsWith('#MESA-')) {
-                       params.set('qr', hash.replace('#', ''));
-                       }
+      if (hash.includes('?')) {
+        var hashQuery = hash.substring(hash.indexOf('?') + 1);
+        var hashParams = new URLSearchParams(hashQuery);
+        hashParams.forEach(function(val, key) {
+          params.set(key, val);
+        });
+      } else if (hash.startsWith('#PV-') || hash.startsWith('#MESA-')) {
+        params.set('qr', hash.replace('#', ''));
+      }
 
-                       var mesaParam = params.get('mesa');
-                       var sillaParam = params.get('silla');
-                       var qrParam = params.get('qr');
+      var mesaParam = params.get('mesa');
+      var sillaParam = params.get('silla');
+      var qrParam = params.get('qr');
 
-                       if (qrParam &amp;&amp; (!mesaParam || !sillaParam)) {
-                       var match = qrParam.match(/PV-0?(\d)(\d)/i);
-                       if (match) {
-                       mesaParam = match[1];
-                       sillaParam = match[2];
-                       }
-                       }
+      if (qrParam &amp;&amp; (!mesaParam || !sillaParam)) {
+        var match = qrParam.match(/PV-0?(\d)(\d)/i);
+        if (match) {
+          mesaParam = match[1];
+          sillaParam = match[2];
+        }
+      }
 
-                       if (mesaParam &amp;&amp; sillaParam) {
-                       var m = parseInt(mesaParam);
-                       var s = parseInt(sillaParam);
-                       if (!isNaN(m) &amp;&amp; !isNaN(s)) {
-                       window.simMesaId = m;
-                       window.simSillaNum = s;
-                       window.destinoPedido = 'mi_silla';
-                       }
-                       }
-                       } catch (e) {
-                       console.error('Error detectando QR de la URL:', e);
-                       }
-                       };
+      if (mesaParam &amp;&amp; sillaParam) {
+        var m = parseInt(mesaParam);
+        var s = parseInt(sillaParam);
+        if (!isNaN(m) &amp;&amp; !isNaN(s)) {
+          window.simMesaId = m;
+          window.simSillaNum = s;
+          window.destinoPedido = 'mi_silla';
+        }
+      }
+    } catch (e) {
+      console.error('Error detectando QR de la URL:', e);
+    }
+  };
 
-                       function initImmediate() {
-                       window.cargarDatosMenu(window.vsMenuData, window.vsCategoriasData);
-                       window.detectarParametrosQrUrl();
-                       window.sincronizarCuentaDesdeStorage();
-                       }
+  function initImmediate() {
+    window.cargarDatosMenu(window.vsMenuData, window.vsCategoriasData);
+    window.detectarParametrosQrUrl();
+    window.sincronizarCuentaDesdeStorage();
+  }
 
-                       if (document.readyState === 'loading') {
-                       document.addEventListener('DOMContentLoaded', initImmediate);
-                       } else {
-                       initImmediate();
-                       }
-                       setTimeout(initImmediate, 10);
-                       setTimeout(initImmediate, 100);
-                       </script>"></anvil-form>
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initImmediate);
+  } else {
+    initImmediate();
+  }
+  setTimeout(initImmediate, 10);
+  setTimeout(initImmediate, 100);
+</script>
+</anvil-form>"></anvil-form>
