@@ -36,7 +36,18 @@ class POSMesero(POSMeseroTemplate):
     except Exception as e:
       print(f"Error procesando enrutamiento QR: {e}")
 
-    # Sincronización inicial
+    # Sincronización inicial con el servidor
+    self.sincronizar_con_servidor()
+
+    # Timer nativo de Anvil en segundo plano para sincronizar cada 2 segundos
+    try:
+      self.timer_sync = anvil.Timer(interval=2)
+      self.timer_sync.set_event_handler('tick', self.timer_tick_sync)
+      self.add_component(self.timer_sync)
+    except Exception as e:
+      print(f"Error iniciando timer sync en POSMesero: {e}")
+
+  def timer_tick_sync(self, **event_args):
     self.sincronizar_con_servidor()
 
   def obtener_cuentas_servidor(self):
