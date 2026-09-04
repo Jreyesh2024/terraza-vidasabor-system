@@ -79,50 +79,134 @@
     </div>
   </header>
 
-  <!-- BANNER DE BIENVENIDA Y VISUALIZADOR INTERACTIVO DE TU MESA -->
-  <div class="bg-gradient-to-b from-slate-900 via-slate-900 to-slate-950 border-b border-slate-800 px-4 sm:px-6 py-4 shadow-lg">
-    <div class="max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-4">
-      
-      <!-- MENSAJE DE BIENVENIDA & LUGAR -->
-      <div class="flex-1 w-full text-center lg:text-left">
-        <div class="flex flex-wrap items-center justify-center lg:justify-start gap-2 mb-1.5">
-          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-400 font-extrabold text-xs border border-emerald-500/30 shadow-sm">
-            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Silla Ocupada
-          </span>
-          <span class="text-xs text-slate-400 font-semibold bg-slate-800/80 px-2.5 py-0.5 rounded-lg border border-slate-700" id="lblQrActivo">
-            Portavasos #PV-011
-          </span>
-        </div>
-        <h2 class="text-xl sm:text-2xl font-black text-white tracking-tight" id="lblUbicacionActiva">
+  <!-- PANTALLA PRINCIPAL: HUB DE BIENVENIDA A TU MESA -->
+  <div id="vistaHubMesa" class="flex-1 max-w-4xl w-full mx-auto p-4 sm:p-6 flex flex-col gap-6">
+    
+    <!-- TARJETA HERO: BIENVENIDA Y LUGAR ASIGNADO -->
+    <div class="glass-card p-6 sm:p-8 rounded-3xl border border-slate-700/80 shadow-2xl relative overflow-hidden text-center flex flex-col items-center gap-4">
+      <div class="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-emerald-500 via-teal-500 to-amber-500"></div>
+
+      <div class="flex flex-wrap items-center justify-center gap-2">
+        <span class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 font-black text-xs border border-emerald-500/40 shadow-sm">
+          <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span> SILLA OCUPADA
+        </span>
+        <span class="text-xs text-slate-400 font-bold bg-slate-900/90 px-3 py-1 rounded-full border border-slate-700" id="lblQrActivo">
+          Portavasos #PV-011
+        </span>
+      </div>
+
+      <div>
+        <h1 class="text-2xl sm:text-4xl font-black text-white tracking-tight" id="lblUbicacionActiva">
           ¡Hola! Estás en la <span class="text-emerald-400">Mesa 1 • Silla 1</span>
-        </h2>
-        <p class="text-xs text-slate-400 mt-1 max-w-xl">
-          Este es tu lugar. Ya está ocupada tu silla y puedes ordenar directamente a tu comanda o pedir platillos al centro para compartir en tu mesa.
+        </h1>
+        <p class="text-xs sm:text-sm text-slate-300 mt-2 max-w-lg mx-auto leading-relaxed">
+          ✨ <b>Este es tu lugar.</b> Tu asiento ha sido registrado automáticamente en el sistema. Puedes empezar a ordenar platillos individuales o pedir al centro para compartir.
         </p>
       </div>
 
-      <!-- VISUALIZADOR DE TU MESA: SILLA 1 (TÚ), AL CENTRO Y ACOMPAÑANTES -->
-      <div class="bg-slate-950/90 border border-slate-700/80 p-3.5 rounded-2xl shadow-2xl flex flex-col items-center gap-2.5 w-full lg:w-auto">
-        <div class="flex items-center justify-between w-full text-[11px] font-bold text-slate-300">
+      <!-- DIAGRAMA VISUAL DE LA MESA Y SUS 4 LUGARES -->
+      <div class="bg-slate-950/80 p-4 rounded-2xl border border-slate-800 w-full max-w-md flex flex-col items-center gap-2.5 my-1">
+        <div class="flex items-center justify-between w-full text-xs font-bold text-slate-300">
           <span class="flex items-center gap-1.5 text-slate-200">
-            <i class="fa-solid fa-chair text-emerald-400"></i> Tu Mesa (<span id="lblMesaIdHeader">Mesa 1</span>)
+            <i class="fa-solid fa-chair text-emerald-400"></i> Distribución de tu Mesa (<span id="lblMesaIdHeader">Mesa 1</span>)
           </span>
-          <span class="text-[10px] text-emerald-400 font-bold bg-emerald-950/80 px-2 py-0.5 rounded-md border border-emerald-500/30" id="lblDestinoActualTxt">
-            🎯 Destino: Silla 1 (Tú)
+          <span class="text-[10px] text-emerald-400 bg-emerald-950/80 px-2 py-0.5 rounded-md border border-emerald-500/30">
+            4 Sillas
           </span>
         </div>
 
-        <!-- BOTONES DE ASIENTOS Y CENTRO DE LA MESA -->
-        <div class="flex flex-wrap items-center justify-center gap-2 my-0.5" id="chipsSillasMesa">
-          <!-- Renderizado dinámicamente con Silla 1 (Tú), Al Centro (Compartir), Silla 2, Silla 3, Silla 4 -->
+        <div class="flex flex-wrap items-center justify-center gap-2.5 w-full" id="chipsSillasMesa">
+          <!-- Sillas renderizadas dinámicamente -->
         </div>
       </div>
+    </div>
+
+    <!-- TARJETAS DE ACCIÓN PRINCIPALES DEL COMENSAL -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      
+      <!-- 1. ORDENAR PARA MI SILLA -->
+      <button type="button" onclick="window.abrirCatalogoConDestino('mi_silla')"
+        class="glass-card p-5 rounded-2xl border border-emerald-500/40 hover:border-emerald-400 hover:bg-emerald-950/20 text-left transition flex items-center gap-4 cursor-pointer shadow-lg group">
+        <div class="w-14 h-14 rounded-2xl bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-2xl text-emerald-400 flex-shrink-0 group-hover:scale-110 transition">
+          🍳
+        </div>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center justify-between">
+            <h3 class="text-base font-black text-white">Ordenar a Mi Silla</h3>
+            <i class="fa-solid fa-arrow-right text-emerald-400 text-xs group-hover:translate-x-1 transition"></i>
+          </div>
+          <p class="text-xs text-slate-400 mt-1">Bebidas, cafés, huevos y platillos individuales a tu cuenta personal.</p>
+        </div>
+      </button>
+
+      <!-- 2. PEDIR AL CENTRO (COMPARTIR) -->
+      <button type="button" onclick="window.abrirCatalogoConDestino('centro')"
+        class="glass-card p-5 rounded-2xl border border-amber-500/40 hover:border-amber-400 hover:bg-amber-950/20 text-left transition flex items-center gap-4 cursor-pointer shadow-lg group">
+        <div class="w-14 h-14 rounded-2xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-2xl text-amber-400 flex-shrink-0 group-hover:scale-110 transition">
+          🍲
+        </div>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center justify-between">
+            <h3 class="text-base font-black text-white">Pedir al Centro</h3>
+            <i class="fa-solid fa-arrow-right text-amber-400 text-xs group-hover:translate-x-1 transition"></i>
+          </div>
+          <p class="text-xs text-slate-400 mt-1">Botanas, chilaquiles o jarras para compartir con todos en tu mesa.</p>
+        </div>
+      </button>
+
+      <!-- 3. VER MI COMANDA Y CUENTA -->
+      <button type="button" onclick="window.mostrarVistaComanda()"
+        class="glass-card p-5 rounded-2xl border border-sky-500/40 hover:border-sky-400 hover:bg-sky-950/20 text-left transition flex items-center gap-4 cursor-pointer shadow-lg group">
+        <div class="w-14 h-14 rounded-2xl bg-sky-500/20 border border-sky-500/40 flex items-center justify-center text-2xl text-sky-400 flex-shrink-0 group-hover:scale-110 transition">
+          🧾
+        </div>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center justify-between">
+            <h3 class="text-base font-black text-white">Mi Comanda & Cuenta</h3>
+            <span class="text-xs font-black text-sky-400" id="lblHubTotalComanda">$0.00</span>
+          </div>
+          <p class="text-xs text-slate-400 mt-1">Revisa tus consumos, envía a cocina y solicita tu cuenta o pago digital.</p>
+        </div>
+      </button>
+
+      <!-- 4. LLAMAR AL MESERO -->
+      <button type="button" onclick="window.solicitarAtencionMesero()"
+        class="glass-card p-5 rounded-2xl border border-purple-500/40 hover:border-purple-400 hover:bg-purple-950/20 text-left transition flex items-center gap-4 cursor-pointer shadow-lg group">
+        <div class="w-14 h-14 rounded-2xl bg-purple-500/20 border border-purple-500/40 flex items-center justify-center text-2xl text-purple-400 flex-shrink-0 group-hover:scale-110 transition">
+          🔔
+        </div>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center justify-between">
+            <h3 class="text-base font-black text-white">Llamar al Mesero</h3>
+            <i class="fa-solid fa-bell text-purple-400 text-xs"></i>
+          </div>
+          <p class="text-xs text-slate-400 mt-1">Solicita asistencia o cubiertos en tu mesa con un solo toque.</p>
+        </div>
+      </button>
 
     </div>
+
   </div>
 
-  <!-- CONTENIDO PRINCIPAL DEL MENÚ DIGITAL -->
-  <main class="flex-1 max-w-7xl w-full mx-auto p-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
+  <!-- VISTA DEL CATÁLOGO DE PLATILLOS (SE MUESTRA AL ELEGIR ORDENAR) -->
+  <main id="vistaCatalogoPlatillos" class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 grid grid-cols-1 lg:grid-cols-3 gap-6 hidden">
+    
+    <!-- BARRA SUPERIOR DE NAVEGACIÓN DENTRO DEL CATÁLOGO -->
+    <div class="lg:col-span-3 flex flex-wrap justify-between items-center bg-slate-900/90 p-3 sm:p-4 rounded-2xl border border-slate-800 gap-3">
+      <div class="flex items-center gap-3">
+        <button type="button" onclick="window.mostrarVistaHubMesa()"
+          class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold border border-slate-700 transition flex items-center gap-1.5 cursor-pointer">
+          <i class="fa-solid fa-arrow-left"></i> Volver a Tu Mesa
+        </button>
+        <span class="text-xs text-slate-300 font-bold" id="lblCatalogoDestinoBadge">
+          🎯 Agregando a: Silla 1 (Tú)
+        </span>
+      </div>
+      <button type="button" onclick="window.mostrarVistaComanda()"
+        class="px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-black transition flex items-center gap-1.5 cursor-pointer shadow-md shadow-emerald-600/30">
+        <i class="fa-solid fa-receipt"></i> Ver Comanda (<span id="lblCatBtnTotal">$0.00</span>)
+      </button>
+    </div>
 
     <!-- SECCIÓN IZQUIERDA: CATÁLOGO Y PRODUCTOS -->
     <section class="lg:col-span-2 flex flex-col gap-6">
@@ -155,9 +239,88 @@
 
     </section>
 
-    <!-- SECCIÓN DERECHA: SIDEBAR DE COMANDA Y COBRO AGRUPADO -->
-    <aside
+    <!-- SECCIÓN DERECHA: SIDEBAR DE COMANDA Y COBRO -->
+    <aside id="sidebarComanda"
       class="glass-card rounded-2xl p-6 flex flex-col justify-between h-full border border-slate-800 shadow-2xl gap-4">
+      <div>
+        <div class="flex justify-between items-center pb-3 border-b border-slate-800 mb-3">
+          <div>
+            <h2 class="text-base font-bold text-white flex items-center gap-2">
+              <i class="fa-solid fa-receipt text-emerald-400"></i> <span id="txtTituloComanda">Mi Comanda (Silla 1)</span>
+            </h2>
+            <p class="text-xs text-slate-400" id="txtSubComanda">Mesa 1 • Portavasos #PV-011</p>
+          </div>
+          <span class="px-2.5 py-1 text-[10px] font-black rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 uppercase">
+            Activa
+          </span>
+        </div>
+
+        <!-- LISTA DE ITEMS REGISTRADOS DE MI SILLA Y AL CENTRO -->
+        <div class="space-y-2.5 max-h-56 overflow-y-auto pr-1" id="cartItemsList">
+          <div class="text-center py-6 text-slate-500 text-xs">
+            No hay consumos agregados a esta silla.
+          </div>
+        </div>
+
+        <!-- SECCIÓN: PAGAR POR ACOMPAÑANTES EN MI MESA -->
+        <div class="mt-4 pt-3 border-t border-slate-800/80">
+          <div class="flex justify-between items-center mb-2">
+            <span class="text-xs font-bold text-slate-200 flex items-center gap-1.5">
+              <i class="fa-solid fa-users text-amber-400"></i> Pagar por otros en mi mesa:
+            </span>
+            <button onclick="window.seleccionarTodosAcompanantes()"
+              class="text-[10px] text-emerald-400 hover:underline font-semibold">Toda Mesa</button>
+          </div>
+
+          <div id="listaAcompanantesMesa" class="space-y-1.5 max-h-36 overflow-y-auto pr-1 text-xs">
+            <!-- Checklist populated dynamically -->
+          </div>
+        </div>
+      </div>
+
+      <!-- TOTALES Y ACCIONES DE COBRO -->
+      <div class="pt-3 border-t border-slate-800 space-y-3">
+        <div class="space-y-1.5 text-xs">
+          <div class="flex justify-between text-slate-400">
+            <span id="lblSubtotalDetalle">Subtotal (Mi Silla + Centro):</span>
+            <span class="font-semibold text-slate-200" id="txtSubtotal">$0.00</span>
+          </div>
+          <div class="flex justify-between text-slate-400">
+            <span>IVA 16% Trasladado:</span>
+            <span class="font-semibold text-slate-200" id="txtIVA">$0.00</span>
+          </div>
+          <div class="flex justify-between text-slate-400">
+            <span>Propina Sugerida (10%):</span>
+            <span class="font-semibold text-slate-200" id="txtPropina">$0.00</span>
+          </div>
+          <div class="flex justify-between text-base font-black text-white pt-2 border-t border-slate-800">
+            <span id="lblTotalCobro">Total a Pagar:</span>
+            <span class="text-emerald-400 text-lg font-black" id="txtTotal">$0.00</span>
+          </div>
+        </div>
+
+        <!-- BOTÓN ENVIAR A COCINA / BARRA -->
+        <button id="btnClienteEnviarCocina" onclick="window.enviarPedidoClienteCocina();"
+          class="w-full py-2.5 px-3 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-xs shadow-lg shadow-amber-500/20 transition flex items-center justify-center gap-2 cursor-pointer">
+          <i class="fa-solid fa-fire"></i> <span id="btnClienteEnviarCocinaTxt">Enviar a Cocina / Barra</span>
+        </button>
+
+        <!-- BOTONES DE COBRO MULTICANAL -->
+        <div class="grid grid-cols-2 gap-2">
+          <button onclick="window.abrirModalCobroCliente('santander')"
+            class="py-3 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-100 text-xs font-bold border border-slate-700 transition flex items-center justify-center gap-1.5 cursor-pointer">
+            <i class="fa-solid fa-credit-card text-sky-400"></i> Santander
+          </button>
+          <button onclick="window.abrirModalCobroCliente('tarjeta')"
+            class="py-3 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold shadow-lg shadow-emerald-600/30 transition flex items-center justify-center gap-1.5 cursor-pointer">
+            <i class="fa-solid fa-check-double"></i> Pagar / Ticket (<span id="txtBtnPagarMonto">$0.00</span>)
+          </button>
+        </div>
+      </div>
+
+    </aside>
+
+  </main>
       <div>
         <div class="flex justify-between items-center pb-3 border-b border-slate-800 mb-3">
           <div>
@@ -965,6 +1128,56 @@
 
   window.destinoPedido = 'mi_silla'; // 'mi_silla' | 'centro' | 2 | 3 | 4
 
+  window.abrirCatalogoConDestino = function (dest) {
+    window.destinoPedido = dest;
+    var hub = document.getElementById('vistaHubMesa');
+    var cat = document.getElementById('vistaCatalogoPlatillos');
+    if (hub) hub.classList.add('hidden');
+    if (cat) cat.classList.remove('hidden');
+
+    var badge = document.getElementById('lblCatalogoDestinoBadge');
+    if (badge) {
+      if (dest === 'centro') {
+        badge.innerHTML = '🍲 Agregando a: <span class="text-amber-400 font-black">Al Centro (Para Compartir)</span>';
+      } else if (dest === 'mi_silla' || dest === window.simSillaNum) {
+        badge.innerHTML = `🎯 Agregando a: <span class="text-emerald-400 font-black">Silla ${window.simSillaNum} (Tú)</span>`;
+      } else {
+        badge.innerHTML = `🎯 Agregando a: <span class="text-sky-400 font-black">Silla ${dest}</span>`;
+      }
+    }
+
+    window.renderSillasMesaBar();
+    window.filtrarProductos();
+    window.renderCarrito();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  window.mostrarVistaHubMesa = function () {
+    var hub = document.getElementById('vistaHubMesa');
+    var cat = document.getElementById('vistaCatalogoPlatillos');
+    if (hub) hub.classList.remove('hidden');
+    if (cat) cat.classList.add('hidden');
+    window.sincronizarCuentaDesdeStorage();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  window.mostrarVistaComanda = function () {
+    var hub = document.getElementById('vistaHubMesa');
+    var cat = document.getElementById('vistaCatalogoPlatillos');
+    if (hub) hub.classList.add('hidden');
+    if (cat) cat.classList.remove('hidden');
+    
+    var badge = document.getElementById('lblCatalogoDestinoBadge');
+    if (badge) {
+      badge.innerHTML = `🧾 <span class="text-sky-400 font-black">Revisando Comanda & Cuenta</span>`;
+    }
+    window.renderCarrito();
+    var sidebar = document.getElementById('sidebarComanda');
+    if (sidebar) {
+      sidebar.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   window.seleccionarDestinoPedido = function (dest) {
     window.destinoPedido = dest;
     var destTxt = document.getElementById('lblDestinoActualTxt');
@@ -1166,8 +1379,8 @@
     var txtTitulo = document.getElementById('txtTituloComanda');
     var txtSub = document.getElementById('txtSubComanda');
 
-    if (lblQr) lblQr.innerText = qrId;
-    if (lblUbicacion) lblUbicacion.innerText = `Mesa ${window.simMesaId} • Silla ${window.simSillaNum} (${comensalNom})`;
+    if (lblQr) lblQr.innerText = 'Portavasos #' + qrId;
+    if (lblUbicacion) lblUbicacion.innerHTML = `¡Hola! Estás en la <span class="text-emerald-400">Mesa ${window.simMesaId} • Silla ${window.simSillaNum}</span>`;
     if (txtTitulo) txtTitulo.innerText = `Mi Comanda (Silla ${window.simSillaNum})`;
     if (txtSub) txtSub.innerText = `Mesa ${window.simMesaId} • Portavasos #${qrId}`;
 
@@ -1443,6 +1656,11 @@
     if (txtPropina) txtPropina.innerText = `$${propina.toFixed(2)}`;
     if (txtTotal) txtTotal.innerText = `$${total.toFixed(2)}`;
     if (txtBtnPagar) txtBtnPagar.innerText = `$${total.toFixed(2)}`;
+
+    var lblHubTotal = document.getElementById('lblHubTotalComanda');
+    if (lblHubTotal) lblHubTotal.innerText = `$${total.toFixed(2)}`;
+    var lblCatBtnTotal = document.getElementById('lblCatBtnTotal');
+    if (lblCatBtnTotal) lblCatBtnTotal.innerText = `$${total.toFixed(2)}`;
   };
 
   window.modoPagoCliente = 'solo_yo'; // 'solo_yo' | 'incluir_ninos' | 'toda_mesa'
