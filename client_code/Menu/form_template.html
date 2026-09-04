@@ -1306,6 +1306,13 @@
     window.renderSillasMesaBar();
     window.renderCarrito();
     window.renderAcompanantesMesa();
+
+    // Notificar al servidor en tiempo real para iluminar la silla en la pantalla del mesero
+    try {
+      if (window.anvilCheckinSilla) {
+        window.anvilCheckinSilla(window.simMesaId, window.simSillaNum, qrId);
+      }
+    } catch (e) { }
   };
 
   window.renderCarrito = function () {

@@ -68,6 +68,61 @@ def get_mesas_terraza():
         print('Uplink get_mesas exception:', e)
     return SEED_MESAS
 
+# Almacenamiento centralizado de cuentas y sillas de La Terraza (sincronizado en tiempo real)
+CUENTAS_TERRAZA = {
+    "1-1": {"mesaId": 1, "sillaId": 1, "qrId": "PV-011", "estado": "disponible", "comensalNombre": "Silla 1", "items": []},
+    "1-2": {"mesaId": 1, "sillaId": 2, "qrId": "PV-012", "estado": "disponible", "comensalNombre": "Silla 2", "items": []},
+    "1-3": {"mesaId": 1, "sillaId": 3, "qrId": "PV-013", "estado": "disponible", "comensalNombre": "Silla 3", "items": []},
+    "1-4": {"mesaId": 1, "sillaId": 4, "qrId": "PV-014", "estado": "disponible", "comensalNombre": "Silla 4", "items": []},
+    "2-1": {"mesaId": 2, "sillaId": 1, "qrId": "PV-021", "estado": "disponible", "comensalNombre": "Silla 1", "items": []},
+    "2-2": {"mesaId": 2, "sillaId": 2, "qrId": "PV-022", "estado": "disponible", "comensalNombre": "Silla 2", "items": []},
+    "2-3": {"mesaId": 2, "sillaId": 3, "qrId": "PV-023", "estado": "disponible", "comensalNombre": "Silla 3", "items": []},
+    "2-4": {"mesaId": 2, "sillaId": 4, "qrId": "PV-024", "estado": "disponible", "comensalNombre": "Silla 4", "items": []},
+    "3-1": {"mesaId": 3, "sillaId": 1, "qrId": "PV-031", "estado": "ocupada", "comensalNombre": "Silla 1", "items": [{"id": 501, "nombre": "Omelette de Claras con Champiñones", "notas": "Sin queso", "precio": 155.00, "cantidad": 1, "mesaId": 3, "sillaNum": 1, "hora": "09:15 AM", "enviadoCocina": True, "horaEnvioCocina": "09:15 AM"}]},
+    "3-2": {"mesaId": 3, "sillaId": 2, "qrId": "PV-032", "estado": "ocupada", "comensalNombre": "Silla 2", "items": [{"id": 502, "nombre": "Café con Leche / Capuchino", "notas": "Con canela", "precio": 68.00, "cantidad": 1, "mesaId": 3, "sillaNum": 2, "hora": "09:20 AM", "enviadoCocina": True, "horaEnvioCocina": "09:20 AM"}]},
+    "3-3": {"mesaId": 3, "sillaId": 3, "qrId": "PV-033", "estado": "ocupada", "comensalNombre": "Silla 3", "items": []},
+    "3-4": {"mesaId": 3, "sillaId": 4, "qrId": "PV-034", "estado": "ocupada", "comensalNombre": "Silla 4", "items": []},
+}
+
+@anvil.server.callable
+def get_cuentas_terraza():
+    return CUENTAS_TERRAZA
+
+@anvil.server.callable
+def checkin_silla_qr(mesa_id, silla_id, qr_id=''):
+    key = f"{mesa_id}-{silla_id}"
+    if key not in CUENTAS_TERRAZA:
+        CUENTAS_TERRAZA[key] = {
+            "mesaId": int(mesa_id),
+            "sillaId": int(silla_id),
+            "qrId": qr_id or f"PV-0{mesa_id}{silla_id}",
+            "estado": "ocupada",
+            "comensalNombre": f"Comensal Silla {silla_id}",
+            "items": []
+        }
+    else:
+        CUENTAS_TERRAZA[key]["estado"] = "ocupada"
+        if qr_id:
+            CUENTAS_TERRAZA[key]["qrId"] = qr_id
+    return CUENTAS_TERRAZA[key]
+
+@anvil.server.callable
+def actualizar_cuenta_silla(mesa_id, silla_id, items, estado='ocupada'):
+    key = f"{mesa_id}-{silla_id}"
+    if key in CUENTAS_TERRAZA:
+        CUENTAS_TERRAZA[key]["items"] = items
+        CUENTAS_TERRAZA[key]["estado"] = estado
+    else:
+        CUENTAS_TERRAZA[key] = {
+            "mesaId": int(mesa_id),
+            "sillaId": int(silla_id),
+            "qrId": f"PV-0{mesa_id}{silla_id}",
+            "estado": estado,
+            "comensalNombre": f"Comensal Silla {silla_id}",
+            "items": items
+        }
+    return CUENTAS_TERRAZA
+
 @anvil.server.callable
 def procesar_cobro_terraza(metodo_pago, items_carrito):
     try:

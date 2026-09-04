@@ -1,4 +1,3 @@
-<anvil-form container="HtmlTemplate" prop:html="">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <link rel="stylesheet" href="_/theme/theme.css">
 
@@ -2147,6 +2146,54 @@
       sillaOrigenMover: null,
       cuentas: loadStateFromStorage()
     };
+
+    window.aplicarCuentasServidor = function(cuentasServidor) {
+      if (!cuentasServidor || typeof cuentasServidor !== 'object') return;
+      if (!window.palapaState || !window.palapaState.cuentas) return;
+
+      var changed = false;
+      Object.keys(cuentasServidor).forEach(function(k) {
+        var srv = cuentasServidor[k];
+        if (!srv) return;
+        
+        if (!window.palapaState.cuentas[k]) {
+          window.palapaState.cuentas[k] = JSON.parse(JSON.stringify(srv));
+          changed = true;
+        } else {
+          var curr = window.palapaState.cuentas[k];
+          if (srv.estado === 'ocupada' && curr.estado !== 'ocupada') {
+            curr.estado = 'ocupada';
+            changed = true;
+          }
+          if (srv.qrId && !curr.qrId) {
+            curr.qrId = srv.qrId;
+            changed = true;
+          }
+          if (srv.items && srv.items.length > 0 && (!curr.items || curr.items.length < srv.items.length)) {
+            curr.items = srv.items;
+            curr.estado = 'ocupada';
+            changed = true;
+          }
+        }
+      });
+
+      if (changed) {
+        saveStateToStorage();
+        renderStateUI();
+      }
+    };
+
+    // Auto-polling en segundo plano para sincronizar check-ins de comensales en tiempo real
+    setInterval(function() {
+      try {
+        if (window.anvilGetCuentasServidor) {
+          var srvData = window.anvilGetCuentasServidor();
+          if (srvData) {
+            window.aplicarCuentasServidor(srvData);
+          }
+        }
+      } catch (e) { }
+    }, 3000);
 
     function resetDemoState() {
       var initial = JSON.parse(JSON.stringify(DEFAULT_CUENTAS));
@@ -6028,4 +6075,4 @@
 
     setTimeout(function () { renderStateUI(); setupDragListeners(); }, 150);
   })();
-</script></anvil-form>
+</script>

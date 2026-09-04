@@ -7,6 +7,8 @@ class Menu(MenuTemplate):
     self.init_components(**properties)
     try:
       anvil.js.window.anvilAppNav = self.navegar_modulo
+      anvil.js.window.anvilCheckinSilla = self.hacer_checkin_silla
+      anvil.js.window.anvilSyncCuenta = self.sincronizar_cuenta_servidor
     except Exception:
       pass
 
@@ -24,6 +26,24 @@ class Menu(MenuTemplate):
           anvil.open_form('ClientesLealtad')
     except Exception as e:
       print(f"Error procesando routing en Menu: {e}")
+
+  def hacer_checkin_silla(self, mesa_id, silla_id, qr_id=''):
+    try:
+      import anvil.server
+      res = anvil.server.call('checkin_silla_qr', int(mesa_id), int(silla_id), str(qr_id))
+      return res
+    except Exception as e:
+      print(f"Error en checkin_silla: {e}")
+      return None
+
+  def sincronizar_cuenta_servidor(self, mesa_id, silla_id, items, estado='ocupada'):
+    try:
+      import anvil.server
+      res = anvil.server.call('actualizar_cuenta_silla', int(mesa_id), int(silla_id), items, str(estado))
+      return res
+    except Exception as e:
+      print(f"Error en sincronizar_cuenta_servidor: {e}")
+      return None
 
   def navegar_modulo(self, modulo_nombre):
     target_form = 'POSMesero'
