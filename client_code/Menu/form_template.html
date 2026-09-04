@@ -208,7 +208,30 @@
     </div>
 
     <!-- SECCIÓN IZQUIERDA: CATÁLOGO Y PRODUCTOS -->
-    <section class=&quot;lg:col-span-2 flex flex-col gap-6&quot;>
+    <section class=&quot;lg:col-span-2 flex flex-col gap-4&quot;>
+
+      <!-- BANNER SUPERIOR DE ESTADO DE COMANDA (SIEMPRE VISIBLE PARA EL COMENSAL) -->
+      <div id=&quot;stickyComandaBarCliente&quot; class=&quot;bg-gradient-to-r from-slate-900 to-slate-950 p-4 rounded-2xl border border-emerald-500/40 shadow-xl flex flex-wrap items-center justify-between gap-3&quot;>
+        <div class=&quot;flex items-center gap-3&quot;>
+          <div class=&quot;w-10 h-10 rounded-xl bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-xl text-emerald-400&quot;>
+            🧾
+          </div>
+          <div>
+            <div class=&quot;text-xs font-black text-white flex items-center gap-2&quot; id=&quot;lblStickyComandaTitulo&quot;>
+              Mi Comanda: 0 productos
+            </div>
+            <div class=&quot;text-[11px] text-slate-400 mt-0.5&quot; id=&quot;lblStickyComandaSubtitulo&quot;>
+              Selecciona una categoría y agrega platillos a tu cuenta
+            </div>
+          </div>
+        </div>
+        <div class=&quot;flex items-center gap-2&quot;>
+          <span class=&quot;text-sm font-black text-emerald-400 bg-emerald-950/80 px-2.5 py-1 rounded-lg border border-emerald-500/30&quot; id=&quot;lblStickyComandaTotal&quot;>$0.00</span>
+          <button type=&quot;button&quot; onclick=&quot;window.mostrarVistaComanda()&quot; class=&quot;px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-black transition flex items-center gap-1.5 shadow-md shadow-emerald-600/30 cursor-pointer&quot;>
+            <i class=&quot;fa-solid fa-receipt&quot;></i> Ver Comanda
+          </button>
+        </div>
+      </div>
 
       <!-- BUSCADOR &amp; BARRA DE CATEGORÍAS -->
       <div class=&quot;flex flex-col sm:flex-row gap-4 justify-between items-center&quot;>
@@ -391,70 +414,88 @@
     </div>
   </div>
 
-  <!-- MODAL DE FICHA TÉCNICA Y RECETA DE COCINA (CLIENTE QR) -->
+  <!-- MODAL DE PERSONALIZACIÓN GOURMET DEL PLATILLO (CLIENTE QR) -->
   <div id=&quot;modalRecetaClienteBackdrop&quot;
     style=&quot;display: none !important; position: fixed !important; inset: 0 !important; z-index: 100000 !important; background: rgba(2, 6, 23, 0.85) !important; backdrop-filter: blur(12px) !important; align-items: center !important; justify-content: center !important; padding: 16px !important;&quot;
     onclick=&quot;if(event.target === this) window.cerrarModalRecetaCliente();&quot;>
     <div
-      style=&quot;background: #090d16 !important; border: 1px solid #334155 !important; border-radius: 20px !important; width: 100% !important; max-width: 540px !important; padding: 20px !important; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.8) !important; display: flex !important; flex-direction: column !important; gap: 12px !important; color: #f8fafc !important; max-height: 90vh !important; overflow-y: auto !important;&quot;>
+      style=&quot;background: #090d16 !important; border: 1px solid #334155 !important; border-radius: 24px !important; width: 100% !important; max-width: 520px !important; padding: 24px !important; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.8) !important; display: flex !important; flex-direction: column !important; gap: 16px !important; color: #f8fafc !important; max-height: 90vh !important; overflow-y: auto !important;&quot;>
       
       <!-- HEADER -->
-      <div style=&quot;display: flex !important; justify-content: space-between !important; align-items: flex-start !important; border-bottom: 1px solid #1e293b !important; padding-bottom: 10px !important;&quot;>
+      <div style=&quot;display: flex !important; justify-content: space-between !important; align-items: flex-start !important; border-bottom: 1px solid #1e293b !important; padding-bottom: 12px !important;&quot;>
         <div style=&quot;display: flex; align-items: center; gap: 12px;&quot;>
-          <div id=&quot;cliRecetaIcono&quot; style=&quot;width: 44px; height: 44px; border-radius: 12px; background: #1e293b; display: flex; align-items: center; justify-content: center; font-size: 24px; border: 1px solid #334155;&quot;>🍳</div>
+          <div id=&quot;cliRecetaIcono&quot; style=&quot;width: 50px; height: 50px; border-radius: 16px; background: linear-gradient(135deg, rgba(16,185,129,0.2), rgba(2,132,199,0.2)); display: flex; align-items: center; justify-content: center; font-size: 26px; border: 1.5px solid rgba(16,185,129,0.4);&quot;>🍳</div>
           <div>
-            <span style=&quot;font-size: 10px; font-weight: 800; color: #38bdf8; text-transform: uppercase;&quot; id=&quot;cliRecetaCategoria&quot;>Especialidades</span>
-            <h2 style=&quot;font-size: 16px; font-weight: 900; color: #ffffff; margin: 0;&quot; id=&quot;cliRecetaTitulo&quot;>Platillo</h2>
+            <span style=&quot;font-size: 11px; font-weight: 800; color: #38bdf8; text-transform: uppercase;&quot; id=&quot;cliRecetaCategoria&quot;>Desayunos Gourmet</span>
+            <h2 style=&quot;font-size: 18px; font-weight: 900; color: #ffffff; margin: 2px 0 0 0;&quot; id=&quot;cliRecetaTitulo&quot;>Platillo</h2>
           </div>
         </div>
         <button onclick=&quot;window.cerrarModalRecetaCliente();&quot;
-          style=&quot;background: #1e293b !important; border: none !important; color: #94a3b8 !important; width: 30px !important; height: 30px !important; border-radius: 8px !important; font-weight: bold !important; cursor: pointer !important;&quot;>✕</button>
+          style=&quot;background: #1e293b !important; border: 1px solid #334155 !important; color: #94a3b8 !important; width: 32px !important; height: 32px !important; border-radius: 10px !important; font-weight: bold !important; cursor: pointer !important; display: flex; align-items: center; justify-content: center;&quot;>✕</button>
       </div>
 
-      <!-- METRICS BAR -->
-      <div style=&quot;display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; background: #020617; padding: 10px; border-radius: 12px; border: 1px solid #1e293b; text-align: center;&quot;>
-        <div>
-          <span style=&quot;font-size: 10px; color: #94a3b8; display: block;&quot;>⏱️ Preparación</span>
-          <span id=&quot;cliRecetaTiempo&quot; style=&quot;font-size: 12px; font-weight: 800; color: #fbbf24;&quot;>15 min</span>
-        </div>
-        <div>
-          <span style=&quot;font-size: 10px; color: #94a3b8; display: block;&quot;>👤 Porción</span>
-          <span id=&quot;cliRecetaPorcion&quot; style=&quot;font-size: 12px; font-weight: 800; color: #38bdf8;&quot;>1 persona</span>
-        </div>
-        <div>
-          <span style=&quot;font-size: 10px; color: #94a3b8; display: block;&quot;>💲 Precio</span>
-          <span id=&quot;cliRecetaPrecio&quot; style=&quot;font-size: 12px; font-weight: 900; color: #34d399;&quot;>$0.00</span>
+      <!-- DESCRIPCIÓN GOURMET &amp; PRECIO BASE -->
+      <div style=&quot;background: #0f172a; border: 1px solid #1e293b; border-radius: 16px; padding: 14px;&quot;>
+        <p id=&quot;cliRecetaDescripcion&quot; style=&quot;font-size: 13px; color: #cbd5e1; line-height: 1.5; margin: 0;&quot;></p>
+        <div style=&quot;display: flex; justify-content: space-between; align-items: center; margin-top: 10px; padding-top: 8px; border-top: 1px dashed #1e293b;&quot;>
+          <span style=&quot;font-size: 11px; color: #94a3b8; font-weight: 600;&quot;>Precio base:</span>
+          <span id=&quot;cliRecetaPrecio&quot; style=&quot;font-size: 16px; font-weight: 900; color: #34d399;&quot;>$0.00</span>
         </div>
       </div>
 
-      <!-- INGREDIENTES -->
-      <div style=&quot;background: #0f172a; border: 1px solid #1e293b; border-radius: 12px; padding: 12px;&quot;>
-        <span style=&quot;font-size: 11px; font-weight: 800; color: #38bdf8; display: block; margin-bottom: 6px;&quot;>
-          <i class=&quot;fa-solid fa-carrot&quot;></i> Ingredientes y Porciones:
+      <!-- OPCIONES DE TÉRMINO / PREPARACIÓN -->
+      <div id=&quot;boxTerminoPreparacion&quot; style=&quot;display: flex; flex-direction: column; gap: 8px;&quot;>
+        <span style=&quot;font-size: 12px; font-weight: 800; color: #fbbf24; display: flex; align-items: center; gap: 6px;&quot;>
+          <i class=&quot;fa-solid fa-fire-burner&quot;></i> ¿Cómo deseas tu preparación / término?
         </span>
-        <ul id=&quot;cliRecetaIngredientesList&quot; style=&quot;margin: 0; padding-left: 18px; font-size: 11px; color: #cbd5e1; display: flex; flex-direction: column; gap: 3px;&quot;></ul>
+        <div id=&quot;chipsTerminoContainer&quot; style=&quot;display: flex; flex-wrap: wrap; gap: 6px;&quot;>
+          <!-- Chips interactivos de término generados dinámicamente -->
+        </div>
       </div>
 
-      <!-- PREPARACIÓN -->
-      <div style=&quot;background: #0f172a; border: 1px solid #1e293b; border-radius: 12px; padding: 12px;&quot;>
-        <span style=&quot;font-size: 11px; font-weight: 800; color: #34d399; display: block; margin-bottom: 6px;&quot;>
-          <i class=&quot;fa-solid fa-fire&quot;></i> Preparación:
+      <!-- PREFERENCIAS / QUITAR INGREDIENTES -->
+      <div style=&quot;display: flex; flex-direction: column; gap: 8px;&quot;>
+        <span style=&quot;font-size: 12px; font-weight: 800; color: #38bdf8; display: flex; align-items: center; gap: 6px;&quot;>
+          <i class=&quot;fa-solid fa-sliders&quot;></i> Preferencias / Exclusiones:
         </span>
-        <ol id=&quot;cliRecetaPasosList&quot; style=&quot;margin: 0; padding-left: 18px; font-size: 11px; color: #e2e8f0; display: flex; flex-direction: column; gap: 4px;&quot;></ol>
+        <div id=&quot;chipsPreferenciasContainer&quot; style=&quot;display: flex; flex-wrap: wrap; gap: 6px;&quot;>
+          <!-- Chips de quitar ingredientes -->
+        </div>
       </div>
 
-      <!-- ADICIONALES POR SEPARADO -->
-      <div id=&quot;boxCliRecetaAdicionales&quot; style=&quot;background: rgba(56,189,248,0.08); border: 1px solid rgba(56,189,248,0.25); border-radius: 12px; padding: 12px; display: none;&quot;>
-        <span style=&quot;font-size: 11px; font-weight: 800; color: #38bdf8; display: block; margin-bottom: 6px;&quot;>
-          <i class=&quot;fa-solid fa-circle-plus&quot;></i> Ingredientes Extras / Adicionales (Cobro por separado):
+      <!-- INGREDIENTES EXTRAS (COBRO ADICIONAL) -->
+      <div style=&quot;display: flex; flex-direction: column; gap: 8px; background: rgba(56,189,248,0.06); border: 1px solid rgba(56,189,248,0.2); border-radius: 16px; padding: 12px;&quot;>
+        <span style=&quot;font-size: 12px; font-weight: 800; color: #38bdf8; display: flex; align-items: center; gap: 6px;&quot;>
+          <i class=&quot;fa-solid fa-circle-plus&quot;></i> ¿Deseas agregar extras a tu platillo?
         </span>
-        <div id=&quot;cliRecetaAdicionalesList&quot; style=&quot;display: flex; flex-wrap: wrap; gap: 6px;&quot;></div>
+        <div id=&quot;chipsExtrasContainer&quot; style=&quot;display: flex; flex-wrap: wrap; gap: 6px;&quot;>
+          <!-- Checkbox chips de extras con costo -->
+        </div>
       </div>
 
-      <button onclick=&quot;window.cerrarModalRecetaCliente();&quot;
-        style=&quot;padding: 10px !important; background: #1e293b !important; color: #f8fafc !important; border: 1px solid #334155 !important; border-radius: 10px !important; font-size: 12px !important; font-weight: 800 !important; cursor: pointer !important;&quot;>
-        Cerrar Detalle
-      </button>
+      <!-- NOTAS ESPECIALES PARA EL CHEF / BARISTA -->
+      <div style=&quot;display: flex; flex-direction: column; gap: 6px;&quot;>
+        <label for=&quot;txtModalNotasEspeciales&quot; style=&quot;font-size: 11px; font-weight: 700; color: #94a3b8;&quot;>
+          <i class=&quot;fa-regular fa-comment-dots&quot;></i> Instrucciones especiales para la cocina:
+        </label>
+        <input type=&quot;text&quot; id=&quot;txtModalNotasEspeciales&quot; placeholder=&quot;Ej. Salsa verde bien caliente, poca sal...&quot;
+          style=&quot;width: 100%; box-sizing: border-box; padding: 10px 14px; background: #020617; border: 1px solid #334155; border-radius: 12px; color: #f8fafc; font-size: 12px; outline: none;&quot;>
+      </div>
+
+      <!-- CANTIDAD Y BOTÓN PRINCIPAL AGREGAR -->
+      <div style=&quot;display: flex; gap: 12px; align-items: center; padding-top: 10px; border-top: 1px solid #1e293b;&quot;>
+        <div style=&quot;display: flex; align-items: center; background: #020617; border: 1px solid #334155; border-radius: 12px; padding: 4px;&quot;>
+          <button type=&quot;button&quot; onclick=&quot;window.cambiarCantidadModal(-1);&quot; style=&quot;width: 32px; height: 32px; background: #1e293b; color: #ffffff; border: none; border-radius: 8px; font-weight: 900; font-size: 14px; cursor: pointer;&quot;>-</button>
+          <span id=&quot;txtModalCantidad&quot; style=&quot;width: 36px; text-align: center; font-size: 14px; font-weight: 900; color: #ffffff;&quot;>1</span>
+          <button type=&quot;button&quot; onclick=&quot;window.cambiarCantidadModal(1);&quot; style=&quot;width: 32px; height: 32px; background: #1e293b; color: #ffffff; border: none; border-radius: 8px; font-weight: 900; font-size: 14px; cursor: pointer;&quot;>+</button>
+        </div>
+
+        <button type=&quot;button&quot; onclick=&quot;window.confirmarAgregarPlatilloPersonalizado();&quot;
+          style=&quot;flex: 1; padding: 14px; background: linear-gradient(135deg, #059669, #0d9488); color: #ffffff; border: none; border-radius: 14px; font-size: 13px; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 16px rgba(5,150,105,0.4);&quot;>
+          <i class=&quot;fa-solid fa-plus-circle&quot;></i> <span id=&quot;btnModalConfirmarTxt&quot;>Agregar a Mi Pedido • $0.00</span>
+        </button>
+      </div>
+
     </div>
   </div>
 
@@ -1306,10 +1347,13 @@
     window.renderCarrito();
     window.renderAcompanantesMesa();
 
-    // Notificar al servidor en tiempo real para iluminar la silla en la pantalla del mesero
+    // Notificar al servidor en tiempo real para iluminar la silla y sincronizar items con la pantalla del mesero
     try {
       if (window.anvilCheckinSilla) {
         window.anvilCheckinSilla(window.simMesaId, window.simSillaNum, qrId);
+      }
+      if (window.anvilSyncCuenta &amp;&amp; cuentaActual &amp;&amp; cuentaActual.items) {
+        window.anvilSyncCuenta(window.simMesaId, window.simSillaNum, JSON.stringify(cuentaActual.items), 'ocupada');
       }
     } catch (e) { }
   };
@@ -1458,6 +1502,14 @@
 
     saveStorageCuentas(cuentas);
     window.renderCarrito();
+
+    // Sincronizar estado &quot;Enviado a Cocina&quot; con el servidor en tiempo real
+    try {
+      if (window.anvilSyncCuenta &amp;&amp; cuentas[keySilla]) {
+        window.anvilSyncCuenta(mesaId, window.simSillaNum, JSON.stringify(cuentas[keySilla].items || []), 'ocupada');
+      }
+    } catch (e) { }
+
     alert(`🚀 ¡${pendientesCount} producto(s) enviados a Cocina / Barra de Café (${nowStr})! La preparación ha iniciado.`);
   };
 
@@ -1586,6 +1638,38 @@
     if (lblHubTotal) lblHubTotal.innerText = `$${total.toFixed(2)}`;
     var lblCatBtnTotal = document.getElementById('lblCatBtnTotal');
     if (lblCatBtnTotal) lblCatBtnTotal.innerText = `$${total.toFixed(2)}`;
+
+    // Actualizar Banner Sticky Superior de Comanda
+    var itemsCount = 0;
+    var pendientesCount = 0;
+    if (cuentas[keySilla] &amp;&amp; cuentas[keySilla].items) {
+      itemsCount += cuentas[keySilla].items.length;
+      cuentas[keySilla].items.forEach(function(i) { if (!i.enviadoCocina) pendientesCount++; });
+    }
+    if (cuentas[keyCentro] &amp;&amp; cuentas[keyCentro].items) {
+      itemsCount += cuentas[keyCentro].items.length;
+      cuentas[keyCentro].items.forEach(function(i) { if (!i.enviadoCocina) pendientesCount++; });
+    }
+
+    var lblStickyTit = document.getElementById('lblStickyComandaTitulo');
+    var lblStickySub = document.getElementById('lblStickyComandaSubtitulo');
+    var lblStickyTot = document.getElementById('lblStickyComandaTotal');
+
+    if (lblStickyTot) lblStickyTot.innerText = `$${total.toFixed(2)}`;
+    if (lblStickyTit) {
+      if (itemsCount === 0) {
+        lblStickyTit.innerHTML = `Mi Comanda: <span class=&quot;text-slate-400 font-semibold&quot;>Sin pedidos aún</span>`;
+      } else {
+        lblStickyTit.innerHTML = `Mi Comanda: <b class=&quot;text-emerald-400&quot;>${itemsCount} producto${itemsCount > 1 ? 's' : ''}</b> ${pendientesCount > 0 ? `<span class=&quot;text-amber-400 text-[10px] font-bold&quot;>(${pendientesCount} pendiente${pendientesCount > 1 ? 's' : ''})</span>` : `<span class=&quot;text-sky-400 text-[10px] font-bold&quot;>✓ En Cocina</span>`}`;
+      }
+    }
+    if (lblStickySub) {
+      if (itemsCount === 0) {
+        lblStickySub.innerText = `Mesa ${mesaId} • Silla ${miSilla} • Selecciona platillos para agregar a tu cuenta`;
+      } else {
+        lblStickySub.innerText = `Mesa ${mesaId} • Silla ${miSilla} • Total acumulado con IVA: $${total.toFixed(2)}`;
+      }
+    }
   };
 
   window.modoPagoCliente = 'solo_yo'; // 'solo_yo' | 'incluir_ninos' | 'toda_mesa'
@@ -1789,7 +1873,7 @@
       card.className = 'glass-card p-4 rounded-2xl flex flex-col justify-between hover:border-emerald-500/50 transition gap-3';
 
       card.innerHTML = `
-          <div class=&quot;flex items-start gap-3 cursor-pointer&quot; onclick=&quot;window.abrirModalRecetaCliente(${prod.id});&quot;>
+          <div class=&quot;flex items-start gap-3 cursor-pointer&quot; onclick=&quot;window.abrirModalPersonalizar(${prod.id});&quot;>
             <div class=&quot;w-12 h-12 rounded-xl bg-slate-800/90 border border-slate-700 flex items-center justify-center text-2xl flex-shrink-0&quot;>
               ${prod.icono || '🍲'}
             </div>
@@ -1800,14 +1884,14 @@
               </div>
               <p class=&quot;text-[11px] text-slate-400 mt-1 line-clamp-2&quot;>${prod.descripcion || ''}</p>
               <div class=&quot;flex items-center gap-2 mt-2&quot;>
-                <span class=&quot;text-[10px] text-sky-400 font-bold bg-sky-500/10 px-2 py-0.5 rounded-md border border-sky-500/20&quot;>⏱️ ${prod.tiempo || '8–10 min'}</span>
-                <span class=&quot;text-[10px] text-slate-400 font-semibold&quot;>${prod.porciones || '1 persona'}</span>
+                <span class=&quot;text-[10px] text-amber-400 font-bold bg-amber-500/10 px-2 py-0.5 rounded-md border border-amber-500/20&quot;>⭐ Gourmet</span>
+                <span class=&quot;text-[10px] text-slate-400 font-semibold&quot;>${prod.categoria_nombre || ''}</span>
               </div>
             </div>
           </div>
           <div class=&quot;flex items-center justify-between gap-2 pt-2 border-t border-slate-800/80&quot;>
-            <button onclick=&quot;window.abrirModalRecetaCliente(${prod.id});&quot; class=&quot;py-2 px-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-sky-400 border border-slate-700 text-xs font-bold transition flex items-center gap-1 cursor-pointer&quot;>
-              <i class=&quot;fa-solid fa-book-open&quot;></i> Receta
+            <button onclick=&quot;window.abrirModalPersonalizar(${prod.id});&quot; class=&quot;py-2 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-sky-400 border border-slate-700 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer&quot;>
+              <i class=&quot;fa-solid fa-sliders&quot;></i> Personalizar
             </button>
             <button onclick=&quot;window.agregarAlCarritoDirecto(${prod.id})&quot; class=&quot;${btnClass}&quot;>
               ${btnTxt}
@@ -1818,57 +1902,257 @@
     });
   };
 
-  window.abrirModalRecetaCliente = function(prodId) {
+  window.modalPersonalizacionState = {
+    prod: null,
+    cantidad: 1,
+    termino: '',
+    preferencias: [],
+    extras: [],
+    extraPrecioTotal: 0
+  };
+
+  window.abrirModalPersonalizar = function(prodId) {
     const prod = (window.vsMenuData || []).find(p => p.id === prodId);
     if (!prod) return;
 
+    window.modalPersonalizacionState = {
+      prod: prod,
+      cantidad: 1,
+      termino: '',
+      preferencias: [],
+      extras: [],
+      extraPrecioTotal: 0
+    };
+
     document.getElementById('cliRecetaIcono').innerText = prod.icono || '🍳';
-    document.getElementById('cliRecetaCategoria').innerText = prod.categoria_nombre || 'Desayuno';
+    document.getElementById('cliRecetaCategoria').innerText = prod.categoria_nombre || 'Especialidades';
     document.getElementById('cliRecetaTitulo').innerText = prod.nombre;
-    document.getElementById('cliRecetaTiempo').innerText = prod.tiempo || '8–10 min';
-    document.getElementById('cliRecetaPorcion').innerText = prod.porciones || '1 persona';
+    document.getElementById('cliRecetaDescripcion').innerText = prod.descripcion || 'Preparado al momento con ingredientes frescos de la más alta calidad.';
     document.getElementById('cliRecetaPrecio').innerText = `$${Number(prod.precio_unitario).toFixed(2)}`;
+    document.getElementById('txtModalNotasEspeciales').value = '';
+    document.getElementById('txtModalCantidad').innerText = '1';
 
-    const listIng = document.getElementById('cliRecetaIngredientesList');
-    if (listIng) {
-      listIng.innerHTML = '';
-      (prod.ingredientes || ['Ingredientes frescos según receta']).forEach(ing => {
-        const li = document.createElement('li');
-        li.innerText = ing;
-        listIng.appendChild(li);
+    // 1. Chips de Término / Preparación
+    const boxTermino = document.getElementById('boxTerminoPreparacion');
+    const containerTermino = document.getElementById('chipsTerminoContainer');
+    containerTermino.innerHTML = '';
+
+    let opcionesTermino = [];
+    const catLower = (prod.categoria_nombre || '').toLowerCase();
+    const nomLower = (prod.nombre || '').toLowerCase();
+
+    if (nomLower.includes('huevo') || nomLower.includes('omelette')) {
+      opcionesTermino = ['🍳 Revueltos', '🍳 Estrellados tiernos', '🍳 Bien cocidos', '🍳 Con yema tierna líquida', '🍳 En Omelette'];
+    } else if (nomLower.includes('café') || nomLower.includes('capuchino') || nomLower.includes('latte')) {
+      opcionesTermino = ['☕ Caliente tradicional', '🧊 Frappé / Frío (+ $10)', '🥛 Con leche entera', '🥛 Con leche deslactosada', '🥥 Leche de almendra (+ $15)'];
+    } else if (nomLower.includes('chilaquiles') || nomLower.includes('molletes') || nomLower.includes('enchiladas')) {
+      opcionesTermino = ['🌿 Salsa Verde clásica', '🍅 Salsa Roja tatemada', '🌶️ Salsa Pasilla suave', '🔥 Salsa Habanero extra'];
+    } else if (nomLower.includes('rib eye') || nomLower.includes('carne') || nomLower.includes('corte')) {
+      opcionesTermino = ['🥩 Término Medio (Jugoso)', '🥩 Tres Cuartos', '🥩 Bien Cocido'];
+    } else if (nomLower.includes('jugo')) {
+      opcionesTermino = ['🥤 Con hielo', '🥤 Sin hielo / Al tiempo', '🥤 Sin azúcar / Natural'];
+    }
+
+    if (opcionesTermino.length > 0) {
+      boxTermino.style.display = 'flex';
+      window.modalPersonalizacionState.termino = opcionesTermino[0];
+      opcionesTermino.forEach((opt, idx) => {
+        const chip = document.createElement('button');
+        chip.type = 'button';
+        chip.className = `px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer border ${idx === 0 ? 'bg-amber-500/30 text-amber-300 border-amber-500/60 shadow-sm' : 'bg-slate-900/80 text-slate-300 border-slate-700 hover:border-slate-500'}`;
+        chip.innerText = opt;
+        chip.onclick = function() {
+          window.modalPersonalizacionState.termino = opt;
+          Array.from(containerTermino.children).forEach(c => {
+            c.className = 'px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer border bg-slate-900/80 text-slate-300 border-slate-700 hover:border-slate-500';
+          });
+          chip.className = 'px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer border bg-amber-500/30 text-amber-300 border-amber-500/60 shadow-sm';
+          window.actualizarModalPersonalizarUI();
+        };
+        containerTermino.appendChild(chip);
       });
+    } else {
+      boxTermino.style.display = 'none';
     }
 
-    const listPasos = document.getElementById('cliRecetaPasosList');
-    if (listPasos) {
-      listPasos.innerHTML = '';
-      (prod.pasos || ['Preparar al momento siguiendo receta']).forEach(paso => {
-        const li = document.createElement('li');
-        li.innerText = paso;
-        listPasos.appendChild(li);
-      });
-    }
+    // 2. Chips de Preferencias / Quitar
+    const containerPref = document.getElementById('chipsPreferenciasContainer');
+    containerPref.innerHTML = '';
+    const prefsList = ['🚫 Sin cebolla', '🌶️ Salsa aparte / Sin picante', '🌿 Sin cilantro', '🫘 Sin frijoles', '🥛 Sin lácteos / Sin crema', '🧂 Poca sal'];
 
-    const boxAdic = document.getElementById('boxCliRecetaAdicionales');
-    const listAdic = document.getElementById('cliRecetaAdicionalesList');
-    if (boxAdic &amp;&amp; listAdic) {
-      if (prod.adicionales &amp;&amp; prod.adicionales.length > 0) {
-        boxAdic.style.display = 'block';
-        listAdic.innerHTML = '';
-        prod.adicionales.forEach(adic => {
-          const chip = document.createElement('span');
-          chip.style.cssText = 'background: #020617; border: 1px solid #0284c7; color: #7dd3fc; font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 6px;';
-          chip.innerText = `+ ${adic}`;
-          listAdic.appendChild(chip);
-        });
-      } else {
-        boxAdic.style.display = 'none';
-      }
-    }
+    prefsList.forEach(pref => {
+      const chip = document.createElement('button');
+      chip.type = 'button';
+      chip.className = 'px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer border bg-slate-900/80 text-slate-300 border-slate-700 hover:border-slate-500';
+      chip.innerText = pref;
+      chip.onclick = function() {
+        const idx = window.modalPersonalizacionState.preferencias.indexOf(pref);
+        if (idx === -1) {
+          window.modalPersonalizacionState.preferencias.push(pref);
+          chip.className = 'px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer border bg-rose-500/20 text-rose-300 border-rose-500/50 shadow-sm';
+        } else {
+          window.modalPersonalizacionState.preferencias.splice(idx, 1);
+          chip.className = 'px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer border bg-slate-900/80 text-slate-300 border-slate-700 hover:border-slate-500';
+        }
+      };
+      containerPref.appendChild(chip);
+    });
+
+    // 3. Chips de Ingredientes Extras con costo
+    const containerExtras = document.getElementById('chipsExtrasContainer');
+    containerExtras.innerHTML = '';
+    const extrasList = [
+      { nombre: '+ Aguacate fresco', precio: 25.00 },
+      { nombre: '+ Tocino crocante dorado', precio: 35.00 },
+      { nombre: '+ Queso Gouda gratinado', precio: 25.00 },
+      { nombre: '+ Champiñones salteados', precio: 20.00 },
+      { nombre: '+ Huevo extra orgánico', precio: 20.00 },
+      { nombre: '+ Porción de frijoles refritos', precio: 20.00 }
+    ];
+
+    extrasList.forEach(ex => {
+      const chip = document.createElement('button');
+      chip.type = 'button';
+      chip.className = 'px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer border bg-slate-900/80 text-slate-300 border-slate-700 hover:border-slate-500 flex items-center gap-1';
+      chip.innerHTML = `<span>${ex.nombre}</span> <b class=&quot;text-sky-400 font-extrabold&quot;>(+$${ex.precio})</b>`;
+      chip.onclick = function() {
+        const idx = window.modalPersonalizacionState.extras.findIndex(e => e.nombre === ex.nombre);
+        if (idx === -1) {
+          window.modalPersonalizacionState.extras.push(ex);
+          chip.className = 'px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer border bg-sky-500/20 text-sky-300 border-sky-500/50 shadow-sm flex items-center gap-1';
+        } else {
+          window.modalPersonalizacionState.extras.splice(idx, 1);
+          chip.className = 'px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer border bg-slate-900/80 text-slate-300 border-slate-700 hover:border-slate-500 flex items-center gap-1';
+        }
+        window.actualizarModalPersonalizarUI();
+      };
+      containerExtras.appendChild(chip);
+    });
+
+    window.actualizarModalPersonalizarUI();
 
     const modal = document.getElementById('modalRecetaClienteBackdrop');
     if (modal) {
       modal.style.display = 'flex';
+    }
+  };
+
+  // Alias para mantener compatibilidad
+  window.abrirModalRecetaCliente = window.abrirModalPersonalizar;
+
+  window.actualizarModalPersonalizarUI = function() {
+    const state = window.modalPersonalizacionState;
+    if (!state.prod) return;
+
+    let extraSum = 0;
+    if (state.termino &amp;&amp; state.termino.includes('(+ $10)')) extraSum += 10;
+    if (state.termino &amp;&amp; state.termino.includes('(+ $15)')) extraSum += 15;
+    state.extras.forEach(e => { extraSum += e.precio; });
+
+    state.extraPrecioTotal = extraSum;
+    const unitPrice = Number(state.prod.precio_unitario) + extraSum;
+    const totalOrder = unitPrice * state.cantidad;
+
+    const btnTxt = document.getElementById('btnModalConfirmarTxt');
+    if (btnTxt) {
+      btnTxt.innerText = `Agregar ${state.cantidad} a Mi Pedido • $${totalOrder.toFixed(2)}`;
+    }
+  };
+
+  window.cambiarCantidadModal = function(delta) {
+    const state = window.modalPersonalizacionState;
+    state.cantidad = Math.max(1, (state.cantidad || 1) + delta);
+    document.getElementById('txtModalCantidad').innerText = state.cantidad;
+    window.actualizarModalPersonalizarUI();
+  };
+
+  window.confirmarAgregarPlatilloPersonalizado = function() {
+    const state = window.modalPersonalizacionState;
+    if (!state.prod) return;
+
+    const prod = state.prod;
+    const cuentas = getStorageCuentas();
+    const mesaId = window.simMesaId || 1;
+    const dest = window.destinoPedido || 'mi_silla';
+    let key = '';
+    let comensalNom = '';
+    let qrId = '';
+    let esCentro = false;
+    let sillaNum = window.simSillaNum;
+
+    if (dest === 'centro') {
+      key = mesaId + '-centro';
+      comensalNom = `Mesa ${mesaId} (Al Centro / Compartido)`;
+      qrId = `MESA-0${mesaId}`;
+      esCentro = true;
+      sillaNum = 0;
+    } else if (dest === 'mi_silla' || dest === window.simSillaNum) {
+      key = mesaId + '-' + window.simSillaNum;
+      comensalNom = `Comensal Silla ${window.simSillaNum}`;
+      qrId = `PV-0${mesaId}${window.simSillaNum}`;
+      sillaNum = window.simSillaNum;
+    } else {
+      sillaNum = parseInt(dest);
+      key = mesaId + '-' + sillaNum;
+      comensalNom = `Comensal Silla ${sillaNum}`;
+      qrId = `PV-0${mesaId}${sillaNum}`;
+    }
+
+    if (!cuentas[key]) {
+      cuentas[key] = {
+        id: Date.now(),
+        mesaId: mesaId,
+        sillaNum: sillaNum,
+        esCentro: esCentro,
+        qrId: qrId,
+        comensalNombre: comensalNom,
+        items: [],
+        estado: 'ocupada',
+        creadoPor: 'cliente_qr',
+        horaApertura: (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      };
+    }
+
+    // Armar detalle de personalización en notas
+    const partesNotas = [];
+    if (state.termino) partesNotas.push(state.termino);
+    if (state.preferencias &amp;&amp; state.preferencias.length > 0) partesNotas.push(state.preferencias.join(', '));
+    if (state.extras &amp;&amp; state.extras.length > 0) partesNotas.push(state.extras.map(e => e.nombre).join(', '));
+    const notasLibres = (document.getElementById('txtModalNotasEspeciales').value || '').trim();
+    if (notasLibres) partesNotas.push(`Nota: ${notasLibres}`);
+
+    const notasFinales = partesNotas.join(' • ');
+    const precioFinalUnit = Number(prod.precio_unitario) + state.extraPrecioTotal;
+
+    const items = cuentas[key].items || [];
+    items.push({
+      id: Date.now(),
+      productoId: prod.id,
+      nombre: prod.nombre,
+      notas: notasFinales,
+      precio: precioFinalUnit,
+      cantidad: state.cantidad,
+      mesaId: mesaId,
+      sillaNum: sillaNum,
+      esCentro: esCentro,
+      enviadoCocina: false,
+      hora: (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+    });
+
+    cuentas[key].items = items;
+    cuentas[key].estado = 'ocupada';
+
+    saveStorageCuentas(cuentas);
+    window.sincronizarCuentaDesdeStorage();
+    window.cerrarModalRecetaCliente();
+
+    // Sincronizar inmediatamente con el servidor de Anvil
+    try {
+      if (window.anvilSyncCuenta) {
+        window.anvilSyncCuenta(mesaId, sillaNum, JSON.stringify(cuentas[key].items), 'ocupada');
+      }
+    } catch(e) {
+      console.error('Error sincronizando con Anvil:', e);
     }
   };
 

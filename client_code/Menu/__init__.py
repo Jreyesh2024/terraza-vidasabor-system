@@ -78,7 +78,21 @@ class Menu(MenuTemplate):
   def sincronizar_cuenta_servidor(self, mesa_id, silla_id, items, estado='ocupada'):
     try:
       import anvil.server
-      res = anvil.server.call('actualizar_cuenta_silla', int(mesa_id), int(silla_id), items, str(estado))
+      import json
+      if isinstance(items, str):
+        try:
+          items_clean = json.loads(items)
+        except Exception:
+          items_clean = []
+      elif isinstance(items, list):
+        items_clean = items
+      else:
+        try:
+          # Convertir proxy o iterable de JS
+          items_clean = json.loads(json.dumps(items))
+        except Exception:
+          items_clean = []
+      res = anvil.server.call('actualizar_cuenta_silla', int(mesa_id), int(silla_id), items_clean, str(estado))
       return res
     except Exception as e:
       print(f"Error en sincronizar_cuenta_servidor: {e}")
@@ -96,5 +110,5 @@ class Menu(MenuTemplate):
       target_form = 'MonitorFiscal'
     elif modulo_nombre in ['clientes_lealtad', 'rewards']:
       target_form = 'ClientesLealtad'
-
+    
     anvil.open_form(target_form)
