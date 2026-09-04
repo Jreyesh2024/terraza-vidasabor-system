@@ -63,18 +63,31 @@ Cuando una mesa o varias mesas solicitan platillos idénticos al mismo tiempo:
 
 ---
 
-## 5. Semáforo de Control de Tiempos en Pantalla KDS
+## 5. Semáforo y Ciclo de Vida Operativo (KDS + Alertas Multirrol)
 
-* 🟢 **Verde (0 a 8 min)**: Tiempo normal y controlado.
-* 🟡 **Ámbar (9 a 14 min)**: Tiempo en desarrollo; el cocinero debe tener el plato en fuego activo.
-* 🔴 **Rojo (≥ 15 min)**: Retraso crítico; el KDS emite pulso visual para priorizar la mesa.
+El sistema opera bajo un modelo de estados interactivos y alertas automáticas por SLA:
+
+1. 🟢 **Verde • Recibida / En Cola (Ingreso)**:
+   - La orden/comanda ingresa al KDS en cuanto el mesero o comensal la envía.
+   - Indica que el pedido está registrado y en espera de ser tomado por el cocinero.
+2. 🟡 **Ámbar • En Preparación Activa (Acción de Cocina)**:
+   - El cocinero presiona el botón **`Atender / Iniciar`** en la pantalla del KDS para señalar que ya tiene el platillo en fuego/preparación.
+   - El estado cambia inmediatamente a **Ámbar**, reflejando trabajo en progreso tanto en cocina como en la comanda del mesero.
+3. 🔴 **Rojo • Tiempo Excedido / Retraso Crítico (Alerta Automática > 14 min)**:
+   - Si el platillo permanece en preparación y supera el tiempo estimado de salida (ej. 14 minutos) sin ser despachado, el sistema cambia automáticamente a **Rojo**.
+   - **Visibilidad Multirrol en Tiempo Real**: Esta alerta roja se sincroniza de forma inmediata y visible para:
+     - 🍳 **Cocina (KDS)**: Pulso visual para priorizar y sacar el platillo de inmediato.
+     - 🏃 **Mesero (POS/Tablet/Móvil)**: Para estar al tanto del estatus de su mesa e informar al cliente si es necesario.
+     - 👑 **Administrador / Gerente**: Monitor de piso para identificar cuellos de botella y apoyar la estación.
+4. 🏁 **Listo / Pase (`✅ Listo`)**:
+   - Cocina presiona **`Listo`**; la orden pasa a la mesa de pase y notifica al mesero para entrega inmediata a mesa.
 
 ---
 
 ## 6. Sincronización con el Croquis y POS del Mesero
 
-1. El mesero presiona **`Enviar a Cocina`** en su comanda.
-2. El ítem cambia de `🟡 Pendiente` a `🔥 En Cocina (09:05 AM)` y queda bloqueado contra borrado involuntario.
-3. El KDS recibe la orden en su estación correspondiente.
-4. Al salir del fuego, cocina presiona `✅ Listo`.
-5. El mesero recibe aviso inmediato en su dispositivo para recoger la comanda y llevarla a la mesa.
+1. **Mesero envía comanda**: Presiona **`Enviar a Cocina`**.
+2. **KDS recibe (🟢 Verde)**: La comanda aparece en verde en la estación correspondiente.
+3. **Cocina inicia preparación (🟡 Ámbar)**: El cocinero toca la orden/platillo para marcar **`Iniciar Fuego`**; el mesero ve en su pantalla que ya está en marcha.
+4. **Control de SLA (🔴 Alerta Roja si > 14 min)**: Si se excede el tiempo de cocción, la comanda se tiñe de rojo en KDS, monitor administrativo y tablet del mesero.
+5. **Salida (✅ Listo)**: Cocina presiona `Listo`, disparando notificación instantánea al mesero para servicio a mesa.

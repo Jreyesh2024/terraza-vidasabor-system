@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portavasos QR - La Terraza de Vida & Sabor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: #090d16;
+      color: #f8fafc;
+      padding: 24px;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .toolbar {
+      background: rgba(30, 41, 59, 0.85);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 20px 24px;
+      margin-bottom: 28px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+    }
+    .toolbar h1 {
+      font-size: 20px;
+      font-weight: 800;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .toolbar p {
+      font-size: 12px;
+      color: #94a3b8;
+      margin-top: 4px;
+    }
+    .url-config-box {
+      display: flex;
+      gap: 8px;
+      width: 100%;
+      max-width: 600px;
+    }
+    .url-config-box input {
+      flex: 1;
+      background: #0f172a;
+      border: 1px solid #334155;
+      color: #38bdf8;
+      font-size: 13px;
+      font-family: monospace;
+      padding: 10px 14px;
+      border-radius: 12px;
+      outline: none;
+    }
+    .url-config-box input:focus {
+      border-color: #10b981;
+      box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
+    }
+    .btn {
+      padding: 10px 18px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: #ffffff;
+    }
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #059669, #047857);
+      transform: translateY(-1px);
+    }
+    .btn-print {
+      background: #334155;
+      color: #f1f5f9;
+    }
+    .btn-print:hover {
+      background: #475569;
+    }
+
+    .filter-tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .filter-btn {
+      background: #1e293b;
+      color: #94a3b8;
+      border: 1px solid #334155;
+      padding: 8px 16px;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .filter-btn.active {
+      background: #10b981;
+      color: #fff;
+      border-color: #10b981;
+    }
+
+    /* GRID DE PORTAVASOS */
+    .pv-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+      gap: 24px;
+    }
+
+    /* TARJETA PORTAVASOS */
+    .pv-card {
+      background: #ffffff;
+      color: #0f172a;
+      border-radius: 20px;
+      padding: 18px;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border: 2px solid #e2e8f0;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .pv-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.6);
+      border-color: #10b981;
+    }
+    .pv-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 6px;
+      background: linear-gradient(90deg, #10b981, #0284c7, #f59e0b);
+    }
+
+    .pv-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+    .pv-brand {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .pv-logo-icon {
+      font-size: 22px;
+      background: #ecfdf5;
+      padding: 4px 6px;
+      border-radius: 8px;
+      border: 1px solid #a7f3d0;
+    }
+    .pv-title {
+      font-size: 11px;
+      font-weight: 900;
+      color: #065f46;
+      letter-spacing: 0.5px;
+    }
+    .pv-subtitle {
+      font-size: 9px;
+      font-weight: 700;
+      color: #047857;
+      letter-spacing: 1px;
+    }
+    .pv-badge {
+      background: #0f172a;
+      color: #f8fafc;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: 8px;
+      letter-spacing: 0.5px;
+    }
+
+    .pv-body {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+    .pv-qr-wrapper {
+      width: 110px;
+      height: 110px;
+      background: #ffffff;
+      padding: 4px;
+      border-radius: 12px;
+      border: 1px solid #cbd5e1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .pv-qr-img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+    .pv-info {
+      flex: 1;
+      min-width: 0;
+    }
+    .pv-silla {
+      font-size: 15px;
+      font-weight: 900;
+      color: #0f172a;
+      line-height: 1.2;
+    }
+    .pv-tag {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      background: #e0f2fe;
+      color: #0369a1;
+      padding: 2px 6px;
+      border-radius: 4px;
+      margin-top: 2px;
+    }
+    .pv-code {
+      font-size: 11px;
+      font-weight: 800;
+      color: #059669;
+      margin-top: 6px;
+      font-family: monospace;
+    }
+    .pv-area {
+      font-size: 10px;
+      color: #64748b;
+      margin-top: 2px;
+      font-weight: 600;
+    }
+
+    .pv-footer {
+      background: #f8fafc;
+      border: 1px dashed #cbd5e1;
+      border-radius: 10px;
+      padding: 8px 10px;
+      text-align: center;
+    }
+    .pv-instruction {
+      font-size: 9.5px;
+      font-weight: 700;
+      color: #334155;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+    }
+    .pv-url-preview {
+      font-size: 8px;
+      color: #94a3b8;
+      font-family: monospace;
+      margin-top: 4px;
+      word-break: break-all;
+      display: none;
+    }
+
+    /* MODO IMPRESIÓN */
+    @media print {
+      body {
+        background: #ffffff !important;
+        color: #000000 !important;
+        padding: 0 !important;
+      }
+      .toolbar, .filter-tabs {
+        display: none !important;
+      }
+      .pv-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 16px !important;
+      }
+      .pv-card {
+        box-shadow: none !important;
+        border: 1.5px solid #64748b !important;
+        page-break-inside: avoid;
+        margin-bottom: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <!-- TOOLBAR INTERACTIVA -->
+  <div class="toolbar">
+    <div>
+      <h1><span>☕</span> Portavasos QR - La Terraza de Vida & Sabor</h1>
+      <p>Códigos QR físicos para ordenar directo a cada comensal y silla.</p>
+    </div>
+    
+    <div class="url-config-box">
+      <input type="text" id="inputBaseUrl" value="https://impeccable-fruitful-beaver.anvil.app/#menu" placeholder="Ingresa la URL de la App en Anvil" />
+      <button class="btn btn-primary" onclick="actualizarTodosQRs()">
+        <i class="fa-solid fa-rotate"></i> Actualizar QRs
+      </button>
+      <button class="btn btn-print" onclick="window.print()">
+        <i class="fa-solid fa-print"></i> Imprimir
+      </button>
+    </div>
+  </div>
+
+  <!-- FILTROS POR MESA -->
+  <div class="filter-tabs">
+    <button class="filter-btn active" onclick="filtrarMesa('all', this)">Todas las Mesas (12 Sillas)</button>
+    <button class="filter-btn" onclick="filtrarMesa('1', this)">🌿 Mesa 1 (4)</button>
+    <button class="filter-btn" onclick="filtrarMesa('2', this)">👨‍👩‍👧‍👦 Mesa 2 (4)</button>
+    <button class="filter-btn" onclick="filtrarMesa('3', this)">🏖️ Mesa 3 (4)</button>
+  </div>
+
+  <!-- GRID DE TARJETAS PORTAVASOS -->
+  <div class="pv-grid" id="pvGrid">
+    
+        <div class="pv-card" data-mesa="1" data-silla="1" data-qr="PV-011">
+          <div class="pv-header">
+            <div class="pv-brand">
+              <span class="pv-logo-icon">🌿</span>
+              <div>
+                <div class="pv-title">LA TERRAZA</div>
+                <div class="pv-subtitle">VIDA & SABOR</div>
+              </div>
+            </div>
+            <div class="pv-badge">MESA 1</div>
+          </div>
+          
+          <div class="pv-body">
+            <div class="pv-qr-wrapper">
+              <img id="img_qr_1_1" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAhIAAAISCAIAAAAWX7HoAAANbUlEQVR4nO3dsZEjyRFA0VnGGjAifaD/ptAHiuMBqFJhx/7rK1RW4z15B2iggf1RQiJ/vV6vLwD4M//4w38HALIBQCMbAASyAUAgGwAEsgFAIBsABLIBQCAbAASyAUAgGwAEsgFAIBsABLIBQCAbAASyAUAgGwAEsgFAIBsABL+/bvj+57++nuXnP/9e9HrvPPLMqzrR9etdZ+Y7eeK7ceead33LZrrzTjptABDIBgCBbAAQyAYAgWwAEMgGAIFsABDIBgCBbADwrinxmTOo19ZNe858veuu6sS593WeN4G866pOfK9+Rn73171XThsABLIBQCAbAASyAUAgGwAEsgFAIBsABLIBQCAbAMyYEr/2adPa66aI121XvvO3z5sD/7Sr2rW1+3kz5N+P+7/OaQOAQDYACGQDgEA2AAhkA4BANgAIZAOAQDYACGQDgBOmxE+0biZz3VTtp72iE69q5j1a53mf9k/jtAFAIBsABLIBQCAbAASyAUAgGwAEsgFAIBsABLIBQGBKfISZG5Jnzieve6927Xw+cWv3zB315sDfw2kDgEA2AAhkA4BANgAIZAOAQDYACGQDgEA2AAhkA4ATpsRPnOdcN5G7aw58nZmz3Lvm3nfNn9/525nXbBv8BE4bAASyAUAgGwAEsgFAIBsABLIBQCAbAASyAUAgGwDMmBJ/3uTzOnfmdf3tn//tzL3cM9+rmX97h195+Ls4bQAQyAYAgWwAEMgGAIFsABDIBgCBbAAQyAYAgWwA8K4p8eftyF1n3Yzxnb+duZnZ837yBPLM+XP/1/0vpw0AAtkAIJANAALZACCQDQAC2QAgkA0AAtkAIJANAIJfr9fra4d1s68z91Sv21S8a/fyNZuZ/y4n7vQ+8arW+Rl5zXeuymkDgEA2AAhkA4BANgAIZAOAQDYACGQDgEA2AAhkA4B37RI/ccb40yZU71g3M/9pn42ZO9vXmfmKdn1/vzfd/XWP7LQBQCAbAASyAUAgGwAEsgFAIBsABLIBQCAbAASyAcC7donv2st9bdfzPm+X+B0z95+fOMv9vF8umHnNu67q58DnddoAIJANAALZACCQDQAC2QAgkA0AAtkAIJANAALZAOCEXeLP29t84tz7undy5qz+uuc9ccL8mmv+5E/ONacNAALZACCQDQAC2QAgkA0AAtkAIJANAALZACCQDQCevkt85pbyE2dfdznxk3PiBPLMb8qJ29FnvqKfTVfltAFAIBsABLIBQCAbAASyAUAgGwAEsgFAIBsABLIBwIwp8XV2zeueOL96bebE9fNmbnd9U+448dM+8x79PO5XHpw2AAhkA4BANgAIZAOAQDYACGQDgEA2AAhkA4BANgAIfn8ts2smc+Yjn/huPG+6dd17NXOyfZ0T5+1PfCfXsUscgDeRDQAC2QAgkA0AAtkAIJANAALZACCQDQAC2QBgxpT4tXUzmTN3IF+7Mxm765p3zevumnvfNck/85rvXNW6v515j74P/HWJa04bAASyAUAgGwAEsgFAIBsABLIBQCAbAASyAUAgGwAEv16v19cOMydj182ue73v8WkT5necePdnbim/NvN573DaACCQDQAC2QAgkA0AAtkAIJANAALZACCQDQAC2QDgXbvEZ26xnjlx/bwZ43UTubv2zK/bjr7Luk/drl3idx75xE/stV3P67QBQCAbAASyAUAgGwAEsgFAIBsABLIBQCAbAASyAcC7psR3zSjeceLm7V27iO/4tFc00527sOvbveuTM/MT+7Psee/cX6cNAALZACCQDQAC2QAgkA0AAtkAIJANAALZACCQDQDeNSV+4i7iO1OXM3enn/i866Zbd+18nvm86x75eTPkM+fAZz6y0wYAgWwAEMgGAIFsABDIBgCBbAAQyAYAgWwAEMgGADOmxK/NnNi89rwZ1BM3q+8y8/5em3lVM399YJ2fG9+UXVPx15w2AAhkA4BANgAIZAOAQDYACGQDgEA2AAhkA4BANgB415T4uinEEzf33rHuvTLb/Od2vVfP+6bM/JZdm3kHf0beBacNAALZACCQDQAC2QAgkA0AAtkAIJANAALZACCQDQCCX6/X62veXOXMncAzJ2NnbhveZeYn58Q58Jnz5zPv74nvhl3iALyJbAAQyAYAgWwAEMgGAIFsABDIBgCBbAAQyAYA79olvm6KeOZs864J1Zmv98QZ8ud9NnZ9B5832e6z8eecNgAIZAOAQDYACGQDgEA2AAhkA4BANgAIZAOAQDYAeNeU+LUTJzZPfN7nbXSf+bwzp6ZnPu+693nd35742fjZ9EsNThsABLIBQCAbAASyAUAgGwAEsgFAIBsABLIBQCAbAMyY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" alt="QR Portavasos PV-011" class="pv-qr-img" />
+            </div>
+            <div class="pv-info">
+              <div class="pv-silla">SILLA 1 <span class="pv-tag">Comensal 1</span></div>
+              <div class="pv-code">PORTAVASOS #PV-011</div>
+              <div class="pv-area">🌿 Terraza Jardín</div>
+            </div>
+          </div>
+
+          <div class="pv-footer">
+            <div class="pv-instruction">
+              <i class="fa-solid fa-camera"></i> Escanea con tu celular para abrir Menú Digital y ordenar
+            </div>
+            <div class="pv-url-preview" id="url_lbl_1_1">https://impeccable-fruitful-beaver.anvil.app/#menu?mesa=1&silla=1&qr=PV-011</div>
+          </div>
+        </div>
+        
+        <div class="pv-card" data-mesa="1" data-silla="2" data-qr="PV-012">
+          <div class="pv-header">
+            <div class="pv-brand">
+              <span class="pv-logo-icon">🌿</span>
+              <div>
+                <div class="pv-title">LA TERRAZA</div>
+                <div class="pv-subtitle">VIDA & SABOR</div>
+              </div>
+            </div>
+            <div class="pv-badge">MESA 1</div>
+          </div>
+          
+          <div class="pv-body">
+            <div class="pv-qr-wrapper">
+              <img id="img_qr_1_2" src="data:image/png;base64,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" alt="QR Portavasos PV-012" class="pv-qr-img" />
+            </div>
+            <div class="pv-info">
+              <div class="pv-silla">SILLA 2 <span class="pv-tag">Comensal 2</span></div>
+              <div class="pv-code">PORTAVASOS #PV-012</div>
+              <div class="pv-area">🌿 Terraza Jardín</div>
+            </div>
+          </div>
+
+          <div class="pv-footer">
+            <div class="pv-instruction">
+              <i class="fa-solid fa-camera"></i> Escanea con tu celular para abrir Menú Digital y ordenar
+            </div>
+            <div class="pv-url-preview" id="url_lbl_1_2">https://impeccable-fruitful-beaver.anvil.app/#menu?mesa=1&silla=2&qr=PV-012</div>
+          </div>
+        </div>
+        
+        <div class="pv-card" data-mesa="1" data-silla="3" data-qr="PV-013">
+          <div class="pv-header">
+            <div class="pv-brand">
+              <span class="pv-logo-icon">🌿</span>
+              <div>
+                <div class="pv-title">LA TERRAZA</div>
+                <div class="pv-subtitle">VIDA & SABOR</div>
+              </div>
+            </div>
+            <div class="pv-badge">MESA 1</div>
+          </div>
+          
+          <div class="pv-body">
+            <div class="pv-qr-wrapper">
+              <img id="img_qr_1_3" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAhIAAAISCAIAAAAWX7HoAAANb0lEQVR4nO3dsZEjyRFA0VnGGjAifaD/ppwPFMcDUD2pY/81C5XVeE/eBRoNYH6UkMhfr9frCwD+zL/+8N8BgGwA0MgGAIFsABDIBgCBbAAQyAYAgWwAEMgGAIFsABDIBgCBbAAQyAYAgWwAEMgGAIFsABDIBgCBbAAQyAYAwe+vG77//Z+vZ/n571+LXu+dR555VTPtus/X//fazKtaZ90n9s7zPu+7sO5OOm0AEMgGAIFsABDIBgCBbAAQyAYAgWwAEMgGAIFsAPCuKfFrz5tQPfH1rruqmXPv65x4J6+deJ9PvOZd1t0rpw0AAtkAIJANAALZACCQDQAC2QAgkA0AAtkAIJANAGZMiV/7tGntmfui77wLJ+4/P/Gzcef/3nm9u7Z2P2+G/Ptxf+ucNgAIZAOAQDYACGQDgEA2AAhkA4BANgAIZAOAQDYAOGFK/ETrZjJ3zTaf+IpmzlTf8bzZ9U/7tH8apw0AAtkAIJANAALZACCQDQAC2QAgkA0AAtkAIJANAAJT4iPM3JC8a4Z8lxPv87qt7HfsmuQ3B/4eThsABLIBQCAbAASyAUAgGwAEsgFAIBsABLIBQCAbAJwwJX7iPOe6idx188nrnnfmpPeJc9F3HnnXhPkd66555l+Vn5FXdYfTBgCBbAAQyAYAgWwAEMgGAIFsABDIBgCBbAAQyAYAM6bET5wi3jWP7f++5//umkCeea+ed82fNm+/i9MGAIFsABDIBgCBbAAQyAYAgWwAEMgGAIFsABDIBgDvmhJ/3o7cO2bO617bNY99bebzrrPr9c40c/7c37q/c9oAIJANAALZACCQDQAC2QAgkA0AAtkAIJANAALZAGDGLvFrM2eMZ86R3rlXuzYkz9zMvGviet2d3PWKZm6DP/FeXZv5mwhOGwAEsgFAIBsABLIBQCAbAASyAUAgGwAEsgFAIBsAvGtK/M4s6K6Z6l0z5DOnPXc98sz5812Tz8/bUz3zFe36/n5vevfXPbLTBgCBbAAQyAYAgWwAEMgGAIFsABDIBgCBbAAQyAYAwa/X6/W1xqftE545U31t5qz+ruedOct94i8XXJt5zbuu6ufA53XaACCQDQAC2QAgkA0AAtkAIJANAALZACCQDQAC2QBgxi7xdf935qzvule0a+79efPJJ96rO3ZNET/vmj/tk3PNaQOAQDYACGQDgEA2AAhkA4BANgAIZAOAQDYACGQDgBN2iZ9o5v7z583Mr/Np92rX7wvsus+f9op+Nl2V0wYAgWwAEMgGAIFsABDIBgCBbAAQyAYAgWwAEMgGADOmxGfOcz5vr+/Mzcwz7+SumduZM/PXTpxtnvke/Rz4d+Oa0wYAgWwAEMgGAIFsABDIBgCBbAAQyAYAgWwAEMgGAMHvrxtOnATe9ci79pCf6MSd3jO3Sa9z4iz3iXdyHbvEAXgT2QAgkA0AAtkAIJANAALZACCQDQAC2QAgkA0A3rVL/MSpyxP3CZ+4iXqmXe/CuqnpazM/z+vMfI++H/frEk4bAASyAUAgGwAEsgFAIBsABLIBQCAbAASyAUAgGwC8a0r8jpmTsTP3VO+abL82czJ25lTtzDn/mZ/2Ez8b12Y+7x1OGwAEsgFAIBsABLIBQCAbAASyAUAgGwAEsgFAIBsABL+/btg1+zpz4vr6kWfuXp65AfvanUde9+4/bw583fu767Oxbob8Z9O3e9fzOm0AEMgGAIFsABDIBgCBbAAQyAYAgWwAEMgGAIFsAHDCLvE7Zm7PXmfmtuGZc9HM3yVuH/j8X7W45rQBQCAbAASyAUAgGwAEsgFAIBsABLIBQCAbAASyAcC7dok/bxfx9TXPnE4/cQP283Y+z9w1ve6zMfMVPW/+fOYjO20AEMgGAIFsABDIBgCBbAAQyAYAgWwAEMgGAIFsADBjSvzazInNa7tmUNdtDN61i/hEMz+x188783u07nln7rf/ufFNmfmLCU4bAASyAUAgGwAEsgFAIBsABLIBQCAbAASyAUAgGwC8a0p83RTiiZt771h3r2bONl/bdVW77tXzPpMzX9G1Xe/g97K/onaJAzCCbAAQyAYAgWwAEMgGAIFsABDIBgCBbAAQyAYAwa/X6/X1T83ccb3LrsnYmduGd5n5yVl3J0/8Ds78/YhdfjbdDbvEAXgT2QAgkA0AAtkAIJANAALZACCQDQAC2QAgkA0A3rVLfN3s68zZ5l0TqjNf74kz5Lvu1cyt7Ov+764J85kb3b8PfPevOW0AEMgGAIFsABDIBgCBbAAQyAYAgWwAEMgGAIFsAPCuKfFrJ05snvi8J26TvjbzeXdNXJ84nb7uPq/7v8/7/q7jtAFAIBsABLIBQCAbAASyAUAgGwAEsgFAIBsABLIBwIwp8Tt27SK+Y+b+5HWzzTNf77rnXWfmndw1+Txzg/3M5/3eNGHutAFAIBsABLIBQCAbAASyAUAgGwAEsgFAIBsABLIBQPDr9Xp9PWu6dZcT58/X2TVjPNOJd+PECXP+nClxAN5ENgAIZAOAQDYACGQDgEA2AAhkA4BANgAIZAOAGbvEZ27f3bUD+Y6ZM7cnbjhfdyd3XdWn/RbDzM3b3yPf33XvoNMGAIFsABDIBgCBbAAQyAYAgWwAEMgGAIFsABDIBgAzpsRnzjeumxTdZdeE6szJ2Jmfq11T8Sf+NsGd1zvz78b3yPfoDqcNAALZACCQDQAC2QAgkA0AAtkAIJANAALZACCQDQDeNSU+c8f1tV1T09c+7ap2mbkR+sR5+3XW7Wxf5+fDdtQ7bQAQyAYAgWwAEMgGAIFsABDIBgCBbAAQyAYAgWwA8K4p8V0TyLv2+l5f84nTvLtmUJ+3mXnX9uw7Zt7JmTPVu+bPZ35/nTYACGQDgEA2AAhkA4BANgAIZAOAQDYACGQDgEA2AAh+vV6vr39q1xTxzM3bz5vHnvm87tWfP+/zvkcn3o11dn1inTYACGQDgEA2AAhkA4BANgAIZAOAQDYACGQDgEA2AJgxJX7Hrp3Au2Z97zhxf/Lzdk3fuao7njfbfOJO70/7W+e0AUAgGwAEsgFAIBsABLIBQCAbAASyAUAgGwAEsgHAu6bET5yavmbu/c/NvOYT38ETt0mf+C7ceeQTvwvrOG0AEMgGAIFsABDIBgCBbAAQyAYAgWwAEMgGAIFsABD8/rrhxNnIT9vqPHNed929OnEaf90jn/gbAXeed+aE+ffI30SwSxyAN5ENAALZACCQDQAC2QAgkA0AAtkAIJANAALZACCwS3yEmRuhT3x/n3cn173e5/1GwLWZc/7fI+/VNacNAALZACCQDQAC2QAgkA0AAtkAIJANAALZACCQDQDeNSW+ayJ312TstZnTvHfMnOa9Y+Yk8B0zp4ivfdo+8O+Rk/x3OG0AEMgGAIFsABDIBgCBbAAQyAYAgWwAEMgGAIFsABD8/nqcXZPAJ27AvvO8u+7VtZnT+LsmkHdtsf60je4n/kW6w2kDgEA2AAhkA4BANgAIZAOAQDYACGQDgEA2AAhkA4B37RKfOd9oQvX/9bwnbnW+Y+Y89szP88z3d+YnZ5d1f1WcNgAIZAOAQDYACGQDgEA2AAhkA4BANgAIZAOAQDYAOGGX+LpZ0BM3UZ84n7zuXu16F2bu5d416T1z8vmOma/o+8B3wWkDgEA2AAhkA4BANgAIZAOAQDYACGQDgEA2AAhkA4B37RI/cTfvzK3OJ97JXbOvu2bI77DT+88fedc3ZZefAzfJO20AEMgGAIFsABDIBgCBbAAQyAYAgWwAEMgGAIFsAPCuXeIz99x+2jXfmSOdOYP6vGntmbPNM/fMz5xOv+P7cd8ypw0AAtkAIJANAALZACCQDQAC2QAgkA0AAtkAIJANAN41JT5z9vWO65nMmVuO78yRztw0PnNmft29WrdZfdcjP28u2n3+O6cNAALZACCQDQAC2QAgkA0AAtkAIJANAALZACCQDQDeNSX+vGnPO2ZOL++abr32vHn75+243vXrAzN/e2LmbwTsemSnDQAC2QAgkA0AAtkAIJANAALZACCQDQAC2QAgkA0AZkyJz5zW3jVVu25OeOYM+Ynz9rvMvM93zLzPJ17z98hvt9MGAIFsABDIBgCBbAAQyAYAgWwAEMgGAIFsABDIBgAnTIlz+vzqp+0D37WV/c6vDzzPib968H15VTOv+ZrTBgCBbAAQyAYAgWwAEMgGAIFsABDIBgCBbAAQyAYAgSnx47ej35lBfd7s+sx3Yd2e+ZnW3asTP88/I7+/dzhtABDIBgCBbAAQyAYAgWwAEMgGAIFsABDIBgCBbAAQ/Hq9Xl//1IlbcHdd864Z1HVXtWuad93zztw1fW3XDvN1du1sX+fncXfSaQOAQDYACGQDgEA2AAhkA4BANgAIZAOAQDYACGQDgBm7xGduwf20Wd91Zm6EnjlhfuIj33HiZ3Ld8z7v76TTBgCBbAAQyAYAgWwAEMgGAIFsABDIBgCBbAAQyAYA79olDsCncdoAIJANAALZACCQDQAC2QAgkA0AAtkAIJANAALZACCQDQAC2QAgkA0AAtkAIJANAALZACCQDQAC2QAgkA0AAtkA4OvP/Q+Ptn3aQ4lUkQAAAABJRU5ErkJggg==" alt="QR Portavasos PV-013" class="pv-qr-img" />
+            </div>
+            <div class="pv-info">
+              <div class="pv-silla">SILLA 3 <span class="pv-tag">Comensal 3</span></div>
+              <div class="pv-code">PORTAVASOS #PV-013</div>
+              <div class="pv-area">🌿 Terraza Jardín</div>
+            </div>
+          </div>
+
+          <div class="pv-footer">
+            <div class="pv-instruction">
+              <i class="fa-solid fa-camera"></i> Escanea con tu celular para abrir Menú Digital y ordenar
+            </div>
+            <div class="pv-url-preview" id="url_lbl_1_3">https://impeccable-fruitful-beaver.anvil.app/#menu?mesa=1&silla=3&qr=PV-013</div>
+          </div>
+        </div>
+        
+        <div class="pv-card" data-mesa="1" data-silla="4" data-qr="PV-014">
+          <div class="pv-header">
+            <div class="pv-brand">
+              <span class="pv-logo-icon">🌿</span>
+              <div>
+                <div class="pv-title">LA TERRAZA</div>
+                <div class="pv-subtitle">VIDA & SABOR</div>
+              </div>
+            </div>
+            <div class="pv-badge">MESA 1</div>
+          </div>
+          
+          <div class="pv-body">
+            <div class="pv-qr-wrapper">
+              <img id="img_qr_1_4" src="data:image/png;base64,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" alt="QR Portavasos PV-014" class="pv-qr-img" />
+            </div>
+            <div class="pv-info">
+              <div class="pv-silla">SILLA 4 <span class="pv-tag">Comensal 4</span></div>
+              <div class="pv-code">PORTAVASOS #PV-014</div>
+              <div class="pv-area">🌿 Terraza Jardín</div>
+            </div>
+          </div>
+
+          <div class="pv-footer">
+            <div class="pv-instruction">
+              <i class="fa-solid fa-camera"></i> Escanea con tu celular para abrir Menú Digital y ordenar
+            </div>
+            <div class="pv-url-preview" id="url_lbl_1_4">https://impeccable-fruitful-beaver.anvil.app/#menu?mesa=1&silla=4&qr=PV-014</div>
+          </div>
+        </div>
+        
+        <div class="pv-card" data-mesa="2" data-silla="1" data-qr="PV-021">
+          <div class="pv-header">
+            <div class="pv-brand">
+              <span class="pv-logo-icon">🌿</span>
+              <div>
+                <div class="pv-title">LA TERRAZA</div>
+                <div class="pv-subtitle">VIDA & SABOR</div>
+              </div>
+            </div>
+            <div class="pv-badge">MESA 2</div>
+          </div>
+          
+          <div class="pv-body">
+            <div class="pv-qr-wrapper">
+              <img id="img_qr_2_1" src="data:image/png;base64,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" alt="QR Portavasos PV-021" class="pv-qr-img" />
+            </div>
+            <div class="pv-info">
+              <div class="pv-silla">SILLA 1 <span class="pv-tag">Papá / Titular</span></div>
+              <div class="pv-code">PORTAVASOS #PV-021</div>
+              <div class="pv-area">👨‍👩‍👧‍👦 Terraza Principal (Familia)</div>
+            </div>
+          </div>
+
+          <div class="pv-footer">
+            <div class="pv-instruction">
+              <i class="fa-solid fa-camera"></i> Escanea con tu celular para abrir Menú Digital y ordenar
+            </div>
+            <div class="pv-url-preview" id="url_lbl_2_1">https://impeccable-fruitful-beaver.anvil.app/#menu?mesa=2&silla=1&qr=PV-021</div>
+          </div>
+        </div>
+        
+        <div class="pv-card" data-mesa="2" data-silla="2" data-qr="PV-022">
+          <div class="pv-header">
+            <div class="pv-brand">
+              <span class="pv-logo-icon">🌿</span>
+              <div>
+                <div class="pv-title">LA TERRAZA</div>
+                <div class="pv-subtitle">VIDA & SABOR</div>
+              </div>
+            </div>
+            <div class="pv-badge">MESA 2</div>
+          </div>
+          
+          <div class="pv-body">
+            <div class="pv-qr-wrapper">
+              <img id="img_qr_2_2" src="data:image/png;base64,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" alt="QR Portavasos PV-022" class="pv-qr-img" />
+            </div>
+            <div class="pv-info">
+              <div class="pv-silla">SILLA 2 <span class="pv-tag">Mamá</span></div>
+              <div class="pv-code">PORTAVASOS #PV-022</div>
+              <div class="pv-area">👨‍👩‍👧‍👦 Terraza Principal (Familia)</div>
+            </div>
+          </div>
+
+          <div class="pv-footer">
+            <div class="pv-instruction">
+              <i class="fa-solid fa-camera"></i> Escanea con tu celular para abrir Menú Digital y ordenar
+            </div>
+            <div class="pv-url-preview" id="url_lbl_2_2">https://impeccable-fruitful-beaver.anvil.app/#menu?mesa=2&silla=2&qr=PV-022</div>
+          </div>
+        </div>
+        
+        <div class="pv-card" data-mesa="2" data-silla="3" data-qr="PV-023">
+          <div class="pv-header">
+            <div class="pv-brand">
+              <span class="pv-logo-icon">🌿</span>
+              <div>
+                <div class="pv-title">LA TERRAZA</div>
+                <div class="pv-subtitle">VIDA & SABOR</div>
+              </div>
+            </div>
+            <div class="pv-badge">MESA 2</div>
+          </div>
+          
+          <div class="pv-body">
+            <div class="pv-qr-wrapper">
+              <img id="img_qr_2_3" src="data:image/png;base64,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" alt="QR Portavasos PV-023" class="pv-qr-img" />
+            </div>
+            <div class="pv-info">
+              <div class="pv-silla">SILLA 3 <span class="pv-tag">Niño 1</span></div>
+              <div class="pv-code">PORTAVASOS #PV-023</div>
+              <div class="pv-area">👨‍👩‍👧‍👦 Terraza Principal (Familia)</div>
+            </div>
+          </div>
+
+          <div class="pv-footer">
+            <div class="pv-instruction">
+              <i class="fa-solid fa-camera"></i> Escanea con tu celular para abrir Menú Digital y ordenar
+            </div>
+            <div class="pv-url-preview" id="url_lbl_2_3">https://impeccable-fruitful-beaver.anvil.app/#menu?mesa=2&silla=3&qr=PV-023</div>
+          </div>
+        </div>
+        
+        <div class="pv-card" data-mesa="2" data-silla="4" data-qr="PV-024">
+          <div class="pv-header">
+            <div class="pv-brand">
+              <span class="pv-logo-icon">🌿</span>
+              <div>
+                <div class="pv-title">LA TERRAZA</div>
+                <div class="pv-subtitle">VIDA & SABOR</div>
+              </div>
+            </div>
+            <div class="pv-badge">MESA 2</div>
+          </div>
+          
+          <div class="pv-body">
+            <div class="pv-qr-wrapper">
+              <img id="img_qr_2_4" src="data:image/png;base64,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" alt="QR Portavasos PV-024" class="pv-qr-img" />
+            </div>
+            <div class="pv-info">
+              <div class="pv-silla">SILLA 4 <span class="pv-tag">Niño 2</span></div>
+              <div class="pv-code">PORTAVASOS #PV-024</div>
+              <div class="pv-area">👨‍👩‍👧‍👦 Terraza Principal (Familia)</div>
+            </div>
+          </div>
+
+          <div class="pv-footer">
+            <div class="pv-instruction">
+              <i class="fa-solid fa-camera"></i> Escanea con tu celular para abrir Menú Digital y ordenar
+            </div>
+            <div class="pv-url-preview" id="url_lbl_2_4">https://impeccable-fruitful-beaver.anvil.app/#menu?mesa=2&silla=4&qr=PV-024</div>
+          </div>
+        </div>
+        
+        <div class="pv-card" data-mesa="3" data-silla="1" data-qr="PV-031">
+          <div class="pv-header">
+            <div class="pv-brand">
+              <span class="pv-logo-icon">🌿</span>
+              <div>
+                <div class="pv-title">LA TERRAZA</div>
+                <div class="pv-subtitle">VIDA & SABOR</div>
+              </div>
+            </div>
+            <div class="pv-badge">MESA 3</div>
+          </div>
+          
+          <div class="pv-body">
+            <div class="pv-qr-wrapper">
+              <img id="img_qr_3_1" src="data:image/png;base64,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" alt="QR Portavasos PV-031" class="pv-qr-img" />
+            </div>
+            <div class="pv-info">
+              <div class="pv-silla">SILLA 1 <span class="pv-tag">Comensal 1</span></div>
+              <div class="pv-code">PORTAVASOS #PV-031</div>
+              <div class="pv-area">🏖️ Palapa Central</div>
+            </div>
+          </div>
+
+          <div class="pv-footer">
+            <div class="pv-instruction">
+              <i class="fa-solid fa-camera"></i> Escanea con tu celular para abrir Menú Digital y ordenar
+            </div>
+            <div class="pv-url-preview" id="url_lbl_3_1">https://impeccable-fruitful-beaver.anvil.app/#menu?mesa=3&silla=1&qr=PV-031</div>
+          </div>
+        </div>
+        
+        <div class="pv-card" data-mesa="3" data-silla="2" data-qr="PV-032">
+          <div class="pv-header">
+            <div class="pv-brand">
+              <span class="pv-logo-icon">🌿</span>
+              <div>
+                <div class="pv-title">LA TERRAZA</div>
+                <div class="pv-subtitle">VIDA & SABOR</div>
+              </div>
+            </div>
+            <div class="pv-badge">MESA 3</div>
+          </div>
+          
+          <div class="pv-body">
+            <div class="pv-qr-wrapper">
+              <img id="img_qr_3_2" src="data:image/png;base64,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" alt="QR Portavasos PV-032" class="pv-qr-img" />
+            </div>
+            <div class="pv-info">
+              <div class="pv-silla">SILLA 2 <span class="pv-tag">Comensal 2</span></div>
+              <div class="pv-code">PORTAVASOS #PV-032</div>
+              <div class="pv-area">🏖️ Palapa Central</div>
+            </div>
+          </div>
+
+          <div class="pv-footer">
+            <div class="pv-instruction">
+              <i class="fa-solid fa-camera"></i> Escanea con tu celular para abrir Menú Digital y ordenar
+            </div>
+            <div class="pv-url-preview" id="url_lbl_3_2">https://impeccable-fruitful-beaver.anvil.app/#menu?mesa=3&silla=2&qr=PV-032</div>
+          </div>
+        </div>
+        
+        <div class="pv-card" data-mesa="3" data-silla="3" data-qr="PV-033">
+          <div class="pv-header">
+            <div class="pv-brand">
+              <span class="pv-logo-icon">🌿</span>
+              <div>
+                <div class="pv-title">LA TERRAZA</div>
+                <div class="pv-subtitle">VIDA & SABOR</div>
+              </div>
+            </div>
+            <div class="pv-badge">MESA 3</div>
+          </div>
+          
+          <div class="pv-body">
+            <div class="pv-qr-wrapper">
+              <img id="img_qr_3_3" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAhIAAAISCAIAAAAWX7HoAAANY0lEQVR4nO3du5UjyRFA0R6eMaBF+kD/TaEPFNsDUF2pzrytTWRk4V55plEofN5JIRC/Xq/XFwD8mX/94b8DANkAoJENAALZACCQDQAC2QAgkA0AAtkAIJANAALZACCQDQAC2QAgkA0AAtkAIJANAALZACCQDQAC2QAgkA0Agt9fN3z/+z9fz/Lzv/8uer53/vLMq3qe67tx7dPeG3fsuqpdd3KmO3fSaQOAQDYACGQDgEA2AAhkA4BANgAIZAOAQDYACGQDgHdNie+aMr1j3bTnzOe77qp2zTbvml6+87jrJpDXXfOuuegTp7V/Rn72190rpw0AAtkAIJANAALZACCQDQAC2QAgkA0AAtkAIJANAGZMiV/7tGntmVPTu+aTZ85Fz5wDX2fX+8p9Pv27zmkDgEA2AAhkA4BANgAIZAOAQDYACGQDgEA2AAhkA4ATpsRPdOIW6+c9o5kT5p/2uwbr/vKJ7/ZP47QBQCAbAASyAUAgGwAEsgFAIBsABLIBQCAbAASyAUBgSnyEmRuSd82Q7/rLu3Y+z9wzf+Ikvznw93DaACCQDQAC2QAgkA0AAtkAIJANAALZACCQDQAC2QDghCnxE+c5182vzpxPvrZrdv15c++7Zsiv7XpPnrgN/trMq7rDaQOAQDYACGQDgEA2AAhkA4BANgAIZAOAQDYACGQDgBlT4idOEa+za1+0/zt/AnnmvZr5f+9Y97jfH/Zd57QBQCAbAASyAUAgGwAEsgFAIBsABLIBQCAbAASyAcC7psSftyN3phPnZu+YuXf9ec93ppnz577r/sppA4BANgAIZAOAQDYACGQDgEA2AAhkA4BANgAIZAOAGbvEr+2a9Z05F31t1+zrnddo3WbmO9e8a+J63Z3c9YxmboM/8V5dm/mbCE4bAASyAUAgGwAEsgFAIBsABLIBQCAbAASyAUAgGwC8a0p85ubeXbuI78xzztwXvWuH+R27Xt/n/TbBHTOf0a5p7e9Nr/66v+y0AUAgGwAEsgFAIBsABLIBQCAbAASyAUAgGwAEsgFA8Ov1en39Xbtmqq+d+LhmjP8pz7vP667Kbu0JV/Vz4OM6bQAQyAYAgWwAEMgGAIFsABDIBgCBbAAQyAYAgWwA8K5d4nfsmtfdtR975jWfuOF85jM6ccL8mmv+5HfONacNAALZACCQDQAC2QAgkA0AAtkAIJANAALZACCQDQBOmBLfNXV5x/XE5okbkndt3p65xfrEjdDrXoV1d+PE7egzn9HPpk+Z0wYAgWwAEMgGAIFsABDIBgCBbAAQyAYAgWwAEMgGAMGv1+v1tcbMSeBrM+dXnzfbPHNP9fOm4u+YOdt84mv0M3If+B1OGwAEsgFAIBsABLIBQCAbAASyAUAgGwAEsgFAIBsAvGtKfNdM5okTuTN3EZ84b3+HXy74p5jl/uT3pNMGAIFsABDIBgCBbAAQyAYAgWwAEMgGAIFsABDIBgDB769NZk4+z5zY3HVVM+ftZ8693zHzNwKu3bmqdf935mv0/bjvK6cNAALZACCQDQAC2QAgkA0AAtkAIJANAALZACCQDQDetUv8eZOx6/YJn7g/ede+6BPndU+ct9/1bn/eO/b7wE/3HU4bAASyAUAgGwAEsgFAIBsABLIBQCAbAASyAUAgGwC8a0p85izozL+8zokTyDPv88xZ3ztmTuPP/KTM/NWDa7vupNMGAIFsABDIBgCBbAAQyAYAgWwAEMgGAIFsABDIBgAn7BJf58TdvHeY1edz5u1n7uX+PvBx77z6ThsABLIBQCAbAASyAUAgGwAEsgFAIBsABLIBQCAbAAS/v5bZtU943V5f8+cTzNxivWvX9LopYvvA//z/3jHzm/Ca0wYAgWwAEMgGAIFsABDIBgCBbAAQyAYAgWwAEMgGADOmxK/NnNi89rwZ1F27iE+06/W9c59nfo7WPe6Jv2swcyr+mtMGAIFsABDIBgCBbAAQyAYAgWwAEMgGAIFsABDIBgDvmhLftT/5jpmzzbv2n8+cIt51VSfOga+zbjp9pl2v4Peyb1G7xAEYQTYACGQDgEA2AAhkA4BANgAIZAOAQDYACGQDgODX6/X6mjdXOXMn8MzJ2JnbhneZ+c5ZdydP/AzO/P2IXX423Q27xAF4E9kAIJANAALZACCQDQAC2QAgkA0AAtkAIJANAN61S3zd7OvM2eZdE6ozn++JM+Qz3xt37vOuz+C1XRPmMze6f2/63rBLHIARZAOAQDYACGQDgEA2AAhkA4BANgAIZAOAQDYAeNeU+LUTJzZPfNwTt0lfm/m4J07Fz9y8fec+r/u/z/v8ruO0AUAgGwAEsgFAIBsABLIBQCAbAASyAUAgGwAEsgHAjCnxO3btIr5j5v7kO8931wz5zMddZ92M8a53zsx57DtmPu73pglzpw0AAtkAIJANAALZACCQDQAC2QAgkA0AAtkAIJANAIJfr9fr6+963pzwp82fr7NrxvjT7Joinjlhzp8zJQ7Am8gGAIFsABDIBgCBbAAQyAYAgWwAEMgGAIFsADBjl/jM7bu7diDfMXPmdtcU8Ylbu++4ftxdc+AzPW9m/o51r6DTBgCBbAAQyAYAgWwAEMgGAIFsABDIBgCBbAAQyAYAM6bET5y5vbZr2vPEO7nuce/M69655pl38nm/TbDu9b3jeb8fcYfTBgCBbAAQyAYAgWwAEMgGAIFsABDIBgCBbAAQyAYA75oSnzk1fe3T5s9nXtWnPaOZu6ZnmjkzP3NH/fem95XTBgCBbAAQyAYAgWwAEMgGAIFsABDIBgCBbAAQyAYAJ+wSv7ZrJ/C6mcwT9wnP3J/8vGntXffqee/JEz+/d+yaIXfaACCQDQAC2QAgkA0AAtkAIJANAALZACCQDQAC2QAg+PV6vb7m2TXNu2tP9cznu+4ZXZs56/tpV3XHzJ3eM38j4MTvK6cNAALZACCQDQAC2QAgkA0AAtkAIJANAALZACCQDQBOmBLftcd45kTurmnPazOnamdOtu/yvNnmE3d637HrW8WUOABvIhsABLIBQCAbAASyAUAgGwAEsgFAIBsABLIBwIwp8Znz2NdmzqDO3FK+a85/5rvuzl++43lXdeJr9D1ylnsdpw0AAtkAIJANAALZACCQDQAC2QAgkA0AAtkAIJANAJ6+S3zm1PQdnzbLzekzxifuA981Yf498l7ZJQ7Am8gGAIFsABDIBgCBbAAQyAYAgWwAEMgGAIFsABD8/rrhzvTjrknvmfOr19ZNAn/aNumZU9PrfNqrMPO3GH4OvFfXnDYACGQDgEA2AAhkA4BANgAIZAOAQDYACGQDgEA2AHjXlPi1mfO66+yaBd31fD/t9d21EfrEKeKZW7uf9+pfW/fecNoAIJANAALZACCQDQAC2QAgkA0AAtkAIJANAALZAGDGlPiu+dWZO4F3ed5U7ae9CjP/74mzzdfW3Y2fTd9I6zhtABDIBgCBbAAQyAYAgWwAEMgGAIFsABDIBgCBbAAQ/Hq9Xl9rnLhreuZm5nVOnBNeNwc+cx575vt55us7853zvE+30wYAgWwAEMgGAIFsABDIBgCBbAAQyAYAgWwAEMgGADN2iV9bNwu6a7b5jl3TvJ82B35t5l7uE98bM818Rt8HvgpOGwAEsgFAIBsABLIBQCAbAASyAUAgGwAEsgFAIBsAvGuX+Im7eWdudZ45n7zrXj2Pnd5//pc/7X31c+AmeacNAALZACCQDQAC2QAgkA0AAtkAIJANAALZACCQDQDeNSX+aWZObJ44977LzGntmZ73+u7a2v194Lbwa04bAASyAUAgGwAEsgFAIBsABLIBQCAbAASyAUAgGwAEv79umDkpesf1xOa6udk7c6R3pkx3TQLP3DW9a5p31773dX955u8p3OE+/5XTBgCBbAAQyAYAgWwAEMgGAIFsABDIBgCBbAAQyAYA75oSf96056ftMb72vHnsa7vmwHfN+q57FdZd1S4zfyNg11922gAgkA0AAtkAIJANAALZACCQDQAC2QAgkA0AAtkAYMaU+Mxp7TvWbfxet09417bwmVPEz5tA3rWF/sT7fOI1f2/6ZrjmtAFAIBsABLIBQCAbAASyAUAgGwAEsgFAIBsABLIBwAlT4pw+v/q8+fNr62ZuZ25Wn2nXXPQd35dXNfOarzltABDIBgCBbAAQyAYAgWwAEMgGAIFsABDIBgCBbAAQmBI/fjv6nRnU582uz3wV1u2ZvzZzVn/dfuznvXO+R37KnDYACGQDgEA2AAhkA4BANgAIZAOAQDYACGQDgEA2AAh+vV6vr7/rxC24u6551wzquqvaNc277nFnvmPXmfn53bWzfZ2fx91Jpw0AAtkAIJANAALZACCQDQAC2QAgkA0AAtkAIJANAGbsEp+5BXedXfPJu+7zzI3QMyfMT/zLd5z4nlz3uM/7nnTaACCQDQAC2QAgkA0AAtkAIJANAALZACCQDQAC2QDgXbvEAfg0ThsABLIBQCAbAASyAUAgGwAEsgFAIBsABLIBQCAbAASyAUAgGwAEsgFAIBsABLIBQCAbAASyAUAgGwAEsgFAIBsAfP25/wP9d3py9DtU3gAAAABJRU5ErkJggg==" alt="QR Portavasos PV-033" class="pv-qr-img" />
+            </div>
+            <div class="pv-info">
+              <div class="pv-silla">SILLA 3 <span class="pv-tag">Comensal 3</span></div>
+              <div class="pv-code">PORTAVASOS #PV-033</div>
+              <div class="pv-area">🏖️ Palapa Central</div>
+            </div>
+          </div>
+
+          <div class="pv-footer">
+            <div class="pv-instruction">
+              <i class="fa-solid fa-camera"></i> Escanea con tu celular para abrir Menú Digital y ordenar
+            </div>
+            <div class="pv-url-preview" id="url_lbl_3_3">https://impeccable-fruitful-beaver.anvil.app/#menu?mesa=3&silla=3&qr=PV-033</div>
+          </div>
+        </div>
+        
+        <div class="pv-card" data-mesa="3" data-silla="4" data-qr="PV-034">
+          <div class="pv-header">
+            <div class="pv-brand">
+              <span class="pv-logo-icon">🌿</span>
+              <div>
+                <div class="pv-title">LA TERRAZA</div>
+                <div class="pv-subtitle">VIDA & SABOR</div>
+              </div>
+            </div>
+            <div class="pv-badge">MESA 3</div>
+          </div>
+          
+          <div class="pv-body">
+            <div class="pv-qr-wrapper">
+              <img id="img_qr_3_4" src="data:image/png;base64,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" alt="QR Portavasos PV-034" class="pv-qr-img" />
+            </div>
+            <div class="pv-info">
+              <div class="pv-silla">SILLA 4 <span class="pv-tag">Comensal 4</span></div>
+              <div class="pv-code">PORTAVASOS #PV-034</div>
+              <div class="pv-area">🏖️ Palapa Central</div>
+            </div>
+          </div>
+
+          <div class="pv-footer">
+            <div class="pv-instruction">
+              <i class="fa-solid fa-camera"></i> Escanea con tu celular para abrir Menú Digital y ordenar
+            </div>
+            <div class="pv-url-preview" id="url_lbl_3_4">https://impeccable-fruitful-beaver.anvil.app/#menu?mesa=3&silla=4&qr=PV-034</div>
+          </div>
+        </div>
+        
+  </div>
+</div>
+
+<script>
+  function buildUrl(baseUrl, mesa, silla, qrId) {
+    var sep = baseUrl.includes('?') ? '&' : '?';
+    if (baseUrl.includes('#')) {
+      return baseUrl + sep + 'mesa=' + mesa + '&silla=' + silla + '&qr=' + qrId;
+    } else {
+      return baseUrl + '#menu?mesa=' + mesa + '&silla=' + silla + '&qr=' + qrId;
+    }
+  }
+
+  function actualizarTodosQRs() {
+    var baseUrl = document.getElementById('inputBaseUrl').value.trim();
+    if (!baseUrl) {
+      alert('Por favor ingresa una URL válida de Anvil');
+      return;
+    }
+
+    var cards = document.querySelectorAll('.pv-card');
+    cards.forEach(function(card) {
+      var mesa = card.getAttribute('data-mesa');
+      var silla = card.getAttribute('data-silla');
+      var qrId = card.getAttribute('data-qr');
+      var newUrl = buildUrl(baseUrl, mesa, silla, qrId);
+
+      var urlLbl = document.getElementById('url_lbl_' + mesa + '_' + silla);
+      if (urlLbl) urlLbl.innerText = newUrl;
+
+      // Generar nuevo QR dinámicamente con QRCode.js
+      var qrWrapper = card.querySelector('.pv-qr-wrapper');
+      qrWrapper.innerHTML = '';
+      new QRCode(qrWrapper, {
+        text: newUrl,
+        width: 102,
+        height: 102,
+        colorDark: "#0f172a",
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.H
+      });
+    });
+  }
+
+  function filtrarMesa(mesaNum, btn) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    var cards = document.querySelectorAll('.pv-card');
+    cards.forEach(card => {
+      if (mesaNum === 'all' || card.getAttribute('data-mesa') === mesaNum) {
+        card.style.display = 'flex';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+  }
+</script>
+
+</body>
+</html>

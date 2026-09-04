@@ -66,20 +66,20 @@ def uplink_get_productos():
         return []
 
 @anvil.server.callable
-def uplink_procesar_cobro(metodo_pago, items_carrito):
-    """Registra pago de comanda en PostgreSQL DBterrazavidasabor"""
+def uplink_procesar_cobro(metodo_pago, items_carrito, tipo_cobro='mesa_completa', numero_silla=None, propina_monto=0.00):
+    """Registra pago de comanda en PostgreSQL DBterrazavidasabor con soporte de cuentas divididas"""
     try:
         conn = get_db_connection()
         folio = f"VS-TICK-{random.randint(1000, 9999)}"
-        subtotal = sum(i['precio_unitario'] * i['cantidad'] for i in items_carrito)
+        subtotal = sum(i.get('precio_unitario', i.get('precio', 0.00)) * i.get('cantidad', 1) for i in items_carrito)
         iva = round(subtotal * 0.16, 2)
-        propina = round(subtotal * 0.10, 2)
+        propina = round(float(propina_monto), 2)
         total = round(subtotal + propina, 2)
 
         es_bancarizado = (metodo_pago != 'efectivo')
 
         with conn.cursor() as cur:
-            # Crear comanda en DB
+            # Crear comanda en DB si aplica
             cur.execute("""
                 INSERT INTO comandas (mesa_id, folio_ticket, estado, subtotal, iva_monto, propina_monto, total)
                 VALUES (1, %s, 'cerrada', %s, %s, %s, %s)
@@ -89,16 +89,29 @@ def uplink_procesar_cobro(metodo_pago, items_carrito):
 
             # Registrar items en detalle_comanda
             for item in items_carrito:
+                es_mesa = item.get('es_cuenta_mesa', False) or (item.get('sillaNum') == 0 or item.get('sillaNum') == 'mesa')
+                silla_num = 0 if es_mesa else item.get('sillaNum', numero_silla or 1)
+                tipo_consumo = item.get('tipo_consumo', 'comida')
+                
                 cur.execute("""
-                    INSERT INTO detalle_comanda (comanda_id, numero_silla, producto_id, producto_nombre, precio_unitario, cantidad, estado_item)
-                    VALUES (%s, 1, %s, %s, %s, %s, 'servido');
-                """, (comanda_id, item['id'], item['nombre'], item['precio_unitario'], item['cantidad']))
+                    INSERT INTO detalle_comanda (comanda_id, numero_silla, es_cuenta_mesa, tipo_consumo, producto_id, producto_nombre, precio_unitario, cantidad, estado_item)
+                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, 'servido');
+                """, (
+                    comanda_id, 
+                    silla_num, 
+                    es_mesa, 
+                    tipo_consumo, 
+                    item.get('id', 1), 
+                    item.get('nombre', 'Producto'), 
+                    item.get('precio_unitario', item.get('precio', 0.00)), 
+                    item.get('cantidad', 1)
+                ))
 
             # Registrar transacción de pago
             cur.execute("""
-                INSERT INTO pagos (comanda_id, tipo_cobro, metodo_pago, es_bancarizado, subtotal_cobrado, iva_cobrado, propina_cobrada, total_cobrado, referencia_transaccion)
-                VALUES (%s, 'mesa_completa', %s, %s, %s, %s, %s, %s, %s);
-            """, (comanda_id, metodo_pago, es_bancarizado, subtotal, iva, propina, total, f"REF-{folio}"))
+                INSERT INTO pagos (comanda_id, numero_silla, tipo_cobro, metodo_pago, es_bancarizado, subtotal_cobrado, iva_cobrado, propina_cobrada, total_cobrado, referencia_transaccion)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s);
+            """, (comanda_id, numero_silla, tipo_cobro, metodo_pago, es_bancarizado, subtotal, iva, propina, total, f"REF-{folio}"))
 
         conn.commit()
         conn.close()
@@ -106,8 +119,10 @@ def uplink_procesar_cobro(metodo_pago, items_carrito):
             "success": True,
             "folio": folio,
             "metodo_pago": metodo_pago,
+            "tipo_cobro": tipo_cobro,
             "subtotal": subtotal,
             "iva": iva,
+            "propina": propina,
             "total": total
         }
     except Exception as e:

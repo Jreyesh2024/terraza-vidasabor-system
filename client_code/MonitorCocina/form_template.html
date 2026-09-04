@@ -1,17 +1,18 @@
 <anvil-form container="HtmlTemplate" prop:html="">
-
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap');
 
   * { box-sizing: border-box; }
-  body, html {
+  html, body {
     background-color: #060911 !important;
     color: #f8fafc !important;
     font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif !important;
-    margin: 0;
-    padding: 0;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    min-height: 100vh !important;
   }
 
   /* KDS Ticket Animations */
@@ -33,6 +34,10 @@
     animation: urgentPulse 1.8s infinite;
   }
 
+  #kdsRootContainer {
+    padding-top: 75px !important;
+  }
+
   /* Custom Scrollbars */
   ::-webkit-scrollbar { width: 6px; height: 6px; }
   ::-webkit-scrollbar-track { background: #0b1120; }
@@ -40,7 +45,7 @@
   ::-webkit-scrollbar-thumb:hover { background: #334155; }
 </style>
 
-<div style="min-height: 100vh; background: #060911; color: #f8fafc; padding: 18px 22px; display: flex; flex-direction: column; gap: 16px;">
+<div id="kdsRootContainer" style="box-sizing: border-box !important; width: 100% !important; min-height: 100vh !important; background: #060911 !important; color: #f8fafc !important; padding: 75px 24px 48px 24px !important; display: flex !important; flex-direction: column !important; gap: 16px !important; position: relative !important; z-index: 1 !important;">
   
   <!-- TOP BAR: HEADER, LIVE CLOCK & NAVIGATION -->
   <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1e293b; padding-bottom: 14px; flex-wrap: wrap; gap: 12px;">
@@ -95,36 +100,97 @@
     </div>
   </div>
 
-  <!-- STATION SELECTOR CHIPS & STATS -->
-  <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
-    <div style="display: flex; gap: 8px; flex-wrap: wrap;" id="kdsStationChips">
-      <button onclick="window.filtrarEstacionKDS('TODAS');" id="chipKDS-TODAS"
-        style="padding: 8px 16px; font-size: 12px; font-weight: 800; border-radius: 12px; border: 1px solid #f59e0b; background: #f59e0b; color: #0f172a; cursor: pointer; display: flex; align-items: center; gap: 6px;">
-        <i class="fa-solid fa-utensils"></i> Toda la Cocina (Expeditor) <span id="badgeCountTODAS" style="padding: 2px 7px; background: #0f172a; color: #fbbf24; border-radius: 8px; font-size: 11px; font-weight: 900;">0</span>
-      </button>
+  <!-- MULTI-LEVEL FILTER BAR: ÁREAS, MESAS & CATEGORÍAS/ESTACIONES -->
+  <div style="background: #090d16; border: 1px solid #1e293b; border-radius: 16px; padding: 14px 18px; display: flex; flex-direction: column; gap: 12px;">
+    
+    <!-- LEVEL 1: ÁREAS DEL RESTAURANTE -->
+    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; border-bottom: 1px solid #1e293b; padding-bottom: 10px;">
+      <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+        <span style="font-size: 11px; font-weight: 900; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 5px;">
+          <i class="fa-solid fa-map-location-dot" style="color: #38bdf8;"></i> Área:
+        </span>
+        <div style="display: flex; gap: 6px; flex-wrap: wrap;" id="kdsAreaChips">
+          <button onclick="window.filtrarAreaKDS('TODAS');" id="chipArea-TODAS"
+            style="padding: 5px 12px; font-size: 11px; font-weight: 800; border-radius: 8px; border: 1px solid #38bdf8; background: #38bdf8; color: #0f172a; cursor: pointer; display: flex; align-items: center; gap: 4px;">
+            🏢 Todas las Áreas
+          </button>
+          <button onclick="window.filtrarAreaKDS('PALAPA');" id="chipArea-PALAPA"
+            style="padding: 5px 12px; font-size: 11px; font-weight: 800; border-radius: 8px; border: 1px solid #334155; background: #0f172a; color: #cbd5e1; cursor: pointer; display: flex; align-items: center; gap: 4px;">
+            🌴 La Palapa (M1-M3)
+          </button>
+          <button onclick="window.filtrarAreaKDS('PATIO');" id="chipArea-PATIO"
+            style="padding: 5px 12px; font-size: 11px; font-weight: 800; border-radius: 8px; border: 1px solid #334155; background: #0f172a; color: #cbd5e1; cursor: pointer; display: flex; align-items: center; gap: 4px;">
+            🌿 Terraza / Patio (M4-M6)
+          </button>
+          <button onclick="window.filtrarAreaKDS('CHIMENEA');" id="chipArea-CHIMENEA"
+            style="padding: 5px 12px; font-size: 11px; font-weight: 800; border-radius: 8px; border: 1px solid #334155; background: #0f172a; color: #cbd5e1; cursor: pointer; display: flex; align-items: center; gap: 4px;">
+            🔥 Chimenea (M7-M9)
+          </button>
+        </div>
+      </div>
 
-      <button onclick="window.filtrarEstacionKDS('COCINA');" id="chipKDS-COCINA"
-        style="padding: 8px 16px; font-size: 12px; font-weight: 800; border-radius: 12px; border: 1px solid #334155; background: #0f172a; color: #cbd5e1; cursor: pointer; display: flex; align-items: center; gap: 6px;">
-        <i class="fa-solid fa-fire-burner" style="color: #f59e0b;"></i> Cocina Caliente <span id="badgeCountCOCINA" style="padding: 2px 7px; background: #1e293b; color: #cbd5e1; border-radius: 8px; font-size: 11px; font-weight: 900;">0</span>
-      </button>
-
-      <button onclick="window.filtrarEstacionKDS('BARRA');" id="chipKDS-BARRA"
-        style="padding: 8px 16px; font-size: 12px; font-weight: 800; border-radius: 12px; border: 1px solid #334155; background: #0f172a; color: #cbd5e1; cursor: pointer; display: flex; align-items: center; gap: 6px;">
-        <i class="fa-solid fa-mug-hot" style="color: #38bdf8;"></i> Barra de Café & Bebidas <span id="badgeCountBARRA" style="padding: 2px 7px; background: #1e293b; color: #cbd5e1; border-radius: 8px; font-size: 11px; font-weight: 900;">0</span>
-      </button>
-
-      <button onclick="window.filtrarEstacionKDS('REPOSTERIA');" id="chipKDS-REPOSTERIA"
-        style="padding: 8px 16px; font-size: 12px; font-weight: 800; border-radius: 12px; border: 1px solid #334155; background: #0f172a; color: #cbd5e1; cursor: pointer; display: flex; align-items: center; gap: 6px;">
-        <i class="fa-solid fa-cake-candles" style="color: #c084fc;"></i> Repostería & Fríos <span id="badgeCountREPOSTERIA" style="padding: 2px 7px; background: #1e293b; color: #cbd5e1; border-radius: 8px; font-size: 11px; font-weight: 900;">0</span>
-      </button>
+      <!-- SEMAPHORE LEGEND -->
+      <div style="display: flex; align-items: center; gap: 12px; font-size: 10px; color: #94a3b8; font-weight: 800;">
+        <span style="display: flex; align-items: center; gap: 4px;"><span style="width: 8px; height: 8px; border-radius: 50%; background: #10b981; display: inline-block;"></span> 🟢 Recibido</span>
+        <span style="display: flex; align-items: center; gap: 4px;"><span style="width: 8px; height: 8px; border-radius: 50%; background: #f59e0b; display: inline-block;"></span> 🟡 En Fuego (&lt;14m)</span>
+        <span style="display: flex; align-items: center; gap: 4px;"><span style="width: 8px; height: 8px; border-radius: 50%; background: #ef4444; display: inline-block;"></span> 🔴 Demorado (&ge;14m)</span>
+      </div>
     </div>
 
-    <!-- SEMAPHORE LEGEND -->
-    <div style="display: flex; align-items: center; gap: 14px; font-size: 11px; color: #94a3b8; font-weight: 700;">
-      <span style="display: flex; align-items: center; gap: 5px;"><span style="width: 10px; height: 10px; border-radius: 50%; background: #10b981; display: inline-block;"></span> Normal (&lt;8 min)</span>
-      <span style="display: flex; align-items: center; gap: 5px;"><span style="width: 10px; height: 10px; border-radius: 50%; background: #f59e0b; display: inline-block;"></span> En Fuego (8-14 min)</span>
-      <span style="display: flex; align-items: center; gap: 5px;"><span style="width: 10px; height: 10px; border-radius: 50%; background: #ef4444; display: inline-block;"></span> Retraso (&ge;15 min)</span>
+    <!-- LEVEL 2: SELECTOR DIRECTO DE MESA (1 A 9) -->
+    <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap; border-bottom: 1px solid #1e293b; padding-bottom: 10px;">
+      <span style="font-size: 11px; font-weight: 900; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 5px;">
+        <i class="fa-solid fa-chair" style="color: #fbbf24;"></i> Mesa:
+      </span>
+      <div style="display: flex; gap: 6px; flex-wrap: wrap;" id="kdsMesaChips">
+        <button onclick="window.filtrarMesaKDS('TODAS');" id="chipMesa-TODAS"
+          style="padding: 4px 10px; font-size: 11px; font-weight: 800; border-radius: 8px; border: 1px solid #f59e0b; background: #f59e0b; color: #0f172a; cursor: pointer;">
+          Todas
+        </button>
+        <!-- Mesas 1 a 9 chips generated dynamically -->
+      </div>
     </div>
+
+    <!-- LEVEL 3: ESTACIONES / CATEGORÍAS (COMIDAS, BEBIDAS, POSTRES, NIÑOS) -->
+    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
+      <div style="display: flex; gap: 6px; flex-wrap: wrap;" id="kdsStationChips">
+        <button onclick="window.filtrarEstacionKDS('TODAS');" id="chipKDS-TODAS"
+          style="padding: 6px 14px; font-size: 11px; font-weight: 800; border-radius: 10px; border: 1px solid #f59e0b; background: #f59e0b; color: #0f172a; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+          <i class="fa-solid fa-utensils"></i> Toda la Cocina (Expeditor) <span id="badgeCountTODAS" style="padding: 1px 6px; background: #0f172a; color: #fbbf24; border-radius: 6px; font-size: 10px; font-weight: 900;">0</span>
+        </button>
+
+        <button onclick="window.filtrarEstacionKDS('COCINA');" id="chipKDS-COCINA"
+          style="padding: 6px 14px; font-size: 11px; font-weight: 800; border-radius: 10px; border: 1px solid #334155; background: #0f172a; color: #cbd5e1; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+          <i class="fa-solid fa-fire-burner" style="color: #f59e0b;"></i> Cocina Caliente (Comidas) <span id="badgeCountCOCINA" style="padding: 1px 6px; background: #1e293b; color: #cbd5e1; border-radius: 6px; font-size: 10px; font-weight: 900;">0</span>
+        </button>
+
+        <button onclick="window.filtrarEstacionKDS('BARRA');" id="chipKDS-BARRA"
+          style="padding: 6px 14px; font-size: 11px; font-weight: 800; border-radius: 10px; border: 1px solid #334155; background: #0f172a; color: #cbd5e1; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+          <i class="fa-solid fa-mug-hot" style="color: #38bdf8;"></i> Barra & Bebidas <span id="badgeCountBARRA" style="padding: 1px 6px; background: #1e293b; color: #cbd5e1; border-radius: 6px; font-size: 10px; font-weight: 900;">0</span>
+        </button>
+
+        <button onclick="window.filtrarEstacionKDS('REPOSTERIA');" id="chipKDS-REPOSTERIA"
+          style="padding: 6px 14px; font-size: 11px; font-weight: 800; border-radius: 10px; border: 1px solid #334155; background: #0f172a; color: #cbd5e1; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+          <i class="fa-solid fa-cake-candles" style="color: #c084fc;"></i> Repostería & Postres <span id="badgeCountREPOSTERIA" style="padding: 1px 6px; background: #1e293b; color: #cbd5e1; border-radius: 6px; font-size: 10px; font-weight: 900;">0</span>
+        </button>
+
+        <button onclick="window.filtrarEstacionKDS('INFANTIL');" id="chipKDS-INFANTIL"
+          style="padding: 6px 14px; font-size: 11px; font-weight: 800; border-radius: 10px; border: 1px solid #334155; background: #0f172a; color: #cbd5e1; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+          <i class="fa-solid fa-child" style="color: #4ade80;"></i> Menú Infantil / Niños <span id="badgeCountINFANTIL" style="padding: 1px 6px; background: #1e293b; color: #cbd5e1; border-radius: 6px; font-size: 10px; font-weight: 900;">0</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ACTIVE FILTER BANNER (If specific table is selected) -->
+  <div id="kdsFocusBanner" style="display: none; background: rgba(2, 132, 199, 0.15); border: 1px solid #0284c7; border-radius: 12px; padding: 10px 16px; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
+    <div style="display: flex; align-items: center; gap: 8px;">
+      <span style="font-size: 16px;">📍</span>
+      <span id="kdsFocusText" style="font-size: 13px; font-weight: 800; color: #38bdf8;">Enfocando Mesa 2</span>
+    </div>
+    <button onclick="window.filtrarMesaKDS('TODAS');" style="background: #0f172a; color: #cbd5e1; border: 1px solid #334155; padding: 4px 10px; border-radius: 8px; font-size: 11px; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 4px;">
+      ✕ Mostrar Todas las Mesas
+    </button>
   </div>
 
   <!-- KDS TICKETS GRID -->
@@ -365,9 +431,11 @@
       }
     };
 
-    // 2. ESTADO LOCAL DEL KDS
+    // 2. ESTADO LOCAL DEL KDS (ÁREAS, MESAS Y ESTACIONES)
     window.kdsState = {
-      estacionFiltro: 'TODAS', // TODAS, COCINA, BARRA, REPOSTERIA
+      areaFiltro: 'TODAS', // TODAS, PALAPA, PATIO, CHIMENEA
+      mesaFiltro: 'TODAS', // TODAS, '1', '2', '3', etc.
+      estacionFiltro: 'TODAS', // TODAS, COCINA, BARRA, REPOSTERIA, INFANTIL
       tickets: []
     };
 
@@ -382,10 +450,21 @@
     setInterval(updateClock, 1000);
     updateClock();
 
-    // Determinar estación de cada producto según su nombre/categoría
+    // Mapeo de Mesas a Áreas del Restaurante
+    function getTableArea(mesaId) {
+      const id = parseInt(mesaId);
+      if (id >= 1 && id <= 3) return { id: 'PALAPA', nombre: 'La Palapa' };
+      if (id >= 4 && id <= 6) return { id: 'PATIO', nombre: 'Terraza / Patio' };
+      if (id >= 7 && id <= 9) return { id: 'CHIMENEA', nombre: 'La Chimenea' };
+      return { id: 'PALAPA', nombre: 'Área General' };
+    }
+
+    // Determinar estación/categoría de cada producto
     function getProductStation(nombre) {
       const n = (nombre || '').toLowerCase();
-      if (n.includes('café') || n.includes('capuchino') || n.includes('espresso') || n.includes('jugo') || n.includes('limonada') || n.includes('té') || n.includes('refresco') || n.includes('bebida') || n.includes('agua')) {
+      if (n.includes('infantil') || n.includes('niño') || n.includes('kids') || n.includes('mini')) {
+        return 'INFANTIL';
+      } else if (n.includes('café') || n.includes('capuchino') || n.includes('espresso') || n.includes('jugo') || n.includes('limonada') || n.includes('té') || n.includes('refresco') || n.includes('bebida') || n.includes('agua') || n.includes('chocolate')) {
         return 'BARRA';
       } else if (n.includes('waffle') || n.includes('hotcake') || n.includes('crepa') || n.includes('pastel') || n.includes('fruta') || n.includes('dulce')) {
         return 'REPOSTERIA';
@@ -394,11 +473,17 @@
       }
     }
 
-    // 3. CARGAR COMANDAS DESDE STORAGE / PALAPA STATE
+    // 3. CARGAR COMANDAS DESDE STORAGE / PALAPA STATE (DESGLOSE POR COMENSAL / COLUMNAS)
     window.cargarKDS = function() {
       // Sincronizar estado global
       if (typeof window.syncStorageWithGlobal === 'function') {
         window.syncStorageWithGlobal();
+      }
+
+      // Si viene una mesa solicitada desde el POS (ej. Mesa 1, Mesa 2)
+      var requestedMesa = localStorage.getItem('kds_filtro_mesa');
+      if (requestedMesa && requestedMesa !== 'TODAS') {
+        window.kdsState.mesaFiltro = requestedMesa;
       }
 
       var raw = localStorage.getItem('palapa_croquis_state_v1');
@@ -425,16 +510,23 @@
               var parts = key.split('-');
               var mesaId = parts[0] || '1';
               var sillaNum = parts[1] || '1';
+              var isMesaCentro = (sillaNum === '0' || cta.es_cuenta_mesa);
+              var areaInfo = getTableArea(mesaId);
 
-              // Agrupar por mesa para el ticket KDS
-              var ticketKey = 'MESA-' + mesaId;
+              // CADA SILLA / COMENSAL O CUENTA DE MESA TIENE SU PROPIA COLUMNA DE COMANDA EN EL KDS
+              var ticketKey = isMesaCentro ? ('MESA-' + mesaId + '-CENTRO') : ('MESA-' + mesaId + '-S-' + sillaNum);
               if (!ticketsMap[ticketKey]) {
                 ticketsMap[ticketKey] = {
-                  id: 'T-' + mesaId,
-                  mesaId: mesaId,
-                  mesaNombre: (mesaId == '1' || mesaId == '2' || mesaId == '3') ? `Mesa ${mesaId} (Palapa)` : `Mesa ${mesaId}`,
+                  id: isMesaCentro ? ('T-' + mesaId + '-CENTRO') : ('T-' + mesaId + '-' + sillaNum),
+                  mesaId: mesaId.toString(),
+                  sillaNum: sillaNum.toString(),
+                  es_cuenta_mesa: isMesaCentro,
+                  mesaNombre: isMesaCentro ? `⭐ Mesa ${mesaId} • AL CENTRO` : `Mesa ${mesaId} • Silla ${sillaNum}`,
+                  comensalNombre: isMesaCentro ? `⭐ PLATILLOS AL CENTRO` : (cta.comensalNombre || `Comensal Silla ${sillaNum}`),
+                  areaId: areaInfo.id,
+                  areaNombre: areaInfo.nombre,
                   horaEnvio: enviados[0].horaEnvioCocina || enviados[0].hora || '09:00 AM',
-                  timestampEnvio: Date.now() - (6 * 60 * 1000), // Simular tiempo inicial si no existe
+                  timestampEnvio: enviados[0].timestampEnvioCocina || (Date.now() - (6 * 60 * 1000)),
                   items: []
                 };
               }
@@ -451,7 +543,10 @@
                   idxInCuenta: idxInCta,
                   estacion: st,
                   horaEnvio: it.horaEnvioCocina || it.hora || '09:00 AM',
-                  estado: it.estadoCocina || 'preparando' // preparando, listo, servido
+                  timestampEnvio: it.timestampEnvioCocina || (Date.now() - (6 * 60 * 1000)),
+                  timestampInicio: it.timestampInicioCocina || null,
+                  minutosEnAtencion: it.minutosEnAtencion || 0,
+                  estado: it.estadoCocina || 'recibido' // recibido (verde), preparando (ambar/rojo), listo, servido
                 });
               });
             }
@@ -459,33 +554,172 @@
         });
       }
 
-      // Si la base de datos está vacía, proveer datos de ejemplo realistas para pruebas
+      // Si la base de datos está vacía, proveer datos de ejemplo realistas con 4 comensales por mesa
       var ticketsList = Object.values(ticketsMap);
       if (ticketsList.length === 0) {
         ticketsList = [
+          // MESA 1: 4 COMENSALES (4 COLUMNAS)
           {
-            id: 'T-2',
-            mesaId: '2',
-            mesaNombre: 'Mesa 2 (Palapa)',
-            horaEnvio: '09:05 AM',
-            minutosTranscurridos: 5,
+            id: 'T-1-1',
+            mesaId: '1',
+            sillaNum: '1',
+            mesaNombre: 'Mesa 1 • Silla 1',
+            comensalNombre: 'Comensal 1 (Titular)',
+            areaId: 'PALAPA',
+            areaNombre: 'La Palapa',
+            horaEnvio: '09:02 AM',
+            timestampEnvio: Date.now() - (6 * 60 * 1000),
             items: [
-              { id: 'p1', nombre: 'Chilaquiles Verdes con Pollo', cantidad: 2, notas: 'Salsa verde bien caliente, sin cebolla picada', sillaNum: 1, keyCuenta: '2-1', idxInCuenta: 0, estacion: 'COCINA', estado: 'preparando' },
-              { id: 'p2', nombre: 'Omelette al Gusto', cantidad: 1, notas: 'Con champiñón y queso gouda extra', sillaNum: 2, keyCuenta: '2-2', idxInCuenta: 0, estacion: 'COCINA', estado: 'preparando' },
-              { id: 'p3', nombre: 'Capuchino Especial V&S', cantidad: 2, notas: 'Leche de almendras y toque de canela', sillaNum: 1, keyCuenta: '2-1', idxInCuenta: 1, estacion: 'BARRA', estado: 'preparando' },
-              { id: 'p4', nombre: 'Waffles Tradicionales Belgas', cantidad: 1, notas: 'Miel de maple aparte con frutos rojos', sillaNum: 3, keyCuenta: '2-3', idxInCuenta: 0, estacion: 'REPOSTERIA', estado: 'preparando' }
+              { id: 'm1_1', nombre: 'Chilaquiles Rojos con Huevo', cantidad: 1, notas: 'Huevos estrellados tiernos, salsa bien caliente', sillaNum: 1, keyCuenta: '1-1', idxInCuenta: 0, estacion: 'COCINA', estado: 'recibido', timestampEnvio: Date.now() - (6 * 60 * 1000) },
+              { id: 'm1_2', nombre: 'Café Americano de Altura', cantidad: 1, notas: 'Con leche deslactosada aparte', sillaNum: 1, keyCuenta: '1-1', idxInCuenta: 1, estacion: 'BARRA', estado: 'preparando', timestampInicio: Date.now() - (3 * 60 * 1000) }
             ]
           },
           {
-            id: 'T-3',
-            mesaId: '3',
-            mesaNombre: 'Mesa 3 (Palapa)',
-            horaEnvio: '08:58 AM',
-            minutosTranscurridos: 12,
+            id: 'T-1-2',
+            mesaId: '1',
+            sillaNum: '2',
+            mesaNombre: 'Mesa 1 • Silla 2',
+            comensalNombre: 'Comensal 2',
+            areaId: 'PALAPA',
+            areaNombre: 'La Palapa',
+            horaEnvio: '09:02 AM',
+            timestampEnvio: Date.now() - (6 * 60 * 1000),
             items: [
-              { id: 'p5', nombre: 'Huevos Rancheros al Albañil', cantidad: 2, notas: 'Tortillas bien doradas, salsa aparte', sillaNum: 1, keyCuenta: '3-1', idxInCuenta: 0, estacion: 'COCINA', estado: 'preparando' },
-              { id: 'p6', nombre: 'Chilaquiles Verdes con Pollo', cantidad: 2, notas: 'Pollo bien deshebrado', sillaNum: 2, keyCuenta: '3-2', idxInCuenta: 0, estacion: 'COCINA', estado: 'preparando' },
-              { id: 'p7', nombre: 'Café Americano de Altura', cantidad: 2, notas: 'Agua bien caliente', sillaNum: 1, keyCuenta: '3-1', idxInCuenta: 1, estacion: 'BARRA', estado: 'listo' }
+              { id: 'm1_3', nombre: 'Omelette al Gusto', cantidad: 1, notas: 'Con queso gouda y espinacas, sin cebolla', sillaNum: 2, keyCuenta: '1-2', idxInCuenta: 0, estacion: 'COCINA', estado: 'recibido', timestampEnvio: Date.now() - (6 * 60 * 1000) },
+              { id: 'm1_4', nombre: 'Jugo Verde Desintoxicante', cantidad: 1, notas: 'Recién prensado, sin hielo', sillaNum: 2, keyCuenta: '1-2', idxInCuenta: 1, estacion: 'BARRA', estado: 'recibido', timestampEnvio: Date.now() - (6 * 60 * 1000) }
+            ]
+          },
+          {
+            id: 'T-1-3',
+            mesaId: '1',
+            sillaNum: '3',
+            mesaNombre: 'Mesa 1 • Silla 3',
+            comensalNombre: 'Comensal 3',
+            areaId: 'PALAPA',
+            areaNombre: 'La Palapa',
+            horaEnvio: '09:02 AM',
+            timestampEnvio: Date.now() - (6 * 60 * 1000),
+            items: [
+              { id: 'm1_5', nombre: 'Huevos Rancheros al Albañil', cantidad: 1, notas: 'Tortillas bien doraditas', sillaNum: 3, keyCuenta: '1-3', idxInCuenta: 0, estacion: 'COCINA', estado: 'preparando', timestampInicio: Date.now() - (5 * 60 * 1000) },
+              { id: 'm1_6', nombre: 'Capuchino Especial V&S', cantidad: 1, notas: 'Con canela espolvoreada', sillaNum: 3, keyCuenta: '1-3', idxInCuenta: 1, estacion: 'BARRA', estado: 'listo', timestampInicio: Date.now() - (5 * 60 * 1000) }
+            ]
+          },
+          {
+            id: 'T-1-4',
+            mesaId: '1',
+            sillaNum: '4',
+            mesaNombre: 'Mesa 1 • Silla 4',
+            comensalNombre: 'Comensal 4',
+            areaId: 'PALAPA',
+            areaNombre: 'La Palapa',
+            horaEnvio: '09:02 AM',
+            timestampEnvio: Date.now() - (6 * 60 * 1000),
+            items: [
+              { id: 'm1_7', nombre: 'Waffles Tradicionales Belgas', cantidad: 1, notas: 'Con frutos rojos y mantequilla extra', sillaNum: 4, keyCuenta: '1-4', idxInCuenta: 0, estacion: 'REPOSTERIA', estado: 'recibido', timestampEnvio: Date.now() - (6 * 60 * 1000) }
+            ]
+          },
+
+          // MESA 2: 4 COMENSALES (4 COLUMNAS)
+          {
+            id: 'T-2-1',
+            mesaId: '2',
+            sillaNum: '1',
+            mesaNombre: 'Mesa 2 • Silla 1',
+            comensalNombre: 'Comensal 1 (Titular)',
+            areaId: 'PALAPA',
+            areaNombre: 'La Palapa',
+            horaEnvio: '09:05 AM',
+            timestampEnvio: Date.now() - (4 * 60 * 1000),
+            items: [
+              { id: 'p1', nombre: 'Chilaquiles Verdes con Pollo', cantidad: 2, notas: 'Salsa verde bien caliente, sin cebolla picada', sillaNum: 1, keyCuenta: '2-1', idxInCuenta: 0, estacion: 'COCINA', estado: 'recibido', timestampEnvio: Date.now() - (4 * 60 * 1000) },
+              { id: 'p3', nombre: 'Capuchino Especial V&S', cantidad: 2, notas: 'Leche de almendras y toque de canela', sillaNum: 1, keyCuenta: '2-1', idxInCuenta: 1, estacion: 'BARRA', estado: 'preparando', timestampInicio: Date.now() - (2 * 60 * 1000) }
+            ]
+          },
+          {
+            id: 'T-2-2',
+            mesaId: '2',
+            sillaNum: '2',
+            mesaNombre: 'Mesa 2 • Silla 2',
+            comensalNombre: 'Comensal 2',
+            areaId: 'PALAPA',
+            areaNombre: 'La Palapa',
+            horaEnvio: '09:05 AM',
+            timestampEnvio: Date.now() - (4 * 60 * 1000),
+            items: [
+              { id: 'p2', nombre: 'Omelette al Gusto', cantidad: 1, notas: 'Con champiñón y queso gouda extra', sillaNum: 2, keyCuenta: '2-2', idxInCuenta: 0, estacion: 'COCINA', estado: 'recibido', timestampEnvio: Date.now() - (4 * 60 * 1000) }
+            ]
+          },
+          {
+            id: 'T-2-3',
+            mesaId: '2',
+            sillaNum: '3',
+            mesaNombre: 'Mesa 2 • Silla 3',
+            comensalNombre: 'Comensal 3',
+            areaId: 'PALAPA',
+            areaNombre: 'La Palapa',
+            horaEnvio: '09:05 AM',
+            timestampEnvio: Date.now() - (4 * 60 * 1000),
+            items: [
+              { id: 'p4', nombre: 'Waffles Tradicionales Belgas', cantidad: 1, notas: 'Miel de maple aparte con frutos rojos', sillaNum: 3, keyCuenta: '2-3', idxInCuenta: 0, estacion: 'REPOSTERIA', estado: 'recibido', timestampEnvio: Date.now() - (4 * 60 * 1000) }
+            ]
+          },
+          {
+            id: 'T-2-4',
+            mesaId: '2',
+            sillaNum: '4',
+            mesaNombre: 'Mesa 2 • Silla 4',
+            comensalNombre: 'Comensal 4',
+            areaId: 'PALAPA',
+            areaNombre: 'La Palapa',
+            horaEnvio: '09:05 AM',
+            timestampEnvio: Date.now() - (4 * 60 * 1000),
+            items: [
+              { id: 'p4_2', nombre: 'Jugo Verde Desintoxicante', cantidad: 1, notas: 'Sin azúcar añadida', sillaNum: 4, keyCuenta: '2-4', idxInCuenta: 0, estacion: 'BARRA', estado: 'preparando', timestampInicio: Date.now() - (1 * 60 * 1000) }
+            ]
+          },
+
+          // MESA 3: 3 COMENSALES (3 COLUMNAS)
+          {
+            id: 'T-3-1',
+            mesaId: '3',
+            sillaNum: '1',
+            mesaNombre: 'Mesa 3 • Silla 1',
+            comensalNombre: 'Comensal 1 (Titular)',
+            areaId: 'PALAPA',
+            areaNombre: 'La Palapa',
+            horaEnvio: '08:48 AM',
+            timestampEnvio: Date.now() - (16 * 60 * 1000),
+            items: [
+              { id: 'p5', nombre: 'Huevos Rancheros al Albañil', cantidad: 2, notas: 'Tortillas bien doradas, salsa aparte', sillaNum: 1, keyCuenta: '3-1', idxInCuenta: 0, estacion: 'COCINA', estado: 'preparando', timestampInicio: Date.now() - (15 * 60 * 1000) },
+              { id: 'p7', nombre: 'Café Americano de Altura', cantidad: 2, notas: 'Agua bien caliente', sillaNum: 1, keyCuenta: '3-1', idxInCuenta: 1, estacion: 'BARRA', estado: 'listo', timestampInicio: Date.now() - (15 * 60 * 1000) }
+            ]
+          },
+          {
+            id: 'T-3-2',
+            mesaId: '3',
+            sillaNum: '2',
+            mesaNombre: 'Mesa 3 • Silla 2',
+            comensalNombre: 'Comensal 2',
+            areaId: 'PALAPA',
+            areaNombre: 'La Palapa',
+            horaEnvio: '08:48 AM',
+            timestampEnvio: Date.now() - (16 * 60 * 1000),
+            items: [
+              { id: 'p6', nombre: 'Chilaquiles Verdes con Pollo', cantidad: 2, notas: 'Pollo bien deshebrado', sillaNum: 2, keyCuenta: '3-2', idxInCuenta: 0, estacion: 'COCINA', estado: 'preparando', timestampInicio: Date.now() - (15 * 60 * 1000) }
+            ]
+          },
+          {
+            id: 'T-3-3',
+            mesaId: '3',
+            sillaNum: '3',
+            mesaNombre: 'Mesa 3 • Silla 3',
+            comensalNombre: 'Comensal 3',
+            areaId: 'PALAPA',
+            areaNombre: 'La Palapa',
+            horaEnvio: '08:48 AM',
+            timestampEnvio: Date.now() - (16 * 60 * 1000),
+            items: [
+              { id: 'p8', nombre: 'Hotcakes Infantiles con Chispas', cantidad: 1, notas: 'Con carita feliz de chocolate', sillaNum: 3, keyCuenta: '3-3', idxInCuenta: 0, estacion: 'INFANTIL', estado: 'recibido', timestampEnvio: Date.now() - (16 * 60 * 1000) }
             ]
           }
         ];
@@ -495,31 +729,41 @@
       renderKDSUI();
     };
 
-    // 4. RENDERIZAR INTERFAZ DEL KDS
+    // 4. RENDERIZAR INTERFAZ DEL KDS CON LOS 3 NIVELES DE FILTRADO
     function renderKDSUI() {
       const container = document.getElementById('kdsTicketsGrid');
       const batchContainer = document.getElementById('kdsBatchContainer');
+      const mesaChipsContainer = document.getElementById('kdsMesaChips');
+      const focusBanner = document.getElementById('kdsFocusBanner');
+      const focusText = document.getElementById('kdsFocusText');
+
+      const currentArea = window.kdsState.areaFiltro;
+      const currentMesa = window.kdsState.mesaFiltro;
       const currentStation = window.kdsState.estacionFiltro;
 
       if (!container) return;
       container.innerHTML = '';
 
-      // Contadores por estación
+      // Contadores por estación y mesas activas
       let countTodas = 0;
       let countCocina = 0;
       let countBarra = 0;
       let countReposteria = 0;
+      let countInfantil = 0;
       let batchMap = {};
+      let activeTablesSet = {};
 
       window.kdsState.tickets.forEach(ticket => {
+        activeTablesSet[ticket.mesaId] = (activeTablesSet[ticket.mesaId] || 0) + 1;
         ticket.items.forEach(it => {
           if (it.estado !== 'servido') {
             countTodas += it.cantidad;
             if (it.estacion === 'COCINA') countCocina += it.cantidad;
             if (it.estacion === 'BARRA') countBarra += it.cantidad;
             if (it.estacion === 'REPOSTERIA') countReposteria += it.cantidad;
+            if (it.estacion === 'INFANTIL') countInfantil += it.cantidad;
 
-            // Agrupar en lote de fuego
+            // Agrupar en lote de fuego (platillos activados en preparación)
             if (it.estado === 'preparando') {
               batchMap[it.nombre] = (batchMap[it.nombre] || 0) + it.cantidad;
             }
@@ -527,22 +771,88 @@
         });
       });
 
-      // Actualizar badges
+      // Actualizar badges de estaciones
       const bT = document.getElementById('badgeCountTODAS');
       const bC = document.getElementById('badgeCountCOCINA');
       const bB = document.getElementById('badgeCountBARRA');
       const bR = document.getElementById('badgeCountREPOSTERIA');
+      const bI = document.getElementById('badgeCountINFANTIL');
       if (bT) bT.innerText = countTodas;
       if (bC) bC.innerText = countCocina;
       if (bB) bB.innerText = countBarra;
       if (bR) bR.innerText = countReposteria;
+      if (bI) bI.innerText = countInfantil;
+
+      // Renderizar Selector Dinámico de Mesas 1 a 9
+      if (mesaChipsContainer) {
+        mesaChipsContainer.innerHTML = '';
+        
+        // Chip 'Todas'
+        const isAllSelected = (currentMesa === 'TODAS');
+        const btnAll = document.createElement('button');
+        btnAll.id = 'chipMesa-TODAS';
+        btnAll.onclick = function() { window.filtrarMesaKDS('TODAS'); };
+        btnAll.style.cssText = `padding: 4px 12px; font-size: 11px; font-weight: 800; border-radius: 8px; border: 1px solid ${isAllSelected ? '#f59e0b' : '#334155'}; background: ${isAllSelected ? '#f59e0b' : '#0f172a'}; color: ${isAllSelected ? '#0f172a' : '#cbd5e1'}; cursor: pointer;`;
+        btnAll.innerHTML = `Todas las Mesas (${window.kdsState.tickets.length})`;
+        mesaChipsContainer.appendChild(btnAll);
+
+        // Mesas 1 a 9
+        for (let m = 1; m <= 9; m++) {
+          const mStr = m.toString();
+          const isSelected = (currentMesa === mStr);
+          const hasOrders = !!activeTablesSet[mStr];
+          const areaObj = getTableArea(m);
+
+          // Si hay filtro de área activo y esta mesa no pertenece al área, ocultar
+          if (currentArea !== 'TODAS' && areaObj.id !== currentArea) {
+            continue;
+          }
+
+          const btnM = document.createElement('button');
+          btnM.id = 'chipMesa-' + mStr;
+          btnM.onclick = (function(mesaNum) {
+            return function() { window.filtrarMesaKDS(mesaNum); };
+          })(mStr);
+
+          let btnBg = '#0f172a';
+          let btnColor = '#cbd5e1';
+          let btnBorder = '#334155';
+          if (isSelected) {
+            btnBg = '#0284c7';
+            btnColor = '#ffffff';
+            btnBorder = '#38bdf8';
+          } else if (hasOrders) {
+            btnBorder = '#f59e0b';
+            btnColor = '#fbbf24';
+          }
+
+          btnM.style.cssText = `padding: 4px 10px; font-size: 11px; font-weight: 800; border-radius: 8px; border: 1px solid ${btnBorder}; background: ${btnBg}; color: ${btnColor}; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;`;
+          btnM.innerHTML = `Mesa ${m} ${hasOrders ? `<span style="width: 6px; height: 6px; border-radius: 50%; background: #f59e0b; display: inline-block;"></span>` : ''}`;
+          mesaChipsContainer.appendChild(btnM);
+        }
+      }
+
+      // Actualizar Banner de Enfoque
+      if (focusBanner && focusText) {
+        if (currentMesa !== 'TODAS') {
+          const areaObj = getTableArea(currentMesa);
+          const mesaTicketsCount = window.kdsState.tickets.filter(t => t.mesaId === currentMesa).length;
+          focusText.innerHTML = `Visualizando comandas de: <b>Mesa ${currentMesa} (${areaObj.nombre})</b> • <b>${mesaTicketsCount} Comensales / Columnas</b> de Servicio`;
+          focusBanner.style.display = 'flex';
+        } else if (currentArea !== 'TODAS') {
+          focusText.innerHTML = `Visualizando área: <b>${currentArea === 'PALAPA' ? 'La Palapa (Mesas 1-3)' : (currentArea === 'PATIO' ? 'Terraza / Patio (Mesas 4-6)' : 'La Chimenea (Mesas 7-9)')}</b>`;
+          focusBanner.style.display = 'flex';
+        } else {
+          focusBanner.style.display = 'none';
+        }
+      }
 
       // Renderizar Lote en Fuego (Batch Cooking Pills)
       if (batchContainer) {
         batchContainer.innerHTML = '';
         const batchKeys = Object.keys(batchMap);
         if (batchKeys.length === 0) {
-          batchContainer.innerHTML = `<span style="font-size: 11px; color: #64748b; font-style: italic;">Sin platillos pendientes en fuego</span>`;
+          batchContainer.innerHTML = `<span style="font-size: 11px; color: #64748b; font-style: italic;">Sin platillos activos en fuego. Presiona "Iniciar Fuego" para comenzar.</span>`;
         } else {
           batchKeys.forEach(nombre => {
             const qty = batchMap[nombre];
@@ -556,8 +866,19 @@
 
       // Filtrar y renderizar tickets
       let renderedTicketsCount = 0;
+      const now = Date.now();
 
       window.kdsState.tickets.forEach((ticket, tIdx) => {
+        // Filtro por Área
+        if (currentArea !== 'TODAS' && ticket.areaId !== currentArea) {
+          return;
+        }
+
+        // Filtro por Mesa
+        if (currentMesa !== 'TODAS' && ticket.mesaId !== currentMesa) {
+          return;
+        }
+
         // Filtrar items según la estación activa
         const visibleItems = ticket.items.filter(it => {
           if (it.estado === 'servido') return false;
@@ -568,23 +889,52 @@
         if (visibleItems.length === 0) return;
         renderedTicketsCount++;
 
-        // Calcular minutos transcurridos
-        const mins = ticket.minutosTranscurridos || 6;
-        let semaforoClass = 'border-emerald-500/40 shadow-emerald-950/20';
-        let semaforoBg = '#059669';
+        // Determinar estado dominante y semáforo del ticket
+        let hasDelayedItem = false;
+        let hasPreparingItem = false;
+        let hasReceivedItem = false;
+        let allItemsReady = true;
+
+        visibleItems.forEach(it => {
+          if (it.estado !== 'listo') allItemsReady = false;
+
+          if (it.estado === 'recibido') {
+            hasReceivedItem = true;
+          } else if (it.estado === 'preparando') {
+            hasPreparingItem = true;
+            const startTime = it.timestampInicio || it.timestampEnvio || ticket.timestampEnvio || (now - 5 * 60000);
+            const elapsedMins = Math.floor((now - startTime) / 60000);
+            if (elapsedMins >= 14) {
+              hasDelayedItem = true;
+            }
+          }
+        });
+
+        let semaforoBg = '#10b981'; // Verde por defecto (Recibido)
         let semaforoText = '#34d399';
+        let semaforoLabel = '🟢 EN ESPERA';
         let isUrgent = false;
 
-        if (mins >= 15) {
-          semaforoClass = 'border-rose-500/60 shadow-rose-950/30';
+        if (allItemsReady) {
+          semaforoBg = '#0284c7';
+          semaforoText = '#38bdf8';
+          semaforoLabel = '✅ LISTO EN PASE';
+        } else if (hasDelayedItem) {
           semaforoBg = '#ef4444';
           semaforoText = '#f87171';
+          semaforoLabel = '🔴 DEMORADO (>14m)';
           isUrgent = true;
-        } else if (mins >= 8) {
-          semaforoClass = 'border-amber-500/50 shadow-amber-950/25';
+        } else if (hasPreparingItem) {
           semaforoBg = '#f59e0b';
           semaforoText = '#fbbf24';
+          semaforoLabel = '🟡 EN FUEGO';
+        } else {
+          semaforoBg = '#10b981';
+          semaforoText = '#34d399';
+          semaforoLabel = '🟢 RECIBIDO';
         }
+
+        const totalElapsedMins = Math.floor((now - (ticket.timestampEnvio || (now - 5 * 60000))) / 60000);
 
         const card = document.createElement('div');
         card.className = `kds-ticket-card ${isUrgent ? 'kds-ticket-urgent' : ''}`;
@@ -600,23 +950,33 @@
         header.style.cssText = 'display: flex; justify-content: space-between; align-items: flex-start; padding-left: 6px;';
         header.innerHTML = `
           <div>
-            <span style="font-size: 15px; font-weight: 900; color: #ffffff; display: block;">
-              ${ticket.mesaNombre}
-            </span>
-            <span style="font-size: 11px; color: #94a3b8; font-weight: 700;">
-              <i class="fa-regular fa-clock"></i> Enviada: ${ticket.horaEnvio}
-            </span>
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <span style="font-size: 15px; font-weight: 900; color: #ffffff;">
+                ${ticket.mesaNombre}
+              </span>
+              <span style="font-size: 10px; font-weight: 900; padding: 2px 6px; border-radius: 6px; background: rgba(15,23,42,0.9); color: ${semaforoText}; border: 1px solid ${semaforoBg};">
+                ${semaforoLabel}
+              </span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 6px; margin-top: 2px;">
+              <span style="font-size: 11px; font-weight: 800; color: #38bdf8;"><i class="fa-solid fa-user"></i> ${ticket.comensalNombre || ('Comensal Silla ' + ticket.sillaNum)}</span>
+              <span style="font-size: 11px; color: #94a3b8; font-weight: 700;">
+                • <i class="fa-regular fa-clock"></i> ${ticket.horaEnvio} (${totalElapsedMins} min)
+              </span>
+            </div>
           </div>
           <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 4px;">
-            <span style="font-size: 11px; font-weight: 900; padding: 3px 8px; border-radius: 8px; background: rgba(15,23,42,0.8); color: ${semaforoText}; border: 1px solid ${semaforoBg}; display: flex; align-items: center; gap: 4px;">
-              <i class="fa-solid fa-stopwatch"></i> ${mins} min
-            </span>
-            <span style="font-size: 10px; color: #64748b; font-weight: 700;">Ticket #${ticket.id}</span>
+            <span style="font-size: 10px; color: #64748b; font-weight: 800;">Ticket #${ticket.id}</span>
+            ${hasReceivedItem ? `
+              <button onclick="window.atenderTicketCompletoKDS(${tIdx});" style="background: linear-gradient(135deg, #f59e0b, #d97706); color: #0f172a; border: none; padding: 4px 8px; border-radius: 6px; font-size: 10px; font-weight: 900; cursor: pointer; display: flex; align-items: center; gap: 4px; box-shadow: 0 2px 8px rgba(245,158,11,0.3);">
+                <i class="fa-solid fa-fire"></i> Iniciar Comanda
+              </button>
+            ` : ''}
           </div>
         `;
         card.appendChild(header);
 
-        // Lista de Platillos
+        // Lista de Platillos agrupados por Silla
         const itemsWrap = document.createElement('div');
         itemsWrap.style.cssText = 'display: flex; flex-direction: column; gap: 8px; padding: 8px 6px; border-top: 1px solid #1e293b; border-bottom: 1px solid #1e293b;';
 
@@ -624,37 +984,80 @@
           let stBadgeBg = '#1e293b';
           let stBadgeColor = '#38bdf8';
           let stLabel = 'Cocina';
-          if (it.estacion === 'BARRA') { stBadgeBg = 'rgba(56,189,248,0.15)'; stBadgeColor = '#38bdf8'; stLabel = 'Barra'; }
+          if (it.estacion === 'BARRA') { stBadgeBg = 'rgba(56,189,248,0.15)'; stBadgeColor = '#38bdf8'; stLabel = 'Barra & Café'; }
           if (it.estacion === 'REPOSTERIA') { stBadgeBg = 'rgba(192,132,252,0.15)'; stBadgeColor = '#c084fc'; stLabel = 'Postres'; }
+          if (it.estacion === 'INFANTIL') { stBadgeBg = 'rgba(74,222,128,0.15)'; stBadgeColor = '#4ade80'; stLabel = 'Infantil'; }
 
-          const isItemListo = (it.estado === 'listo');
+          // Estado y semáforo individual del platillo
+          let itemStateBadge = '';
+          let itemBg = '#070b14';
+          let itemBorder = '#1e293b';
+          let actionButtonHtml = '';
+
+          const itemElapsedMins = it.timestampInicio ? Math.floor((now - it.timestampInicio) / 60000) : 0;
+
+          if (it.estado === 'recibido') {
+            itemStateBadge = `<span style="font-size: 9px; font-weight: 800; background: rgba(16,185,129,0.15); color: #34d399; border: 1px solid rgba(16,185,129,0.4); padding: 2px 6px; border-radius: 4px;">🟢 En Espera</span>`;
+            itemBorder = 'rgba(16,185,129,0.3)';
+            actionButtonHtml = `
+              <button onclick="window.iniciarAtencionItemKDS(${tIdx}, ${iIdx});" style="padding: 4px 10px; font-size: 10px; font-weight: 900; border-radius: 6px; border: none; cursor: pointer; background: linear-gradient(135deg, #f59e0b, #d97706); color: #0f172a; display: flex; align-items: center; gap: 4px; box-shadow: 0 2px 8px rgba(245,158,11,0.25);">
+                <i class="fa-solid fa-fire"></i> Iniciar Fuego
+              </button>
+            `;
+          } else if (it.estado === 'preparando') {
+            if (itemElapsedMins >= 14) {
+              itemStateBadge = `<span style="font-size: 9px; font-weight: 900; background: rgba(239,68,68,0.2); color: #f87171; border: 1px solid #ef4444; padding: 2px 6px; border-radius: 4px; animation: urgentPulse 1.8s infinite;"><i class="fa-solid fa-triangle-exclamation"></i> 🔴 Retraso (${itemElapsedMins} min)</span>`;
+              itemBorder = '#ef4444';
+              itemBg = 'rgba(239,68,68,0.08)';
+            } else {
+              itemStateBadge = `<span style="font-size: 9px; font-weight: 800; background: rgba(245,158,11,0.2); color: #fbbf24; border: 1px solid rgba(245,158,11,0.4); padding: 2px 6px; border-radius: 4px;"><i class="fa-solid fa-fire-burner"></i> 🟡 En Fuego (${itemElapsedMins}m)</span>`;
+              itemBorder = '#f59e0b';
+            }
+            actionButtonHtml = `
+              <button onclick="window.marcarListoItemKDS(${tIdx}, ${iIdx});" style="padding: 4px 10px; font-size: 10px; font-weight: 900; border-radius: 6px; border: none; cursor: pointer; background: linear-gradient(135deg, #059669, #10b981); color: #ffffff; display: flex; align-items: center; gap: 4px; box-shadow: 0 2px 8px rgba(16,185,129,0.3);">
+                <i class="fa-solid fa-check"></i> Marcar Listo
+              </button>
+            `;
+          } else if (it.estado === 'listo') {
+            itemStateBadge = `<span style="font-size: 9px; font-weight: 800; background: rgba(2,132,199,0.25); color: #38bdf8; border: 1px solid #0284c7; padding: 2px 6px; border-radius: 4px;"><i class="fa-solid fa-circle-check"></i> Listo en Pase</span>`;
+            itemBorder = '#0284c7';
+            itemBg = 'rgba(2,132,199,0.1)';
+            actionButtonHtml = `
+              <button onclick="window.iniciarAtencionItemKDS(${tIdx}, ${iIdx});" style="padding: 3px 8px; font-size: 9px; font-weight: 700; border-radius: 6px; border: 1px solid #334155; cursor: pointer; background: #0f172a; color: #94a3b8; display: flex; align-items: center; gap: 3px;">
+                <i class="fa-solid fa-rotate-left"></i> Reabrir
+              </button>
+            `;
+          }
 
           const row = document.createElement('div');
-          row.style.cssText = `background: ${isItemListo ? 'rgba(5,150,105,0.15)' : '#070b14'}; border: 1px solid ${isItemListo ? '#10b981' : '#1e293b'}; border-radius: 10px; padding: 8px 10px; display: flex; flex-direction: column; gap: 4px;`;
+          row.style.cssText = `background: ${itemBg}; border: 1px solid ${itemBorder}; border-radius: 10px; padding: 8px 10px; display: flex; flex-direction: column; gap: 4px;`;
           row.innerHTML = `
             <div style="display: flex; justify-content: space-between; align-items: center;">
               <div style="display: flex; align-items: center; gap: 6px;">
-                <span style="font-size: 13px; font-weight: 900; color: ${isItemListo ? '#34d399' : '#ffffff'};">
+                <span style="font-size: 13px; font-weight: 900; color: ${it.estado === 'listo' ? '#38bdf8' : '#ffffff'};">
                   ${it.cantidad}x ${it.nombre}
                 </span>
-                <span style="font-size: 9px; font-weight: 800; background: #0f172a; color: #fbbf24; border: 1px solid #334155; padding: 1px 5px; border-radius: 4px;">Silla ${it.sillaNum}</span>
+                <span style="font-size: 9px; font-weight: 800; background: #0f172a; color: ${(it.sillaNum === '0' || it.sillaNum === 0) ? '#38bdf8' : '#fbbf24'}; border: 1px solid #334155; padding: 1px 5px; border-radius: 4px;">${(it.sillaNum === '0' || it.sillaNum === 0) ? '⭐ Al Centro' : ('Silla ' + it.sillaNum)}</span>
               </div>
-              <span style="font-size: 9px; font-weight: 800; background: ${stBadgeBg}; color: ${stBadgeColor}; padding: 2px 6px; border-radius: 4px; border: 1px solid ${stBadgeColor};">
-                ${stLabel}
-              </span>
+              <div style="display: flex; align-items: center; gap: 4px;">
+                ${itemStateBadge}
+                <span style="font-size: 9px; font-weight: 800; background: ${stBadgeBg}; color: ${stBadgeColor}; padding: 2px 6px; border-radius: 4px; border: 1px solid ${stBadgeColor};">
+                  ${stLabel}
+                </span>
+              </div>
             </div>
 
             ${it.notas ? `<div style="font-size: 11px; color: #fde047; background: rgba(234,179,8,0.1); border: 1px dashed rgba(234,179,8,0.3); border-radius: 6px; padding: 4px 8px; font-style: italic;"><i class="fa-solid fa-note-sticky"></i> ${it.notas}</div>` : ''}
 
-            <!-- Botones de Acción por Platillo: Ficha de Receta y Toggle Listo -->
+            <!-- Botones de Acción por Platillo: Ficha de Receta y Cambio de Estado -->
             <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 4px; pt-1;">
               <button onclick="window.abrirFichaReceta('${it.nombre.replace(/'/g, "\\'")}');" style="background: transparent; border: none; color: #38bdf8; font-size: 10px; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 4px; padding: 2px;" title="Ver gramajes exactos e instrucciones de preparación">
                 <i class="fa-solid fa-book-open"></i> Ficha Técnica
               </button>
 
-              <button onclick="window.toggleEstadoItemKDS(${tIdx}, ${iIdx});" style="padding: 3px 10px; font-size: 10px; font-weight: 800; border-radius: 6px; border: none; cursor: pointer; background: ${isItemListo ? '#059669' : '#1e293b'}; color: ${isItemListo ? '#ffffff' : '#94a3b8'}; display: flex; align-items: center; gap: 4px;">
-                <i class="fa-solid ${isItemListo ? 'fa-circle-check' : 'fa-clock'}"></i> ${isItemListo ? 'Listo en Pase' : 'En Fuego'}
-              </button>
+              <div>
+                ${actionButtonHtml}
+              </div>
             </div>
           `;
           itemsWrap.appendChild(row);
@@ -666,7 +1069,7 @@
         footer.style.cssText = 'padding-left: 6px; display: flex; gap: 8px;';
         footer.innerHTML = `
           <button onclick="window.despacharTicketCompletoKDS(${tIdx});" style="flex: 1; padding: 10px; background: linear-gradient(135deg, #059669, #10b981); color: #ffffff; border: none; border-radius: 12px; font-size: 12px; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; box-shadow: 0 4px 12px rgba(16,185,129,0.3);">
-            <i class="fa-solid fa-bell-concierge"></i> Marcar Todo Listo (Pase)
+            <i class="fa-solid fa-bell-concierge"></i> ${allItemsReady ? '🔔 Pase / Entregar a Mesero' : '✅ Marcar Todo Listo (Pase)'}
           </button>
         `;
         card.appendChild(footer);
@@ -681,17 +1084,54 @@
               <i class="fa-solid fa-check-double"></i>
             </div>
             <h3 style="font-size: 16px; font-weight: 900; color: #ffffff; margin: 0;">¡Cocina y Barra al Día!</h3>
-            <p style="font-size: 12px; color: #94a3b8; margin: 4px 0 0 0;">No hay comandas pendientes para la estación seleccionada.</p>
+            <p style="font-size: 12px; color: #94a3b8; margin: 4px 0 0 0;">No hay comandas pendientes para el filtro seleccionado (${currentArea !== 'TODAS' ? currentArea + ' • ' : ''}${currentMesa !== 'TODAS' ? 'Mesa ' + currentMesa + ' • ' : ''}${currentStation}).</p>
           </div>
         `;
       }
-    }
+    };
 
-    // 5. CAMBIO DE ESTACIÓN / FILTROS
+    // 5. FUNCIONES DE FILTRADO (ÁREAS, MESAS Y ESTACIONES)
+    window.filtrarAreaKDS = function(area) {
+      window.kdsState.areaFiltro = area;
+      if (area !== 'TODAS') {
+        localStorage.setItem('kds_filtro_area', area);
+      } else {
+        localStorage.removeItem('kds_filtro_area');
+      }
+
+      const chips = ['TODAS', 'PALAPA', 'PATIO', 'CHIMENEA'];
+      chips.forEach(a => {
+        const btn = document.getElementById('chipArea-' + a);
+        if (btn) {
+          if (a === area) {
+            btn.style.background = '#38bdf8';
+            btn.style.color = '#0f172a';
+            btn.style.border = '1px solid #38bdf8';
+          } else {
+            btn.style.background = '#0f172a';
+            btn.style.color = '#cbd5e1';
+            btn.style.border = '1px solid #334155';
+          }
+        }
+      });
+
+      renderKDSUI();
+    };
+
+    window.filtrarMesaKDS = function(mesaId) {
+      window.kdsState.mesaFiltro = mesaId.toString();
+      if (mesaId !== 'TODAS') {
+        localStorage.setItem('kds_filtro_mesa', mesaId.toString());
+      } else {
+        localStorage.removeItem('kds_filtro_mesa');
+      }
+      renderKDSUI();
+    };
+
     window.filtrarEstacionKDS = function(estacion) {
       window.kdsState.estacionFiltro = estacion;
 
-      const chips = ['TODAS', 'COCINA', 'BARRA', 'REPOSTERIA'];
+      const chips = ['TODAS', 'COCINA', 'BARRA', 'REPOSTERIA', 'INFANTIL'];
       chips.forEach(c => {
         const btn = document.getElementById('chipKDS-' + c);
         if (btn) {
@@ -710,15 +1150,16 @@
       renderKDSUI();
     };
 
-    // 6. TOGGLE ESTADO INDIVIDUAL DE ITEM
-    window.toggleEstadoItemKDS = function(ticketIdx, itemIdx) {
+    // 6. ACCIONES DE COCINA: INICIAR ATENCIÓN / FUEGO (VERDE -> ÁMBAR)
+    window.iniciarAtencionItemKDS = function(ticketIdx, itemIdx) {
       const ticket = window.kdsState.tickets[ticketIdx];
       if (!ticket || !ticket.items[itemIdx]) return;
 
       const it = ticket.items[itemIdx];
-      it.estado = (it.estado === 'listo') ? 'preparando' : 'listo';
+      it.estado = 'preparando';
+      it.timestampInicio = Date.now();
 
-      // Sincronizar con cuenta de la palapa en storage
+      // Sincronizar con cuenta en storage
       if (it.keyCuenta) {
         var raw = localStorage.getItem('palapa_croquis_state_v1');
         if (raw) {
@@ -727,7 +1168,8 @@
             if (state && state.cuentas && state.cuentas[it.keyCuenta]) {
               var cItems = state.cuentas[it.keyCuenta].items;
               if (cItems && cItems[it.idxInCuenta]) {
-                cItems[it.idxInCuenta].estadoCocina = it.estado;
+                cItems[it.idxInCuenta].estadoCocina = 'preparando';
+                cItems[it.idxInCuenta].timestampInicioCocina = it.timestampInicio;
                 localStorage.setItem('palapa_croquis_state_v1', JSON.stringify(state));
               }
             }
@@ -738,7 +1180,66 @@
       renderKDSUI();
     };
 
-    // 7. DESPACHAR TICKET COMPLETO
+    // INICIAR ATENCIÓN DE TODOS LOS PLATILLOS DEL TICKET
+    window.atenderTicketCompletoKDS = function(ticketIdx) {
+      const ticket = window.kdsState.tickets[ticketIdx];
+      if (!ticket) return;
+
+      const now = Date.now();
+      ticket.items.forEach(it => {
+        if (it.estado === 'recibido') {
+          it.estado = 'preparando';
+          it.timestampInicio = now;
+          if (it.keyCuenta) {
+            var raw = localStorage.getItem('palapa_croquis_state_v1');
+            if (raw) {
+              try {
+                var state = JSON.parse(raw);
+                if (state && state.cuentas && state.cuentas[it.keyCuenta]) {
+                  var cItems = state.cuentas[it.keyCuenta].items;
+                  if (cItems && cItems[it.idxInCuenta]) {
+                    cItems[it.idxInCuenta].estadoCocina = 'preparando';
+                    cItems[it.idxInCuenta].timestampInicioCocina = now;
+                    localStorage.setItem('palapa_croquis_state_v1', JSON.stringify(state));
+                  }
+                }
+              } catch(e) {}
+            }
+          }
+        }
+      });
+
+      renderKDSUI();
+    };
+
+    // MARCAR PLATILLO LISTO (ÁMBAR/ROJO -> LISTO)
+    window.marcarListoItemKDS = function(ticketIdx, itemIdx) {
+      const ticket = window.kdsState.tickets[ticketIdx];
+      if (!ticket || !ticket.items[itemIdx]) return;
+
+      const it = ticket.items[itemIdx];
+      it.estado = 'listo';
+
+      if (it.keyCuenta) {
+        var raw = localStorage.getItem('palapa_croquis_state_v1');
+        if (raw) {
+          try {
+            var state = JSON.parse(raw);
+            if (state && state.cuentas && state.cuentas[it.keyCuenta]) {
+              var cItems = state.cuentas[it.keyCuenta].items;
+              if (cItems && cItems[it.idxInCuenta]) {
+                cItems[it.idxInCuenta].estadoCocina = 'listo';
+                localStorage.setItem('palapa_croquis_state_v1', JSON.stringify(state));
+              }
+            }
+          } catch(e) {}
+        }
+      }
+
+      renderKDSUI();
+    };
+
+    // 7. DESPACHAR TICKET COMPLETO (PASE / SERVIDO)
     window.despacharTicketCompletoKDS = function(ticketIdx) {
       const ticket = window.kdsState.tickets[ticketIdx];
       if (!ticket) return;
@@ -886,13 +1387,17 @@
 
     // Inicializar KDS y configurar polling automático cada 4 segundos
     setTimeout(function() {
+      try {
+        window.scrollTo(0, 0);
+        if (document.documentElement) document.documentElement.scrollTop = 0;
+        if (document.body) document.body.scrollTop = 0;
+      } catch(e) {}
       window.cargarKDS();
-    }, 100);
+    }, 50);
 
     setInterval(function() {
       window.cargarKDS();
     }, 4000);
 
   })();
-</script>
-</anvil-form>
+</script></anvil-form>

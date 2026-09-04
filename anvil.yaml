@@ -21,5 +21,5 @@ services:
 - client_config: {enable_v2: true}
   server_config: {}
   source: /runtime/services/tables.yml
-startup: {module: POSMesero, type: form}
-startup_form: POSMesero
+startup: {module: Menu, type: form}
+startup_form: Menu

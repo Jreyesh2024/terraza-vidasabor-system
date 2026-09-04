@@ -10,6 +10,21 @@ class POSMesero(POSMeseroTemplate):
     except Exception:
       pass
 
+    try:
+      url_hash = anvil.get_url_hash()
+      abrir_pos = False
+      if isinstance(url_hash, str) and url_hash:
+        url_lower = url_hash.lower()
+        if 'pos_mesero' in url_lower or 'croquis' in url_lower or 'admin' in url_lower:
+          abrir_pos = True
+      elif isinstance(url_hash, dict) and url_hash.get('form') in ['pos_mesero', 'croquis', 'admin']:
+        abrir_pos = True
+
+      if not abrir_pos:
+        anvil.open_form('Menu')
+    except Exception as e:
+      print(f"Error procesando enrutamiento QR: {e}")
+
   def navegar_modulo(self, modulo_nombre):
     target_form = 'POSMesero'
     if modulo_nombre in ['pos_mesero', 'croquis', 'palapa']:

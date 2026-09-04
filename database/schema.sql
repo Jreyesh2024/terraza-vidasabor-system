@@ -65,11 +65,13 @@ CREATE TABLE IF NOT EXISTS comandas (
     notas TEXT
 );
 
--- 5. TABLA DE DETALLE DE COMANDA POR SILLA / COMENSAL
+-- 5. TABLA DE DETALLE DE COMANDA POR SILLA / COMENSAL O CUENTA DE MESA
 CREATE TABLE IF NOT EXISTS detalle_comanda (
     id SERIAL PRIMARY KEY,
     comanda_id INT NOT NULL REFERENCES comandas(id) ON DELETE CASCADE,
-    numero_silla INT NOT NULL DEFAULT 1,
+    numero_silla INT NOT NULL DEFAULT 1, -- 0 o NULL si es Cuenta de Mesa (al centro)
+    es_cuenta_mesa BOOLEAN DEFAULT FALSE, -- TRUE si es platillo al centro / cuenta de mesa
+    tipo_consumo VARCHAR(30) DEFAULT 'comida', -- 'comida', 'bebida', 'postre_extra'
     producto_id INT NOT NULL REFERENCES productos_menu(id),
     producto_nombre VARCHAR(150) NOT NULL,
     precio_unitario NUMERIC(10,2) NOT NULL,
@@ -84,8 +86,8 @@ CREATE TABLE IF NOT EXISTS detalle_comanda (
 CREATE TABLE IF NOT EXISTS pagos (
     id SERIAL PRIMARY KEY,
     comanda_id INT NOT NULL REFERENCES comandas(id),
-    numero_silla INT, -- NULL si es cobro de mesa completa
-    tipo_cobro VARCHAR(30) DEFAULT 'mesa_completa', -- 'mesa_completa', 'por_silla'
+    numero_silla INT, -- NULL si es cobro de mesa completa o cuenta de mesa
+    tipo_cobro VARCHAR(40) DEFAULT 'mesa_completa', -- 'mesa_completa', 'por_silla', 'cuenta_mesa', 'anfitrion_comida', 'split_comida'
     metodo_pago VARCHAR(50) NOT NULL, -- 'terminal_santander', 'mercado_pago_point', 'efectivo'
     es_bancarizado BOOLEAN DEFAULT TRUE,
     subtotal_cobrado NUMERIC(10,2) NOT NULL,
