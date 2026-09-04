@@ -291,40 +291,40 @@
   }
 
   #mainCanvasGrid.mode-comanda {
-  display: grid !important;
-  grid-template-columns: 420px 1fr !important;
-  gap: 20px !important;
-  flex: 1 !important;
+    display: grid !important;
+    grid-template-columns: 420px 1fr !important;
+    gap: 20px !important;
+    flex: 1 !important;
   }
 
   #mainCanvasGrid.mode-comanda #panelCroquisMesas {
-  width: 420px !important;
-  max-width: 420px !important;
-  padding: 16px !important;
+    width: 420px !important;
+    max-width: 420px !important;
+    padding: 16px !important;
   }
 
   #mainCanvasGrid.mode-comanda #viewOverviewCroquis {
-  display: none !important;
+    display: none !important;
   }
 
   #mainCanvasGrid.mode-comanda #viewSidebarComanda {
-  display: flex !important;
+    display: flex !important;
   }
 
   #mainCanvasGrid.mode-comanda #panelMenuCatalogo {
-  display: flex !important;
+    display: flex !important;
   }
 
   @keyframes slideUp {
-  from {
-  transform: translateY(30px);
-  opacity: 0;
-  }
+    from {
+      transform: translateY(30px);
+      opacity: 0;
+    }
 
-  to {
-  transform: translateY(0);
-  opacity: 1;
-  }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
   }
 </style>
 
@@ -2146,6 +2146,54 @@
   sillaOrigenMover: null,
   cuentas: loadStateFromStorage()
   };
+
+  window.aplicarCuentasServidor = function(cuentasServidor) {
+  if (!cuentasServidor || typeof cuentasServidor !== 'object') return;
+  if (!window.palapaState || !window.palapaState.cuentas) return;
+
+  var changed = false;
+  Object.keys(cuentasServidor).forEach(function(k) {
+  var srv = cuentasServidor[k];
+  if (!srv) return;
+
+  if (!window.palapaState.cuentas[k]) {
+  window.palapaState.cuentas[k] = JSON.parse(JSON.stringify(srv));
+  changed = true;
+  } else {
+  var curr = window.palapaState.cuentas[k];
+  if (srv.estado === 'ocupada' &amp;&amp; curr.estado !== 'ocupada') {
+  curr.estado = 'ocupada';
+  changed = true;
+  }
+  if (srv.qrId &amp;&amp; !curr.qrId) {
+  curr.qrId = srv.qrId;
+  changed = true;
+  }
+  if (srv.items &amp;&amp; srv.items.length > 0 &amp;&amp; (!curr.items || curr.items.length < srv.items.length)) {
+  curr.items = srv.items;
+  curr.estado = 'ocupada';
+  changed = true;
+  }
+  }
+  });
+
+  if (changed) {
+  saveStateToStorage();
+  renderStateUI();
+  }
+  };
+
+  // Auto-polling en segundo plano para sincronizar check-ins de comensales en tiempo real
+  setInterval(function() {
+  try {
+  if (window.anvilGetCuentasServidor) {
+  var srvData = window.anvilGetCuentasServidor();
+  if (srvData) {
+  window.aplicarCuentasServidor(srvData);
+  }
+  }
+  } catch (e) { }
+  }, 3000);
 
   function resetDemoState() {
   var initial = JSON.parse(JSON.stringify(DEFAULT_CUENTAS));

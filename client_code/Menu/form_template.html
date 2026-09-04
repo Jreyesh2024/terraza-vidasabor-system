@@ -81,7 +81,7 @@
 
   <!-- PANTALLA PRINCIPAL: HUB DE BIENVENIDA A TU MESA -->
   <div id=&quot;vistaHubMesa&quot; class=&quot;flex-1 max-w-4xl w-full mx-auto p-4 sm:p-6 flex flex-col gap-6&quot;>
-    
+
     <!-- TARJETA HERO: BIENVENIDA Y LUGAR ASIGNADO -->
     <div class=&quot;glass-card p-6 sm:p-8 rounded-3xl border border-slate-700/80 shadow-2xl relative overflow-hidden text-center flex flex-col items-center gap-4&quot;>
       <div class=&quot;absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-emerald-500 via-teal-500 to-amber-500&quot;></div>
@@ -123,7 +123,7 @@
 
     <!-- TARJETAS DE ACCIÓN PRINCIPALES DEL COMENSAL -->
     <div class=&quot;grid grid-cols-1 sm:grid-cols-2 gap-4&quot;>
-      
+
       <!-- 1. ORDENAR PARA MI SILLA -->
       <button type=&quot;button&quot; onclick=&quot;window.abrirCatalogoConDestino('mi_silla')&quot;
         class=&quot;glass-card p-5 rounded-2xl border border-emerald-500/40 hover:border-emerald-400 hover:bg-emerald-950/20 text-left transition flex items-center gap-4 cursor-pointer shadow-lg group&quot;>
@@ -190,7 +190,7 @@
 
   <!-- VISTA DEL CATÁLOGO DE PLATILLOS (SE MUESTRA AL ELEGIR ORDENAR) -->
   <main id=&quot;vistaCatalogoPlatillos&quot; class=&quot;flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 grid grid-cols-1 lg:grid-cols-3 gap-6 hidden&quot;>
-    
+
     <!-- BARRA SUPERIOR DE NAVEGACIÓN DENTRO DEL CATÁLOGO -->
     <div class=&quot;lg:col-span-3 flex flex-wrap justify-between items-center bg-slate-900/90 p-3 sm:p-4 rounded-2xl border border-slate-800 gap-3&quot;>
       <div class=&quot;flex items-center gap-3&quot;>
@@ -398,7 +398,7 @@
     onclick=&quot;if(event.target === this) window.cerrarModalRecetaCliente();&quot;>
     <div
       style=&quot;background: #090d16 !important; border: 1px solid #334155 !important; border-radius: 20px !important; width: 100% !important; max-width: 540px !important; padding: 20px !important; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.8) !important; display: flex !important; flex-direction: column !important; gap: 12px !important; color: #f8fafc !important; max-height: 90vh !important; overflow-y: auto !important;&quot;>
-      
+
       <!-- HEADER -->
       <div style=&quot;display: flex !important; justify-content: space-between !important; align-items: flex-start !important; border-bottom: 1px solid #1e293b !important; padding-bottom: 10px !important;&quot;>
         <div style=&quot;display: flex; align-items: center; gap: 12px;&quot;>
@@ -1085,7 +1085,7 @@
     var cat = document.getElementById('vistaCatalogoPlatillos');
     if (hub) hub.classList.add('hidden');
     if (cat) cat.classList.remove('hidden');
-    
+
     var badge = document.getElementById('lblCatalogoDestinoBadge');
     if (badge) {
       badge.innerHTML = `🧾 <span class=&quot;text-sky-400 font-black&quot;>Revisando Comanda &amp; Cuenta</span>`;
@@ -1306,6 +1306,13 @@
     window.renderSillasMesaBar();
     window.renderCarrito();
     window.renderAcompanantesMesa();
+
+    // Notificar al servidor en tiempo real para iluminar la silla en la pantalla del mesero
+    try {
+      if (window.anvilCheckinSilla) {
+        window.anvilCheckinSilla(window.simMesaId, window.simSillaNum, qrId);
+      }
+    } catch (e) { }
   };
 
   window.renderCarrito = function () {
