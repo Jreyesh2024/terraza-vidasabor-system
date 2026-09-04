@@ -92,6 +92,7 @@ class Menu(MenuTemplate):
           items_clean = json.loads(json.dumps(items))
         except Exception:
           items_clean = []
+      print(f"📡 [MENU.PY] sincronizando con servidor: Mesa {mesa_id} Silla {silla_id} -> {len(items_clean)} items ({estado})")
       res = anvil.server.call('actualizar_cuenta_silla', int(mesa_id), int(silla_id), items_clean, str(estado))
       return res
     except Exception as e:

@@ -84,5 +84,5 @@ class POSMesero(POSMeseroTemplate):
       target_form = 'MonitorFiscal'
     elif modulo_nombre in ['clientes_lealtad', 'rewards']:
       target_form = 'ClientesLealtad'
-
+    
     anvil.open_form(target_form)
