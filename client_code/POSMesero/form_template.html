@@ -2148,6 +2148,12 @@
     };
 
     window.aplicarCuentasServidor = function(cuentasServidor) {
+      if (!cuentasServidor) return;
+      if (typeof cuentasServidor === 'string') {
+        try {
+          cuentasServidor = JSON.parse(cuentasServidor);
+        } catch (e) { return; }
+      }
       if (!cuentasServidor || typeof cuentasServidor !== 'object') return;
       if (!window.palapaState || !window.palapaState.cuentas) return;
 
@@ -2167,6 +2173,10 @@
           }
           if (srv.qrId &amp;&amp; !curr.qrId) {
             curr.qrId = srv.qrId;
+            changed = true;
+          }
+          if (srv.comensalNombre &amp;&amp; curr.comensalNombre !== srv.comensalNombre) {
+            curr.comensalNombre = srv.comensalNombre;
             changed = true;
           }
           if (srv.items &amp;&amp; srv.items.length > 0 &amp;&amp; (!curr.items || curr.items.length < srv.items.length)) {
@@ -5730,7 +5740,7 @@
                 <span style=&quot;font-size: 9px; font-weight: 900; padding: 2px 6px; border-radius: 4px; background: ${badgeBg}; color: ${badgeColor};&quot;>${badgeTxt}</span>
               </div>
               <div style=&quot;display: flex; justify-content: space-between; align-items: center; margin-top: 2px;&quot;>
-                <span style=&quot;font-size: 9px; color: #94a3b8;&quot;>${isPaidSilla ? 'En Sobremesa' : (sOcc ? `${numItems} prod.` : 'Disponible')}</span>
+                <span style=&quot;font-size: 9px; color: ${sOcc ? '#fbbf24' : '#94a3b8'};&quot;>${isPaidSilla ? 'En Sobremesa' : (sOcc ? (numItems > 0 ? `${numItems} prod.` : 'En Menú (QR)') : 'Disponible')}</span>
                 <span style=&quot;font-size: 11px; font-weight: 900; color: ${montoColor};&quot;>${montoTxt}</span>
               </div>
             `;

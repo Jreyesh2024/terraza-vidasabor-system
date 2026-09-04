@@ -3,6 +3,8 @@ import anvil
 import anvil.js
 import anvil.server
 
+import json
+
 class POSMesero(POSMeseroTemplate):
   def __init__(self, **properties):
     self.init_components(**properties)
@@ -52,10 +54,11 @@ class POSMesero(POSMeseroTemplate):
 
   def obtener_cuentas_servidor(self):
     try:
-      return anvil.server.call('get_cuentas_terraza')
+      res = anvil.server.call('get_cuentas_terraza')
+      return json.dumps(res) if res else "{}"
     except Exception as e:
       print(f"Error obteniendo cuentas de servidor: {e}")
-      return {}
+      return "{}"
 
   def sincronizar_con_servidor(self):
     try:
@@ -63,7 +66,7 @@ class POSMesero(POSMeseroTemplate):
       if cuentas:
         try:
           if hasattr(anvil.js.window, 'aplicarCuentasServidor'):
-            anvil.js.window.aplicarCuentasServidor(cuentas)
+            anvil.js.window.aplicarCuentasServidor(json.dumps(cuentas))
         except Exception:
           pass
     except Exception as e:
