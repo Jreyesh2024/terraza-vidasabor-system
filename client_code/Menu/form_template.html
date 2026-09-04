@@ -79,25 +79,45 @@
       </div>
     </header>
 
-    <!-- BARRA DE UBICACIÓN QR Y SILLAS DE SU MESA -->
-    <div class=&quot;bg-slate-900/95 border-b border-slate-800 px-6 py-3 flex flex-wrap justify-between items-center gap-4&quot;>
-      <div class=&quot;flex flex-wrap items-center gap-3 text-xs&quot;>
-        <span
-          class=&quot;inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-500/30 shadow-sm&quot;>
-          <i class=&quot;fa-solid fa-qrcode text-emerald-400&quot;></i> Portavasos: <span id=&quot;lblQrActivo&quot;>PV-011</span>
-        </span>
-        <span class=&quot;text-white font-bold text-sm&quot; id=&quot;lblUbicacionActiva&quot;>Mesa 1 • Silla 1</span>
-        <span class=&quot;inline-flex items-center gap-1 text-[11px] font-bold text-emerald-400 bg-emerald-950/70 border border-emerald-500/30 px-2.5 py-0.5 rounded-full&quot;>
-          <span class=&quot;w-2 h-2 rounded-full bg-emerald-400 animate-pulse&quot;></span> Silla Ocupada
-        </span>
-      </div>
+    <!-- BANNER DE BIENVENIDA Y VISUALIZADOR INTERACTIVO DE TU MESA -->
+    <div class=&quot;bg-gradient-to-b from-slate-900 via-slate-900 to-slate-950 border-b border-slate-800 px-4 sm:px-6 py-4 shadow-lg&quot;>
+      <div class=&quot;max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-4&quot;>
 
-      <!-- SILLAS EXCLUSIVAS DE ESTA MESA -->
-      <div class=&quot;flex items-center gap-2&quot;>
-        <span class=&quot;text-xs text-slate-400 font-medium&quot;>Sillas en tu mesa:</span>
-        <div id=&quot;chipsSillasMesa&quot; class=&quot;flex items-center gap-1.5&quot;>
-          <!-- Renderizado dinámicamente con las 4 sillas de la mesa actual -->
+        <!-- MENSAJE DE BIENVENIDA &amp; LUGAR -->
+        <div class=&quot;flex-1 w-full text-center lg:text-left&quot;>
+          <div class=&quot;flex flex-wrap items-center justify-center lg:justify-start gap-2 mb-1.5&quot;>
+            <span class=&quot;inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-400 font-extrabold text-xs border border-emerald-500/30 shadow-sm&quot;>
+              <span class=&quot;w-2 h-2 rounded-full bg-emerald-400 animate-pulse&quot;></span> Silla Ocupada
+            </span>
+            <span class=&quot;text-xs text-slate-400 font-semibold bg-slate-800/80 px-2.5 py-0.5 rounded-lg border border-slate-700&quot; id=&quot;lblQrActivo&quot;>
+              Portavasos #PV-011
+            </span>
+          </div>
+          <h2 class=&quot;text-xl sm:text-2xl font-black text-white tracking-tight&quot; id=&quot;lblUbicacionActiva&quot;>
+            ¡Hola! Estás en la <span class=&quot;text-emerald-400&quot;>Mesa 1 • Silla 1</span>
+          </h2>
+          <p class=&quot;text-xs text-slate-400 mt-1 max-w-xl&quot;>
+            Este es tu lugar. Ya está ocupada tu silla y puedes ordenar directamente a tu comanda o pedir platillos al centro para compartir en tu mesa.
+          </p>
         </div>
+
+        <!-- VISUALIZADOR DE TU MESA: SILLA 1 (TÚ), AL CENTRO Y ACOMPAÑANTES -->
+        <div class=&quot;bg-slate-950/90 border border-slate-700/80 p-3.5 rounded-2xl shadow-2xl flex flex-col items-center gap-2.5 w-full lg:w-auto&quot;>
+          <div class=&quot;flex items-center justify-between w-full text-[11px] font-bold text-slate-300&quot;>
+            <span class=&quot;flex items-center gap-1.5 text-slate-200&quot;>
+              <i class=&quot;fa-solid fa-chair text-emerald-400&quot;></i> Tu Mesa (<span id=&quot;lblMesaIdHeader&quot;>Mesa 1</span>)
+            </span>
+            <span class=&quot;text-[10px] text-emerald-400 font-bold bg-emerald-950/80 px-2 py-0.5 rounded-md border border-emerald-500/30&quot; id=&quot;lblDestinoActualTxt&quot;>
+              🎯 Destino: Silla 1 (Tú)
+            </span>
+          </div>
+
+          <!-- BOTONES DE ASIENTOS Y CENTRO DE LA MESA -->
+          <div class=&quot;flex flex-wrap items-center justify-center gap-2 my-0.5&quot; id=&quot;chipsSillasMesa&quot;>
+            <!-- Renderizado dinámicamente con Silla 1 (Tú), Al Centro (Compartir), Silla 2, Silla 3, Silla 4 -->
+          </div>
+        </div>
+
       </div>
     </div>
 
@@ -943,6 +963,27 @@
       alert(`🧾 Cuenta Solicitada:\nMesa ${window.simMesaId} • Silla ${window.simSillaNum}\nTotal a Liquidar: $${total.toFixed(2)} MXN\n\nEl mesero acudirá con la cuenta y opciones de pago.`);
     };
 
+    window.destinoPedido = 'mi_silla'; // 'mi_silla' | 'centro' | 2 | 3 | 4
+
+    window.seleccionarDestinoPedido = function (dest) {
+      window.destinoPedido = dest;
+      var destTxt = document.getElementById('lblDestinoActualTxt');
+      if (destTxt) {
+        if (dest === 'centro') {
+          destTxt.innerText = '🎯 Destino: Al Centro (Para Compartir)';
+          destTxt.className = 'text-[10px] text-amber-400 font-bold bg-amber-950/80 px-2 py-0.5 rounded-md border border-amber-500/30';
+        } else if (dest === 'mi_silla' || dest === window.simSillaNum) {
+          destTxt.innerText = `🎯 Destino: Silla ${window.simSillaNum} (Tú)`;
+          destTxt.className = 'text-[10px] text-emerald-400 font-bold bg-emerald-950/80 px-2 py-0.5 rounded-md border border-emerald-500/30';
+        } else {
+          destTxt.innerText = `🎯 Destino: Silla ${dest} (Acompañante)`;
+          destTxt.className = 'text-[10px] text-sky-400 font-bold bg-sky-950/80 px-2 py-0.5 rounded-md border border-sky-500/30';
+        }
+      }
+      window.renderSillasMesaBar();
+      window.filtrarProductos();
+    };
+
     window.renderSillasMesaBar = function () {
       var container = document.getElementById('chipsSillasMesa');
       if (!container) return;
@@ -951,30 +992,130 @@
       var mesaId = window.simMesaId || 1;
       var miSilla = window.simSillaNum || 1;
       var cuentas = getStorageCuentas();
+      var dest = window.destinoPedido || 'mi_silla';
 
+      var lblMesaHeader = document.getElementById('lblMesaIdHeader');
+      if (lblMesaHeader) lblMesaHeader.innerText = `Mesa ${mesaId}`;
+
+      // 1. Botón: Mi Silla (Tú)
+      var btnMiSilla = document.createElement('button');
+      btnMiSilla.type = 'button';
+      btnMiSilla.onclick = function() { window.seleccionarDestinoPedido('mi_silla'); };
+      var isMiSillaActive = (dest === 'mi_silla' || dest === miSilla);
+      btnMiSilla.className = isMiSillaActive
+        ? 'px-3 py-1.5 text-xs font-black rounded-xl bg-emerald-500 text-slate-950 border border-emerald-400 flex items-center gap-1.5 shadow-md shadow-emerald-500/30 cursor-pointer scale-105 transition'
+        : 'px-2.5 py-1.5 text-xs font-bold rounded-xl bg-slate-800 text-emerald-400 hover:bg-slate-700 border border-emerald-500/40 flex items-center gap-1.5 transition cursor-pointer';
+      btnMiSilla.innerHTML = `<i class=&quot;fa-solid fa-user-check text-[11px]&quot;></i> Silla ${miSilla} (Tú)`;
+      container.appendChild(btnMiSilla);
+
+      // 2. Botón: Al Centro (Para Compartir en la Mesa)
+      var keyCentro = mesaId + '-centro';
+      var cuentaCentro = cuentas[keyCentro];
+      var hasCentroItems = cuentaCentro &amp;&amp; cuentaCentro.items &amp;&amp; cuentaCentro.items.length > 0;
+      var isCentroActive = (dest === 'centro');
+      var btnCentro = document.createElement('button');
+      btnCentro.type = 'button';
+      btnCentro.onclick = function() { window.seleccionarDestinoPedido('centro'); };
+      btnCentro.className = isCentroActive
+        ? 'px-3 py-1.5 text-xs font-black rounded-xl bg-amber-500 text-slate-950 border border-amber-400 flex items-center gap-1.5 shadow-md shadow-amber-500/30 cursor-pointer scale-105 transition'
+        : 'px-2.5 py-1.5 text-xs font-bold rounded-xl bg-slate-800 text-amber-300 hover:bg-slate-700 border border-amber-500/40 flex items-center gap-1.5 transition cursor-pointer';
+      btnCentro.innerHTML = `<i class=&quot;fa-solid fa-utensils text-[11px]&quot;></i> Al Centro${hasCentroItems ? ' 🍲' : ''}`;
+      container.appendChild(btnCentro);
+
+      // 3. Botones: Otras Sillas de Mi Mesa (Acompañantes 1..4 excepto miSilla)
       for (var s = 1; s <= 4; s++) {
-        var isMe = (s === miSilla);
-        var key = mesaId + '-' + s;
-        var c = cuentas[key];
-        var hasItems = c &amp;&amp; c.items &amp;&amp; c.items.length > 0;
+        if (s === miSilla) continue;
+        var isTarget = (dest === s);
+        var keyS = mesaId + '-' + s;
+        var cS = cuentas[keyS];
+        var hasItemsS = cS &amp;&amp; cS.items &amp;&amp; cS.items.length > 0;
 
-        var btn = document.createElement('button');
-        btn.type = 'button';
-        btn.onclick = (function(sNum) {
-          return function() {
-            window.cambiarSimulacionQr(mesaId + '-' + sNum);
-          };
+        var btnS = document.createElement('button');
+        btnS.type = 'button';
+        btnS.onclick = (function(sNum) {
+          return function() { window.seleccionarDestinoPedido(sNum); };
         })(s);
 
-        if (isMe) {
-          btn.className = 'px-3 py-1.5 text-xs font-black rounded-xl bg-emerald-500 text-slate-950 border border-emerald-400 flex items-center gap-1.5 shadow-md shadow-emerald-500/20 cursor-pointer';
-          btn.innerHTML = `<i class=&quot;fa-solid fa-user-check text-[11px]&quot;></i> Silla ${s} (Tú)`;
-        } else {
-          btn.className = 'px-2.5 py-1.5 text-xs font-semibold rounded-xl bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white border border-slate-700 flex items-center gap-1.5 transition cursor-pointer';
-          btn.innerHTML = `Silla ${s}${hasItems ? ' <span class=&quot;text-[10px] bg-emerald-950 text-emerald-300 px-1.5 py-0.5 rounded-full border border-emerald-500/40&quot;>🍽️</span>' : ''}`;
-        }
-        container.appendChild(btn);
+        btnS.className = isTarget
+          ? 'px-3 py-1.5 text-xs font-black rounded-xl bg-sky-500 text-slate-950 border border-sky-400 flex items-center gap-1.5 shadow-md shadow-sky-500/30 cursor-pointer scale-105 transition'
+          : 'px-2.5 py-1.5 text-xs font-semibold rounded-xl bg-slate-800 text-slate-400 hover:bg-slate-700 hover:text-white border border-slate-700 flex items-center gap-1.5 transition cursor-pointer';
+        btnS.innerHTML = `Silla ${s}${hasItemsS ? ' 🍽️' : ''}`;
+        container.appendChild(btnS);
       }
+    };
+
+    window.agregarAlCarritoDirecto = function (prodId) {
+      var prod = (window.vsMenuData || []).find(p => p.id === prodId);
+      if (!prod) return;
+
+      var cuentas = getStorageCuentas();
+      var mesaId = window.simMesaId || 1;
+      var dest = window.destinoPedido || 'mi_silla';
+      var key = '';
+      var comensalNom = '';
+      var qrId = '';
+      var esCentro = false;
+      var sillaNum = window.simSillaNum;
+
+      if (dest === 'centro') {
+        key = mesaId + '-centro';
+        comensalNom = `Mesa ${mesaId} (Al Centro / Compartido)`;
+        qrId = `MESA-0${mesaId}`;
+        esCentro = true;
+        sillaNum = 0;
+      } else if (dest === 'mi_silla' || dest === window.simSillaNum) {
+        key = mesaId + '-' + window.simSillaNum;
+        comensalNom = `Comensal Silla ${window.simSillaNum}`;
+        qrId = `PV-0${mesaId}${window.simSillaNum}`;
+        sillaNum = window.simSillaNum;
+      } else {
+        sillaNum = parseInt(dest);
+        key = mesaId + '-' + sillaNum;
+        comensalNom = `Comensal Silla ${sillaNum}`;
+        qrId = `PV-0${mesaId}${sillaNum}`;
+      }
+
+      if (!cuentas[key]) {
+        cuentas[key] = {
+          id: Date.now(),
+          mesaId: mesaId,
+          sillaNum: sillaNum,
+          esCentro: esCentro,
+          qrId: qrId,
+          comensalNombre: comensalNom,
+          items: [],
+          estado: 'ocupada',
+          creadoPor: 'cliente_qr',
+          horaApertura: (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        };
+      }
+
+      var items = cuentas[key].items || [];
+      var existing = items.find(i => i.id === prod.id);
+      if (existing) {
+        existing.cantidad += 1;
+      } else {
+        items.push({
+          id: prod.id,
+          nombre: prod.nombre,
+          precio: Number(prod.precio_unitario),
+          cantidad: 1,
+          mesaId: mesaId,
+          sillaNum: sillaNum,
+          esCentro: esCentro,
+          enviadoCocina: false,
+          hora: (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        });
+      }
+      cuentas[key].items = items;
+      cuentas[key].estado = 'ocupada';
+
+      saveStorageCuentas(cuentas);
+      window.sincronizarCuentaDesdeStorage();
+
+      var destNombre = esCentro ? 'al Centro de la Mesa' : `a la Silla ${sillaNum}`;
+      // Feedback visual sutil
+      console.log(`✅ Agregado: ${prod.nombre} (${destNombre})`);
     };
 
     window.cambiarSimulacionQr = function (keyStr) {
@@ -1041,37 +1182,82 @@
       container.innerHTML = '';
 
       var cuentas = getStorageCuentas();
-      var key = window.simMesaId + '-' + window.simSillaNum;
-      var cuentaActual = cuentas[key] || { items: [] };
-      var items = cuentaActual.items || [];
+      var mesaId = window.simMesaId || 1;
+      var keySilla = mesaId + '-' + window.simSillaNum;
+      var cuentaSilla = cuentas[keySilla] || { items: [] };
+      var itemsSilla = cuentaSilla.items || [];
+
+      var keyCentro = mesaId + '-centro';
+      var cuentaCentro = cuentas[keyCentro] || { items: [] };
+      var itemsCentro = cuentaCentro.items || [];
 
       var pendientesCount = 0;
 
-      if (items.length === 0) {
-        container.innerHTML = `<div class=&quot;text-center py-6 text-slate-500 text-xs&quot;>No hay consumos registrados en tu silla.</div>`;
+      if (itemsSilla.length === 0 &amp;&amp; itemsCentro.length === 0) {
+        container.innerHTML = `<div class=&quot;text-center py-6 text-slate-500 text-xs&quot;>No hay consumos registrados en tu silla ni al centro.</div>`;
       } else {
-        items.forEach((item, idx) => {
-          const itemSubtotal = item.precio * item.cantidad;
-          if (!item.enviadoCocina) pendientesCount++;
+        // 1. Consumos de Mi Silla
+        if (itemsSilla.length > 0) {
+          var hSilla = document.createElement('div');
+          hSilla.className = 'text-[11px] font-bold text-emerald-400 mb-1 flex items-center gap-1';
+          hSilla.innerHTML = `<i class=&quot;fa-solid fa-user text-[10px]&quot;></i> Tu Silla (${window.simSillaNum}):`;
+          container.appendChild(hSilla);
 
-          const row = document.createElement('div');
-          row.className = 'flex justify-between items-center bg-slate-900/80 p-2.5 rounded-xl border border-slate-800 text-xs';
-          row.innerHTML = `
-            <div>
-              <div class=&quot;flex items-center gap-1.5&quot;>
-                <span class=&quot;font-bold text-white&quot;>${item.nombre} x${item.cantidad}</span>
+          itemsSilla.forEach((item) => {
+            const itemSubtotal = item.precio * item.cantidad;
+            if (!item.enviadoCocina) pendientesCount++;
+
+            const row = document.createElement('div');
+            row.className = 'flex justify-between items-center bg-slate-900/80 p-2.5 rounded-xl border border-slate-800 text-xs mb-1.5';
+            row.innerHTML = `
+              <div>
+                <div class=&quot;flex items-center gap-1.5&quot;>
+                  <span class=&quot;font-bold text-white&quot;>${item.nombre} x${item.cantidad}</span>
+                </div>
+                <div class=&quot;flex items-center gap-2 mt-1&quot;>
+                  <span class=&quot;text-[10px] text-slate-400&quot;>${item.notas ? item.notas + ' • ' : ''}$${Number(item.precio).toFixed(2)} c/u</span>
+                  ${item.enviadoCocina
+                    ? `<span class=&quot;bg-emerald-950/60 text-emerald-300 border border-emerald-500/40 text-[9px] font-bold px-1.5 py-0.5 rounded flex items-center gap-1&quot;><i class=&quot;fa-solid fa-fire text-emerald-400&quot;></i> En Cocina (${item.horaEnvioCocina || item.hora || ''})</span>`
+                    : `<span class=&quot;bg-amber-950/60 text-amber-300 border border-amber-500/40 text-[9px] font-bold px-1.5 py-0.5 rounded flex items-center gap-1&quot;><i class=&quot;fa-solid fa-clock text-amber-400&quot;></i> Pendiente</span>`}
+                </div>
               </div>
-              <div class=&quot;flex items-center gap-2 mt-1&quot;>
-                <span class=&quot;text-[10px] text-slate-400&quot;>${item.notas ? item.notas + ' • ' : ''}$${Number(item.precio).toFixed(2)} c/u</span>
-                ${item.enviadoCocina
-                  ? `<span class=&quot;bg-emerald-950/60 text-emerald-300 border border-emerald-500/40 text-[9px] font-bold px-1.5 py-0.5 rounded flex items-center gap-1&quot;><i class=&quot;fa-solid fa-fire text-emerald-400&quot;></i> En Cocina (${item.horaEnvioCocina || item.hora || ''})</span>`
-                  : `<span class=&quot;bg-amber-950/60 text-amber-300 border border-amber-500/40 text-[9px] font-bold px-1.5 py-0.5 rounded flex items-center gap-1&quot;><i class=&quot;fa-solid fa-clock text-amber-400&quot;></i> Pendiente</span>`}
+              <span class=&quot;font-black text-emerald-400&quot;>$${itemSubtotal.toFixed(2)}</span>
+            `;
+            container.appendChild(row);
+          });
+        }
+
+        // 2. Consumos al Centro (Compartidos)
+        if (itemsCentro.length > 0) {
+          var hCentro = document.createElement('div');
+          hCentro.className = 'text-[11px] font-bold text-amber-400 mt-2.5 mb-1 flex items-center gap-1';
+          hCentro.innerHTML = `<i class=&quot;fa-solid fa-utensils text-[10px]&quot;></i> Al Centro (Compartido en Mesa):`;
+          container.appendChild(hCentro);
+
+          itemsCentro.forEach((item) => {
+            const itemSubtotal = item.precio * item.cantidad;
+            if (!item.enviadoCocina) pendientesCount++;
+
+            const row = document.createElement('div');
+            row.className = 'flex justify-between items-center bg-amber-950/20 p-2.5 rounded-xl border border-amber-500/30 text-xs mb-1.5';
+            row.innerHTML = `
+              <div>
+                <div class=&quot;flex items-center gap-1.5&quot;>
+                  <span class=&quot;font-bold text-amber-200&quot;>${item.nombre} x${item.cantidad}</span>
+                  <span class=&quot;text-[9px] font-bold bg-amber-500/20 text-amber-300 px-1.5 py-0.5 rounded&quot;>Centro</span>
+                </div>
+                <div class=&quot;flex items-center gap-2 mt-1&quot;>
+                  <span class=&quot;text-[10px] text-slate-400&quot;>${item.notas ? item.notas + ' • ' : ''}$${Number(item.precio).toFixed(2)} c/u</span>
+                  ${item.enviadoCocina
+                    ? `<span class=&quot;bg-emerald-950/60 text-emerald-300 border border-emerald-500/40 text-[9px] font-bold px-1.5 py-0.5 rounded flex items-center gap-1&quot;><i class=&quot;fa-solid fa-fire text-emerald-400&quot;></i> En Cocina (${item.horaEnvioCocina || item.hora || ''})</span>`
+                    : `<span class=&quot;bg-amber-950/60 text-amber-300 border border-amber-500/40 text-[9px] font-bold px-1.5 py-0.5 rounded flex items-center gap-1&quot;><i class=&quot;fa-solid fa-clock text-amber-400&quot;></i> Pendiente</span>`}
+                </div>
               </div>
-            </div>
-            <span class=&quot;font-black text-emerald-400&quot;>$${itemSubtotal.toFixed(2)}</span>
-          `;
-          container.appendChild(row);
-        });
+              <span class=&quot;font-black text-amber-400&quot;>$${itemSubtotal.toFixed(2)}</span>
+            `;
+            container.appendChild(row);
+          });
+        }
       }
 
       const btnSendCocina = document.getElementById('btnClienteEnviarCocina');
@@ -1082,7 +1268,7 @@
           btnSendCocina.style.opacity = '1';
           btnSendCocina.style.cursor = 'pointer';
           btnSendCocinaTxt.innerHTML = `<b>Enviar a Cocina / Barra</b> (${pendientesCount} pendiente${pendientesCount > 1 ? 's' : ''})`;
-        } else if (items.length > 0) {
+        } else if (itemsSilla.length > 0 || itemsCentro.length > 0) {
           btnSendCocina.disabled = true;
           btnSendCocina.style.opacity = '0.65';
           btnSendCocina.style.cursor = 'default';
@@ -1100,28 +1286,41 @@
 
     window.enviarPedidoClienteCocina = function () {
       var cuentas = getStorageCuentas();
-      var key = window.simMesaId + '-' + window.simSillaNum;
-      var cuenta = cuentas[key];
-      if (!cuenta || !cuenta.items || cuenta.items.length === 0) {
-        alert('Agrega al menos un producto a tu comanda antes de enviar a cocina.');
-        return;
+      var mesaId = window.simMesaId || 1;
+      var keySilla = mesaId + '-' + window.simSillaNum;
+      var keyCentro = mesaId + '-centro';
+
+      var pendientesCount = 0;
+      var nowStr = (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+      if (cuentas[keySilla] &amp;&amp; cuentas[keySilla].items) {
+        cuentas[keySilla].items.forEach(i => {
+          if (!i.enviadoCocina) {
+            i.enviadoCocina = true;
+            i.horaEnvioCocina = nowStr;
+            pendientesCount++;
+          }
+        });
       }
 
-      var pendientes = cuenta.items.filter(i => !i.enviadoCocina);
-      if (pendientes.length === 0) {
+      if (cuentas[keyCentro] &amp;&amp; cuentas[keyCentro].items) {
+        cuentas[keyCentro].items.forEach(i => {
+          if (!i.enviadoCocina) {
+            i.enviadoCocina = true;
+            i.horaEnvioCocina = nowStr;
+            pendientesCount++;
+          }
+        });
+      }
+
+      if (pendientesCount === 0) {
         alert('Todos tus productos ya fueron enviados a Cocina / Barra de Café.');
         return;
       }
 
-      var nowStr = (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-      pendientes.forEach(i => {
-        i.enviadoCocina = true;
-        i.horaEnvioCocina = nowStr;
-      });
-
       saveStorageCuentas(cuentas);
       window.renderCarrito();
-      alert(`🚀 ¡${pendientes.length} producto(s) enviados a Cocina / Barra de Café (${nowStr})! La preparación ha iniciado.`);
+      alert(`🚀 ¡${pendientesCount} producto(s) enviados a Cocina / Barra de Café (${nowStr})! La preparación ha iniciado.`);
     };
 
     window.renderAcompanantesMesa = function () {
@@ -1134,7 +1333,7 @@
       var miSilla = window.simSillaNum;
 
       var otrasSillas = [];
-      for (var s = 1; s <= 10; s++) {
+      for (var s = 1; s <= 4; s++) {
         if (s !== miSilla) {
           var k = mesaId + '-' + s;
           var c = cuentas[k];
@@ -1147,35 +1346,32 @@
       }
 
       if (otrasSillas.length === 0) {
-        container.innerHTML = '<div class=&quot;text-slate-500 text-[11px] py-1 italic&quot;>No hay otros comensales con cuenta en esta mesa.</div>';
+        container.innerHTML = `<div class=&quot;text-slate-500 text-[11px] py-2&quot;>No hay otras sillas con consumos en tu mesa.</div>`;
         return;
       }
 
-      otrasSillas.forEach(obj => {
-        var s = obj.sillaNum;
-        var isChecked = window.sillasAcompanantesSeleccionadas.indexOf(s) !== -1;
-        var row = document.createElement('label');
-        row.className = `flex items-center justify-between p-2 rounded-xl border cursor-pointer transition select-none ${isChecked ? 'bg-emerald-950/40 border-emerald-500/50' : 'bg-slate-900/60 border-slate-800 hover:border-slate-700'}`;
+      otrasSillas.forEach(item => {
+        const isSelected = window.sillasAcompanantesSeleccionadas.includes(item.sillaNum);
+        const row = document.createElement('label');
+        row.className = `flex items-center justify-between p-2 rounded-xl border transition cursor-pointer ${isSelected ? 'bg-emerald-950/40 border-emerald-500/40 text-emerald-300' : 'bg-slate-900/60 border-slate-800 text-slate-400'}`;
+
         row.innerHTML = `
           <div class=&quot;flex items-center gap-2&quot;>
-            <input type=&quot;checkbox&quot; value=&quot;${s}&quot; ${isChecked ? 'checked' : ''} onchange=&quot;window.toggleAcompanante(${s})&quot; class=&quot;accent-emerald-500 rounded&quot;>
-            <div>
-              <span class=&quot;font-bold text-slate-100 block&quot;>Silla ${s} <span class=&quot;text-slate-400 font-normal&quot;>(${obj.cuenta.comensalNombre || 'Comensal'})</span></span>
-              <span class=&quot;text-[10px] text-slate-400&quot;>${obj.cuenta.items.length} consumos</span>
-            </div>
+            <input type=&quot;checkbox&quot; onchange=&quot;window.toggleAcompanante(${item.sillaNum})&quot; ${isSelected ? 'checked' : ''} class=&quot;rounded text-emerald-500 focus:ring-0&quot;>
+            <span class=&quot;font-bold text-xs&quot;>Silla ${item.sillaNum} ${item.cuenta.comensalNombre ? '(' + item.cuenta.comensalNombre + ')' : ''}</span>
           </div>
-          <span class=&quot;font-bold text-amber-400&quot;>$${obj.total.toFixed(2)}</span>
+          <span class=&quot;font-bold text-xs text-white&quot;>$${item.total.toFixed(2)}</span>
         `;
         container.appendChild(row);
       });
     };
 
     window.toggleAcompanante = function (sillaNum) {
-      var idx = window.sillasAcompanantesSeleccionadas.indexOf(sillaNum);
-      if (idx === -1) {
-        window.sillasAcompanantesSeleccionadas.push(sillaNum);
-      } else {
+      const idx = window.sillasAcompanantesSeleccionadas.indexOf(sillaNum);
+      if (idx > -1) {
         window.sillasAcompanantesSeleccionadas.splice(idx, 1);
+      } else {
+        window.sillasAcompanantesSeleccionadas.push(sillaNum);
       }
       window.renderAcompanantesMesa();
       window.recalcularTotalesCompletos();
@@ -1185,36 +1381,44 @@
       var cuentas = getStorageCuentas();
       var mesaId = window.simMesaId;
       var miSilla = window.simSillaNum;
-      window.sillasAcompanantesSeleccionadas = [];
-      for (var s = 1; s <= 10; s++) {
-        if (s !== miSilla &amp;&amp; cuentas[mesaId + '-' + s]) {
-          window.sillasAcompanantesSeleccionadas.push(s);
+      var all = [];
+      for (var s = 1; s <= 4; s++) {
+        if (s !== miSilla &amp;&amp; cuentas[mesaId + '-' + s] &amp;&amp; cuentas[mesaId + '-' + s].items &amp;&amp; cuentas[mesaId + '-' + s].items.length > 0) {
+          all.push(s);
         }
       }
+      window.sillasAcompanantesSeleccionadas = all;
       window.renderAcompanantesMesa();
       window.recalcularTotalesCompletos();
     };
 
     window.recalcularTotalesCompletos = function () {
       var cuentas = getStorageCuentas();
-      var mesaId = window.simMesaId;
-      var miSilla = window.simSillaNum;
+      var mesaId = window.simMesaId || 1;
+      var miSilla = window.simSillaNum || 1;
 
-      var subtotalPropio = 0;
-      var cPropia = cuentas[mesaId + '-' + miSilla];
-      if (cPropia &amp;&amp; cPropia.items) {
-        cPropia.items.forEach(function (i) { subtotalPropio += (i.precio * i.cantidad); });
+      var subtotalNeto = 0;
+
+      // 1. Mi Silla
+      var keySilla = mesaId + '-' + miSilla;
+      if (cuentas[keySilla] &amp;&amp; cuentas[keySilla].items) {
+        cuentas[keySilla].items.forEach(function (it) { subtotalNeto += it.precio * it.cantidad; });
       }
 
-      var subtotalAcompanantes = 0;
-      window.sillasAcompanantesSeleccionadas.forEach(function (sNum) {
-        var cAcomp = cuentas[mesaId + '-' + sNum];
-        if (cAcomp &amp;&amp; cAcomp.items) {
-          cAcomp.items.forEach(function (i) { subtotalAcompanantes += (i.precio * i.cantidad); });
+      // 2. Al Centro
+      var keyCentro = mesaId + '-centro';
+      if (cuentas[keyCentro] &amp;&amp; cuentas[keyCentro].items) {
+        cuentas[keyCentro].items.forEach(function (it) { subtotalNeto += it.precio * it.cantidad; });
+      }
+
+      // 3. Acompañantes
+      (window.sillasAcompanantesSeleccionadas || []).forEach(function (s) {
+        var k = mesaId + '-' + s;
+        if (cuentas[k] &amp;&amp; cuentas[k].items) {
+          cuentas[k].items.forEach(function (it) { subtotalNeto += it.precio * it.cantidad; });
         }
       });
 
-      var subtotalNeto = subtotalPropio + subtotalAcompanantes;
       var iva = subtotalNeto * 0.16;
       var propina = subtotalNeto * 0.10;
       var total = subtotalNeto + iva;
@@ -1228,9 +1432,9 @@
 
       if (lblSubtotalDetalle) {
         if (window.sillasAcompanantesSeleccionadas.length > 0) {
-          lblSubtotalDetalle.innerText = `Subtotal (Silla ${miSilla} + ${window.sillasAcompanantesSeleccionadas.length} Acompañantes):`;
+          lblSubtotalDetalle.innerText = `Subtotal (Silla ${miSilla} + Centro + ${window.sillasAcompanantesSeleccionadas.length} Acompañantes):`;
         } else {
-          lblSubtotalDetalle.innerText = `Subtotal (Solo Silla ${miSilla}):`;
+          lblSubtotalDetalle.innerText = `Subtotal (Silla ${miSilla} + Centro):`;
         }
       }
 
@@ -1241,142 +1445,98 @@
       if (txtBtnPagar) txtBtnPagar.innerText = `$${total.toFixed(2)}`;
     };
 
-    window.agregarAlCarrito = function (prod) {
-      var cuentas = getStorageCuentas();
-      var key = window.simMesaId + '-' + window.simSillaNum;
-      if (!cuentas[key]) {
-        cuentas[key] = {
-          estado: 'ocupada',
-          qrId: 'PV-0' + window.simMesaId + window.simSillaNum,
-          comensalNombre: 'Comensal Silla ' + window.simSillaNum,
-          items: [],
-          historialUbicaciones: [{ mesaId: window.simMesaId, sillaNum: window.simSillaNum, hora: (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }]
-        };
-      }
-
-      var items = cuentas[key].items;
-      var existing = items.find(i => i.id === prod.id);
-      if (existing) {
-        existing.cantidad += 1;
-      } else {
-        items.push({
-          id: prod.id,
-          nombre: prod.nombre,
-          precio: prod.precio_unitario,
-          cantidad: 1,
-          mesaId: window.simMesaId,
-          sillaNum: window.simSillaNum,
-          hora: (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-        });
-      }
-
-      saveStorageCuentas(cuentas);
-      window.sincronizarCuentaDesdeStorage();
-    };
-
-    window.modoPagoCliente = 'incluir_ninos'; // 'solo_yo' | 'incluir_ninos' | 'toda_mesa'
+    window.modoPagoCliente = 'solo_yo'; // 'solo_yo' | 'incluir_ninos' | 'toda_mesa'
 
     window.abrirModalCobroCliente = function (metodo) {
       const modal = document.getElementById('modalCobroCliente');
-      if (!modal) return;
-      window.renderModalCobroDetalle();
-      modal.classList.remove('hidden');
-      modal.style.display = 'flex';
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+      }
+      window.setModoPagoCliente(window.modoPagoCliente || 'solo_yo');
     };
 
     window.cerrarModalCobroCliente = function () {
       const modal = document.getElementById('modalCobroCliente');
       if (modal) {
         modal.classList.add('hidden');
-        modal.style.display = 'none';
+        modal.classList.remove('flex');
       }
     };
 
     window.setModoPagoCliente = function (modo) {
       window.modoPagoCliente = modo;
-      var btnSolo = document.getElementById('btnModoSoloYo');
-      var btnNinos = document.getElementById('btnModoNinos');
-      var btnToda = document.getElementById('btnModoTodaMesa');
+      const btnSoloYo = document.getElementById('btnModoSoloYo');
+      const btnNinos = document.getElementById('btnModoNinos');
+      const btnToda = document.getElementById('btnModoTodaMesa');
 
-      [btnSolo, btnNinos, btnToda].forEach(b => {
+      const activeCls = 'bg-emerald-600/30 text-emerald-300 border-emerald-500/50';
+      const inactiveCls = 'bg-slate-800 text-slate-300 border-slate-700';
+
+      [btnSoloYo, btnNinos, btnToda].forEach(b => {
         if (b) {
-          b.className = 'p-2 rounded-lg font-bold border text-center transition bg-slate-800 text-slate-300 border-slate-700 cursor-pointer';
+          b.className = 'p-2 rounded-lg font-bold border text-center transition cursor-pointer ' + inactiveCls;
         }
       });
 
-      if (modo === 'solo_yo' &amp;&amp; btnSolo) {
-        btnSolo.className = 'p-2 rounded-lg font-bold border text-center transition bg-emerald-600/30 text-emerald-300 border-emerald-500/50 cursor-pointer';
-      } else if (modo === 'incluir_ninos' &amp;&amp; btnNinos) {
-        btnNinos.className = 'p-2 rounded-lg font-bold border text-center transition bg-emerald-600/30 text-emerald-300 border-emerald-500/50 cursor-pointer';
-      } else if (modo === 'toda_mesa' &amp;&amp; btnToda) {
-        btnToda.className = 'p-2 rounded-lg font-bold border text-center transition bg-emerald-600/30 text-emerald-300 border-emerald-500/50 cursor-pointer';
-      }
+      if (modo === 'solo_yo' &amp;&amp; btnSoloYo) btnSoloYo.className = 'p-2 rounded-lg font-bold border text-center transition cursor-pointer ' + activeCls;
+      if (modo === 'incluir_ninos' &amp;&amp; btnNinos) btnNinos.className = 'p-2 rounded-lg font-bold border text-center transition cursor-pointer ' + activeCls;
+      if (modo === 'toda_mesa' &amp;&amp; btnToda) btnToda.className = 'p-2 rounded-lg font-bold border text-center transition cursor-pointer ' + activeCls;
 
-      window.renderModalCobroDetalle();
+      window.renderDetalleModalCobro();
     };
 
-    window.renderModalCobroDetalle = function () {
-      var cuentas = getStorageCuentas();
-      var mesaId = window.simMesaId;
-      var miSilla = window.simSillaNum;
-      var container = document.getElementById('modalCobroDetalleTramos');
-      var subtotalEl = document.getElementById('modalSubtotal');
-      var ivaEl = document.getElementById('modalIVA');
-      var propinaEl = document.getElementById('modalPropina');
-      var totalEl = document.getElementById('modalTotal');
-      var subtituloEl = document.getElementById('modalCobroSubtitulo');
+    window.renderDetalleModalCobro = function () {
+      const container = document.getElementById('modalItemsDesglose');
+      const subtotalEl = document.getElementById('modalSubtotal');
+      const ivaEl = document.getElementById('modalIVA');
+      const propinaEl = document.getElementById('modalPropina');
+      const totalEl = document.getElementById('modalTotal');
 
       if (!container) return;
       container.innerHTML = '';
 
-      var sillasAIncluir = [];
-      if (window.modoPagoCliente === 'solo_yo') {
-        sillasAIncluir = [miSilla];
-      } else if (window.modoPagoCliente === 'incluir_ninos') {
-        sillasAIncluir = [miSilla].concat(window.sillasAcompanantesSeleccionadas);
+      var cuentas = getStorageCuentas();
+      var mesaId = window.simMesaId || 1;
+      var miSilla = window.simSillaNum || 1;
+
+      var keysAIncluir = [mesaId + '-' + miSilla, mesaId + '-centro'];
+      if (window.modoPagoCliente === 'incluir_ninos') {
+        (window.sillasAcompanantesSeleccionadas || []).forEach(s => keysAIncluir.push(mesaId + '-' + s));
       } else if (window.modoPagoCliente === 'toda_mesa') {
-        for (var s = 1; s <= 10; s++) {
-          if (cuentas[mesaId + '-' + s]) {
-            sillasAIncluir.push(s);
-          }
-        }
+        for (var s = 1; s <= 4; s++) keysAIncluir.push(mesaId + '-' + s);
       }
-
-      // Eliminar duplicados
-      sillasAIncluir = sillasAIncluir.filter((v, i, a) => a.indexOf(v) === i).sort();
-
-      if (subtituloEl) {
-        subtituloEl.innerText = `Mesa ${mesaId} • ${sillasAIncluir.length} Cuenta${sillasAIncluir.length > 1 ? 's' : ''} Seleccionada${sillasAIncluir.length > 1 ? 's' : ''}`;
-      }
+      keysAIncluir = keysAIncluir.filter((v, i, a) => a.indexOf(v) === i);
 
       var totalNeto = 0;
 
-      sillasAIncluir.forEach(sNum => {
-        var c = cuentas[mesaId + '-' + sNum];
+      keysAIncluir.forEach(k => {
+        var c = cuentas[k];
         if (!c || !c.items || c.items.length === 0) return;
 
-        var subSilla = 0;
+        var subBlock = 0;
         var block = document.createElement('div');
         block.className = 'p-2.5 rounded-xl bg-slate-950/60 border border-slate-800/80 mb-2';
 
         var h = document.createElement('div');
         h.className = 'flex justify-between items-center font-bold text-emerald-400 mb-1';
-        h.innerHTML = `<span>Silla ${sNum} ${c.comensalNombre ? '• ' + c.comensalNombre : ''}</span><span class=&quot;text-[10px] text-slate-500&quot;>QR: #${c.qrId || 'PV-0' + mesaId + sNum}</span>`;
+        var nom = c.esCentro ? 'Al Centro (Compartido)' : `Silla ${c.sillaNum}`;
+        h.innerHTML = `<span>${nom}</span><span class=&quot;text-[10px] text-slate-500&quot;>QR: #${c.qrId || 'PV-0' + mesaId}</span>`;
         block.appendChild(h);
 
         c.items.forEach(it => {
           var itTotal = it.precio * it.cantidad;
-          subSilla += itTotal;
+          subBlock += itTotal;
           totalNeto += itTotal;
           var row = document.createElement('div');
-          row.className = 'flex justify-between text-slate-300 py-0.5';
+          row.className = 'flex justify-between text-slate-300 py-0.5 text-xs';
           row.innerHTML = `<span>${it.cantidad}x ${it.nombre}</span><span>$${itTotal.toFixed(2)}</span>`;
           block.appendChild(row);
         });
 
         var subRow = document.createElement('div');
         subRow.className = 'flex justify-between text-slate-400 font-bold pt-1 mt-1 border-t border-slate-900 text-[11px]';
-        subRow.innerHTML = `<span>Subtotal Silla ${sNum}:</span><span class=&quot;text-amber-400&quot;>$${subSilla.toFixed(2)}</span>`;
+        subRow.innerHTML = `<span>Subtotal ${nom}:</span><span class=&quot;text-amber-400&quot;>$${subBlock.toFixed(2)}</span>`;
         block.appendChild(subRow);
 
         container.appendChild(block);
@@ -1394,55 +1554,54 @@
 
     window.ejecutarPagoFinal = function (metodo) {
       var cuentas = getStorageCuentas();
-      var mesaId = window.simMesaId;
-      var miSilla = window.simSillaNum;
+      var mesaId = window.simMesaId || 1;
+      var miSilla = window.simSillaNum || 1;
 
-      var sillasAIncluir = [];
-      if (window.modoPagoCliente === 'solo_yo') {
-        sillasAIncluir = [miSilla];
-      } else if (window.modoPagoCliente === 'incluir_ninos') {
-        sillasAIncluir = [miSilla].concat(window.sillasAcompanantesSeleccionadas);
+      var keysAIncluir = [mesaId + '-' + miSilla, mesaId + '-centro'];
+      if (window.modoPagoCliente === 'incluir_ninos') {
+        (window.sillasAcompanantesSeleccionadas || []).forEach(s => keysAIncluir.push(mesaId + '-' + s));
       } else if (window.modoPagoCliente === 'toda_mesa') {
-        for (var s = 1; s <= 10; s++) {
-          if (cuentas[mesaId + '-' + s]) {
-            sillasAIncluir.push(s);
-          }
-        }
+        for (var s = 1; s <= 4; s++) keysAIncluir.push(mesaId + '-' + s);
       }
+      keysAIncluir = keysAIncluir.filter((v, i, a) => a.indexOf(v) === i);
 
-      sillasAIncluir = sillasAIncluir.filter((v, i, a) => a.indexOf(v) === i);
       var totalText = document.getElementById('modalTotal') ? document.getElementById('modalTotal').innerText : '$0.00';
-      var sillasStr = sillasAIncluir.map(function (s) { return 'Silla ' + s; }).join(', ');
 
-      if (confirm(`¿Confirmar liquidación vía ${metodo.toUpperCase()} para Mesa ${mesaId} (${sillasStr}) por ${totalText}?`)) {
-        sillasAIncluir.forEach(function (sNum) {
-          delete cuentas[mesaId + '-' + sNum];
+      if (confirm(`¿Confirmar liquidación vía ${metodo.toUpperCase()} para Mesa ${mesaId} por ${totalText}?`)) {
+        keysAIncluir.forEach(function (k) {
+          delete cuentas[k];
         });
+
         saveStorageCuentas(cuentas);
         window.cerrarModalCobroCliente();
-        alert(`🎉 ¡Pago completado con éxito vía ${metodo.toUpperCase()}!\nSe han liberado las cuentas de Mesa ${mesaId} (${sillasStr}).`);
         window.sincronizarCuentaDesdeStorage();
+        alert(`🎉 ¡Pago de ${totalText} procesado con éxito vía ${metodo.toUpperCase()}! Gracias por tu visita a La Terraza V&amp;S.`);
       }
     };
 
     window.cargarDatosMenu = function (productos, categorias) {
-      if (productos &amp;&amp; productos.length > 0) window.vsMenuData = productos;
-      if (categorias &amp;&amp; categorias.length > 0) window.vsCategoriasData = categorias;
-      window.renderCategoriasChips(window.vsCategoriasData);
-      window.renderProductos();
-      window.sincronizarCuentaDesdeStorage();
+      if (productos) window.vsMenuData = productos;
+      if (categorias) window.vsCategoriasData = categorias;
+      window.renderCategoriasChips();
+      window.filtrarProductos();
     };
 
-    window.renderCategoriasChips = function (categorias) {
+    window.renderCategoriasChips = function () {
       const container = document.getElementById('categoriesChips');
       if (!container) return;
       container.innerHTML = '';
 
-      categorias.forEach(cat => {
+      const allBtn = document.createElement('button');
+      allBtn.className = `cat-chip ${window.categoriaActual === 'Todos' ? 'active bg-emerald-500 text-slate-950 font-black shadow-md shadow-emerald-500/20' : 'bg-slate-900/80 text-slate-300 border border-slate-700 hover:bg-slate-800'} px-4 py-2 text-xs font-bold rounded-xl whitespace-nowrap transition cursor-pointer`;
+      allBtn.innerText = 'Todos';
+      allBtn.onclick = () => window.seleccionarCategoria('Todos');
+      container.appendChild(allBtn);
+
+      (window.vsCategoriasData || []).forEach(cat => {
         const btn = document.createElement('button');
-        const isActive = window.categoriaActual === cat.nombre;
-        btn.className = `cat-chip ${isActive ? 'active bg-emerald-500 text-white shadow-md shadow-emerald-500/20' : 'bg-slate-800/80 text-slate-400 hover:text-white'} px-4 py-2 text-xs font-bold rounded-xl whitespace-nowrap transition`;
-        btn.innerText = `${cat.icono || '🍽️'} ${cat.nombre}`;
+        const isActive = (window.categoriaActual === cat.nombre);
+        btn.className = `cat-chip ${isActive ? 'active bg-emerald-500 text-slate-950 font-black shadow-md shadow-emerald-500/20' : 'bg-slate-900/80 text-slate-300 border border-slate-700 hover:bg-slate-800'} px-4 py-2 text-xs font-bold rounded-xl whitespace-nowrap transition flex items-center gap-1.5 cursor-pointer`;
+        btn.innerHTML = `<span>${cat.icono || '🍽️'}</span> <span>${cat.nombre}</span>`;
         btn.onclick = () => window.seleccionarCategoria(cat.nombre);
         container.appendChild(btn);
       });
@@ -1450,21 +1609,17 @@
 
     window.seleccionarCategoria = function (catNombre) {
       window.categoriaActual = catNombre;
-      window.renderCategoriasChips(window.vsCategoriasData);
-      window.renderProductos();
+      window.renderCategoriasChips();
+      window.filtrarProductos();
     };
 
     window.filtrarProductos = function () {
-      window.renderProductos();
-    };
-
-    window.renderProductos = function () {
       const container = document.getElementById('productsGridContainer');
       if (!container) return;
       container.innerHTML = '';
 
+      const query = (document.getElementById('searchInput') ? document.getElementById('searchInput').value : '').toLowerCase().trim();
       const catActual = window.categoriaActual;
-      const query = document.getElementById('searchInput') ? document.getElementById('searchInput').value.toLowerCase().trim() : '';
 
       const filtrados = (window.vsMenuData || []).filter(prod => {
         const matchCat = (!catActual || catActual === 'Todos' || prod.categoria_nombre === catActual);
@@ -1476,6 +1631,15 @@
         container.innerHTML = `<div class=&quot;text-center py-12 text-slate-500 text-sm col-span-2&quot;>No se encontraron platillos o bebidas disponibles</div>`;
         return;
       }
+
+      const isCentro = (window.destinoPedido === 'centro');
+      const destSilla = (window.destinoPedido === 'mi_silla' || !window.destinoPedido) ? window.simSillaNum : window.destinoPedido;
+      const btnTxt = isCentro
+        ? '<i class=&quot;fa-solid fa-utensils text-amber-400&quot;></i> Al Centro (Compartir)'
+        : `<i class=&quot;fa-solid fa-plus text-emerald-400&quot;></i> Agregar a Silla ${destSilla}`;
+      const btnClass = isCentro
+        ? 'flex-1 py-2 px-3 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer shadow-sm'
+        : 'flex-1 py-2 px-3 rounded-xl bg-emerald-600/30 hover:bg-emerald-500/40 text-emerald-300 border border-emerald-500/30 text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer shadow-sm';
 
       filtrados.forEach(prod => {
         const card = document.createElement('div');
@@ -1499,11 +1663,11 @@
             </div>
           </div>
           <div class=&quot;flex items-center justify-between gap-2 pt-2 border-t border-slate-800/80&quot;>
-            <button onclick=&quot;window.abrirModalRecetaCliente(${prod.id});&quot; class=&quot;py-1.5 px-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-sky-400 border border-slate-700 text-xs font-bold transition flex items-center gap-1 cursor-pointer&quot;>
+            <button onclick=&quot;window.abrirModalRecetaCliente(${prod.id});&quot; class=&quot;py-2 px-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-sky-400 border border-slate-700 text-xs font-bold transition flex items-center gap-1 cursor-pointer&quot;>
               <i class=&quot;fa-solid fa-book-open&quot;></i> Receta
             </button>
-            <button onclick=&quot;window.agregarAlCarritoDirecto(${prod.id})&quot; class=&quot;flex-1 py-1.5 px-3 rounded-xl bg-emerald-600/30 hover:bg-emerald-500/40 text-emerald-300 border border-emerald-500/30 text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer&quot;>
-              <i class=&quot;fa-solid fa-plus text-emerald-400&quot;></i> Agregar a mi Silla
+            <button onclick=&quot;window.agregarAlCarritoDirecto(${prod.id})&quot; class=&quot;${btnClass}&quot;>
+              ${btnTxt}
             </button>
           </div>
         `;
@@ -1613,13 +1777,7 @@
           if (!isNaN(m) &amp;&amp; !isNaN(s)) {
             window.simMesaId = m;
             window.simSillaNum = s;
-            var sel = document.getElementById('selSimularQr');
-            if (sel) {
-              sel.value = m + '-' + s;
-            }
-            if (window.cambiarSimulacionQr) {
-              window.cambiarSimulacionQr(m + '-' + s);
-            }
+            window.destinoPedido = 'mi_silla';
           }
         }
       } catch (e) {
