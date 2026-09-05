@@ -67,6 +67,17 @@
     box-shadow: 0 4px 10px rgba(245, 158, 11, 0.3) !important;
   }
 
+  /* Silla con pedido nuevo del cliente (aún no enviado a cocina) */
+  .chair-btn-fixed.chair-has-new-order {
+    animation: pulse-new-order 1.4s ease-in-out infinite !important;
+    border: 2px solid #fb923c !important;
+  }
+
+  @keyframes pulse-new-order {
+    0%, 100% { box-shadow: 0 0 8px 2px rgba(251, 146, 60, 0.5); transform: scale(1); }
+    50% { box-shadow: 0 0 18px 6px rgba(251, 146, 60, 0.85); transform: scale(1.06); }
+  }
+
   .chair-btn-fixed.chair-state-paid {
     background: #0284c7 !important;
     border: 2px solid #38bdf8 !important;
@@ -168,6 +179,19 @@
   #dragToast.toast-err {
     border-color: #ef4444;
     color: #f87171;
+  }
+
+  #dragToast.toast-info {
+    border-color: #38bdf8;
+    color: #7dd3fc;
+  }
+
+  /* Toast especial para pedidos nuevos de clientes QR */
+  #dragToast.toast-new-order {
+    border-color: #fb923c;
+    color: #fdba74;
+    box-shadow: 0 0 24px 4px rgba(251, 146, 60, 0.55), 0 12px 32px rgba(0,0,0,0.7);
+    font-size: 14px;
   }
 
   /* ── Mini-modal confirmación combinación ── */
@@ -2147,6 +2171,9 @@
       cuentas: loadStateFromStorage()
     };
 
+    // Snapshot anterior para detectar items NUEVOS y disparar notificaciones al mesero
+    var _prevCuentasSnapshot = {};
+
     window.aplicarCuentasServidor = function(cuentasServidor) {
       if (!cuentasServidor) return;
       if (typeof cuentasServidor === 'string') {
@@ -2197,6 +2224,22 @@
         saveStateToStorage();
         renderStateUI();
       }
+
+      // 🔔 Notificar al mesero cuando llegan items nuevos de un cliente QR
+      Object.keys(cuentasServidor).forEach(function(k) {
+        var srv = cuentasServidor[k];
+        if (!srv || !srv.items || !Array.isArray(srv.items) || srv.items.length === 0) return;
+        var prev = _prevCuentasSnapshot[k];
+        var prevCount = prev &amp;&amp; prev.items ? prev.items.length : 0;
+        var newCount = srv.items.length;
+        if (newCount > prevCount) {
+          var newest = srv.items[srv.items.length - 1];
+          var nombreProd = newest ? newest.nombre : 'Producto';
+          var msg = `🛎️ M${srv.mesaId} Silla ${srv.sillaId || srv.sillaNum}: &quot;${nombreProd}&quot;${newCount > 1 ? ` (+${newCount - prevCount} item${newCount - prevCount > 1 ? 's' : ''})` : ''}`;
+          showOrderToast(msg);
+        }
+        _prevCuentasSnapshot[k] = { items: JSON.parse(JSON.stringify(srv.items)) };
+      });
     };
 
     // Auto-polling en segundo plano para sincronizar check-ins de comensales en tiempo real
@@ -2241,7 +2284,7 @@
     // ── Toast de notificación (reemplaza alert()) ──
     var _toastTimer = null;
     function showDragToast(msg, tipo) {
-      // tipo: 'ok' | 'warn' | 'err'
+      // tipo: 'ok' | 'warn' | 'err' | 'info'
       var t = document.getElementById('dragToast');
       if (!t) return;
       t.textContent = msg;
@@ -2250,6 +2293,18 @@
       _toastTimer = setTimeout(function () {
         t.className = t.className.replace(' show', '').replace('show', '');
       }, 3200);
+    }
+
+    // Toast especial para pedidos nuevos de clientes QR (más tiempo + color naranja)
+    function showOrderToast(msg) {
+      var t = document.getElementById('dragToast');
+      if (!t) return;
+      t.textContent = msg;
+      t.className = 'show toast-new-order';
+      if (_toastTimer) clearTimeout(_toastTimer);
+      _toastTimer = setTimeout(function () {
+        t.className = t.className.replace(' show', '').replace('show', '');
+      }, 5000);
     }
 
     // ── Mini-modal confirmación (reemplaza confirm()) ──
@@ -5133,16 +5188,46 @@
         chairEl.style.cssText = `position: absolute !important; ${posCss} z-index: 25 !important; cursor: pointer !important; white-space: nowrap !important;`;
 
         const paidCheck = isPaid ? ' ✓' : '';
-        if (isJoinedMode) {
-          chairEl.innerHTML = isArrimada ? `🪑 M${m}-S${s}${paidCheck}` : `M${m}-S${s}${paidCheck}`;
-        } else {
-          chairEl.innerHTML = isArrimada ? `🪑 S${s}${paidCheck}` : `Silla ${s}${paidCheck}`;
+
+        // Detectar si hay items nuevos del cliente (no enviados a cocina aún)
+        const hasNewItems = cuenta &amp;&amp; cuenta.items &amp;&amp; cuenta.items.some(it => !it.enviadoCocina);
+        const newItemsCount = cuenta &amp;&amp; cuenta.items ? cuenta.items.filter(it => !it.enviadoCocina).length : 0;
+        const totalItems = numItems;
+
+        // Badge de conteo de items
+        let itemBadge = '';
+        if (totalItems > 0 &amp;&amp; !isPaid) {
+          const badgeColor = hasNewItems ? '#ef4444' : '#d97706';
+          itemBadge = ` <span style=&quot;display:inline-block;background:${badgeColor};color:#fff;border-radius:10px;padding:0px 5px;font-size:9px;font-weight:900;vertical-align:middle;min-width:16px;text-align:center;line-height:15px;margin-left:2px;&quot;>${totalItems}</span>`;
         }
+
+        // Mini resumen del primer producto
+        let miniProd = '';
+        if (totalItems > 0 &amp;&amp; !isPaid &amp;&amp; cuenta &amp;&amp; cuenta.items) {
+          const primero = cuenta.items[0];
+          const nombre = primero.nombre ? primero.nombre.substring(0, 12) + (primero.nombre.length > 12 ? '…' : '') : '';
+          miniProd = `<div style=&quot;font-size:8px;opacity:0.9;margin-top:1px;line-height:1.1;max-width:64px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;&quot;>${hasNewItems ? '🆕 ' : ''}${nombre}${totalItems > 1 ? ` +${totalItems-1}` : ''}</div>`;
+        }
+
+        if (isJoinedMode) {
+          chairEl.innerHTML = isArrimada ? `🪑 M${m}-S${s}${paidCheck}${itemBadge}${miniProd}` : `M${m}-S${s}${paidCheck}${itemBadge}${miniProd}`;
+        } else {
+          chairEl.innerHTML = isArrimada ? `🪑 S${s}${paidCheck}${itemBadge}${miniProd}` : `Silla ${s}${paidCheck}${itemBadge}${miniProd}`;
+        }
+
+        // Pulsar si hay pedidos nuevos del cliente aún sin enviar a cocina
+        if (hasNewItems) {
+          chairEl.classList.add('chair-has-new-order');
+        }
+
+        const itemsTooltip = cuenta &amp;&amp; cuenta.items &amp;&amp; cuenta.items.length > 0
+          ? '\n' + cuenta.items.map(it => `  • ${it.nombre} x${it.cantidad || 1}${it.enviadoCocina ? '' : ' 🆕'}`).join('\n')
+          : '';
 
         chairEl.setAttribute('title', isPaid
           ? `Mesa ${m} Silla ${s} (Cuenta Pagada / Sobremesa) • Clic para ver o liberar`
           : (isOccupied
-            ? `Mesa ${m} Silla ${s} (Ocupada${saldoPendiente > 0 ? ' · $' + saldoPendiente.toFixed(2) + ' pend.' : ''}) • Arrastra para mover o clic para comanda`
+            ? `Mesa ${m} Silla ${s} (Ocupada${saldoPendiente > 0 ? ' · $' + saldoPendiente.toFixed(2) + ' pend.' : ''}) • Arrastra para mover o clic para comanda${itemsTooltip}`
             : `Mesa ${m} Silla ${s} (Disponible) • Arrastra para trasladar o clic para comanda`));
 
         chairEl.addEventListener('mousedown', function (e) {
