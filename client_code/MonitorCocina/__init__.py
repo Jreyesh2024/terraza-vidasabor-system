@@ -105,19 +105,19 @@ class MonitorCocina(MonitorCocinaTemplate):
         return
       doc = anvil.js.window.document
       scripts = dom.querySelectorAll('script')
-      for s in scripts:
+      count = int(scripts.length) if hasattr(scripts, 'length') else len(scripts)
+      for i in range(count):
+        s = scripts.item(i) if hasattr(scripts, 'item') else scripts[i]
         if not s.getAttribute('data-executed'):
           s.setAttribute('data-executed', 'true')
-          code = s.textContent
+          code = str(s.textContent)
           if code and code.strip():
-            new_script = doc.createElement('script')
-            for attr in s.attributes:
-              try:
-                new_script.setAttribute(attr.name, attr.value)
-              except Exception:
-                pass
-            new_script.textContent = code
-            doc.head.appendChild(new_script)
-            doc.head.removeChild(new_script)
+            try:
+              anvil.js.window.eval(code)
+            except Exception:
+              new_script = doc.createElement('script')
+              new_script.textContent = code
+              doc.head.appendChild(new_script)
+              doc.head.removeChild(new_script)
     except Exception as e:
       print(f"[MonitorCocina] Error en ejecutar_scripts_template: {e}")
