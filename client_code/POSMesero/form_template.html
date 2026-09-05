@@ -378,12 +378,12 @@
     <!-- AREA SELECTOR & MODULE SWITCHER -->
     <div
       style="display: flex !important; flex-wrap: wrap !important; gap: 8px !important; background: #0f2744 !important; padding: 6px 10px !important; border-radius: 12px !important; border: 1px solid rgba(255,255,255,0.12) !important; align-items: center !important;">
-      <button id="btn-nav-admin" onclick="if(window.anvilAppNav) window.anvilAppNav('admin_menu');"
+      <button id="btn-nav-admin" data-action="anvilAppNav" data-args="admin_menu"
         style="padding: 7px 14px !important; font-size: 11px !important; font-weight: 800 !important; border-radius: 8px !important; background: #0f172a !important; color: #34d399 !important; border: 1px solid #34d399 !important; cursor: pointer !important; display: flex !important; align-items: center !important; gap: 6px !important;">
         <i class="fa-solid fa-house"></i> Inicio / Hub
       </button>
       <button id="btn-area-palapa"
-        onclick="window.volverAlCroquisGeneral(); if(window.anvilAppNav) window.anvilAppNav('pos_mesero');"
+        data-action="volverAlCroquisYRecargar"
         style="padding: 7px 14px !important; font-size: 11px !important; font-weight: 700 !important; border-radius: 8px !important; background-color: #059669 !important; color: #ffffff !important; border: none !important; cursor: pointer !important; display: flex !important; align-items: center !important; gap: 6px !important; box-shadow: 0 2px 6px rgba(5,150,105,0.4) !important;">
         <i class="fa-solid fa-umbrella-beach" style="color: #fcd34d !important;"></i> La Palapa (6x4m)
       </button>
@@ -391,11 +391,11 @@
         style="padding: 7px 12px !important; font-size: 11px !important; font-weight: 700 !important; border-radius: 8px !important; background: #1e3a5f !important; color: #38bdf8 !important; border: 1px solid rgba(56, 189, 248, 0.4) !important; cursor: pointer !important; display: flex !important; align-items: center !important; gap: 6px !important;">
         <i class="fa-solid fa-rotate-right"></i> Reiniciar Demo
       </button>
-      <button id="btn-nav-cocina" onclick="if(window.anvilAppNav) window.anvilAppNav('monitor_cocina');"
+      <button id="btn-nav-cocina" data-action="anvilAppNav" data-args="monitor_cocina"
         style="padding: 7px 14px !important; font-size: 11px !important; font-weight: 600 !important; border-radius: 8px !important; background: transparent !important; color: #e2e8f0 !important; border: 1px solid transparent !important; cursor: pointer !important; display: flex !important; align-items: center !important; gap: 6px !important;">
         <i class="fa-solid fa-fire" style="color: #f59e0b !important;"></i> Cocina KDS
       </button>
-      <button id="btn-nav-fiscal" onclick="if(window.anvilAppNav) window.anvilAppNav('monitor_fiscal');"
+      <button id="btn-nav-fiscal" data-action="anvilAppNav" data-args="monitor_fiscal"
         style="padding: 7px 14px !important; font-size: 11px !important; font-weight: 600 !important; border-radius: 8px !important; background: transparent !important; color: #e2e8f0 !important; border: 1px solid transparent !important; cursor: pointer !important; display: flex !important; align-items: center !important; gap: 6px !important;">
         <i class="fa-solid fa-chart-pie" style="color: #38bdf8 !important;"></i> Fiscal
       </button>
@@ -485,19 +485,19 @@
           </div>
           <div
             style="display: flex !important; gap: 8px !important; align-items: center !important; flex-wrap: wrap !important;">
-            <button id="btnJoin12" onclick="window.unirMesas('1-2');" type="button"
+            <button id="btnJoin12" data-action="unirMesas" data-args="1-2" type="button"
               style="padding: 6px 12px !important; font-size: 11px !important; font-weight: 800 !important; border-radius: 8px !important; background: #ffffff !important; color: #0284c7 !important; border: 1.5px solid #0284c7 !important; cursor: pointer !important; display: flex !important; align-items: center !important; gap: 6px !important; box-shadow: 0 2px 4px rgba(2, 132, 199, 0.1) !important;">
               🔗 Juntar M1 + M2 (8 Pax)
             </button>
-            <button id="btnJoin23" onclick="window.unirMesas('2-3');" type="button"
+            <button id="btnJoin23" data-action="unirMesas" data-args="2-3" type="button"
               style="padding: 6px 12px !important; font-size: 11px !important; font-weight: 800 !important; border-radius: 8px !important; background: #ffffff !important; color: #0284c7 !important; border: 1.5px solid #0284c7 !important; cursor: pointer !important; display: flex !important; align-items: center !important; gap: 6px !important; box-shadow: 0 2px 4px rgba(2, 132, 199, 0.1) !important;">
               🔗 Juntar M2 + M3 (8 Pax)
             </button>
-            <button id="btnJoinAll" onclick="window.unirMesas('1-2-3');" type="button"
+            <button id="btnJoinAll" data-action="unirMesas" data-args="1-2-3" type="button"
               style="padding: 6px 12px !important; font-size: 11px !important; font-weight: 800 !important; border-radius: 8px !important; background: linear-gradient(135deg, #0284c7, #0369a1) !important; color: #ffffff !important; border: none !important; cursor: pointer !important; display: flex !important; align-items: center !important; gap: 6px !important; box-shadow: 0 2px 6px rgba(2, 132, 199, 0.25) !important;">
               👑 Juntar Todas M1+M2+M3 (Imperial 10-12 Pax)
             </button>
-            <button id="btnSeparateTables" onclick="window.separarMesas();" type="button"
+            <button id="btnSeparateTables" data-action="separarMesas" type="button"
               style="display: none !important; padding: 6px 12px !important; font-size: 11px !important; font-weight: 800 !important; border-radius: 8px !important; background: #fef2f2 !important; color: #dc2626 !important; border: 1.5px solid #f87171 !important; cursor: pointer !important; align-items: center !important; gap: 6px !important;">
               ✂ Separar a Mesas Individuales
             </button>
@@ -517,17 +517,17 @@
 
             <div id="table-box-1" class="table-box-220"
               style="position: relative !important; width: 250px !important; height: 230px !important; display: flex !important; align-items: center !important; justify-content: center !important; margin: 0 auto !important;">
-              <div id="table-circle-1" class="table-square-fixed"
+              <div id="table-circle-1" class="table-square-fixed" data-action="clickMesa" data-args="1"
                 style="width: 104px !important; height: 104px !important; border-radius: 16px !important; background: #ecfdf5 !important; border: 3px solid #10b981 !important; box-shadow: 0 2px 8px rgba(16, 185, 129, 0.2) !important; display: flex !important; flex-direction: column !important; align-items: center !important; justify-content: center !important; cursor: pointer !important; z-index: 10 !important;">
                 <span
                   style="font-size: 18px !important; font-weight: 900 !important; color: #065f46 !important; margin: 0 !important; line-height: 1 !important;">M1</span>
                 <span id="table-status-1"
                   style="font-size: 9px !important; font-weight: 800 !important; color: #059669 !important; text-transform: uppercase !important; margin-top: 2px !important;">Libre</span>
               </div>
-              <div id="chair-1-1" class="chair-btn-fixed chair-state-free" draggable="true" style="position: absolute !important; top: 2px; left: 50%; transform: translateX(-50%); z-index: 25 !important; cursor: pointer !important; white-space: nowrap !important;" title="Mesa 1 Silla 1 (Disponible) • Arrastra o clic para comanda">Silla 1</div>
-              <div id="chair-1-2" class="chair-btn-fixed chair-state-free" draggable="true" style="position: absolute !important; right: 2px; top: 50%; transform: translateY(-50%); z-index: 25 !important; cursor: pointer !important; white-space: nowrap !important;" title="Mesa 1 Silla 2 (Disponible) • Arrastra o clic para comanda">Silla 2</div>
-              <div id="chair-1-3" class="chair-btn-fixed chair-state-free" draggable="true" style="position: absolute !important; bottom: 2px; left: 50%; transform: translateX(-50%); z-index: 25 !important; cursor: pointer !important; white-space: nowrap !important;" title="Mesa 1 Silla 3 (Disponible) • Arrastra o clic para comanda">Silla 3</div>
-              <div id="chair-1-4" class="chair-btn-fixed chair-state-free" draggable="true" style="position: absolute !important; left: 2px; top: 50%; transform: translateY(-50%); z-index: 25 !important; cursor: pointer !important; white-space: nowrap !important;" title="Mesa 1 Silla 4 (Disponible) • Arrastra o clic para comanda">Silla 4</div>
+              <div id="chair-1-1" class="chair-btn-fixed chair-state-free" draggable="true" data-action="clickSilla" data-args="1,1" style="position: absolute !important; top: 2px; left: 50%; transform: translateX(-50%); z-index: 25 !important; cursor: pointer !important; white-space: nowrap !important;" title="Mesa 1 Silla 1 (Disponible) • Arrastra o clic para comanda">Silla 1</div>
+              <div id="chair-1-2" class="chair-btn-fixed chair-state-free" draggable="true" data-action="clickSilla" data-args="1,2" style="position: absolute !important; right: 2px; top: 50%; transform: translateY(-50%); z-index: 25 !important; cursor: pointer !important; white-space: nowrap !important;" title="Mesa 1 Silla 2 (Disponible) • Arrastra o clic para comanda">Silla 2</div>
+              <div id="chair-1-3" class="chair-btn-fixed chair-state-free" draggable="true" data-action="clickSilla" data-args="1,3" style="position: absolute !important; bottom: 2px; left: 50%; transform: translateX(-50%); z-index: 25 !important; cursor: pointer !important; white-space: nowrap !important;" title="Mesa 1 Silla 3 (Disponible) • Arrastra o clic para comanda">Silla 3</div>
+              <div id="chair-1-4" class="chair-btn-fixed chair-state-free" draggable="true" data-action="clickSilla" data-args="1,4" style="position: absolute !important; left: 2px; top: 50%; transform: translateY(-50%); z-index: 25 !important; cursor: pointer !important; white-space: nowrap !important;" title="Mesa 1 Silla 4 (Disponible) • Arrastra o clic para comanda">Silla 4</div>
             </div>
 
             <span id="table-label-1"
@@ -544,17 +544,17 @@
 
             <div id="table-box-2" class="table-box-220"
               style="position: relative !important; width: 250px !important; height: 230px !important; display: flex !important; align-items: center !important; justify-content: center !important; margin: 0 auto !important;">
-              <div id="table-circle-2" class="table-square-fixed"
+              <div id="table-circle-2" class="table-square-fixed" data-action="clickMesa" data-args="2"
                 style="width: 104px !important; height: 104px !important; border-radius: 16px !important; background: #ecfdf5 !important; border: 3px solid #10b981 !important; box-shadow: 0 2px 8px rgba(16, 185, 129, 0.2) !important; display: flex !important; flex-direction: column !important; align-items: center !important; justify-content: center !important; cursor: pointer !important; z-index: 10 !important;">
                 <span
                   style="font-size: 18px !important; font-weight: 900 !important; color: #065f46 !important; margin: 0 !important; line-height: 1 !important;">M2</span>
                 <span id="table-status-2"
                   style="font-size: 9px !important; font-weight: 800 !important; color: #059669 !important; text-transform: uppercase !important; margin-top: 2px !important;">Libre</span>
               </div>
-              <div id="chair-2-1" class="chair-btn-fixed chair-state-free" draggable="true" style="position: absolute !important; top: 2px; left: 50%; transform: translateX(-50%); z-index: 25 !important; cursor: pointer !important; white-space: nowrap !important;" title="Mesa 2 Silla 1 (Disponible) • Arrastra o clic para comanda">Silla 1</div>
-              <div id="chair-2-2" class="chair-btn-fixed chair-state-free" draggable="true" style="position: absolute !important; right: 2px; top: 50%; transform: translateY(-50%); z-index: 25 !important; cursor: pointer !important; white-space: nowrap !important;" title="Mesa 2 Silla 2 (Disponible) • Arrastra o clic para comanda">Silla 2</div>
-              <div id="chair-2-3" class="chair-btn-fixed chair-state-free" draggable="true" style="position: absolute !important; bottom: 2px; left: 50%; transform: translateX(-50%); z-index: 25 !important; cursor: pointer !important; white-space: nowrap !important;" title="Mesa 2 Silla 3 (Disponible) • Arrastra o clic para comanda">Silla 3</div>
-              <div id="chair-2-4" class="chair-btn-fixed chair-state-free" draggable="true" style="position: absolute !important; left: 2px; top: 50%; transform: translateY(-50%); z-index: 25 !important; cursor: pointer !important; white-space: nowrap !important;" title="Mesa 2 Silla 4 (Disponible) • Arrastra o clic para comanda">Silla 4</div>
+              <div id="chair-2-1" class="chair-btn-fixed chair-state-free" draggable="true" data-action="clickSilla" data-args="2,1" style="position: absolute !important; top: 2px; left: 50%; transform: translateX(-50%); z-index: 25 !important; cursor: pointer !important; white-space: nowrap !important;" title="Mesa 2 Silla 1 (Disponible) • Arrastra o clic para comanda">Silla 1</div>
+              <div id="chair-2-2" class="chair-btn-fixed chair-state-free" draggable="true" data-action="clickSilla" data-args="2,2" style="position: absolute !important; right: 2px; top: 50%; transform: translateY(-50%); z-index: 25 !important; cursor: pointer !important; white-space: nowrap !important;" title="Mesa 2 Silla 2 (Disponible) • Arrastra o clic para comanda">Silla 2</div>
+              <div id="chair-2-3" class="chair-btn-fixed chair-state-free" draggable="true" data-action="clickSilla" data-args="2,3" style="position: absolute !important; bottom: 2px; left: 50%; transform: translateX(-50%); z-index: 25 !important; cursor: pointer !important; white-space: nowrap !important;" title="Mesa 2 Silla 3 (Disponible) • Arrastra o clic para comanda">Silla 3</div>
+              <div id="chair-2-4" class="chair-btn-fixed chair-state-free" draggable="true" data-action="clickSilla" data-args="2,4" style="position: absolute !important; left: 2px; top: 50%; transform: translateY(-50%); z-index: 25 !important; cursor: pointer !important; white-space: nowrap !important;" title="Mesa 2 Silla 4 (Disponible) • Arrastra o clic para comanda">Silla 4</div>
             </div>
 
             <span id="table-label-2"
@@ -571,7 +571,7 @@
 
             <div id="table-box-3" class="table-box-220"
               style="position: relative !important; width: 250px !important; height: 230px !important; display: flex !important; align-items: center !important; justify-content: center !important; margin: 0 auto !important;">
-              <div id="table-circle-3" class="table-square-fixed"
+              <div id="table-circle-3" class="table-square-fixed" data-action="clickMesa" data-args="3"
                 style="width: 104px !important; height: 104px !important; border-radius: 16px !important; background: #fffbeb !important; border: 3px solid #f59e0b !important; box-shadow: 0 2px 8px rgba(245, 158, 11, 0.2) !important; display: flex !important; flex-direction: column !important; align-items: center !important; justify-content: center !important; cursor: pointer !important; z-index: 10 !important;">
                 <span
                   style="font-size: 18px !important; font-weight: 900 !important; color: #92400e !important; margin: 0 !important; line-height: 1 !important;">M3</span>
@@ -579,10 +579,10 @@
                   style="font-size: 9px !important; font-weight: 800 !important; color: #d97706 !important; text-transform: uppercase !important; margin-top: 2px !important;">2
                   Ocupadas</span>
               </div>
-              <div id="chair-3-1" class="chair-btn-fixed chair-state-busy" draggable="true" style="position: absolute !important; top: 2px; left: 50%; transform: translateX(-50%); z-index: 25 !important; cursor: pointer !important; white-space: nowrap !important;" title="Mesa 3 Silla 1 (Ocupada) • Arrastra o clic para comanda">Silla 1 <span style="display:inline-block;background:#d97706;color:#fff;border-radius:10px;padding:0px 5px;font-size:9px;font-weight:900;margin-left:2px;">1</span></div>
-              <div id="chair-3-2" class="chair-btn-fixed chair-state-busy" draggable="true" style="position: absolute !important; right: 2px; top: 50%; transform: translateY(-50%); z-index: 25 !important; cursor: pointer !important; white-space: nowrap !important;" title="Mesa 3 Silla 2 (Ocupada) • Arrastra o clic para comanda">Silla 2 <span style="display:inline-block;background:#d97706;color:#fff;border-radius:10px;padding:0px 5px;font-size:9px;font-weight:900;margin-left:2px;">1</span></div>
-              <div id="chair-3-3" class="chair-btn-fixed chair-state-free" draggable="true" style="position: absolute !important; bottom: 2px; left: 50%; transform: translateX(-50%); z-index: 25 !important; cursor: pointer !important; white-space: nowrap !important;" title="Mesa 3 Silla 3 (Disponible) • Arrastra o clic para comanda">Silla 3</div>
-              <div id="chair-3-4" class="chair-btn-fixed chair-state-free" draggable="true" style="position: absolute !important; left: 2px; top: 50%; transform: translateY(-50%); z-index: 25 !important; cursor: pointer !important; white-space: nowrap !important;" title="Mesa 3 Silla 4 (Disponible) • Arrastra o clic para comanda">Silla 4</div>
+              <div id="chair-3-1" class="chair-btn-fixed chair-state-busy" draggable="true" data-action="clickSilla" data-args="3,1" style="position: absolute !important; top: 2px; left: 50%; transform: translateX(-50%); z-index: 25 !important; cursor: pointer !important; white-space: nowrap !important;" title="Mesa 3 Silla 1 (Ocupada) • Arrastra o clic para comanda">Silla 1 <span style="display:inline-block;background:#d97706;color:#fff;border-radius:10px;padding:0px 5px;font-size:9px;font-weight:900;margin-left:2px;">1</span></div>
+              <div id="chair-3-2" class="chair-btn-fixed chair-state-busy" draggable="true" data-action="clickSilla" data-args="3,2" style="position: absolute !important; right: 2px; top: 50%; transform: translateY(-50%); z-index: 25 !important; cursor: pointer !important; white-space: nowrap !important;" title="Mesa 3 Silla 2 (Ocupada) • Arrastra o clic para comanda">Silla 2 <span style="display:inline-block;background:#d97706;color:#fff;border-radius:10px;padding:0px 5px;font-size:9px;font-weight:900;margin-left:2px;">1</span></div>
+              <div id="chair-3-3" class="chair-btn-fixed chair-state-free" draggable="true" data-action="clickSilla" data-args="3,3" style="position: absolute !important; bottom: 2px; left: 50%; transform: translateX(-50%); z-index: 25 !important; cursor: pointer !important; white-space: nowrap !important;" title="Mesa 3 Silla 3 (Disponible) • Arrastra o clic para comanda">Silla 3</div>
+              <div id="chair-3-4" class="chair-btn-fixed chair-state-free" draggable="true" data-action="clickSilla" data-args="3,4" style="position: absolute !important; left: 2px; top: 50%; transform: translateY(-50%); z-index: 25 !important; cursor: pointer !important; white-space: nowrap !important;" title="Mesa 3 Silla 4 (Disponible) • Arrastra o clic para comanda">Silla 4</div>
             </div>
 
             <span id="table-label-3"
@@ -633,7 +633,7 @@
             style="display: grid !important; grid-template-columns: repeat(2, 1fr) !important; gap: 6px !important;">
             <!-- Generated dynamically for S1, S2, S3, S4, and any extra chairs (S5+) -->
           </div>
-          <button onclick="window.arrimarSillaExtraMesaActual();" type="button"
+          <button data-action="arrimarSillaExtraMesaActual" type="button"
             style="margin-top: 6px !important; width: 100% !important; padding: 6px 10px !important; background: rgba(56, 189, 248, 0.12) !important; color: #38bdf8 !important; border: 1px dashed rgba(56, 189, 248, 0.4) !important; border-radius: 8px !important; font-size: 11px !important; font-weight: 800 !important; cursor: pointer !important; display: flex !important; align-items: center !important; justify-content: center !important; gap: 6px !important; transition: all 0.2s ease !important;">
             <i class="fa-solid fa-plus-circle"></i> + Arrimar Silla Extra a esta Mesa
           </button>
@@ -664,7 +664,7 @@
         </div>
 
         <!-- BATCH SEND TO KITCHEN BUTTON -->
-        <button id="btnSidebarEnviarCocina" onclick="window.enviarACocinaComandaActiva();"
+        <button id="btnSidebarEnviarCocina" data-action="enviarACocinaComandaActiva"
           style="padding: 10px 12px !important; background: linear-gradient(135deg, #f59e0b, #d97706) !important; color: #0f172a !important; border: none !important; border-radius: 12px !important; font-size: 12px !important; font-weight: 900 !important; cursor: pointer !important; display: flex !important; align-items: center !important; justify-content: center !important; gap: 8px !important; box-shadow: 0 4px 12px rgba(245,158,11,0.3) !important;">
           <i class="fa-solid fa-paper-plane"></i> <span id="btnSidebarEnviarCocinaTxt">Enviar a Cocina / Barra</span>
         </button>
@@ -688,11 +688,11 @@
 
         <!-- Action Buttons -->
         <div style="display: flex !important; gap: 8px !important;">
-          <button onclick="window.abrirModalComandaActual();"
+          <button data-action="abrirModalComandaActual"
             style="flex: 1 !important; padding: 10px !important; background: #059669 !important; color: #ffffff !important; border: none !important; border-radius: 10px !important; font-size: 11px !important; font-weight: 800 !important; cursor: pointer !important; display: flex !important; align-items: center !important; justify-content: center !important; gap: 6px !important; box-shadow: 0 2px 8px rgba(5,150,105,0.3) !important;">
             <i class="fa-solid fa-credit-card"></i> Cobrar Silla
           </button>
-          <button onclick="window.verTodaLaMesaEnColumnas();"
+          <button data-action="verTodaLaMesaEnColumnas"
             style="flex: 1 !important; padding: 10px !important; background: #1e293b !important; color: #fbbf24 !important; border: 1px solid #334155 !important; border-radius: 10px !important; font-size: 11px !important; font-weight: 800 !important; cursor: pointer !important; display: flex !important; align-items: center !important; justify-content: center !important; gap: 6px !important;"
             title="Ver resumen de toda la mesa">
             <i class="fa-solid fa-table"></i> Toda la Mesa
@@ -723,7 +723,7 @@
               style="padding: 7px 14px !important; background: rgba(5, 150, 105, 0.2) !important; color: #34d399 !important; border: 1px solid rgba(5, 150, 105, 0.4) !important; border-radius: 12px !important; font-size: 13px !important; font-weight: 900 !important;">
               Mesa 2 • Silla 1
             </span>
-            <button onclick="window.volverAlCroquisGeneral();"
+            <button data-action="volverAlCroquisGeneral"
               style="background: linear-gradient(135deg, #0284c7, #0369a1) !important; color: #ffffff !important; border: none !important; border-radius: 12px !important; padding: 8px 16px !important; font-size: 12px !important; font-weight: 900 !important; cursor: pointer !important; display: flex !important; align-items: center !important; gap: 8px !important; box-shadow: 0 4px 12px rgba(2, 132, 199, 0.35) !important;">
               <i class="fa-solid fa-arrow-left"></i> ⬅ Volver al Plano de Mesas
             </button>
@@ -732,31 +732,31 @@
 
         <!-- CATEGORY CHIPS (DESAYUNOS ESTRUCTURADOS - BEBIDAS PRIMERO) -->
         <div style="display: flex !important; gap: 6px !important; flex-wrap: wrap !important;" id="waiterCatChips">
-          <button data-cat="Bebidas & Jugos" id="wchip-Bebidas" onclick="window.filtrarCategoria('Bebidas & Jugos')"
+          <button data-cat="Bebidas & Jugos" id="wchip-Bebidas" data-action="filtrarCategoria" data-args="Bebidas & Jugos"
             style="padding: 6px 11px !important; font-size: 11px !important; font-weight: 800 !important; border-radius: 10px !important; border: 1px solid #34d399 !important; background: #059669 !important; color: #ffffff !important; cursor: pointer !important;">☕
             Bebidas & Cafetería</button>
           <button data-cat="Al Centro (Para Compartir)" id="wchip-AlCentro"
-            onclick="window.filtrarCategoria('Al Centro (Para Compartir)')"
+            data-action="filtrarCategoria" data-args="Al Centro (Para Compartir)"
             style="padding: 6px 11px !important; font-size: 11px !important; font-weight: 800 !important; border-radius: 10px !important; border: 1px solid #334155 !important; background: #1e293b !important; color: #cbd5e1 !important; cursor: pointer !important;">🧺
             Al Centro</button>
           <button data-cat="Huevos & Omelettes" id="wchip-Huevos"
-            onclick="window.filtrarCategoria('Huevos & Omelettes')"
+            data-action="filtrarCategoria" data-args="Huevos & Omelettes"
             style="padding: 6px 11px !important; font-size: 11px !important; font-weight: 800 !important; border-radius: 10px !important; border: 1px solid #334155 !important; background: #1e293b !important; color: #cbd5e1 !important; cursor: pointer !important;">🍳
             Huevos & Omelettes</button>
           <button data-cat="Especialidades Mexicanas" id="wchip-Mex"
-            onclick="window.filtrarCategoria('Especialidades Mexicanas')"
+            data-action="filtrarCategoria" data-args="Especialidades Mexicanas"
             style="padding: 6px 11px !important; font-size: 11px !important; font-weight: 800 !important; border-radius: 10px !important; border: 1px solid #334155 !important; background: #1e293b !important; color: #cbd5e1 !important; cursor: pointer !important;">🥘
             Mexicanas</button>
           <button data-cat="Dulces & Americanos" id="wchip-Dulces"
-            onclick="window.filtrarCategoria('Dulces & Americanos')"
+            data-action="filtrarCategoria" data-args="Dulces & Americanos"
             style="padding: 6px 11px !important; font-size: 11px !important; font-weight: 800 !important; border-radius: 10px !important; border: 1px solid #334155 !important; background: #1e293b !important; color: #cbd5e1 !important; cursor: pointer !important;">🥞
             Dulces</button>
           <button data-cat="Combos Recomendados" id="wchip-Combos"
-            onclick="window.filtrarCategoria('Combos Recomendados')"
+            data-action="filtrarCategoria" data-args="Combos Recomendados"
             style="padding: 6px 11px !important; font-size: 11px !important; font-weight: 800 !important; border-radius: 10px !important; border: 1px solid #334155 !important; background: #1e293b !important; color: #cbd5e1 !important; cursor: pointer !important;">⭐
             Combos</button>
           <button data-cat="Menú Infantil (Kids)" id="wchip-Kids"
-            onclick="window.filtrarCategoria('Menú Infantil (Kids)')"
+            data-action="filtrarCategoria" data-args="Menú Infantil (Kids)"
             style="padding: 6px 11px !important; font-size: 11px !important; font-weight: 800 !important; border-radius: 10px !important; border: 1px solid #334155 !important; background: #1e293b !important; color: #cbd5e1 !important; cursor: pointer !important;">👶
             Menú Infantil</button>
         </div>
@@ -771,16 +771,16 @@
       <!-- FOOTER QUICK BUTTONS -->
       <div
         style="display: flex !important; gap: 8px !important; padding-top: 12px !important; border-top: 1px solid #334155 !important; flex-wrap: wrap !important;">
-        <button id="btnVerComandaActiva" onclick="window.abrirModalComandaActual();"
+        <button id="btnVerComandaActiva" data-action="abrirModalComandaActual"
           style="flex: 2 !important; min-width: 180px !important; padding: 12px !important; background: linear-gradient(135deg, #059669, #0d9488) !important; color: #ffffff !important; font-weight: 900 !important; font-size: 12px !important; border-radius: 12px !important; border: none !important; cursor: pointer !important; box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3) !important; display: flex !important; align-items: center !important; justify-content: center !important; gap: 6px !important;">
           <i class="fa-solid fa-receipt"></i> Ver Comanda & Cobrar
         </button>
-        <button onclick="window.irACocinaMesaActual();"
+        <button data-action="irACocinaMesaActual"
           style="flex: 1 !important; min-width: 120px !important; padding: 12px !important; background: #0f172a !important; color: #fbbf24 !important; border: 1px solid #f59e0b !important; font-weight: 900 !important; font-size: 11px !important; border-radius: 12px !important; cursor: pointer !important; display: flex !important; align-items: center !important; justify-content: center !important; gap: 6px !important;"
           title="Ver estado de preparación de esta mesa en Cocina (KDS)">
           <i class="fa-solid fa-fire-burner"></i> Ver en Cocina
         </button>
-        <button onclick="window.volverAlCroquisGeneral();"
+        <button data-action="volverAlCroquisGeneral"
           style="flex: 1 !important; min-width: 120px !important; padding: 12px !important; background: #1e293b !important; color: #38bdf8 !important; border: 1px solid #334155 !important; font-weight: 900 !important; font-size: 11px !important; border-radius: 12px !important; cursor: pointer !important; display: flex !important; align-items: center !important; justify-content: center !important; gap: 6px !important;">
           <i class="fa-solid fa-table-cells-large"></i> ⬅ Plano
         </button>
@@ -818,7 +818,7 @@
 </div>
 
 <!-- MODAL POPUP PARA COMANDA / TICKET POR SILLA -->
-<div id="modalComandaBackdrop" style="display: none;" onclick="if (event.target === this) window.cerrarModalComanda();">
+<div id="modalComandaBackdrop" style="display: none;" data-backdrop-action="cerrarModalComanda">
   <div id="modalComandaCard"
     style="background: #0f172a !important; border: 1px solid #1e293b !important; border-radius: 20px !important; padding: 24px !important; width: 100% !important; max-width: 640px !important; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8) !important; display: flex !important; flex-direction: column !important; gap: 16px !important;">
 
@@ -835,15 +835,15 @@
           Asignación Individual</p>
       </div>
       <div style="display: flex !important; align-items: center !important; gap: 8px !important;">
-        <button id="btnVerEnCocinaModal" onclick="window.irACocinaMesaActual();"
+        <button id="btnVerEnCocinaModal" data-action="irACocinaMesaActual"
           style="padding: 6px 12px !important; background: linear-gradient(135deg, #f59e0b, #d97706) !important; color: #0f172a !important; border: none !important; border-radius: 8px !important; font-size: 11px !important; font-weight: 900 !important; cursor: pointer !important; display: flex !important; align-items: center !important; gap: 5px !important; box-shadow: 0 2px 8px rgba(245, 158, 11, 0.3) !important;">
           <i class="fa-solid fa-fire-burner"></i> Ver en Cocina (KDS)
         </button>
-        <button id="btnVerTodaMesaHeader" onclick="window.verTodaLaMesaEnColumnas();"
+        <button id="btnVerTodaMesaHeader" data-action="verTodaLaMesaEnColumnas"
           style="display: none !important; padding: 6px 12px !important; background: rgba(56, 189, 248, 0.15) !important; color: #38bdf8 !important; border: 1px solid rgba(56, 189, 248, 0.3) !important; border-radius: 8px !important; font-size: 11px !important; font-weight: 800 !important; cursor: pointer !important; align-items: center !important; gap: 4px !important;">
           <i class="fa-solid fa-users"></i> Ver Toda la Mesa
         </button>
-        <button id="btnCloseModal" onclick="window.cerrarModalComanda();"
+        <button id="btnCloseModal" data-action="cerrarModalComanda"
           style="background: #1e293b !important; border: none !important; color: #94a3b8 !important; width: 32px !important; height: 32px !important; border-radius: 10px !important; font-weight: bold !important; cursor: pointer !important;">✕</button>
       </div>
     </div>
@@ -856,11 +856,11 @@
           <i class="fa-solid fa-layer-group" style="color: #10b981;"></i> Sillas de la mesa incluidas en este cobro:
         </span>
         <div style="display: flex !important; gap: 6px !important;">
-          <button type="button" onclick="window.comandaToggleTodaLaMesa();" id="btnComandaTodaMesa"
+          <button type="button" data-action="comandaToggleTodaLaMesa" id="btnComandaTodaMesa"
             style="padding: 3px 8px !important; font-size: 10px !important; font-weight: 800 !important; background: #059669 !important; color: #ffffff !important; border: none !important; border-radius: 6px !important; cursor: pointer !important;">
             Toda la Mesa
           </button>
-          <button type="button" onclick="window.comandaSoloEstaSilla();" id="btnComandaSoloEsta"
+          <button type="button" data-action="comandaSoloEstaSilla" id="btnComandaSoloEsta"
             style="padding: 3px 8px !important; font-size: 10px !important; font-weight: 800 !important; background: #1e293b !important; color: #cbd5e1 !important; border: 1px solid #334155 !important; border-radius: 6px !important; cursor: pointer !important;">
             Solo Titular
           </button>
@@ -922,21 +922,21 @@
     <div
       style="display: flex !important; flex-direction: column !important; gap: 10px !important; padding-top: 8px !important;">
       <div style="display: flex !important; gap: 10px !important;">
-        <button id="btnCobrarModalDirecto" onclick="window.cobrarSeleccionadasDesdeComanda();"
+        <button id="btnCobrarModalDirecto" data-action="cobrarSeleccionadasDesdeComanda"
           style="display: none !important; flex: 1.4 !important; padding: 12px !important; background: linear-gradient(135deg, #059669, #10b981) !important; color: #ffffff !important; font-weight: 900 !important; font-size: 12px !important; border-radius: 10px !important; border: none !important; cursor: pointer !important; align-items: center !important; justify-content: center !important; gap: 6px !important; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4) !important;">
           <i class="fa-solid fa-credit-card"></i> Cobrar Cuenta (<span id="txtBtnCobrarModal">$0.00</span>)
         </button>
-        <button id="btnPrecuenta" onclick="window.abrirPrecuenta();"
+        <button id="btnPrecuenta" data-action="abrirPrecuenta"
           style="flex: 1 !important; padding: 10px !important; background: #1e293b !important; color: #cbd5e1 !important; font-weight: 700 !important; font-size: 11px !important; border-radius: 10px !important; border: 1px solid #334155 !important; cursor: pointer !important; display: flex !important; align-items: center !important; justify-content: center !important; gap: 6px !important;">
           <i class="fa-solid fa-receipt" style="color: #38bdf8 !important;"></i> Precuenta Térmica
         </button>
       </div>
       <div style="display: flex !important; gap: 10px !important;">
-        <button id="btnLiberarSilla" onclick="window.liberarSillaActual();"
+        <button id="btnLiberarSilla" data-action="liberarSillaActual"
           style="padding: 10px 14px !important; background: rgba(220, 38, 38, 0.15) !important; color: #f87171 !important; font-weight: 800 !important; font-size: 11px !important; border-radius: 10px !important; border: 1px solid rgba(239, 68, 68, 0.3) !important; cursor: pointer !important; display: flex !important; align-items: center !important; justify-content: center !important; gap: 6px !important;">
           <i class="fa-solid fa-broom"></i> Desocupar Silla
         </button>
-        <button id="btnCerrarModalBottom" onclick="window.cerrarModalComanda(); window.volverAlCroquisGeneral();"
+        <button id="btnCerrarModalBottom" data-action="cerrarModalComandaYVolverCroquis"
           style="flex: 1.2 !important; padding: 10px !important; background: #1e293b !important; color: #38bdf8 !important; border: 1px solid #334155 !important; font-weight: 800 !important; font-size: 11px !important; border-radius: 10px !important; cursor: pointer !important; display: flex !important; align-items: center !important; justify-content: center !important; gap: 6px !important;">
           <i class="fa-solid fa-arrow-left"></i> ⬅ Volver al Plano de Mesas
         </button>
@@ -947,7 +947,7 @@
 </div>
 
 <!-- MODAL POP-MENU CONTEXTUAL DE MESA -->
-<div id="modalPopMenuMesaBackdrop" onclick="if (event.target === this) window.cerrarPopMenuMesa();"
+<div id="modalPopMenuMesaBackdrop" data-backdrop-action="cerrarPopMenuMesa"
   style="display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.75); backdrop-filter: blur(6px); z-index: 9999; align-items: center; justify-content: center; padding: 16px;">
   <div id="modalPopMenuMesaCard"
     style="background: #090d16 !important; border: 2px solid #1e293b !important; border-radius: 20px !important; width: 100% !important; max-width: 440px !important; box-shadow: 0 25px 50px rgba(0, 0, 0, 0.9) !important; color: #f8fafc !important; padding: 22px !important; display: flex !important; flex-direction: column !important; gap: 14px !important;">
@@ -968,7 +968,7 @@
             style="font-size: 11px !important; font-weight: 800 !important; color: #fbbf24 !important;">🟡 2 Comensal(es) • Total Mesa: $0.00</span>
         </div>
       </div>
-      <button onclick="window.cerrarPopMenuMesa();"
+      <button data-action="cerrarPopMenuMesa"
         style="background: #1e293b !important; border: none !important; color: #94a3b8 !important; width: 32px !important; height: 32px !important; border-radius: 8px !important; font-weight: bold !important; cursor: pointer !important;">✕</button>
     </div>
 
@@ -991,7 +991,7 @@
     <!-- Opciones de Acción del Pop-Menu -->
     <div style="display: flex !important; flex-direction: column !important; gap: 8px !important;">
       <!-- Opción 1: Pedir / Agregar al Centro (Mesa) -->
-      <button id="btnPopMenuPedirAlCentro" onclick="window.popMenuAccionPedirAlCentro();"
+      <button id="btnPopMenuPedirAlCentro" data-action="popMenuAccionPedirAlCentro"
         style="width: 100% !important; padding: 13px 16px !important; background: linear-gradient(135deg, #d97706, #b45309) !important; color: #ffffff !important; border: 1px solid #f59e0b !important; border-radius: 12px !important; font-size: 13px !important; font-weight: 900 !important; cursor: pointer !important; display: flex !important; align-items: center !important; justify-content: space-between !important; box-shadow: 0 4px 14px rgba(217, 119, 6, 0.4) !important;">
         <span style="display: flex !important; align-items: center !important; gap: 8px !important;">
           <span style="font-size: 17px !important;">⭐</span>
@@ -1002,7 +1002,7 @@
       </button>
 
       <!-- Opción 2: Checar en Cocina (KDS) -->
-      <button id="btnPopMenuChecarCocina" onclick="window.popMenuAccionChecarCocina();"
+      <button id="btnPopMenuChecarCocina" data-action="popMenuAccionChecarCocina"
         style="width: 100% !important; padding: 11px 16px !important; background: #0f172a !important; color: #f8fafc !important; border: 1px solid #334155 !important; border-radius: 12px !important; font-size: 12px !important; font-weight: 800 !important; cursor: pointer !important; display: flex !important; align-items: center !important; justify-content: space-between !important;">
         <span style="display: flex !important; align-items: center !important; gap: 8px !important;">
           <i class="fa-solid fa-fire-burner" style="font-size: 15px !important; color: #f59e0b !important;"></i>
@@ -1013,7 +1013,7 @@
       </button>
 
       <!-- Opción 3: Ver Comanda Completa de la Mesa -->
-      <button onclick="window.popMenuAccionAbrirComanda();"
+      <button data-action="popMenuAccionAbrirComanda"
         style="width: 100% !important; padding: 11px 16px !important; background: #0f172a !important; color: #f8fafc !important; border: 1px solid #334155 !important; border-radius: 12px !important; font-size: 12px !important; font-weight: 800 !important; cursor: pointer !important; display: flex !important; align-items: center !important; justify-content: space-between !important;">
         <span style="display: flex !important; align-items: center !important; gap: 8px !important;">
           <i class="fa-solid fa-receipt" style="color: #34d399 !important;"></i>
@@ -1023,7 +1023,7 @@
       </button>
 
       <!-- Opción 4: Cobrar / Precuenta -->
-      <button onclick="window.popMenuAccionCobrar();"
+      <button data-action="popMenuAccionCobrar"
         style="width: 100% !important; padding: 11px 16px !important; background: #0f172a !important; color: #f8fafc !important; border: 1px solid #334155 !important; border-radius: 12px !important; font-size: 12px !important; font-weight: 800 !important; cursor: pointer !important; display: flex !important; align-items: center !important; justify-content: space-between !important;">
         <span style="display: flex !important; align-items: center !important; gap: 8px !important;">
           <i class="fa-solid fa-credit-card" style="color: #38bdf8 !important;"></i>
@@ -1037,7 +1037,7 @@
 </div>
 
 <!-- MODAL PRECUENTA TÉRMICA & DIVISIÓN DE CUENTAS INTELIGENTE -->
-<div id="modalPrecuentaBackdrop" style="display: none;" onclick="if (event.target === this) window.cerrarPrecuenta();">
+<div id="modalPrecuentaBackdrop" style="display: none;" data-backdrop-action="cerrarPrecuenta">
   <div
     style="background: #ffffff !important; color: #0f172a !important; border-radius: 18px !important; padding: 22px !important; width: 100% !important; max-width: 480px !important; max-height: 92vh !important; overflow-y: auto !important; box-shadow: 0 25px 50px rgba(0,0,0,0.85) !important; font-family: 'Courier New', Courier, monospace !important; display: flex !important; flex-direction: column !important; gap: 10px !important;">
     
@@ -1052,19 +1052,19 @@
 
     <!-- SELECTOR DE MODALIDAD DE DIVISIÓN DE CUENTA -->
     <div style="background: #0f172a !important; padding: 6px !important; border-radius: 12px !important; display: grid !important; grid-template-columns: repeat(2, 1fr) !important; gap: 4px !important;">
-      <button type="button" id="btnTabPrecuenta_indiv" onclick="window.setPrecuentaModo('individual')"
+      <button type="button" id="btnTabPrecuenta_indiv" data-action="setPrecuentaModo" data-args="individual"
         style="padding: 6px 8px !important; font-size: 10px !important; font-weight: 800 !important; border-radius: 8px !important; border: none !important; cursor: pointer !important; background: #059669 !important; color: #ffffff !important; display: flex !important; align-items: center !important; justify-content: center !important; gap: 4px !important;">
         🪑 1. Cuentas Sillas & Centro
       </button>
-      <button type="button" id="btnTabPrecuenta_anfitrion" onclick="window.setPrecuentaModo('anfitrion')"
+      <button type="button" id="btnTabPrecuenta_anfitrion" data-action="setPrecuentaModo" data-args="anfitrion"
         style="padding: 6px 8px !important; font-size: 10px !important; font-weight: 800 !important; border-radius: 8px !important; border: none !important; cursor: pointer !important; background: #1e293b !important; color: #94a3b8 !important; display: flex !important; align-items: center !important; justify-content: center !important; gap: 4px !important;">
         🎁 2. Anfitrión Invita Comida
       </button>
-      <button type="button" id="btnTabPrecuenta_split" onclick="window.setPrecuentaModo('split_comida')"
+      <button type="button" id="btnTabPrecuenta_split" data-action="setPrecuentaModo" data-args="split_comida"
         style="padding: 6px 8px !important; font-size: 10px !important; font-weight: 800 !important; border-radius: 8px !important; border: none !important; cursor: pointer !important; background: #1e293b !important; color: #94a3b8 !important; display: flex !important; align-items: center !important; justify-content: center !important; gap: 4px !important;">
         ⚖️ 3. Dividir Comida Equitativa
       </button>
-      <button type="button" id="btnTabPrecuenta_mesa" onclick="window.setPrecuentaModo('mesa_completa')"
+      <button type="button" id="btnTabPrecuenta_mesa" data-action="setPrecuentaModo" data-args="mesa_completa"
         style="padding: 6px 8px !important; font-size: 10px !important; font-weight: 800 !important; border-radius: 8px !important; border: none !important; cursor: pointer !important; background: #1e293b !important; color: #94a3b8 !important; display: flex !important; align-items: center !important; justify-content: center !important; gap: 4px !important;">
         📄 4. Toda la Mesa (1 solo pago)
       </button>
@@ -1098,15 +1098,15 @@
     </div>
 
     <div style="display: flex !important; gap: 6px !important; margin-top: 2px !important;">
-      <button onclick="window.cobrarSillasPrecuenta();" id="btnCobrarPrecuentaGlobal"
+      <button data-action="cobrarSillasPrecuenta" id="btnCobrarPrecuentaGlobal"
         style="flex: 1.4 !important; padding: 9px !important; background: #059669 !important; color: #ffffff !important; border: none !important; border-radius: 8px !important; font-size: 11px !important; font-weight: 900 !important; cursor: pointer !important; display: flex !important; align-items: center !important; justify-content: center !important; gap: 4px !important;">
         💳 Cobrar Selección (<span id="btnCobrarMonto">$0.00</span>)
       </button>
-      <button onclick="window.print();"
+      <button data-action="print"
         style="flex: 1 !important; padding: 9px !important; background: #0f172a !important; color: #ffffff !important; border: none !important; border-radius: 8px !important; font-size: 11px !important; font-weight: bold !important; cursor: pointer !important;">
         🖨️ Imprimir
       </button>
-      <button onclick="window.cerrarPrecuenta();"
+      <button data-action="cerrarPrecuenta"
         style="flex: 0.8 !important; padding: 9px !important; background: #e2e8f0 !important; color: #334155 !important; border: none !important; border-radius: 8px !important; font-size: 11px !important; font-weight: bold !important; cursor: pointer !important;">
         ✕ Cerrar
       </button>
@@ -1115,7 +1115,7 @@
 </div>
 
 <!-- MODAL PASARELA DE COBRO Y LIQUIDACIÓN MULTI-MÉTODO (MERCADO PAGO POINT, SANTANDER, EFECTIVO, QR, MIXTO) -->
-<div id="modalPasarelaCobroBackdrop" style="display: none;" onclick="if (event.target === this) window.cerrarModalPasarelaCobro();">
+<div id="modalPasarelaCobroBackdrop" style="display: none;" data-backdrop-action="cerrarModalPasarelaCobro">
   <div id="modalPasarelaCobroCard"
     style="background: #090d16 !important; border: 1px solid #1e293b !important; border-radius: 20px !important; width: 100% !important; max-width: 580px !important; max-height: 90vh !important; overflow-y: auto !important; box-shadow: 0 25px 50px rgba(0,0,0,0.9) !important; color: #f8fafc !important; padding: 22px !important; display: flex !important; flex-direction: column !important; gap: 14px !important; animation: slideUp 0.25s ease-out !important;">
 
@@ -1132,7 +1132,7 @@
           Mesa 2 • Sillas 1, 3, 4
         </p>
       </div>
-      <button onclick="window.cerrarModalPasarelaCobro();"
+      <button data-action="cerrarModalPasarelaCobro"
         style="background: #1e293b !important; border: none !important; color: #94a3b8 !important; width: 30px !important; height: 30px !important; border-radius: 8px !important; font-weight: bold !important; cursor: pointer !important;">✕</button>
     </div>
 
@@ -1196,15 +1196,15 @@
       </div>
 
       <div style="display: grid !important; grid-template-columns: repeat(5, 1fr) !important; gap: 6px !important;">
-        <button type="button" class="btn-tip-pct" onclick="window.setPasarelaTipPct(0)" id="btnTipPct0"
+        <button type="button" class="btn-tip-pct" data-action="setPasarelaTipPct" data-args="0" id="btnTipPct0"
           style="padding: 6px !important; border-radius: 6px !important; font-size: 10px !important; font-weight: 800 !important; cursor: pointer !important; background: #1e293b !important; color: #94a3b8 !important; border: 1px solid #334155 !important;">0%</button>
-        <button type="button" class="btn-tip-pct" onclick="window.setPasarelaTipPct(10)" id="btnTipPct10"
+        <button type="button" class="btn-tip-pct" data-action="setPasarelaTipPct" data-args="10" id="btnTipPct10"
           style="padding: 6px !important; border-radius: 6px !important; font-size: 10px !important; font-weight: 800 !important; cursor: pointer !important; background: #064e3b !important; color: #34d399 !important; border: 1px solid #10b981 !important;">10%</button>
-        <button type="button" class="btn-tip-pct" onclick="window.setPasarelaTipPct(15)" id="btnTipPct15"
+        <button type="button" class="btn-tip-pct" data-action="setPasarelaTipPct" data-args="15" id="btnTipPct15"
           style="padding: 6px !important; border-radius: 6px !important; font-size: 10px !important; font-weight: 800 !important; cursor: pointer !important; background: #1e293b !important; color: #94a3b8 !important; border: 1px solid #334155 !important;">15%</button>
-        <button type="button" class="btn-tip-pct" onclick="window.setPasarelaTipPct(20)" id="btnTipPct20"
+        <button type="button" class="btn-tip-pct" data-action="setPasarelaTipPct" data-args="20" id="btnTipPct20"
           style="padding: 6px !important; border-radius: 6px !important; font-size: 10px !important; font-weight: 800 !important; cursor: pointer !important; background: #1e293b !important; color: #94a3b8 !important; border: 1px solid #334155 !important;">20%</button>
-        <button type="button" class="btn-tip-pct" onclick="window.setPasarelaTipPct('libre')" id="btnTipPctLibre"
+        <button type="button" class="btn-tip-pct" data-action="setPasarelaTipPct" data-args="libre" id="btnTipPctLibre"
           style="padding: 6px !important; border-radius: 6px !important; font-size: 10px !important; font-weight: 800 !important; cursor: pointer !important; background: #1e293b !important; color: #94a3b8 !important; border: 1px solid #334155 !important;">Libre</button>
       </div>
 
@@ -1239,25 +1239,25 @@
         <i class="fa-solid fa-wallet" style="color: #38bdf8;"></i> Selecciona el Método de Pago:
       </span>
       <div style="display: grid !important; grid-template-columns: repeat(5, 1fr) !important; gap: 6px !important;">
-        <button type="button" onclick="window.selectPasarelaMetodo('MERCADOPAGO')" id="btnTabMP"
+        <button type="button" data-action="selectPasarelaMetodo" data-args="MERCADOPAGO" id="btnTabMP"
           class="btn-pasarela-tab"
           style="padding: 8px 4px !important; border-radius: 8px !important; font-size: 10px !important; font-weight: 800 !important; cursor: pointer !important; background: #064e3b !important; color: #34d399 !important; border: 2px solid #10b981 !important; display: flex !important; flex-direction: column !important; align-items: center !important; gap: 3px !important;">
           <i class="fa-solid fa-mobile-screen" style="font-size: 14px;"></i> Terminal MP
         </button>
-        <button type="button" onclick="window.selectPasarelaMetodo('TERMINAL_SANTANDER')" id="btnTabSantander"
+        <button type="button" data-action="selectPasarelaMetodo" data-args="TERMINAL_SANTANDER" id="btnTabSantander"
           class="btn-pasarela-tab"
           style="padding: 8px 4px !important; border-radius: 8px !important; font-size: 10px !important; font-weight: 800 !important; cursor: pointer !important; background: #1e293b !important; color: #94a3b8 !important; border: 1px solid #334155 !important; display: flex !important; flex-direction: column !important; align-items: center !important; gap: 3px !important;">
           <i class="fa-solid fa-credit-card" style="font-size: 14px;"></i> Santander
         </button>
-        <button type="button" onclick="window.selectPasarelaMetodo('CASH')" id="btnTabCash" class="btn-pasarela-tab"
+        <button type="button" data-action="selectPasarelaMetodo" data-args="CASH" id="btnTabCash" class="btn-pasarela-tab"
           style="padding: 8px 4px !important; border-radius: 8px !important; font-size: 10px !important; font-weight: 800 !important; cursor: pointer !important; background: #1e293b !important; color: #94a3b8 !important; border: 1px solid #334155 !important; display: flex !important; flex-direction: column !important; align-items: center !important; gap: 3px !important;">
           <i class="fa-solid fa-money-bill-wave" style="font-size: 14px;"></i> Efectivo
         </button>
-        <button type="button" onclick="window.selectPasarelaMetodo('QR_LINK')" id="btnTabQR" class="btn-pasarela-tab"
+        <button type="button" data-action="selectPasarelaMetodo" data-args="QR_LINK" id="btnTabQR" class="btn-pasarela-tab"
           style="padding: 8px 4px !important; border-radius: 8px !important; font-size: 10px !important; font-weight: 800 !important; cursor: pointer !important; background: #1e293b !important; color: #94a3b8 !important; border: 1px solid #334155 !important; display: flex !important; flex-direction: column !important; align-items: center !important; gap: 3px !important;">
           <i class="fa-solid fa-qrcode" style="font-size: 14px;"></i> QR / Link
         </button>
-        <button type="button" onclick="window.selectPasarelaMetodo('MIXTO')" id="btnTabMixto" class="btn-pasarela-tab"
+        <button type="button" data-action="selectPasarelaMetodo" data-args="MIXTO" id="btnTabMixto" class="btn-pasarela-tab"
           style="padding: 8px 4px !important; border-radius: 8px !important; font-size: 10px !important; font-weight: 800 !important; cursor: pointer !important; background: #1e293b !important; color: #94a3b8 !important; border: 1px solid #334155 !important; display: flex !important; flex-direction: column !important; align-items: center !important; gap: 3px !important;">
           <i class="fa-solid fa-layer-group" style="font-size: 14px;"></i> Mixto
         </button>
@@ -1336,14 +1336,14 @@
           <i class="fa-solid fa-money-bill-wave" style="color: #10b981;"></i> Cobro en Efectivo
         </span>
         <div style="display: flex !important; gap: 4px !important;">
-          <button type="button" onclick="window.setCashExacto()"
+          <button type="button" data-action="setCashExacto"
             style="padding: 3px 8px !important; font-size: 10px !important; font-weight: bold !important; background: #1e293b !important; color: #38bdf8 !important; border: 1px solid #334155 !important; border-radius: 6px !important; cursor: pointer !important;">Monto
             Exacto</button>
-          <button type="button" onclick="window.setCashBillete(200)"
+          <button type="button" data-action="setCashBillete" data-args="200"
             style="padding: 3px 6px !important; font-size: 10px !important; font-weight: bold !important; background: #1e293b !important; color: #cbd5e1 !important; border: 1px solid #334155 !important; border-radius: 6px !important; cursor: pointer !important;">$200</button>
-          <button type="button" onclick="window.setCashBillete(500)"
+          <button type="button" data-action="setCashBillete" data-args="500"
             style="padding: 3px 6px !important; font-size: 10px !important; font-weight: bold !important; background: #1e293b !important; color: #cbd5e1 !important; border: 1px solid #334155 !important; border-radius: 6px !important; cursor: pointer !important;">$500</button>
-          <button type="button" onclick="window.setCashBillete(1000)"
+          <button type="button" data-action="setCashBillete" data-args="1000"
             style="padding: 3px 6px !important; font-size: 10px !important; font-weight: bold !important; background: #1e293b !important; color: #cbd5e1 !important; border: 1px solid #334155 !important; border-radius: 6px !important; cursor: pointer !important;">$1000</button>
         </div>
       </div>
@@ -1389,7 +1389,7 @@
         <span style="font-size: 12px !important; font-weight: 900 !important; color: #ffffff !important;">
           <i class="fa-solid fa-layer-group" style="color: #a7f3d0;"></i> Pagos Divididos / Múltiples Métodos
         </span>
-        <button type="button" onclick="window.addPasarelaPagoRow()"
+        <button type="button" data-action="addPasarelaPagoRow"
           style="padding: 4px 8px !important; font-size: 10px !important; font-weight: bold !important; background: #059669 !important; color: #ffffff !important; border: none !important; border-radius: 6px !important; cursor: pointer !important;">
           + Agregar Método
         </button>
@@ -1400,7 +1400,7 @@
         style="display: flex !important; justify-content: space-between !important; align-items: center !important; background: #0f172a !important; padding: 6px 10px !important; border-radius: 8px !important; border: 1px dashed #334155 !important; font-size: 11px !important;">
         <span>Cubierto: <b id="pasarelaMixtoCubierto" style="color: #38bdf8;">$0.00</b></span>
         <span>Restante: <b id="pasarelaMixtoRestante" style="color: #fbbf24;">$0.00</b></span>
-        <button type="button" onclick="window.autoCompletarRemanenteMixto()" id="btnAutoRemanente"
+        <button type="button" data-action="autoCompletarRemanenteMixto" id="btnAutoRemanente"
           style="padding: 2px 8px !important; font-size: 10px !important; font-weight: bold !important; background: rgba(56,189,248,0.2) !important; color: #38bdf8 !important; border: 1px solid rgba(56,189,248,0.4) !important; border-radius: 6px !important; cursor: pointer !important;">
           👉 Aplicar Restante
         </button>
@@ -1431,11 +1431,11 @@
 
     <!-- Botones de Acción -->
     <div style="display: flex !important; gap: 8px !important;">
-      <button onclick="window.ejecutarLiquidacionPasarela();" id="btnPasarelaConfirmarCobro"
+      <button data-action="ejecutarLiquidacionPasarela" id="btnPasarelaConfirmarCobro"
         style="flex: 1.5 !important; padding: 12px !important; background: linear-gradient(135deg, #059669, #10b981) !important; color: #ffffff !important; border: none !important; border-radius: 10px !important; font-size: 12px !important; font-weight: 900 !important; cursor: pointer !important; display: flex !important; align-items: center !important; justify-content: center !important; gap: 6px !important; box-shadow: 0 4px 12px rgba(16,185,129,0.4) !important;">
         <i class="fa-solid fa-check-circle"></i> Confirmar y Registrar Pago
       </button>
-      <button onclick="window.cerrarModalPasarelaCobro();"
+      <button data-action="cerrarModalPasarelaCobro"
         style="flex: 0.8 !important; padding: 12px !important; background: #1e293b !important; color: #cbd5e1 !important; border: 1px solid #334155 !important; border-radius: 10px !important; font-size: 12px !important; font-weight: 700 !important; cursor: pointer !important;">
         Cancelar
       </button>
@@ -1447,7 +1447,7 @@
 <!-- MODAL DE FICHA TÉCNICA Y RECETA DE COCINA -->
 <div id="modalRecetaBackdrop"
   style="display: none !important; position: fixed !important; inset: 0 !important; z-index: 100000 !important; background: rgba(2, 6, 23, 0.85) !important; backdrop-filter: blur(12px) !important; align-items: center !important; justify-content: center !important; padding: 16px !important;"
-  onclick="if(event.target === this) window.cerrarModalReceta();">
+  data-backdrop-action="cerrarModalReceta">
   <div id="modalRecetaCard"
     style="background: #090d16 !important; border: 1px solid #334155 !important; border-radius: 20px !important; width: 100% !important; max-width: 580px !important; padding: 20px !important; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.8), 0 0 30px rgba(56,189,248,0.2) !important; display: flex !important; flex-direction: column !important; gap: 12px !important; color: #f8fafc !important; max-height: 90vh !important; overflow-y: auto !important;">
 
@@ -1466,7 +1466,7 @@
             Chilaquiles Verdes o Rojos</h2>
         </div>
       </div>
-      <button onclick="window.cerrarModalReceta();"
+      <button data-action="cerrarModalReceta"
         style="background: #1e293b !important; border: none !important; color: #94a3b8 !important; width: 30px !important; height: 30px !important; border-radius: 8px !important; font-weight: bold !important; cursor: pointer !important;">✕</button>
     </div>
 
@@ -1527,7 +1527,7 @@
     </div>
 
     <!-- FOOTER -->
-    <button onclick="window.cerrarModalReceta();"
+    <button data-action="cerrarModalReceta"
       style="padding: 10px !important; background: #1e293b !important; color: #f8fafc !important; border: 1px solid #334155 !important; border-radius: 10px !important; font-size: 12px !important; font-weight: 800 !important; cursor: pointer !important;">
       Cerrar Ficha Técnica
     </button>
@@ -1535,9 +1535,4 @@
 </div>
 
 
-<script>
-  if (typeof window.initPOSMesero === 'function') {
-    window.initPOSMesero();
-  }
-</script>
 </anvil-form>

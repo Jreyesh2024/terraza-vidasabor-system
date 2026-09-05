@@ -2,60 +2,6 @@ app_id: terraza_vidasabor_app
 metadata: {title: VidaSabor Terraza}
 name: La Terraza de Vida & Sabor
 native_deps: |
-  <script>
-    window.navMenu = function(modulo) {
-      if (typeof window.anvilAppNav === 'function') {
-        window.anvilAppNav(modulo);
-      } else if (typeof window.navMenuPy === 'function') {
-        window.navMenuPy(modulo);
-      } else {
-        console.log("Navegando a:", modulo);
-      }
-    };
-    if (!window.clickSilla) window.clickSilla = function(m, s) { if (window.handleSillaClick) window.handleSillaClick(m, s); };
-    if (!window.clickMesa) window.clickMesa = function(m) { if (window.handleMesaClick) window.handleMesaClick(m); };
-    if (!window.filtrarCategoria) window.filtrarCategoria = function(c) { if (window.handleFiltrarCategoria) window.handleFiltrarCategoria(c); };
-    if (!window.iniciarModoMover) window.iniciarModoMover = function() { if (window.handleIniciarModoMover) window.handleIniciarModoMover(); };
-    if (!window.abrirModalComandaActual) window.abrirModalComandaActual = function() { if (window.handleAbrirModal) window.handleAbrirModal(); };
-
-    // Ejecutor universal de scripts para formularios HtmlTemplate de Anvil
-    window.runFormScripts = function(node) {
-      if (!node) return;
-      var root = (node.nodeType === 1) ? node : document;
-      var scripts = (root.tagName === 'SCRIPT') ? [root] : root.querySelectorAll('script');
-      scripts.forEach(function(s) {
-        if (!s.dataset.executed) {
-          s.dataset.executed = 'true';
-          var newScript = document.createElement('script');
-          Array.from(s.attributes).forEach(function(attr) {
-            newScript.setAttribute(attr.name, attr.value);
-          });
-          newScript.textContent = s.textContent;
-          document.body.appendChild(newScript);
-          newScript.remove();
-        }
-      });
-    };
-
-    try {
-      var formObserver = new MutationObserver(function(mutations) {
-        mutations.forEach(function(m) {
-          m.addedNodes.forEach(function(n) {
-            if (n && n.nodeType === 1) {
-              window.runFormScripts(n);
-            }
-          });
-        });
-      });
-      if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', function() {
-          formObserver.observe(document.body, { childList: true, subtree: true });
-        });
-      } else if (document.body) {
-        formObserver.observe(document.body, { childList: true, subtree: true });
-      }
-    } catch(e) { console.warn("Observer error:", e); }
-  </script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="_/theme/theme.css">
   <script src="_/theme/pos_mesero.js"></script>
