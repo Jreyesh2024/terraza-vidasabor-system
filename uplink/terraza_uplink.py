@@ -589,6 +589,14 @@ def alias_guardar_producto_terraza(prod_dict):
 def alias_cambiar_disponibilidad_terraza(prod_id, disponible):
     return uplink_cambiar_disponibilidad_producto(prod_id, disponible)
 
+@anvil.server.callable('get_recetas_cocina_terraza')
+def alias_get_recetas_cocina_terraza():
+    return uplink_get_recetas_cocina()
+
+@anvil.server.callable('get_areas_terraza')
+def alias_get_areas_terraza():
+    return uplink_get_areas()
+
 # ----------------------------------------------------
 # CONEXIÓN PRINCIPAL UPLINK DE ANVIL
 # ----------------------------------------------------
