@@ -15,21 +15,7 @@ class POSMesero(POSMeseroTemplate):
       anvil.js.window.anvilGetCuentasServidor = self.obtener_cuentas_servidor
       anvil.js.window.anvilSyncCuenta = self.sincronizar_cuenta_servidor
 
-      # Fallbacks inmediatos para evitar TypeError antes o durante la carga de scripts
-      def _py_click_silla(m, s):
-        if hasattr(anvil.js.window, 'handleSillaClick'):
-          anvil.js.window.handleSillaClick(m, s)
-        else:
-          print(f"[POSMesero] clickSilla({m}, {s}) ejecutado")
-
-      def _py_click_mesa(m):
-        if hasattr(anvil.js.window, 'handleMesaClick'):
-          anvil.js.window.handleMesaClick(m)
-        else:
-          print(f"[POSMesero] clickMesa({m}) ejecutado")
-
-      anvil.js.window.clickSilla = _py_click_silla
-      anvil.js.window.clickMesa = _py_click_mesa
+      pass
     except Exception as e:
       print(f"[POSMesero] Error exponiendo funciones en window: {e}")
 
