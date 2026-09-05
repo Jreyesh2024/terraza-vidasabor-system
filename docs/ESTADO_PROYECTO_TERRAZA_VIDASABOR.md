@@ -1,8 +1,8 @@
 # Estado del Proyecto: La Terraza de Vida & Sabor (V&S)
 
 > **Documento de Control de Avances, Arquitectura y Estado de Funcionalidades**  
-> **Fecha:** 4 de Septiembre de 2026  
-> **Sistema:** POS Inteligente + Menú Digital QR + KDS Cocina + PostgreSQL + Anvil Uplink
+> **Fecha:** 5 de Septiembre de 2026  
+> **Sistema:** Dashboard Ejecutivo Hub + POS Inteligente + Menú Digital QR + KDS Cocina + PostgreSQL + Anvil Uplink
 
 ---
 
@@ -11,11 +11,12 @@
 El sistema **La Terraza de Vida & Sabor** es una plataforma integral e independiente para la operación gastronómica de la Terraza, diseñada para funcionar con una base de datos local en **PostgreSQL (`dbterrazavidasabor`)** alojada en la Mac Mini y una interfaz gráfica responsiva operada a través de **Anvil.works**.
 
 ### Objetivos Clave:
-1. **Comanda y Atención por Silla (Portavasos QR):** Cada asiento físico (Mesa 1..3, Sillas 1..4) cuenta con un código QR único (ej. `PV-011`, `PV-012`). El comensal escanea desde su celular y puede armar su comanda individual o pedir platillos compartidos al centro.
-2. **Croquis Interactivo del Mesero (`POSMesero`):** Panel táctil/desktop con vista panorámica de las 3 mesas, estados de sillas en vivo (Verde = Disponible, Naranja = Ocupada, Azul = Sobremesa/Pagada), unión de mesas y *Drag & Drop* de sillas para transferir o unificar consumos.
-3. **Cobro Flexible y Cuentas Divididas:** Permite cobrar por silla individual, seleccionar varias sillas en un solo ticket o cobrar la mesa completa, con cálculo de IVA (16%), propinas y métodos de pago bancarizados o efectivo.
-4. **Monitor de Cocina / KDS (`MonitorCocina`):** Despacho de comandas separadas por estación de preparación (*Cocina* vs *Barra de Café*).
-5. **Única Fuente de la Verdad:** Toda la información de catálogo, categorías, mesas y transacciones reside de forma centralizada en la base de datos PostgreSQL.
+1. **Dashboard Ejecutivo Hub (`AdminMenu`):** Vista gerencial unificada con 4 KPIs principales (Ventas Semanales, Platillo Estrella, Efectivo en Caja y Bancos, Mesas Ocupadas), Comandas Activas en tiempo real, Alertas de Insumos Críticos para compras y Modal de Gestión Dinámica de Platillos y Categorías en PostgreSQL. Formulario de inicio (`startup_form`).
+2. **Croquis Interactivo del Mesero (`POSMesero`):** Panel táctil/desktop con vista de 12 mesas modulares en 4 áreas físicas (Palapa, Jardín, Pérgola, Barra), estados de sillas en vivo (Verde = Libre, Naranja = Ocupada, Azul = Sobremesa/Pagada), unión de mesas para grupos de 8 a 12 pax, sillas arrimables dinámicas y *Drag & Drop*.
+3. **Comanda y Atención por Silla (Portavasos QR):** Cada asiento físico cuenta con un código QR único (`PV-011` a `PV-0124`). El comensal escanea desde su celular y puede armar su comanda individual o pedir platillos compartidos al centro.
+4. **Cobro Flexible y Cuentas Divididas:** Permite cobrar por silla individual, seleccionar varias sillas en un solo ticket o cobrar la mesa completa, con cálculo de IVA (16%), propinas y métodos de pago bancarizados (Mercado Pago Point Smart 2, Santander) o efectivo.
+5. **Monitor de Cocina / KDS (`MonitorCocina`):** Despacho de comandas separadas por estación de preparación (*Cocina*, *Plancha*, *Barra de Bebidas*), con recetas estandarizadas y batch cooking.
+6. **Única Fuente de la Verdad:** Toda la información de catálogo (43 productos, 7 categorías), mesas (12), sillas y transacciones reside centralizada en PostgreSQL.
 
 ---
 
@@ -24,9 +25,11 @@ El sistema **La Terraza de Vida & Sabor** es una plataforma integral e independi
 ```mermaid
 graph TD
   subgraph Clientes y Estaciones
+    Admin[📊 Dashboard Ejecutivo<br/>AdminMenu.html / AdminMenu.py]
     Phone[📱 Celular del Comensal<br/>Menu.html / Menu.py]
     PC_POS[💻 Pantalla Mesero / Caja<br/>POSMesero.html / POSMesero.py]
     PC_KDS[🍳 Monitor Cocina / KDS<br/>MonitorCocina.html]
+    Fiscal[🏛️ Monitor Fiscal & Lealtad<br/>MonitorFiscal / ClientesLealtad]
   end
 
   subgraph Nube Anvil
@@ -38,9 +41,11 @@ graph TD
     PostgresDB[(🐘 PostgreSQL dbterrazavidasabor<br/>Tablas: mesas, productos_menu, comandas, etc.)]
   end
 
+  Admin -->|anvil.server.call| AnvilCloud
   Phone -->|anvil.server.call| AnvilCloud
   PC_POS -->|anvil.server.call| AnvilCloud
   PC_KDS -->|anvil.server.call| AnvilCloud
+  Fiscal -->|anvil.server.call| AnvilCloud
   AnvilCloud -->|Uplink RPC| UplinkDaemon
   UplinkDaemon -->|psycopg2 / SQL| PostgresDB
 ```
@@ -51,14 +56,15 @@ graph TD
 
 | Módulo / Archivo | Ubicación en Proyecto | Función Principal | Estado |
 | :--- | :--- | :--- | :--- |
-| **Base de Datos** | `database/init_terraza.sql` | Esquema relacional PostgreSQL (`categorias`, `productos_menu`, `mesas`, `comandas`, `detalle_comanda`, `pagos`). | ✅ Completo |
-| **Uplink Daemon** | `uplink/terraza_uplink.py` | Servicio persistente en Python que conecta Anvil con PostgreSQL `dbterrazavidasabor`. | ✅ Conectado |
-| **Server Module** | `server_code/ServerModule1.py`<br/>`server/ServerModule1.py` | Puente transparente en Anvil para delegar consultas RPC al Uplink. | ✅ Actualizado |
-| **POS Mesero (UI)** | `anvil/forms/pos_mesero/POSMesero.html` | Croquis interactivo 3 mesas x 4 sillas, Drag & Drop, comandas por silla, cobro dividido. | ✅ Funcional |
-| **POS Mesero (Py)** | `anvil/forms/pos_mesero/POSMesero.py` | Inicialización de `POSMeseroTemplate`, router URL y timer de sincronización (2s). | ✅ Funcional |
-| **Menú Móvil (UI)** | `anvil/forms/menu/Menu.html` | Menú comensal para celular, modal de personalización gourmet, notas de chef y extras. | ✅ Rediseñado |
-| **Menú Móvil (Py)** | `anvil/forms/menu/Menu.py` | Inicialización de `MenuTemplate`, detección de parámetros QR (`#mesa=X&silla=Y`) y check-in. | ✅ Funcional |
-| **Config Anvil** | `anvil.yaml` | Configuración de app Anvil (`startup_form: POSMesero`). | ✅ Actualizado |
+| **Dashboard Hub** | `client_code/AdminMenu/` | Dashboard Ejecutivo, KPIs, gestión de menú y catálogo PostgreSQL. | ✅ Desplegado |
+| **Base de Datos** | PostgreSQL `dbterrazavidasabor` | Esquema relacional (`areas`, `mesas`, `sillas`, `categorias`, `productos_menu`, `recetas_ingredientes`, `comandas`, `detalle_comanda`, `pagos`). | ✅ Completo (43 prods, 12 mesas) |
+| **Uplink Daemon** | `uplink/terraza_uplink.py` | Servicio persistente en Python que conecta Anvil con PostgreSQL con serialización recursiva para Anvil RPC. | ✅ Conectado (SERVER) |
+| **Server Module** | `server_code/ServerModule1.py` | Puente en Anvil Cloud para delegar consultas RPC al Uplink. | ✅ Actualizado |
+| **POS Mesero** | `client_code/POSMesero/` | Croquis interactivo 12 mesas modulares, Drag & Drop, comandas por silla, cobro dividido. | ✅ Funcional |
+| **Menú Móvil** | `client_code/Menu/` | Menú comensal para celular, modal de personalización gourmet, notas de chef y extras. | ✅ Funcional |
+| **Monitor Cocina** | `client_code/MonitorCocina/` | Monitor KDS con filtros de estación, batch cooking y recetas técnicas. | ✅ Funcional |
+| **Config Anvil** | `anvil.yaml` | Configuración de app Anvil (`startup_form: AdminMenu`), `native_deps` con puente de navegación global `window.navMenu`. | ✅ Actualizado |
+| **Editor IDs** | `.anvil_editor.yaml` | Registro Base32 de formularios (`AdminMenu`: `WTJJRXFF6FAF2SANSZHRW4F7KR3H7XMA`). | ✅ Sincronizado |
 
 ---
 
