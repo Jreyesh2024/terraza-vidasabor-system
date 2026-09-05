@@ -173,8 +173,7 @@
 
   </div>
 
-  <!-- VISTA: COMANDA DE LA MESA (PLATILLOS AL CENTRO COMPARTIDOS) -->
-  <div id=&quot;vistaComandaMesa&quot; class=&quot;flex-1 w-full max-w-lg mx-auto p-4 sm:p-6 flex flex-col gap-4 hidden&quot;>
+  <div id=&quot;vistaComandaMesa&quot; class=&quot;flex-1 w-full max-w-lg mx-auto p-4 sm:p-6 pb-28 sm:pb-32 flex flex-col gap-4 hidden&quot;>
 
     <!-- Barra de navegación -->
     <div class=&quot;flex items-center justify-between bg-slate-900/90 px-4 py-3 rounded-2xl border border-slate-800 shadow-md&quot;>
@@ -254,7 +253,7 @@
   </div>
 
   <!-- VISTA LIMPIA: MI COMANDA (SOLO MIS ITEMS - SIN CATÁLOGO) -->
-  <div id=&quot;vistaComandaLimpia&quot; class=&quot;flex-1 w-full max-w-lg mx-auto p-4 sm:p-6 flex flex-col gap-4 hidden&quot;>
+  <div id=&quot;vistaComandaLimpia&quot; class=&quot;flex-1 w-full max-w-lg mx-auto p-4 sm:p-6 pb-28 sm:pb-32 flex flex-col gap-4 hidden&quot;>
 
     <!-- Barra de navegación -->
     <div class=&quot;flex items-center justify-between bg-slate-900/90 px-4 py-3 rounded-2xl border border-slate-800&quot;>
@@ -266,10 +265,16 @@
         <i class=&quot;fa-solid fa-receipt text-emerald-400&quot;></i>
         <span id=&quot;lblComandaLimpiaTitulo&quot;>Mi Comanda</span>
       </span>
-      <button type=&quot;button&quot; onclick=&quot;window.abrirCatalogoConDestino('mi_silla')&quot;
-        class=&quot;px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-black border border-emerald-500 transition flex items-center gap-1.5 cursor-pointer&quot;>
-        <i class=&quot;fa-solid fa-plus&quot;></i> Agregar
-      </button>
+      <div class=&quot;flex items-center gap-1.5&quot;>
+        <button type=&quot;button&quot; onclick=&quot;window.abrirCatalogoConDestino('centro')&quot;
+          class=&quot;px-2.5 py-1.5 rounded-xl bg-amber-600/20 hover:bg-amber-600/40 text-amber-300 text-xs font-bold border border-amber-500/40 transition flex items-center gap-1 cursor-pointer&quot;>
+          🍲 <span class=&quot;hidden sm:inline&quot;>Pedir</span> Al Centro
+        </button>
+        <button type=&quot;button&quot; onclick=&quot;window.abrirCatalogoConDestino('mi_silla')&quot;
+          class=&quot;px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-black border border-emerald-500 transition flex items-center gap-1.5 cursor-pointer&quot;>
+          <i class=&quot;fa-solid fa-plus&quot;></i> Agregar
+        </button>
+      </div>
     </div>
 
     <!-- Tarjeta de comanda limpia -->
@@ -335,7 +340,7 @@
   </div>
 
   <!-- VISTA DEL CATÁLOGO DE PLATILLOS (SE MUESTRA AL ELEGIR ORDENAR) -->
-  <main id=&quot;vistaCatalogoPlatillos&quot; class=&quot;flex-1 max-w-4xl w-full mx-auto p-4 sm:p-6 flex flex-col gap-4 hidden&quot;>
+  <main id=&quot;vistaCatalogoPlatillos&quot; class=&quot;flex-1 max-w-4xl w-full mx-auto p-4 sm:p-6 pb-28 sm:pb-32 flex flex-col gap-4 hidden&quot;>
 
     <!-- BARRA SUPERIOR DE NAVEGACIÓN DENTRO DEL CATÁLOGO -->
     <div class=&quot;flex items-center justify-between bg-slate-900/90 px-4 py-3 rounded-2xl border border-slate-800 shadow-md&quot;>
@@ -1245,20 +1250,35 @@
 
   window.destinoPedido = 'mi_silla'; // 'mi_silla' | 'centro' | 2 | 3 | 4
 
+  // Helper central para asegurar que NUNCA queden 2 vistas abiertas al mismo tiempo
+  window.ocultarTodasLasVistas = function () {
+  ['vistaHubMesa', 'vistaComandaMesa', 'vistaComandaLimpia', 'vistaCatalogoPlatillos'].forEach(function (id) {
+  var el = document.getElementById(id);
+  if (el) {
+  el.classList.add('hidden');
+  el.style.display = 'none';
+  }
+  });
+  };
+
   window.abrirCatalogoConDestino = function (dest) {
   window.destinoPedido = dest;
-  var hub = document.getElementById('vistaHubMesa');
-  var cat = document.getElementById('vistaCatalogoPlatillos');
-  var comanda = document.getElementById('vistaComandaLimpia');
-  if (hub) hub.classList.add('hidden');
-  if (comanda) comanda.classList.add('hidden');
-  if (cat) cat.classList.remove('hidden');
 
-  // Actualizar badge de destino
+  // 1. Ocultar absolutamente todas las demás vistas (hub, comanda personal, comanda de la mesa)
+  window.ocultarTodasLasVistas();
+
+  // 2. Mostrar exclusivamente el contenedor del catálogo
+  var cat = document.getElementById('vistaCatalogoPlatillos');
+  if (cat) {
+  cat.classList.remove('hidden');
+  cat.style.display = '';
+  }
+
+  // 3. Actualizar badge de destino en la barra superior
   var badge = document.getElementById('lblCatalogoDestinoBadge');
   if (badge) {
   if (dest === 'centro') {
-  badge.innerHTML = '🍲 Al Centro';
+  badge.innerHTML = '🍲 Al Centro (Para Compartir)';
   } else if (dest === 'mi_silla' || dest === window.simSillaNum) {
   badge.innerHTML = `🎯 Silla ${window.simSillaNum} (Tú)`;
   } else {
@@ -1266,13 +1286,15 @@
   }
   }
 
-  // Mostrar pantalla de categorias (paso A), ocultar productos (paso B)
+  // 4. Mostrar siempre el grid de categorías de 2 columnas (paso A) y ocultar productos (paso B)
   window.mostrarGridCategorias();
   window.actualizarNavComandaBtn();
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  // 5. Posicionar la vista arriba de inmediato sin estorbo de scroll
+  window.scrollTo({ top: 0, behavior: 'instant' });
   };
 
-  // Muestra el grid de categorias (sub-vista A)
+  // Muestra el grid de categorias de 2 columnas (sub-vista A)
   window.mostrarGridCategorias = function () {
   var gCat = document.getElementById('vistaCatCategorias');
   var gProd = document.getElementById('vistaCatProductos');
@@ -1361,42 +1383,36 @@
   };
 
   window.mostrarVistaHubMesa = function () {
+  window.ocultarTodasLasVistas();
   var hub = document.getElementById('vistaHubMesa');
-  var cat = document.getElementById('vistaCatalogoPlatillos');
-  var comanda = document.getElementById('vistaComandaLimpia');
-  var comandaMesa = document.getElementById('vistaComandaMesa');
-  if (hub) hub.classList.remove('hidden');
-  if (cat) cat.classList.add('hidden');
-  if (comanda) comanda.classList.add('hidden');
-  if (comandaMesa) comandaMesa.classList.add('hidden');
+  if (hub) {
+  hub.classList.remove('hidden');
+  hub.style.display = '';
+  }
   window.sincronizarCuentaDesdeStorage();
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  window.scrollTo({ top: 0, behavior: 'instant' });
   };
 
   window.mostrarVistaComanda = function () {
-  var hub = document.getElementById('vistaHubMesa');
-  var cat = document.getElementById('vistaCatalogoPlatillos');
+  window.ocultarTodasLasVistas();
   var comanda = document.getElementById('vistaComandaLimpia');
-  var comandaMesa = document.getElementById('vistaComandaMesa');
-  if (hub) hub.classList.add('hidden');
-  if (cat) cat.classList.add('hidden');
-  if (comandaMesa) comandaMesa.classList.add('hidden');
-  if (comanda) comanda.classList.remove('hidden');
+  if (comanda) {
+  comanda.classList.remove('hidden');
+  comanda.style.display = '';
+  }
   window.renderComandaLimpia();
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  window.scrollTo({ top: 0, behavior: 'instant' });
   };
 
   window.mostrarVistaComandaMesa = function () {
-  var hub = document.getElementById('vistaHubMesa');
-  var cat = document.getElementById('vistaCatalogoPlatillos');
-  var comanda = document.getElementById('vistaComandaLimpia');
+  window.ocultarTodasLasVistas();
   var comandaMesa = document.getElementById('vistaComandaMesa');
-  if (hub) hub.classList.add('hidden');
-  if (cat) cat.classList.add('hidden');
-  if (comanda) comanda.classList.add('hidden');
-  if (comandaMesa) comandaMesa.classList.remove('hidden');
+  if (comandaMesa) {
+  comandaMesa.classList.remove('hidden');
+  comandaMesa.style.display = '';
+  }
   window.renderComandaMesa();
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  window.scrollTo({ top: 0, behavior: 'instant' });
   };
 
   // Renderiza la vista limpia de comanda PERSONAL (exclusivamente items de MI silla)
