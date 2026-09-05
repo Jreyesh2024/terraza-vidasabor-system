@@ -661,17 +661,13 @@
     actualizarFecha();
 
     // 3. PUENTE DE NAVEGACIÓN
-    window.navMenu = function (modulo) {
-      if (modulo === 'salir') {
-        window.navMenu('pos_mesero');
-        return;
-      }
-      if (typeof window.anvilAppNav === 'function') {
-        window.anvilAppNav(modulo);
-      } else {
-        console.log("Navegando a:", modulo);
-      }
-    };
+    // window.navMenu es definido por Python (__init__.py) vía anvil.js.window.navMenu
+    // Este bloque solo define un fallback de seguridad si el form aún no terminó de cargar.
+    if (typeof window.navMenu !== 'function') {
+      window.navMenu = function (modulo) {
+        console.warn('[AdminMenu] window.navMenu aún no lista, módulo:', modulo);
+      };
+    }
 
     // 4. RENDER DEL DASHBOARD COMPLETO DESDE POSTGRESQL
     window.renderAdminDashboard = function (kpisJson, prodsJson, catsJson, mesasJson) {
