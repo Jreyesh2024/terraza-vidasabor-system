@@ -79,8 +79,8 @@
   </header>
 
   <!-- PANTALLA PRINCIPAL: HUB DE BIENVENIDA A TU MESA (SIMPLIFICADA) -->
-  <div id=&quot;vistaHubMesa&quot; class=&quot;flex-1 max-w-3xl w-full mx-auto p-4 sm:p-6 flex flex-col gap-5 justify-center&quot;>
-
+  <div id=&quot;vistaHubMesa&quot; class=&quot;flex-1 w-full max-w-2xl mx-auto p-4 sm:p-6 flex flex-col gap-5 justify-center&quot;>
+    
     <!-- TARJETA HERO COMPACTA (SOLO LUGAR Y QR) -->
     <div class=&quot;glass-card p-6 sm:p-8 rounded-3xl border border-slate-700/80 shadow-2xl relative overflow-hidden text-center flex flex-col items-center gap-3&quot;>
       <div class=&quot;absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-emerald-500 via-teal-500 to-amber-500&quot;></div>
@@ -101,7 +101,7 @@
 
     <!-- TARJETAS DE ACCIÓN PRINCIPALES DEL COMENSAL (3 ACCIONES DIRECTAS) -->
     <div class=&quot;grid grid-cols-1 sm:grid-cols-3 gap-4&quot;>
-
+      
       <!-- 1. ORDENAR PARA MI SILLA -->
       <button type=&quot;button&quot; onclick=&quot;window.abrirCatalogoConDestino('mi_silla')&quot;
         class=&quot;glass-card p-5 rounded-2xl border border-emerald-500/40 hover:border-emerald-400 hover:bg-emerald-950/20 text-left transition flex flex-col justify-between gap-3 cursor-pointer shadow-lg group&quot;>
@@ -151,9 +151,90 @@
 
   </div>
 
+  <!-- VISTA LIMPIA: MI COMANDA (SOLO MIS ITEMS - SIN CATÁLOGO) -->
+  <div id=&quot;vistaComandaLimpia&quot; class=&quot;flex-1 w-full max-w-lg mx-auto p-4 sm:p-6 flex flex-col gap-4 hidden&quot;>
+
+    <!-- Barra de navegación -->
+    <div class=&quot;flex items-center justify-between bg-slate-900/90 px-4 py-3 rounded-2xl border border-slate-800&quot;>
+      <button type=&quot;button&quot; onclick=&quot;window.mostrarVistaHubMesa()&quot;
+        class=&quot;px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold border border-slate-700 transition flex items-center gap-1.5 cursor-pointer&quot;>
+        <i class=&quot;fa-solid fa-arrow-left&quot;></i> Volver
+      </button>
+      <span class=&quot;text-sm font-black text-white flex items-center gap-2&quot;>
+        <i class=&quot;fa-solid fa-receipt text-emerald-400&quot;></i>
+        <span id=&quot;lblComandaLimpiaTitulo&quot;>Mi Comanda</span>
+      </span>
+      <button type=&quot;button&quot; onclick=&quot;window.abrirCatalogoConDestino('mi_silla')&quot;
+        class=&quot;px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-black border border-emerald-500 transition flex items-center gap-1.5 cursor-pointer&quot;>
+        <i class=&quot;fa-solid fa-plus&quot;></i> Agregar
+      </button>
+    </div>
+
+    <!-- Tarjeta de comanda limpia -->
+    <div class=&quot;glass-card rounded-3xl border border-emerald-500/30 shadow-2xl overflow-hidden&quot;>
+      <!-- Header de la tarjeta -->
+      <div class=&quot;bg-gradient-to-r from-emerald-950/60 to-slate-900 px-5 py-4 border-b border-emerald-500/20 flex items-center justify-between&quot;>
+        <div>
+          <div class=&quot;text-sm font-black text-white&quot; id=&quot;lblComandaLimpiaUbicacion&quot;>Mesa 1 · Silla 1</div>
+          <div class=&quot;text-[11px] text-emerald-400 font-bold mt-0.5&quot; id=&quot;lblComandaLimpiaSub&quot;>Portavasos #PV-011</div>
+        </div>
+        <span class=&quot;inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 font-black text-xs border border-emerald-500/40&quot;>
+          <span class=&quot;w-2 h-2 rounded-full bg-emerald-400 animate-pulse&quot;></span> Cuenta Activa
+        </span>
+      </div>
+
+      <!-- Lista de items de MI silla solamente -->
+      <div class=&quot;px-5 py-4 min-h-24&quot; id=&quot;comandaLimpiaItems&quot;>
+        <div class=&quot;text-center py-8 text-slate-500 text-xs&quot;>
+          Aún no has pedido nada. ¡Toca &quot;Agregar&quot; para elegir del menú!
+        </div>
+      </div>
+
+      <!-- Totales -->
+      <div class=&quot;px-5 py-4 border-t border-slate-800 space-y-1.5 bg-slate-950/40&quot;>
+        <div class=&quot;flex justify-between text-xs text-slate-400&quot;>
+          <span>Subtotal:</span>
+          <span class=&quot;font-semibold text-slate-200&quot; id=&quot;lblComandaLimpiaSubtotal&quot;>$0.00</span>
+        </div>
+        <div class=&quot;flex justify-between text-xs text-slate-400&quot;>
+          <span>IVA 16%:</span>
+          <span class=&quot;font-semibold text-slate-200&quot; id=&quot;lblComandaLimpiaIVA&quot;>$0.00</span>
+        </div>
+        <div class=&quot;flex justify-between text-xs text-slate-400&quot;>
+          <span>Propina sugerida (10%):</span>
+          <span class=&quot;font-semibold text-slate-200&quot; id=&quot;lblComandaLimpiaPropina&quot;>$0.00</span>
+        </div>
+        <div class=&quot;flex justify-between text-base font-black text-white pt-2 border-t border-slate-800&quot;>
+          <span>Total Estimado:</span>
+          <span class=&quot;text-emerald-400 text-lg&quot; id=&quot;lblComandaLimpiaTotal&quot;>$0.00</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Botón enviar a cocina -->
+    <button id=&quot;btnComandaLimpiaEnviar&quot; onclick=&quot;window.enviarPedidoClienteCocina(); window.renderComandaLimpia();&quot;
+      class=&quot;w-full py-3.5 px-4 rounded-2xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-sm shadow-lg shadow-amber-500/20 transition flex items-center justify-center gap-2 cursor-pointer&quot;
+      disabled style=&quot;opacity:0.4;&quot;>
+      <i class=&quot;fa-solid fa-fire&quot;></i> <span id=&quot;btnComandaLimpiaEnviarTxt&quot;>Enviar a Cocina / Barra</span>
+    </button>
+
+    <!-- Botones de cobro -->
+    <div class=&quot;grid grid-cols-2 gap-3&quot;>
+      <button onclick=&quot;window.solicitarAtencionMesero()&quot;
+        class=&quot;py-3 px-3 rounded-2xl bg-amber-500/20 border border-amber-500/40 text-amber-300 text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer hover:bg-amber-500/30&quot;>
+        <i class=&quot;fa-solid fa-bell text-amber-400&quot;></i> Llamar Mesero
+      </button>
+      <button onclick=&quot;window.solicitarCuentaComensal()&quot;
+        class=&quot;py-3 px-3 rounded-2xl bg-sky-500/20 border border-sky-500/40 text-sky-300 text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer hover:bg-sky-500/30&quot;>
+        <i class=&quot;fa-solid fa-receipt text-sky-400&quot;></i> Pedir la Cuenta
+      </button>
+    </div>
+
+  </div>
+
   <!-- VISTA DEL CATÁLOGO DE PLATILLOS (SE MUESTRA AL ELEGIR ORDENAR) -->
   <main id=&quot;vistaCatalogoPlatillos&quot; class=&quot;flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 grid grid-cols-1 lg:grid-cols-3 gap-6 hidden&quot;>
-
+    
     <!-- BARRA SUPERIOR DE NAVEGACIÓN DENTRO DEL CATÁLOGO -->
     <div class=&quot;lg:col-span-3 flex flex-wrap justify-between items-center bg-slate-900/90 p-3 sm:p-4 rounded-2xl border border-slate-800 gap-3&quot;>
       <div class=&quot;flex items-center gap-3&quot;>
@@ -165,10 +246,6 @@
           🎯 Agregando a: Silla 1 (Tú)
         </span>
       </div>
-      <button type=&quot;button&quot; onclick=&quot;window.mostrarVistaComanda()&quot;
-        class=&quot;px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-black transition flex items-center gap-1.5 cursor-pointer shadow-md shadow-emerald-600/30&quot;>
-        <i class=&quot;fa-solid fa-receipt&quot;></i> Ver Comanda (<span id=&quot;lblCatBtnTotal&quot;>$0.00</span>)
-      </button>
     </div>
 
     <!-- SECCIÓN IZQUIERDA: CATÁLOGO Y PRODUCTOS -->
@@ -192,7 +269,7 @@
         <div class=&quot;flex items-center gap-2&quot;>
           <span class=&quot;text-sm font-black text-emerald-400 bg-emerald-950/80 px-2.5 py-1 rounded-lg border border-emerald-500/30&quot; id=&quot;lblStickyComandaTotal&quot;>$0.00</span>
           <button type=&quot;button&quot; onclick=&quot;window.mostrarVistaComanda()&quot; class=&quot;px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-black transition flex items-center gap-1.5 shadow-md shadow-emerald-600/30 cursor-pointer&quot;>
-            <i class=&quot;fa-solid fa-receipt&quot;></i> Ver Comanda
+            <i class=&quot;fa-solid fa-receipt&quot;></i> Mi Comanda
           </button>
         </div>
       </div>
@@ -384,7 +461,7 @@
     onclick=&quot;if(event.target === this) window.cerrarModalRecetaCliente();&quot;>
     <div
       style=&quot;background: #090d16 !important; border: 1px solid #334155 !important; border-radius: 24px !important; width: 100% !important; max-width: 520px !important; padding: 24px !important; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.8) !important; display: flex !important; flex-direction: column !important; gap: 16px !important; color: #f8fafc !important; max-height: 90vh !important; overflow-y: auto !important;&quot;>
-
+      
       <!-- HEADER -->
       <div style=&quot;display: flex !important; justify-content: space-between !important; align-items: flex-start !important; border-bottom: 1px solid #1e293b !important; padding-bottom: 12px !important;&quot;>
         <div style=&quot;display: flex; align-items: center; gap: 12px;&quot;>
@@ -1072,7 +1149,9 @@
     window.destinoPedido = dest;
     var hub = document.getElementById('vistaHubMesa');
     var cat = document.getElementById('vistaCatalogoPlatillos');
+    var comanda = document.getElementById('vistaComandaLimpia');
     if (hub) hub.classList.add('hidden');
+    if (comanda) comanda.classList.add('hidden');
     if (cat) cat.classList.remove('hidden');
 
     var badge = document.getElementById('lblCatalogoDestinoBadge');
@@ -1095,8 +1174,10 @@
   window.mostrarVistaHubMesa = function () {
     var hub = document.getElementById('vistaHubMesa');
     var cat = document.getElementById('vistaCatalogoPlatillos');
+    var comanda = document.getElementById('vistaComandaLimpia');
     if (hub) hub.classList.remove('hidden');
     if (cat) cat.classList.add('hidden');
+    if (comanda) comanda.classList.add('hidden');
     window.sincronizarCuentaDesdeStorage();
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -1104,17 +1185,90 @@
   window.mostrarVistaComanda = function () {
     var hub = document.getElementById('vistaHubMesa');
     var cat = document.getElementById('vistaCatalogoPlatillos');
+    var comanda = document.getElementById('vistaComandaLimpia');
     if (hub) hub.classList.add('hidden');
-    if (cat) cat.classList.remove('hidden');
+    if (cat) cat.classList.add('hidden');
+    if (comanda) comanda.classList.remove('hidden');
+    window.renderComandaLimpia();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
-    var badge = document.getElementById('lblCatalogoDestinoBadge');
-    if (badge) {
-      badge.innerHTML = `🧾 <span class=&quot;text-sky-400 font-black&quot;>Revisando Comanda &amp; Cuenta</span>`;
+  // Renderiza la vista limpia de comanda (solo items de MI silla)
+  window.renderComandaLimpia = function () {
+    var mesaId = window.simMesaId || 1;
+    var sillaNum = window.simSillaNum || 1;
+    var qrId = 'PV-0' + mesaId + sillaNum;
+    var cuentas = getStorageCuentas();
+    var keySilla = mesaId + '-' + sillaNum;
+    var itemsSilla = (cuentas[keySilla] &amp;&amp; cuentas[keySilla].items) ? cuentas[keySilla].items : [];
+
+    // Actualizar títulos
+    var tit = document.getElementById('lblComandaLimpiaTitulo');
+    var ubi = document.getElementById('lblComandaLimpiaUbicacion');
+    var sub = document.getElementById('lblComandaLimpiaSub');
+    if (tit) tit.textContent = 'Mi Comanda — Silla ' + sillaNum;
+    if (ubi) ubi.textContent = 'Mesa ' + mesaId + ' · Silla ' + sillaNum;
+    if (sub) sub.textContent = 'Portavasos #' + qrId;
+
+    // Renderizar items
+    var container = document.getElementById('comandaLimpiaItems');
+    if (!container) return;
+    container.innerHTML = '';
+
+    var pendientes = 0;
+    var subtotal = 0;
+
+    if (itemsSilla.length === 0) {
+      container.innerHTML = '<div class=&quot;text-center py-10 text-slate-500 text-sm&quot;>¡Aún no has pedido nada! Toca <b class=&quot;text-emerald-400&quot;>Agregar</b> para elegir del menú.</div>';
+    } else {
+      itemsSilla.forEach(function (it) {
+        var monto = it.precio * it.cantidad;
+        subtotal += monto;
+        if (!it.enviadoCocina) pendientes++;
+
+        var row = document.createElement('div');
+        row.className = 'flex items-center justify-between py-3 border-b border-slate-800/60 last:border-0';
+        var estadoBadge = it.enviadoCocina
+          ? '<span class=&quot;text-[9px] font-black bg-emerald-950/60 text-emerald-300 border border-emerald-500/40 px-1.5 py-0.5 rounded flex items-center gap-1&quot;><i class=&quot;fa-solid fa-fire text-[8px]&quot;></i> En Cocina</span>'
+          : '<span class=&quot;text-[9px] font-black bg-amber-950/60 text-amber-300 border border-amber-500/40 px-1.5 py-0.5 rounded flex items-center gap-1&quot;><i class=&quot;fa-solid fa-clock text-[8px]&quot;></i> Pendiente</span>';
+        row.innerHTML = `
+          <div class=&quot;flex-1&quot;>
+            <div class=&quot;text-sm font-bold text-white&quot;>${it.nombre} <span class=&quot;text-slate-400 font-normal text-xs&quot;>x${it.cantidad}</span></div>
+            <div class=&quot;flex items-center gap-2 mt-0.5&quot;>${estadoBadge}${it.notas ? '<span class=&quot;text-[10px] text-slate-500&quot;>' + it.notas + '</span>' : ''}</div>
+          </div>
+          <span class=&quot;text-sm font-black text-emerald-400 ml-3&quot;>$${monto.toFixed(2)}</span>
+        `;
+        container.appendChild(row);
+      });
     }
-    window.renderCarrito();
-    var sidebar = document.getElementById('sidebarComanda');
-    if (sidebar) {
-      sidebar.scrollIntoView({ behavior: 'smooth' });
+
+    // Calcular totales
+    var iva = subtotal * 0.16;
+    var propina = subtotal * 0.10;
+    var total = subtotal + iva + propina;
+    var el = function(id) { return document.getElementById(id); };
+    if (el('lblComandaLimpiaSubtotal')) el('lblComandaLimpiaSubtotal').textContent = '$' + subtotal.toFixed(2);
+    if (el('lblComandaLimpiaIVA')) el('lblComandaLimpiaIVA').textContent = '$' + iva.toFixed(2);
+    if (el('lblComandaLimpiaPropina')) el('lblComandaLimpiaPropina').textContent = '$' + propina.toFixed(2);
+    if (el('lblComandaLimpiaTotal')) el('lblComandaLimpiaTotal').textContent = '$' + total.toFixed(2);
+
+    // Habilitar/deshabilitar botón enviar
+    var btn = document.getElementById('btnComandaLimpiaEnviar');
+    var btnTxt = document.getElementById('btnComandaLimpiaEnviarTxt');
+    if (btn) {
+      if (pendientes > 0) {
+        btn.disabled = false;
+        btn.style.opacity = '1';
+        if (btnTxt) btnTxt.textContent = 'Enviar a Cocina / Barra (' + pendientes + ' pendiente' + (pendientes > 1 ? 's' : '') + ')';
+      } else if (itemsSilla.length > 0) {
+        btn.disabled = true;
+        btn.style.opacity = '0.65';
+        if (btnTxt) btnTxt.innerHTML = '<i class=&quot;fa-solid fa-check-double&quot;></i> Todo enviado a Cocina';
+      } else {
+        btn.disabled = true;
+        btn.style.opacity = '0.4';
+        if (btnTxt) btnTxt.textContent = 'Enviar a Cocina / Barra';
+      }
     }
   };
 
