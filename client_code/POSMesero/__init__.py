@@ -96,9 +96,10 @@ class POSMesero(POSMeseroTemplate):
         self._root = anvil.js.get_dom_node(self)
         self._exponer_puente_python()
         self._bind_events()
-        self._cargar_catalogo_pos_db()
-        self._sincronizar_con_servidor()
-        self._boot_js()
+        # Anvil v3 ignora los <script> del theme/native_deps en la práctica,
+        # así que Python inyecta pos_mesero.js en <head> y encadena el boot
+        # cuando el archivo termine de cargar.
+        self._asegurar_pos_mesero_js_y_arrancar()
         self._iniciar_timer_sync()
 
     def form_hide(self, **event_args):
@@ -287,6 +288,37 @@ class POSMesero(POSMeseroTemplate):
         except Exception as e:
             print(f"[POSMesero] Error sincronizando cuenta: {e}")
             return None
+
+    # ─────────────────── inyección de pos_mesero.js desde Python ─────────
+    def _asegurar_pos_mesero_js_y_arrancar(self):
+        """
+        Si pos_mesero.js ya está en el <head>, arranca directo.
+        Si no, lo inyecta y programa el arranque al terminar de cargar.
+        Independiente de anvil.yaml / theme / templates.yaml.
+        """
+        document = anvil.js.window.document
+        existente = document.querySelector('script[src*="pos_mesero"]')
+        if existente is not None:
+            # Ya cargado en un ciclo previo del form o en una sesión anterior.
+            self._cargar_catalogo_pos_db()
+            self._sincronizar_con_servidor()
+            self._boot_js()
+            return
+        script = document.createElement("script")
+        script.src = "_/theme/pos_mesero.js"
+        script.async = False  # respeta el orden si se añaden más adelante
+        script.onload = self._on_pos_mesero_js_ready
+        script.onerror = self._on_pos_mesero_js_error
+        document.head.appendChild(script)
+
+    def _on_pos_mesero_js_ready(self, *_):
+        print("[POSMesero] pos_mesero.js cargado, iniciando UI.")
+        self._cargar_catalogo_pos_db()
+        self._sincronizar_con_servidor()
+        self._boot_js()
+
+    def _on_pos_mesero_js_error(self, *_):
+        print("[POSMesero] ERROR: no se pudo cargar _/theme/pos_mesero.js")
 
     def _boot_js(self):
         """Dispara el arranque visual del JS (renderiza croquis según estado)."""
