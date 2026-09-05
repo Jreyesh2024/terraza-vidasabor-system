@@ -2148,6 +2148,12 @@
     };
 
     window.aplicarCuentasServidor = function(cuentasServidor) {
+      if (!cuentasServidor) return;
+      if (typeof cuentasServidor === 'string') {
+        try {
+          cuentasServidor = JSON.parse(cuentasServidor);
+        } catch (e) { return; }
+      }
       if (!cuentasServidor || typeof cuentasServidor !== 'object') return;
       if (!window.palapaState || !window.palapaState.cuentas) return;
 
@@ -2169,9 +2175,19 @@
             curr.qrId = srv.qrId;
             changed = true;
           }
-          if (srv.items && srv.items.length > 0 && (!curr.items || curr.items.length < srv.items.length)) {
-            curr.items = srv.items;
-            curr.estado = 'ocupada';
+          if (srv.comensalNombre && curr.comensalNombre !== srv.comensalNombre) {
+            curr.comensalNombre = srv.comensalNombre;
+            changed = true;
+          }
+          if (srv.items && Array.isArray(srv.items)) {
+            if (JSON.stringify(curr.items || []) !== JSON.stringify(srv.items)) {
+              curr.items = JSON.parse(JSON.stringify(srv.items));
+              curr.estado = srv.estado || (curr.items.length > 0 ? 'ocupada' : curr.estado);
+              changed = true;
+            }
+          }
+          if (srv.estado && curr.estado !== srv.estado) {
+            curr.estado = srv.estado;
             changed = true;
           }
         }
@@ -2184,16 +2200,27 @@
     };
 
     // Auto-polling en segundo plano para sincronizar check-ins de comensales en tiempo real
+    // NOTA: window.anvilGetCuentasServidor() devuelve una Promise (bridge Anvil JS→Python es async)
+    var _syncInFlight = false;
     setInterval(function() {
+      if (_syncInFlight) return; // evitar solapamiento de requests
       try {
         if (window.anvilGetCuentasServidor) {
-          var srvData = window.anvilGetCuentasServidor();
-          if (srvData) {
-            window.aplicarCuentasServidor(srvData);
+          _syncInFlight = true;
+          var maybePromise = window.anvilGetCuentasServidor();
+          // Manejar tanto Promise como valor síncrono (compatibilidad)
+          if (maybePromise && typeof maybePromise.then === 'function') {
+            maybePromise.then(function(srvData) {
+              _syncInFlight = false;
+              if (srvData) { window.aplicarCuentasServidor(srvData); }
+            }).catch(function(e) { _syncInFlight = false; });
+          } else {
+            _syncInFlight = false;
+            if (maybePromise) { window.aplicarCuentasServidor(maybePromise); }
           }
         }
-      } catch (e) { }
-    }, 3000);
+      } catch (e) { _syncInFlight = false; }
+    }, 2000);
 
     function resetDemoState() {
       var initial = JSON.parse(JSON.stringify(DEFAULT_CUENTAS));
@@ -5730,7 +5757,7 @@
                 <span style="font-size: 9px; font-weight: 900; padding: 2px 6px; border-radius: 4px; background: ${badgeBg}; color: ${badgeColor};">${badgeTxt}</span>
               </div>
               <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 2px;">
-                <span style="font-size: 9px; color: #94a3b8;">${isPaidSilla ? 'En Sobremesa' : (sOcc ? `${numItems} prod.` : 'Disponible')}</span>
+                <span style="font-size: 9px; color: ${sOcc ? '#fbbf24' : '#94a3b8'};">${isPaidSilla ? 'En Sobremesa' : (sOcc ? (numItems > 0 ? `${numItems} prod.` : 'En Menú (QR)') : 'Disponible')}</span>
                 <span style="font-size: 11px; font-weight: 900; color: ${montoColor};">${montoTxt}</span>
               </div>
             `;
