@@ -4345,7 +4345,6 @@
     // Exponer funciones clave globalmente para que Python y llamadas onclick directas puedan interactuar
     window.renderStateUI = renderStateUI;
     window.setupDragListeners = setupDragListeners;
-    window.renderChairBadge = renderChairBadge;
     window.handleSillaClick = handleSillaClick;
     window.handleMesaClick = handleMesaClick;
     window.clickSilla = handleSillaClick;
