@@ -9,11 +9,13 @@ class POSMesero(POSMeseroTemplate):
   def __init__(self, **properties):
     self.init_components(**properties)
     try:
+      # Exponer navegación directamente en window (Anvil no ejecuta <script> en HtmlTemplate)
+      anvil.js.window.navMenu = self.navegar_modulo
       anvil.js.window.anvilAppNav = self.navegar_modulo
       anvil.js.window.anvilGetCuentasServidor = self.obtener_cuentas_servidor
       anvil.js.window.anvilSyncCuenta = self.sincronizar_cuenta_servidor
-    except Exception:
-      pass
+    except Exception as e:
+      print(f"[POSMesero] Error exponiendo funciones en window: {e}")
 
     try:
       url_hash = anvil.get_url_hash()
