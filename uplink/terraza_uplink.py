@@ -100,16 +100,24 @@ def uplink_actualizar_cuenta_silla(mesa_id, silla_id, items, estado='ocupada'):
     print(f"📝 [UPLINK] Cuenta actualizada: Mesa {mesa_id} Silla {silla_id} -> {len(items)} items ({estado})")
     return CUENTAS_TERRAZA
 
+def serialize_for_anvil(val):
+    if val is None:
+        return None
+    if isinstance(val, Decimal):
+        return float(val)
+    if isinstance(val, (datetime, date)):
+        return val.isoformat()
+    if isinstance(val, dict):
+        return {k: serialize_for_anvil(v) for k, v in val.items()}
+    if isinstance(val, (list, tuple)):
+        return [serialize_for_anvil(item) for item in val]
+    return val
+
 def clean_row(r):
     if not r:
         return {}
-    d = dict(r)
-    for k, v in d.items():
-        if isinstance(v, Decimal):
-            d[k] = float(v)
-        elif isinstance(v, (datetime, date)):
-            d[k] = v.isoformat()
-    return d
+    return serialize_for_anvil(dict(r))
+
 
 @anvil.server.callable
 def uplink_get_categorias():
@@ -452,26 +460,9 @@ def uplink_get_kds():
             """)
             rows = cur.fetchall()
         conn.close()
-        return [dict(r) for r in rows]
+        return [clean_row(r) for r in rows]
     except Exception as e:
         print(f"Error en uplink_get_kds: {e}")
-        return []
-
-@anvil.server.callable
-def uplink_get_mesas():
-    """Obtiene el listado de mesas con su estado y capacidad desde PostgreSQL"""
-    try:
-        conn = get_db_connection()
-        with conn.cursor() as cur:
-            cur.execute("""
-                SELECT * FROM mesas
-                ORDER BY area_nombre, numero_mesa;
-            """)
-            rows = cur.fetchall()
-        conn.close()
-        return [dict(r) for r in rows]
-    except Exception as e:
-        print(f"Error en uplink_get_mesas: {e}")
         return []
 
 @anvil.server.callable
@@ -497,7 +488,7 @@ def uplink_get_dashboard_kpis():
         comensales_count = 0
         comandas_recientes = []
         
-        for key, cta in CUENTAS_MEMORIA.items():
+        for key, cta in CUENTAS_TERRAZA.items():
             if cta and cta.get('estado') == 'ocupada' and cta.get('items'):
                 ocupadas_count += 1
                 items_count = len(cta.get('items', []))
