@@ -3,8 +3,12 @@
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap');
 
-  * { box-sizing: border-box; }
-  html, body {
+  * {
+    box-sizing: border-box;
+  }
+
+  html,
+  body {
     background-color: #060911 !important;
     color: #f8fafc !important;
     font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif !important;
@@ -16,13 +20,27 @@
 
   /* KDS Ticket Animations */
   @keyframes ticketPop {
-    from { opacity: 0; transform: scale(0.96) translateY(10px); }
-    to { opacity: 1; transform: scale(1) translateY(0); }
+    from {
+      opacity: 0;
+      transform: scale(0.96) translateY(10px);
+    }
+
+    to {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
   }
 
   @keyframes urgentPulse {
-    0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
-    50% { box-shadow: 0 0 0 8px rgba(239, 68, 68, 0); }
+
+    0%,
+    100% {
+      box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+    }
+
+    50% {
+      box-shadow: 0 0 0 8px rgba(239, 68, 68, 0);
+    }
   }
 
   .kds-ticket-card {
@@ -38,18 +56,34 @@
   }
 
   /* Custom Scrollbars */
-  ::-webkit-scrollbar { width: 6px; height: 6px; }
-  ::-webkit-scrollbar-track { background: #0b1120; }
-  ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
-  ::-webkit-scrollbar-thumb:hover { background: #334155; }
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #0b1120;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #1e293b;
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #334155;
+  }
 </style>
 
-<div id="kdsRootContainer" style="box-sizing: border-box !important; width: 100% !important; min-height: 100vh !important; background: #060911 !important; color: #f8fafc !important; padding: 75px 24px 48px 24px !important; display: flex !important; flex-direction: column !important; gap: 16px !important; position: relative !important; z-index: 1 !important;">
-  
+<div id="kdsRootContainer"
+  style="box-sizing: border-box !important; width: 100% !important; min-height: 100vh !important; background: #060911 !important; color: #f8fafc !important; padding: 75px 24px 48px 24px !important; display: flex !important; flex-direction: column !important; gap: 16px !important; position: relative !important; z-index: 1 !important;">
+
   <!-- TOP BAR: HEADER, LIVE CLOCK & NAVIGATION -->
-  <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1e293b; padding-bottom: 14px; flex-wrap: wrap; gap: 12px;">
+  <div
+    style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1e293b; padding-bottom: 14px; flex-wrap: wrap; gap: 12px;">
     <div style="display: flex; align-items: center; gap: 14px;">
-      <div style="width: 48px; height: 48px; border-radius: 14px; background: linear-gradient(135deg, #f59e0b, #d97706); display: flex; align-items: center; justify-content: center; font-size: 22px; color: #0f172a; box-shadow: 0 4px 16px rgba(245, 158, 11, 0.35);">
+      <div
+        style="width: 48px; height: 48px; border-radius: 14px; background: linear-gradient(135deg, #f59e0b, #d97706); display: flex; align-items: center; justify-content: center; font-size: 22px; color: #0f172a; box-shadow: 0 4px 16px rgba(245, 158, 11, 0.35);">
         <i class="fa-solid fa-fire-burner"></i>
       </div>
       <div>
@@ -57,8 +91,11 @@
           <h1 style="font-size: 20px; font-weight: 900; margin: 0; color: #ffffff; letter-spacing: -0.5px;">
             Monitor de Cocina & Barra (KDS)
           </h1>
-          <span id="kdsLiveDot" style="display: inline-flex; align-items: center; gap: 5px; font-size: 10px; font-weight: 800; background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.4); padding: 3px 8px; border-radius: 20px;">
-            <span style="width: 6px; height: 6px; border-radius: 50%; background: #34d399; display: inline-block;"></span> EN VIVO
+          <span id="kdsLiveDot"
+            style="display: inline-flex; align-items: center; gap: 5px; font-size: 10px; font-weight: 800; background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.4); padding: 3px 8px; border-radius: 20px;">
+            <span
+              style="width: 6px; height: 6px; border-radius: 50%; background: #34d399; display: inline-block;"></span>
+            EN VIVO
           </span>
         </div>
         <p style="font-size: 12px; color: #94a3b8; margin: 2px 0 0 0;">
@@ -69,23 +106,33 @@
 
     <!-- Right Controls: Station Clock & Nav Buttons -->
     <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
-      <div style="background: #0f172a; border: 1px solid #1e293b; border-radius: 12px; padding: 6px 14px; display: flex; align-items: center; gap: 8px;">
+      <div
+        style="background: #0f172a; border: 1px solid #1e293b; border-radius: 12px; padding: 6px 14px; display: flex; align-items: center; gap: 8px;">
         <i class="fa-regular fa-clock" style="color: #38bdf8; font-size: 14px;"></i>
-        <span id="kdsClock" style="font-size: 14px; font-weight: 900; color: #f8fafc; font-variant-numeric: tabular-nums;">--:--:--</span>
+        <span id="kdsClock"
+          style="font-size: 14px; font-weight: 900; color: #f8fafc; font-variant-numeric: tabular-nums;">--:--:--</span>
       </div>
 
-      <button onclick="window.cargarKDS();" style="background: #0f172a; hover:background: #1e293b; color: #cbd5e1; border: 1px solid #334155; border-radius: 12px; padding: 8px 14px; font-size: 12px; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+      <button onclick="window.cargarKDS();"
+        style="background: #0f172a; hover:background: #1e293b; color: #cbd5e1; border: 1px solid #334155; border-radius: 12px; padding: 8px 14px; font-size: 12px; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 6px;">
         <i class="fa-solid fa-rotate"></i> Refrescar
       </button>
 
-      <button onclick="window.navMenu('pos_mesero');" style="background: linear-gradient(135deg, #059669, #10b981); color: #ffffff; border: none; border-radius: 12px; padding: 8px 16px; font-size: 12px; font-weight: 900; cursor: pointer; display: flex; align-items: center; gap: 6px; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.35);">
+      <button onclick="window.navMenu('admin_menu');"
+        style="background: #0f172a; color: #34d399; border: 1px solid #34d399; border-radius: 12px; padding: 8px 14px; font-size: 12px; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+        <i class="fa-solid fa-house"></i> Inicio / Hub
+      </button>
+
+      <button onclick="window.navMenu('pos_mesero');"
+        style="background: linear-gradient(135deg, #059669, #10b981); color: #ffffff; border: none; border-radius: 12px; padding: 8px 16px; font-size: 12px; font-weight: 900; cursor: pointer; display: flex; align-items: center; gap: 6px; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.35);">
         <i class="fa-solid fa-table-cells-large"></i> Volver a Mesas & POS
       </button>
     </div>
   </div>
 
   <!-- CONSOLIDADO DE FUEGO / BATCH COOKING BAR -->
-  <div style="background: rgba(15, 23, 42, 0.85); border: 1px solid #1e293b; border-radius: 16px; padding: 12px 18px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
+  <div
+    style="background: rgba(15, 23, 42, 0.85); border: 1px solid #1e293b; border-radius: 16px; padding: 12px 18px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
     <div style="display: flex; align-items: center; gap: 10px;">
       <span style="font-size: 13px; font-weight: 900; color: #fbbf24; display: flex; align-items: center; gap: 6px;">
         <i class="fa-solid fa-fire"></i> LOTE ACUMULADO EN FUEGO (BATCH):
@@ -95,17 +142,21 @@
       </div>
     </div>
     <div style="font-size: 11px; color: #94a3b8;">
-      <i class="fa-solid fa-circle-info" style="color: #38bdf8;"></i> Optimiza sartenes y quemadores consolidando comandas iguales.
+      <i class="fa-solid fa-circle-info" style="color: #38bdf8;"></i> Optimiza sartenes y quemadores consolidando
+      comandas iguales.
     </div>
   </div>
 
   <!-- MULTI-LEVEL FILTER BAR: ÁREAS, MESAS & CATEGORÍAS/ESTACIONES -->
-  <div style="background: #090d16; border: 1px solid #1e293b; border-radius: 16px; padding: 14px 18px; display: flex; flex-direction: column; gap: 12px;">
-    
+  <div
+    style="background: #090d16; border: 1px solid #1e293b; border-radius: 16px; padding: 14px 18px; display: flex; flex-direction: column; gap: 12px;">
+
     <!-- LEVEL 1: ÁREAS DEL RESTAURANTE -->
-    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; border-bottom: 1px solid #1e293b; padding-bottom: 10px;">
+    <div
+      style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; border-bottom: 1px solid #1e293b; padding-bottom: 10px;">
       <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-        <span style="font-size: 11px; font-weight: 900; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 5px;">
+        <span
+          style="font-size: 11px; font-weight: 900; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 5px;">
           <i class="fa-solid fa-map-location-dot" style="color: #38bdf8;"></i> Área:
         </span>
         <div style="display: flex; gap: 6px; flex-wrap: wrap;" id="kdsAreaChips">
@@ -130,15 +181,23 @@
 
       <!-- SEMAPHORE LEGEND -->
       <div style="display: flex; align-items: center; gap: 12px; font-size: 10px; color: #94a3b8; font-weight: 800;">
-        <span style="display: flex; align-items: center; gap: 4px;"><span style="width: 8px; height: 8px; border-radius: 50%; background: #10b981; display: inline-block;"></span> 🟢 Recibido</span>
-        <span style="display: flex; align-items: center; gap: 4px;"><span style="width: 8px; height: 8px; border-radius: 50%; background: #f59e0b; display: inline-block;"></span> 🟡 En Fuego (&lt;14m)</span>
-        <span style="display: flex; align-items: center; gap: 4px;"><span style="width: 8px; height: 8px; border-radius: 50%; background: #ef4444; display: inline-block;"></span> 🔴 Demorado (&ge;14m)</span>
+        <span style="display: flex; align-items: center; gap: 4px;"><span
+            style="width: 8px; height: 8px; border-radius: 50%; background: #10b981; display: inline-block;"></span> 🟢
+          Recibido</span>
+        <span style="display: flex; align-items: center; gap: 4px;"><span
+            style="width: 8px; height: 8px; border-radius: 50%; background: #f59e0b; display: inline-block;"></span> 🟡
+          En Fuego (&lt;14m)</span>
+        <span style="display: flex; align-items: center; gap: 4px;"><span
+            style="width: 8px; height: 8px; border-radius: 50%; background: #ef4444; display: inline-block;"></span> 🔴
+          Demorado (&ge;14m)</span>
       </div>
     </div>
 
     <!-- LEVEL 2: SELECTOR DIRECTO DE MESA (1 A 9) -->
-    <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap; border-bottom: 1px solid #1e293b; padding-bottom: 10px;">
-      <span style="font-size: 11px; font-weight: 900; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 5px;">
+    <div
+      style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap; border-bottom: 1px solid #1e293b; padding-bottom: 10px;">
+      <span
+        style="font-size: 11px; font-weight: 900; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 5px;">
         <i class="fa-solid fa-chair" style="color: #fbbf24;"></i> Mesa:
       </span>
       <div style="display: flex; gap: 6px; flex-wrap: wrap;" id="kdsMesaChips">
@@ -155,45 +214,55 @@
       <div style="display: flex; gap: 6px; flex-wrap: wrap;" id="kdsStationChips">
         <button onclick="window.filtrarEstacionKDS('TODAS');" id="chipKDS-TODAS"
           style="padding: 6px 14px; font-size: 11px; font-weight: 800; border-radius: 10px; border: 1px solid #f59e0b; background: #f59e0b; color: #0f172a; cursor: pointer; display: flex; align-items: center; gap: 6px;">
-          <i class="fa-solid fa-utensils"></i> Toda la Cocina (Expeditor) <span id="badgeCountTODAS" style="padding: 1px 6px; background: #0f172a; color: #fbbf24; border-radius: 6px; font-size: 10px; font-weight: 900;">0</span>
+          <i class="fa-solid fa-utensils"></i> Toda la Cocina (Expeditor) <span id="badgeCountTODAS"
+            style="padding: 1px 6px; background: #0f172a; color: #fbbf24; border-radius: 6px; font-size: 10px; font-weight: 900;">0</span>
         </button>
 
         <button onclick="window.filtrarEstacionKDS('COCINA');" id="chipKDS-COCINA"
           style="padding: 6px 14px; font-size: 11px; font-weight: 800; border-radius: 10px; border: 1px solid #334155; background: #0f172a; color: #cbd5e1; cursor: pointer; display: flex; align-items: center; gap: 6px;">
-          <i class="fa-solid fa-fire-burner" style="color: #f59e0b;"></i> Cocina Caliente (Comidas) <span id="badgeCountCOCINA" style="padding: 1px 6px; background: #1e293b; color: #cbd5e1; border-radius: 6px; font-size: 10px; font-weight: 900;">0</span>
+          <i class="fa-solid fa-fire-burner" style="color: #f59e0b;"></i> Cocina Caliente (Comidas) <span
+            id="badgeCountCOCINA"
+            style="padding: 1px 6px; background: #1e293b; color: #cbd5e1; border-radius: 6px; font-size: 10px; font-weight: 900;">0</span>
         </button>
 
         <button onclick="window.filtrarEstacionKDS('BARRA');" id="chipKDS-BARRA"
           style="padding: 6px 14px; font-size: 11px; font-weight: 800; border-radius: 10px; border: 1px solid #334155; background: #0f172a; color: #cbd5e1; cursor: pointer; display: flex; align-items: center; gap: 6px;">
-          <i class="fa-solid fa-mug-hot" style="color: #38bdf8;"></i> Barra & Bebidas <span id="badgeCountBARRA" style="padding: 1px 6px; background: #1e293b; color: #cbd5e1; border-radius: 6px; font-size: 10px; font-weight: 900;">0</span>
+          <i class="fa-solid fa-mug-hot" style="color: #38bdf8;"></i> Barra & Bebidas <span id="badgeCountBARRA"
+            style="padding: 1px 6px; background: #1e293b; color: #cbd5e1; border-radius: 6px; font-size: 10px; font-weight: 900;">0</span>
         </button>
 
         <button onclick="window.filtrarEstacionKDS('REPOSTERIA');" id="chipKDS-REPOSTERIA"
           style="padding: 6px 14px; font-size: 11px; font-weight: 800; border-radius: 10px; border: 1px solid #334155; background: #0f172a; color: #cbd5e1; cursor: pointer; display: flex; align-items: center; gap: 6px;">
-          <i class="fa-solid fa-cake-candles" style="color: #c084fc;"></i> Repostería & Postres <span id="badgeCountREPOSTERIA" style="padding: 1px 6px; background: #1e293b; color: #cbd5e1; border-radius: 6px; font-size: 10px; font-weight: 900;">0</span>
+          <i class="fa-solid fa-cake-candles" style="color: #c084fc;"></i> Repostería & Postres <span
+            id="badgeCountREPOSTERIA"
+            style="padding: 1px 6px; background: #1e293b; color: #cbd5e1; border-radius: 6px; font-size: 10px; font-weight: 900;">0</span>
         </button>
 
         <button onclick="window.filtrarEstacionKDS('INFANTIL');" id="chipKDS-INFANTIL"
           style="padding: 6px 14px; font-size: 11px; font-weight: 800; border-radius: 10px; border: 1px solid #334155; background: #0f172a; color: #cbd5e1; cursor: pointer; display: flex; align-items: center; gap: 6px;">
-          <i class="fa-solid fa-child" style="color: #4ade80;"></i> Menú Infantil / Niños <span id="badgeCountINFANTIL" style="padding: 1px 6px; background: #1e293b; color: #cbd5e1; border-radius: 6px; font-size: 10px; font-weight: 900;">0</span>
+          <i class="fa-solid fa-child" style="color: #4ade80;"></i> Menú Infantil / Niños <span id="badgeCountINFANTIL"
+            style="padding: 1px 6px; background: #1e293b; color: #cbd5e1; border-radius: 6px; font-size: 10px; font-weight: 900;">0</span>
         </button>
       </div>
     </div>
   </div>
 
   <!-- ACTIVE FILTER BANNER (If specific table is selected) -->
-  <div id="kdsFocusBanner" style="display: none; background: rgba(2, 132, 199, 0.15); border: 1px solid #0284c7; border-radius: 12px; padding: 10px 16px; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
+  <div id="kdsFocusBanner"
+    style="display: none; background: rgba(2, 132, 199, 0.15); border: 1px solid #0284c7; border-radius: 12px; padding: 10px 16px; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
     <div style="display: flex; align-items: center; gap: 8px;">
       <span style="font-size: 16px;">📍</span>
       <span id="kdsFocusText" style="font-size: 13px; font-weight: 800; color: #38bdf8;">Enfocando Mesa 2</span>
     </div>
-    <button onclick="window.filtrarMesaKDS('TODAS');" style="background: #0f172a; color: #cbd5e1; border: 1px solid #334155; padding: 4px 10px; border-radius: 8px; font-size: 11px; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 4px;">
+    <button onclick="window.filtrarMesaKDS('TODAS');"
+      style="background: #0f172a; color: #cbd5e1; border: 1px solid #334155; padding: 4px 10px; border-radius: 8px; font-size: 11px; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 4px;">
       ✕ Mostrar Todas las Mesas
     </button>
   </div>
 
   <!-- KDS TICKETS GRID -->
-  <div id="kdsTicketsGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; flex: 1;">
+  <div id="kdsTicketsGrid"
+    style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; flex: 1;">
     <!-- Active kitchen tickets rendered dynamically -->
   </div>
 
@@ -204,17 +273,21 @@
   style="display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(8px); z-index: 100; align-items: center; justify-content: center; padding: 16px;">
   <div id="modalFichaRecetaCard"
     style="background: #090d16; border: 1px solid #1e293b; border-radius: 20px; width: 100%; max-width: 540px; max-height: 90vh; overflow-y: auto; box-shadow: 0 25px 50px rgba(0, 0, 0, 0.9); color: #f8fafc; padding: 22px; display: flex; flex-direction: column; gap: 16px;">
-    
+
     <!-- Modal Header -->
-    <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid #1e293b; padding-bottom: 12px;">
+    <div
+      style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid #1e293b; padding-bottom: 12px;">
       <div>
         <div style="display: flex; align-items: center; gap: 8px;">
           <span id="fichaRecetaIcon" style="font-size: 20px;">🍳</span>
-          <h2 id="fichaRecetaTitulo" style="font-size: 17px; font-weight: 900; margin: 0; color: #ffffff;">Chilaquiles Verdes con Pollo</h2>
+          <h2 id="fichaRecetaTitulo" style="font-size: 17px; font-weight: 900; margin: 0; color: #ffffff;">Chilaquiles
+            Verdes con Pollo</h2>
         </div>
-        <p id="fichaRecetaCategoria" style="font-size: 11px; color: #fbbf24; font-weight: 700; margin: 3px 0 0 0;">Especialidades Mexicanas • Estación: Cocina Caliente</p>
+        <p id="fichaRecetaCategoria" style="font-size: 11px; color: #fbbf24; font-weight: 700; margin: 3px 0 0 0;">
+          Especialidades Mexicanas • Estación: Cocina Caliente</p>
       </div>
-      <button onclick="window.cerrarFichaReceta();" style="background: #1e293b; border: none; color: #94a3b8; width: 32px; height: 32px; border-radius: 8px; font-weight: bold; cursor: pointer;">✕</button>
+      <button onclick="window.cerrarFichaReceta();"
+        style="background: #1e293b; border: none; color: #94a3b8; width: 32px; height: 32px; border-radius: 8px; font-weight: bold; cursor: pointer;">✕</button>
     </div>
 
     <!-- Quick Stats -->
@@ -225,7 +298,8 @@
       </div>
       <div style="background: #020617; border: 1px solid #1e293b; border-radius: 10px; padding: 8px;">
         <span style="font-size: 10px; color: #94a3b8; display: block;">Equipo / Utensilio</span>
-        <span id="fichaRecetaEquipo" style="font-size: 12px; font-weight: 800; color: #38bdf8;">Sartén Hondo / Quemador</span>
+        <span id="fichaRecetaEquipo" style="font-size: 12px; font-weight: 800; color: #38bdf8;">Sartén Hondo /
+          Quemador</span>
       </div>
       <div style="background: #020617; border: 1px solid #1e293b; border-radius: 10px; padding: 8px;">
         <span style="font-size: 10px; color: #94a3b8; display: block;">Temperatura</span>
@@ -235,26 +309,31 @@
 
     <!-- Gramajes & Ingredientes Estandarizados (Escandallo) -->
     <div>
-      <h3 style="font-size: 12px; font-weight: 900; color: #38bdf8; margin: 0 0 8px 0; display: flex; align-items: center; gap: 6px;">
+      <h3
+        style="font-size: 12px; font-weight: 900; color: #38bdf8; margin: 0 0 8px 0; display: flex; align-items: center; gap: 6px;">
         <i class="fa-solid fa-scale-balanced"></i> Ingredientes Dosificados (Porción Exacta):
       </h3>
-      <div id="fichaRecetaIngredientes" style="display: flex; flex-direction: column; gap: 5px; background: #020617; border: 1px solid #1e293b; border-radius: 12px; padding: 10px 14px; font-size: 11px;">
+      <div id="fichaRecetaIngredientes"
+        style="display: flex; flex-direction: column; gap: 5px; background: #020617; border: 1px solid #1e293b; border-radius: 12px; padding: 10px 14px; font-size: 11px;">
         <!-- Ingredients list populated dynamically -->
       </div>
     </div>
 
     <!-- Procedimiento Paso a Paso -->
     <div>
-      <h3 style="font-size: 12px; font-weight: 900; color: #fbbf24; margin: 0 0 8px 0; display: flex; align-items: center; gap: 6px;">
+      <h3
+        style="font-size: 12px; font-weight: 900; color: #fbbf24; margin: 0 0 8px 0; display: flex; align-items: center; gap: 6px;">
         <i class="fa-solid fa-list-check"></i> Procedimiento de Preparación:
       </h3>
-      <div id="fichaRecetaPasos" style="display: flex; flex-direction: column; gap: 6px; font-size: 11px; color: #cbd5e1; line-height: 1.4;">
+      <div id="fichaRecetaPasos"
+        style="display: flex; flex-direction: column; gap: 6px; font-size: 11px; color: #cbd5e1; line-height: 1.4;">
         <!-- Steps populated dynamically -->
       </div>
     </div>
 
     <!-- Montaje y Emplatado -->
-    <div style="background: rgba(5, 150, 105, 0.12); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 12px; padding: 10px 14px; font-size: 11px;">
+    <div
+      style="background: rgba(5, 150, 105, 0.12); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 12px; padding: 10px 14px; font-size: 11px;">
       <span style="font-weight: 900; color: #34d399; display: block; margin-bottom: 2px;">
         <i class="fa-solid fa-plate-wheat"></i> Emplatado & Pase:
       </span>
@@ -263,172 +342,86 @@
       </span>
     </div>
 
-    <button onclick="window.cerrarFichaReceta();" style="width: 100%; padding: 10px; background: #1e293b; color: #f8fafc; font-weight: 800; font-size: 12px; border: 1px solid #334155; border-radius: 10px; cursor: pointer;">
+    <button onclick="window.cerrarFichaReceta();"
+      style="width: 100%; padding: 10px; background: #1e293b; color: #f8fafc; font-weight: 800; font-size: 12px; border: 1px solid #334155; border-radius: 10px; cursor: pointer;">
       Cerrar Ficha
     </button>
   </div>
 </div>
 
 <script>
-  (function() {
-    // 1. BASE DE DATOS DE RECETAS ESTANDARIZADAS (FICHAS TÉCNICAS CON GRAMAJES)
-    const RECETARIO_ESTANDARIZADO = {
-      'Chilaquiles Verdes con Pollo': {
-        icon: '🌽',
-        categoria: 'Especialidades Mexicanas • Cocina Caliente',
-        tiempo: '6 min',
-        equipo: 'Sartén Hondo / Fuego Alto',
-        temp: 'Caliente (>75°C)',
-        ingredientes: [
-          { item: 'Totopo de maíz horneado', cant: '120 g', dosificador: 'Bolsa dosificada #1' },
-          { item: 'Salsa verde tatemada', cant: '150 ml', dosificador: '1 Cucharón rojo medidor' },
-          { item: 'Pechuga deshebrada cocida', cant: '80 g', dosificador: '1 Bolsa precocinada' },
-          { item: 'Queso fresco de rancho', cant: '30 g', dosificador: '1 Cucharada medidora' },
-          { item: 'Crema ácida de rancho', cant: '20 ml', dosificador: 'Biberón dosificador' },
-          { item: 'Cebolla morada encurtida', cant: '15 g', dosificador: 'Pinzas de montaje' }
-        ],
-        pasos: [
-          '1. Verter 150ml de salsa verde en el sartén caliente hasta hervir ligero (30 seg).',
-          '2. Agregar los 120g de totopos y los 80g de pollo deshebrado. Saltear envolvente durante 45 seg sin romper el totopo.',
-          '3. Emplatar inmediatamente para conservar consistencia crujiente-suave.',
-          '4. Decorar con crema en hilo, queso espolvoreado y cebolla morada al centro.'
-        ],
-        montaje: 'Plato hondo de barro negro. Salida inmediata a pase térmico.'
-      },
-      'Chilaquiles Rojos con Huevo': {
-        icon: '🍳',
-        categoria: 'Especialidades Mexicanas • Cocina Caliente',
-        tiempo: '6 min',
-        equipo: 'Sartén + Plancha de Huevos',
-        temp: 'Caliente (>75°C)',
-        ingredientes: [
-          { item: 'Totopo de maíz horneado', cant: '120 g', dosificador: 'Bolsa dosificada #1' },
-          { item: 'Salsa roja de chile guajillo', cant: '150 ml', dosificador: '1 Cucharón rojo' },
-          { item: 'Huevos frescos (al gusto)', cant: '2 piezas', dosificador: 'Cascarón fresco' },
-          { item: 'Queso fresco y crema', cant: '30g / 20ml', dosificador: 'Medidor estándar' },
-          { item: 'Frijoles refritos de guarnición', cant: '80 g', dosificador: 'Cucharón mediano' }
-        ],
-        pasos: [
-          '1. Cocinar los 2 huevos en plancha (estrellados o revueltos según nota).',
-          '2. Calentar salsa roja y bañar totopos en sartén caliente durante 45 seg.',
-          '3. Emplatar chilaquiles, colocar los huevos encima y guarnición de frijoles a un costado.'
-        ],
-        montaje: 'Plato ovalado tradicional con frijoles y totopos bañados.'
-      },
-      'Omelette al Gusto': {
-        icon: '🍳',
-        categoria: 'Huevos & Omelettes • Cocina Caliente',
-        tiempo: '5 min',
-        equipo: 'Sartén antiadherente 22cm',
-        temp: 'Fuego Medio',
-        ingredientes: [
-          { item: 'Huevo fresco batido', cant: '3 piezas (150 ml)', dosificador: 'Taza medidora' },
-          { item: 'Queso Gouda rallado', cant: '40 g', dosificador: 'Cucharada colmada' },
-          { item: 'Espinaca baby fresca', cant: '20 g', dosificador: '1 Puñado limpio' },
-          { item: 'Champiñón fileteado', cant: '30 g', dosificador: '1 Porción pre-salteada' },
-          { item: 'Mantequilla sin sal', cant: '10 g', dosificador: '1 Cubo dosificado' }
-        ],
-        pasos: [
-          '1. Fundir mantequilla a fuego medio, verter huevo batido y remover suavemente los bordes.',
-          '2. Al cuajar al 80%, rellenar con queso, espinacas y champiñones al centro.',
-          '3. Doblar en media luna o rollo francés y sellar 20 segundos.',
-          '4. Servir con frijoles refritos y pan tostado o tortillas.'
-        ],
-        montaje: 'Plato extendido blanco con frijoles de olla y pico de gallo.'
-      },
-      'Huevos Rancheros al Albañil': {
-        icon: '🌶️',
-        categoria: 'Huevos & Omelettes • Cocina Caliente',
-        tiempo: '6 min',
-        equipo: 'Plancha + Sartén salsas',
-        temp: 'Fuego Alto',
-        ingredientes: [
-          { item: 'Tortillas de maíz pasadas por aceite', cant: '2 piezas', dosificador: 'Tortilla caliente' },
-          { item: 'Huevos estrellados tiernos', cant: '2 piezas', dosificador: 'Huevos frescos' },
-          { item: 'Salsa ranchera martajada', cant: '120 ml', dosificador: '1 Cucharón' },
-          { item: 'Frijoles refritos', cant: '80 g', dosificador: 'Guarnición' }
-        ],
-        pasos: [
-          '1. Montar las 2 tortillas doradas ligeras en el plato base.',
-          '2. Colocar un huevo estrellado sobre cada tortilla.',
-          '3. Bañar abundantemente con salsa ranchera caliente y acompañar con frijolitos.'
-        ],
-        montaje: 'Plato extendido de talavera con frijol refrito y queso cotija.'
-      },
-      'Capuchino Especial V&S': {
-        icon: '☕',
-        categoria: 'Bebidas & Cafetería • Barra de Café',
-        tiempo: '3 min',
-        equipo: 'Máquina Espresso Profesional',
-        temp: '65°C - 70°C',
-        ingredientes: [
-          { item: 'Café de especialidad en grano', cant: '18 g (Doble shot)', dosificador: 'Molino calibrado' },
-          { item: 'Leche entera o vegetal', cant: '160 ml', dosificador: 'Jarra de emulsionar' },
-          { item: 'Canela en polvo / Cacao', cant: '1 g', dosificador: 'Espolvoreador fino' }
-        ],
-        pasos: [
-          '1. Extraer doble shot de espresso (36g líquido en 26-28 segundos).',
-          '2. Emulsionar leche logrando microespuma sedosa y brillante a 65°C.',
-          '3. Verter con técnica de latte art al centro de la taza y toque de canela.'
-        ],
-        montaje: 'Taza de cerámica V&S con servilleta y galleta de cortesía.'
-      },
-      'Café Americano de Altura': {
-        icon: '☕',
-        categoria: 'Bebidas & Cafetería • Barra de Café',
-        tiempo: '2 min',
-        equipo: 'Máquina Espresso',
-        temp: '85°C',
-        ingredientes: [
-          { item: 'Espresso doble', cant: '18 g café (60 ml)', dosificador: 'Molino calibrado' },
-          { item: 'Agua purificada caliente', cant: '200 ml', dosificador: 'Lanceta de agua' }
-        ],
-        pasos: [
-          '1. Servir 200ml de agua caliente en taza.',
-          '2. Extraer el doble shot de espresso directamente sobre el agua para preservar la crema.'
-        ],
-        montaje: 'Taza grande con sobre de azúcar mascabado y sustituto.'
-      },
-      'Jugo Verde Desintoxicante': {
-        icon: '🥤',
-        categoria: 'Bebidas & Cafetería • Barra de Café',
-        tiempo: '3 min',
-        equipo: 'Extractor prensado en frío',
-        temp: 'Frío (4°C)',
-        ingredientes: [
-          { item: 'Jugo de naranja natural', cant: '150 ml', dosificador: 'Recién exprimido' },
-          { item: 'Nopal limpio', cant: '50 g (1/2 pieza)', dosificador: 'Porción limpia' },
-          { item: 'Apio fresco', cant: '30 g (1 varita)', dosificador: 'Trozo dosificado' },
-          { item: 'Piña miel', cant: '60 g (1 rebanada)', dosificador: 'Cubos dosificados' },
-          { item: 'Espinaca baby', cant: '15 g', dosificador: '1 Puñado' }
-        ],
-        pasos: [
-          '1. Colocar todos los ingredientes en el vaso de licuadora de alta potencia.',
-          '2. Licuar a máxima velocidad durante 35 segundos hasta textura tersa sin grumos.',
-          '3. Servir inmediatamente sin colar para conservar fibra.'
-        ],
-        montaje: 'Vaso alto de cristal con popote biodegradable.'
-      },
-      'Waffles Tradicionales Belgas': {
-        icon: '🥞',
-        categoria: 'Dulces & Americanos • Repostería & Fríos',
-        tiempo: '6 min',
-        equipo: 'Wafflera de hierro a 190°C',
-        temp: 'Recién horneado',
-        ingredientes: [
-          { item: 'Masa preparada de waffle', cant: '140 ml', dosificador: 'Cucharón dosificador' },
-          { item: 'Frutos rojos frescos', cant: '40 g (fresas/arándanos)', dosificador: 'Porción limpia' },
-          { item: 'Miel de maple pura', cant: '30 ml', dosificador: 'Jarra pequeña' },
-          { item: 'Mantequilla de rancho', cant: '15 g', dosificador: '1 Porción' }
-        ],
-        pasos: [
-          '1. Verter 140ml de masa en la wafflera caliente pre-engrasada.',
-          '2. Hornear por 4 min y medio hasta dorado crujiente.',
-          '3. Emplatar con cubo de mantequilla al centro, frutos rojos y azúcar glass espolvoreada.'
-        ],
-        montaje: 'Plato grande blanco con mielera al costado.'
+  (function () {
+    // 1. BASE DE DATOS DE RECETAS ESTANDARIZADAS DESDE POSTGRESQL
+    window.recetarioCocinaDB = {};
+    window.mesasCocinaDB = {};
+    window.areasCocinaDB = [];
+
+    window.setRecetarioFromDB = function (recetasJson) {
+      try {
+        const list = typeof recetasJson === 'string' ? JSON.parse(recetasJson) : recetasJson;
+        if (Array.isArray(list)) {
+          list.forEach(function (r) {
+            window.recetarioCocinaDB[r.nombre] = r;
+            window.recetarioCocinaDB[r.nombre.toLowerCase().trim()] = r;
+          });
+        }
+      } catch (e) {
+        console.error('Error cargando recetario desde DB:', e);
       }
     };
+
+    window.setMesasCocinaFromDB = function (mesasJson, areasJson) {
+      try {
+        const mesas = typeof mesasJson === 'string' ? JSON.parse(mesasJson) : mesasJson;
+        if (Array.isArray(mesas)) {
+          mesas.forEach(function (m) {
+            window.mesasCocinaDB[m.id] = m;
+            window.mesasCocinaDB[m.numero_mesa] = m;
+          });
+        }
+      } catch (e) {
+        console.error('Error cargando mesas en KDS:', e);
+      }
+
+      try {
+        const areas = typeof areasJson === 'string' ? JSON.parse(areasJson) : areasJson;
+        if (Array.isArray(areas) && areas.length > 0) {
+          window.areasCocinaDB = areas;
+          renderKDSAreaChips();
+        }
+      } catch (e) {
+        console.error('Error cargando areas en KDS:', e);
+      }
+    };
+
+    function renderKDSAreaChips() {
+      const container = document.getElementById('kdsAreaChips');
+      if (!container || !window.areasCocinaDB || window.areasCocinaDB.length === 0) return;
+      container.innerHTML = '';
+
+      const btnTodas = document.createElement('button');
+      btnTodas.id = 'chipArea-TODAS';
+      btnTodas.setAttribute('data-area', 'TODAS');
+      btnTodas.onclick = function () { window.filtrarAreaKDS('TODAS'); };
+      const isTodas = (window.kdsState.areaFiltro === 'TODAS');
+      btnTodas.style.cssText = 'padding: 5px 12px; font-size: 11px; font-weight: 800; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 4px; ' +
+        (isTodas ? 'border: 1px solid #38bdf8; background: #38bdf8; color: #0f172a;' : 'border: 1px solid #334155; background: #0f172a; color: #cbd5e1;');
+      btnTodas.innerHTML = '🏢 Todas las Áreas';
+      container.appendChild(btnTodas);
+
+      window.areasCocinaDB.forEach(function (area) {
+        const btn = document.createElement('button');
+        const areaName = area.nombre;
+        btn.id = 'chipArea-' + area.id;
+        btn.setAttribute('data-area', areaName);
+        btn.onclick = function () { window.filtrarAreaKDS(areaName); };
+        const isActive = (window.kdsState.areaFiltro === areaName);
+        btn.style.cssText = 'padding: 5px 12px; font-size: 11px; font-weight: 800; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 4px; ' +
+          (isActive ? 'border: 1px solid #38bdf8; background: #38bdf8; color: #0f172a;' : 'border: 1px solid #334155; background: #0f172a; color: #cbd5e1;');
+        btn.innerHTML = (area.icono ? (area.icono + ' ') : '📍 ') + areaName;
+        container.appendChild(btn);
+      });
+    }
 
     // 2. ESTADO LOCAL DEL KDS (ÁREAS, MESAS Y ESTACIONES)
     window.kdsState = {
@@ -449,8 +442,18 @@
     setInterval(updateClock, 1000);
     updateClock();
 
-    // Mapeo de Mesas a Áreas del Restaurante
+    // Mapeo dinámico de Mesas a Áreas desde PostgreSQL
     function getTableArea(mesaId) {
+      const m = window.mesasCocinaDB && (window.mesasCocinaDB[mesaId] || window.mesasCocinaDB[parseInt(mesaId)]);
+      if (m && m.area_nombre) {
+        let idArea = 'PALAPA';
+        const an = m.area_nombre.toUpperCase();
+        if (an.includes('PATIO')) idArea = 'PATIO';
+        else if (an.includes('CHIMENEA')) idArea = 'CHIMENEA';
+        else if (an.includes('JARDÍN') || an.includes('JARDIN')) idArea = 'JARDIN';
+        else if (an.includes('BARRA') || an.includes('PALAPA')) idArea = 'PALAPA';
+        return { id: idArea, nombre: m.area_nombre };
+      }
       const id = parseInt(mesaId);
       if (id >= 1 && id <= 3) return { id: 'PALAPA', nombre: 'La Palapa' };
       if (id >= 4 && id <= 6) return { id: 'PATIO', nombre: 'Terraza / Patio' };
@@ -458,8 +461,16 @@
       return { id: 'PALAPA', nombre: 'Área General' };
     }
 
-    // Determinar estación/categoría de cada producto
+    // Determinar estación/categoría de cada producto dinámicamente desde PostgreSQL
     function getProductStation(nombre) {
+      const r = window.recetarioCocinaDB && (window.recetarioCocinaDB[nombre] || window.recetarioCocinaDB[(nombre || '').toLowerCase().trim()]);
+      if (r && r.estacion_preparacion) {
+        const est = r.estacion_preparacion.toUpperCase();
+        if (est.includes('BARRA') || est.includes('CAFÉ') || est.includes('BEBIDA')) return 'BARRA';
+        if (est.includes('REPOSTERIA') || est.includes('POSTRE')) return 'REPOSTERIA';
+        if (est.includes('INFANTIL') || est.includes('KIDS')) return 'INFANTIL';
+        return 'COCINA';
+      }
       const n = (nombre || '').toLowerCase();
       if (n.includes('infantil') || n.includes('niño') || n.includes('kids') || n.includes('mini')) {
         return 'INFANTIL';
@@ -473,7 +484,7 @@
     }
 
     // 3. CARGAR COMANDAS DESDE STORAGE / PALAPA STATE (DESGLOSE POR COMENSAL / COLUMNAS)
-    window.cargarKDS = function() {
+    window.cargarKDS = function () {
       // Sincronizar estado global
       if (typeof window.syncStorageWithGlobal === 'function') {
         window.syncStorageWithGlobal();
@@ -488,7 +499,7 @@
       var raw = localStorage.getItem('palapa_croquis_state_v1');
       var state = null;
       if (raw) {
-        try { state = JSON.parse(raw); } catch(e) {}
+        try { state = JSON.parse(raw); } catch (e) { }
       }
       if (!state && window.palapaState) {
         state = window.palapaState;
@@ -497,11 +508,11 @@
       var ticketsMap = {};
 
       if (state && state.cuentas) {
-        Object.keys(state.cuentas).forEach(function(key) {
+        Object.keys(state.cuentas).forEach(function (key) {
           var cta = state.cuentas[key];
           if (cta && cta.items && cta.items.length > 0) {
             // Filtrar items que hayan sido enviados a cocina y no estén completamente servidos
-            var enviados = cta.items.filter(function(it) {
+            var enviados = cta.items.filter(function (it) {
               return it.enviadoCocina === true && it.estadoCocina !== 'servido';
             });
 
@@ -530,7 +541,7 @@
                 };
               }
 
-              enviados.forEach(function(it, idxInCta) {
+              enviados.forEach(function (it, idxInCta) {
                 var st = getProductStation(it.nombre);
                 ticketsMap[ticketKey].items.push({
                   id: it.id,
@@ -785,12 +796,12 @@
       // Renderizar Selector Dinámico de Mesas 1 a 9
       if (mesaChipsContainer) {
         mesaChipsContainer.innerHTML = '';
-        
+
         // Chip 'Todas'
         const isAllSelected = (currentMesa === 'TODAS');
         const btnAll = document.createElement('button');
         btnAll.id = 'chipMesa-TODAS';
-        btnAll.onclick = function() { window.filtrarMesaKDS('TODAS'); };
+        btnAll.onclick = function () { window.filtrarMesaKDS('TODAS'); };
         btnAll.style.cssText = `padding: 4px 12px; font-size: 11px; font-weight: 800; border-radius: 8px; border: 1px solid ${isAllSelected ? '#f59e0b' : '#334155'}; background: ${isAllSelected ? '#f59e0b' : '#0f172a'}; color: ${isAllSelected ? '#0f172a' : '#cbd5e1'}; cursor: pointer;`;
         btnAll.innerHTML = `Todas las Mesas (${window.kdsState.tickets.length})`;
         mesaChipsContainer.appendChild(btnAll);
@@ -809,8 +820,8 @@
 
           const btnM = document.createElement('button');
           btnM.id = 'chipMesa-' + mStr;
-          btnM.onclick = (function(mesaNum) {
-            return function() { window.filtrarMesaKDS(mesaNum); };
+          btnM.onclick = (function (mesaNum) {
+            return function () { window.filtrarMesaKDS(mesaNum); };
           })(mStr);
 
           let btnBg = '#0f172a';
@@ -1090,7 +1101,7 @@
     };
 
     // 5. FUNCIONES DE FILTRADO (ÁREAS, MESAS Y ESTACIONES)
-    window.filtrarAreaKDS = function(area) {
+    window.filtrarAreaKDS = function (area) {
       window.kdsState.areaFiltro = area;
       if (area !== 'TODAS') {
         localStorage.setItem('kds_filtro_area', area);
@@ -1098,11 +1109,12 @@
         localStorage.removeItem('kds_filtro_area');
       }
 
-      const chips = ['TODAS', 'PALAPA', 'PATIO', 'CHIMENEA'];
-      chips.forEach(a => {
-        const btn = document.getElementById('chipArea-' + a);
-        if (btn) {
-          if (a === area) {
+      const container = document.getElementById('kdsAreaChips');
+      if (container) {
+        const buttons = container.querySelectorAll('button');
+        buttons.forEach(function (btn) {
+          const btnArea = btn.getAttribute('data-area') || btn.id.replace('chipArea-', '');
+          if (btnArea === area || btn.innerText.includes(area)) {
             btn.style.background = '#38bdf8';
             btn.style.color = '#0f172a';
             btn.style.border = '1px solid #38bdf8';
@@ -1111,13 +1123,13 @@
             btn.style.color = '#cbd5e1';
             btn.style.border = '1px solid #334155';
           }
-        }
-      });
+        });
+      }
 
       renderKDSUI();
     };
 
-    window.filtrarMesaKDS = function(mesaId) {
+    window.filtrarMesaKDS = function (mesaId) {
       window.kdsState.mesaFiltro = mesaId.toString();
       if (mesaId !== 'TODAS') {
         localStorage.setItem('kds_filtro_mesa', mesaId.toString());
@@ -1127,7 +1139,7 @@
       renderKDSUI();
     };
 
-    window.filtrarEstacionKDS = function(estacion) {
+    window.filtrarEstacionKDS = function (estacion) {
       window.kdsState.estacionFiltro = estacion;
 
       const chips = ['TODAS', 'COCINA', 'BARRA', 'REPOSTERIA', 'INFANTIL'];
@@ -1150,7 +1162,7 @@
     };
 
     // 6. ACCIONES DE COCINA: INICIAR ATENCIÓN / FUEGO (VERDE -> ÁMBAR)
-    window.iniciarAtencionItemKDS = function(ticketIdx, itemIdx) {
+    window.iniciarAtencionItemKDS = function (ticketIdx, itemIdx) {
       const ticket = window.kdsState.tickets[ticketIdx];
       if (!ticket || !ticket.items[itemIdx]) return;
 
@@ -1172,7 +1184,7 @@
                 localStorage.setItem('palapa_croquis_state_v1', JSON.stringify(state));
               }
             }
-          } catch(e) {}
+          } catch (e) { }
         }
       }
 
@@ -1180,7 +1192,7 @@
     };
 
     // INICIAR ATENCIÓN DE TODOS LOS PLATILLOS DEL TICKET
-    window.atenderTicketCompletoKDS = function(ticketIdx) {
+    window.atenderTicketCompletoKDS = function (ticketIdx) {
       const ticket = window.kdsState.tickets[ticketIdx];
       if (!ticket) return;
 
@@ -1202,7 +1214,7 @@
                     localStorage.setItem('palapa_croquis_state_v1', JSON.stringify(state));
                   }
                 }
-              } catch(e) {}
+              } catch (e) { }
             }
           }
         }
@@ -1212,7 +1224,7 @@
     };
 
     // MARCAR PLATILLO LISTO (ÁMBAR/ROJO -> LISTO)
-    window.marcarListoItemKDS = function(ticketIdx, itemIdx) {
+    window.marcarListoItemKDS = function (ticketIdx, itemIdx) {
       const ticket = window.kdsState.tickets[ticketIdx];
       if (!ticket || !ticket.items[itemIdx]) return;
 
@@ -1231,7 +1243,7 @@
                 localStorage.setItem('palapa_croquis_state_v1', JSON.stringify(state));
               }
             }
-          } catch(e) {}
+          } catch (e) { }
         }
       }
 
@@ -1239,7 +1251,7 @@
     };
 
     // 7. DESPACHAR TICKET COMPLETO (PASE / SERVIDO)
-    window.despacharTicketCompletoKDS = function(ticketIdx) {
+    window.despacharTicketCompletoKDS = function (ticketIdx) {
       const ticket = window.kdsState.tickets[ticketIdx];
       if (!ticket) return;
 
@@ -1257,7 +1269,7 @@
                   localStorage.setItem('palapa_croquis_state_v1', JSON.stringify(state));
                 }
               }
-            } catch(e) {}
+            } catch (e) { }
           }
         }
       });
@@ -1268,7 +1280,7 @@
     };
 
     // 8. MODAL DE FICHA TÉCNICA DE RECETA
-    window.abrirFichaReceta = function(nombrePlatillo) {
+    window.abrirFichaReceta = function (nombrePlatillo) {
       const modal = document.getElementById('modalFichaRecetaBackdrop');
       const titulo = document.getElementById('fichaRecetaTitulo');
       const categoria = document.getElementById('fichaRecetaCategoria');
@@ -1280,9 +1292,55 @@
       const pasosContainer = document.getElementById('fichaRecetaPasos');
       const montaje = document.getElementById('fichaRecetaMontaje');
 
-      // Buscar receta en recetario o generar ficha estándar por defecto
-      let receta = RECETARIO_ESTANDARIZADO[nombrePlatillo];
-      if (!receta) {
+      // Buscar receta en recetario dinámico de PostgreSQL o generar ficha estándar por defecto
+      let rDB = window.recetarioCocinaDB && (window.recetarioCocinaDB[nombrePlatillo] || window.recetarioCocinaDB[(nombrePlatillo || '').toLowerCase().trim()]);
+      let receta = null;
+
+      if (rDB) {
+        let ingList = [];
+        let rawIng = rDB.ingredientes;
+        if (typeof rawIng === 'string') {
+          try { rawIng = JSON.parse(rawIng); } catch (e) { rawIng = [rawIng]; }
+        }
+        if (Array.isArray(rawIng)) {
+          ingList = rawIng.map(function (ing) {
+            if (typeof ing === 'object' && ing !== null) {
+              return {
+                item: ing.item || ing.nombre || 'Ingrediente',
+                cant: ing.cant || ing.cantidad || '',
+                dosificador: ing.dosificador || 'Porción estándar'
+              };
+            }
+            return {
+              item: String(ing),
+              cant: '',
+              dosificador: 'Control estándar'
+            };
+          });
+        }
+
+        let pasosList = [];
+        let rawPasos = rDB.pasos;
+        if (typeof rawPasos === 'string') {
+          try { rawPasos = JSON.parse(rawPasos); } catch (e) { rawPasos = [rawPasos]; }
+        }
+        if (Array.isArray(rawPasos)) {
+          pasosList = rawPasos.map(function (p, idx) {
+            return (typeof p === 'string' && (p.startsWith('1.') || p.startsWith('2.') || p.startsWith('3.') || p.startsWith('4.'))) ? p : ((idx + 1) + '. ' + p);
+          });
+        }
+
+        receta = {
+          icon: rDB.icono || '🍲',
+          categoria: (rDB.categoria_nombre || 'Especialidad') + ' • Estación: ' + (rDB.estacion_preparacion || 'Cocina Caliente'),
+          tiempo: (rDB.tiempo_estimado || '6–8') + ' min',
+          equipo: 'Estación ' + (rDB.estacion_preparacion || 'Cocina Caliente') + ' / Vajilla estándar',
+          temp: 'Caliente (>75°C)',
+          ingredientes: ingList.length > 0 ? ingList : [{ item: 'Ingredientes frescos de temporada', cant: '1 porción', dosificador: 'Control estándar' }],
+          pasos: pasosList.length > 0 ? pasosList : ['Preparar al momento siguiendo el estándar de calidad de La Terraza.'],
+          montaje: rDB.notas_receta || 'Vajilla estándar de La Terraza con guarnición y pase inmediato térmico.'
+        };
+      } else {
         receta = {
           icon: '🍲',
           categoria: 'Especialidad de la Casa • Cocina Caliente',
@@ -1342,7 +1400,7 @@
       }
     };
 
-    window.cerrarFichaReceta = function() {
+    window.cerrarFichaReceta = function () {
       const modal = document.getElementById('modalFichaRecetaBackdrop');
       if (modal) {
         modal.style.display = 'none';
@@ -1350,7 +1408,7 @@
     };
 
     // Navegación
-    window.navMenu = function(modulo) {
+    window.navMenu = function (modulo) {
       if (window.anvilAppNav) {
         window.anvilAppNav(modulo);
       } else if (typeof window.parent !== 'undefined' && window.parent.anvilAppNav) {
@@ -1381,20 +1439,20 @@
 
         osc.start();
         osc.stop(ctx.currentTime + 0.8);
-      } catch(e) {}
+      } catch (e) { }
     }
 
     // Inicializar KDS y configurar polling automático cada 4 segundos
-    setTimeout(function() {
+    setTimeout(function () {
       try {
         window.scrollTo(0, 0);
         if (document.documentElement) document.documentElement.scrollTop = 0;
         if (document.body) document.body.scrollTop = 0;
-      } catch(e) {}
+      } catch (e) { }
       window.cargarKDS();
     }, 50);
 
-    setInterval(function() {
+    setInterval(function () {
       window.cargarKDS();
     }, 4000);
 

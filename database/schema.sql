@@ -13,6 +13,8 @@ CREATE TABLE IF NOT EXISTS categorias (
     descripcion TEXT,
     orden_display INT DEFAULT 1,
     icono VARCHAR(50) DEFAULT '🍽️',
+    destacado BOOLEAN DEFAULT FALSE,
+    es_al_centro BOOLEAN DEFAULT FALSE,
     activo BOOLEAN DEFAULT TRUE,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
@@ -29,7 +31,16 @@ CREATE TABLE IF NOT EXISTS productos_menu (
     estacion_preparacion VARCHAR(50) DEFAULT 'cocina', -- 'cocina', 'barra_cafe', 'reposteria'
     flags_nutricionales JSONB DEFAULT '{"gluten_free": false, "keto": false, "vegan": false, "lacteos": true}'::jsonb,
     icono VARCHAR(50) DEFAULT '🍲',
+    es_al_centro BOOLEAN DEFAULT FALSE,
     disponible BOOLEAN DEFAULT TRUE,
+    tiempo_estimado VARCHAR(50) DEFAULT '10-15 min',
+    porciones VARCHAR(50) DEFAULT '1 porción',
+    opciones_termino JSONB DEFAULT '[]'::jsonb,         -- Términos de cocción o temperatura (ej: Término medio, Mucho hielo, etc.)
+    preferencias_exclusion JSONB DEFAULT '[]'::jsonb,   -- Ingredientes que se pueden quitar (ej: Sin cebolla, Sin cilantro)
+    extras_disponibles JSONB DEFAULT '[]'::jsonb,       -- Extras con costo adicional (ej: [{"nombre": "+ Tocino", "precio": 35.00}])
+    ingredientes JSONB DEFAULT '[]'::jsonb,             -- Lista detallada de ingredientes para la receta
+    pasos JSONB DEFAULT '[]'::jsonb,                    -- Pasos de preparación para la cocina / barista
+    notas_receta TEXT DEFAULT '',                       -- Notas del chef o indicaciones de servicio
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 

@@ -3,12 +3,15 @@ import anvil
 import anvil.js
 import anvil.server
 
+import json
+
 class POSMesero(POSMeseroTemplate):
   def __init__(self, **properties):
     self.init_components(**properties)
     try:
       anvil.js.window.anvilAppNav = self.navegar_modulo
       anvil.js.window.anvilGetCuentasServidor = self.obtener_cuentas_servidor
+      anvil.js.window.anvilSyncCuenta = self.sincronizar_cuenta_servidor
     except Exception:
       pass
 
@@ -39,6 +42,9 @@ class POSMesero(POSMeseroTemplate):
     # Sincronización inicial con el servidor
     self.sincronizar_con_servidor()
 
+    # Cargar catálogo dinámico de productos, categorías y mesas desde PostgreSQL
+    self.cargar_catalogo_pos_db()
+
     # Timer nativo de Anvil en segundo plano para sincronizar cada 2 segundos
     try:
       self.timer_sync = anvil.Timer(interval=2)
@@ -52,10 +58,11 @@ class POSMesero(POSMeseroTemplate):
 
   def obtener_cuentas_servidor(self):
     try:
-      return anvil.server.call('get_cuentas_terraza')
+      res = anvil.server.call('get_cuentas_terraza')
+      return json.dumps(res) if res else "{}"
     except Exception as e:
       print(f"Error obteniendo cuentas de servidor: {e}")
-      return {}
+      return "{}"
 
   def sincronizar_con_servidor(self):
     try:
@@ -63,11 +70,46 @@ class POSMesero(POSMeseroTemplate):
       if cuentas:
         try:
           if hasattr(anvil.js.window, 'aplicarCuentasServidor'):
-            anvil.js.window.aplicarCuentasServidor(cuentas)
+            anvil.js.window.aplicarCuentasServidor(json.dumps(cuentas))
         except Exception:
           pass
     except Exception as e:
       print(f"Error sincronizando servidor en POSMesero: {e}")
+
+  def cargar_catalogo_pos_db(self):
+    try:
+      prods = anvil.server.call('get_productos_terraza')
+      cats = anvil.server.call('get_categorias_terraza')
+      mesas = anvil.server.call('get_mesas_terraza')
+      if hasattr(anvil.js.window, 'setPOSCatalogoFromDB'):
+        anvil.js.window.setPOSCatalogoFromDB(
+          json.dumps(prods) if prods else "[]",
+          json.dumps(cats) if cats else "[]",
+          json.dumps(mesas) if mesas else "[]"
+        )
+    except Exception as e:
+      print(f"Error cargando catalogo POS desde servidor: {e}")
+
+  def sincronizar_cuenta_servidor(self, mesa_id, silla_id, items, estado='ocupada'):
+    try:
+      if isinstance(items, str):
+        try:
+          items_clean = json.loads(items)
+        except Exception:
+          items_clean = []
+      elif isinstance(items, list):
+        items_clean = items
+      else:
+        try:
+          items_clean = json.loads(json.dumps(items))
+        except Exception:
+          items_clean = []
+      print(f"📡 [POSMESERO] sincronizando con servidor: Mesa {mesa_id} Silla {silla_id} -> {len(items_clean)} items ({estado})")
+      res = anvil.server.call('actualizar_cuenta_silla', int(mesa_id), int(silla_id), items_clean, str(estado))
+      return res
+    except Exception as e:
+      print(f"Error en sincronizar_cuenta_servidor desde POSMesero: {e}")
+      return None
 
   def navegar_modulo(self, modulo_nombre):
     target_form = 'POSMesero'
@@ -81,5 +123,7 @@ class POSMesero(POSMeseroTemplate):
       target_form = 'MonitorFiscal'
     elif modulo_nombre in ['clientes_lealtad', 'rewards']:
       target_form = 'ClientesLealtad'
+    elif modulo_nombre in ['admin', 'admin_menu', 'inicio', 'dashboard']:
+      target_form = 'AdminMenu'
     
     anvil.open_form(target_form)

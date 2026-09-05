@@ -66,14 +66,21 @@
     </div>
 
     <!-- ACCIONES RÁPIDAS DEL COMENSAL EN EL HEADER -->
-    <div class="flex items-center gap-2.5">
+    <div class="flex items-center gap-1.5 sm:gap-2">
+      <button onclick="window.mostrarVistaHubMesa()"
+        title="Volver a Mi Silla"
+        class="px-2.5 py-1.5 sm:px-3 sm:py-2 text-xs font-black rounded-xl bg-emerald-950/80 border border-emerald-500/50 text-emerald-300 hover:bg-emerald-900/80 transition flex items-center gap-1.5 shadow-sm cursor-pointer">
+        <i class="fa-solid fa-chair text-emerald-400 text-xs"></i> <span>Mi Silla</span>
+      </button>
       <button onclick="window.solicitarAtencionMesero()"
-        class="px-4 py-2 text-xs font-black rounded-xl bg-amber-500/20 border border-amber-500/50 text-amber-300 hover:bg-amber-500/30 transition flex items-center gap-2 shadow-sm cursor-pointer">
-        <i class="fa-solid fa-bell text-amber-400 text-sm"></i> Llamar Mesero
+        title="Llamar al Mesero"
+        class="px-2.5 py-1.5 sm:px-3 sm:py-2 text-xs font-black rounded-xl bg-amber-500/20 border border-amber-500/50 text-amber-300 hover:bg-amber-500/30 transition flex items-center gap-1.5 shadow-sm cursor-pointer">
+        <i class="fa-solid fa-bell text-amber-400 text-xs"></i> <span>Mesero</span>
       </button>
       <button onclick="window.solicitarCuentaComensal()"
-        class="px-4 py-2 text-xs font-black rounded-xl bg-sky-500/20 border border-sky-500/50 text-sky-300 hover:bg-sky-500/30 transition flex items-center gap-2 shadow-sm cursor-pointer">
-        <i class="fa-solid fa-receipt text-sky-400 text-sm"></i> Pedir Cuenta
+        title="Pedir la Cuenta"
+        class="px-2.5 py-1.5 sm:px-3 sm:py-2 text-xs font-black rounded-xl bg-sky-500/20 border border-sky-500/50 text-sky-300 hover:bg-sky-500/30 transition flex items-center gap-1.5 shadow-sm cursor-pointer">
+        <i class="fa-solid fa-receipt text-sky-400 text-xs"></i> <span>Cuenta</span>
       </button>
     </div>
   </header>
@@ -99,8 +106,8 @@
       </h1>
     </div>
 
-    <!-- TARJETAS DE ACCIÓN PRINCIPALES DEL COMENSAL (3 ACCIONES DIRECTAS) -->
-    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+    <!-- TARJETAS DE ACCIÓN PRINCIPALES DEL COMENSAL (4 ACCIONES DIRECTAS EN 2x2) -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
       
       <!-- 1. ORDENAR PARA MI SILLA -->
       <button type="button" onclick="window.abrirCatalogoConDestino('mi_silla')"
@@ -132,7 +139,7 @@
         </div>
       </button>
 
-      <!-- 3. MI COMANDA (VISUALIZAR PEDIDOS) -->
+      <!-- 3. MI COMANDA (PERSONAL) -->
       <button type="button" onclick="window.mostrarVistaComanda()"
         class="glass-card p-5 rounded-2xl border border-sky-500/40 hover:border-sky-400 hover:bg-sky-950/20 text-left transition flex flex-col justify-between gap-3 cursor-pointer shadow-lg group">
         <div class="flex items-center justify-between w-full">
@@ -142,8 +149,23 @@
           <span class="text-xs font-black text-sky-400 bg-sky-950/80 px-2 py-0.5 rounded-md border border-sky-500/30" id="lblHubTotalComanda">$0.00</span>
         </div>
         <div>
-          <h3 class="text-base font-black text-white">Mi Comanda</h3>
-          <p class="text-xs text-slate-400 mt-1 leading-relaxed">Visualiza los platillos que has marcado, envíalos a cocina y consulta tu saldo.</p>
+          <h3 class="text-base font-black text-white">Mi Comanda (Personal)</h3>
+          <p class="text-xs text-slate-400 mt-1 leading-relaxed">Tus pedidos individuales, consulta de tu saldo personal y envío a cocina.</p>
+        </div>
+      </button>
+
+      <!-- 4. COMANDA DE LA MESA (AL CENTRO) -->
+      <button type="button" onclick="window.mostrarVistaComandaMesa()"
+        class="glass-card p-5 rounded-2xl border border-yellow-500/40 hover:border-yellow-400 hover:bg-yellow-950/20 text-left transition flex flex-col justify-between gap-3 cursor-pointer shadow-lg group">
+        <div class="flex items-center justify-between w-full">
+          <div class="w-12 h-12 rounded-2xl bg-yellow-500/20 border border-yellow-500/40 flex items-center justify-center text-2xl text-yellow-400 group-hover:scale-110 transition">
+            ⭐
+          </div>
+          <span class="text-xs font-black text-yellow-400 bg-yellow-950/80 px-2 py-0.5 rounded-md border border-yellow-500/30" id="lblHubTotalMesaCentro">$0.00</span>
+        </div>
+        <div>
+          <h3 class="text-base font-black text-white">Comanda de la Mesa</h3>
+          <p class="text-xs text-slate-400 mt-1 leading-relaxed">Platillos al centro compartidos por todos. Nadie los tiene cargados individualmente.</p>
         </div>
       </button>
 
@@ -151,8 +173,87 @@
 
   </div>
 
+  <div id="vistaComandaMesa" class="flex-1 w-full max-w-lg mx-auto p-4 sm:p-6 pb-28 sm:pb-32 flex flex-col gap-4 hidden">
+
+    <!-- Barra de navegación -->
+    <div class="flex items-center justify-between bg-slate-900/90 px-4 py-3 rounded-2xl border border-slate-800 shadow-md">
+      <button type="button" onclick="window.mostrarVistaHubMesa()"
+        class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold border border-slate-700 transition flex items-center gap-1.5 cursor-pointer">
+        <i class="fa-solid fa-arrow-left"></i> Volver a Mi Silla
+      </button>
+      <span class="text-sm font-black text-white flex items-center gap-2">
+        <span class="text-yellow-400">⭐</span>
+        <span>Comanda de la Mesa</span>
+      </span>
+      <button type="button" onclick="window.abrirCatalogoConDestino('centro')"
+        class="px-3 py-1.5 rounded-xl bg-amber-600 hover:bg-amber-500 text-white text-xs font-black border border-amber-500 transition flex items-center gap-1.5 cursor-pointer">
+        <i class="fa-solid fa-plus"></i> Pedir al Centro
+      </button>
+    </div>
+
+    <!-- Banner explicativo: consumos compartidos -->
+    <div class="bg-amber-950/40 border border-amber-500/40 rounded-2xl p-3.5 flex items-start gap-3 shadow-md">
+      <span class="text-2xl flex-shrink-0">🍲</span>
+      <div class="text-xs text-amber-200/90 leading-relaxed">
+        <b class="text-amber-300 font-black block mb-0.5">Consumos Compartidos de la Mesa</b>
+        Estos platillos son para compartir y <u>no se cargan a la cuenta personal de nadie</u>. Al final, el grupo decidirá quién los absorbe o cómo dividirlos.
+      </div>
+    </div>
+
+    <!-- Tarjeta de comanda de la mesa -->
+    <div class="glass-card rounded-3xl border border-amber-500/30 shadow-2xl overflow-hidden">
+      <!-- Header de la tarjeta -->
+      <div class="bg-gradient-to-r from-amber-950/60 to-slate-900 px-5 py-4 border-b border-amber-500/20 flex items-center justify-between">
+        <div>
+          <div class="text-sm font-black text-white" id="lblComandaMesaUbicacion">Mesa 1 • Platillos al Centro</div>
+          <div class="text-[11px] text-amber-400 font-bold mt-0.5">Cuenta Compartida por Toda la Mesa</div>
+        </div>
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 font-black text-xs border border-amber-500/40">
+          <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span> Mesa Activa
+        </span>
+      </div>
+
+      <!-- Lista de items al centro -->
+      <div class="px-5 py-4 min-h-24" id="comandaMesaItems">
+        <div class="text-center py-8 text-slate-500 text-xs">
+          No hay platillos pedidos al centro aún. ¡Toca "Pedir al Centro" para botanear o compartir!
+        </div>
+      </div>
+
+      <!-- Totales de la mesa al centro -->
+      <div class="px-5 py-4 border-t border-slate-800 space-y-1.5 bg-slate-950/40">
+        <div class="flex justify-between text-xs text-slate-400">
+          <span>Subtotal al Centro:</span>
+          <span class="font-semibold text-slate-200" id="lblComandaMesaSubtotal">$0.00</span>
+        </div>
+        <div class="flex justify-between text-xs text-slate-400">
+          <span>IVA 16%:</span>
+          <span class="font-semibold text-slate-200" id="lblComandaMesaIVA">$0.00</span>
+        </div>
+        <div class="flex justify-between text-base font-black text-white pt-2 border-t border-slate-800">
+          <span>Total Acumulado al Centro:</span>
+          <span class="text-amber-400 text-lg font-black" id="lblComandaMesaTotal">$0.00</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Botón enviar al centro a cocina -->
+    <button id="btnComandaMesaEnviar" onclick="window.enviarPedidoCentroCocina();"
+      class="w-full py-3.5 px-4 rounded-2xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-sm shadow-lg shadow-amber-500/20 transition flex items-center justify-center gap-2 cursor-pointer"
+      disabled style="opacity:0.4;">
+      <i class="fa-solid fa-fire"></i> <span id="btnComandaMesaEnviarTxt">Enviar al Centro a Cocina</span>
+    </button>
+
+    <!-- Botón volver a comanda personal -->
+    <button type="button" onclick="window.mostrarVistaComanda()"
+      class="w-full py-3 px-4 rounded-2xl bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700 text-slate-300 text-xs font-bold transition flex items-center justify-center gap-2 cursor-pointer">
+      <i class="fa-solid fa-user text-emerald-400"></i> Ver Mi Comanda Personal
+    </button>
+
+  </div>
+
   <!-- VISTA LIMPIA: MI COMANDA (SOLO MIS ITEMS - SIN CATÁLOGO) -->
-  <div id="vistaComandaLimpia" class="flex-1 w-full max-w-lg mx-auto p-4 sm:p-6 flex flex-col gap-4 hidden">
+  <div id="vistaComandaLimpia" class="flex-1 w-full max-w-lg mx-auto p-4 sm:p-6 pb-28 sm:pb-32 flex flex-col gap-4 hidden">
 
     <!-- Barra de navegación -->
     <div class="flex items-center justify-between bg-slate-900/90 px-4 py-3 rounded-2xl border border-slate-800">
@@ -164,10 +265,16 @@
         <i class="fa-solid fa-receipt text-emerald-400"></i>
         <span id="lblComandaLimpiaTitulo">Mi Comanda</span>
       </span>
-      <button type="button" onclick="window.abrirCatalogoConDestino('mi_silla')"
-        class="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-black border border-emerald-500 transition flex items-center gap-1.5 cursor-pointer">
-        <i class="fa-solid fa-plus"></i> Agregar
-      </button>
+      <div class="flex items-center gap-1.5">
+        <button type="button" onclick="window.abrirCatalogoConDestino('centro')"
+          class="px-2.5 py-1.5 rounded-xl bg-amber-600/20 hover:bg-amber-600/40 text-amber-300 text-xs font-bold border border-amber-500/40 transition flex items-center gap-1 cursor-pointer">
+          🍲 <span class="hidden sm:inline">Pedir</span> Al Centro
+        </button>
+        <button type="button" onclick="window.abrirCatalogoConDestino('mi_silla')"
+          class="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-black border border-emerald-500 transition flex items-center gap-1.5 cursor-pointer">
+          <i class="fa-solid fa-plus"></i> Agregar
+        </button>
+      </div>
     </div>
 
     <!-- Tarjeta de comanda limpia -->
@@ -233,78 +340,79 @@
   </div>
 
   <!-- VISTA DEL CATÁLOGO DE PLATILLOS (SE MUESTRA AL ELEGIR ORDENAR) -->
-  <main id="vistaCatalogoPlatillos" class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 grid grid-cols-1 lg:grid-cols-3 gap-6 hidden">
+  <main id="vistaCatalogoPlatillos" class="flex-1 max-w-4xl w-full mx-auto p-4 sm:p-6 pb-28 sm:pb-32 flex flex-col gap-4 hidden">
     
     <!-- BARRA SUPERIOR DE NAVEGACIÓN DENTRO DEL CATÁLOGO -->
-    <div class="lg:col-span-3 flex flex-wrap justify-between items-center bg-slate-900/90 p-3 sm:p-4 rounded-2xl border border-slate-800 gap-3">
-      <div class="flex items-center gap-3">
-        <button type="button" onclick="window.mostrarVistaHubMesa()"
+    <div class="flex items-center justify-between bg-slate-900/90 px-4 py-3 rounded-2xl border border-slate-800 shadow-md">
+      <div class="flex items-center gap-2">
+        <button type="button" id="btnCatalogoBack" onclick="window.catalogoVolverAtras()"
           class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold border border-slate-700 transition flex items-center gap-1.5 cursor-pointer">
-          <i class="fa-solid fa-arrow-left"></i> Volver a Tu Mesa
+          <i class="fa-solid fa-arrow-left"></i> <span id="lblCatalogoBackTxt">Volver a Mi Silla</span>
         </button>
-        <span class="text-xs text-slate-300 font-bold" id="lblCatalogoDestinoBadge">
-          🎯 Agregando a: Silla 1 (Tú)
-        </span>
+        <button type="button" onclick="window.mostrarVistaHubMesa()"
+          class="px-2.5 py-1.5 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-300 text-xs font-bold border border-slate-700 transition flex items-center gap-1 cursor-pointer" title="Ir al Inicio / Mi Silla">
+          <i class="fa-solid fa-house text-emerald-400"></i> Inicio
+        </button>
       </div>
+      <span class="text-xs text-slate-300 font-bold" id="lblCatalogoDestinoBadge">
+        🎯 Silla 1 (Tú)
+      </span>
+      <button type="button" onclick="window.mostrarVistaComanda()"
+        class="px-3 py-1.5 rounded-xl bg-emerald-700/60 hover:bg-emerald-600/70 text-emerald-300 text-xs font-bold border border-emerald-600/40 transition flex items-center gap-1.5 cursor-pointer">
+        <i class="fa-solid fa-receipt"></i> <span id="lblCatBtnTotalNav">Mi Comanda</span>
+      </button>
     </div>
 
-    <!-- SECCIÓN IZQUIERDA: CATÁLOGO Y PRODUCTOS -->
-    <section class="lg:col-span-2 flex flex-col gap-4">
+    <!-- SECCIÓN PRINCIPAL DEL CATÁLOGO (OCUPA TODA LA ANCHURA) -->
+    <section class="w-full flex flex-col gap-4">
 
-      <!-- BANNER SUPERIOR DE ESTADO DE COMANDA (SIEMPRE VISIBLE PARA EL COMENSAL) -->
-      <div id="stickyComandaBarCliente" class="bg-gradient-to-r from-slate-900 to-slate-950 p-4 rounded-2xl border border-emerald-500/40 shadow-xl flex flex-wrap items-center justify-between gap-3">
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-xl bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-xl text-emerald-400">
-            🧾
+      <!-- SUB-VISTA A: GRID DE CATEGORÍAS (se muestra al entrar al catálogo) -->
+      <div id="vistaCatCategorias">
+        <p class="text-xs text-slate-400 font-bold mb-3 px-1">¿Qué te apetece hoy?</p>
+        <div class="grid grid-cols-2 gap-3" id="categoriasGridContainer">
+          <!-- Generado dinámicamente por renderCategoriasGrid() -->
+          <div class="col-span-2 text-center py-8 text-slate-500 text-xs">
+            <i class="fa-solid fa-spinner animate-spin text-xl text-emerald-500 mb-2"></i>
+            <p>Cargando menú...</p>
           </div>
-          <div>
-            <div class="text-xs font-black text-white flex items-center gap-2" id="lblStickyComandaTitulo">
-              Mi Comanda: 0 productos
-            </div>
-            <div class="text-[11px] text-slate-400 mt-0.5" id="lblStickyComandaSubtitulo">
-              Selecciona una categoría y agrega platillos a tu cuenta
-            </div>
-          </div>
-        </div>
-        <div class="flex items-center gap-2">
-          <span class="text-sm font-black text-emerald-400 bg-emerald-950/80 px-2.5 py-1 rounded-lg border border-emerald-500/30" id="lblStickyComandaTotal">$0.00</span>
-          <button type="button" onclick="window.mostrarVistaComanda()" class="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-black transition flex items-center gap-1.5 shadow-md shadow-emerald-600/30 cursor-pointer">
-            <i class="fa-solid fa-receipt"></i> Mi Comanda
-          </button>
         </div>
       </div>
 
-      <!-- BUSCADOR & BARRA DE CATEGORÍAS -->
-      <div class="flex flex-col sm:flex-row gap-4 justify-between items-center">
-        <div class="relative w-full sm:w-80">
-          <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3.5 text-slate-500 text-sm"></i>
-          <input type="text" id="searchInput" placeholder="Buscar platillos o bebidas..."
-            oninput="window.filtrarProductos()"
-            class="w-full pl-10 pr-4 py-2.5 bg-slate-900/80 border border-slate-700/80 rounded-xl text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-emerald-500 transition">
+      <!-- SUB-VISTA B: PRODUCTOS DE UNA CATEGORÍA (oculta hasta que el usuario elija) -->
+      <div id="vistaCatProductos" class="hidden flex-col gap-4">
+        <!-- Header de la categoría seleccionada -->
+        <div class="flex items-center justify-between px-3 py-2.5 bg-slate-900/70 rounded-2xl border border-slate-800 shadow-sm">
+          <div class="flex items-center gap-2.5">
+            <span id="lblCatSelIcono" class="text-2xl">🍽️</span>
+            <div>
+              <div class="text-sm font-black text-white" id="lblCatSelNombre">Categoría</div>
+              <div class="text-[11px] text-slate-400" id="lblCatSelCount">0 opciones</div>
+            </div>
+          </div>
+          <div class="flex items-center gap-1.5">
+            <button type="button" onclick="window.mostrarGridCategorias();"
+              class="px-2.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold border border-slate-700 transition flex items-center gap-1 cursor-pointer">
+              <i class="fa-solid fa-arrow-left"></i> Categorías
+            </button>
+            <button type="button" onclick="window.mostrarVistaHubMesa();"
+              class="px-2.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold border border-slate-700 transition flex items-center gap-1 cursor-pointer">
+              <i class="fa-solid fa-house text-emerald-400"></i> Inicio
+            </button>
+          </div>
         </div>
-
-        <!-- CHIPS DE CATEGORÍAS -->
-        <div class="flex gap-2 overflow-x-auto w-full sm:w-auto pb-1" id="categoriesChips">
-          <button onclick="window.seleccionarCategoria('Todos')"
-            class="cat-chip active px-4 py-2 text-xs font-bold rounded-xl bg-emerald-500 text-white shadow-md shadow-emerald-500/20 whitespace-nowrap transition">
-            Todos
-          </button>
-        </div>
-      </div>
-
-      <!-- GRID DE TARJETAS DE PLATILLOS -->
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="productsGridContainer">
-        <div class="text-center py-12 text-slate-500 col-span-2">
-          <i class="fa-solid fa-spinner animate-spin text-2xl text-emerald-500 mb-2"></i>
-          <p>Cargando menú de La Terraza V&S...</p>
+        <!-- Grid de productos -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3" id="productsGridContainer">
+          <div class="text-center py-10 text-slate-500 col-span-2">
+            <i class="fa-solid fa-spinner animate-spin text-xl text-emerald-500 mb-2"></i>
+            <p>Cargando platillos...</p>
+          </div>
         </div>
       </div>
 
     </section>
 
-    <!-- SECCIÓN DERECHA: SIDEBAR DE COMANDA Y COBRO -->
-    <aside id="sidebarComanda"
-      class="glass-card rounded-2xl p-6 flex flex-col justify-between h-full border border-slate-800 shadow-2xl gap-4">
+    <!-- SIDEBAR COMANDA (COMPLETAMENTE OCULTO EN CATÁLOGO; LA COMANDA SE GESTIONA EN 'MI COMANDA') -->
+    <aside id="sidebarComanda" class="hidden" style="display:none !important;">
       <div>
         <div class="flex justify-between items-center pb-3 border-b border-slate-800 mb-3">
           <div>
@@ -406,15 +514,27 @@
       <div class="bg-slate-950/80 p-3 rounded-xl border border-slate-800/80 space-y-2">
         <span class="text-xs font-bold text-slate-300 block"><i
             class="fa-solid fa-hand-holding-dollar text-emerald-400 mr-1"></i> ¿Qué deseas pagar?</span>
-        <div class="grid grid-cols-3 gap-1.5 text-[11px]">
+        <div class="grid grid-cols-2 gap-1.5 text-[11px]">
           <button type="button" onclick="window.setModoPagoCliente('solo_yo')" id="btnModoSoloYo"
-            class="p-2 rounded-lg font-bold border text-center transition bg-slate-800 text-slate-300 border-slate-700 cursor-pointer">Solo
-            Mi Silla</button>
-          <button type="button" onclick="window.setModoPagoCliente('incluir_ninos')" id="btnModoNinos"
-            class="p-2 rounded-lg font-bold border text-center transition bg-emerald-600/30 text-emerald-300 border-emerald-500/50 cursor-pointer">Acompañantes</button>
+            class="p-2 rounded-lg font-bold border text-center transition bg-emerald-600/30 text-emerald-300 border-emerald-500/50 cursor-pointer">
+            1. Solo Mi Silla
+          </button>
+          <button type="button" onclick="window.setModoPagoCliente('split_centro')" id="btnModoSplitCentro"
+            class="p-2 rounded-lg font-bold border text-center transition bg-slate-800 text-slate-300 border-slate-700 cursor-pointer">
+            2. Mi Silla + Dividir Centro
+          </button>
+          <button type="button" onclick="window.setModoPagoCliente('absorber_centro')" id="btnModoAbsorberCentro"
+            class="p-2 rounded-lg font-bold border text-center transition bg-slate-800 text-slate-300 border-slate-700 cursor-pointer">
+            3. Mi Silla + Todo el Centro
+          </button>
+          <button type="button" onclick="window.setModoPagoCliente('split_toda_mesa')" id="btnModoSplitTodaMesa"
+            class="p-2 rounded-lg font-bold border text-center transition bg-slate-800 text-slate-300 border-slate-700 cursor-pointer">
+            4. Dividir Mesa Equitativa
+          </button>
           <button type="button" onclick="window.setModoPagoCliente('toda_mesa')" id="btnModoTodaMesa"
-            class="p-2 rounded-lg font-bold border text-center transition bg-slate-800 text-slate-300 border-slate-700 cursor-pointer">Toda
-            la Mesa</button>
+            class="col-span-2 p-2 rounded-lg font-bold border text-center transition bg-slate-800 text-slate-300 border-slate-700 cursor-pointer">
+            5. Toda la Mesa Completa (100%)
+          </button>
         </div>
       </div>
 
@@ -463,7 +583,7 @@
       style="background: #090d16 !important; border: 1px solid #334155 !important; border-radius: 24px !important; width: 100% !important; max-width: 520px !important; padding: 24px !important; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.8) !important; display: flex !important; flex-direction: column !important; gap: 16px !important; color: #f8fafc !important; max-height: 90vh !important; overflow-y: auto !important;">
       
       <!-- HEADER -->
-      <div style="display: flex !important; justify-content: space-between !important; align-items: flex-start !important; border-bottom: 1px solid #1e293b !important; padding-bottom: 12px !important;">
+      <div style="display: flex !important; justify-content: space-between !important; align-items: center !important; border-bottom: 1px solid #1e293b !important; padding-bottom: 12px !important;">
         <div style="display: flex; align-items: center; gap: 12px;">
           <div id="cliRecetaIcono" style="width: 50px; height: 50px; border-radius: 16px; background: linear-gradient(135deg, rgba(16,185,129,0.2), rgba(2,132,199,0.2)); display: flex; align-items: center; justify-content: center; font-size: 26px; border: 1.5px solid rgba(16,185,129,0.4);">🍳</div>
           <div>
@@ -471,8 +591,10 @@
             <h2 style="font-size: 18px; font-weight: 900; color: #ffffff; margin: 2px 0 0 0;" id="cliRecetaTitulo">Platillo</h2>
           </div>
         </div>
-        <button onclick="window.cerrarModalRecetaCliente();"
-          style="background: #1e293b !important; border: 1px solid #334155 !important; color: #94a3b8 !important; width: 32px !important; height: 32px !important; border-radius: 10px !important; font-weight: bold !important; cursor: pointer !important; display: flex; align-items: center; justify-content: center;">✕</button>
+        <button type="button" onclick="window.cerrarModalRecetaCliente();"
+          style="background: #1e293b !important; border: 1px solid #334155 !important; color: #cbd5e1 !important; padding: 6px 12px !important; border-radius: 10px !important; font-size: 12px !important; font-weight: 800 !important; cursor: pointer !important; display: flex; align-items: center; gap: 4px;">
+          <i class="fa-solid fa-arrow-left"></i> Volver
+        </button>
       </div>
 
       <!-- DESCRIPCIÓN GOURMET & PRECIO BASE -->
@@ -495,7 +617,7 @@
       </div>
 
       <!-- PREFERENCIAS / QUITAR INGREDIENTES -->
-      <div style="display: flex; flex-direction: column; gap: 8px;">
+      <div id="boxPreferenciasContainer" style="display: flex; flex-direction: column; gap: 8px;">
         <span style="font-size: 12px; font-weight: 800; color: #38bdf8; display: flex; align-items: center; gap: 6px;">
           <i class="fa-solid fa-sliders"></i> Preferencias / Exclusiones:
         </span>
@@ -505,7 +627,7 @@
       </div>
 
       <!-- INGREDIENTES EXTRAS (COBRO ADICIONAL) -->
-      <div style="display: flex; flex-direction: column; gap: 8px; background: rgba(56,189,248,0.06); border: 1px solid rgba(56,189,248,0.2); border-radius: 16px; padding: 12px;">
+      <div id="boxExtrasContainer" style="display: flex; flex-direction: column; gap: 8px; background: rgba(56,189,248,0.06); border: 1px solid rgba(56,189,248,0.2); border-radius: 16px; padding: 12px;">
         <span style="font-size: 12px; font-weight: 800; color: #38bdf8; display: flex; align-items: center; gap: 6px;">
           <i class="fa-solid fa-circle-plus"></i> ¿Deseas agregar extras a tu platillo?
         </span>
@@ -517,23 +639,28 @@
       <!-- NOTAS ESPECIALES PARA EL CHEF / BARISTA -->
       <div style="display: flex; flex-direction: column; gap: 6px;">
         <label for="txtModalNotasEspeciales" style="font-size: 11px; font-weight: 700; color: #94a3b8;">
-          <i class="fa-regular fa-comment-dots"></i> Instrucciones especiales para la cocina:
+          <i class="fa-regular fa-comment-dots"></i> Instrucciones especiales para la cocina / barra:
         </label>
-        <input type="text" id="txtModalNotasEspeciales" placeholder="Ej. Salsa verde bien caliente, poca sal..."
+        <input type="text" id="txtModalNotasEspeciales" placeholder="Ej. Bien frío con hielo, salsa aparte..."
           style="width: 100%; box-sizing: border-box; padding: 10px 14px; background: #020617; border: 1px solid #334155; border-radius: 12px; color: #f8fafc; font-size: 12px; outline: none;">
       </div>
 
       <!-- CANTIDAD Y BOTÓN PRINCIPAL AGREGAR -->
-      <div style="display: flex; gap: 12px; align-items: center; padding-top: 10px; border-top: 1px solid #1e293b;">
+      <div style="display: flex; gap: 10px; align-items: center; padding-top: 12px; border-top: 1px solid #1e293b;">
+        <button type="button" onclick="window.cerrarModalRecetaCliente();"
+          style="padding: 12px 16px; background: #1e293b; color: #cbd5e1; border: 1px solid #334155; border-radius: 14px; font-size: 12px; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+          <i class="fa-solid fa-arrow-left"></i> Volver
+        </button>
+
         <div style="display: flex; align-items: center; background: #020617; border: 1px solid #334155; border-radius: 12px; padding: 4px;">
-          <button type="button" onclick="window.cambiarCantidadModal(-1);" style="width: 32px; height: 32px; background: #1e293b; color: #ffffff; border: none; border-radius: 8px; font-weight: 900; font-size: 14px; cursor: pointer;">-</button>
-          <span id="txtModalCantidad" style="width: 36px; text-align: center; font-size: 14px; font-weight: 900; color: #ffffff;">1</span>
-          <button type="button" onclick="window.cambiarCantidadModal(1);" style="width: 32px; height: 32px; background: #1e293b; color: #ffffff; border: none; border-radius: 8px; font-weight: 900; font-size: 14px; cursor: pointer;">+</button>
+          <button type="button" onclick="window.cambiarCantidadModal(-1);" style="width: 30px; height: 30px; background: #1e293b; color: #ffffff; border: none; border-radius: 8px; font-weight: 900; font-size: 14px; cursor: pointer;">-</button>
+          <span id="txtModalCantidad" style="width: 32px; text-align: center; font-size: 14px; font-weight: 900; color: #ffffff;">1</span>
+          <button type="button" onclick="window.cambiarCantidadModal(1);" style="width: 30px; height: 30px; background: #1e293b; color: #ffffff; border: none; border-radius: 8px; font-weight: 900; font-size: 14px; cursor: pointer;">+</button>
         </div>
 
         <button type="button" onclick="window.confirmarAgregarPlatilloPersonalizado();"
-          style="flex: 1; padding: 14px; background: linear-gradient(135deg, #059669, #0d9488); color: #ffffff; border: none; border-radius: 14px; font-size: 13px; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 16px rgba(5,150,105,0.4);">
-          <i class="fa-solid fa-plus-circle"></i> <span id="btnModalConfirmarTxt">Agregar a Mi Pedido • $0.00</span>
+          style="flex: 1; padding: 13px; background: linear-gradient(135deg, #059669, #0d9488); color: #ffffff; border: none; border-radius: 14px; font-size: 13px; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; box-shadow: 0 4px 16px rgba(5,150,105,0.4);">
+          <i class="fa-solid fa-plus-circle"></i> <span id="btnModalConfirmarTxt">Agregar • $0.00</span>
         </button>
       </div>
 
@@ -542,557 +669,15 @@
 
 </div>
 
-<script>
-  window.vsMenuData = [
-    // 1. BEBIDAS & JUGOS
-    {
-      id: 501,
-      categoria_nombre: "Bebidas & Jugos",
-      nombre: "Café Americano / de Olla",
-      descripcion: "Café de altura recién tostado o receta tradicional con canela y piloncillo",
-      precio_unitario: 45.00,
-      estacion_preparacion: "barra_cafe",
-      icono: "☕",
-      tiempo: "3–5 min",
-      porciones: "1 taza (240ml)",
-      ingredientes: ["15g café de grano arábica molido", "240ml agua purificada a 90°C", "Opción de olla: piloncillo y canela"],
-      pasos: ["Extraer en cafetera de goteo o hervir infusión de canela y piloncillo.", "Servir bien caliente en taza precalentada."],
-      notas: "Mantener café fresco en contenedor hermético."
-    },
-    {
-      id: 502,
-      categoria_nombre: "Bebidas & Jugos",
-      nombre: "Café con Leche / Capuchino",
-      descripcion: "Espresso doble con leche cremada artesanal al vapor",
-      precio_unitario: 68.00,
-      estacion_preparacion: "barra_cafe",
-      icono: "☕",
-      tiempo: "4–6 min",
-      porciones: "1 taza (240ml)",
-      ingredientes: ["18g café espresso molido", "60ml espresso doble", "180ml leche cremada al vapor", "Canela"],
-      pasos: ["Extraer espresso doble en taza.", "Cremar leche con textura aterciopelada a 65°C.", "Verter sobre espresso y decorar con canela."],
-      notas: "Textura microespuma sedosa."
-    },
-    {
-      id: 503,
-      categoria_nombre: "Bebidas & Jugos",
-      nombre: "Jugo de Naranja Natural",
-      descripcion: "100% natural recién exprimido al momento",
-      precio_unitario: 55.00,
-      estacion_preparacion: "barra_cafe",
-      icono: "🍊",
-      tiempo: "3–5 min",
-      porciones: "1 vaso (300ml)",
-      ingredientes: ["4–5 naranjas de jugo frescas (300ml)"],
-      pasos: ["Lavar naranjas, cortar y exprimir en extractor al momento.", "Servir en vaso alto con hielo."],
-      notas: "Exprimir al momento para evitar oxidación."
-    },
-    {
-      id: 504,
-      categoria_nombre: "Bebidas & Jugos",
-      nombre: "Jugo Verde Energético",
-      descripcion: "Nopal, apio, piña, perejil y jugo de naranja fresco",
-      precio_unitario: 60.00,
-      estacion_preparacion: "barra_cafe",
-      icono: "🥬",
-      tiempo: "4–6 min",
-      porciones: "1 vaso (350ml)",
-      ingredientes: ["1/2 nopal tierno limpio", "1 vara de apio fresco", "60g piña en cubos", "Ramita de perejil", "180ml jugo de naranja natural"],
-      pasos: ["Licuar todos los ingredientes a alta velocidad durante 45s.", "Servir de inmediato sin colar."],
-      notas: "Bebida detox de alto valor nutricional."
-    },
-    {
-      id: 505,
-      categoria_nombre: "Bebidas & Jugos",
-      nombre: "Chocolate Caliente Tradicional",
-      descripcion: "Preparado con cacao criollo, canela y leche caliente",
-      precio_unitario: 55.00,
-      estacion_preparacion: "barra_cafe",
-      icono: "🍫",
-      tiempo: "5–7 min",
-      porciones: "1 taza (240ml)",
-      ingredientes: ["40g tableta de chocolate de mesa con canela", "240ml leche entera caliente"],
-      pasos: ["Disolver chocolate en leche caliente a fuego bajo.", "Batir con molinillo tradicional hasta espuma espesa."],
-      notas: "Tradición artesanal mexicana."
-    },
-    {
-      id: 506,
-      categoria_nombre: "Bebidas & Jugos",
-      nombre: "Agua Fresca de Fruta del Día",
-      descripcion: "Agua de fruta natural de temporada (500 ml)",
-      precio_unitario: 40.00,
-      estacion_preparacion: "barra_cafe",
-      icono: "🍉",
-      tiempo: "2–3 min",
-      porciones: "1 vaso (500ml)",
-      ingredientes: ["500ml agua de fruta natural fresca (Jamaica, Horchata, Limón Chía)", "Hielo al gusto"],
-      pasos: ["Servir en vaso con cubos de hielo."],
-      notas: "Preparada diariamente."
-    },
-    {
-      id: 507,
-      categoria_nombre: "Bebidas & Jugos",
-      nombre: "Refresco de Lata (355ml)",
-      descripcion: "Variedad de refrescos fríos de lata",
-      precio_unitario: 38.00,
-      estacion_preparacion: "barra_cafe",
-      icono: "🥤",
-      tiempo: "1–2 min",
-      porciones: "1 lata (355ml)",
-      ingredientes: ["1 lata 355ml surtida fría", "Vaso con hielo y limón"],
-      pasos: ["Entregar lata cerrada con vaso de hielo."],
-      notas: "Refrigerador a 3°C."
-    },
+  // ============================================================================
+  // CATÁLOGO DINÁMICO CONECTADO EXCLUSIVAMENTE A POSTGRESQL (dbterrazavidasabor)
+  // Toda la información de platillos, precios, términos, opciones y extras se
+  // almacena y consulta en la base de datos PostgreSQL en tiempo real.
+  // ============================================================================
+  window.vsMenuData = [];
+  window.vsCategoriasData = [];
 
-    // 2. HUEVOS Y OMELETTES
-    {
-      id: 101,
-      categoria_nombre: "Huevos & Omelettes",
-      nombre: "Huevos al Gusto",
-      descripcion: "2 huevos (fritos, revueltos o estrellados) + frijoles + tortillas o pan",
-      precio_unitario: 90.00,
-      estacion_preparacion: "cocina",
-      icono: "🍳",
-      tiempo: "8–10 min",
-      porciones: "1 persona",
-      ingredientes: ["2 huevos frescos", "1 cda aceite o mantequilla", "80g frijoles refritos", "Tortillas o pan"],
-      pasos: ["Cocinar al término solicitado (revueltos, fritos, estrellados).", "Acompañar con frijoles calientes y tortillas o pan."],
-      notas: "Preguntar siempre término de yema."
-    },
-    {
-      id: 102,
-      categoria_nombre: "Huevos & Omelettes",
-      nombre: "Huevos a la Mexicana",
-      descripcion: "Huevos revueltos con jitomate, cebolla y chile + frijoles refritos",
-      precio_unitario: 95.00,
-      estacion_preparacion: "cocina",
-      icono: "🍳",
-      tiempo: "8–10 min",
-      porciones: "1 persona",
-      ingredientes: ["2 huevos", "40g jitomate picado", "25g cebolla picada", "10–15g chile serrano picado", "10g cilantro", "80g frijoles + tortillas"],
-      pasos: ["Sofríe cebolla, jitomate y chile 2–3 min.", "Agrega los huevos batidos con sal y revuelve 3–4 min.", "Ajusta sal y agrega cilantro al final."],
-      notas: "Ajustar picante al gusto."
-    },
-    {
-      id: 103,
-      categoria_nombre: "Huevos & Omelettes",
-      nombre: "Huevos Rancheros",
-      descripcion: "Huevos estrellados sobre tortilla con salsa roja o verde + frijoles",
-      precio_unitario: 105.00,
-      estacion_preparacion: "cocina",
-      icono: "🍳",
-      tiempo: "10–12 min",
-      porciones: "1 persona",
-      ingredientes: ["2 huevos", "2 tortillas de maíz pasadas por aceite", "120ml salsa roja o verde caliente", "80g frijoles refritos", "Queso y crema"],
-      pasos: ["Calienta tortillas y colócalas en plato.", "Fríe huevos estrellados tiernos.", "Coloca sobre tortillas, baña con salsa caliente y corona con queso, crema y frijoles."],
-      notas: "Salsa hirviendo al servir."
-    },
-    {
-      id: 104,
-      categoria_nombre: "Huevos & Omelettes",
-      nombre: "Huevos con Jamón / Tocino / Chorizo",
-      descripcion: "Huevos al gusto + proteína a elegir + frijoles de la olla",
-      precio_unitario: 115.00,
-      estacion_preparacion: "cocina",
-      icono: "🥓",
-      tiempo: "8–10 min",
-      porciones: "1 persona",
-      ingredientes: ["2 huevos", "40–50g jamón, tocino o chorizo", "80g frijoles + tortillas"],
-      pasos: ["Dorar proteína elegida, verter huevos batidos y cocinar al punto.", "Servir con frijoles y tortillas."],
-      notas: "Escurrir exceso de grasa."
-    },
-    {
-      id: 105,
-      categoria_nombre: "Huevos & Omelettes",
-      nombre: "Omelette de Jamón y Queso",
-      descripcion: "Omelette relleno con queso gouda y jamón + ensalada o frijoles",
-      precio_unitario: 125.00,
-      estacion_preparacion: "cocina",
-      icono: "🧀",
-      tiempo: "7–9 min",
-      porciones: "1 persona",
-      ingredientes: ["3 huevos", "40g jamón picado", "40g queso manchego o Oaxaca", "1 cda mantequilla"],
-      pasos: ["Batir huevos con sal y pimienta.", "Cocinar en sartén con mantequilla a fuego medio.", "Agregar jamón y queso, doblar y terminar 1–2 min."],
-      notas: "Consistencia cremosa interior."
-    },
-    {
-      id: 106,
-      categoria_nombre: "Huevos & Omelettes",
-      nombre: "Omelette Champiñones y Espinaca",
-      descripcion: "Opción ligera con espinacas baby, champiñón fresco y queso",
-      precio_unitario: 130.00,
-      estacion_preparacion: "cocina",
-      icono: "🍄",
-      tiempo: "8–10 min",
-      porciones: "1 persona",
-      ingredientes: ["3 huevos orgánicos", "50g champiñones frescos", "30g espinaca baby", "30g queso panela"],
-      pasos: ["Saltear champiñones y espinaca 2 min.", "Verter huevos batidos, rellenar con salteado y queso, doblar y servir."],
-      notas: "Opción vegetariana."
-    },
-    {
-      id: 107,
-      categoria_nombre: "Huevos & Omelettes",
-      nombre: "Machaca con Huevo Norteña",
-      descripcion: "Clásico norteño de carne seca con huevo + frijoles y tortillas",
-      precio_unitario: 135.00,
-      estacion_preparacion: "cocina",
-      icono: "🥩",
-      tiempo: "10–12 min",
-      porciones: "1 persona",
-      ingredientes: ["50g machaca de res sonorense", "2 huevos", "Jitomate y cebolla", "80g frijoles + tortillas de harina"],
-      pasos: ["Sofríe verdura, añade machaca para hidratar.", "Incorpora huevos batidos y revuelve bien.", "Servir con frijoles y tortillas de harina."],
-      notas: "Carne seca norteña artesanal."
-    },
-
-    // 3. ESPECIALIDADES MEXICANAS
-    {
-      id: 201,
-      categoria_nombre: "Especialidades Mexicanas",
-      nombre: "Chilaquiles Verdes o Rojos",
-      descripcion: "Con crema, queso y cebolla. Acompañados con huevo o pollo",
-      precio_unitario: 145.00,
-      estacion_preparacion: "cocina",
-      icono: "🥘",
-      tiempo: "15–18 min",
-      porciones: "1 persona",
-      ingredientes: ["80–90g totopos artesanos de maíz", "180ml salsa verde o roja casera", "50g pollo deshebrado o 1 huevo", "30g crema mexicana", "25g queso fresco desmoronado", "15g cebolla en pluma", "Cilantro fresco"],
-      pasos: ["Calentar salsa en sartén hondo (3–4 min).", "Agregar totopos y mezclar solo hasta hidratar (1–2 min).", "Servir en plato, coronar con pollo o huevo, crema, queso, cebolla y cilantro."],
-      adicionales: ["Bistec de Res Extra (100g) +$45.00", "Porción Extra de Pollo (50g) +$35.00", "Huevo Extra al Gusto +$20.00", "Aguacate en Rebanadas +$25.00", "Queso Gratinado Extra +$25.00"],
-      notas: "Totopos crujientes previamente fritos en hermético."
-    },
-    {
-      id: 202,
-      categoria_nombre: "Especialidades Mexicanas",
-      nombre: "Chilaquiles con Bistec o Chorizo",
-      descripcion: "Versión fuerte con bistec a la plancha o chorizo artesanal",
-      precio_unitario: 165.00,
-      estacion_preparacion: "cocina",
-      icono: "🥩",
-      tiempo: "15–18 min",
-      porciones: "1 persona",
-      ingredientes: ["90g totopos artesanos de maíz", "180ml salsa verde o roja", "120g bistec plancha o 60g chorizo", "30g crema", "25g queso fresco", "15g cebolla"],
-      pasos: ["Asar bistec al término.", "Preparar chilaquiles en salsa hirviendo 1–2 min.", "Montar chilaquiles con carne en tiras."],
-      adicionales: ["Huevo Estrellado Extra +$20.00", "Aguacate en Rebanadas +$25.00", "Queso Gratinado Extra +$25.00"],
-      notas: "Platillo insignia fuerte."
-    },
-    {
-      id: 203,
-      categoria_nombre: "Especialidades Mexicanas",
-      nombre: "Enchiladas de Desayuno",
-      descripcion: "Rojas o verdes, rellenas de pollo o queso + huevo estrellado encima",
-      precio_unitario: 145.00,
-      estacion_preparacion: "cocina",
-      icono: "🌶️",
-      tiempo: "12–15 min",
-      porciones: "1 persona (3 piezas)",
-      ingredientes: ["3 tortillas maíz pasadas por aceite", "100g pollo o queso", "180ml salsa verde/roja caliente", "1 huevo estrellado", "30g crema", "25g queso fresco"],
-      pasos: ["Rellenar tortillas con pollo/queso y enrollar.", "Bañar con salsa caliente.", "Coronar con huevo estrellado, crema y queso fresco."],
-      adicionales: ["Porción Extra de Pollo +$35.00", "Aguacate en Rebanadas +$25.00"],
-      notas: "Servir muy caliente."
-    },
-    {
-      id: 204,
-      categoria_nombre: "Especialidades Mexicanas",
-      nombre: "Molletes Tradicionales",
-      descripcion: "Bolillo con frijoles refritos, queso gratinado y pico de gallo",
-      precio_unitario: 105.00,
-      estacion_preparacion: "cocina",
-      icono: "🥖",
-      tiempo: "8–10 min",
-      porciones: "1 persona (2 mitades)",
-      ingredientes: ["1 bolillo artesano partido a la mitad", "80g frijoles refritos", "50–60g queso manchego o Oaxaca rallado", "40g pico de gallo fresco"],
-      pasos: ["Abrir bolillo y tostar base.", "Untar frijoles, cubrir con queso rallado.", "Gratinar 3–4 min en horno.", "Servir con pico de gallo."],
-      adicionales: ["Porción de Chorizo Artesanal (40g) +$30.00", "Porción de Tocino Dorado (30g) +$30.00", "Huevo Estrellado encima +$20.00", "Aguacate en Rebanadas +$25.00"],
-      notas: "Pan crujiente por fuera y suave por dentro."
-    },
-    {
-      id: 205,
-      categoria_nombre: "Especialidades Mexicanas",
-      nombre: "Tacos de Huevo al Gusto (3 pzas)",
-      descripcion: "3 tacos de huevo con salsa a elegir y frijoles",
-      precio_unitario: 85.00,
-      estacion_preparacion: "cocina",
-      icono: "🌮",
-      tiempo: "8–10 min",
-      porciones: "1 persona (3 tacos)",
-      ingredientes: ["3 tortillas calientes", "2 huevos revueltos al gusto", "Frijoles y salsas"],
-      pasos: ["Preparar huevo revuelto.", "Montar en 3 tortillas con frijoles y salsa."],
-      notas: "Rápido y económico."
-    },
-    {
-      id: 206,
-      categoria_nombre: "Especialidades Mexicanas",
-      nombre: "Tacos de Chorizo con Huevo (3 pzas)",
-      descripcion: "Guisado tradicional en tortillas recién hechas",
-      precio_unitario: 95.00,
-      estacion_preparacion: "cocina",
-      icono: "🌮",
-      tiempo: "8–10 min",
-      porciones: "1 persona (3 tacos)",
-      ingredientes: ["3 tortillas", "50g chorizo artesanal", "2 huevos", "Cebolla y cilantro"],
-      pasos: ["Dorar chorizo 3 min, incorporar huevos y revolver.", "Repartir en 3 tacos con cebolla y cilantro."],
-      notas: "Sabor casero."
-    },
-
-    // 4. DULCES / AMERICANOS
-    {
-      id: 301,
-      categoria_nombre: "Dulces & Americanos",
-      nombre: "Hotcakes Clásicos (3 pzas)",
-      descripcion: "Con mantequilla de rancho y miel de maple o cajeta",
-      precio_unitario: 110.00,
-      estacion_preparacion: "cocina",
-      icono: "🥞",
-      tiempo: "12–15 min",
-      porciones: "1 persona (3 piezas)",
-      ingredientes: ["120g harina hotcakes", "1 huevo", "150ml leche", "15g azúcar", "10g mantequilla derretida", "Pizca sal", "Miel y mantequilla"],
-      pasos: ["Mezclar ingredientes hasta masa uniforme.", "Cocinar en sartén antiadherente a fuego medio (2 min por lado).", "Servir torre de 3 con mantequilla y miel o cajeta."],
-      notas: "Fuego medio parejo."
-    },
-    {
-      id: 302,
-      categoria_nombre: "Dulces & Americanos",
-      nombre: "Hotcakes con Fruta Fresca",
-      descripcion: "Acompañados de plátano, fresas de temporada o mixtas",
-      precio_unitario: 130.00,
-      estacion_preparacion: "cocina",
-      icono: "🍓",
-      tiempo: "12–15 min",
-      porciones: "1 persona (3 piezas)",
-      ingredientes: ["3 hotcakes", "40g plátano", "40g fresas", "Miel maple"],
-      pasos: ["Cocinar 3 hotcakes.", "Montar intercalando fruta fresca y bañar con miel."],
-      notas: "Favorito familiar."
-    },
-    {
-      id: 303,
-      categoria_nombre: "Dulces & Americanos",
-      nombre: "Waffles Belgas con Frutas",
-      descripcion: "Waffles dorados con fruta fresca y miel de abeja",
-      precio_unitario: 135.00,
-      estacion_preparacion: "cocina",
-      icono: "🧇",
-      tiempo: "10–12 min",
-      porciones: "1 persona",
-      ingredientes: ["1 waffle belga dorado", "Fresas, plátano y moras", "Miel de abeja", "Azúcar glass"],
-      pasos: ["Hornear en waflera 4 min.", "Decorar con fruta fresca, azúcar glass y miel."],
-      notas: "Exterior crujiente."
-    },
-    {
-      id: 304,
-      categoria_nombre: "Dulces & Americanos",
-      nombre: "Orden de Fruta de Temporada",
-      descripcion: "Papaya, melón y piña con yogurt natural o granola",
-      precio_unitario: 95.00,
-      estacion_preparacion: "cocina",
-      icono: "🍍",
-      tiempo: "4–6 min",
-      porciones: "1 persona",
-      ingredientes: ["80g papaya", "80g melón", "80g piña", "Yogurt o granola"],
-      pasos: ["Cortar fruta en cubos uniformes.", "Servir con ramequín de yogurt o granola."],
-      notas: "Fruta fresca del día."
-    },
-    {
-      id: 305,
-      categoria_nombre: "Dulces & Americanos",
-      nombre: "Yogurt con Granola y Fruta",
-      descripcion: "Bowl fresco con yogurt natural, granola artesanal y fruta",
-      precio_unitario: 90.00,
-      estacion_preparacion: "cocina",
-      icono: "🥣",
-      tiempo: "4–6 min",
-      porciones: "1 persona",
-      ingredientes: ["150g yogurt griego", "40g granola artesanal", "Fresas, plátano y miel"],
-      pasos: ["Cama de yogurt en bowl.", "Decorar con granola y frutas, bañar con miel."],
-      notas: "Opción ligera."
-    },
-
-    // 5. COMBOS RECOMENDADOS
-    {
-      id: 401,
-      categoria_nombre: "Combos Recomendados",
-      nombre: "Combo Clásico Desayuno",
-      descripcion: "Huevos al gusto + frijoles + jugo de naranja + café",
-      precio_unitario: 145.00,
-      estacion_preparacion: "cocina",
-      icono: "⭐",
-      tiempo: "12–15 min",
-      porciones: "1 persona",
-      ingredientes: ["Huevos al gusto con frijoles y tortillas", "Jugo naranja (240ml)", "Café americano o de olla (240ml)"],
-      pasos: ["Servir café y jugo de inmediato.", "Cocinar huevos y servir con guarnición."],
-      notas: "Bebidas al inicio."
-    },
-    {
-      id: 402,
-      categoria_nombre: "Combos Recomendados",
-      nombre: "Combo Chilaquiles V&S",
-      descripcion: "Chilaquiles con huevo/pollo + jugo natural + café",
-      precio_unitario: 175.00,
-      estacion_preparacion: "cocina",
-      icono: "⭐",
-      tiempo: "15–18 min",
-      porciones: "1 persona",
-      ingredientes: ["Chilaquiles verdes/rojos con huevo o pollo", "Jugo naranja", "Café americano o de olla"],
-      pasos: ["Entregar café y jugo.", "Preparar chilaquiles y servir calientes."],
-      notas: "Combo estrella matutino."
-    },
-    {
-      id: 403,
-      categoria_nombre: "Combos Recomendados",
-      nombre: "Combo Dulce Mañana",
-      descripcion: "Hotcakes + jugo de naranja natural + café americano",
-      precio_unitario: 155.00,
-      estacion_preparacion: "cocina",
-      icono: "⭐",
-      tiempo: "12–15 min",
-      porciones: "1 persona",
-      ingredientes: ["3 Hotcakes clásicos con mantequilla y miel", "Jugo naranja", "Café americano"],
-      pasos: ["Servir café y jugo.", "Cocinar hotcakes y servir con miel."],
-      notas: "Desayuno dulce."
-    },
-
-    // 6. MENÚ INFANTIL (KIDS)
-    {
-      id: 601,
-      categoria_nombre: "Menú Infantil (Kids)",
-      nombre: "Hotcakes Infantiles (2 piezas)",
-      descripcion: "2 hotcakes suaves y esponjosos con mantequilla y miel o cajeta",
-      precio_unitario: 75.00,
-      estacion_preparacion: "cocina",
-      icono: "🥞",
-      tiempo: "10–12 min",
-      porciones: "1 niño (2 piezas)",
-      ingredientes: ["80g harina para hotcakes", "1 huevo chico", "100ml leche", "10g azúcar", "8g mantequilla derretida", "Pizca de sal", "Miel o cajeta"],
-      pasos: ["Mezclar ingredientes hasta masa suave.", "Cocinar a fuego medio (1.5–2 min por lado).", "Servir con mantequilla y miel o cajeta."],
-      adicionales: ["Fresas o Plátano Rebanado +$20.00", "Chispas de Chocolate +$15.00"],
-      notas: "Porción infantil suave y esponjosa."
-    },
-    {
-      id: 602,
-      categoria_nombre: "Menú Infantil (Kids)",
-      nombre: "Huevito Feliz con Jamón",
-      descripcion: "Huevo al gusto decorado con jamón en tiras, frijolitos y pan o tortilla",
-      precio_unitario: 65.00,
-      estacion_preparacion: "cocina",
-      icono: "🍳",
-      tiempo: "7–8 min",
-      porciones: "1 niño",
-      ingredientes: ["1 huevo fresco", "25g jamón en tiras", "50g frijoles refritos suaves", "1 tortilla de maíz o 1/2 bolillo", "1 cdita mantequilla"],
-      pasos: ["Calentar jamón en sartén.", "Cocinar huevo en forma de carita feliz.", "Servir con frijoles y tortilla o pan."],
-      notas: "Montaje divertido para niños."
-    },
-    {
-      id: 603,
-      categoria_nombre: "Menú Infantil (Kids)",
-      nombre: "Huevos con Jamón (Kids)",
-      descripcion: "1 huevo revuelto suave con jamón picado y frijolitos",
-      precio_unitario: 65.00,
-      estacion_preparacion: "cocina",
-      icono: "🥓",
-      tiempo: "7–8 min",
-      porciones: "1 niño",
-      ingredientes: ["1 huevo", "30g jamón picado", "50g frijoles refritos", "1 tortilla o 1/2 pan", "1 cdita mantequilla"],
-      pasos: ["Sofríe jamón ligeramente.", "Agrega huevo y cocina revuelto suave.", "Acompaña con frijoles y tortilla o pan."],
-      notas: "Cocción suave."
-    },
-    {
-      id: 604,
-      categoria_nombre: "Menú Infantil (Kids)",
-      nombre: "Mollete Pequeño",
-      descripcion: "1/2 bolillo con frijolitos, queso gratinado y pico de gallo suave",
-      precio_unitario: 55.00,
-      estacion_preparacion: "cocina",
-      icono: "🥖",
-      tiempo: "7–9 min",
-      porciones: "1 niño (1 mitad)",
-      ingredientes: ["1/2 bolillo artesano", "50g frijoles refritos", "30g queso manchego o Oaxaca rallado", "25g pico de gallo suave (sin picante)"],
-      pasos: ["Abre medio bolillo y calienta.", "Unta frijoles, agrega queso y gratina 3–4 min.", "Sirve con pico de gallo suave."],
-      adicionales: ["Porción de Chorizo Infantil (20g) +$15.00", "Porción de Tocino +$15.00"],
-      notas: "Pico de gallo 100% sin chile para niños."
-    },
-    {
-      id: 605,
-      categoria_nombre: "Menú Infantil (Kids)",
-      nombre: "Quesadilla de Queso con Frijolitos",
-      descripcion: "Quesadilla doradita con queso manchego o Oaxaca fundido",
-      precio_unitario: 45.00,
-      estacion_preparacion: "cocina",
-      icono: "🧀",
-      tiempo: "5–6 min",
-      porciones: "1 niño",
-      ingredientes: ["1 tortilla de harina o maíz", "40g queso Oaxaca o manchego", "40g frijoles refritos para acompañar"],
-      pasos: ["Coloca queso en tortilla y dobla.", "Calienta en comal hasta fundir.", "Sirve con frijoles."],
-      adicionales: ["Jamón en Cubitos +$15.00"],
-      notas: "Queso bien fundido."
-    },
-    {
-      id: 606,
-      categoria_nombre: "Menú Infantil (Kids)",
-      nombre: "Fruta Fresca Infantil",
-      descripcion: "Tazón con fruta de temporada picada en trozos pequeños",
-      precio_unitario: 50.00,
-      estacion_preparacion: "cocina",
-      icono: "🍉",
-      tiempo: "3–4 min",
-      porciones: "1 niño",
-      ingredientes: ["120–140g fruta fresca de temporada en trozos regulares pequeños"],
-      pasos: ["Pica la fruta en trozos pequeños y limpios.", "Sirve en tazón chico."],
-      notas: "Corte adaptado para niños."
-    },
-    {
-      id: 607,
-      categoria_nombre: "Menú Infantil (Kids)",
-      nombre: "Yogurt con Granola y Fruta (Kids)",
-      descripcion: "Tazón de yogurt natural o fresa con granola suave y fruta fresca",
-      precio_unitario: 50.00,
-      estacion_preparacion: "cocina",
-      icono: "🥣",
-      tiempo: "2–3 min",
-      porciones: "1 niño",
-      ingredientes: ["120g yogurt natural o frutas", "25g granola suave", "40g plátano o fresas en rebanadas"],
-      pasos: ["Coloca yogurt en tazón.", "Agrega granola y fruta fresca encima."],
-      notas: "Desayuno nutritivo."
-    },
-    {
-      id: 608,
-      categoria_nombre: "Menú Infantil (Kids)",
-      nombre: "Mini Chilaquiles Suaves (Kids)",
-      descripcion: "Totopitos con salsa suave de tomate sin picante, crema y queso fresco",
-      precio_unitario: 85.00,
-      estacion_preparacion: "cocina",
-      icono: "🥘",
-      tiempo: "10–12 min",
-      porciones: "1 niño",
-      ingredientes: ["50–55g totopos", "100ml salsa roja suave de tomate (sin picante)", "20g crema", "20g queso fresco", "10g cebolla suave"],
-      pasos: ["Calienta salsa suave.", "Agrega totopos y mezcla 1 min hasta hidratar.", "Sirve con crema y queso fresco."],
-      adicionales: ["Pollo Deshebrado (30g) +$20.00", "Huevo Revuelto +$15.00"],
-      notas: "Salsa 100% sin chile para niños."
-    },
-    {
-      id: 609,
-      categoria_nombre: "Menú Infantil (Kids)",
-      nombre: "Chocolate con Pan Tostado",
-      descripcion: "Chocolate caliente espumoso con pan tostado con mantequilla",
-      precio_unitario: 45.00,
-      estacion_preparacion: "barra_cafe",
-      icono: "🍫",
-      tiempo: "5–6 min",
-      porciones: "1 niño",
-      ingredientes: ["200ml leche tibia", "20–25g chocolate de mesa", "1/2 bolillo o 1 rebanada de pan tostado", "5g mantequilla"],
-      pasos: ["Calienta leche con chocolate hasta disolver.", "Tuesta pan y unta mantequilla.", "Sirve juntos a temperatura tibia."],
-      notas: "Temperatura tibia agradable."
-    }
-  ];
-
-  window.vsCategoriasData = [
-    { id: 1, nombre: "Bebidas & Jugos", icono: "☕" },
-    { id: 2, nombre: "Huevos & Omelettes", icono: "🍳" },
-    { id: 3, nombre: "Especialidades Mexicanas", icono: "🥘" },
-    { id: 4, nombre: "Dulces & Americanos", icono: "🥞" },
-    { id: 5, nombre: "Combos Recomendados", icono: "⭐" },
-    { id: 6, nombre: "Menú Infantil (Kids)", icono: "👶" }
-  ];
-
-  window.categoriaActual = "Bebidas & Jugos";
+  window.categoriaActual = "Al Centro (Para Compartir)";
   window.simMesaId = 1;
   window.simSillaNum = 1;
   window.sillasAcompanantesSeleccionadas = [];
@@ -1106,9 +691,19 @@
       }
       if (Array.isArray(cats) && cats.length > 0) {
         window.vsCategoriasData = cats;
-        if (typeof window.renderCategoriasTabs === 'function') window.renderCategoriasTabs();
+        // Si la categoría actual no existe en el catálogo recibido, usar la primera categoría disponible
+        if (!window.vsCategoriasData.some(function(c){ return c.nombre === window.categoriaActual; })) {
+          if (window.vsCategoriasData.length > 0) {
+            window.categoriaActual = window.vsCategoriasData[0].nombre;
+          }
+        }
       }
+      if (typeof window.renderCategoriasGrid === 'function') window.renderCategoriasGrid();
+      if (typeof window.renderCategoriasChips === 'function') window.renderCategoriasChips();
+      if (typeof window.renderCategoriasTabs === 'function') window.renderCategoriasTabs();
       if (typeof window.renderMenuGrid === 'function') window.renderMenuGrid();
+      if (typeof window.filtrarProductos === 'function') window.filtrarProductos();
+      console.log('✅ [POSTGRESQL] Catálogo cargado dinámicamente:', (window.vsMenuData||[]).length, 'platillos,', (window.vsCategoriasData||[]).length, 'categorías');
     } catch(e) {
       console.error('Error cargando catalogo PostgreSQL:', e);
     }
@@ -1145,55 +740,216 @@
 
   window.destinoPedido = 'mi_silla'; // 'mi_silla' | 'centro' | 2 | 3 | 4
 
+  // Helper central para asegurar que NUNCA queden 2 vistas abiertas al mismo tiempo
+  window.ocultarTodasLasVistas = function () {
+    ['vistaHubMesa', 'vistaComandaMesa', 'vistaComandaLimpia', 'vistaCatalogoPlatillos'].forEach(function (id) {
+      var el = document.getElementById(id);
+      if (el) {
+        el.classList.add('hidden');
+        el.style.display = 'none';
+      }
+    });
+  };
+
   window.abrirCatalogoConDestino = function (dest) {
     window.destinoPedido = dest;
-    var hub = document.getElementById('vistaHubMesa');
-    var cat = document.getElementById('vistaCatalogoPlatillos');
-    var comanda = document.getElementById('vistaComandaLimpia');
-    if (hub) hub.classList.add('hidden');
-    if (comanda) comanda.classList.add('hidden');
-    if (cat) cat.classList.remove('hidden');
+    
+    // 1. Ocultar absolutamente todas las demás vistas (hub, comanda personal, comanda de la mesa)
+    window.ocultarTodasLasVistas();
 
+    // 2. Mostrar exclusivamente el contenedor del catálogo
+    var cat = document.getElementById('vistaCatalogoPlatillos');
+    if (cat) {
+      cat.classList.remove('hidden');
+      cat.style.display = '';
+    }
+
+    // 3. Actualizar badge de destino en la barra superior
     var badge = document.getElementById('lblCatalogoDestinoBadge');
     if (badge) {
       if (dest === 'centro') {
-        badge.innerHTML = '🍲 Agregando a: <span class="text-amber-400 font-black">Al Centro (Para Compartir)</span>';
+        badge.innerHTML = '🍲 Al Centro (Para Compartir)';
       } else if (dest === 'mi_silla' || dest === window.simSillaNum) {
-        badge.innerHTML = `🎯 Agregando a: <span class="text-emerald-400 font-black">Silla ${window.simSillaNum} (Tú)</span>`;
+        badge.innerHTML = `🎯 Silla ${window.simSillaNum} (Tú)`;
       } else {
-        badge.innerHTML = `🎯 Agregando a: <span class="text-sky-400 font-black">Silla ${dest}</span>`;
+        badge.innerHTML = `🎯 Silla ${dest}`;
       }
     }
 
-    window.renderSillasMesaBar();
-    window.filtrarProductos();
-    window.renderCarrito();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    // 4. Mostrar siempre el grid de categorías de 2 columnas (paso A) y ocultar productos (paso B)
+    window.mostrarGridCategorias();
+    window.actualizarNavComandaBtn();
+
+    // 5. Posicionar la vista arriba de inmediato sin estorbo de scroll
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  };
+
+  // Muestra el grid de categorias de 2 columnas (sub-vista A)
+  window.mostrarGridCategorias = function () {
+    var gCat = document.getElementById('vistaCatCategorias');
+    var gProd = document.getElementById('vistaCatProductos');
+    if (gCat) { gCat.style.display = ''; gCat.classList.remove('hidden'); }
+    if (gProd) { gProd.style.display = 'none'; gProd.classList.add('hidden'); }
+    var backBtn = document.getElementById('lblCatalogoBackTxt');
+    if (backBtn) backBtn.textContent = 'Volver a Mi Silla';
+    window.renderCategoriasGrid();
+  };
+
+  // Volver inteligente: si estoy en productos -> vuelvo a categorias; si estoy en categorias -> vuelvo al hub
+  window.catalogoVolverAtras = function () {
+    var gProd = document.getElementById('vistaCatProductos');
+    var estaEnProductos = gProd && !gProd.classList.contains('hidden') && gProd.style.display !== 'none';
+    if (estaEnProductos) {
+      window.mostrarGridCategorias();
+    } else {
+      window.mostrarVistaHubMesa();
+    }
+  };
+
+  // Actualiza el boton de comanda en la nav bar con el conteo de items
+  window.actualizarNavComandaBtn = function () {
+    var cuentas = getStorageCuentas();
+    var mesaId = window.simMesaId || 1;
+    var key = mesaId + '-' + (window.simSillaNum || 1);
+    var items = (cuentas[key] && cuentas[key].items) ? cuentas[key].items : [];
+    var el = document.getElementById('lblCatBtnTotalNav');
+    if (el) {
+      el.textContent = items.length > 0 ? `Mi Comanda (${items.length})` : 'Mi Comanda';
+    }
+  };
+
+  // Renderiza el grid de 2 columnas con las categorias disponibles
+  window.renderCategoriasGrid = function () {
+    var container = document.getElementById('categoriasGridContainer');
+    if (!container) return;
+    container.innerHTML = '';
+
+    var cats = window.vsCategoriasData || [];
+    if (cats.length === 0) {
+      // Intentar extraer categorias desde los productos
+      var seen = {};
+      (window.vsMenuData || []).forEach(function (p) {
+        if (p.categoria_nombre && !seen[p.categoria_nombre]) {
+          seen[p.categoria_nombre] = { nombre: p.categoria_nombre, icono: p.icono || '🍽️', count: 0 };
+        }
+        if (seen[p.categoria_nombre]) seen[p.categoria_nombre].count++;
+      });
+      cats = Object.values(seen);
+    } else {
+      // Contar productos por categoria
+      cats = cats.map(function (c) {
+        var count = (window.vsMenuData || []).filter(function (p) { return p.categoria_nombre === c.nombre; }).length;
+        return Object.assign({}, c, { count: count });
+      });
+    }
+
+    if (cats.length === 0) {
+      container.innerHTML = `
+        <div class="col-span-2 text-center py-12 text-slate-400">
+          <div class="inline-block animate-spin text-3xl mb-3">⏳</div>
+          <p class="font-bold text-sm text-slate-300">Cargando menú oficial desde PostgreSQL...</p>
+          <p class="text-xs text-slate-500 mt-1">Conectando en tiempo real con dbterrazavidasabor</p>
+        </div>
+      `;
+      return;
+    }
+
+    // Asegurar que 'Al Centro (Para Compartir)' esté en primer lugar
+    var centroCat = cats.find(function(c) { return c.nombre === 'Al Centro (Para Compartir)'; });
+    var otrasCats = cats.filter(function(c) { return c.nombre !== 'Al Centro (Para Compartir)'; });
+    if (centroCat) {
+      cats = [centroCat].concat(otrasCats);
+    }
+
+    // Paleta de colores rotativos para las tarjetas estándar
+    var colores = [
+      { bg: 'from-emerald-900/60 to-emerald-950/80', border: 'border-emerald-500/30', icon: 'bg-emerald-500/20 text-emerald-300', text: 'text-emerald-400' },
+      { bg: 'from-amber-900/60 to-amber-950/80', border: 'border-amber-500/30', icon: 'bg-amber-500/20 text-amber-300', text: 'text-amber-400' },
+      { bg: 'from-sky-900/60 to-sky-950/80', border: 'border-sky-500/30', icon: 'bg-sky-500/20 text-sky-300', text: 'text-sky-400' },
+      { bg: 'from-violet-900/60 to-violet-950/80', border: 'border-violet-500/30', icon: 'bg-violet-500/20 text-violet-300', text: 'text-violet-400' },
+      { bg: 'from-rose-900/60 to-rose-950/80', border: 'border-rose-500/30', icon: 'bg-rose-500/20 text-rose-300', text: 'text-rose-400' },
+      { bg: 'from-teal-900/60 to-teal-950/80', border: 'border-teal-500/30', icon: 'bg-teal-500/20 text-teal-300', text: 'text-teal-400' },
+    ];
+
+    var colorIdx = 0;
+    cats.forEach(function (cat) {
+      var tile = document.createElement('button');
+      tile.type = 'button';
+      var esCentro = (cat.nombre === 'Al Centro (Para Compartir)' || cat.destacado);
+
+      if (esCentro) {
+        // Cuadrado/Banner que abarca las 2 columnas completo
+        tile.className = 'col-span-2 glass-card bg-gradient-to-r from-amber-950/80 via-yellow-950/60 to-amber-900/80 border-2 border-amber-500/60 hover:border-amber-400 rounded-3xl p-5 flex items-center justify-between text-left cursor-pointer hover:scale-[1.01] active:scale-[0.99] transition shadow-xl group';
+        tile.innerHTML = `
+          <div class="flex items-center gap-4">
+            <div class="w-14 h-14 rounded-2xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-3xl text-amber-400 group-hover:scale-110 transition flex-shrink-0">
+              🍲
+            </div>
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="text-[10px] font-black text-amber-400 uppercase tracking-wider bg-amber-500/20 px-2.5 py-0.5 rounded-full border border-amber-500/30">⭐ Para Compartir en la Mesa</span>
+                <span class="text-[11px] text-amber-300 font-bold">${cat.count || 0} opciones</span>
+              </div>
+              <h3 class="text-base font-black text-white mt-1">Platillos y Botanas Al Centro</h3>
+              <p class="text-xs text-amber-200/80 mt-0.5 line-clamp-1">Guacamole con chicharrón, taquitos de camarón y carne, jarras y botanas para la mesa.</p>
+            </div>
+          </div>
+          <i class="fa-solid fa-chevron-right text-amber-400 text-sm ml-2 group-hover:translate-x-1 transition flex-shrink-0"></i>
+        `;
+      } else {
+        var c = colores[colorIdx % colores.length];
+        colorIdx++;
+        tile.className = `glass-card bg-gradient-to-br ${c.bg} border ${c.border} rounded-2xl p-5 flex flex-col items-center justify-center gap-3 text-center cursor-pointer hover:scale-105 active:scale-95 transition-transform shadow-lg`;
+        tile.innerHTML = `
+          <div class="w-14 h-14 rounded-2xl ${c.icon} flex items-center justify-center text-3xl border ${c.border}">${cat.icono || '🍽️'}</div>
+          <div>
+            <div class="text-sm font-black text-white leading-tight">${cat.nombre}</div>
+            <div class="text-[11px] ${c.text} font-bold mt-0.5">${cat.count || 0} opciones</div>
+          </div>
+        `;
+      }
+
+      tile.onclick = (function (catData) {
+        return function () { window.seleccionarCategoria(catData.nombre, catData.icono); };
+      })(cat);
+      container.appendChild(tile);
+    });
   };
 
   window.mostrarVistaHubMesa = function () {
+    window.ocultarTodasLasVistas();
     var hub = document.getElementById('vistaHubMesa');
-    var cat = document.getElementById('vistaCatalogoPlatillos');
-    var comanda = document.getElementById('vistaComandaLimpia');
-    if (hub) hub.classList.remove('hidden');
-    if (cat) cat.classList.add('hidden');
-    if (comanda) comanda.classList.add('hidden');
+    if (hub) {
+      hub.classList.remove('hidden');
+      hub.style.display = '';
+    }
     window.sincronizarCuentaDesdeStorage();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: 'instant' });
   };
 
   window.mostrarVistaComanda = function () {
-    var hub = document.getElementById('vistaHubMesa');
-    var cat = document.getElementById('vistaCatalogoPlatillos');
+    window.ocultarTodasLasVistas();
     var comanda = document.getElementById('vistaComandaLimpia');
-    if (hub) hub.classList.add('hidden');
-    if (cat) cat.classList.add('hidden');
-    if (comanda) comanda.classList.remove('hidden');
+    if (comanda) {
+      comanda.classList.remove('hidden');
+      comanda.style.display = '';
+    }
     window.renderComandaLimpia();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: 'instant' });
   };
 
-  // Renderiza la vista limpia de comanda (solo items de MI silla)
+  window.mostrarVistaComandaMesa = function () {
+    window.ocultarTodasLasVistas();
+    var comandaMesa = document.getElementById('vistaComandaMesa');
+    if (comandaMesa) {
+      comandaMesa.classList.remove('hidden');
+      comandaMesa.style.display = '';
+    }
+    window.renderComandaMesa();
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  };
+
+  // Renderiza la vista limpia de comanda PERSONAL (exclusivamente items de MI silla)
   window.renderComandaLimpia = function () {
     var mesaId = window.simMesaId || 1;
     var sillaNum = window.simSillaNum || 1;
@@ -1202,15 +958,21 @@
     var keySilla = mesaId + '-' + sillaNum;
     var itemsSilla = (cuentas[keySilla] && cuentas[keySilla].items) ? cuentas[keySilla].items : [];
 
+    // Platillos al Centro para checar si la mesa tiene consumos
+    var keyCentro = mesaId + '-centro';
+    var keyCentro0 = mesaId + '-0';
+    var ctaCentro = cuentas[keyCentro] || cuentas[keyCentro0] || { items: [] };
+    var itemsCentro = ctaCentro.items || [];
+
     // Actualizar títulos
     var tit = document.getElementById('lblComandaLimpiaTitulo');
     var ubi = document.getElementById('lblComandaLimpiaUbicacion');
     var sub = document.getElementById('lblComandaLimpiaSub');
-    if (tit) tit.textContent = 'Mi Comanda — Silla ' + sillaNum;
+    if (tit) tit.textContent = 'Mi Comanda (Personal) — Silla ' + sillaNum;
     if (ubi) ubi.textContent = 'Mesa ' + mesaId + ' · Silla ' + sillaNum;
     if (sub) sub.textContent = 'Portavasos #' + qrId;
 
-    // Renderizar items
+    // Renderizar items personales
     var container = document.getElementById('comandaLimpiaItems');
     if (!container) return;
     container.innerHTML = '';
@@ -1219,7 +981,7 @@
     var subtotal = 0;
 
     if (itemsSilla.length === 0) {
-      container.innerHTML = '<div class="text-center py-10 text-slate-500 text-sm">¡Aún no has pedido nada! Toca <b class="text-emerald-400">Agregar</b> para elegir del menú.</div>';
+      container.innerHTML = '<div class="text-center py-10 text-slate-500 text-sm">No tienes consumos personales en tu silla aún. Toca <b class="text-emerald-400">Agregar</b> para pedir algo.</div>';
     } else {
       itemsSilla.forEach(function (it) {
         var monto = it.precio * it.cantidad;
@@ -1227,22 +989,42 @@
         if (!it.enviadoCocina) pendientes++;
 
         var row = document.createElement('div');
-        row.className = 'flex items-center justify-between py-3 border-b border-slate-800/60 last:border-0';
+        row.className = 'flex items-center justify-between py-2.5 border-b border-slate-800/60 last:border-0';
         var estadoBadge = it.enviadoCocina
           ? '<span class="text-[9px] font-black bg-emerald-950/60 text-emerald-300 border border-emerald-500/40 px-1.5 py-0.5 rounded flex items-center gap-1"><i class="fa-solid fa-fire text-[8px]"></i> En Cocina</span>'
           : '<span class="text-[9px] font-black bg-amber-950/60 text-amber-300 border border-amber-500/40 px-1.5 py-0.5 rounded flex items-center gap-1"><i class="fa-solid fa-clock text-[8px]"></i> Pendiente</span>';
         row.innerHTML = `
-          <div class="flex-1">
+          <div class="flex-1 pr-2">
             <div class="text-sm font-bold text-white">${it.nombre} <span class="text-slate-400 font-normal text-xs">x${it.cantidad}</span></div>
             <div class="flex items-center gap-2 mt-0.5">${estadoBadge}${it.notas ? '<span class="text-[10px] text-slate-500">' + it.notas + '</span>' : ''}</div>
           </div>
-          <span class="text-sm font-black text-emerald-400 ml-3">$${monto.toFixed(2)}</span>
+          <span class="text-sm font-black text-emerald-400 ml-2">$${monto.toFixed(2)}</span>
         `;
         container.appendChild(row);
       });
     }
 
-    // Calcular totales
+    // Banner si hay platillos al centro en la mesa (para que sepa que existen sin cargárselos)
+    if (itemsCentro.length > 0) {
+      var totCentro = 0;
+      itemsCentro.forEach(function(i) { totCentro += i.precio * i.cantidad; });
+      var bannerMesa = document.createElement('div');
+      bannerMesa.className = 'mt-3 p-3 rounded-2xl bg-amber-950/30 border border-amber-500/30 flex items-center justify-between text-xs cursor-pointer hover:bg-amber-950/50 transition';
+      bannerMesa.onclick = function() { window.mostrarVistaComandaMesa(); };
+      bannerMesa.innerHTML = `
+        <div class="flex items-center gap-2.5">
+          <span class="text-lg">🍲</span>
+          <div>
+            <div class="font-bold text-amber-200">Hay ${itemsCentro.length} platillo(s) al centro en tu mesa</div>
+            <div class="text-[10px] text-amber-400/80">Total al centro: $${totCentro.toFixed(2)} (no cargados a tu cuenta)</div>
+          </div>
+        </div>
+        <span class="text-xs font-bold text-amber-300 flex items-center gap-1">Ver <i class="fa-solid fa-arrow-right text-[10px]"></i></span>
+      `;
+      container.appendChild(bannerMesa);
+    }
+
+    // Calcular totales PERSONALES de la silla
     var iva = subtotal * 0.16;
     var propina = subtotal * 0.10;
     var total = subtotal + iva + propina;
@@ -1252,7 +1034,7 @@
     if (el('lblComandaLimpiaPropina')) el('lblComandaLimpiaPropina').textContent = '$' + propina.toFixed(2);
     if (el('lblComandaLimpiaTotal')) el('lblComandaLimpiaTotal').textContent = '$' + total.toFixed(2);
 
-    // Habilitar/deshabilitar botón enviar
+    // Habilitar/deshabilitar botón enviar a cocina
     var btn = document.getElementById('btnComandaLimpiaEnviar');
     var btnTxt = document.getElementById('btnComandaLimpiaEnviarTxt');
     if (btn) {
@@ -1270,6 +1052,119 @@
         if (btnTxt) btnTxt.textContent = 'Enviar a Cocina / Barra';
       }
     }
+  };
+
+  // Renderiza la vista de COMANDA DE LA MESA (platillos al centro compartidos)
+  window.renderComandaMesa = function () {
+    var mesaId = window.simMesaId || 1;
+    var cuentas = getStorageCuentas();
+    var keyCentro = mesaId + '-centro';
+    var keyCentro0 = mesaId + '-0';
+    var ctaCentro = cuentas[keyCentro] || cuentas[keyCentro0] || { items: [] };
+    var itemsCentro = ctaCentro.items || [];
+
+    var ubi = document.getElementById('lblComandaMesaUbicacion');
+    if (ubi) ubi.textContent = 'Mesa ' + mesaId + ' • Platillos al Centro';
+
+    var container = document.getElementById('comandaMesaItems');
+    if (!container) return;
+    container.innerHTML = '';
+
+    var pendientes = 0;
+    var subtotal = 0;
+
+    if (itemsCentro.length === 0) {
+      container.innerHTML = '<div class="text-center py-10 text-slate-500 text-sm">No hay platillos pedidos al centro aún.<br>Toca <b class="text-amber-400">Pedir al Centro</b> para botanear o compartir.</div>';
+    } else {
+      itemsCentro.forEach(function (it) {
+        var monto = it.precio * it.cantidad;
+        subtotal += monto;
+        if (!it.enviadoCocina) pendientes++;
+
+        var row = document.createElement('div');
+        row.className = 'flex items-center justify-between py-2.5 border-b border-slate-800/60 last:border-0';
+        var estadoBadge = it.enviadoCocina
+          ? '<span class="text-[9px] font-black bg-emerald-950/60 text-emerald-300 border border-emerald-500/40 px-1.5 py-0.5 rounded flex items-center gap-1"><i class="fa-solid fa-fire text-[8px]"></i> En Cocina</span>'
+          : '<span class="text-[9px] font-black bg-amber-950/60 text-amber-300 border border-amber-500/40 px-1.5 py-0.5 rounded flex items-center gap-1"><i class="fa-solid fa-clock text-[8px]"></i> Pendiente</span>';
+        row.innerHTML = `
+          <div class="flex-1 pr-2">
+            <div class="text-sm font-bold text-amber-100">${it.nombre} <span class="text-slate-400 font-normal text-xs">x${it.cantidad}</span></div>
+            <div class="flex items-center gap-2 mt-0.5">${estadoBadge}${it.notas ? '<span class="text-[10px] text-slate-500">' + it.notas + '</span>' : ''}</div>
+          </div>
+          <span class="text-sm font-black text-amber-400 ml-2">$${monto.toFixed(2)}</span>
+        `;
+        container.appendChild(row);
+      });
+    }
+
+    var iva = subtotal * 0.16;
+    var total = subtotal + iva;
+    var el = function(id) { return document.getElementById(id); };
+    if (el('lblComandaMesaSubtotal')) el('lblComandaMesaSubtotal').textContent = '$' + subtotal.toFixed(2);
+    if (el('lblComandaMesaIVA')) el('lblComandaMesaIVA').textContent = '$' + iva.toFixed(2);
+    if (el('lblComandaMesaTotal')) el('lblComandaMesaTotal').textContent = '$' + total.toFixed(2);
+
+    var btn = document.getElementById('btnComandaMesaEnviar');
+    var btnTxt = document.getElementById('btnComandaMesaEnviarTxt');
+    if (btn) {
+      if (pendientes > 0) {
+        btn.disabled = false;
+        btn.style.opacity = '1';
+        if (btnTxt) btnTxt.textContent = 'Enviar al Centro a Cocina (' + pendientes + ' pendiente' + (pendientes > 1 ? 's' : '') + ')';
+      } else if (itemsCentro.length > 0) {
+        btn.disabled = true;
+        btn.style.opacity = '0.65';
+        if (btnTxt) btnTxt.innerHTML = '<i class="fa-solid fa-check-double"></i> Todo al Centro enviado a Cocina';
+      } else {
+        btn.disabled = true;
+        btn.style.opacity = '0.4';
+        if (btnTxt) btnTxt.textContent = 'Enviar al Centro a Cocina';
+      }
+    }
+  };
+
+  // Enviar exclusivamente los pedidos al centro a cocina
+  window.enviarPedidoCentroCocina = function () {
+    var cuentas = getStorageCuentas();
+    var mesaId = window.simMesaId || 1;
+    var keyCentro = mesaId + '-centro';
+    var keyCentro0 = mesaId + '-0';
+
+    var cta = cuentas[keyCentro] || cuentas[keyCentro0];
+    if (!cta || !cta.items || cta.items.length === 0) {
+      alert('No hay consumos al centro para enviar.');
+      return;
+    }
+
+    var pendientes = 0;
+    var nowStr = (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    cta.items.forEach(function(i) {
+      if (!i.enviadoCocina) {
+        i.enviadoCocina = true;
+        i.horaEnvioCocina = nowStr;
+        pendientes++;
+      }
+    });
+
+    if (pendientes === 0) {
+      alert('Todos los platillos al centro ya fueron enviados a Cocina / Barra.');
+      return;
+    }
+
+    saveStorageCuentas(cuentas);
+    window.renderComandaMesa();
+    window.sincronizarCuentaDesdeStorage();
+
+    // Sincronizar de inmediato con el servidor (silla 0 = centro)
+    try {
+      if (window.anvilSyncCuenta) {
+        window.anvilSyncCuenta(mesaId, 0, JSON.stringify(cta.items), 'ocupada');
+      }
+    } catch(e) {
+      console.error('Error sincronizando centro con servidor:', e);
+    }
+
+    alert(`🚀 ¡${pendientes} platillo(s) al centro enviados a Cocina / Barra (${nowStr})!`);
   };
 
   window.seleccionarDestinoPedido = function (dest) {
@@ -1615,6 +1510,7 @@
     var mesaId = window.simMesaId || 1;
     var keySilla = mesaId + '-' + window.simSillaNum;
     var keyCentro = mesaId + '-centro';
+    var keyCentro0 = mesaId + '-0';
 
     var pendientesCount = 0;
     var nowStr = (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -1639,6 +1535,16 @@
       });
     }
 
+    if (cuentas[keyCentro0] && cuentas[keyCentro0].items) {
+      cuentas[keyCentro0].items.forEach(i => {
+        if (!i.enviadoCocina) {
+          i.enviadoCocina = true;
+          i.horaEnvioCocina = nowStr;
+          pendientesCount++;
+        }
+      });
+    }
+
     if (pendientesCount === 0) {
       alert('Todos tus productos ya fueron enviados a Cocina / Barra de Café.');
       return;
@@ -1646,13 +1552,26 @@
 
     saveStorageCuentas(cuentas);
     window.renderCarrito();
+    if (typeof window.renderComandaLimpia === 'function') {
+      window.renderComandaLimpia();
+    }
 
     // Sincronizar estado "Enviado a Cocina" con el servidor en tiempo real
     try {
-      if (window.anvilSyncCuenta && cuentas[keySilla]) {
-        window.anvilSyncCuenta(mesaId, window.simSillaNum, JSON.stringify(cuentas[keySilla].items || []), 'ocupada');
+      if (window.anvilSyncCuenta) {
+        // 1. Sincronizar consumos de Mi Silla
+        if (cuentas[keySilla] && cuentas[keySilla].items) {
+          window.anvilSyncCuenta(mesaId, window.simSillaNum, JSON.stringify(cuentas[keySilla].items || []), 'ocupada');
+        }
+        // 2. Sincronizar consumos Al Centro (silla 0)
+        var itemsCentro = (cuentas[keyCentro] && cuentas[keyCentro].items) || (cuentas[keyCentro0] && cuentas[keyCentro0].items) || [];
+        if (itemsCentro.length > 0) {
+          window.anvilSyncCuenta(mesaId, 0, JSON.stringify(itemsCentro), 'ocupada');
+        }
       }
-    } catch (e) { }
+    } catch (e) {
+      console.error('Error sincronizando envío a cocina:', e);
+    }
 
     alert(`🚀 ¡${pendientesCount} producto(s) enviados a Cocina / Barra de Café (${nowStr})! La preparación ha iniciado.`);
   };
@@ -1733,26 +1652,34 @@
 
     var subtotalNeto = 0;
 
-    // 1. Mi Silla
+    // 1. Mi Silla (Personal)
+    var subtotalSilla = 0;
     var keySilla = mesaId + '-' + miSilla;
     if (cuentas[keySilla] && cuentas[keySilla].items) {
-      cuentas[keySilla].items.forEach(function (it) { subtotalNeto += it.precio * it.cantidad; });
+      cuentas[keySilla].items.forEach(function (it) { subtotalSilla += it.precio * it.cantidad; });
     }
+    var totalSilla = subtotalSilla * 1.16;
 
-    // 2. Al Centro
+    // 2. Al Centro (Compartido de la Mesa)
+    var subtotalCentro = 0;
     var keyCentro = mesaId + '-centro';
-    if (cuentas[keyCentro] && cuentas[keyCentro].items) {
-      cuentas[keyCentro].items.forEach(function (it) { subtotalNeto += it.precio * it.cantidad; });
+    var keyCentro0 = mesaId + '-0';
+    var ctaCentro = cuentas[keyCentro] || cuentas[keyCentro0];
+    if (ctaCentro && ctaCentro.items) {
+      ctaCentro.items.forEach(function (it) { subtotalCentro += it.precio * it.cantidad; });
     }
+    var totalCentro = subtotalCentro * 1.16;
 
-    // 3. Acompañantes
+    // 3. Acompañantes seleccionados (si aplica)
+    var subtotalAcompanantes = 0;
     (window.sillasAcompanantesSeleccionadas || []).forEach(function (s) {
       var k = mesaId + '-' + s;
       if (cuentas[k] && cuentas[k].items) {
-        cuentas[k].items.forEach(function (it) { subtotalNeto += it.precio * it.cantidad; });
+        cuentas[k].items.forEach(function (it) { subtotalAcompanantes += it.precio * it.cantidad; });
       }
     });
 
+    var subtotalNeto = subtotalSilla + subtotalCentro + subtotalAcompanantes;
     var iva = subtotalNeto * 0.16;
     var propina = subtotalNeto * 0.10;
     var total = subtotalNeto + iva;
@@ -1778,10 +1705,15 @@
     if (txtTotal) txtTotal.innerText = `$${total.toFixed(2)}`;
     if (txtBtnPagar) txtBtnPagar.innerText = `$${total.toFixed(2)}`;
 
+    // Badges en el Hub: Comanda Personal vs Comanda de la Mesa
     var lblHubTotal = document.getElementById('lblHubTotalComanda');
-    if (lblHubTotal) lblHubTotal.innerText = `$${total.toFixed(2)}`;
+    if (lblHubTotal) lblHubTotal.innerText = `$${totalSilla.toFixed(2)}`;
+
+    var lblHubMesaCentro = document.getElementById('lblHubTotalMesaCentro');
+    if (lblHubMesaCentro) lblHubMesaCentro.innerText = totalCentro > 0 ? `$${totalCentro.toFixed(2)}` : '$0.00';
+
     var lblCatBtnTotal = document.getElementById('lblCatBtnTotal');
-    if (lblCatBtnTotal) lblCatBtnTotal.innerText = `$${total.toFixed(2)}`;
+    if (lblCatBtnTotal) lblCatBtnTotal.innerText = `$${totalSilla.toFixed(2)}`;
 
     // Actualizar Banner Sticky Superior de Comanda
     var itemsCount = 0;
@@ -1835,30 +1767,65 @@
     }
   };
 
+  window.sillasSplitCentro = null;
+  window.numComensalesSplitMesa = null;
+
+  window.toggleSillaSplitCentro = function (silla) {
+    if (!window.sillasSplitCentro) {
+      window.sillasSplitCentro = [1, 2, 3, 4];
+    }
+    var sNum = parseInt(silla);
+    var idx = window.sillasSplitCentro.indexOf(sNum);
+    if (idx > -1) {
+      if (window.sillasSplitCentro.length > 1) {
+        window.sillasSplitCentro.splice(idx, 1);
+      }
+    } else {
+      window.sillasSplitCentro.push(sNum);
+      window.sillasSplitCentro.sort();
+    }
+    window.renderDetalleModalCobro();
+  };
+
+  window.seleccionarTodasSillasSplitCentro = function () {
+    window.sillasSplitCentro = [1, 2, 3, 4];
+    window.renderDetalleModalCobro();
+  };
+
+  window.cambiarNumSplitMesa = function (delta) {
+    window.numComensalesSplitMesa = Math.max(1, Math.min(10, (window.numComensalesSplitMesa || 2) + delta));
+    window.renderDetalleModalCobro();
+  };
+
   window.setModoPagoCliente = function (modo) {
-    window.modoPagoCliente = modo;
+    window.modoPagoCliente = modo || 'solo_yo';
     const btnSoloYo = document.getElementById('btnModoSoloYo');
-    const btnNinos = document.getElementById('btnModoNinos');
+    const btnSplitCentro = document.getElementById('btnModoSplitCentro');
+    const btnAbsorberCentro = document.getElementById('btnModoAbsorberCentro');
+    const btnSplitToda = document.getElementById('btnModoSplitTodaMesa');
     const btnToda = document.getElementById('btnModoTodaMesa');
 
-    const activeCls = 'bg-emerald-600/30 text-emerald-300 border-emerald-500/50';
+    const activeCls = 'bg-emerald-600/30 text-emerald-300 border-emerald-500/50 shadow-sm';
     const inactiveCls = 'bg-slate-800 text-slate-300 border-slate-700';
 
-    [btnSoloYo, btnNinos, btnToda].forEach(b => {
+    [btnSoloYo, btnSplitCentro, btnAbsorberCentro, btnSplitToda, btnToda].forEach(b => {
       if (b) {
-        b.className = 'p-2 rounded-lg font-bold border text-center transition cursor-pointer ' + inactiveCls;
+        var base = b === btnToda ? 'col-span-2 ' : '';
+        b.className = base + 'p-2 rounded-lg font-bold border text-center transition cursor-pointer ' + inactiveCls;
       }
     });
 
     if (modo === 'solo_yo' && btnSoloYo) btnSoloYo.className = 'p-2 rounded-lg font-bold border text-center transition cursor-pointer ' + activeCls;
-    if (modo === 'incluir_ninos' && btnNinos) btnNinos.className = 'p-2 rounded-lg font-bold border text-center transition cursor-pointer ' + activeCls;
-    if (modo === 'toda_mesa' && btnToda) btnToda.className = 'p-2 rounded-lg font-bold border text-center transition cursor-pointer ' + activeCls;
+    if (modo === 'split_centro' && btnSplitCentro) btnSplitCentro.className = 'p-2 rounded-lg font-bold border text-center transition cursor-pointer ' + activeCls;
+    if (modo === 'absorber_centro' && btnAbsorberCentro) btnAbsorberCentro.className = 'p-2 rounded-lg font-bold border text-center transition cursor-pointer ' + activeCls;
+    if (modo === 'split_toda_mesa' && btnSplitToda) btnSplitToda.className = 'p-2 rounded-lg font-bold border text-center transition cursor-pointer ' + activeCls;
+    if (modo === 'toda_mesa' && btnToda) btnToda.className = 'col-span-2 p-2 rounded-lg font-bold border text-center transition cursor-pointer ' + activeCls;
 
     window.renderDetalleModalCobro();
   };
 
   window.renderDetalleModalCobro = function () {
-    const container = document.getElementById('modalItemsDesglose');
+    const container = document.getElementById('modalCobroDetalleTramos') || document.getElementById('modalItemsDesglose');
     const subtotalEl = document.getElementById('modalSubtotal');
     const ivaEl = document.getElementById('modalIVA');
     const propinaEl = document.getElementById('modalPropina');
@@ -1870,48 +1837,260 @@
     var cuentas = getStorageCuentas();
     var mesaId = window.simMesaId || 1;
     var miSilla = window.simSillaNum || 1;
+    var modo = window.modoPagoCliente || 'solo_yo';
 
-    var keysAIncluir = [mesaId + '-' + miSilla, mesaId + '-centro'];
-    if (window.modoPagoCliente === 'incluir_ninos') {
-      (window.sillasAcompanantesSeleccionadas || []).forEach(s => keysAIncluir.push(mesaId + '-' + s));
-    } else if (window.modoPagoCliente === 'toda_mesa') {
-      for (var s = 1; s <= 4; s++) keysAIncluir.push(mesaId + '-' + s);
+    // 1. Detectar comensales y sillas activas en la mesa
+    var sillasActivas = [];
+    for (var s = 1; s <= 4; s++) {
+      var c = cuentas[mesaId + '-' + s];
+      if (c && (c.estado === 'ocupada' || (c.items && c.items.length > 0))) {
+        sillasActivas.push(s);
+      }
     }
-    keysAIncluir = keysAIncluir.filter((v, i, a) => a.indexOf(v) === i);
+    if (sillasActivas.indexOf(miSilla) === -1) sillasActivas.push(miSilla);
+    sillasActivas.sort();
+    var numComensales = Math.max(1, sillasActivas.length);
+
+    // 2. Consumos individuales de Mi Silla
+    var keySilla = mesaId + '-' + miSilla;
+    var ctaSilla = cuentas[keySilla] || { items: [] };
+    var itemsSilla = ctaSilla.items || [];
+    var subtotalSilla = 0;
+    itemsSilla.forEach(function (it) { subtotalSilla += (it.precio || 0) * (it.cantidad || 1); });
+
+    // 3. Consumos Al Centro de la Mesa
+    var keyCentro = mesaId + '-centro';
+    var keyCentro0 = mesaId + '-0';
+    var ctaCentro = cuentas[keyCentro] || cuentas[keyCentro0] || { items: [] };
+    var itemsCentro = ctaCentro.items || [];
+    var subtotalCentro = 0;
+    itemsCentro.forEach(function (it) { subtotalCentro += (it.precio || 0) * (it.cantidad || 1); });
 
     var totalNeto = 0;
 
-    keysAIncluir.forEach(k => {
-      var c = cuentas[k];
-      if (!c || !c.items || c.items.length === 0) return;
+    // RENDER: CASO 1 - SOLO MI SILLA
+    if (modo === 'solo_yo') {
+      totalNeto = subtotalSilla;
 
-      var subBlock = 0;
       var block = document.createElement('div');
-      block.className = 'p-2.5 rounded-xl bg-slate-950/60 border border-slate-800/80 mb-2';
-
-      var h = document.createElement('div');
-      h.className = 'flex justify-between items-center font-bold text-emerald-400 mb-1';
-      var nom = c.esCentro ? 'Al Centro (Compartido)' : `Silla ${c.sillaNum}`;
-      h.innerHTML = `<span>${nom}</span><span class="text-[10px] text-slate-500">QR: #${c.qrId || 'PV-0' + mesaId}</span>`;
-      block.appendChild(h);
-
-      c.items.forEach(it => {
-        var itTotal = it.precio * it.cantidad;
-        subBlock += itTotal;
-        totalNeto += itTotal;
-        var row = document.createElement('div');
-        row.className = 'flex justify-between text-slate-300 py-0.5 text-xs';
-        row.innerHTML = `<span>${it.cantidad}x ${it.nombre}</span><span>$${itTotal.toFixed(2)}</span>`;
-        block.appendChild(row);
-      });
-
-      var subRow = document.createElement('div');
-      subRow.className = 'flex justify-between text-slate-400 font-bold pt-1 mt-1 border-t border-slate-900 text-[11px]';
-      subRow.innerHTML = `<span>Subtotal ${nom}:</span><span class="text-amber-400">$${subBlock.toFixed(2)}</span>`;
-      block.appendChild(subRow);
-
+      block.className = 'p-3 rounded-xl bg-slate-950/70 border border-emerald-500/30 mb-2';
+      block.innerHTML = `
+        <div class="flex justify-between items-center font-bold text-emerald-400 mb-1.5 pb-1 border-b border-slate-800">
+          <span><i class="fa-solid fa-chair text-xs"></i> Tu Silla ${miSilla} (Consumos Personales)</span>
+          <span class="text-[10px] text-slate-500">QR: #PV-0${mesaId}${miSilla}</span>
+        </div>
+      `;
+      if (itemsSilla.length === 0) {
+        block.innerHTML += `<div class="text-slate-500 text-xs py-2 text-center">No tienes consumos individuales registrados.</div>`;
+      } else {
+        itemsSilla.forEach(function (it) {
+          var m = it.precio * it.cantidad;
+          block.innerHTML += `<div class="flex justify-between text-slate-300 py-0.5 text-xs"><span>${it.cantidad}x ${it.nombre}</span><span class="font-bold text-emerald-400">$${m.toFixed(2)}</span></div>`;
+        });
+      }
+      block.innerHTML += `
+        <div class="flex justify-between text-slate-300 font-black pt-1.5 mt-1.5 border-t border-slate-800 text-xs">
+          <span>Subtotal Mi Silla:</span><span class="text-emerald-400">$${subtotalSilla.toFixed(2)}</span>
+        </div>
+      `;
       container.appendChild(block);
-    });
+
+      if (itemsCentro.length > 0) {
+        var notaCentro = document.createElement('div');
+        notaCentro.className = 'p-2.5 rounded-xl bg-amber-950/25 border border-amber-500/25 text-[11px] text-amber-300/80 flex items-center justify-between';
+        notaCentro.innerHTML = `
+          <span><i class="fa-solid fa-info-circle text-amber-400 mr-1"></i> Platillos al centro ($${subtotalCentro.toFixed(2)}) <b>NO incluidos</b> en este cobro (permanecen en la mesa).</span>
+        `;
+        container.appendChild(notaCentro);
+      }
+    }
+
+    // RENDER: CASO 2 - MI SILLA + DIVIDIR CENTRO ENTRE SILLAS ESPECÍFICAS
+    else if (modo === 'split_centro') {
+      if (!window.sillasSplitCentro) {
+        window.sillasSplitCentro = sillasActivas.length > 1 ? [...sillasActivas] : [1, 2];
+      }
+
+      var numParticipantes = Math.max(1, window.sillasSplitCentro.length);
+      var cuotaPorSilla = subtotalCentro / numParticipantes;
+      var participaMiSilla = window.sillasSplitCentro.indexOf(miSilla) !== -1;
+      var aportacionCentro = participaMiSilla ? cuotaPorSilla : 0;
+
+      totalNeto = subtotalSilla + aportacionCentro;
+
+      // Bloque 1: Alimentos de Mi Silla
+      var block1 = document.createElement('div');
+      block1.className = 'p-3 rounded-xl bg-slate-950/70 border border-emerald-500/30 mb-2';
+      block1.innerHTML = `
+        <div class="flex justify-between items-center font-bold text-emerald-400 mb-1.5 pb-1 border-b border-slate-800">
+          <span><i class="fa-solid fa-chair text-xs"></i> 1. Alimentos de Tu Silla (${miSilla})</span>
+          <span class="text-xs font-black text-emerald-400">$${subtotalSilla.toFixed(2)}</span>
+        </div>
+      `;
+      if (itemsSilla.length === 0) {
+        block1.innerHTML += `<div class="text-slate-500 text-xs py-1 text-center">Sin consumos individuales registrados.</div>`;
+      } else {
+        itemsSilla.forEach(function (it) {
+          var m = it.precio * it.cantidad;
+          block1.innerHTML += `<div class="flex justify-between text-slate-300 py-0.5 text-xs"><span>${it.cantidad}x ${it.nombre}</span><span>$${m.toFixed(2)}</span></div>`;
+        });
+      }
+      container.appendChild(block1);
+
+      // Bloque 2: Reparto de Platillos al Centro con selección de sillas
+      var block2 = document.createElement('div');
+      block2.className = 'p-3 rounded-xl bg-amber-950/30 border border-amber-500/40 mb-2';
+
+      var chipsHtml = [1, 2, 3, 4].map(function(s) {
+        var activo = window.sillasSplitCentro.indexOf(s) !== -1;
+        var esMiSilla = (s === miSilla);
+        var cls = activo
+          ? 'bg-amber-500/20 text-amber-300 border-amber-500 font-bold shadow-sm'
+          : 'bg-slate-900/60 text-slate-500 border-slate-700 hover:text-slate-300';
+        return `<button type="button" onclick="window.toggleSillaSplitCentro(${s})" class="px-2.5 py-1 rounded-lg border text-[11px] transition cursor-pointer ${cls}">
+          ${activo ? '✓ ' : ''}Silla ${s} ${esMiSilla ? '(Tú)' : ''}
+        </button>`;
+      }).join(' ');
+
+      block2.innerHTML = `
+        <div class="flex justify-between items-center font-bold text-amber-300 mb-1.5 pb-1 border-b border-amber-500/20">
+          <span><i class="fa-solid fa-scale-balanced text-xs"></i> 2. Reparto de Platillos al Centro</span>
+          <span class="text-xs font-black text-amber-400">+$${aportacionCentro.toFixed(2)}</span>
+        </div>
+        <div class="flex items-center justify-between text-[11px] text-slate-300 mb-1.5">
+          <span>¿Quiénes pagan el centro ($${subtotalCentro.toFixed(2)})?</span>
+          <button type="button" onclick="window.seleccionarTodasSillasSplitCentro()" class="text-[10px] text-amber-400 underline hover:text-amber-300 cursor-pointer">Todas</button>
+        </div>
+        <div class="flex flex-wrap gap-1.5 mb-2">
+          ${chipsHtml}
+        </div>
+        <div class="p-2 rounded-lg bg-amber-950/40 border border-amber-500/20 text-[11px] text-amber-200/90 leading-relaxed">
+          <i class="fa-solid fa-calculator text-amber-400 mr-1"></i>
+          Total centro <b>$${subtotalCentro.toFixed(2)}</b> ÷ <b>${numParticipantes} silla(s)</b> = <b>$${cuotaPorSilla.toFixed(2)}</b> c/u.
+          ${participaMiSilla ? `<span class="block mt-0.5 text-emerald-400 font-bold">✓ Tu Silla ${miSilla} aporta $${cuotaPorSilla.toFixed(2)}</span>` : `<span class="block mt-0.5 text-slate-400 italic">✗ Tu Silla ${miSilla} no participa (lo pagan las otras sillas).</span>`}
+        </div>
+      `;
+      container.appendChild(block2);
+    }
+
+    // RENDER: CASO 3 - MI SILLA + TODO EL CENTRO (ABSORBER)
+    else if (modo === 'absorber_centro') {
+      totalNeto = subtotalSilla + subtotalCentro;
+
+      // Bloque 1: Mi Silla
+      var bSilla = document.createElement('div');
+      bSilla.className = 'p-3 rounded-xl bg-slate-950/70 border border-emerald-500/30 mb-2';
+      bSilla.innerHTML = `
+        <div class="flex justify-between items-center font-bold text-emerald-400 mb-1 pb-1 border-b border-slate-800">
+          <span><i class="fa-solid fa-chair text-xs"></i> Tu Silla ${miSilla}</span>
+          <span class="text-xs font-black text-emerald-400">$${subtotalSilla.toFixed(2)}</span>
+        </div>
+      `;
+      itemsSilla.forEach(function (it) {
+        var m = it.precio * it.cantidad;
+        bSilla.innerHTML += `<div class="flex justify-between text-slate-300 py-0.5 text-xs"><span>${it.cantidad}x ${it.nombre}</span><span>$${m.toFixed(2)}</span></div>`;
+      });
+      container.appendChild(bSilla);
+
+      // Bloque 2: Todo el Centro
+      var bCentro = document.createElement('div');
+      bCentro.className = 'p-3 rounded-xl bg-amber-950/30 border border-amber-500/40 mb-2';
+      bCentro.innerHTML = `
+        <div class="flex justify-between items-center font-bold text-amber-300 mb-1 pb-1 border-b border-amber-500/20">
+          <span><i class="fa-solid fa-bowl-food text-xs"></i> 100% Platillos al Centro (Absorbidos por ti)</span>
+          <span class="text-xs font-black text-amber-400">$${subtotalCentro.toFixed(2)}</span>
+        </div>
+      `;
+      itemsCentro.forEach(function (it) {
+        var m = it.precio * it.cantidad;
+        bCentro.innerHTML += `<div class="flex justify-between text-slate-300 py-0.5 text-xs"><span>${it.cantidad}x ${it.nombre}</span><span>$${m.toFixed(2)}</span></div>`;
+      });
+      container.appendChild(bCentro);
+    }
+
+    // RENDER: CASO 4 - DIVIDIR TODA LA MESA EN PARTES IGUALES (SPLIT GENERAL)
+    else if (modo === 'split_toda_mesa') {
+      var grandSubMesa = 0;
+      for (var s = 1; s <= 4; s++) {
+        var cAcc = cuentas[mesaId + '-' + s];
+        if (cAcc && cAcc.items) {
+          cAcc.items.forEach(function (i) { grandSubMesa += i.precio * i.cantidad; });
+        }
+      }
+      grandSubMesa += subtotalCentro;
+
+      if (!window.numComensalesSplitMesa) {
+        window.numComensalesSplitMesa = Math.max(2, numComensales);
+      }
+      var nPer = window.numComensalesSplitMesa;
+      var cuotaEquitativa = grandSubMesa / nPer;
+      totalNeto = cuotaEquitativa;
+
+      var bSplit = document.createElement('div');
+      bSplit.className = 'p-3 rounded-xl bg-slate-950/70 border border-emerald-500/30 mb-2';
+      bSplit.innerHTML = `
+        <div class="flex justify-between items-center font-bold text-emerald-400 mb-2 pb-1 border-b border-slate-800">
+          <span><i class="fa-solid fa-users text-xs"></i> Cuenta Total de la Mesa Dividida</span>
+          <span class="text-xs font-black text-emerald-400">$${grandSubMesa.toFixed(2)}</span>
+        </div>
+        <div class="flex items-center justify-between bg-slate-900/80 p-2.5 rounded-xl border border-slate-800 mb-2">
+          <span class="text-xs text-slate-300 font-bold">Dividir equitativamente entre:</span>
+          <div class="flex items-center gap-2">
+            <button type="button" onclick="window.cambiarNumSplitMesa(-1)" class="w-7 h-7 rounded-lg bg-slate-800 hover:bg-slate-700 text-white font-black flex items-center justify-center border border-slate-700 cursor-pointer">-</button>
+            <span class="text-xs font-black text-emerald-400 px-1">${nPer} personas</span>
+            <button type="button" onclick="window.cambiarNumSplitMesa(1)" class="w-7 h-7 rounded-lg bg-slate-800 hover:bg-slate-700 text-white font-black flex items-center justify-center border border-slate-700 cursor-pointer">+</button>
+          </div>
+        </div>
+        <div class="p-2 rounded-lg bg-emerald-950/30 border border-emerald-500/30 text-xs text-emerald-300 flex justify-between items-center">
+          <span>Tu cuota equitativa a liquidar:</span>
+          <span class="text-base font-black text-emerald-400">$${cuotaEquitativa.toFixed(2)}</span>
+        </div>
+      `;
+      container.appendChild(bSplit);
+    }
+
+    // RENDER: CASO 5 - TODA LA MESA COMPLETA (100%)
+    else if (modo === 'toda_mesa') {
+      var grandSub = 0;
+      for (var s = 1; s <= 4; s++) {
+        var cKey = mesaId + '-' + s;
+        var cAcc = cuentas[cKey];
+        if (cAcc && cAcc.items && cAcc.items.length > 0) {
+          var sSub = 0;
+          cAcc.items.forEach(function (i) { sSub += i.precio * i.cantidad; });
+          grandSub += sSub;
+
+          var bRow = document.createElement('div');
+          bRow.className = 'p-2.5 rounded-xl bg-slate-950/60 border border-slate-800 mb-1.5 text-xs';
+          bRow.innerHTML = `
+            <div class="flex justify-between font-bold text-emerald-400 mb-1">
+              <span>Silla ${s} ${s === miSilla ? '(Tú)' : ''}</span><span>$${sSub.toFixed(2)}</span>
+            </div>
+          `;
+          cAcc.items.forEach(function (it) {
+            bRow.innerHTML += `<div class="flex justify-between text-slate-400 text-[11px]"><span>${it.cantidad}x ${it.nombre}</span><span>$${(it.precio * it.cantidad).toFixed(2)}</span></div>`;
+          });
+          container.appendChild(bRow);
+        }
+      }
+
+      if (itemsCentro.length > 0) {
+        grandSub += subtotalCentro;
+        var bCentRow = document.createElement('div');
+        bCentRow.className = 'p-2.5 rounded-xl bg-amber-950/30 border border-amber-500/30 mb-1.5 text-xs';
+        bCentRow.innerHTML = `
+          <div class="flex justify-between font-bold text-amber-300 mb-1">
+            <span>Al Centro (Mesa ${mesaId})</span><span>$${subtotalCentro.toFixed(2)}</span>
+          </div>
+        `;
+        itemsCentro.forEach(function (it) {
+          bCentRow.innerHTML += `<div class="flex justify-between text-slate-400 text-[11px]"><span>${it.cantidad}x ${it.nombre}</span><span>$${(it.precio * it.cantidad).toFixed(2)}</span></div>`;
+        });
+        container.appendChild(bCentRow);
+      }
+
+      totalNeto = grandSub;
+    }
 
     var iva = totalNeto * 0.16;
     var propina = totalNeto * 0.10;
@@ -1927,21 +2106,42 @@
     var cuentas = getStorageCuentas();
     var mesaId = window.simMesaId || 1;
     var miSilla = window.simSillaNum || 1;
-
-    var keysAIncluir = [mesaId + '-' + miSilla, mesaId + '-centro'];
-    if (window.modoPagoCliente === 'incluir_ninos') {
-      (window.sillasAcompanantesSeleccionadas || []).forEach(s => keysAIncluir.push(mesaId + '-' + s));
-    } else if (window.modoPagoCliente === 'toda_mesa') {
-      for (var s = 1; s <= 4; s++) keysAIncluir.push(mesaId + '-' + s);
-    }
-    keysAIncluir = keysAIncluir.filter((v, i, a) => a.indexOf(v) === i);
+    var modo = window.modoPagoCliente || 'solo_yo';
 
     var totalText = document.getElementById('modalTotal') ? document.getElementById('modalTotal').innerText : '$0.00';
 
-    if (confirm(`¿Confirmar liquidación vía ${metodo.toUpperCase()} para Mesa ${mesaId} por ${totalText}?`)) {
-      keysAIncluir.forEach(function (k) {
-        delete cuentas[k];
-      });
+    if (confirm(`¿Confirmar liquidación (${modo.toUpperCase()}) vía ${metodo.toUpperCase()} por ${totalText}?`)) {
+      if (modo === 'solo_yo' || modo === 'split_centro' || modo === 'split_toda_mesa') {
+        // Liquidar la cuenta de mi silla
+        delete cuentas[mesaId + '-' + miSilla];
+        try {
+          if (window.anvilSyncCuenta) window.anvilSyncCuenta(mesaId, miSilla, [], 'libre');
+        } catch(e) {}
+      } else if (modo === 'absorber_centro') {
+        // Liquidar mi silla y todo el centro
+        delete cuentas[mesaId + '-' + miSilla];
+        delete cuentas[mesaId + '-centro'];
+        delete cuentas[mesaId + '-0'];
+        try {
+          if (window.anvilSyncCuenta) {
+            window.anvilSyncCuenta(mesaId, miSilla, [], 'libre');
+            window.anvilSyncCuenta(mesaId, 0, [], 'libre');
+          }
+        } catch(e) {}
+      } else if (modo === 'toda_mesa') {
+        // Liquidar todas las sillas y el centro
+        for (var s = 1; s <= 4; s++) {
+          delete cuentas[mesaId + '-' + s];
+          try {
+            if (window.anvilSyncCuenta) window.anvilSyncCuenta(mesaId, s, [], 'libre');
+          } catch(e) {}
+        }
+        delete cuentas[mesaId + '-centro'];
+        delete cuentas[mesaId + '-0'];
+        try {
+          if (window.anvilSyncCuenta) window.anvilSyncCuenta(mesaId, 0, [], 'libre');
+        } catch(e) {}
+      }
 
       saveStorageCuentas(cuentas);
       window.cerrarModalCobroCliente();
@@ -1953,6 +2153,7 @@
   window.cargarDatosMenu = function (productos, categorias) {
     if (productos) window.vsMenuData = productos;
     if (categorias) window.vsCategoriasData = categorias;
+    if (typeof window.renderCategoriasGrid === 'function') window.renderCategoriasGrid();
     window.renderCategoriasChips();
     window.filtrarProductos();
   };
@@ -1978,10 +2179,35 @@
     });
   };
 
-  window.seleccionarCategoria = function (catNombre) {
+  window.seleccionarCategoria = function (catNombre, catIcono) {
     window.categoriaActual = catNombre;
-    window.renderCategoriasChips();
+
+    // Cambiar a sub-vista B (productos)
+    var gCat = document.getElementById('vistaCatCategorias');
+    var gProd = document.getElementById('vistaCatProductos');
+    if (gCat) { gCat.style.display = 'none'; gCat.classList.add('hidden'); }
+    if (gProd) { gProd.style.display = 'flex'; gProd.classList.remove('hidden'); }
+
+    // Actualizar el header de la categoria
+    var icono = catIcono || (window.vsCategoriasData || []).find(function(c){ return c.nombre === catNombre; });
+    if (icono && typeof icono === 'object') icono = icono.icono;
+    var lblIcono = document.getElementById('lblCatSelIcono');
+    var lblNombre = document.getElementById('lblCatSelNombre');
+    var lblCount = document.getElementById('lblCatSelCount');
+    if (lblIcono) lblIcono.textContent = icono || '🍽️';
+    if (lblNombre) lblNombre.textContent = catNombre;
+
+    // Cambiar el botón de Volver para que regrese al grid de categorias
+    var backTxt = document.getElementById('lblCatalogoBackTxt');
+    if (backTxt) backTxt.textContent = 'Categorías';
+
     window.filtrarProductos();
+    window.actualizarNavComandaBtn();
+
+    // Actualizar conteo
+    var count = (window.vsMenuData || []).filter(function(p){ return p.categoria_nombre === catNombre; }).length;
+    if (lblCount) lblCount.textContent = count + ' opción' + (count !== 1 ? 'es' : '');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   window.filtrarProductos = function () {
@@ -2081,21 +2307,33 @@
     const containerTermino = document.getElementById('chipsTerminoContainer');
     containerTermino.innerHTML = '';
 
-    let opcionesTermino = [];
-    const catLower = (prod.categoria_nombre || '').toLowerCase();
-    const nomLower = (prod.nombre || '').toLowerCase();
+    // =========================================================================
+    // OPCIONES CARGADAS DINÁMICAMENTE DESDE POSTGRESQL (dbterrazavidasabor)
+    // =========================================================================
+    let opcionesTermino = prod.opciones_termino || [];
+    let prefsList = prod.preferencias_exclusion || [];
+    let extrasList = prod.extras_disponibles || [];
 
-    if (nomLower.includes('huevo') || nomLower.includes('omelette')) {
-      opcionesTermino = ['🍳 Revueltos', '🍳 Estrellados tiernos', '🍳 Bien cocidos', '🍳 Con yema tierna líquida', '🍳 En Omelette'];
-    } else if (nomLower.includes('café') || nomLower.includes('capuchino') || nomLower.includes('latte')) {
-      opcionesTermino = ['☕ Caliente tradicional', '🧊 Frappé / Frío (+ $10)', '🥛 Con leche entera', '🥛 Con leche deslactosada', '🥥 Leche de almendra (+ $15)'];
-    } else if (nomLower.includes('chilaquiles') || nomLower.includes('molletes') || nomLower.includes('enchiladas')) {
-      opcionesTermino = ['🌿 Salsa Verde clásica', '🍅 Salsa Roja tatemada', '🌶️ Salsa Pasilla suave', '🔥 Salsa Habanero extra'];
-    } else if (nomLower.includes('rib eye') || nomLower.includes('carne') || nomLower.includes('corte')) {
-      opcionesTermino = ['🥩 Término Medio (Jugoso)', '🥩 Tres Cuartos', '🥩 Bien Cocido'];
-    } else if (nomLower.includes('jugo')) {
-      opcionesTermino = ['🥤 Con hielo', '🥤 Sin hielo / Al tiempo', '🥤 Sin azúcar / Natural'];
+    if (typeof opcionesTermino === 'string') {
+      try { opcionesTermino = JSON.parse(opcionesTermino); } catch(e){ opcionesTermino = []; }
     }
+    if (typeof prefsList === 'string') {
+      try { prefsList = JSON.parse(prefsList); } catch(e){ prefsList = []; }
+    }
+    if (typeof extrasList === 'string') {
+      try { extrasList = JSON.parse(extrasList); } catch(e){ extrasList = []; }
+    }
+
+    // Normalizar extras para asegurar que el precio sea numérico
+    extrasList = (extrasList || []).map(function(ex) {
+      if (typeof ex === 'string') {
+        return { nombre: ex, precio: 0.00 };
+      }
+      return {
+        nombre: ex.nombre || ex.titulo || 'Extra',
+        precio: Number(ex.precio || ex.precio_unitario || 0.00)
+      };
+    });
 
     if (opcionesTermino.length > 0) {
       boxTermino.style.display = 'flex';
@@ -2120,58 +2358,61 @@
     }
 
     // 2. Chips de Preferencias / Quitar
+    const boxPref = document.getElementById('boxPreferenciasContainer');
     const containerPref = document.getElementById('chipsPreferenciasContainer');
     containerPref.innerHTML = '';
-    const prefsList = ['🚫 Sin cebolla', '🌶️ Salsa aparte / Sin picante', '🌿 Sin cilantro', '🫘 Sin frijoles', '🥛 Sin lácteos / Sin crema', '🧂 Poca sal'];
 
-    prefsList.forEach(pref => {
-      const chip = document.createElement('button');
-      chip.type = 'button';
-      chip.className = 'px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer border bg-slate-900/80 text-slate-300 border-slate-700 hover:border-slate-500';
-      chip.innerText = pref;
-      chip.onclick = function() {
-        const idx = window.modalPersonalizacionState.preferencias.indexOf(pref);
-        if (idx === -1) {
-          window.modalPersonalizacionState.preferencias.push(pref);
-          chip.className = 'px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer border bg-rose-500/20 text-rose-300 border-rose-500/50 shadow-sm';
-        } else {
-          window.modalPersonalizacionState.preferencias.splice(idx, 1);
-          chip.className = 'px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer border bg-slate-900/80 text-slate-300 border-slate-700 hover:border-slate-500';
-        }
-      };
-      containerPref.appendChild(chip);
-    });
+    if (prefsList.length > 0) {
+      if (boxPref) boxPref.style.display = 'flex';
+      prefsList.forEach(pref => {
+        const chip = document.createElement('button');
+        chip.type = 'button';
+        chip.className = 'px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer border bg-slate-900/80 text-slate-300 border-slate-700 hover:border-slate-500';
+        chip.innerText = pref;
+        chip.onclick = function() {
+          const idx = window.modalPersonalizacionState.preferencias.indexOf(pref);
+          if (idx === -1) {
+            window.modalPersonalizacionState.preferencias.push(pref);
+            chip.className = 'px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer border bg-rose-500/20 text-rose-300 border-rose-500/50 shadow-sm';
+          } else {
+            window.modalPersonalizacionState.preferencias.splice(idx, 1);
+            chip.className = 'px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer border bg-slate-900/80 text-slate-300 border-slate-700 hover:border-slate-500';
+          }
+        };
+        containerPref.appendChild(chip);
+      });
+    } else {
+      if (boxPref) boxPref.style.display = 'none';
+    }
 
     // 3. Chips de Ingredientes Extras con costo
+    const boxExtras = document.getElementById('boxExtrasContainer');
     const containerExtras = document.getElementById('chipsExtrasContainer');
     containerExtras.innerHTML = '';
-    const extrasList = [
-      { nombre: '+ Aguacate fresco', precio: 25.00 },
-      { nombre: '+ Tocino crocante dorado', precio: 35.00 },
-      { nombre: '+ Queso Gouda gratinado', precio: 25.00 },
-      { nombre: '+ Champiñones salteados', precio: 20.00 },
-      { nombre: '+ Huevo extra orgánico', precio: 20.00 },
-      { nombre: '+ Porción de frijoles refritos', precio: 20.00 }
-    ];
 
-    extrasList.forEach(ex => {
-      const chip = document.createElement('button');
-      chip.type = 'button';
-      chip.className = 'px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer border bg-slate-900/80 text-slate-300 border-slate-700 hover:border-slate-500 flex items-center gap-1';
-      chip.innerHTML = `<span>${ex.nombre}</span> <b class="text-sky-400 font-extrabold">(+$${ex.precio})</b>`;
-      chip.onclick = function() {
-        const idx = window.modalPersonalizacionState.extras.findIndex(e => e.nombre === ex.nombre);
-        if (idx === -1) {
-          window.modalPersonalizacionState.extras.push(ex);
-          chip.className = 'px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer border bg-sky-500/20 text-sky-300 border-sky-500/50 shadow-sm flex items-center gap-1';
-        } else {
-          window.modalPersonalizacionState.extras.splice(idx, 1);
-          chip.className = 'px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer border bg-slate-900/80 text-slate-300 border-slate-700 hover:border-slate-500 flex items-center gap-1';
-        }
-        window.actualizarModalPersonalizarUI();
-      };
-      containerExtras.appendChild(chip);
-    });
+    if (extrasList.length > 0) {
+      if (boxExtras) boxExtras.style.display = 'flex';
+      extrasList.forEach(ex => {
+        const chip = document.createElement('button');
+        chip.type = 'button';
+        chip.className = 'px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer border bg-slate-900/80 text-slate-300 border-slate-700 hover:border-slate-500 flex items-center gap-1';
+        chip.innerHTML = `<span>${ex.nombre}</span> ${ex.precio > 0 ? `<b class="text-sky-400 font-extrabold">(+$${ex.precio.toFixed(2)})</b>` : ''}`;
+        chip.onclick = function() {
+          const idx = window.modalPersonalizacionState.extras.findIndex(e => e.nombre === ex.nombre);
+          if (idx === -1) {
+            window.modalPersonalizacionState.extras.push(ex);
+            chip.className = 'px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer border bg-sky-500/20 text-sky-300 border-sky-500/50 shadow-sm flex items-center gap-1';
+          } else {
+            window.modalPersonalizacionState.extras.splice(idx, 1);
+            chip.className = 'px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer border bg-slate-900/80 text-slate-300 border-slate-700 hover:border-slate-500 flex items-center gap-1';
+          }
+          window.actualizarModalPersonalizarUI();
+        };
+        containerExtras.appendChild(chip);
+      });
+    } else {
+      if (boxExtras) boxExtras.style.display = 'none';
+    }
 
     window.actualizarModalPersonalizarUI();
 
@@ -2367,6 +2608,9 @@
     window.cargarDatosMenu(window.vsMenuData, window.vsCategoriasData);
     window.detectarParametrosQrUrl();
     window.sincronizarCuentaDesdeStorage();
+    if ((!window.vsMenuData || window.vsMenuData.length === 0) && window.anvilRecargarCatalogo) {
+      try { window.anvilRecargarCatalogo(); } catch(e){}
+    }
   }
 
   if (document.readyState === 'loading') {

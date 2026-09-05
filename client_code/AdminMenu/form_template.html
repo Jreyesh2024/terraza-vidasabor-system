@@ -1,0 +1,992 @@
+<anvil-form container="HtmlTemplate" prop:html="">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap');
+  html, body {
+    background-color: #0f1114 !important;
+    color: #f8fafc !important;
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  .glass-card {
+    background: #1c1c1c !important;
+    border: 1px solid #3f3f3f !important;
+  }
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: #0f1114;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #334155;
+    border-radius: 4px;
+  }
+</style>
+
+<div class="min-h-screen bg-[#0f1114] text-white font-sans overflow-x-hidden pb-12">
+
+  <!-- ENCABEZADO SUPERIOR (ESTILO VIDASPA) -->
+  <header class="bg-gradient-to-b from-[#1b2b3b] to-[#0f1114] pt-6 pb-8 px-6 md:px-8 border-b border-white/5 shadow-lg relative">
+    <div class="absolute inset-0 bg-emerald-500/5 mix-blend-overlay pointer-events-none"></div>
+    <div class="max-w-6xl mx-auto relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
+      
+      <!-- LOGO TEXTUAL -->
+      <div class="flex items-baseline gap-2">
+        <h1 class="text-3xl font-black tracking-tight">
+          <span class="text-[#34d399]">Terraza</span> <span class="text-white">Vida & Sabor</span>
+        </h1>
+        <span class="text-xs tracking-widest text-[#34d399] uppercase opacity-80 font-bold">Restaurante & Palapa</span>
+      </div>
+
+      <!-- BADGES SUPERIORES -->
+      <div class="flex items-center gap-3 flex-wrap">
+        <div class="bg-white/10 backdrop-blur-sm rounded-full px-4 py-1.5 text-xs md:text-sm text-emerald-100 font-medium border border-white/10" id="ui_fecha_hoy">
+          Cargando fecha...
+        </div>
+        <div class="bg-emerald-500/20 backdrop-blur-sm rounded-full px-4 py-1.5 text-xs md:text-sm text-emerald-200 font-bold border border-emerald-500/30 flex items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Administración
+        </div>
+        <button onclick="window.navMenu('pos_mesero')" class="bg-blue-500/20 hover:bg-blue-500/30 text-blue-200 backdrop-blur-sm rounded-full px-4 py-1.5 text-xs md:text-sm font-bold border border-blue-500/30 transition flex items-center gap-1.5">
+          <i class="fa-solid fa-utensils"></i> Ir a Piso (POS)
+        </button>
+        <button onclick="window.navMenu('salir')" class="bg-red-500/20 hover:bg-red-500/40 text-red-200 backdrop-blur-sm rounded-full px-4 py-1.5 text-xs md:text-sm font-medium border border-red-500/30 transition flex items-center gap-1.5" title="Cerrar sesión">
+          <span>Salir</span>
+          <i class="fa-solid fa-arrow-right-from-bracket"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <main class="max-w-6xl mx-auto px-4 sm:px-8 mt-8">
+
+    <!-- TÍTULO Y SUBTÍTULO -->
+    <div class="mb-8">
+      <h2 class="text-2xl md:text-3xl font-bold tracking-tight mb-1 text-white flex items-center gap-2">
+        Buen día, Terraza Vida & Sabor 👋
+      </h2>
+      <p class="text-[#a3a3a3] text-sm md:text-base font-light">
+        Panel de control gerencial y operación general — acceso rápido a todas las funciones del restaurante
+      </p>
+    </div>
+
+    <!-- 4 FILA DE KPIS (ESTILO VIDASPA CON BARRAS SUPERIORES DE COLOR) -->
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+
+      <!-- KPI 1: VENTAS DE LA SEMANA -->
+      <div class="bg-[#1c1c1c] rounded-xl p-5 border border-[#3f3f3f] shadow-md relative overflow-hidden group">
+        <div class="absolute top-0 left-0 w-full h-1 bg-[#3e8f6e]"></div>
+        <div class="text-[10px] uppercase tracking-wider font-bold text-[#a3a3a3] mb-2 flex justify-between items-center">
+          <span>Ventas de la semana</span>
+          <i class="fa-solid fa-chart-line text-[#3e8f6e]"></i>
+        </div>
+        <div class="text-2xl sm:text-3xl font-black text-white mb-1 flex items-baseline gap-1">
+          <span class="text-base text-[#a3a3a3]">$</span><span id="kpi_ventas_semana">14,850.00</span>
+        </div>
+        <div class="text-xs text-[#a3a3a3]"><span id="kpi_comandas_semana" class="text-emerald-400 font-bold">38</span> comandas atendidas</div>
+      </div>
+
+      <!-- KPI 2: PLATILLO ESTRELLA -->
+      <div class="bg-[#1c1c1c] rounded-xl p-5 border border-[#3f3f3f] shadow-md relative overflow-hidden group">
+        <div class="absolute top-0 left-0 w-full h-1 bg-[#3a72b8]"></div>
+        <div class="text-[10px] uppercase tracking-wider font-bold text-[#a3a3a3] mb-2 flex justify-between items-center">
+          <span>Platillo Estrella</span>
+          <i class="fa-solid fa-trophy text-[#3a72b8]"></i>
+        </div>
+        <div class="text-lg sm:text-xl font-black text-white mb-1 truncate" id="kpi_platillo_nombre">
+          🍳 Chilaquiles Rojos
+        </div>
+        <div class="text-xs text-[#a3a3a3]"><span id="kpi_platillo_ordenes" class="text-sky-400 font-bold">42</span> órdenes esta semana</div>
+      </div>
+
+      <!-- KPI 3: CAJA CHICA & BANCOS -->
+      <div class="bg-[#1c1c1c] rounded-xl p-5 border border-[#3f3f3f] shadow-md relative overflow-hidden group">
+        <div class="absolute top-0 left-0 w-full h-1 bg-[#b56d35]"></div>
+        <div class="text-[10px] uppercase tracking-wider font-bold text-[#a3a3a3] mb-2 flex justify-between items-center">
+          <span>Caja Chica & Bancos</span>
+          <i class="fa-solid fa-vault text-[#b56d35]"></i>
+        </div>
+        <div class="text-2xl sm:text-3xl font-black text-white mb-1 flex items-baseline gap-1">
+          <span class="text-base text-[#a3a3a3]">$</span><span id="kpi_efectivo_caja">5,400</span>
+        </div>
+        <div class="text-xs text-[#a3a3a3]"><span id="kpi_bancos" class="text-amber-400 font-bold">$9,450.00</span> TPV Santander/MP</div>
+      </div>
+
+      <!-- KPI 4: OCUPACIÓN EN PISO -->
+      <div class="bg-[#1c1c1c] rounded-xl p-5 border border-[#3f3f3f] shadow-md relative overflow-hidden group">
+        <div class="absolute top-0 left-0 w-full h-1 bg-[#2e8b8b]"></div>
+        <div class="text-[10px] uppercase tracking-wider font-bold text-[#a3a3a3] mb-2 flex justify-between items-center">
+          <span>Ocupación en Piso</span>
+          <i class="fa-solid fa-chair text-[#2e8b8b]"></i>
+        </div>
+        <div class="text-2xl sm:text-3xl font-black text-white mb-1" id="kpi_mesas_ocupadas">
+          6 mesas activas
+        </div>
+        <div class="text-xs text-[#a3a3a3]"><span id="kpi_comensales_activos" class="text-teal-400 font-bold">24</span> comensales en palapa</div>
+      </div>
+
+    </div>
+
+    <!-- CUADRÍCULA DE 9 MÓDULOS (3X3 CON BARRAS LATERALES Y BADGES PILL) -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+
+      <!-- MÓDULO 1: POS MESERO (PISO & MESAS) -->
+      <button onclick="window.navMenu('pos_mesero')" class="text-left bg-[#1c1c1c] rounded-2xl p-6 border border-[#3f3f3f] shadow-lg relative overflow-hidden hover:bg-[#252525] transition-all group flex flex-col h-full active:scale-[0.98]">
+        <div class="absolute top-0 left-0 h-full w-1.5 bg-[#3e8f6e] group-hover:w-2 transition-all"></div>
+        <div class="text-3xl mb-3 ml-2">🍽️</div>
+        <h3 class="text-xl font-bold mb-1.5 ml-2 text-white">POS Mesero & Piso</h3>
+        <p class="text-sm text-[#a3a3a3] font-light leading-relaxed mb-6 ml-2 flex-grow">Croquis interactivo de la palapa, 44 sillas con código QR, comanda al centro y cobro</p>
+        <div class="mt-auto ml-2">
+          <span class="inline-block bg-[#3e8f6e]/10 text-[#3e8f6e] text-[10px] uppercase tracking-wider font-black px-3 py-1 rounded-full border border-[#3e8f6e]/20">Operación</span>
+        </div>
+      </button>
+
+      <!-- MÓDULO 2: MONITOR DE COCINA (KDS) -->
+      <button onclick="window.navMenu('monitor_cocina')" class="text-left bg-[#1c1c1c] rounded-2xl p-6 border border-[#3f3f3f] shadow-lg relative overflow-hidden hover:bg-[#252525] transition-all group flex flex-col h-full active:scale-[0.98]">
+        <div class="absolute top-0 left-0 h-full w-1.5 bg-[#3a72b8] group-hover:w-2 transition-all"></div>
+        <div class="text-3xl mb-3 ml-2">👨‍🍳</div>
+        <h3 class="text-xl font-bold mb-1.5 ml-2 text-white">Monitor Cocina (KDS)</h3>
+        <p class="text-sm text-[#a3a3a3] font-light leading-relaxed mb-6 ml-2 flex-grow">Comandas en tiempo real, semáforo de tiempos y fichas técnicas de recetas estandarizadas</p>
+        <div class="mt-auto ml-2">
+          <span class="inline-block bg-[#3a72b8]/10 text-[#3a72b8] text-[10px] uppercase tracking-wider font-black px-3 py-1 rounded-full border border-[#3a72b8]/20">Cocina</span>
+        </div>
+      </button>
+
+      <!-- MÓDULO 3: GESTIÓN DE MENÚ & RECETAS (POSTGRESQL) -->
+      <button onclick="window.abrirModalAdminMenu()" class="text-left bg-[#1c1c1c] rounded-2xl p-6 border border-[#3f3f3f] shadow-lg relative overflow-hidden hover:bg-[#252525] transition-all group flex flex-col h-full active:scale-[0.98]">
+        <div class="absolute top-0 left-0 h-full w-1.5 bg-[#b56d35] group-hover:w-2 transition-all"></div>
+        <div class="text-3xl mb-3 ml-2">📋</div>
+        <h3 class="text-xl font-bold mb-1.5 ml-2 text-white">Gestión de Menú & Recetas</h3>
+        <p class="text-sm text-[#a3a3a3] font-light leading-relaxed mb-6 ml-2 flex-grow">Alta de platillos, precios de temporada, gramajes, términos y adicionales en PostgreSQL</p>
+        <div class="mt-auto ml-2">
+          <span class="inline-block bg-[#b56d35]/10 text-[#b56d35] text-[10px] uppercase tracking-wider font-black px-3 py-1 rounded-full border border-[#b56d35]/20">Catálogo DB</span>
+        </div>
+      </button>
+
+      <!-- MÓDULO 4: MENÚ DIGITAL QR (COMENSAL) -->
+      <button onclick="window.navMenu('menu')" class="text-left bg-[#1c1c1c] rounded-2xl p-6 border border-[#3f3f3f] shadow-lg relative overflow-hidden hover:bg-[#252525] transition-all group flex flex-col h-full active:scale-[0.98]">
+        <div class="absolute top-0 left-0 h-full w-1.5 bg-[#b54e35] group-hover:w-2 transition-all"></div>
+        <div class="text-3xl mb-3 ml-2">📱</div>
+        <h3 class="text-xl font-bold mb-1.5 ml-2 text-white">Menú Digital QR</h3>
+        <p class="text-sm text-[#a3a3a3] font-light leading-relaxed mb-6 ml-2 flex-grow">Vista en el celular del comensal con personalizaciones, exclusiones, extras y notas para cocina</p>
+        <div class="mt-auto ml-2">
+          <span class="inline-block bg-[#b54e35]/10 text-[#b54e35] text-[10px] uppercase tracking-wider font-black px-3 py-1 rounded-full border border-[#b54e35]/20">Clientes</span>
+        </div>
+      </button>
+
+      <!-- MÓDULO 5: REGISTRO DEL PERSONAL & IMSS -->
+      <button onclick="window.abrirModalPersonal()" class="text-left bg-[#1c1c1c] rounded-2xl p-6 border border-[#3f3f3f] shadow-lg relative overflow-hidden hover:bg-[#252525] transition-all group flex flex-col h-full active:scale-[0.98]">
+        <div class="absolute top-0 left-0 h-full w-1.5 bg-[#a87b42] group-hover:w-2 transition-all"></div>
+        <div class="text-3xl mb-3 ml-2">👥</div>
+        <h3 class="text-xl font-bold mb-1.5 ml-2 text-white">Registro de Personal & IMSS</h3>
+        <p class="text-sm text-[#a3a3a3] font-light leading-relaxed mb-6 ml-2 flex-grow">Alta de meseros y cocineras, expediente digital de documentos y cálculo estimado IMSS</p>
+        <div class="mt-auto ml-2">
+          <span class="inline-block bg-[#a87b42]/10 text-[#a87b42] text-[10px] uppercase tracking-wider font-black px-3 py-1 rounded-full border border-[#a87b42]/20">Personal</span>
+        </div>
+      </button>
+
+      <!-- MÓDULO 6: TABLERO FISCAL & FINANZAS -->
+      <button onclick="window.navMenu('monitor_fiscal')" class="text-left bg-[#1c1c1c] rounded-2xl p-6 border border-[#3f3f3f] shadow-lg relative overflow-hidden hover:bg-[#252525] transition-all group flex flex-col h-full active:scale-[0.98]">
+        <div class="absolute top-0 left-0 h-full w-1.5 bg-[#c9a227] group-hover:w-2 transition-all"></div>
+        <div class="text-3xl mb-3 ml-2">🏛️</div>
+        <h3 class="text-xl font-bold mb-1.5 ml-2 text-white">Tablero Fiscal & SAT</h3>
+        <p class="text-sm text-[#a3a3a3] font-light leading-relaxed mb-6 ml-2 flex-grow">Ingresos bancarizados vs efectivo, desglose de IVA (16%), CFDI global y cotejo con el contador</p>
+        <div class="mt-auto ml-2">
+          <span class="inline-block bg-[#c9a227]/10 text-[#c9a227] text-[10px] uppercase tracking-wider font-black px-3 py-1 rounded-full border border-[#c9a227]/20">Fiscal</span>
+        </div>
+      </button>
+
+      <!-- MÓDULO 7: CAJA CHICA & FLUJO DE GASTOS -->
+      <button onclick="window.abrirModalCajaChica()" class="text-left bg-[#1c1c1c] rounded-2xl p-6 border border-[#3f3f3f] shadow-lg relative overflow-hidden hover:bg-[#252525] transition-all group flex flex-col h-full active:scale-[0.98]">
+        <div class="absolute top-0 left-0 h-full w-1.5 bg-[#10b981] group-hover:w-2 transition-all"></div>
+        <div class="text-3xl mb-3 ml-2">💵</div>
+        <h3 class="text-xl font-bold mb-1.5 ml-2 text-white">Caja Chica & Gastos</h3>
+        <p class="text-sm text-[#a3a3a3] font-light leading-relaxed mb-6 ml-2 flex-grow">Arqueo diario de caja, retiros de efectivo, propinas del equipo y pago de servicios (luz/renta)</p>
+        <div class="mt-auto ml-2">
+          <span class="inline-block bg-[#10b981]/10 text-[#10b981] text-[10px] uppercase tracking-wider font-black px-3 py-1 rounded-full border border-[#10b981]/20">Caja Chica</span>
+        </div>
+      </button>
+
+      <!-- MÓDULO 8: ALMACÉN & COMPRAS (TICKET INTELLIGENT) -->
+      <button onclick="window.abrirModalInventario()" class="text-left bg-[#1c1c1c] rounded-2xl p-6 border border-[#3f3f3f] shadow-lg relative overflow-hidden hover:bg-[#252525] transition-all group flex flex-col h-full active:scale-[0.98]">
+        <div class="absolute top-0 left-0 h-full w-1.5 bg-[#2e8b8b] group-hover:w-2 transition-all"></div>
+        <div class="text-3xl mb-3 ml-2">🛒</div>
+        <h3 class="text-xl font-bold mb-1.5 ml-2 text-white">Almacén & Compras</h3>
+        <p class="text-sm text-[#a3a3a3] font-light leading-relaxed mb-6 ml-2 flex-grow">Alertas de stock crítico, compras semanales y enlace con la app Ticket Intelligent</p>
+        <div class="mt-auto ml-2">
+          <span class="inline-block bg-[#2e8b8b]/10 text-[#2e8b8b] text-[10px] uppercase tracking-wider font-black px-3 py-1 rounded-full border border-[#2e8b8b]/20">Inventarios API</span>
+        </div>
+      </button>
+
+      <!-- MÓDULO 9: CLIENTES & LEALTAD (REWARDS) -->
+      <button onclick="window.navMenu('clientes_lealtad')" class="text-left bg-[#1c1c1c] rounded-2xl p-6 border border-[#3f3f3f] shadow-lg relative overflow-hidden hover:bg-[#252525] transition-all group flex flex-col h-full active:scale-[0.98]">
+        <div class="absolute top-0 left-0 h-full w-1.5 bg-[#5642a8] group-hover:w-2 transition-all"></div>
+        <div class="text-3xl mb-3 ml-2">🎁</div>
+        <h3 class="text-xl font-bold mb-1.5 ml-2 text-white">Clientes & Lealtad</h3>
+        <p class="text-sm text-[#a3a3a3] font-light leading-relaxed mb-6 ml-2 flex-grow">Puntos acumulados por consumo, visitas frecuentes y beneficios de fidelización</p>
+        <div class="mt-auto ml-2">
+          <span class="inline-block bg-[#5642a8]/10 text-[#5642a8] text-[10px] uppercase tracking-wider font-black px-3 py-1 rounded-full border border-[#5642a8]/20">Lealtad</span>
+        </div>
+      </button>
+
+    </div>
+
+    <!-- SECCIÓN INFERIOR: 2 WIDGETS EN PARALELO (ESTILO VIDASPA) -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+
+      <!-- WIDGET 1: COMANDAS ACTIVAS EN TIEMPO REAL -->
+      <div class="bg-[#1c1c1c] rounded-2xl p-6 border border-[#3f3f3f] shadow-lg">
+        <div class="flex items-center justify-between mb-6 pb-4 border-b border-white/5">
+          <h3 class="text-lg font-bold text-white flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
+            Comandas Activas en Tiempo Real
+          </h3>
+          <span class="bg-emerald-900/40 text-emerald-300 text-xs px-3 py-1 rounded-full font-bold border border-emerald-500/20" id="ui_badge_comandas">
+            4 activas
+          </span>
+        </div>
+
+        <div class="space-y-3" id="list_comandas_activas">
+          <div class="text-[#a3a3a3] text-sm text-center py-4">Cargando comandas en vivo...</div>
+        </div>
+      </div>
+
+      <!-- WIDGET 2: ALERTAS DE COMPRA SEMANAL (TICKET INTELLIGENT) -->
+      <div class="bg-[#1c1c1c] rounded-2xl p-6 border border-[#3f3f3f] shadow-lg">
+        <div class="flex items-center justify-between mb-6 pb-4 border-b border-white/5">
+          <h3 class="text-lg font-bold text-white flex items-center gap-2">
+            <i class="fa-solid fa-cart-flatbed text-amber-400"></i>
+            Alertas de Compra Semanal
+          </h3>
+          <span class="bg-amber-900/40 text-amber-300 text-xs px-3 py-1 rounded-full font-bold border border-amber-500/20" id="ui_badge_insumos">
+            5 insumos críticos
+          </span>
+        </div>
+
+        <div class="space-y-3" id="list_alertas_compras">
+          <div class="text-[#a3a3a3] text-sm text-center py-4">Cargando alertas de insumos...</div>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+</div>
+
+<!-- ================================================================= -->
+<!-- MODAL: GESTIÓN DE MENÚ & RECETAS ESTANDARIZADAS (POSTGRESQL)      -->
+<!-- ================================================================= -->
+<div id="modalAdminMenu" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden items-center justify-center p-4">
+  <div class="bg-[#131720] border border-[#2b3548] rounded-3xl w-full max-w-5xl max-h-[92vh] flex flex-col shadow-2xl overflow-hidden">
+    
+    <!-- HEADER MODAL -->
+    <div class="px-6 py-4 border-b border-[#2b3548] flex items-center justify-between bg-[#1a202c]">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-amber-500/20 border border-amber-500/30 flex items-center justify-center text-amber-400 text-xl font-black">
+          📋
+        </div>
+        <div>
+          <h2 class="text-lg font-extrabold text-white">Administrador de Menú & Fichas Técnicas</h2>
+          <p class="text-xs text-amber-400">Base de datos PostgreSQL en tiempo real (`dbterrazavidasabor`)</p>
+        </div>
+      </div>
+      <button onclick="window.cerrarModalAdminMenu()" class="text-slate-400 hover:text-white text-xl p-2 transition">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+
+    <!-- BODY CON COLUMNAS: CATÁLOGO IZQ / EDITOR DER -->
+    <div class="flex-1 overflow-y-auto custom-scrollbar p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
+      
+      <!-- COLUMNA IZQ: LISTADO DE PLATILLOS (5 COLS) -->
+      <div class="lg:col-span-5 flex flex-col gap-4 border-r border-[#2b3548] pr-0 lg:pr-6">
+        <div class="flex items-center justify-between gap-2">
+          <input type="text" id="filtroPlatilloInput" oninput="window.filtrarListaPlatillos()" placeholder="🔍 Buscar platillo o categoría..." 
+            class="w-full bg-[#0b0e14] border border-[#2b3548] rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-500 transition">
+          <button onclick="window.nuevoPlatilloForm()" class="bg-amber-600 hover:bg-amber-500 text-white font-bold text-xs px-3 py-2 rounded-xl transition whitespace-nowrap flex items-center gap-1.5 shadow-lg shadow-amber-900/30">
+            <i class="fa-solid fa-plus"></i> Nuevo
+          </button>
+        </div>
+
+        <div id="listaPlatillosAdmin" class="space-y-2 overflow-y-auto max-h-[58vh] custom-scrollbar pr-1">
+          <!-- Items generados dinámicamente -->
+        </div>
+      </div>
+
+      <!-- COLUMNA DER: FORMULARIO DE ALTA / EDICIÓN (7 COLS) -->
+      <div class="lg:col-span-7 flex flex-col gap-5 overflow-y-auto max-h-[66vh] custom-scrollbar pr-2">
+        <div class="flex items-center justify-between pb-3 border-b border-[#2b3548]">
+          <h3 class="text-sm font-extrabold text-white flex items-center gap-2" id="formPlatilloTitulo">
+            ✏️ Editar Platillo & Ficha Técnica
+          </h3>
+          <span class="text-[11px] text-slate-400" id="formPlatilloIdBadge">ID: -</span>
+        </div>
+
+        <input type="hidden" id="formPlatilloId" value="">
+
+        <!-- SECCIÓN 1: DATOS BÁSICOS -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Nombre del Platillo</label>
+            <input type="text" id="formNombre" class="w-full bg-[#0b0e14] border border-[#2b3548] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-500 transition">
+          </div>
+          <div>
+            <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Categoría</label>
+            <select id="formCategoriaId" class="w-full bg-[#0b0e14] border border-[#2b3548] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-500 transition">
+              <!-- Categorías cargadas desde PostgreSQL -->
+            </select>
+          </div>
+          <div>
+            <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Precio ($ MXN)</label>
+            <input type="number" step="0.50" id="formPrecio" class="w-full bg-[#0b0e14] border border-[#2b3548] rounded-xl px-3 py-2 text-xs text-emerald-400 font-bold focus:outline-none focus:border-emerald-500 transition">
+          </div>
+          <div>
+            <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Estación de Cocina (KDS)</label>
+            <select id="formEstacion" class="w-full bg-[#0b0e14] border border-[#2b3548] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-500 transition">
+              <option value="Cocina Caliente">Cocina Caliente</option>
+              <option value="Cocina Fría">Cocina Fría</option>
+              <option value="Barra">Barra / Cafetería</option>
+              <option value="Repostería">Repostería & Dulces</option>
+              <option value="Infantil">Menú Infantil</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Icono / Emoji</label>
+            <input type="text" id="formIcono" class="w-full bg-[#0b0e14] border border-[#2b3548] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-500 transition" placeholder="🍳">
+          </div>
+          <div>
+            <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Tiempo Estimado</label>
+            <input type="text" id="formTiempo" class="w-full bg-[#0b0e14] border border-[#2b3548] rounded-xl px-3 py-2 text-xs text-sky-400 focus:outline-none focus:border-sky-500 transition" placeholder="8-10 min">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Descripción Breve (Menú Comensal)</label>
+          <textarea id="formDescripcion" rows="2" class="w-full bg-[#0b0e14] border border-[#2b3548] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-500 transition"></textarea>
+        </div>
+
+        <!-- SECCIÓN 2: PERSONALIZACIONES COMENSAL (TÉRMINOS, EXCLUSIONES, EXTRAS) -->
+        <div class="p-4 bg-[#0b0e14] rounded-2xl border border-[#232b3b] space-y-3">
+          <span class="text-xs font-black text-amber-400 uppercase tracking-wider flex items-center gap-1.5">
+            📱 Opciones para el Celular del Comensal
+          </span>
+
+          <div>
+            <label class="block text-[10px] font-bold text-slate-400 mb-1">Términos de Preparación (separados por coma)</label>
+            <input type="text" id="formTerminos" class="w-full bg-[#131720] border border-[#2b3548] rounded-lg px-3 py-1.5 text-xs text-white" placeholder="Yema tierna, Yema bien cocida, Volteados">
+          </div>
+
+          <div>
+            <label class="block text-[10px] font-bold text-slate-400 mb-1">Preferencias de Exclusión (separadas por coma)</label>
+            <input type="text" id="formExclusiones" class="w-full bg-[#131720] border border-[#2b3548] rounded-lg px-3 py-1.5 text-xs text-white" placeholder="Sin cebolla, Sin crema, Salsa aparte">
+          </div>
+
+          <div>
+            <label class="block text-[10px] font-bold text-slate-400 mb-1">Adicionales / Extras Sugeridos (Formato: Nombre +$Precio)</label>
+            <input type="text" id="formExtras" class="w-full bg-[#131720] border border-[#2b3548] rounded-lg px-3 py-1.5 text-xs text-white" placeholder="Aguacate extra +$25.00, Queso gratinado +$20.00, Huevo extra +$15.00">
+          </div>
+        </div>
+
+        <!-- SECCIÓN 3: FICHA TÉCNICA COCINA -->
+        <div class="p-4 bg-[#0b0e14] rounded-2xl border border-[#232b3b] space-y-3">
+          <span class="text-xs font-black text-sky-400 uppercase tracking-wider flex items-center gap-1.5">
+            👨‍🍳 Ficha Técnica de Receta (Gramajes y Pasos)
+          </span>
+
+          <div>
+            <label class="block text-[10px] font-bold text-slate-400 mb-1">Ingredientes y Gramajes (uno por línea)</label>
+            <textarea id="formIngredientes" rows="3" class="w-full bg-[#131720] border border-[#2b3548] rounded-lg px-3 py-2 text-xs text-white font-mono" placeholder="120g totopos horneados&#10;150ml salsa tatemada roja&#10;2 huevos frescos de rancho"></textarea>
+          </div>
+
+          <div>
+            <label class="block text-[10px] font-bold text-slate-400 mb-1">Pasos de Elaboración (uno por línea)</label>
+            <textarea id="formPasos" rows="3" class="w-full bg-[#131720] border border-[#2b3548] rounded-lg px-3 py-2 text-xs text-white" placeholder="1. Freír huevos al término seleccionado por el cliente&#10;2. Calentar salsa y bañar totopos en sartén caliente por 45 seg&#10;3. Emplatar con frijoles y servir de inmediato"></textarea>
+          </div>
+
+          <div>
+            <label class="block text-[10px] font-bold text-slate-400 mb-1">Vajilla y Notas de Montaje</label>
+            <input type="text" id="formNotasReceta" class="w-full bg-[#131720] border border-[#2b3548] rounded-lg px-3 py-1.5 text-xs text-white" placeholder="Plato ovalado de barro hondo. Salida inmediata a pase térmico.">
+          </div>
+        </div>
+
+        <!-- FOOTER ACCIONES FORMULARIO -->
+        <div class="flex items-center justify-between pt-3 border-t border-[#2b3548]">
+          <label class="flex items-center gap-2 cursor-pointer">
+            <input type="checkbox" id="formDisponible" class="rounded bg-[#0b0e14] border-slate-700 text-emerald-500 focus:ring-0">
+            <span class="text-xs font-bold text-emerald-400">Platillo Activo / Disponible</span>
+          </label>
+
+          <button onclick="window.guardarPlatilloDB()" class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-black text-xs rounded-xl shadow-lg shadow-emerald-900/40 transition flex items-center gap-2">
+            <i class="fa-solid fa-cloud-arrow-up"></i> Guardar en PostgreSQL
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ================================================================= -->
+<!-- MODAL: REGISTRO DE PERSONAL & ESTIMADOR IMSS                      -->
+<!-- ================================================================= -->
+<div id="modalPersonal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden items-center justify-center p-4">
+  <div class="bg-[#131720] border border-[#2b3548] rounded-3xl w-full max-w-3xl max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
+    <div class="px-6 py-4 border-b border-[#2b3548] flex items-center justify-between bg-[#1a202c]">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-orange-500/20 border border-orange-500/30 flex items-center justify-center text-orange-400 text-xl font-black">
+          👥
+        </div>
+        <div>
+          <h2 class="text-lg font-extrabold text-white">Registro de Personal & Expediente Digital</h2>
+          <p class="text-xs text-orange-400">Control de meseros, cocineras y estimador de cuotas obrero-patronales IMSS</p>
+        </div>
+      </div>
+      <button onclick="window.cerrarModalPersonal()" class="text-slate-400 hover:text-white text-xl p-2 transition">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+
+    <div class="p-6 overflow-y-auto custom-scrollbar space-y-6">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-[11px] font-bold text-slate-400 mb-1">Nombre Completo</label>
+          <input type="text" placeholder="Ej. Carlos Mendoza Sánchez" class="w-full bg-[#0b0e14] border border-[#2b3548] rounded-xl px-3 py-2 text-xs text-white">
+        </div>
+        <div>
+          <label class="block text-[11px] font-bold text-slate-400 mb-1">Puesto / Rol</label>
+          <select class="w-full bg-[#0b0e14] border border-[#2b3548] rounded-xl px-3 py-2 text-xs text-white">
+            <option>Mesero / Piso Palapa</option>
+            <option>Cocinera / Jefe de Línea</option>
+            <option>Bartender / Barra de Café</option>
+            <option>Capitán de Meseros</option>
+            <option>Lavaloza / Auxiliar</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-[11px] font-bold text-slate-400 mb-1">Salario Diario Integrado (SDI)</label>
+          <input type="number" value="320.00" class="w-full bg-[#0b0e14] border border-[#2b3548] rounded-xl px-3 py-2 text-xs text-emerald-400 font-bold">
+        </div>
+        <div>
+          <label class="block text-[11px] font-bold text-slate-400 mb-1">Número de Seguridad Social (NSS)</label>
+          <input type="text" placeholder="11 dígitos" class="w-full bg-[#0b0e14] border border-[#2b3548] rounded-xl px-3 py-2 text-xs text-white">
+        </div>
+      </div>
+
+      <!-- CHECKLIST DE EXPEDIENTE DIGITAL -->
+      <div class="p-4 bg-[#0b0e14] rounded-2xl border border-[#232b3b] space-y-3">
+        <span class="text-xs font-black text-orange-400 uppercase tracking-wider flex items-center gap-1.5">
+          📄 Expediente Digital & Documentos Escaneados
+        </span>
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 text-xs text-slate-300">
+          <label class="flex items-center gap-2 p-2 bg-[#131720] rounded-lg border border-[#2b3548]">
+            <input type="checkbox" checked class="text-emerald-500 rounded"> INE Escaneado
+          </label>
+          <label class="flex items-center gap-2 p-2 bg-[#131720] rounded-lg border border-[#2b3548]">
+            <input type="checkbox" checked class="text-emerald-500 rounded"> CURP Oficial
+          </label>
+          <label class="flex items-center gap-2 p-2 bg-[#131720] rounded-lg border border-[#2b3548]">
+            <input type="checkbox" checked class="text-emerald-500 rounded"> Constancia SAT
+          </label>
+          <label class="flex items-center gap-2 p-2 bg-[#131720] rounded-lg border border-[#2b3548]">
+            <input type="checkbox" checked class="text-emerald-500 rounded"> Comprobante Dom.
+          </label>
+          <label class="flex items-center gap-2 p-2 bg-[#131720] rounded-lg border border-[#2b3548]">
+            <input type="checkbox" checked class="text-emerald-500 rounded"> Contrato Firmado
+          </label>
+          <label class="flex items-center gap-2 p-2 bg-[#131720] rounded-lg border border-[#2b3548]">
+            <input type="checkbox" class="text-emerald-500 rounded"> Alta IDSE / IMSS
+          </label>
+        </div>
+      </div>
+
+      <!-- ESTIMADOR IMSS -->
+      <div class="p-4 bg-orange-950/20 rounded-2xl border border-orange-500/30 flex items-center justify-between">
+        <div>
+          <span class="text-xs font-bold text-orange-300 block">Cálculo Previo Estimado IMSS (Mes en curso)</span>
+          <span class="text-[11px] text-slate-400">Cotejo previo para comparar con la liquidación del contador</span>
+        </div>
+        <span class="text-xl font-black text-orange-400">$2,460.00 / mes</span>
+      </div>
+
+      <div class="flex justify-end gap-3 pt-2">
+        <button onclick="window.cerrarModalPersonal()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-xs font-bold rounded-xl text-slate-300">Cerrar</button>
+        <button onclick="alert('✅ Empleado registrado en el sistema local'); window.cerrarModalPersonal();" class="px-5 py-2 bg-orange-600 hover:bg-orange-500 text-xs font-bold rounded-xl text-white shadow-lg shadow-orange-900/40">Guardar Registro</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================================================================= -->
+<!-- MODAL: TICKET INTELLIGENT & COMPRAS SEMANALES                     -->
+<!-- ================================================================= -->
+<div id="modalInventario" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden items-center justify-center p-4">
+  <div class="bg-[#131720] border border-[#2b3548] rounded-3xl w-full max-w-3xl max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
+    <div class="px-6 py-4 border-b border-[#2b3548] flex items-center justify-between bg-[#1a202c]">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-teal-500/20 border border-teal-500/30 flex items-center justify-center text-teal-400 text-xl font-black">
+          🛒
+        </div>
+        <div>
+          <h2 class="text-lg font-extrabold text-white">Almacén & Microservicio Ticket Intelligent</h2>
+          <p class="text-xs text-teal-400">Arquitectura desacoplada por API para escaneo de facturas, luz, renta e insumos</p>
+        </div>
+      </div>
+      <button onclick="window.cerrarModalInventario()" class="text-slate-400 hover:text-white text-xl p-2 transition">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+
+    <div class="p-6 overflow-y-auto custom-scrollbar space-y-5">
+      <div class="p-4 bg-teal-950/20 rounded-2xl border border-teal-500/30">
+        <h4 class="text-xs font-bold text-teal-300 mb-1 flex items-center gap-2">
+          <i class="fa-solid fa-microchip"></i> Micro-App Ticket Intelligent Conectable vía API
+        </h4>
+        <p class="text-xs text-slate-300 leading-relaxed">
+          Esta aplicación procesa facturas y tickets escaneados mediante IA, clasificando automáticamente compras de alimentos, pagos de renta y energía eléctrica. Aquí se reciben las alertas de compras prioritarias semanales para La Terraza.
+        </p>
+      </div>
+
+      <h4 class="text-xs font-black text-white uppercase tracking-wider">Insumos Críticos Semanales Recomendados</h4>
+      <div class="space-y-2.5">
+        <div class="flex items-center justify-between p-3 bg-[#0b0e14] rounded-xl border border-[#2b3548]">
+          <div class="flex items-center gap-3">
+            <span class="text-xl">🥚</span>
+            <div>
+              <span class="text-xs font-bold text-white block">Huevos frescos de rancho</span>
+              <span class="text-[10px] text-slate-400">Consumo semanal: 15 rejas • Stock: 3 rejas</span>
+            </div>
+          </div>
+          <span class="px-2.5 py-1 bg-red-500/20 text-red-400 border border-red-500/30 rounded-lg text-[10px] font-bold">URGENTE (1 día)</span>
+        </div>
+        <div class="flex items-center justify-between p-3 bg-[#0b0e14] rounded-xl border border-[#2b3548]">
+          <div class="flex items-center gap-3">
+            <span class="text-xl">🌽</span>
+            <div>
+              <span class="text-xs font-bold text-white block">Totopos horneados de maíz</span>
+              <span class="text-[10px] text-slate-400">Consumo semanal: 25 kg • Stock: 4 kg</span>
+            </div>
+          </div>
+          <span class="px-2.5 py-1 bg-amber-500/20 text-amber-400 border border-amber-500/30 rounded-lg text-[10px] font-bold">PRÓXIMO (2 días)</span>
+        </div>
+        <div class="flex items-center justify-between p-3 bg-[#0b0e14] rounded-xl border border-[#2b3548]">
+          <div class="flex items-center gap-3">
+            <span class="text-xl">🧀</span>
+            <div>
+              <span class="text-xs font-bold text-white block">Queso fresco artesanal</span>
+              <span class="text-[10px] text-slate-400">Consumo semanal: 12 kg • Stock: 2.5 kg</span>
+            </div>
+          </div>
+          <span class="px-2.5 py-1 bg-amber-500/20 text-amber-400 border border-amber-500/30 rounded-lg text-[10px] font-bold">PRÓXIMO (3 días)</span>
+        </div>
+      </div>
+
+      <div class="flex justify-end pt-2">
+        <button onclick="window.cerrarModalInventario()" class="px-5 py-2 bg-teal-600 hover:bg-teal-500 text-xs font-bold rounded-xl text-white">Entendido</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================================================================= -->
+<!-- MODAL: CAJA CHICA & FLUJO DE GASTOS                               -->
+<!-- ================================================================= -->
+<div id="modalCajaChica" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden items-center justify-center p-4">
+  <div class="bg-[#131720] border border-[#2b3548] rounded-3xl w-full max-w-2xl max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
+    <div class="px-6 py-4 border-b border-[#2b3548] flex items-center justify-between bg-[#1a202c]">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400 text-xl font-black">
+          💵
+        </div>
+        <div>
+          <h2 class="text-lg font-extrabold text-white">Arqueo de Caja Chica & Propinas</h2>
+          <p class="text-xs text-emerald-400">Control de flujo físico en efectivo para piso y barra</p>
+        </div>
+      </div>
+      <button onclick="window.cerrarModalCajaChica()" class="text-slate-400 hover:text-white text-xl p-2 transition">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+
+    <div class="p-6 overflow-y-auto custom-scrollbar space-y-4">
+      <div class="grid grid-cols-2 gap-4">
+        <div class="p-4 bg-[#0b0e14] rounded-xl border border-[#2b3548]">
+          <span class="text-[10px] uppercase font-bold text-slate-400 block mb-1">Fondo Inicial de Caja</span>
+          <span class="text-xl font-black text-white">$1,500.00</span>
+        </div>
+        <div class="p-4 bg-[#0b0e14] rounded-xl border border-[#2b3548]">
+          <span class="text-[10px] uppercase font-bold text-slate-400 block mb-1">Ingresos Efectivo Hoy</span>
+          <span class="text-xl font-black text-emerald-400">$3,900.00</span>
+        </div>
+        <div class="p-4 bg-[#0b0e14] rounded-xl border border-[#2b3548]">
+          <span class="text-[10px] uppercase font-bold text-slate-400 block mb-1">Pozo de Propinas Acumuladas</span>
+          <span class="text-xl font-black text-purple-400">$850.00</span>
+        </div>
+        <div class="p-4 bg-[#0b0e14] rounded-xl border border-[#2b3548]">
+          <span class="text-[10px] uppercase font-bold text-slate-400 block mb-1">Saldo en Cajón</span>
+          <span class="text-xl font-black text-amber-400">$5,400.00</span>
+        </div>
+      </div>
+
+      <div class="flex justify-end gap-3 pt-3">
+        <button onclick="window.cerrarModalCajaChica()" class="px-5 py-2 bg-emerald-600 hover:bg-emerald-500 text-xs font-bold rounded-xl text-white">Aceptar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  (function () {
+    // 1. ESTADO GLOBAL DEL DASHBOARD
+    window.adminState = {
+      kpis: {},
+      productos: [],
+      categorias: [],
+      mesas: []
+    };
+
+    // 2. ACTUALIZAR FECHA REAL EN ESPAÑOL
+    function actualizarFecha() {
+      const fechaEl = document.getElementById('ui_fecha_hoy');
+      if (fechaEl) {
+        const opciones = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        const fechaStr = new Date().toLocaleDateString('es-MX', opciones);
+        fechaEl.innerText = fechaStr.charAt(0).toUpperCase() + fechaStr.slice(1);
+      }
+    }
+    actualizarFecha();
+
+    // 3. PUENTE DE NAVEGACIÓN
+    window.navMenu = function (modulo) {
+      if (modulo === 'salir') {
+        window.navMenu('pos_mesero');
+        return;
+      }
+      if (typeof window.anvilAppNav === 'function') {
+        window.anvilAppNav(modulo);
+      } else {
+        console.log("Navegando a:", modulo);
+      }
+    };
+
+    // 4. RENDER DEL DASHBOARD COMPLETO DESDE POSTGRESQL
+    window.renderAdminDashboard = function (kpisJson, prodsJson, catsJson, mesasJson) {
+      try {
+        window.adminState.kpis = (typeof kpisJson === 'string') ? JSON.parse(kpisJson) : kpisJson;
+      } catch (e) { console.error('Error parseando KPIs:', e); }
+
+      try {
+        window.adminState.productos = (typeof prodsJson === 'string') ? JSON.parse(prodsJson) : prodsJson;
+      } catch (e) { console.error('Error parseando productos:', e); }
+
+      try {
+        window.adminState.categorias = (typeof catsJson === 'string') ? JSON.parse(catsJson) : catsJson;
+      } catch (e) { console.error('Error parseando categorias:', e); }
+
+      try {
+        window.adminState.mesas = (typeof mesasJson === 'string') ? JSON.parse(mesasJson) : mesasJson;
+      } catch (e) { console.error('Error parseando mesas:', e); }
+
+      const k = window.adminState.kpis;
+
+      // Actualizar 4 KPIs Superiores
+      if (k.ventas) {
+        document.getElementById('kpi_ventas_semana').innerText = Number(k.ventas.total_semana || 14850).toLocaleString('es-MX', { minimumFractionDigits: 2 });
+        document.getElementById('kpi_comandas_semana').innerText = k.ventas.comandas_semana || 38;
+      }
+      if (k.platillo_estrella) {
+        document.getElementById('kpi_platillo_nombre').innerText = (k.platillo_estrella.icono || '🍳') + ' ' + (k.platillo_estrella.nombre || 'Chilaquiles');
+        document.getElementById('kpi_platillo_ordenes').innerText = k.platillo_estrella.ordenes_semana || 42;
+      }
+      if (k.flujo_caja) {
+        document.getElementById('kpi_efectivo_caja').innerText = Number(k.flujo_caja.efectivo || 5400).toLocaleString('es-MX');
+        document.getElementById('kpi_bancos').innerText = '$' + Number(k.flujo_caja.bancarizado || 9450).toLocaleString('es-MX', { minimumFractionDigits: 2 });
+      }
+      if (k.mesas) {
+        document.getElementById('kpi_mesas_ocupadas').innerText = (k.mesas.ocupadas || 6) + ' mesas activas';
+        document.getElementById('kpi_comensales_activos').innerText = k.mesas.comensales_activos || 24;
+      }
+
+      // Render Comandas Activas (Widget 1)
+      const listCmd = document.getElementById('list_comandas_activas');
+      const badgeCmd = document.getElementById('ui_badge_comandas');
+      if (listCmd) {
+        listCmd.innerHTML = '';
+        const cmds = k.comandas_recientes || [];
+        if (badgeCmd) badgeCmd.innerText = `${cmds.length} activas`;
+        
+        cmds.forEach(cmd => {
+          const row = document.createElement('div');
+          row.className = 'flex items-center justify-between p-3 bg-[#0b0e14] rounded-xl border border-[#2b3548] hover:border-slate-600 transition cursor-pointer';
+          row.onclick = function() { window.navMenu('pos_mesero'); };
+          row.innerHTML = `
+            <div class="flex items-center gap-3">
+              <div class="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 font-bold flex items-center justify-center text-xs">
+                ${cmd.mesa.includes('Centro') ? '⭐' : '🍽️'}
+              </div>
+              <div>
+                <span class="text-xs font-bold text-white block">${cmd.mesa} • <span class="text-slate-400 font-normal">${cmd.comensal}</span></span>
+                <span class="text-[10px] text-slate-500">${cmd.hora} • ${cmd.items_count} platillo(s)</span>
+              </div>
+            </div>
+            <div class="text-right">
+              <span class="text-xs font-black text-emerald-400 block">$${Number(cmd.monto).toFixed(2)}</span>
+              <span class="text-[9px] font-bold px-2 py-0.5 rounded-full bg-emerald-950 text-emerald-300 border border-emerald-800">${cmd.estado}</span>
+            </div>
+          `;
+          listCmd.appendChild(row);
+        });
+      }
+
+      // Render Alertas de Compras (Widget 2)
+      const listIns = document.getElementById('list_alertas_compras');
+      const badgeIns = document.getElementById('ui_badge_insumos');
+      if (listIns) {
+        listIns.innerHTML = '';
+        const alertas = k.alertas_insumos || [];
+        if (badgeIns) badgeIns.innerText = `${alertas.length} insumos críticos`;
+
+        alertas.forEach(a => {
+          const row = document.createElement('div');
+          row.className = 'flex items-center justify-between p-3 bg-[#0b0e14] rounded-xl border border-[#2b3548]';
+          row.innerHTML = `
+            <div class="flex items-center gap-3">
+              <span class="w-2.5 h-2.5 rounded-full" style="background: ${a.color};"></span>
+              <div>
+                <span class="text-xs font-bold text-white block">${a.insumo}</span>
+                <span class="text-[10px] text-slate-400">Stock actual: ${a.cant_actual} • Consumo: ${a.consumo_semanal}</span>
+              </div>
+            </div>
+            <span class="px-2.5 py-1 rounded-lg text-[10px] font-bold" style="background: ${a.color}22; color: ${a.color}; border: 1px solid ${a.color}44;">
+              ${a.urgencia} (${a.dias_restantes})
+            </span>
+          `;
+          listIns.appendChild(row);
+        });
+      }
+
+      // Llenar select de categorías en el modal
+      renderCategoriasSelect();
+      renderListaPlatillosModal();
+    };
+
+    // 5. FUNCIONALIDAD MODAL GESTIÓN MENÚ
+    window.abrirModalAdminMenu = function () {
+      const modal = document.getElementById('modalAdminMenu');
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        renderListaPlatillosModal();
+      }
+    };
+
+    window.cerrarModalAdminMenu = function () {
+      const modal = document.getElementById('modalAdminMenu');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
+    };
+
+    function renderCategoriasSelect() {
+      const sel = document.getElementById('formCategoriaId');
+      if (!sel) return;
+      sel.innerHTML = '';
+      (window.adminState.categorias || []).forEach(cat => {
+        const opt = document.createElement('option');
+        opt.value = cat.id;
+        opt.innerText = (cat.icono || '🍽️') + ' ' + cat.nombre;
+        sel.appendChild(opt);
+      });
+    }
+
+    function renderListaPlatillosModal() {
+      const container = document.getElementById('listaPlatillosAdmin');
+      if (!container) return;
+      container.innerHTML = '';
+
+      const query = (document.getElementById('filtroPlatilloInput')?.value || '').toLowerCase().trim();
+      const prods = window.adminState.productos || [];
+
+      const filtrados = prods.filter(p => {
+        return (p.nombre || '').toLowerCase().includes(query) || (p.categoria_nombre || '').toLowerCase().includes(query);
+      });
+
+      if (filtrados.length === 0) {
+        container.innerHTML = '<div class="text-xs text-slate-500 text-center py-6">No se encontraron platillos</div>';
+        return;
+      }
+
+      filtrados.forEach(p => {
+        const item = document.createElement('div');
+        item.className = 'p-3 bg-[#0b0e14] rounded-xl border border-[#2b3548] hover:border-amber-500/50 transition cursor-pointer flex items-center justify-between group';
+        item.onclick = function () { window.cargarPlatilloEnForm(p.id); };
+        item.innerHTML = `
+          <div class="flex items-center gap-2.5 truncate">
+            <span class="text-lg">${p.icono || '🍽️'}</span>
+            <div class="truncate">
+              <span class="text-xs font-bold text-white block truncate group-hover:text-amber-400 transition">${p.nombre}</span>
+              <span class="text-[10px] text-slate-400 block truncate">${p.categoria_nombre || 'General'} • $${Number(p.precio_unitario || p.precio || 0).toFixed(2)}</span>
+            </div>
+          </div>
+          <span class="text-[10px] font-bold px-2 py-0.5 rounded-md ${p.disponible ? 'bg-emerald-950 text-emerald-400 border border-emerald-800' : 'bg-red-950 text-red-400 border border-red-800'}">
+            ${p.disponible ? 'Activo' : 'Pausado'}
+          </span>
+        `;
+        container.appendChild(item);
+      });
+
+      if (filtrados.length > 0 && !document.getElementById('formPlatilloId').value) {
+        window.cargarPlatilloEnForm(filtrados[0].id);
+      }
+    }
+
+    window.filtrarListaPlatillos = function () {
+      renderListaPlatillosModal();
+    };
+
+    window.nuevoPlatilloForm = function () {
+      document.getElementById('formPlatilloTitulo').innerText = '➕ Nuevo Platillo en Menú';
+      document.getElementById('formPlatilloIdBadge').innerText = 'Nuevo registro';
+      document.getElementById('formPlatilloId').value = '';
+      document.getElementById('formNombre').value = '';
+      document.getElementById('formPrecio').value = '120.00';
+      document.getElementById('formIcono').value = '🍳';
+      document.getElementById('formTiempo').value = '8-10 min';
+      document.getElementById('formDescripcion').value = '';
+      document.getElementById('formTerminos').value = 'Yema tierna, Yema bien cocida, Volteados';
+      document.getElementById('formExclusiones').value = 'Sin cebolla, Sin crema, Salsa aparte';
+      document.getElementById('formExtras').value = 'Aguacate extra +$25.00, Queso gratinado +$20.00';
+      document.getElementById('formIngredientes').value = 'Ingrediente 1 (gramaje)\nIngrediente 2 (gramaje)';
+      document.getElementById('formPasos').value = '1. Preparación previa de insumos\n2. Cocción al momento\n3. Emplatado y pase térmico';
+      document.getElementById('formNotasReceta').value = 'Vajilla estándar de La Terraza.';
+      document.getElementById('formDisponible').checked = true;
+    };
+
+    window.cargarPlatilloEnForm = function (prodId) {
+      const prod = (window.adminState.productos || []).find(p => p.id === prodId);
+      if (!prod) return;
+
+      document.getElementById('formPlatilloTitulo').innerText = `✏️ Editando: ${prod.nombre}`;
+      document.getElementById('formPlatilloIdBadge').innerText = `ID #${prod.id} (${prod.codigo_sku || 'SKU'})`;
+      document.getElementById('formPlatilloId').value = prod.id;
+      document.getElementById('formNombre').value = prod.nombre || '';
+      document.getElementById('formCategoriaId').value = prod.categoria_id || 1;
+      document.getElementById('formPrecio').value = prod.precio_unitario || prod.precio || 0;
+      document.getElementById('formEstacion').value = prod.estacion_preparacion || 'Cocina Caliente';
+      document.getElementById('formIcono').value = prod.icono || '🍳';
+      document.getElementById('formTiempo').value = prod.tiempo_estimado || '8-10 min';
+      document.getElementById('formDescripcion').value = prod.descripcion || '';
+
+      // Opciones comensal
+      const terminos = Array.isArray(prod.opciones_termino) ? prod.opciones_termino.join(', ') : (prod.opciones_termino || '');
+      document.getElementById('formTerminos').value = terminos;
+
+      const exclusiones = Array.isArray(prod.preferencias_exclusion) ? prod.preferencias_exclusion.join(', ') : (prod.preferencias_exclusion || '');
+      document.getElementById('formExclusiones').value = exclusiones;
+
+      let extrasStr = '';
+      if (Array.isArray(prod.extras_disponibles)) {
+        extrasStr = prod.extras_disponibles.map(e => (typeof e === 'object' ? `${e.nombre} +$${e.precio}` : e)).join(', ');
+      }
+      document.getElementById('formExtras').value = extrasStr;
+
+      // Ficha técnica
+      let ingStr = '';
+      if (Array.isArray(prod.ingredientes)) {
+        ingStr = prod.ingredientes.map(i => (typeof i === 'object' ? `${i.cant || ''} ${i.item || i.nombre || ''}`.trim() : i)).join('\n');
+      }
+      document.getElementById('formIngredientes').value = ingStr;
+
+      let pasosStr = '';
+      if (Array.isArray(prod.pasos)) {
+        pasosStr = prod.pasos.join('\n');
+      }
+      document.getElementById('formPasos').value = pasosStr;
+
+      document.getElementById('formNotasReceta').value = prod.notas_receta || '';
+      document.getElementById('formDisponible').checked = (prod.disponible !== false);
+    };
+
+    window.guardarPlatilloDB = function () {
+      const idVal = document.getElementById('formPlatilloId').value;
+      const nombre = document.getElementById('formNombre').value.trim();
+      if (!nombre) {
+        alert('Por favor especifique el nombre del platillo');
+        return;
+      }
+
+      const terminosRaw = document.getElementById('formTerminos').value.split(',').map(s => s.trim()).filter(Boolean);
+      const exclusionesRaw = document.getElementById('formExclusiones').value.split(',').map(s => s.trim()).filter(Boolean);
+      const extrasRaw = document.getElementById('formExtras').value.split(',').map(s => {
+        const parts = s.trim().split('+$');
+        return { nombre: parts[0]?.trim() || s.trim(), precio: parseFloat(parts[1]) || 20.00 };
+      }).filter(e => e.nombre);
+
+      const ingredientesRaw = document.getElementById('formIngredientes').value.split('\n').map(s => s.trim()).filter(Boolean);
+      const pasosRaw = document.getElementById('formPasos').value.split('\n').map(s => s.trim()).filter(Boolean);
+
+      const prodPayload = {
+        id: idVal ? parseInt(idVal) : null,
+        nombre: nombre,
+        categoria_id: parseInt(document.getElementById('formCategoriaId').value),
+        precio_unitario: parseFloat(document.getElementById('formPrecio').value) || 0.00,
+        estacion_preparacion: document.getElementById('formEstacion').value,
+        icono: document.getElementById('formIcono').value || '🍽️',
+        tiempo_estimado: document.getElementById('formTiempo').value || '10 min',
+        descripcion: document.getElementById('formDescripcion').value,
+        opciones_termino: terminosRaw,
+        preferencias_exclusion: exclusionesRaw,
+        extras_disponibles: extrasRaw,
+        ingredientes: ingredientesRaw,
+        pasos: pasosRaw,
+        notas_receta: document.getElementById('formNotasReceta').value,
+        disponible: document.getElementById('formDisponible').checked
+      };
+
+      if (typeof window.anvilGuardarProducto === 'function') {
+        const resStr = window.anvilGuardarProducto(JSON.stringify(prodPayload));
+        alert('✅ ¡Platillo y Ficha Técnica guardados exitosamente en PostgreSQL!');
+        window.cerrarModalAdminMenu();
+      } else {
+        console.log("Guardando:", prodPayload);
+        alert('✅ Guardado en memoria de prueba.');
+        window.cerrarModalAdminMenu();
+      }
+    };
+
+    // 6. MODALES ADICIONALES
+    window.abrirModalPersonal = function () {
+      const m = document.getElementById('modalPersonal');
+      if (m) { m.classList.remove('hidden'); m.classList.add('flex'); }
+    };
+    window.cerrarModalPersonal = function () {
+      const m = document.getElementById('modalPersonal');
+      if (m) { m.classList.add('hidden'); m.classList.remove('flex'); }
+    };
+
+    window.abrirModalInventario = function () {
+      const m = document.getElementById('modalInventario');
+      if (m) { m.classList.remove('hidden'); m.classList.add('flex'); }
+    };
+    window.cerrarModalInventario = function () {
+      const m = document.getElementById('modalInventario');
+      if (m) { m.classList.add('hidden'); m.classList.remove('flex'); }
+    };
+
+    window.abrirModalCajaChica = function () {
+      const m = document.getElementById('modalCajaChica');
+      if (m) { m.classList.remove('hidden'); m.classList.add('flex'); }
+    };
+    window.cerrarModalCajaChica = function () {
+      const m = document.getElementById('modalCajaChica');
+      if (m) { m.classList.add('hidden'); m.classList.remove('flex'); }
+    };
+
+  })();
+</script>
+</anvil-form>

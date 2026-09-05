@@ -22,5 +22,7 @@ class MonitorFiscal(MonitorFiscalTemplate):
       target_form = 'MonitorFiscal'
     elif modulo_nombre in ['clientes_lealtad', 'rewards']:
       target_form = 'ClientesLealtad'
+    elif modulo_nombre in ['admin', 'admin_menu', 'inicio', 'dashboard']:
+      target_form = 'AdminMenu'
     
     anvil.open_form(target_form)

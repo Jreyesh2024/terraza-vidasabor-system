@@ -1,3 +1,4 @@
+<anvil-form container="HtmlTemplate" prop:html="">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <link rel="stylesheet" href="_/theme/theme.css">
 
@@ -65,6 +66,17 @@
     border: 2px solid #f59e0b !important;
     color: #ffffff !important;
     box-shadow: 0 4px 10px rgba(245, 158, 11, 0.3) !important;
+  }
+
+  /* Silla con pedido nuevo del cliente (aún no enviado a cocina) */
+  .chair-btn-fixed.chair-has-new-order {
+    animation: pulse-new-order 1.4s ease-in-out infinite !important;
+    border: 2px solid #fb923c !important;
+  }
+
+  @keyframes pulse-new-order {
+    0%, 100% { box-shadow: 0 0 8px 2px rgba(251, 146, 60, 0.5); transform: scale(1); }
+    50% { box-shadow: 0 0 18px 6px rgba(251, 146, 60, 0.85); transform: scale(1.06); }
   }
 
   .chair-btn-fixed.chair-state-paid {
@@ -168,6 +180,19 @@
   #dragToast.toast-err {
     border-color: #ef4444;
     color: #f87171;
+  }
+
+  #dragToast.toast-info {
+    border-color: #38bdf8;
+    color: #7dd3fc;
+  }
+
+  /* Toast especial para pedidos nuevos de clientes QR */
+  #dragToast.toast-new-order {
+    border-color: #fb923c;
+    color: #fdba74;
+    box-shadow: 0 0 24px 4px rgba(251, 146, 60, 0.55), 0 12px 32px rgba(0,0,0,0.7);
+    font-size: 14px;
   }
 
   /* ── Mini-modal confirmación combinación ── */
@@ -352,6 +377,10 @@
     <!-- AREA SELECTOR & MODULE SWITCHER -->
     <div
       style="display: flex !important; flex-wrap: wrap !important; gap: 8px !important; background: #0f2744 !important; padding: 6px 10px !important; border-radius: 12px !important; border: 1px solid rgba(255,255,255,0.12) !important; align-items: center !important;">
+      <button id="btn-nav-admin" onclick="if(window.anvilAppNav) window.anvilAppNav('admin_menu');"
+        style="padding: 7px 14px !important; font-size: 11px !important; font-weight: 800 !important; border-radius: 8px !important; background: #0f172a !important; color: #34d399 !important; border: 1px solid #34d399 !important; cursor: pointer !important; display: flex !important; align-items: center !important; gap: 6px !important;">
+        <i class="fa-solid fa-house"></i> Inicio / Hub
+      </button>
       <button id="btn-area-palapa"
         onclick="window.volverAlCroquisGeneral(); if(window.anvilAppNav) window.anvilAppNav('pos_mesero');"
         style="padding: 7px 14px !important; font-size: 11px !important; font-weight: 700 !important; border-radius: 8px !important; background-color: #059669 !important; color: #ffffff !important; border: none !important; cursor: pointer !important; display: flex !important; align-items: center !important; gap: 6px !important; box-shadow: 0 2px 6px rgba(5,150,105,0.4) !important;">
@@ -693,6 +722,10 @@
           <button data-cat="Bebidas & Jugos" id="wchip-Bebidas" onclick="window.filtrarCategoria('Bebidas & Jugos')"
             style="padding: 6px 11px !important; font-size: 11px !important; font-weight: 800 !important; border-radius: 10px !important; border: 1px solid #34d399 !important; background: #059669 !important; color: #ffffff !important; cursor: pointer !important;">☕
             Bebidas & Cafetería</button>
+          <button data-cat="Al Centro (Para Compartir)" id="wchip-AlCentro"
+            onclick="window.filtrarCategoria('Al Centro (Para Compartir)')"
+            style="padding: 6px 11px !important; font-size: 11px !important; font-weight: 800 !important; border-radius: 10px !important; border: 1px solid #334155 !important; background: #1e293b !important; color: #cbd5e1 !important; cursor: pointer !important;">🧺
+            Al Centro</button>
           <button data-cat="Huevos & Omelettes" id="wchip-Huevos"
             onclick="window.filtrarCategoria('Huevos & Omelettes')"
             style="padding: 6px 11px !important; font-size: 11px !important; font-weight: 800 !important; border-radius: 10px !important; border: 1px solid #334155 !important; background: #1e293b !important; color: #cbd5e1 !important; cursor: pointer !important;">🍳
@@ -1490,508 +1523,98 @@
 
 <script>
   (function () {
-    window.catalogProducts = [
-      // 1. BEBIDAS & CAFETERÍA (PRIMERA OPCIÓN DE SERVICIO)
-      {
-        id: 501,
-        categoria_nombre: "Bebidas & Jugos",
-        nombre: "Café Americano / de Olla",
-        descripcion: "Café de altura recién tostado o receta tradicional con canela y piloncillo",
-        precio: 45.00,
-        icono: "☕",
-        tiempo: "3–5 min",
-        porciones: "1 taza (240ml)",
-        ingredientes: ["15g café de grano arábica molido", "240ml agua purificada a 90°C", "Opción de olla: 5g piloncillo y raja de canela"],
-        pasos: ["Extraer en cafetera de goteo o hervir infusión de canela/piloncillo.", "Servir bien caliente en taza precalentada."],
-        notas: "Mantener café molido en contenedor hermético."
-      },
-      {
-        id: 502,
-        categoria_nombre: "Bebidas & Jugos",
-        nombre: "Café con Leche / Capuchino",
-        descripcion: "Espresso doble con leche cremada artesanal al vapor",
-        precio: 68.00,
-        icono: "☕",
-        tiempo: "4–6 min",
-        porciones: "1 taza (240ml)",
-        ingredientes: ["18g café espresso molido fino", "60ml espresso doble", "180ml leche entera o almendra cremada al vapor", "Canela en polvo"],
-        pasos: ["Extraer espresso doble en taza.", "Cremar leche con textura aterciopelada a 65°C.", "Verter sobre espresso y espolvorear canela."],
-        notas: "Textura microespuma sedosa sin burbujas grandes."
-      },
-      {
-        id: 503,
-        categoria_nombre: "Bebidas & Jugos",
-        nombre: "Jugo de Naranja Natural",
-        descripcion: "100% natural recién exprimido al momento",
-        precio: 55.00,
-        icono: "🍊",
-        tiempo: "3–5 min",
-        porciones: "1 vaso (300ml)",
-        ingredientes: ["4–5 naranjas de jugo frescas (aprox. 300ml)"],
-        pasos: ["Lavar naranjas, cortar a la mitad y exprimir en extractor de inmediato.", "Servir en vaso alto con hielo opcional."],
-        notas: "Exprimir al momento para evitar que se oxide o amargue."
-      },
-      {
-        id: 504,
-        categoria_nombre: "Bebidas & Jugos",
-        nombre: "Jugo Verde Energético",
-        descripcion: "Nopal, apio, piña, perejil y jugo de naranja fresco",
-        precio: 60.00,
-        icono: "🥬",
-        tiempo: "4–6 min",
-        porciones: "1 vaso (350ml)",
-        ingredientes: ["1/2 nopal tierno limpio", "1 vara de apio fresco", "60g piña en cubos", "Ramita de perejil", "180ml jugo de naranja natural recién exprimido"],
-        pasos: ["Colocar todos los ingredientes en licuadora de alta potencia.", "Licuar a máxima velocidad durante 45 segundos hasta textura tersa.", "Servir de inmediato sin colar."],
-        notas: "Bebida detox y digestiva de alto valor."
-      },
-      {
-        id: 505,
-        categoria_nombre: "Bebidas & Jugos",
-        nombre: "Chocolate Caliente Tradicional",
-        descripcion: "Preparado con cacao criollo, canela y leche caliente",
-        precio: 55.00,
-        icono: "🍫",
-        tiempo: "5–7 min",
-        porciones: "1 taza (240ml)",
-        ingredientes: ["40g tableta de chocolate de mesa con canela", "240ml leche entera caliente"],
-        pasos: ["Disolver chocolate en la leche caliente a fuego bajo.", "Batir con molinillo tradicional de madera hasta lograr abundante espuma espesa.", "Servir bien caliente."],
-        notas: "Tradición mexicana con espuma artesanal."
-      },
-      {
-        id: 506,
-        categoria_nombre: "Bebidas & Jugos",
-        nombre: "Agua Fresca de Fruta del Día",
-        descripcion: "Agua de fruta natural de temporada (500 ml)",
-        precio: 40.00,
-        icono: "🍉",
-        tiempo: "2–3 min",
-        porciones: "1 vaso (500ml)",
-        ingredientes: ["500ml agua de fruta natural (Jamaica, Horchata, Limón con Chía, etc.)", "Hielo al gusto"],
-        pasos: ["Servir en vaso de 500ml con cubos de hielo."],
-        notas: "Preparada diariamente con fruta 100% natural."
-      },
-      {
-        id: 507,
-        categoria_nombre: "Bebidas & Jugos",
-        nombre: "Refresco de Lata (355ml)",
-        descripcion: "Variedad de refrescos fríos de lata",
-        precio: 38.00,
-        icono: "🥤",
-        tiempo: "1–2 min",
-        porciones: "1 lata (355ml)",
-        ingredientes: ["1 lata 355ml fría surtida", "Vaso con hielo y rodaja de limón"],
-        pasos: ["Entregar lata cerrada acompañada de vaso con hielo."],
-        notas: "Mantener refrigerador a 3°C."
-      },
+    window.catalogProducts = [];
+    window.catalogCategories = [];
+    window.catalogMesas = [];
 
-      // 2. HUEVOS Y OMELETTES
-      {
-        id: 101,
-        categoria_nombre: "Huevos & Omelettes",
-        nombre: "Huevos al Gusto",
-        descripcion: "2 huevos (fritos, revueltos o estrellados) + frijoles + tortillas o pan",
-        precio: 90.00,
-        icono: "🍳",
-        tiempo: "8–10 min",
-        porciones: "1 persona",
-        ingredientes: ["2 huevos frescos", "1 cda aceite o mantequilla", "80g frijoles refritos de la casa", "2–3 tortillas de maíz o pan tostado", "Sal al gusto"],
-        pasos: ["Cocinar los huevos al término elegido por el comensal (revueltos, fritos o estrellados).", "Acompañar con 80g de frijoles refritos calientes y tortillas de maíz o pan tostado."],
-        notas: "Preguntar siempre término de cocción de la yema."
-      },
-      {
-        id: 102,
-        categoria_nombre: "Huevos & Omelettes",
-        nombre: "Huevos a la Mexicana",
-        descripcion: "Huevos revueltos con jitomate, cebolla y chile + frijoles refritos",
-        precio: 95.00,
-        icono: "🍳",
-        tiempo: "8–10 min",
-        porciones: "1 persona",
-        ingredientes: ["2 huevos frescos", "40g jitomate picado", "25g cebolla picada", "10–15g chile serrano o jalapeño picado", "10g cilantro picado", "Sal al gusto", "1 cda aceite", "80g frijoles refritos + tortillas"],
-        pasos: ["Sofríe cebolla, jitomate y chile durante 2–3 minutos en sartén.", "Agrega los huevos batidos con sal y revuelve hasta el punto deseado (3–4 min).", "Ajusta sal y agrega cilantro fresco al final.", "Sirve con frijoles refritos y tortillas calientes."],
-        notas: "Preguntar nivel de picante al cliente."
-      },
-      {
-        id: 103,
-        categoria_nombre: "Huevos & Omelettes",
-        nombre: "Huevos Rancheros",
-        descripcion: "Huevos estrellados sobre tortilla con salsa roja o verde + frijoles",
-        precio: 105.00,
-        icono: "🍳",
-        tiempo: "10–12 min",
-        porciones: "1 persona",
-        ingredientes: ["2 huevos", "2 tortillas de maíz pasadas por aceite", "120ml salsa roja o verde caliente", "80g frijoles refritos", "20g queso fresco desmoronado", "15g crema mexicana"],
-        pasos: ["Calienta las tortillas pasándolas ligeramente por aceite y colócalas en el plato.", "Fríe los dos huevos estrellados con yema tierna.", "Coloca los huevos sobre las tortillas, baña con salsa caliente y corona con crema, queso fresco y frijoles."],
-        notas: "La salsa debe estar hirviendo al momento de bañar."
-      },
-      {
-        id: 104,
-        categoria_nombre: "Huevos & Omelettes",
-        nombre: "Huevos con Jamón / Tocino / Chorizo",
-        descripcion: "Huevos al gusto + proteína a elegir + frijoles de la olla",
-        precio: 115.00,
-        icono: "🥓",
-        tiempo: "8–10 min",
-        porciones: "1 persona",
-        ingredientes: ["2 huevos", "40–50g de jamón, tocino o chorizo", "Sal y pimienta", "1 cda aceite o mantequilla", "80g frijoles + tortillas"],
-        pasos: ["Con jamón: Calienta el jamón 1 min, agrega huevos y revuelve.", "Con tocino: Fríe el tocino hasta crujiente, retira exceso de grasa y cocina los huevos.", "Con chorizo: Dora el chorizo 3–4 min, agrega los huevos y revuelve.", "Sirve con frijoles y tortillas."],
-        notas: "Escurrir grasa excedente en tocino y chorizo."
-      },
-      {
-        id: 105,
-        categoria_nombre: "Huevos & Omelettes",
-        nombre: "Omelette de Jamón y Queso",
-        descripcion: "Omelette relleno con queso gouda y jamón + ensalada o frijoles",
-        precio: 125.00,
-        icono: "🧀",
-        tiempo: "7–9 min",
-        porciones: "1 persona",
-        ingredientes: ["3 huevos", "40g jamón picado", "40g queso manchego o Oaxaca", "Sal y pimienta", "1 cda mantequilla"],
-        pasos: ["Bate los 3 huevos con sal y pimienta.", "Calienta la mantequilla en sartén antiadherente, vierte huevos y deja cuajar a fuego medio.", "Agrega jamón y queso en una mitad, dobla en media luna y termina de cocinar 1–2 min.", "Sirve con ensalada o frijoles."],
-        notas: "Doblar cuando el centro esté jugoso para lograr consistencia cremosa."
-      },
-      {
-        id: 106,
-        categoria_nombre: "Huevos & Omelettes",
-        nombre: "Omelette Champiñones y Espinaca",
-        descripcion: "Opción ligera con espinacas baby, champiñón fresco y queso",
-        precio: 130.00,
-        icono: "🍄",
-        tiempo: "8–10 min",
-        porciones: "1 persona",
-        ingredientes: ["3 huevos orgánicos", "50g champiñones frescos rebanados", "30g espinaca baby fresca", "30g queso panela o asadero", "Mantequilla, sal y pimienta"],
-        pasos: ["Saltea champiñones y espinacas 2 min con mantequilla.", "Vierte los huevos batidos, deja cuajar la base, coloca el salteado y queso, dobla y cocina 1 min.", "Sirve con frijoles o ensalada."],
-        notas: "Opción vegetariana y saludable."
-      },
-      {
-        id: 107,
-        categoria_nombre: "Huevos & Omelettes",
-        nombre: "Machaca con Huevo Norteña",
-        descripcion: "Clásico norteño de carne seca con huevo + frijoles y tortillas",
-        precio: 135.00,
-        icono: "🥩",
-        tiempo: "10–12 min",
-        porciones: "1 persona",
-        ingredientes: ["50g machaca de res sonorense deshebrada", "2 huevos", "30g jitomate y cebolla picados", "80g frijoles refritos + tortillas de harina"],
-        pasos: ["Sofríe cebolla y jitomate, agrega la machaca para hidratar 2 min.", "Incorpora los huevos batidos y revuelve bien hasta integrar.", "Sirve con frijoles refritos y tortillas de harina calientes."],
-        notas: "Auténtica machaca sonorense de res."
-      },
+    window.setPOSCatalogoFromDB = function (prodsJson, catsJson, mesasJson) {
+      try {
+        const prods = (typeof prodsJson === 'string') ? JSON.parse(prodsJson) : prodsJson;
+        if (Array.isArray(prods) && prods.length > 0) {
+          window.catalogProducts = prods.map(function (p) {
+            var rawIng = p.ingredientes;
+            var parsedIng = [];
+            if (Array.isArray(rawIng)) parsedIng = rawIng;
+            else if (typeof rawIng === 'string') {
+              try { parsedIng = JSON.parse(rawIng); } catch (e) { parsedIng = [rawIng]; }
+            }
 
-      // 3. ESPECIALIDADES MEXICANAS
-      {
-        id: 201,
-        categoria_nombre: "Especialidades Mexicanas",
-        nombre: "Chilaquiles Verdes o Rojos",
-        descripcion: "Con crema, queso y cebolla. Acompañados con huevo o pollo",
-        precio: 145.00,
-        icono: "🥘",
-        tiempo: "15–18 min",
-        porciones: "1 persona",
-        ingredientes: ["80–90g totopos artesanos de maíz", "180ml salsa verde o roja casera", "50g pollo deshebrado o 1 huevo", "30g crema mexicana", "25g queso fresco desmoronado", "15g cebolla en pluma", "Cilantro fresco al gusto"],
-        pasos: ["Calienta la salsa en un sartén hondo (3–4 min).", "Agrega los totopos y mezcla solo hasta que se hidraten (1–2 min). No dejarlos de más para que no se hagan papilla.", "Sirve en plato, agrega pollo o huevo encima, crema, queso fresco, cebolla en pluma y cilantro."],
-        adicionales: ["Bistec de Res Extra (100g) +$45.00", "Porción Extra de Pollo (50g) +$35.00", "Huevo Extra al Gusto +$20.00", "Aguacate en Rebanadas +$25.00", "Queso Gratinado Extra +$25.00"],
-        notas: "Los totopos se tienen fritos en recipiente hermético. La salsa debe hervir antes de añadir totopos."
-      },
-      {
-        id: 202,
-        categoria_nombre: "Especialidades Mexicanas",
-        nombre: "Chilaquiles con Bistec o Chorizo",
-        descripcion: "Versión fuerte con bistec a la plancha o chorizo artesanal",
-        precio: 165.00,
-        icono: "🥩",
-        tiempo: "15–18 min",
-        porciones: "1 persona",
-        ingredientes: ["90g totopos artesanos de maíz", "180ml salsa verde o roja caliente", "120g bistec de res a la plancha o 60g chorizo frito", "30g crema mexicana", "25g queso fresco desmoronado", "15g cebolla en pluma", "Cilantro fresco"],
-        pasos: ["Asa el bistec a la plancha al término deseado con sal y pimienta.", "Prepara los chilaquiles hidratando totopos en salsa caliente 1–2 min.", "Monta los chilaquiles y corona con el bistec en fajitas o chorizo dorado."],
-        adicionales: ["Huevo Estrellado Extra +$20.00", "Aguacate en Rebanadas +$25.00", "Queso Gratinado Extra +$25.00"],
-        notas: "Platillo de alto ticket y gran satisfacción."
-      },
-      {
-        id: 203,
-        categoria_nombre: "Especialidades Mexicanas",
-        nombre: "Enchiladas de Desayuno",
-        descripcion: "Rojas o verdes, rellenas de pollo o queso + huevo estrellado encima",
-        precio: 145.00,
-        icono: "🌶️",
-        tiempo: "12–15 min",
-        porciones: "1 persona (3 enchiladas)",
-        ingredientes: ["3 tortillas de maíz pasadas por aceite", "100g pollo deshebrado o queso", "180ml salsa verde o roja caliente", "1 huevo estrellado encima", "30g crema mexicana", "25g queso fresco", "15g cebolla en pluma"],
-        pasos: ["Rellena las tortillas con pollo o queso y enrolla.", "Baña con abundante salsa caliente.", "Corona con huevo estrellado, crema, queso fresco y cebolla en pluma."],
-        adicionales: ["Porción Extra de Pollo +$35.00", "Aguacate en Rebanadas +$25.00"],
-        notas: "Platillo insignia de desayuno mexicano."
-      },
-      {
-        id: 204,
-        categoria_nombre: "Especialidades Mexicanas",
-        nombre: "Molletes Tradicionales",
-        descripcion: "Bolillo con frijoles refritos, queso gratinado y pico de gallo",
-        precio: 105.00,
-        icono: "🥖",
-        tiempo: "8–10 min",
-        porciones: "1 persona (2 mitades de bolillo)",
-        ingredientes: ["1 bolillo artesano partido a la mitad", "80g frijoles refritos", "50–60g queso manchego o Oaxaca rallado", "40g pico de gallo fresco (jitomate, cebolla, cilantro, limón y sal)"],
-        pasos: ["Abre el bolillo y tuesta ligeramente la base.", "Unta los frijoles refritos y cubre uniformemente con queso rallado.", "Gratina en horno o salamandra 3–4 minutos.", "Sirve con pico de gallo fresco encima."],
-        adicionales: ["Porción de Chorizo Artesanal (40g) +$30.00", "Porción de Tocino Dorado (30g) +$30.00", "Huevo Estrellado encima +$20.00", "Aguacate en Rebanadas +$25.00"],
-        notas: "El pan debe quedar crujiente por fuera y suave por dentro."
-      },
-      {
-        id: 205,
-        categoria_nombre: "Especialidades Mexicanas",
-        nombre: "Tacos de Huevo al Gusto (3 pzas)",
-        descripcion: "3 tacos de huevo con salsa a elegir y frijoles",
-        precio: 85.00,
-        icono: "🌮",
-        tiempo: "8–10 min",
-        porciones: "1 persona (3 tacos)",
-        ingredientes: ["3 tortillas calientes de maíz o harina", "2 huevos revueltos al gusto", "Salsas de la casa + 60g frijoles"],
-        pasos: ["Prepara el huevo revuelto al gusto del comensal.", "Reparte en 3 tortillas calientes con frijoles y salsas al lado."],
-        notas: "Opción rápida y tradicional."
-      },
-      {
-        id: 206,
-        categoria_nombre: "Especialidades Mexicanas",
-        nombre: "Tacos de Chorizo con Huevo (3 pzas)",
-        descripcion: "Guisado tradicional en tortillas recién hechas",
-        precio: 95.00,
-        icono: "🌮",
-        tiempo: "8–10 min",
-        porciones: "1 persona (3 tacos)",
-        ingredientes: ["3 tortillas", "50g chorizo de cerdo artesanal", "2 huevos", "Cebolla, cilantro y salsas"],
-        pasos: ["Dora el chorizo 3 min, agrega los huevos y revuelve.", "Monta en 3 tortillas calientes con cebolla y cilantro."],
-        notas: "Sabor casero muy solicitado."
-      },
+            var rawPasos = p.pasos;
+            var parsedPasos = [];
+            if (Array.isArray(rawPasos)) parsedPasos = rawPasos;
+            else if (typeof rawPasos === 'string') {
+              try { parsedPasos = JSON.parse(rawPasos); } catch (e) { parsedPasos = [rawPasos]; }
+            }
 
-      // 4. DULCES / AMERICANOS
-      {
-        id: 301,
-        categoria_nombre: "Dulces & Americanos",
-        nombre: "Hotcakes Clásicos (3 pzas)",
-        descripcion: "Con mantequilla de rancho y miel de maple o cajeta",
-        precio: 110.00,
-        icono: "🥞",
-        tiempo: "12–15 min",
-        porciones: "1 persona (3 piezas)",
-        ingredientes: ["120g harina para hotcakes", "1 huevo", "150ml leche", "15g azúcar", "10g mantequilla derretida", "Pizca de sal", "Mantequilla de rancho y miel de maple o cajeta para servir"],
-        pasos: ["Mezcla todos los ingredientes hasta masa homogénea (sin sobrebatir).", "Cocina en sartén antiadherente a fuego medio (aprox. 2 min por lado).", "Sirve torre de 3 con cubo de mantequilla y miel o cajeta."],
-        notas: "Sartén a fuego medio constante para dorado parejo."
-      },
-      {
-        id: 302,
-        categoria_nombre: "Dulces & Americanos",
-        nombre: "Hotcakes con Fruta Fresca",
-        descripcion: "Acompañados de plátano, fresas de temporada o mixtas",
-        precio: 130.00,
-        icono: "🍓",
-        tiempo: "12–15 min",
-        porciones: "1 persona (3 piezas)",
-        ingredientes: ["3 hotcakes esponjosos", "40g plátano rebanado", "40g fresas de temporada", "Miel de maple pura"],
-        pasos: ["Cocina los 3 hotcakes.", "Monta intercalando fruta fresca entre cada capa y baña con miel."],
-        notas: "Favorito para niños y desayunos familiares."
-      },
-      {
-        id: 303,
-        categoria_nombre: "Dulces & Americanos",
-        nombre: "Waffles Belgas con Frutas",
-        descripcion: "Waffles dorados con fruta fresca y miel de abeja",
-        precio: 135.00,
-        icono: "🧇",
-        tiempo: "10–12 min",
-        porciones: "1 persona",
-        ingredientes: ["1 waffle belga dorado crujiente", "Fresas, plátano y moras frescas", "Miel de abeja pura y azúcar glass"],
-        pasos: ["Hornear en waflera 4 min hasta dorado crujiente.", "Decorar con fruta fresca, espolvorear azúcar glass y servir miel."],
-        notas: "Textura exterior crujiente e interior esponjoso."
-      },
-      {
-        id: 304,
-        categoria_nombre: "Dulces & Americanos",
-        nombre: "Orden de Fruta de Temporada",
-        descripcion: "Papaya, melón y piña con yogurt natural o granola",
-        precio: 95.00,
-        icono: "🍍",
-        tiempo: "4–6 min",
-        porciones: "1 persona",
-        ingredientes: ["80g papaya", "80g melón", "80g piña en cubos", "60ml yogurt natural o 30g granola artesanal"],
-        pasos: ["Cortar fruta fresca en cubos uniformes.", "Montar en plato hondo con ramequín de yogurt o granola."],
-        notas: "Opción fresca y saludable."
-      },
-      {
-        id: 305,
-        categoria_nombre: "Dulces & Americanos",
-        nombre: "Yogurt con Granola y Fruta",
-        descripcion: "Bowl fresco con yogurt natural, granola artesanal y fruta",
-        precio: 90.00,
-        icono: "🥣",
-        tiempo: "4–6 min",
-        porciones: "1 persona",
-        ingredientes: ["150g yogurt griego natural", "40g granola artesanal con frutos secos", "Fresas, plátano y miel de abeja"],
-        pasos: ["Colocar cama de yogurt en bowl.", "Decorar con granola y frutas en abanico, bañar con hilo de miel."],
-        notas: "Excelente opción ligera."
-      },
+            var rawExtras = p.extras_disponibles;
+            var parsedExtras = [];
+            if (Array.isArray(rawExtras)) {
+              parsedExtras = rawExtras.map(function (ex) {
+                if (typeof ex === 'object' && ex !== null) return (ex.nombre || '') + ' +$' + (ex.precio || 0);
+                return String(ex);
+              });
+            }
 
-      // 5. COMBOS RECOMENDADOS
-      {
-        id: 401,
-        categoria_nombre: "Combos Recomendados",
-        nombre: "Combo Clásico Desayuno",
-        descripcion: "Huevos al gusto + frijoles + jugo de naranja + café",
-        precio: 145.00,
-        icono: "⭐",
-        tiempo: "12–15 min",
-        porciones: "1 persona",
-        ingredientes: ["Huevos al gusto con frijoles y tortillas", "1 Jugo de naranja natural (240ml)", "1 Café americano o de olla (240ml)"],
-        pasos: ["Servir café y jugo de inmediato para abrir apetito.", "Cocinar huevos al gusto y montar con frijoles."],
-        notas: "Servicio de bebidas inmediato."
-      },
-      {
-        id: 402,
-        categoria_nombre: "Combos Recomendados",
-        nombre: "Combo Chilaquiles V&S",
-        descripcion: "Chilaquiles con huevo/pollo + jugo natural + café",
-        precio: 175.00,
-        icono: "⭐",
-        tiempo: "15–18 min",
-        porciones: "1 persona",
-        ingredientes: ["Chilaquiles verdes o rojos con huevo/pollo", "1 Jugo de naranja natural", "1 Café americano o de olla"],
-        pasos: ["Entregar café y jugo.", "Preparar chilaquiles al momento y servir calientes."],
-        notas: "Combo más vendido de la mañana."
-      },
-      {
-        id: 403,
-        categoria_nombre: "Combos Recomendados",
-        nombre: "Combo Dulce Mañana",
-        descripcion: "Hotcakes + jugo de naranja natural + café americano",
-        precio: 155.00,
-        icono: "⭐",
-        tiempo: "12–15 min",
-        porciones: "1 persona",
-        ingredientes: ["3 Hotcakes clásicos con mantequilla y miel", "1 Jugo de naranja natural", "1 Café americano"],
-        pasos: ["Servir café y jugo.", "Cocinar hotcakes y servir calientes con mantequilla y miel."],
-        notas: "Opción dulce integral."
-      },
-
-      // 6. MENÚ INFANTIL (KIDS)
-      {
-        id: 601,
-        categoria_nombre: "Menú Infantil (Kids)",
-        nombre: "Hotcakes Infantiles (2 piezas)",
-        descripcion: "2 hotcakes suaves y esponjosos con mantequilla y miel o cajeta",
-        precio: 75.00,
-        icono: "🥞",
-        tiempo: "10–12 min",
-        porciones: "1 niño (2 piezas)",
-        ingredientes: ["80g harina para hotcakes", "1 huevo chico o 1/2 grande", "100ml leche", "10g azúcar", "8g mantequilla derretida", "Pizca de sal", "Mantequilla para cocinar", "Miel o cajeta para servir"],
-        pasos: ["Mezclar todos los ingredientes hasta obtener una masa suave.", "Cocinar en sartén antiadherente a fuego medio (aprox. 1.5–2 min por lado).", "Servir con mantequilla y miel o cajeta."],
-        adicionales: ["Fresas o Plátano Rebanado +$20.00", "Chispas de Chocolate +$15.00"],
-        notas: "Porción infantil suave y esponjosa."
-      },
-      {
-        id: 602,
-        categoria_nombre: "Menú Infantil (Kids)",
-        nombre: "Huevito Feliz con Jamón",
-        descripcion: "Huevo al gusto decorado con jamón en tiras, frijolitos y pan o tortilla",
-        precio: 65.00,
-        icono: "🍳",
-        tiempo: "7–8 min",
-        porciones: "1 niño",
-        ingredientes: ["1 huevo fresco", "25g jamón en tiras", "50g frijoles refritos suaves", "1 tortilla de maíz o 1/2 bolillo", "1 cdita mantequilla o aceite", "Sal al gusto"],
-        pasos: ["Calentar el jamón en el sartén.", "Cocinar el huevo (revuelto o estrellado con carita feliz) junto al jamón o aparte.", "Servir con frijoles y tortilla o pan."],
-        notas: "Montaje divertido en forma de carita feliz."
-      },
-      {
-        id: 603,
-        categoria_nombre: "Menú Infantil (Kids)",
-        nombre: "Huevos con Jamón (Versión Infantil)",
-        descripcion: "1 huevo revuelto suave con jamón picado y frijolitos",
-        precio: 65.00,
-        icono: "🥓",
-        tiempo: "7–8 min",
-        porciones: "1 niño",
-        ingredientes: ["1 huevo", "30g jamón picado", "50g frijoles refritos", "1 tortilla o 1/2 pan", "1 cdita mantequilla o aceite", "Sal al gusto"],
-        pasos: ["Sofríe ligeramente el jamón.", "Agrega el huevo y cocina revuelto suave.", "Acompaña con frijoles y tortilla o pan."],
-        notas: "Cocción suave sin dorar en exceso."
-      },
-      {
-        id: 604,
-        categoria_nombre: "Menú Infantil (Kids)",
-        nombre: "Mollete Pequeño",
-        descripcion: "1/2 bolillo con frijolitos, queso gratinado y pico de gallo suave",
-        precio: 55.00,
-        icono: "🥖",
-        tiempo: "7–9 min",
-        porciones: "1 niño (1 mitad)",
-        ingredientes: ["1/2 bolillo artesano", "50g frijoles refritos", "30g queso manchego o Oaxaca rallado", "25g pico de gallo suave (sin picante)"],
-        pasos: ["Abre el medio bolillo y caliéntalo ligeramente.", "Unta los frijoles, agrega el queso y gratina 3–4 minutos.", "Sirve con el pico de gallo suave encima."],
-        adicionales: ["Porción de Chorizo Infantil (20g) +$15.00", "Porción de Tocino +$15.00"],
-        notas: "Pico de gallo 100% sin picante para niños."
-      },
-      {
-        id: 605,
-        categoria_nombre: "Menú Infantil (Kids)",
-        nombre: "Quesadilla de Queso con Frijolitos",
-        descripcion: "Quesadilla doradita con queso manchego o Oaxaca fundido",
-        precio: 45.00,
-        icono: "🧀",
-        tiempo: "5–6 min",
-        porciones: "1 niño",
-        ingredientes: ["1 tortilla de harina o maíz", "40g queso Oaxaca o manchego", "40g frijoles refritos para acompañar", "Mantequilla mínima"],
-        pasos: ["Coloca el queso en la tortilla y dobla en media luna.", "Calienta en sartén por ambos lados hasta que el queso se derrita.", "Sirve con frijoles."],
-        adicionales: ["Jamón en Cubitos +$15.00"],
-        notas: "Queso bien fundido y masa suave."
-      },
-      {
-        id: 606,
-        categoria_nombre: "Menú Infantil (Kids)",
-        nombre: "Fruta Fresca Infantil",
-        descripcion: "Tazón con fruta de temporada picada en trozos pequeños",
-        precio: 50.00,
-        icono: "🍉",
-        tiempo: "3–4 min",
-        porciones: "1 niño",
-        ingredientes: ["120–140g fruta fresca de temporada (plátano, melón, papaya, sandía) en trozos regulares"],
-        pasos: ["Pica la fruta en trozos regulares pequeños.", "Sirve en tazón chico infantil."],
-        notas: "Corte adaptado para fácil masticación."
-      },
-      {
-        id: 607,
-        categoria_nombre: "Menú Infantil (Kids)",
-        nombre: "Yogurt con Granola y Fruta (Kids)",
-        descripcion: "Tazón de yogurt natural o fresa con granola suave y fruta fresca",
-        precio: 50.00,
-        icono: "🥣",
-        tiempo: "2–3 min",
-        porciones: "1 niño",
-        ingredientes: ["120g yogurt natural o de frutas", "25g granola suave", "40g plátano o fresas en rebanadas"],
-        pasos: ["Coloca el yogurt en el tazón.", "Agrega la granola y la fruta fresca encima."],
-        notas: "Desayuno nutritivo y ligero."
-      },
-      {
-        id: 608,
-        categoria_nombre: "Menú Infantil (Kids)",
-        nombre: "Mini Chilaquiles Suaves (Kids)",
-        descripcion: "Totopitos con salsa suave de tomate sin picante, crema y queso fresco",
-        precio: 85.00,
-        icono: "🥘",
-        tiempo: "10–12 min",
-        porciones: "1 niño",
-        ingredientes: ["50–55g totopos", "100ml salsa roja o verde suave (sin picante)", "20g crema mexicana", "20g queso fresco desmoronado", "10g cebolla suave"],
-        pasos: ["Calienta la salsa suave.", "Agrega los totopos y mezcla solo hasta hidratar (1 minuto aprox.).", "Sirve con crema, queso y cebolla suave."],
-        adicionales: ["Pollo Deshebrado (30g) +$20.00", "Huevo Revuelto +$15.00"],
-        notas: "Salsa 100% sin chile adaptada a niños."
-      },
-      {
-        id: 609,
-        categoria_nombre: "Menú Infantil (Kids)",
-        nombre: "Chocolate con Pan Tostado",
-        descripcion: "Chocolate caliente espumoso con pan tostado con mantequilla",
-        precio: 45.00,
-        icono: "🍫",
-        tiempo: "5–6 min",
-        porciones: "1 niño",
-        ingredientes: ["200ml leche tibia", "20–25g chocolate de mesa o cocoa azucarada", "1/2 bolillo o 1 rebanada de pan tostado", "5g mantequilla"],
-        pasos: ["Calienta la leche con el chocolate hasta que se disuelva y espese ligeramente.", "Tuesta el pan y úntalo con mantequilla.", "Sirve juntos a temperatura tibia."],
-        notas: "Temperatura tibia agradable y segura para niños."
+            return {
+              id: p.id,
+              nombre: p.nombre,
+              categoria_id: p.categoria_id,
+              categoria_nombre: p.categoria_nombre || (p.categoria ? p.categoria.nombre : ''),
+              descripcion: p.descripcion || '',
+              precio: (typeof p.precio === 'number') ? p.precio : (parseFloat(p.precio_unitario) || 0),
+              icono: p.icono || '🍽️',
+              tiempo: p.tiempo_estimado ? (p.tiempo_estimado + ' min') : (p.tiempo || '8–10 min'),
+              porciones: p.porciones || '1 persona',
+              ingredientes: parsedIng.length > 0 ? parsedIng : ['Ingredientes frescos de temporada'],
+              pasos: parsedPasos.length > 0 ? parsedPasos : ['Preparar al momento con ingredientes de calidad.'],
+              adicionales: parsedExtras,
+              notas: p.notas_receta || p.notas || ''
+            };
+          });
+        }
+      } catch (e) {
+        console.error('Error parseando productos POS en setPOSCatalogoFromDB:', e);
       }
-    ];
+
+      try {
+        const cats = (typeof catsJson === 'string') ? JSON.parse(catsJson) : catsJson;
+        if (Array.isArray(cats) && cats.length > 0) {
+          window.catalogCategories = cats;
+          renderWaiterCatChips();
+        }
+      } catch (e) {
+        console.error('Error parseando categorias POS en setPOSCatalogoFromDB:', e);
+      }
+
+      try {
+        const mesas = (typeof mesasJson === 'string') ? JSON.parse(mesasJson) : mesasJson;
+        if (Array.isArray(mesas) && mesas.length > 0) {
+          window.catalogMesas = mesas;
+        }
+      } catch (e) {
+        console.error('Error parseando mesas POS en setPOSCatalogoFromDB:', e);
+      }
+
+      renderWaiterMenuGrid();
+    };
+
+    function renderWaiterCatChips() {
+      const container = document.getElementById('waiterCatChips');
+      if (!container || !window.catalogCategories || window.catalogCategories.length === 0) return;
+      container.innerHTML = '';
+      const catActual = window.palapaState.categoriaFiltro || window.catalogCategories[0].nombre;
+
+      window.catalogCategories.forEach(function (cat) {
+        const btn = document.createElement('button');
+        btn.dataset.cat = cat.nombre;
+        btn.onclick = function () { window.filtrarCategoria(cat.nombre); };
+        const isActive = (cat.nombre === catActual);
+        btn.style.cssText = 'padding: 6px 11px !important; font-size: 11px !important; font-weight: 800 !important; border-radius: 10px !important; cursor: pointer !important; white-space: nowrap !important; transition: all 0.2s; ' +
+          (isActive ? 'border: 1px solid #34d399 !important; background: #059669 !important; color: #ffffff !important;' : 'border: 1px solid #334155 !important; background: #1e293b !important; color: #cbd5e1 !important;');
+        btn.innerHTML = (cat.icono ? (cat.icono + ' ') : '') + cat.nombre;
+        container.appendChild(btn);
+      });
+    }
 
     var DEFAULT_CUENTAS = {
       // MESA 1: 100% Libre / Disponible (0 comensales)
@@ -2147,7 +1770,16 @@
       cuentas: loadStateFromStorage()
     };
 
+    // Snapshot anterior para detectar items NUEVOS y disparar notificaciones al mesero
+    var _prevCuentasSnapshot = {};
+
     window.aplicarCuentasServidor = function(cuentasServidor) {
+      if (!cuentasServidor) return;
+      if (typeof cuentasServidor === 'string') {
+        try {
+          cuentasServidor = JSON.parse(cuentasServidor);
+        } catch (e) { return; }
+      }
       if (!cuentasServidor || typeof cuentasServidor !== 'object') return;
       if (!window.palapaState || !window.palapaState.cuentas) return;
 
@@ -2169,9 +1801,33 @@
             curr.qrId = srv.qrId;
             changed = true;
           }
-          if (srv.items && srv.items.length > 0 && (!curr.items || curr.items.length < srv.items.length)) {
-            curr.items = srv.items;
-            curr.estado = 'ocupada';
+          if (srv.comensalNombre && curr.comensalNombre !== srv.comensalNombre) {
+            curr.comensalNombre = srv.comensalNombre;
+            changed = true;
+          }
+          if (srv.items && Array.isArray(srv.items)) {
+            var localItems = curr.items || [];
+            var mergedItems = srv.items.map(function(sItem, sIdx) {
+              var lItem = localItems[sIdx] || localItems.find(function(it) {
+                return (it.id && it.id === sItem.id) || (it.nombre === sItem.nombre && it.precio === sItem.precio);
+              });
+              if (lItem && lItem.enviadoCocina && !sItem.enviadoCocina) {
+                return Object.assign({}, sItem, {
+                  enviadoCocina: true,
+                  horaEnvioCocina: lItem.horaEnvioCocina || sItem.horaEnvioCocina
+                });
+              }
+              return sItem;
+            });
+
+            if (JSON.stringify(curr.items || []) !== JSON.stringify(mergedItems)) {
+              curr.items = mergedItems;
+              curr.estado = srv.estado || (curr.items.length > 0 ? 'ocupada' : curr.estado);
+              changed = true;
+            }
+          }
+          if (srv.estado && curr.estado !== srv.estado) {
+            curr.estado = srv.estado;
             changed = true;
           }
         }
@@ -2181,19 +1837,46 @@
         saveStateToStorage();
         renderStateUI();
       }
+
+      // 🔔 Notificar al mesero cuando llegan items nuevos de un cliente QR
+      Object.keys(cuentasServidor).forEach(function(k) {
+        var srv = cuentasServidor[k];
+        if (!srv || !srv.items || !Array.isArray(srv.items) || srv.items.length === 0) return;
+        var prev = _prevCuentasSnapshot[k];
+        var prevCount = prev && prev.items ? prev.items.length : 0;
+        var newCount = srv.items.length;
+        if (newCount > prevCount) {
+          var newest = srv.items[srv.items.length - 1];
+          var nombreProd = newest ? newest.nombre : 'Producto';
+          var msg = `🛎️ M${srv.mesaId} Silla ${srv.sillaId || srv.sillaNum}: "${nombreProd}"${newCount > 1 ? ` (+${newCount - prevCount} item${newCount - prevCount > 1 ? 's' : ''})` : ''}`;
+          showOrderToast(msg);
+        }
+        _prevCuentasSnapshot[k] = { items: JSON.parse(JSON.stringify(srv.items)) };
+      });
     };
 
     // Auto-polling en segundo plano para sincronizar check-ins de comensales en tiempo real
+    // NOTA: window.anvilGetCuentasServidor() devuelve una Promise (bridge Anvil JS→Python es async)
+    var _syncInFlight = false;
     setInterval(function() {
+      if (_syncInFlight) return; // evitar solapamiento de requests
       try {
         if (window.anvilGetCuentasServidor) {
-          var srvData = window.anvilGetCuentasServidor();
-          if (srvData) {
-            window.aplicarCuentasServidor(srvData);
+          _syncInFlight = true;
+          var maybePromise = window.anvilGetCuentasServidor();
+          // Manejar tanto Promise como valor síncrono (compatibilidad)
+          if (maybePromise && typeof maybePromise.then === 'function') {
+            maybePromise.then(function(srvData) {
+              _syncInFlight = false;
+              if (srvData) { window.aplicarCuentasServidor(srvData); }
+            }).catch(function(e) { _syncInFlight = false; });
+          } else {
+            _syncInFlight = false;
+            if (maybePromise) { window.aplicarCuentasServidor(maybePromise); }
           }
         }
-      } catch (e) { }
-    }, 3000);
+      } catch (e) { _syncInFlight = false; }
+    }, 2000);
 
     function resetDemoState() {
       var initial = JSON.parse(JSON.stringify(DEFAULT_CUENTAS));
@@ -2214,7 +1897,7 @@
     // ── Toast de notificación (reemplaza alert()) ──
     var _toastTimer = null;
     function showDragToast(msg, tipo) {
-      // tipo: 'ok' | 'warn' | 'err'
+      // tipo: 'ok' | 'warn' | 'err' | 'info'
       var t = document.getElementById('dragToast');
       if (!t) return;
       t.textContent = msg;
@@ -2223,6 +1906,18 @@
       _toastTimer = setTimeout(function () {
         t.className = t.className.replace(' show', '').replace('show', '');
       }, 3200);
+    }
+
+    // Toast especial para pedidos nuevos de clientes QR (más tiempo + color naranja)
+    function showOrderToast(msg) {
+      var t = document.getElementById('dragToast');
+      if (!t) return;
+      t.textContent = msg;
+      t.className = 'show toast-new-order';
+      if (_toastTimer) clearTimeout(_toastTimer);
+      _toastTimer = setTimeout(function () {
+        t.className = t.className.replace(' show', '').replace('show', '');
+      }, 5000);
     }
 
     // ── Mini-modal confirmación (reemplaza confirm()) ──
@@ -4970,13 +4665,22 @@
     };
 
     window.enviarItemIndividualACocina = function (idx) {
-      const mesaId = window.palapaState.mesaSeleccionadaId;
-      const sillaNum = window.palapaState.sillaSeleccionadaNum;
-      if (!mesaId || sillaNum === null || sillaNum === undefined) return;
+      const mesaId = window.palapaState.mesaSeleccionadaId || 1;
+      let sillaNum = window.palapaState.sillaSeleccionadaNum;
+      if (sillaNum === null || sillaNum === undefined) {
+        sillaNum = 0; // Cuenta de mesa al centro
+      }
 
-      const key = `${mesaId}-${sillaNum}`;
-      const cuenta = window.palapaState.cuentas[key];
-      if (!cuenta || !cuenta.items || !cuenta.items[idx]) return;
+      let key = `${mesaId}-${sillaNum}`;
+      let cuenta = window.palapaState.cuentas[key];
+      if (!cuenta && (sillaNum === 0 || sillaNum === 'centro')) {
+        key = `${mesaId}-centro`;
+        cuenta = window.palapaState.cuentas[key];
+      }
+      if (!cuenta || !cuenta.items || !cuenta.items[idx]) {
+        console.warn('No se encontró el item a enviar:', { mesaId, sillaNum, key, idx });
+        return;
+      }
 
       const item = cuenta.items[idx];
       const nowStr = (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -4985,16 +4689,34 @@
 
       saveStateToStorage();
       renderStateUI();
+
+      // Sincronizar inmediatamente con el servidor persistente
+      try {
+        if (window.anvilSyncCuenta) {
+          const syncSilla = (sillaNum === 'centro') ? 0 : sillaNum;
+          window.anvilSyncCuenta(mesaId, syncSilla, JSON.stringify(cuenta.items), cuenta.estado || 'ocupada');
+        }
+      } catch (err) {
+        console.error('Error sincronizando item individual con servidor:', err);
+      }
+
       showDragToast(`🚀 ¡${item.nombre} enviado a Cocina / Barra (${nowStr})!`, 'ok');
     };
 
     window.enviarACocinaComandaActiva = function () {
-      const mesaId = window.palapaState.mesaSeleccionadaId;
-      const sillaNum = window.palapaState.sillaSeleccionadaNum;
-      if (!mesaId || sillaNum === null || sillaNum === undefined) return;
+      const mesaId = window.palapaState.mesaSeleccionadaId || 1;
+      let sillaNum = window.palapaState.sillaSeleccionadaNum;
+      if (sillaNum === null || sillaNum === undefined) {
+        sillaNum = 0; // Cuenta de mesa al centro
+      }
 
-      const key = `${mesaId}-${sillaNum}`;
-      const cuenta = window.palapaState.cuentas[key];
+      let key = `${mesaId}-${sillaNum}`;
+      let cuenta = window.palapaState.cuentas[key];
+      if (!cuenta && (sillaNum === 0 || sillaNum === 'centro')) {
+        key = `${mesaId}-centro`;
+        cuenta = window.palapaState.cuentas[key];
+      }
+
       if (!cuenta || !cuenta.items || cuenta.items.length === 0) {
         showDragToast('ℹ Agrega al menos un producto a la comanda antes de enviar a cocina.', 'warn');
         return;
@@ -5014,6 +4736,17 @@
 
       saveStateToStorage();
       renderStateUI();
+
+      // Sincronizar inmediatamente con el servidor persistente
+      try {
+        if (window.anvilSyncCuenta) {
+          const syncSilla = (sillaNum === 'centro') ? 0 : sillaNum;
+          window.anvilSyncCuenta(mesaId, syncSilla, JSON.stringify(cuenta.items), cuenta.estado || 'ocupada');
+        }
+      } catch (err) {
+        console.error('Error sincronizando comanda activa con servidor:', err);
+      }
+
       showDragToast(`🚀 ¡${pendientes.length} producto(s) enviados a Cocina / Barra (KDS)! (${nowStr})`, 'ok');
     };
 
@@ -5106,16 +4839,46 @@
         chairEl.style.cssText = `position: absolute !important; ${posCss} z-index: 25 !important; cursor: pointer !important; white-space: nowrap !important;`;
 
         const paidCheck = isPaid ? ' ✓' : '';
-        if (isJoinedMode) {
-          chairEl.innerHTML = isArrimada ? `🪑 M${m}-S${s}${paidCheck}` : `M${m}-S${s}${paidCheck}`;
-        } else {
-          chairEl.innerHTML = isArrimada ? `🪑 S${s}${paidCheck}` : `Silla ${s}${paidCheck}`;
+
+        // Detectar si hay items nuevos del cliente (no enviados a cocina aún)
+        const hasNewItems = cuenta && cuenta.items && cuenta.items.some(it => !it.enviadoCocina);
+        const newItemsCount = cuenta && cuenta.items ? cuenta.items.filter(it => !it.enviadoCocina).length : 0;
+        const totalItems = numItems;
+
+        // Badge de conteo de items
+        let itemBadge = '';
+        if (totalItems > 0 && !isPaid) {
+          const badgeColor = hasNewItems ? '#ef4444' : '#d97706';
+          itemBadge = ` <span style="display:inline-block;background:${badgeColor};color:#fff;border-radius:10px;padding:0px 5px;font-size:9px;font-weight:900;vertical-align:middle;min-width:16px;text-align:center;line-height:15px;margin-left:2px;">${totalItems}</span>`;
         }
+
+        // Mini resumen del primer producto
+        let miniProd = '';
+        if (totalItems > 0 && !isPaid && cuenta && cuenta.items) {
+          const primero = cuenta.items[0];
+          const nombre = primero.nombre ? primero.nombre.substring(0, 12) + (primero.nombre.length > 12 ? '…' : '') : '';
+          miniProd = `<div style="font-size:8px;opacity:0.9;margin-top:1px;line-height:1.1;max-width:64px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${hasNewItems ? '🆕 ' : ''}${nombre}${totalItems > 1 ? ` +${totalItems-1}` : ''}</div>`;
+        }
+
+        if (isJoinedMode) {
+          chairEl.innerHTML = isArrimada ? `🪑 M${m}-S${s}${paidCheck}${itemBadge}${miniProd}` : `M${m}-S${s}${paidCheck}${itemBadge}${miniProd}`;
+        } else {
+          chairEl.innerHTML = isArrimada ? `🪑 S${s}${paidCheck}${itemBadge}${miniProd}` : `Silla ${s}${paidCheck}${itemBadge}${miniProd}`;
+        }
+
+        // Pulsar si hay pedidos nuevos del cliente aún sin enviar a cocina
+        if (hasNewItems) {
+          chairEl.classList.add('chair-has-new-order');
+        }
+
+        const itemsTooltip = cuenta && cuenta.items && cuenta.items.length > 0
+          ? '\n' + cuenta.items.map(it => `  • ${it.nombre} x${it.cantidad || 1}${it.enviadoCocina ? '' : ' 🆕'}`).join('\n')
+          : '';
 
         chairEl.setAttribute('title', isPaid
           ? `Mesa ${m} Silla ${s} (Cuenta Pagada / Sobremesa) • Clic para ver o liberar`
           : (isOccupied
-            ? `Mesa ${m} Silla ${s} (Ocupada${saldoPendiente > 0 ? ' · $' + saldoPendiente.toFixed(2) + ' pend.' : ''}) • Arrastra para mover o clic para comanda`
+            ? `Mesa ${m} Silla ${s} (Ocupada${saldoPendiente > 0 ? ' · $' + saldoPendiente.toFixed(2) + ' pend.' : ''}) • Arrastra para mover o clic para comanda${itemsTooltip}`
             : `Mesa ${m} Silla ${s} (Disponible) • Arrastra para trasladar o clic para comanda`));
 
         chairEl.addEventListener('mousedown', function (e) {
@@ -5730,7 +5493,7 @@
                 <span style="font-size: 9px; font-weight: 900; padding: 2px 6px; border-radius: 4px; background: ${badgeBg}; color: ${badgeColor};">${badgeTxt}</span>
               </div>
               <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 2px;">
-                <span style="font-size: 9px; color: #94a3b8;">${isPaidSilla ? 'En Sobremesa' : (sOcc ? `${numItems} prod.` : 'Disponible')}</span>
+                <span style="font-size: 9px; color: ${sOcc ? '#fbbf24' : '#94a3b8'};">${isPaidSilla ? 'En Sobremesa' : (sOcc ? (numItems > 0 ? `${numItems} prod.` : 'En Menú (QR)') : 'Disponible')}</span>
                 <span style="font-size: 11px; font-weight: 900; color: ${montoColor};">${montoTxt}</span>
               </div>
             `;
@@ -5859,8 +5622,16 @@
       if (!grid) return;
       grid.innerHTML = '';
 
-      const catFiltro = window.palapaState.categoriaFiltro || 'Bebidas & Jugos';
-      const filtrados = window.catalogProducts.filter(p => p.categoria_nombre === catFiltro);
+      if (!window.catalogProducts || window.catalogProducts.length === 0) {
+        grid.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; padding: 30px; color: #94a3b8; font-size: 13px;"><i class="fa-solid fa-circle-notch fa-spin" style="margin-right: 8px; color: #10b981;"></i>Cargando catálogo en tiempo real desde PostgreSQL...</div>';
+        return;
+      }
+
+      const catFiltro = window.palapaState.categoriaFiltro || (window.catalogCategories && window.catalogCategories[0] ? window.catalogCategories[0].nombre : 'Bebidas & Jugos');
+      let filtrados = window.catalogProducts.filter(p => p.categoria_nombre === catFiltro);
+      if (filtrados.length === 0 && window.catalogProducts.length > 0) {
+        filtrados = window.catalogProducts.filter(p => p.categoria_nombre === window.catalogProducts[0].categoria_nombre);
+      }
       const sillaNum = (window.palapaState.sillaSeleccionadaNum !== null && window.palapaState.sillaSeleccionadaNum !== undefined) ? window.palapaState.sillaSeleccionadaNum : 1;
 
       filtrados.forEach(prod => {
@@ -6042,29 +5813,21 @@
     window.filtrarCategoria = function (catNombre) {
       window.palapaState.categoriaFiltro = catNombre;
 
-      const chipMap = [
-        { id: 'wchip-Bebidas', cat: 'Bebidas & Jugos' },
-        { id: 'wchip-Huevos', cat: 'Huevos & Omelettes' },
-        { id: 'wchip-Mex', cat: 'Especialidades Mexicanas' },
-        { id: 'wchip-Dulces', cat: 'Dulces & Americanos' },
-        { id: 'wchip-Combos', cat: 'Combos Recomendados' },
-        { id: 'wchip-Kids', cat: 'Menú Infantil (Kids)' }
-      ];
-
-      chipMap.forEach(item => {
-        const el = document.getElementById(item.id);
-        if (el) {
-          if (item.cat === catNombre) {
-            el.style.background = "#059669";
-            el.style.color = "#ffffff";
-            el.style.border = "1px solid #34d399";
+      const container = document.getElementById('waiterCatChips');
+      if (container) {
+        const buttons = container.querySelectorAll('button');
+        buttons.forEach(function (btn) {
+          if (btn.dataset.cat === catNombre) {
+            btn.style.background = "#059669";
+            btn.style.color = "#ffffff";
+            btn.style.border = "1px solid #34d399";
           } else {
-            el.style.background = "#1e293b";
-            el.style.color = "#cbd5e1";
-            el.style.border = "1px solid #334155";
+            btn.style.background = "#1e293b";
+            btn.style.color = "#cbd5e1";
+            btn.style.border = "1px solid #334155";
           }
-        }
-      });
+        });
+      }
 
       renderWaiterMenuGrid();
     };
@@ -6076,3 +5839,4 @@
     setTimeout(function () { renderStateUI(); setupDragListeners(); }, 150);
   })();
 </script>
+</anvil-form>
