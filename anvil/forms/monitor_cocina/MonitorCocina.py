@@ -8,8 +8,18 @@ class MonitorCocina(MonitorCocinaTemplate):
   def __init__(self, **properties):
     self.init_components(**properties)
     try:
+      # Exponer navegación directamente en window
+      anvil.js.window.navMenu = self.navegar_modulo
       anvil.js.window.anvilAppNav = self.navegar_modulo
       anvil.js.window.scrollTo(0, 0)
+    except Exception as e:
+      print(f"[MonitorCocina] Error exponiendo funciones en window: {e}")
+
+    # Ejecutar scripts de plantilla
+    try:
+      dom = anvil.js.get_dom_node(self)
+      if hasattr(anvil.js.window, 'runFormScripts'):
+        anvil.js.window.runFormScripts(dom)
     except Exception:
       pass
 

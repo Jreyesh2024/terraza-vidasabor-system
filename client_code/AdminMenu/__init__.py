@@ -28,6 +28,14 @@ class AdminMenu(AdminMenuTemplate):
     except Exception as e:
       print(f"[AdminMenu] Error exponiendo funciones en window: {e}")
 
+    # Ejecutar scripts de plantilla
+    try:
+      dom = anvil.js.get_dom_node(self)
+      if hasattr(anvil.js.window, 'runFormScripts'):
+        anvil.js.window.runFormScripts(dom)
+    except Exception:
+      pass
+
     # Cargar datos iniciales del Dashboard
     self.cargar_dashboard()
 

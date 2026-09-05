@@ -9,11 +9,21 @@ class POSMesero(POSMeseroTemplate):
   def __init__(self, **properties):
     self.init_components(**properties)
     try:
+      # Exponer navegación directamente en window
+      anvil.js.window.navMenu = self.navegar_modulo
       anvil.js.window.anvilAppNav = self.navegar_modulo
       anvil.js.window.anvilGetCuentasServidor = self.obtener_cuentas_servidor
       anvil.js.window.anvilSyncCuenta = self.sincronizar_cuenta_servidor
-    except Exception:
-      pass
+    except Exception as e:
+      print(f"[POSMesero] Error exponiendo funciones en window: {e}")
+
+    # Ejecutar scripts del template HtmlTemplate para garantizar funciones y listeners
+    try:
+      dom = anvil.js.get_dom_node(self)
+      if hasattr(anvil.js.window, 'runFormScripts'):
+        anvil.js.window.runFormScripts(dom)
+    except Exception as e:
+      print(f"[POSMesero] Error ejecutando runFormScripts: {e}")
 
     try:
       url_hash = anvil.get_url_hash()
@@ -35,6 +45,13 @@ class POSMesero(POSMeseroTemplate):
 
     # Cargar catálogo dinámico de productos, categorías y mesas desde PostgreSQL
     self.cargar_catalogo_pos_db()
+
+    # Disparar renderizado visual de sillas y mesas
+    try:
+      if hasattr(anvil.js.window, 'renderStateUI'):
+        anvil.js.window.renderStateUI()
+    except Exception as e:
+      print(f"[POSMesero] Error en renderStateUI inicial: {e}")
 
     # Timer nativo de Anvil en segundo plano para sincronizar cada 2 segundos
     try:
@@ -62,6 +79,8 @@ class POSMesero(POSMeseroTemplate):
         try:
           if hasattr(anvil.js.window, 'aplicarCuentasServidor'):
             anvil.js.window.aplicarCuentasServidor(json.dumps(cuentas))
+          elif hasattr(anvil.js.window, 'renderStateUI'):
+            anvil.js.window.renderStateUI()
         except Exception:
           pass
     except Exception as e:
@@ -78,6 +97,8 @@ class POSMesero(POSMeseroTemplate):
           json.dumps(cats) if cats else "[]",
           json.dumps(mesas) if mesas else "[]"
         )
+      if hasattr(anvil.js.window, 'renderStateUI'):
+        anvil.js.window.renderStateUI()
     except Exception as e:
       print(f"Error cargando catalogo POS desde servidor: {e}")
 

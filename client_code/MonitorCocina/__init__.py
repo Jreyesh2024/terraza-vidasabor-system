@@ -15,6 +15,14 @@ class MonitorCocina(MonitorCocinaTemplate):
     except Exception as e:
       print(f"[MonitorCocina] Error exponiendo funciones en window: {e}")
 
+    # Ejecutar scripts de plantilla
+    try:
+      dom = anvil.js.get_dom_node(self)
+      if hasattr(anvil.js.window, 'runFormScripts'):
+        anvil.js.window.runFormScripts(dom)
+    except Exception:
+      pass
+
     # Cargar recetas y mesas dinámicas desde PostgreSQL
     self.cargar_recetario_db()
 

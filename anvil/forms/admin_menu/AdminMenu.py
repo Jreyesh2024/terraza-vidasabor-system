@@ -8,10 +8,31 @@ class AdminMenu(AdminMenuTemplate):
   def __init__(self, **properties):
     self.init_components(**properties)
     try:
+      # Exponer funciones de navegación y acción directamente en window
+      # NOTA: Anvil no ejecuta <script> en HtmlTemplate, por eso se define
+      # window.navMenu desde Python para que siempre esté disponible.
+      anvil.js.window.navMenu = self.navegar_modulo
       anvil.js.window.anvilAppNav = self.navegar_modulo
       anvil.js.window.anvilGuardarProducto = self.guardar_producto_db
       anvil.js.window.anvilCambiarDisp = self.cambiar_disponibilidad_db
       anvil.js.window.anvilCargarDashboard = self.cargar_dashboard
+      # Exponer modales (fallback no-op para que no exploten botones de modal)
+      for fn_name in ['abrirModalAdminMenu', 'cerrarModalAdminMenu',
+                      'abrirModalPersonal', 'cerrarModalPersonal',
+                      'abrirModalInventario', 'cerrarModalInventario',
+                      'abrirModalCajaChica', 'cerrarModalCajaChica',
+                      'guardarPlatilloDB', 'nuevoPlatilloForm',
+                      'filtrarListaPlatillos']:
+        if not getattr(anvil.js.window, fn_name, None):
+          anvil.js.window[fn_name] = lambda *a, _n=fn_name: print(f"[AdminMenu] {_n} llamado")
+    except Exception as e:
+      print(f"[AdminMenu] Error exponiendo funciones en window: {e}")
+
+    # Ejecutar scripts de plantilla
+    try:
+      dom = anvil.js.get_dom_node(self)
+      if hasattr(anvil.js.window, 'runFormScripts'):
+        anvil.js.window.runFormScripts(dom)
     except Exception:
       pass
 

@@ -21,6 +21,14 @@ class Menu(MenuTemplate):
     except Exception as e:
       print(f"[Menu] Error exponiendo funciones en window: {e}")
 
+    # Ejecutar scripts de plantilla
+    try:
+      dom = anvil.js.get_dom_node(self)
+      if hasattr(anvil.js.window, 'runFormScripts'):
+        anvil.js.window.runFormScripts(dom)
+    except Exception:
+      pass
+
     # Leer parámetros QR de la URL para auto-registrar check-in
     try:
       url_hash = anvil.get_url_hash()
