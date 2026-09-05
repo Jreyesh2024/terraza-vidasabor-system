@@ -328,7 +328,7 @@
       <!-- SELECTOR DE ALCANCE DEL PAGO -->
       <div class=&quot;bg-slate-950/80 p-3 rounded-xl border border-slate-800/80 space-y-2&quot;>
         <span class=&quot;text-xs font-bold text-slate-300 block&quot;><i
-                                                               class=&quot;fa-solid fa-hand-holding-dollar text-emerald-400 mr-1&quot;></i> ¿Qué deseas pagar?</span>
+            class=&quot;fa-solid fa-hand-holding-dollar text-emerald-400 mr-1&quot;></i> ¿Qué deseas pagar?</span>
         <div class=&quot;grid grid-cols-3 gap-1.5 text-[11px]&quot;>
           <button type=&quot;button&quot; onclick=&quot;window.setModoPagoCliente('solo_yo')&quot; id=&quot;btnModoSoloYo&quot;
             class=&quot;p-2 rounded-lg font-bold border text-center transition bg-slate-800 text-slate-300 border-slate-700 cursor-pointer&quot;>Solo
@@ -349,11 +349,11 @@
       <!-- TOTALES -->
       <div class=&quot;pt-3 border-t border-slate-800 space-y-1.5 text-xs&quot;>
         <div class=&quot;flex justify-between text-slate-400&quot;><span>Subtotal Neto:</span><span id=&quot;modalSubtotal&quot;
-                                                                                      class=&quot;text-slate-200 font-bold&quot;>$0.00</span></div>
+            class=&quot;text-slate-200 font-bold&quot;>$0.00</span></div>
         <div class=&quot;flex justify-between text-slate-400&quot;><span>IVA 16% Trasladado:</span><span id=&quot;modalIVA&quot;
-                                                                                           class=&quot;text-slate-200 font-bold&quot;>$0.00</span></div>
+            class=&quot;text-slate-200 font-bold&quot;>$0.00</span></div>
         <div class=&quot;flex justify-between text-slate-400&quot;><span>Propina Sugerida (10%):</span><span id=&quot;modalPropina&quot;
-                                                                                               class=&quot;text-slate-200 font-bold&quot;>$0.00</span></div>
+            class=&quot;text-slate-200 font-bold&quot;>$0.00</span></div>
         <div class=&quot;flex justify-between text-base font-black text-white pt-2 border-t border-slate-800&quot;>
           <span>Total Final a Liquidar:</span>
           <span id=&quot;modalTotal&quot; class=&quot;text-emerald-400 text-lg font-black&quot;>$0.00</span>
@@ -1020,6 +1020,23 @@
   window.simSillaNum = 1;
   window.sillasAcompanantesSeleccionadas = [];
 
+  window.setMenuDataFromPostgreSQL = function(prodsJson, catsJson) {
+    try {
+      var prods = typeof prodsJson === 'string' ? JSON.parse(prodsJson) : prodsJson;
+      var cats = typeof catsJson === 'string' ? JSON.parse(catsJson) : catsJson;
+      if (Array.isArray(prods) &amp;&amp; prods.length > 0) {
+        window.vsMenuData = prods;
+      }
+      if (Array.isArray(cats) &amp;&amp; cats.length > 0) {
+        window.vsCategoriasData = cats;
+        if (typeof window.renderCategoriasTabs === 'function') window.renderCategoriasTabs();
+      }
+      if (typeof window.renderMenuGrid === 'function') window.renderMenuGrid();
+    } catch(e) {
+      console.error('Error cargando catalogo PostgreSQL:', e);
+    }
+  };
+
   function getStorageCuentas() {
     try {
       var raw = localStorage.getItem('palapa_cuentas_v1');
@@ -1137,29 +1154,29 @@
     var btnMiSilla = document.createElement('button');
     btnMiSilla.type = 'button';
     btnMiSilla.onclick = function() { window.seleccionarDestinoPedido('mi_silla'); };
-      var isMiSillaActive = (dest === 'mi_silla' || dest === miSilla);
-      btnMiSilla.className = isMiSillaActive
+    var isMiSillaActive = (dest === 'mi_silla' || dest === miSilla);
+    btnMiSilla.className = isMiSillaActive
       ? 'px-3 py-1.5 text-xs font-black rounded-xl bg-emerald-500 text-slate-950 border border-emerald-400 flex items-center gap-1.5 shadow-md shadow-emerald-500/30 cursor-pointer scale-105 transition'
       : 'px-2.5 py-1.5 text-xs font-bold rounded-xl bg-slate-800 text-emerald-400 hover:bg-slate-700 border border-emerald-500/40 flex items-center gap-1.5 transition cursor-pointer';
-      btnMiSilla.innerHTML = `<i class=&quot;fa-solid fa-user-check text-[11px]&quot;></i> Silla ${miSilla} (Tú)`;
-      container.appendChild(btnMiSilla);
+    btnMiSilla.innerHTML = `<i class=&quot;fa-solid fa-user-check text-[11px]&quot;></i> Silla ${miSilla} (Tú)`;
+    container.appendChild(btnMiSilla);
 
-      // 2. Botón: Al Centro (Para Compartir en la Mesa)
-      var keyCentro = mesaId + '-centro';
-      var cuentaCentro = cuentas[keyCentro];
-      var hasCentroItems = cuentaCentro &amp;&amp; cuentaCentro.items &amp;&amp; cuentaCentro.items.length > 0;
-      var isCentroActive = (dest === 'centro');
-      var btnCentro = document.createElement('button');
-      btnCentro.type = 'button';
-      btnCentro.onclick = function() { window.seleccionarDestinoPedido('centro'); };
-      btnCentro.className = isCentroActive
+    // 2. Botón: Al Centro (Para Compartir en la Mesa)
+    var keyCentro = mesaId + '-centro';
+    var cuentaCentro = cuentas[keyCentro];
+    var hasCentroItems = cuentaCentro &amp;&amp; cuentaCentro.items &amp;&amp; cuentaCentro.items.length > 0;
+    var isCentroActive = (dest === 'centro');
+    var btnCentro = document.createElement('button');
+    btnCentro.type = 'button';
+    btnCentro.onclick = function() { window.seleccionarDestinoPedido('centro'); };
+    btnCentro.className = isCentroActive
       ? 'px-3 py-1.5 text-xs font-black rounded-xl bg-amber-500 text-slate-950 border border-amber-400 flex items-center gap-1.5 shadow-md shadow-amber-500/30 cursor-pointer scale-105 transition'
       : 'px-2.5 py-1.5 text-xs font-bold rounded-xl bg-slate-800 text-amber-300 hover:bg-slate-700 border border-amber-500/40 flex items-center gap-1.5 transition cursor-pointer';
-      btnCentro.innerHTML = `<i class=&quot;fa-solid fa-utensils text-[11px]&quot;></i> Al Centro${hasCentroItems ? ' 🍲' : ''}`;
-      container.appendChild(btnCentro);
+    btnCentro.innerHTML = `<i class=&quot;fa-solid fa-utensils text-[11px]&quot;></i> Al Centro${hasCentroItems ? ' 🍲' : ''}`;
+    container.appendChild(btnCentro);
 
-      // 3. Botones: Otras Sillas de Mi Mesa (Acompañantes 1..4 excepto miSilla)
-      for (var s = 1; s <= 4; s++) {
+    // 3. Botones: Otras Sillas de Mi Mesa (Acompañantes 1..4 excepto miSilla)
+    for (var s = 1; s <= 4; s++) {
       if (s === miSilla) continue;
       var isTarget = (dest === s);
       var keyS = mesaId + '-' + s;
@@ -1169,548 +1186,548 @@
       var btnS = document.createElement('button');
       btnS.type = 'button';
       btnS.onclick = (function(sNum) {
-      return function() { window.seleccionarDestinoPedido(sNum); };
+        return function() { window.seleccionarDestinoPedido(sNum); };
       })(s);
 
       btnS.className = isTarget
-      ? 'px-3 py-1.5 text-xs font-black rounded-xl bg-sky-500 text-slate-950 border border-sky-400 flex items-center gap-1.5 shadow-md shadow-sky-500/30 cursor-pointer scale-105 transition'
-      : 'px-2.5 py-1.5 text-xs font-semibold rounded-xl bg-slate-800 text-slate-400 hover:bg-slate-700 hover:text-white border border-slate-700 flex items-center gap-1.5 transition cursor-pointer';
+        ? 'px-3 py-1.5 text-xs font-black rounded-xl bg-sky-500 text-slate-950 border border-sky-400 flex items-center gap-1.5 shadow-md shadow-sky-500/30 cursor-pointer scale-105 transition'
+        : 'px-2.5 py-1.5 text-xs font-semibold rounded-xl bg-slate-800 text-slate-400 hover:bg-slate-700 hover:text-white border border-slate-700 flex items-center gap-1.5 transition cursor-pointer';
       btnS.innerHTML = `Silla ${s}${hasItemsS ? ' 🍽️' : ''}`;
       container.appendChild(btnS);
-      }
-      };
+    }
+  };
 
-      window.agregarAlCarritoDirecto = function (prodId) {
-      var prod = (window.vsMenuData || []).find(p => p.id === prodId);
-      if (!prod) return;
+  window.agregarAlCarritoDirecto = function (prodId) {
+    var prod = (window.vsMenuData || []).find(p => p.id === prodId);
+    if (!prod) return;
 
-      var cuentas = getStorageCuentas();
-      var mesaId = window.simMesaId || 1;
-      var dest = window.destinoPedido || 'mi_silla';
-      var key = '';
-      var comensalNom = '';
-      var qrId = '';
-      var esCentro = false;
-      var sillaNum = window.simSillaNum;
+    var cuentas = getStorageCuentas();
+    var mesaId = window.simMesaId || 1;
+    var dest = window.destinoPedido || 'mi_silla';
+    var key = '';
+    var comensalNom = '';
+    var qrId = '';
+    var esCentro = false;
+    var sillaNum = window.simSillaNum;
 
-      if (dest === 'centro') {
+    if (dest === 'centro') {
       key = mesaId + '-centro';
       comensalNom = `Mesa ${mesaId} (Al Centro / Compartido)`;
       qrId = `MESA-0${mesaId}`;
       esCentro = true;
       sillaNum = 0;
-      } else if (dest === 'mi_silla' || dest === window.simSillaNum) {
+    } else if (dest === 'mi_silla' || dest === window.simSillaNum) {
       key = mesaId + '-' + window.simSillaNum;
       comensalNom = `Comensal Silla ${window.simSillaNum}`;
       qrId = `PV-0${mesaId}${window.simSillaNum}`;
       sillaNum = window.simSillaNum;
-      } else {
+    } else {
       sillaNum = parseInt(dest);
       key = mesaId + '-' + sillaNum;
       comensalNom = `Comensal Silla ${sillaNum}`;
       qrId = `PV-0${mesaId}${sillaNum}`;
-      }
+    }
 
-      if (!cuentas[key]) {
+    if (!cuentas[key]) {
       cuentas[key] = {
-      id: Date.now(),
-      mesaId: mesaId,
-      sillaNum: sillaNum,
-      esCentro: esCentro,
-      qrId: qrId,
-      comensalNombre: comensalNom,
-      items: [],
-      estado: 'ocupada',
-      creadoPor: 'cliente_qr',
-      horaApertura: (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        id: Date.now(),
+        mesaId: mesaId,
+        sillaNum: sillaNum,
+        esCentro: esCentro,
+        qrId: qrId,
+        comensalNombre: comensalNom,
+        items: [],
+        estado: 'ocupada',
+        creadoPor: 'cliente_qr',
+        horaApertura: (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       };
-      }
+    }
 
-      var items = cuentas[key].items || [];
-      var existing = items.find(i => i.id === prod.id);
-      if (existing) {
+    var items = cuentas[key].items || [];
+    var existing = items.find(i => i.id === prod.id);
+    if (existing) {
       existing.cantidad += 1;
-      } else {
+    } else {
       items.push({
-      id: prod.id,
-      nombre: prod.nombre,
-      precio: Number(prod.precio_unitario),
-      cantidad: 1,
-      mesaId: mesaId,
-      sillaNum: sillaNum,
-      esCentro: esCentro,
-      enviadoCocina: false,
-      hora: (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        id: prod.id,
+        nombre: prod.nombre,
+        precio: Number(prod.precio_unitario),
+        cantidad: 1,
+        mesaId: mesaId,
+        sillaNum: sillaNum,
+        esCentro: esCentro,
+        enviadoCocina: false,
+        hora: (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       });
-      }
-      cuentas[key].items = items;
-      cuentas[key].estado = 'ocupada';
+    }
+    cuentas[key].items = items;
+    cuentas[key].estado = 'ocupada';
 
-      saveStorageCuentas(cuentas);
-      window.sincronizarCuentaDesdeStorage();
+    saveStorageCuentas(cuentas);
+    window.sincronizarCuentaDesdeStorage();
 
-      // Sincronizar inmediatamente con el servidor de Anvil para que el mesero lo vea
-      try {
+    // Sincronizar inmediatamente con el servidor de Anvil para que el mesero lo vea
+    try {
       if (window.anvilSyncCuenta &amp;&amp; cuentas[key]) {
-      window.anvilSyncCuenta(mesaId, sillaNum, JSON.stringify(cuentas[key].items || []), 'ocupada');
+        window.anvilSyncCuenta(mesaId, sillaNum, JSON.stringify(cuentas[key].items || []), 'ocupada');
       }
-      } catch(e) {
+    } catch(e) {
       console.error('Error sincronizando con Anvil:', e);
-      }
+    }
 
-      var destNombre = esCentro ? 'al Centro de la Mesa' : `a la Silla ${sillaNum}`;
-      // Feedback visual sutil
-      console.log(`✅ Agregado: ${prod.nombre} (${destNombre})`);
-      };
+    var destNombre = esCentro ? 'al Centro de la Mesa' : `a la Silla ${sillaNum}`;
+    // Feedback visual sutil
+    console.log(`✅ Agregado: ${prod.nombre} (${destNombre})`);
+  };
 
-      window.cambiarSimulacionQr = function (keyStr) {
-      var parts = keyStr.split('-');
-      window.simMesaId = parseInt(parts[0]);
-      window.simSillaNum = parseInt(parts[1]);
+  window.cambiarSimulacionQr = function (keyStr) {
+    var parts = keyStr.split('-');
+    window.simMesaId = parseInt(parts[0]);
+    window.simSillaNum = parseInt(parts[1]);
 
-      // Si es Mesa 2 Silla 1 (Papá), sugerir niños seleccionados (3 y 4)
-      if (window.simMesaId === 2 &amp;&amp; window.simSillaNum === 1) {
+    // Si es Mesa 2 Silla 1 (Papá), sugerir niños seleccionados (3 y 4)
+    if (window.simMesaId === 2 &amp;&amp; window.simSillaNum === 1) {
       window.sillasAcompanantesSeleccionadas = [3, 4];
-      } else {
+    } else {
       window.sillasAcompanantesSeleccionadas = [];
-      }
+    }
 
-      window.sincronizarCuentaDesdeStorage();
-      };
+    window.sincronizarCuentaDesdeStorage();
+  };
 
-      window.sincronizarCuentaDesdeStorage = function () {
-      var cuentas = getStorageCuentas();
-      var key = window.simMesaId + '-' + window.simSillaNum;
-      var qrId = 'PV-0' + window.simMesaId + window.simSillaNum;
+  window.sincronizarCuentaDesdeStorage = function () {
+    var cuentas = getStorageCuentas();
+    var key = window.simMesaId + '-' + window.simSillaNum;
+    var qrId = 'PV-0' + window.simMesaId + window.simSillaNum;
 
-      // Asegurar que la silla esté marcada automáticamente como OCUPADA / ACTIVA
-      if (!cuentas[key]) {
+    // Asegurar que la silla esté marcada automáticamente como OCUPADA / ACTIVA
+    if (!cuentas[key]) {
       cuentas[key] = {
-      id: Date.now(),
-      mesaId: window.simMesaId,
-      sillaNum: window.simSillaNum,
-      qrId: qrId,
-      comensalNombre: 'Comensal Silla ' + window.simSillaNum,
-      items: [],
-      estado: 'ocupada',
-      creadoPor: 'cliente_qr',
-      horaApertura: (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        id: Date.now(),
+        mesaId: window.simMesaId,
+        sillaNum: window.simSillaNum,
+        qrId: qrId,
+        comensalNombre: 'Comensal Silla ' + window.simSillaNum,
+        items: [],
+        estado: 'ocupada',
+        creadoPor: 'cliente_qr',
+        horaApertura: (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       };
       saveStorageCuentas(cuentas);
-      } else {
+    } else {
       cuentas[key].estado = 'ocupada';
       if (!cuentas[key].qrId) cuentas[key].qrId = qrId;
       saveStorageCuentas(cuentas);
-      }
+    }
 
-      var cuentaActual = cuentas[key];
-      var comensalNom = (cuentaActual &amp;&amp; cuentaActual.comensalNombre) ? cuentaActual.comensalNombre : ('Comensal Silla ' + window.simSillaNum);
+    var cuentaActual = cuentas[key];
+    var comensalNom = (cuentaActual &amp;&amp; cuentaActual.comensalNombre) ? cuentaActual.comensalNombre : ('Comensal Silla ' + window.simSillaNum);
 
-      var lblQr = document.getElementById('lblQrActivo');
-      var lblUbicacion = document.getElementById('lblUbicacionActiva');
-      var txtTitulo = document.getElementById('txtTituloComanda');
-      var txtSub = document.getElementById('txtSubComanda');
+    var lblQr = document.getElementById('lblQrActivo');
+    var lblUbicacion = document.getElementById('lblUbicacionActiva');
+    var txtTitulo = document.getElementById('txtTituloComanda');
+    var txtSub = document.getElementById('txtSubComanda');
 
-      if (lblQr) lblQr.innerText = 'Portavasos #' + qrId;
-      if (lblUbicacion) lblUbicacion.innerHTML = `¡Hola! Estás en la <span class=&quot;text-emerald-400&quot;>Mesa ${window.simMesaId} • Silla ${window.simSillaNum}</span>`;
-      if (txtTitulo) txtTitulo.innerText = `Mi Comanda (Silla ${window.simSillaNum})`;
-      if (txtSub) txtSub.innerText = `Mesa ${window.simMesaId} • Portavasos #${qrId}`;
+    if (lblQr) lblQr.innerText = 'Portavasos #' + qrId;
+    if (lblUbicacion) lblUbicacion.innerHTML = `¡Hola! Estás en la <span class=&quot;text-emerald-400&quot;>Mesa ${window.simMesaId} • Silla ${window.simSillaNum}</span>`;
+    if (txtTitulo) txtTitulo.innerText = `Mi Comanda (Silla ${window.simSillaNum})`;
+    if (txtSub) txtSub.innerText = `Mesa ${window.simMesaId} • Portavasos #${qrId}`;
 
-      window.renderSillasMesaBar();
-      window.renderCarrito();
-      window.renderAcompanantesMesa();
+    window.renderSillasMesaBar();
+    window.renderCarrito();
+    window.renderAcompanantesMesa();
 
-      // Notificar al servidor en tiempo real para iluminar la silla y sincronizar items con la pantalla del mesero
-      try {
+    // Notificar al servidor en tiempo real para iluminar la silla y sincronizar items con la pantalla del mesero
+    try {
       if (window.anvilCheckinSilla) {
-      window.anvilCheckinSilla(window.simMesaId, window.simSillaNum, qrId);
+        window.anvilCheckinSilla(window.simMesaId, window.simSillaNum, qrId);
       }
       if (window.anvilSyncCuenta &amp;&amp; cuentaActual &amp;&amp; cuentaActual.items) {
-      window.anvilSyncCuenta(window.simMesaId, window.simSillaNum, JSON.stringify(cuentaActual.items), 'ocupada');
+        window.anvilSyncCuenta(window.simMesaId, window.simSillaNum, JSON.stringify(cuentaActual.items), 'ocupada');
       }
-      } catch (e) { }
-      };
+    } catch (e) { }
+  };
 
-      window.renderCarrito = function () {
-      const container = document.getElementById('cartItemsList');
-      if (!container) return;
-      container.innerHTML = '';
+  window.renderCarrito = function () {
+    const container = document.getElementById('cartItemsList');
+    if (!container) return;
+    container.innerHTML = '';
 
-      var cuentas = getStorageCuentas();
-      var mesaId = window.simMesaId || 1;
-      var keySilla = mesaId + '-' + window.simSillaNum;
-      var cuentaSilla = cuentas[keySilla] || { items: [] };
-      var itemsSilla = cuentaSilla.items || [];
+    var cuentas = getStorageCuentas();
+    var mesaId = window.simMesaId || 1;
+    var keySilla = mesaId + '-' + window.simSillaNum;
+    var cuentaSilla = cuentas[keySilla] || { items: [] };
+    var itemsSilla = cuentaSilla.items || [];
 
-      var keyCentro = mesaId + '-centro';
-      var cuentaCentro = cuentas[keyCentro] || { items: [] };
-      var itemsCentro = cuentaCentro.items || [];
+    var keyCentro = mesaId + '-centro';
+    var cuentaCentro = cuentas[keyCentro] || { items: [] };
+    var itemsCentro = cuentaCentro.items || [];
 
-      var pendientesCount = 0;
+    var pendientesCount = 0;
 
-      if (itemsSilla.length === 0 &amp;&amp; itemsCentro.length === 0) {
+    if (itemsSilla.length === 0 &amp;&amp; itemsCentro.length === 0) {
       container.innerHTML = `<div class=&quot;text-center py-6 text-slate-500 text-xs&quot;>No hay consumos registrados en tu silla ni al centro.</div>`;
-      } else {
+    } else {
       // 1. Consumos de Mi Silla
       if (itemsSilla.length > 0) {
-      var hSilla = document.createElement('div');
-      hSilla.className = 'text-[11px] font-bold text-emerald-400 mb-1 flex items-center gap-1';
-      hSilla.innerHTML = `<i class=&quot;fa-solid fa-user text-[10px]&quot;></i> Tu Silla (${window.simSillaNum}):`;
-      container.appendChild(hSilla);
+        var hSilla = document.createElement('div');
+        hSilla.className = 'text-[11px] font-bold text-emerald-400 mb-1 flex items-center gap-1';
+        hSilla.innerHTML = `<i class=&quot;fa-solid fa-user text-[10px]&quot;></i> Tu Silla (${window.simSillaNum}):`;
+        container.appendChild(hSilla);
 
-      itemsSilla.forEach((item) => {
-      const itemSubtotal = item.precio * item.cantidad;
-      if (!item.enviadoCocina) pendientesCount++;
+        itemsSilla.forEach((item) => {
+          const itemSubtotal = item.precio * item.cantidad;
+          if (!item.enviadoCocina) pendientesCount++;
 
-      const row = document.createElement('div');
-      row.className = 'flex justify-between items-center bg-slate-900/80 p-2.5 rounded-xl border border-slate-800 text-xs mb-1.5';
-      row.innerHTML = `
-      <div>
-      <div class=&quot;flex items-center gap-1.5&quot;>
-      <span class=&quot;font-bold text-white&quot;>${item.nombre} x${item.cantidad}</span>
-      </div>
-      <div class=&quot;flex items-center gap-2 mt-1&quot;>
-      <span class=&quot;text-[10px] text-slate-400&quot;>${item.notas ? item.notas + ' • ' : ''}$${Number(item.precio).toFixed(2)} c/u</span>
-      ${item.enviadoCocina
-      ? `<span class=&quot;bg-emerald-950/60 text-emerald-300 border border-emerald-500/40 text-[9px] font-bold px-1.5 py-0.5 rounded flex items-center gap-1&quot;><i class=&quot;fa-solid fa-fire text-emerald-400&quot;></i> En Cocina (${item.horaEnvioCocina || item.hora || ''})</span>`
-      : `<span class=&quot;bg-amber-950/60 text-amber-300 border border-amber-500/40 text-[9px] font-bold px-1.5 py-0.5 rounded flex items-center gap-1&quot;><i class=&quot;fa-solid fa-clock text-amber-400&quot;></i> Pendiente</span>`}
-      </div>
-      </div>
-      <span class=&quot;font-black text-emerald-400&quot;>$${itemSubtotal.toFixed(2)}</span>
-      `;
-      container.appendChild(row);
-      });
+          const row = document.createElement('div');
+          row.className = 'flex justify-between items-center bg-slate-900/80 p-2.5 rounded-xl border border-slate-800 text-xs mb-1.5';
+          row.innerHTML = `
+              <div>
+                <div class=&quot;flex items-center gap-1.5&quot;>
+                  <span class=&quot;font-bold text-white&quot;>${item.nombre} x${item.cantidad}</span>
+                </div>
+                <div class=&quot;flex items-center gap-2 mt-1&quot;>
+                  <span class=&quot;text-[10px] text-slate-400&quot;>${item.notas ? item.notas + ' • ' : ''}$${Number(item.precio).toFixed(2)} c/u</span>
+                  ${item.enviadoCocina
+                    ? `<span class=&quot;bg-emerald-950/60 text-emerald-300 border border-emerald-500/40 text-[9px] font-bold px-1.5 py-0.5 rounded flex items-center gap-1&quot;><i class=&quot;fa-solid fa-fire text-emerald-400&quot;></i> En Cocina (${item.horaEnvioCocina || item.hora || ''})</span>`
+                    : `<span class=&quot;bg-amber-950/60 text-amber-300 border border-amber-500/40 text-[9px] font-bold px-1.5 py-0.5 rounded flex items-center gap-1&quot;><i class=&quot;fa-solid fa-clock text-amber-400&quot;></i> Pendiente</span>`}
+                </div>
+              </div>
+              <span class=&quot;font-black text-emerald-400&quot;>$${itemSubtotal.toFixed(2)}</span>
+            `;
+          container.appendChild(row);
+        });
       }
 
       // 2. Consumos al Centro (Compartidos)
       if (itemsCentro.length > 0) {
-      var hCentro = document.createElement('div');
-      hCentro.className = 'text-[11px] font-bold text-amber-400 mt-2.5 mb-1 flex items-center gap-1';
-      hCentro.innerHTML = `<i class=&quot;fa-solid fa-utensils text-[10px]&quot;></i> Al Centro (Compartido en Mesa):`;
-      container.appendChild(hCentro);
+        var hCentro = document.createElement('div');
+        hCentro.className = 'text-[11px] font-bold text-amber-400 mt-2.5 mb-1 flex items-center gap-1';
+        hCentro.innerHTML = `<i class=&quot;fa-solid fa-utensils text-[10px]&quot;></i> Al Centro (Compartido en Mesa):`;
+        container.appendChild(hCentro);
 
-      itemsCentro.forEach((item) => {
-      const itemSubtotal = item.precio * item.cantidad;
-      if (!item.enviadoCocina) pendientesCount++;
+        itemsCentro.forEach((item) => {
+          const itemSubtotal = item.precio * item.cantidad;
+          if (!item.enviadoCocina) pendientesCount++;
 
-      const row = document.createElement('div');
-      row.className = 'flex justify-between items-center bg-amber-950/20 p-2.5 rounded-xl border border-amber-500/30 text-xs mb-1.5';
-      row.innerHTML = `
-      <div>
-      <div class=&quot;flex items-center gap-1.5&quot;>
-      <span class=&quot;font-bold text-amber-200&quot;>${item.nombre} x${item.cantidad}</span>
-      <span class=&quot;text-[9px] font-bold bg-amber-500/20 text-amber-300 px-1.5 py-0.5 rounded&quot;>Centro</span>
-      </div>
-      <div class=&quot;flex items-center gap-2 mt-1&quot;>
-      <span class=&quot;text-[10px] text-slate-400&quot;>${item.notas ? item.notas + ' • ' : ''}$${Number(item.precio).toFixed(2)} c/u</span>
-      ${item.enviadoCocina
-      ? `<span class=&quot;bg-emerald-950/60 text-emerald-300 border border-emerald-500/40 text-[9px] font-bold px-1.5 py-0.5 rounded flex items-center gap-1&quot;><i class=&quot;fa-solid fa-fire text-emerald-400&quot;></i> En Cocina (${item.horaEnvioCocina || item.hora || ''})</span>`
-      : `<span class=&quot;bg-amber-950/60 text-amber-300 border border-amber-500/40 text-[9px] font-bold px-1.5 py-0.5 rounded flex items-center gap-1&quot;><i class=&quot;fa-solid fa-clock text-amber-400&quot;></i> Pendiente</span>`}
-      </div>
-      </div>
-      <span class=&quot;font-black text-amber-400&quot;>$${itemSubtotal.toFixed(2)}</span>
-      `;
-      container.appendChild(row);
-      });
+          const row = document.createElement('div');
+          row.className = 'flex justify-between items-center bg-amber-950/20 p-2.5 rounded-xl border border-amber-500/30 text-xs mb-1.5';
+          row.innerHTML = `
+              <div>
+                <div class=&quot;flex items-center gap-1.5&quot;>
+                  <span class=&quot;font-bold text-amber-200&quot;>${item.nombre} x${item.cantidad}</span>
+                  <span class=&quot;text-[9px] font-bold bg-amber-500/20 text-amber-300 px-1.5 py-0.5 rounded&quot;>Centro</span>
+                </div>
+                <div class=&quot;flex items-center gap-2 mt-1&quot;>
+                  <span class=&quot;text-[10px] text-slate-400&quot;>${item.notas ? item.notas + ' • ' : ''}$${Number(item.precio).toFixed(2)} c/u</span>
+                  ${item.enviadoCocina
+                    ? `<span class=&quot;bg-emerald-950/60 text-emerald-300 border border-emerald-500/40 text-[9px] font-bold px-1.5 py-0.5 rounded flex items-center gap-1&quot;><i class=&quot;fa-solid fa-fire text-emerald-400&quot;></i> En Cocina (${item.horaEnvioCocina || item.hora || ''})</span>`
+                    : `<span class=&quot;bg-amber-950/60 text-amber-300 border border-amber-500/40 text-[9px] font-bold px-1.5 py-0.5 rounded flex items-center gap-1&quot;><i class=&quot;fa-solid fa-clock text-amber-400&quot;></i> Pendiente</span>`}
+                </div>
+              </div>
+              <span class=&quot;font-black text-amber-400&quot;>$${itemSubtotal.toFixed(2)}</span>
+            `;
+          container.appendChild(row);
+        });
       }
-      }
+    }
 
-      const btnSendCocina = document.getElementById('btnClienteEnviarCocina');
-      const btnSendCocinaTxt = document.getElementById('btnClienteEnviarCocinaTxt');
-      if (btnSendCocina &amp;&amp; btnSendCocinaTxt) {
+    const btnSendCocina = document.getElementById('btnClienteEnviarCocina');
+    const btnSendCocinaTxt = document.getElementById('btnClienteEnviarCocinaTxt');
+    if (btnSendCocina &amp;&amp; btnSendCocinaTxt) {
       if (pendientesCount > 0) {
-      btnSendCocina.disabled = false;
-      btnSendCocina.style.opacity = '1';
-      btnSendCocina.style.cursor = 'pointer';
-      btnSendCocinaTxt.innerHTML = `<b>Enviar a Cocina / Barra</b> (${pendientesCount} pendiente${pendientesCount > 1 ? 's' : ''})`;
+        btnSendCocina.disabled = false;
+        btnSendCocina.style.opacity = '1';
+        btnSendCocina.style.cursor = 'pointer';
+        btnSendCocinaTxt.innerHTML = `<b>Enviar a Cocina / Barra</b> (${pendientesCount} pendiente${pendientesCount > 1 ? 's' : ''})`;
       } else if (itemsSilla.length > 0 || itemsCentro.length > 0) {
-      btnSendCocina.disabled = true;
-      btnSendCocina.style.opacity = '0.65';
-      btnSendCocina.style.cursor = 'default';
-      btnSendCocinaTxt.innerHTML = `<i class=&quot;fa-solid fa-check-double&quot;></i> Todo enviado a Cocina`;
+        btnSendCocina.disabled = true;
+        btnSendCocina.style.opacity = '0.65';
+        btnSendCocina.style.cursor = 'default';
+        btnSendCocinaTxt.innerHTML = `<i class=&quot;fa-solid fa-check-double&quot;></i> Todo enviado a Cocina`;
       } else {
-      btnSendCocina.disabled = true;
-      btnSendCocina.style.opacity = '0.4';
-      btnSendCocina.style.cursor = 'not-allowed';
-      btnSendCocinaTxt.innerHTML = `Enviar a Cocina / Barra`;
+        btnSendCocina.disabled = true;
+        btnSendCocina.style.opacity = '0.4';
+        btnSendCocina.style.cursor = 'not-allowed';
+        btnSendCocinaTxt.innerHTML = `Enviar a Cocina / Barra`;
       }
-      }
+    }
 
-      window.recalcularTotalesCompletos();
-      };
+    window.recalcularTotalesCompletos();
+  };
 
-      window.enviarPedidoClienteCocina = function () {
-      var cuentas = getStorageCuentas();
-      var mesaId = window.simMesaId || 1;
-      var keySilla = mesaId + '-' + window.simSillaNum;
-      var keyCentro = mesaId + '-centro';
+  window.enviarPedidoClienteCocina = function () {
+    var cuentas = getStorageCuentas();
+    var mesaId = window.simMesaId || 1;
+    var keySilla = mesaId + '-' + window.simSillaNum;
+    var keyCentro = mesaId + '-centro';
 
-      var pendientesCount = 0;
-      var nowStr = (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    var pendientesCount = 0;
+    var nowStr = (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
-      if (cuentas[keySilla] &amp;&amp; cuentas[keySilla].items) {
+    if (cuentas[keySilla] &amp;&amp; cuentas[keySilla].items) {
       cuentas[keySilla].items.forEach(i => {
-      if (!i.enviadoCocina) {
-      i.enviadoCocina = true;
-      i.horaEnvioCocina = nowStr;
-      pendientesCount++;
-      }
+        if (!i.enviadoCocina) {
+          i.enviadoCocina = true;
+          i.horaEnvioCocina = nowStr;
+          pendientesCount++;
+        }
       });
-      }
+    }
 
-      if (cuentas[keyCentro] &amp;&amp; cuentas[keyCentro].items) {
+    if (cuentas[keyCentro] &amp;&amp; cuentas[keyCentro].items) {
       cuentas[keyCentro].items.forEach(i => {
-      if (!i.enviadoCocina) {
-      i.enviadoCocina = true;
-      i.horaEnvioCocina = nowStr;
-      pendientesCount++;
-      }
+        if (!i.enviadoCocina) {
+          i.enviadoCocina = true;
+          i.horaEnvioCocina = nowStr;
+          pendientesCount++;
+        }
       });
-      }
+    }
 
-      if (pendientesCount === 0) {
+    if (pendientesCount === 0) {
       alert('Todos tus productos ya fueron enviados a Cocina / Barra de Café.');
       return;
-      }
+    }
 
-      saveStorageCuentas(cuentas);
-      window.renderCarrito();
+    saveStorageCuentas(cuentas);
+    window.renderCarrito();
 
-      // Sincronizar estado &quot;Enviado a Cocina&quot; con el servidor en tiempo real
-      try {
+    // Sincronizar estado &quot;Enviado a Cocina&quot; con el servidor en tiempo real
+    try {
       if (window.anvilSyncCuenta &amp;&amp; cuentas[keySilla]) {
-      window.anvilSyncCuenta(mesaId, window.simSillaNum, JSON.stringify(cuentas[keySilla].items || []), 'ocupada');
+        window.anvilSyncCuenta(mesaId, window.simSillaNum, JSON.stringify(cuentas[keySilla].items || []), 'ocupada');
       }
-      } catch (e) { }
+    } catch (e) { }
 
-      alert(`🚀 ¡${pendientesCount} producto(s) enviados a Cocina / Barra de Café (${nowStr})! La preparación ha iniciado.`);
-      };
+    alert(`🚀 ¡${pendientesCount} producto(s) enviados a Cocina / Barra de Café (${nowStr})! La preparación ha iniciado.`);
+  };
 
-      window.renderAcompanantesMesa = function () {
-      const container = document.getElementById('listaAcompanantesMesa');
-      if (!container) return;
-      container.innerHTML = '';
+  window.renderAcompanantesMesa = function () {
+    const container = document.getElementById('listaAcompanantesMesa');
+    if (!container) return;
+    container.innerHTML = '';
 
-      var cuentas = getStorageCuentas();
-      var mesaId = window.simMesaId;
-      var miSilla = window.simSillaNum;
+    var cuentas = getStorageCuentas();
+    var mesaId = window.simMesaId;
+    var miSilla = window.simSillaNum;
 
-      var otrasSillas = [];
-      for (var s = 1; s <= 4; s++) {
+    var otrasSillas = [];
+    for (var s = 1; s <= 4; s++) {
       if (s !== miSilla) {
-      var k = mesaId + '-' + s;
-      var c = cuentas[k];
-      if (c &amp;&amp; c.items &amp;&amp; c.items.length > 0) {
-      var tot = 0;
-      c.items.forEach(function (i) { tot += i.precio * i.cantidad; });
-      otrasSillas.push({ sillaNum: s, cuenta: c, total: tot });
+        var k = mesaId + '-' + s;
+        var c = cuentas[k];
+        if (c &amp;&amp; c.items &amp;&amp; c.items.length > 0) {
+          var tot = 0;
+          c.items.forEach(function (i) { tot += i.precio * i.cantidad; });
+          otrasSillas.push({ sillaNum: s, cuenta: c, total: tot });
+        }
       }
-      }
-      }
+    }
 
-      if (otrasSillas.length === 0) {
+    if (otrasSillas.length === 0) {
       container.innerHTML = `<div class=&quot;text-slate-500 text-[11px] py-2&quot;>No hay otras sillas con consumos en tu mesa.</div>`;
       return;
-      }
+    }
 
-      otrasSillas.forEach(item => {
+    otrasSillas.forEach(item => {
       const isSelected = window.sillasAcompanantesSeleccionadas.includes(item.sillaNum);
       const row = document.createElement('label');
       row.className = `flex items-center justify-between p-2 rounded-xl border transition cursor-pointer ${isSelected ? 'bg-emerald-950/40 border-emerald-500/40 text-emerald-300' : 'bg-slate-900/60 border-slate-800 text-slate-400'}`;
 
       row.innerHTML = `
-      <div class=&quot;flex items-center gap-2&quot;>
-      <input type=&quot;checkbox&quot; onchange=&quot;window.toggleAcompanante(${item.sillaNum})&quot; ${isSelected ? 'checked' : ''} class=&quot;rounded text-emerald-500 focus:ring-0&quot;>
-      <span class=&quot;font-bold text-xs&quot;>Silla ${item.sillaNum} ${item.cuenta.comensalNombre ? '(' + item.cuenta.comensalNombre + ')' : ''}</span>
-      </div>
-      <span class=&quot;font-bold text-xs text-white&quot;>$${item.total.toFixed(2)}</span>
-      `;
+          <div class=&quot;flex items-center gap-2&quot;>
+            <input type=&quot;checkbox&quot; onchange=&quot;window.toggleAcompanante(${item.sillaNum})&quot; ${isSelected ? 'checked' : ''} class=&quot;rounded text-emerald-500 focus:ring-0&quot;>
+            <span class=&quot;font-bold text-xs&quot;>Silla ${item.sillaNum} ${item.cuenta.comensalNombre ? '(' + item.cuenta.comensalNombre + ')' : ''}</span>
+          </div>
+          <span class=&quot;font-bold text-xs text-white&quot;>$${item.total.toFixed(2)}</span>
+        `;
       container.appendChild(row);
-      });
-      };
+    });
+  };
 
-      window.toggleAcompanante = function (sillaNum) {
-      const idx = window.sillasAcompanantesSeleccionadas.indexOf(sillaNum);
-      if (idx > -1) {
+  window.toggleAcompanante = function (sillaNum) {
+    const idx = window.sillasAcompanantesSeleccionadas.indexOf(sillaNum);
+    if (idx > -1) {
       window.sillasAcompanantesSeleccionadas.splice(idx, 1);
-      } else {
+    } else {
       window.sillasAcompanantesSeleccionadas.push(sillaNum);
-      }
-      window.renderAcompanantesMesa();
-      window.recalcularTotalesCompletos();
-      };
+    }
+    window.renderAcompanantesMesa();
+    window.recalcularTotalesCompletos();
+  };
 
-      window.seleccionarTodosAcompanantes = function () {
-      var cuentas = getStorageCuentas();
-      var mesaId = window.simMesaId;
-      var miSilla = window.simSillaNum;
-      var all = [];
-      for (var s = 1; s <= 4; s++) {
+  window.seleccionarTodosAcompanantes = function () {
+    var cuentas = getStorageCuentas();
+    var mesaId = window.simMesaId;
+    var miSilla = window.simSillaNum;
+    var all = [];
+    for (var s = 1; s <= 4; s++) {
       if (s !== miSilla &amp;&amp; cuentas[mesaId + '-' + s] &amp;&amp; cuentas[mesaId + '-' + s].items &amp;&amp; cuentas[mesaId + '-' + s].items.length > 0) {
-      all.push(s);
+        all.push(s);
       }
-      }
-      window.sillasAcompanantesSeleccionadas = all;
-      window.renderAcompanantesMesa();
-      window.recalcularTotalesCompletos();
-      };
+    }
+    window.sillasAcompanantesSeleccionadas = all;
+    window.renderAcompanantesMesa();
+    window.recalcularTotalesCompletos();
+  };
 
-      window.recalcularTotalesCompletos = function () {
-      var cuentas = getStorageCuentas();
-      var mesaId = window.simMesaId || 1;
-      var miSilla = window.simSillaNum || 1;
+  window.recalcularTotalesCompletos = function () {
+    var cuentas = getStorageCuentas();
+    var mesaId = window.simMesaId || 1;
+    var miSilla = window.simSillaNum || 1;
 
-      var subtotalNeto = 0;
+    var subtotalNeto = 0;
 
-      // 1. Mi Silla
-      var keySilla = mesaId + '-' + miSilla;
-      if (cuentas[keySilla] &amp;&amp; cuentas[keySilla].items) {
+    // 1. Mi Silla
+    var keySilla = mesaId + '-' + miSilla;
+    if (cuentas[keySilla] &amp;&amp; cuentas[keySilla].items) {
       cuentas[keySilla].items.forEach(function (it) { subtotalNeto += it.precio * it.cantidad; });
-      }
+    }
 
-      // 2. Al Centro
-      var keyCentro = mesaId + '-centro';
-      if (cuentas[keyCentro] &amp;&amp; cuentas[keyCentro].items) {
+    // 2. Al Centro
+    var keyCentro = mesaId + '-centro';
+    if (cuentas[keyCentro] &amp;&amp; cuentas[keyCentro].items) {
       cuentas[keyCentro].items.forEach(function (it) { subtotalNeto += it.precio * it.cantidad; });
-      }
+    }
 
-      // 3. Acompañantes
-      (window.sillasAcompanantesSeleccionadas || []).forEach(function (s) {
+    // 3. Acompañantes
+    (window.sillasAcompanantesSeleccionadas || []).forEach(function (s) {
       var k = mesaId + '-' + s;
       if (cuentas[k] &amp;&amp; cuentas[k].items) {
-      cuentas[k].items.forEach(function (it) { subtotalNeto += it.precio * it.cantidad; });
+        cuentas[k].items.forEach(function (it) { subtotalNeto += it.precio * it.cantidad; });
       }
-      });
+    });
 
-      var iva = subtotalNeto * 0.16;
-      var propina = subtotalNeto * 0.10;
-      var total = subtotalNeto + iva;
+    var iva = subtotalNeto * 0.16;
+    var propina = subtotalNeto * 0.10;
+    var total = subtotalNeto + iva;
 
-      var txtSubtotal = document.getElementById('txtSubtotal');
-      var txtIVA = document.getElementById('txtIVA');
-      var txtPropina = document.getElementById('txtPropina');
-      var txtTotal = document.getElementById('txtTotal');
-      var txtBtnPagar = document.getElementById('txtBtnPagarMonto');
-      var lblSubtotalDetalle = document.getElementById('lblSubtotalDetalle');
+    var txtSubtotal = document.getElementById('txtSubtotal');
+    var txtIVA = document.getElementById('txtIVA');
+    var txtPropina = document.getElementById('txtPropina');
+    var txtTotal = document.getElementById('txtTotal');
+    var txtBtnPagar = document.getElementById('txtBtnPagarMonto');
+    var lblSubtotalDetalle = document.getElementById('lblSubtotalDetalle');
 
-      if (lblSubtotalDetalle) {
+    if (lblSubtotalDetalle) {
       if (window.sillasAcompanantesSeleccionadas.length > 0) {
-      lblSubtotalDetalle.innerText = `Subtotal (Silla ${miSilla} + Centro + ${window.sillasAcompanantesSeleccionadas.length} Acompañantes):`;
+        lblSubtotalDetalle.innerText = `Subtotal (Silla ${miSilla} + Centro + ${window.sillasAcompanantesSeleccionadas.length} Acompañantes):`;
       } else {
-      lblSubtotalDetalle.innerText = `Subtotal (Silla ${miSilla} + Centro):`;
+        lblSubtotalDetalle.innerText = `Subtotal (Silla ${miSilla} + Centro):`;
       }
-      }
+    }
 
-      if (txtSubtotal) txtSubtotal.innerText = `$${subtotalNeto.toFixed(2)}`;
-      if (txtIVA) txtIVA.innerText = `$${iva.toFixed(2)}`;
-      if (txtPropina) txtPropina.innerText = `$${propina.toFixed(2)}`;
-      if (txtTotal) txtTotal.innerText = `$${total.toFixed(2)}`;
-      if (txtBtnPagar) txtBtnPagar.innerText = `$${total.toFixed(2)}`;
+    if (txtSubtotal) txtSubtotal.innerText = `$${subtotalNeto.toFixed(2)}`;
+    if (txtIVA) txtIVA.innerText = `$${iva.toFixed(2)}`;
+    if (txtPropina) txtPropina.innerText = `$${propina.toFixed(2)}`;
+    if (txtTotal) txtTotal.innerText = `$${total.toFixed(2)}`;
+    if (txtBtnPagar) txtBtnPagar.innerText = `$${total.toFixed(2)}`;
 
-      var lblHubTotal = document.getElementById('lblHubTotalComanda');
-      if (lblHubTotal) lblHubTotal.innerText = `$${total.toFixed(2)}`;
-      var lblCatBtnTotal = document.getElementById('lblCatBtnTotal');
-      if (lblCatBtnTotal) lblCatBtnTotal.innerText = `$${total.toFixed(2)}`;
+    var lblHubTotal = document.getElementById('lblHubTotalComanda');
+    if (lblHubTotal) lblHubTotal.innerText = `$${total.toFixed(2)}`;
+    var lblCatBtnTotal = document.getElementById('lblCatBtnTotal');
+    if (lblCatBtnTotal) lblCatBtnTotal.innerText = `$${total.toFixed(2)}`;
 
-      // Actualizar Banner Sticky Superior de Comanda
-      var itemsCount = 0;
-      var pendientesCount = 0;
-      if (cuentas[keySilla] &amp;&amp; cuentas[keySilla].items) {
+    // Actualizar Banner Sticky Superior de Comanda
+    var itemsCount = 0;
+    var pendientesCount = 0;
+    if (cuentas[keySilla] &amp;&amp; cuentas[keySilla].items) {
       itemsCount += cuentas[keySilla].items.length;
       cuentas[keySilla].items.forEach(function(i) { if (!i.enviadoCocina) pendientesCount++; });
-      }
-      if (cuentas[keyCentro] &amp;&amp; cuentas[keyCentro].items) {
+    }
+    if (cuentas[keyCentro] &amp;&amp; cuentas[keyCentro].items) {
       itemsCount += cuentas[keyCentro].items.length;
       cuentas[keyCentro].items.forEach(function(i) { if (!i.enviadoCocina) pendientesCount++; });
-      }
+    }
 
-      var lblStickyTit = document.getElementById('lblStickyComandaTitulo');
-      var lblStickySub = document.getElementById('lblStickyComandaSubtitulo');
-      var lblStickyTot = document.getElementById('lblStickyComandaTotal');
+    var lblStickyTit = document.getElementById('lblStickyComandaTitulo');
+    var lblStickySub = document.getElementById('lblStickyComandaSubtitulo');
+    var lblStickyTot = document.getElementById('lblStickyComandaTotal');
 
-      if (lblStickyTot) lblStickyTot.innerText = `$${total.toFixed(2)}`;
-      if (lblStickyTit) {
+    if (lblStickyTot) lblStickyTot.innerText = `$${total.toFixed(2)}`;
+    if (lblStickyTit) {
       if (itemsCount === 0) {
-      lblStickyTit.innerHTML = `Mi Comanda: <span class=&quot;text-slate-400 font-semibold&quot;>Sin pedidos aún</span>`;
+        lblStickyTit.innerHTML = `Mi Comanda: <span class=&quot;text-slate-400 font-semibold&quot;>Sin pedidos aún</span>`;
       } else {
-      lblStickyTit.innerHTML = `Mi Comanda: <b class=&quot;text-emerald-400&quot;>${itemsCount} producto${itemsCount > 1 ? 's' : ''}</b> ${pendientesCount > 0 ? `<span class=&quot;text-amber-400 text-[10px] font-bold&quot;>(${pendientesCount} pendiente${pendientesCount > 1 ? 's' : ''})</span>` : `<span class=&quot;text-sky-400 text-[10px] font-bold&quot;>✓ En Cocina</span>`}`;
+        lblStickyTit.innerHTML = `Mi Comanda: <b class=&quot;text-emerald-400&quot;>${itemsCount} producto${itemsCount > 1 ? 's' : ''}</b> ${pendientesCount > 0 ? `<span class=&quot;text-amber-400 text-[10px] font-bold&quot;>(${pendientesCount} pendiente${pendientesCount > 1 ? 's' : ''})</span>` : `<span class=&quot;text-sky-400 text-[10px] font-bold&quot;>✓ En Cocina</span>`}`;
       }
-      }
-      if (lblStickySub) {
+    }
+    if (lblStickySub) {
       if (itemsCount === 0) {
-      lblStickySub.innerText = `Mesa ${mesaId} • Silla ${miSilla} • Selecciona platillos para agregar a tu cuenta`;
+        lblStickySub.innerText = `Mesa ${mesaId} • Silla ${miSilla} • Selecciona platillos para agregar a tu cuenta`;
       } else {
-      lblStickySub.innerText = `Mesa ${mesaId} • Silla ${miSilla} • Total acumulado con IVA: $${total.toFixed(2)}`;
+        lblStickySub.innerText = `Mesa ${mesaId} • Silla ${miSilla} • Total acumulado con IVA: $${total.toFixed(2)}`;
       }
-      }
-      };
+    }
+  };
 
-      window.modoPagoCliente = 'solo_yo'; // 'solo_yo' | 'incluir_ninos' | 'toda_mesa'
+  window.modoPagoCliente = 'solo_yo'; // 'solo_yo' | 'incluir_ninos' | 'toda_mesa'
 
-      window.abrirModalCobroCliente = function (metodo) {
-      const modal = document.getElementById('modalCobroCliente');
-      if (modal) {
+  window.abrirModalCobroCliente = function (metodo) {
+    const modal = document.getElementById('modalCobroCliente');
+    if (modal) {
       modal.classList.remove('hidden');
       modal.classList.add('flex');
-      }
-      window.setModoPagoCliente(window.modoPagoCliente || 'solo_yo');
-      };
+    }
+    window.setModoPagoCliente(window.modoPagoCliente || 'solo_yo');
+  };
 
-      window.cerrarModalCobroCliente = function () {
-      const modal = document.getElementById('modalCobroCliente');
-      if (modal) {
+  window.cerrarModalCobroCliente = function () {
+    const modal = document.getElementById('modalCobroCliente');
+    if (modal) {
       modal.classList.add('hidden');
       modal.classList.remove('flex');
-      }
-      };
+    }
+  };
 
-      window.setModoPagoCliente = function (modo) {
-      window.modoPagoCliente = modo;
-      const btnSoloYo = document.getElementById('btnModoSoloYo');
-      const btnNinos = document.getElementById('btnModoNinos');
-      const btnToda = document.getElementById('btnModoTodaMesa');
+  window.setModoPagoCliente = function (modo) {
+    window.modoPagoCliente = modo;
+    const btnSoloYo = document.getElementById('btnModoSoloYo');
+    const btnNinos = document.getElementById('btnModoNinos');
+    const btnToda = document.getElementById('btnModoTodaMesa');
 
-      const activeCls = 'bg-emerald-600/30 text-emerald-300 border-emerald-500/50';
-      const inactiveCls = 'bg-slate-800 text-slate-300 border-slate-700';
+    const activeCls = 'bg-emerald-600/30 text-emerald-300 border-emerald-500/50';
+    const inactiveCls = 'bg-slate-800 text-slate-300 border-slate-700';
 
-      [btnSoloYo, btnNinos, btnToda].forEach(b => {
+    [btnSoloYo, btnNinos, btnToda].forEach(b => {
       if (b) {
-      b.className = 'p-2 rounded-lg font-bold border text-center transition cursor-pointer ' + inactiveCls;
+        b.className = 'p-2 rounded-lg font-bold border text-center transition cursor-pointer ' + inactiveCls;
       }
-      });
+    });
 
-      if (modo === 'solo_yo' &amp;&amp; btnSoloYo) btnSoloYo.className = 'p-2 rounded-lg font-bold border text-center transition cursor-pointer ' + activeCls;
-      if (modo === 'incluir_ninos' &amp;&amp; btnNinos) btnNinos.className = 'p-2 rounded-lg font-bold border text-center transition cursor-pointer ' + activeCls;
-      if (modo === 'toda_mesa' &amp;&amp; btnToda) btnToda.className = 'p-2 rounded-lg font-bold border text-center transition cursor-pointer ' + activeCls;
+    if (modo === 'solo_yo' &amp;&amp; btnSoloYo) btnSoloYo.className = 'p-2 rounded-lg font-bold border text-center transition cursor-pointer ' + activeCls;
+    if (modo === 'incluir_ninos' &amp;&amp; btnNinos) btnNinos.className = 'p-2 rounded-lg font-bold border text-center transition cursor-pointer ' + activeCls;
+    if (modo === 'toda_mesa' &amp;&amp; btnToda) btnToda.className = 'p-2 rounded-lg font-bold border text-center transition cursor-pointer ' + activeCls;
 
-      window.renderDetalleModalCobro();
-      };
+    window.renderDetalleModalCobro();
+  };
 
-      window.renderDetalleModalCobro = function () {
-      const container = document.getElementById('modalItemsDesglose');
-      const subtotalEl = document.getElementById('modalSubtotal');
-      const ivaEl = document.getElementById('modalIVA');
-      const propinaEl = document.getElementById('modalPropina');
-      const totalEl = document.getElementById('modalTotal');
+  window.renderDetalleModalCobro = function () {
+    const container = document.getElementById('modalItemsDesglose');
+    const subtotalEl = document.getElementById('modalSubtotal');
+    const ivaEl = document.getElementById('modalIVA');
+    const propinaEl = document.getElementById('modalPropina');
+    const totalEl = document.getElementById('modalTotal');
 
-      if (!container) return;
-      container.innerHTML = '';
+    if (!container) return;
+    container.innerHTML = '';
 
-      var cuentas = getStorageCuentas();
-      var mesaId = window.simMesaId || 1;
-      var miSilla = window.simSillaNum || 1;
+    var cuentas = getStorageCuentas();
+    var mesaId = window.simMesaId || 1;
+    var miSilla = window.simSillaNum || 1;
 
-      var keysAIncluir = [mesaId + '-' + miSilla, mesaId + '-centro'];
-      if (window.modoPagoCliente === 'incluir_ninos') {
+    var keysAIncluir = [mesaId + '-' + miSilla, mesaId + '-centro'];
+    if (window.modoPagoCliente === 'incluir_ninos') {
       (window.sillasAcompanantesSeleccionadas || []).forEach(s => keysAIncluir.push(mesaId + '-' + s));
-      } else if (window.modoPagoCliente === 'toda_mesa') {
+    } else if (window.modoPagoCliente === 'toda_mesa') {
       for (var s = 1; s <= 4; s++) keysAIncluir.push(mesaId + '-' + s);
-      }
-      keysAIncluir = keysAIncluir.filter((v, i, a) => a.indexOf(v) === i);
+    }
+    keysAIncluir = keysAIncluir.filter((v, i, a) => a.indexOf(v) === i);
 
-      var totalNeto = 0;
+    var totalNeto = 0;
 
-      keysAIncluir.forEach(k => {
+    keysAIncluir.forEach(k => {
       var c = cuentas[k];
       if (!c || !c.items || c.items.length === 0) return;
 
@@ -1725,13 +1742,13 @@
       block.appendChild(h);
 
       c.items.forEach(it => {
-      var itTotal = it.precio * it.cantidad;
-      subBlock += itTotal;
-      totalNeto += itTotal;
-      var row = document.createElement('div');
-      row.className = 'flex justify-between text-slate-300 py-0.5 text-xs';
-      row.innerHTML = `<span>${it.cantidad}x ${it.nombre}</span><span>$${itTotal.toFixed(2)}</span>`;
-      block.appendChild(row);
+        var itTotal = it.precio * it.cantidad;
+        subBlock += itTotal;
+        totalNeto += itTotal;
+        var row = document.createElement('div');
+        row.className = 'flex justify-between text-slate-300 py-0.5 text-xs';
+        row.innerHTML = `<span>${it.cantidad}x ${it.nombre}</span><span>$${itTotal.toFixed(2)}</span>`;
+        block.appendChild(row);
       });
 
       var subRow = document.createElement('div');
@@ -1740,365 +1757,365 @@
       block.appendChild(subRow);
 
       container.appendChild(block);
-      });
+    });
 
-      var iva = totalNeto * 0.16;
-      var propina = totalNeto * 0.10;
-      var granTotal = totalNeto + iva;
+    var iva = totalNeto * 0.16;
+    var propina = totalNeto * 0.10;
+    var granTotal = totalNeto + iva;
 
-      if (subtotalEl) subtotalEl.innerText = `$${totalNeto.toFixed(2)}`;
-      if (ivaEl) ivaEl.innerText = `$${iva.toFixed(2)}`;
-      if (propinaEl) propinaEl.innerText = `$${propina.toFixed(2)}`;
-      if (totalEl) totalEl.innerText = `$${granTotal.toFixed(2)}`;
-      };
+    if (subtotalEl) subtotalEl.innerText = `$${totalNeto.toFixed(2)}`;
+    if (ivaEl) ivaEl.innerText = `$${iva.toFixed(2)}`;
+    if (propinaEl) propinaEl.innerText = `$${propina.toFixed(2)}`;
+    if (totalEl) totalEl.innerText = `$${granTotal.toFixed(2)}`;
+  };
 
-      window.ejecutarPagoFinal = function (metodo) {
-      var cuentas = getStorageCuentas();
-      var mesaId = window.simMesaId || 1;
-      var miSilla = window.simSillaNum || 1;
+  window.ejecutarPagoFinal = function (metodo) {
+    var cuentas = getStorageCuentas();
+    var mesaId = window.simMesaId || 1;
+    var miSilla = window.simSillaNum || 1;
 
-      var keysAIncluir = [mesaId + '-' + miSilla, mesaId + '-centro'];
-      if (window.modoPagoCliente === 'incluir_ninos') {
+    var keysAIncluir = [mesaId + '-' + miSilla, mesaId + '-centro'];
+    if (window.modoPagoCliente === 'incluir_ninos') {
       (window.sillasAcompanantesSeleccionadas || []).forEach(s => keysAIncluir.push(mesaId + '-' + s));
-      } else if (window.modoPagoCliente === 'toda_mesa') {
+    } else if (window.modoPagoCliente === 'toda_mesa') {
       for (var s = 1; s <= 4; s++) keysAIncluir.push(mesaId + '-' + s);
-      }
-      keysAIncluir = keysAIncluir.filter((v, i, a) => a.indexOf(v) === i);
+    }
+    keysAIncluir = keysAIncluir.filter((v, i, a) => a.indexOf(v) === i);
 
-      var totalText = document.getElementById('modalTotal') ? document.getElementById('modalTotal').innerText : '$0.00';
+    var totalText = document.getElementById('modalTotal') ? document.getElementById('modalTotal').innerText : '$0.00';
 
-      if (confirm(`¿Confirmar liquidación vía ${metodo.toUpperCase()} para Mesa ${mesaId} por ${totalText}?`)) {
+    if (confirm(`¿Confirmar liquidación vía ${metodo.toUpperCase()} para Mesa ${mesaId} por ${totalText}?`)) {
       keysAIncluir.forEach(function (k) {
-      delete cuentas[k];
+        delete cuentas[k];
       });
 
       saveStorageCuentas(cuentas);
       window.cerrarModalCobroCliente();
       window.sincronizarCuentaDesdeStorage();
       alert(`🎉 ¡Pago de ${totalText} procesado con éxito vía ${metodo.toUpperCase()}! Gracias por tu visita a La Terraza V&amp;S.`);
-      }
-      };
+    }
+  };
 
-      window.cargarDatosMenu = function (productos, categorias) {
-      if (productos) window.vsMenuData = productos;
-      if (categorias) window.vsCategoriasData = categorias;
-      window.renderCategoriasChips();
-      window.filtrarProductos();
-      };
+  window.cargarDatosMenu = function (productos, categorias) {
+    if (productos) window.vsMenuData = productos;
+    if (categorias) window.vsCategoriasData = categorias;
+    window.renderCategoriasChips();
+    window.filtrarProductos();
+  };
 
-      window.renderCategoriasChips = function () {
-      const container = document.getElementById('categoriesChips');
-      if (!container) return;
-      container.innerHTML = '';
+  window.renderCategoriasChips = function () {
+    const container = document.getElementById('categoriesChips');
+    if (!container) return;
+    container.innerHTML = '';
 
-      const allBtn = document.createElement('button');
-      allBtn.className = `cat-chip ${window.categoriaActual === 'Todos' ? 'active bg-emerald-500 text-slate-950 font-black shadow-md shadow-emerald-500/20' : 'bg-slate-900/80 text-slate-300 border border-slate-700 hover:bg-slate-800'} px-4 py-2 text-xs font-bold rounded-xl whitespace-nowrap transition cursor-pointer`;
-      allBtn.innerText = 'Todos';
-      allBtn.onclick = () => window.seleccionarCategoria('Todos');
-      container.appendChild(allBtn);
+    const allBtn = document.createElement('button');
+    allBtn.className = `cat-chip ${window.categoriaActual === 'Todos' ? 'active bg-emerald-500 text-slate-950 font-black shadow-md shadow-emerald-500/20' : 'bg-slate-900/80 text-slate-300 border border-slate-700 hover:bg-slate-800'} px-4 py-2 text-xs font-bold rounded-xl whitespace-nowrap transition cursor-pointer`;
+    allBtn.innerText = 'Todos';
+    allBtn.onclick = () => window.seleccionarCategoria('Todos');
+    container.appendChild(allBtn);
 
-      (window.vsCategoriasData || []).forEach(cat => {
+    (window.vsCategoriasData || []).forEach(cat => {
       const btn = document.createElement('button');
       const isActive = (window.categoriaActual === cat.nombre);
       btn.className = `cat-chip ${isActive ? 'active bg-emerald-500 text-slate-950 font-black shadow-md shadow-emerald-500/20' : 'bg-slate-900/80 text-slate-300 border border-slate-700 hover:bg-slate-800'} px-4 py-2 text-xs font-bold rounded-xl whitespace-nowrap transition flex items-center gap-1.5 cursor-pointer`;
       btn.innerHTML = `<span>${cat.icono || '🍽️'}</span> <span>${cat.nombre}</span>`;
       btn.onclick = () => window.seleccionarCategoria(cat.nombre);
       container.appendChild(btn);
-      });
-      };
+    });
+  };
 
-      window.seleccionarCategoria = function (catNombre) {
-      window.categoriaActual = catNombre;
-      window.renderCategoriasChips();
-      window.filtrarProductos();
-      };
+  window.seleccionarCategoria = function (catNombre) {
+    window.categoriaActual = catNombre;
+    window.renderCategoriasChips();
+    window.filtrarProductos();
+  };
 
-      window.filtrarProductos = function () {
-      const container = document.getElementById('productsGridContainer');
-      if (!container) return;
-      container.innerHTML = '';
+  window.filtrarProductos = function () {
+    const container = document.getElementById('productsGridContainer');
+    if (!container) return;
+    container.innerHTML = '';
 
-      const query = (document.getElementById('searchInput') ? document.getElementById('searchInput').value : '').toLowerCase().trim();
-      const catActual = window.categoriaActual;
+    const query = (document.getElementById('searchInput') ? document.getElementById('searchInput').value : '').toLowerCase().trim();
+    const catActual = window.categoriaActual;
 
-      const filtrados = (window.vsMenuData || []).filter(prod => {
+    const filtrados = (window.vsMenuData || []).filter(prod => {
       const matchCat = (!catActual || catActual === 'Todos' || prod.categoria_nombre === catActual);
       const matchText = prod.nombre.toLowerCase().includes(query) || (prod.descripcion &amp;&amp; prod.descripcion.toLowerCase().includes(query));
       return matchCat &amp;&amp; matchText;
-      });
+    });
 
-      if (filtrados.length === 0) {
+    if (filtrados.length === 0) {
       container.innerHTML = `<div class=&quot;text-center py-12 text-slate-500 text-sm col-span-2&quot;>No se encontraron platillos o bebidas disponibles</div>`;
       return;
-      }
+    }
 
-      const isCentro = (window.destinoPedido === 'centro');
-      const destSilla = (window.destinoPedido === 'mi_silla' || !window.destinoPedido) ? window.simSillaNum : window.destinoPedido;
-      const btnTxt = isCentro
+    const isCentro = (window.destinoPedido === 'centro');
+    const destSilla = (window.destinoPedido === 'mi_silla' || !window.destinoPedido) ? window.simSillaNum : window.destinoPedido;
+    const btnTxt = isCentro
       ? '<i class=&quot;fa-solid fa-utensils text-amber-400&quot;></i> Al Centro (Compartir)'
       : `<i class=&quot;fa-solid fa-plus text-emerald-400&quot;></i> Agregar a Silla ${destSilla}`;
-      const btnClass = isCentro
+    const btnClass = isCentro
       ? 'flex-1 py-2 px-3 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer shadow-sm'
       : 'flex-1 py-2 px-3 rounded-xl bg-emerald-600/30 hover:bg-emerald-500/40 text-emerald-300 border border-emerald-500/30 text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer shadow-sm';
 
-      filtrados.forEach(prod => {
+    filtrados.forEach(prod => {
       const card = document.createElement('div');
       card.className = 'glass-card p-4 rounded-2xl flex flex-col justify-between hover:border-emerald-500/50 transition gap-3';
 
       card.innerHTML = `
-      <div class=&quot;flex items-start gap-3 cursor-pointer&quot; onclick=&quot;window.abrirModalPersonalizar(${prod.id});&quot;>
-      <div class=&quot;w-12 h-12 rounded-xl bg-slate-800/90 border border-slate-700 flex items-center justify-center text-2xl flex-shrink-0&quot;>
-      ${prod.icono || '🍲'}
-      </div>
-      <div class=&quot;flex-1 min-w-0&quot;>
-      <div class=&quot;flex justify-between items-start&quot;>
-      <h3 class=&quot;text-sm font-bold text-white tracking-tight truncate&quot;>${prod.nombre}</h3>
-      <span class=&quot;text-sm font-black text-emerald-400 ml-2&quot;>$${Number(prod.precio_unitario).toFixed(2)}</span>
-      </div>
-      <p class=&quot;text-[11px] text-slate-400 mt-1 line-clamp-2&quot;>${prod.descripcion || ''}</p>
-      <div class=&quot;flex items-center gap-2 mt-2&quot;>
-      <span class=&quot;text-[10px] text-amber-400 font-bold bg-amber-500/10 px-2 py-0.5 rounded-md border border-amber-500/20&quot;>⭐ Gourmet</span>
-      <span class=&quot;text-[10px] text-slate-400 font-semibold&quot;>${prod.categoria_nombre || ''}</span>
-      </div>
-      </div>
-      </div>
-      <div class=&quot;flex items-center justify-between gap-2 pt-2 border-t border-slate-800/80&quot;>
-      <button onclick=&quot;window.abrirModalPersonalizar(${prod.id});&quot; class=&quot;py-2 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-sky-400 border border-slate-700 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer&quot;>
-      <i class=&quot;fa-solid fa-sliders&quot;></i> Personalizar
-      </button>
-      <button onclick=&quot;window.agregarAlCarritoDirecto(${prod.id})&quot; class=&quot;${btnClass}&quot;>
-      ${btnTxt}
-      </button>
-      </div>
-      `;
+          <div class=&quot;flex items-start gap-3 cursor-pointer&quot; onclick=&quot;window.abrirModalPersonalizar(${prod.id});&quot;>
+            <div class=&quot;w-12 h-12 rounded-xl bg-slate-800/90 border border-slate-700 flex items-center justify-center text-2xl flex-shrink-0&quot;>
+              ${prod.icono || '🍲'}
+            </div>
+            <div class=&quot;flex-1 min-w-0&quot;>
+              <div class=&quot;flex justify-between items-start&quot;>
+                <h3 class=&quot;text-sm font-bold text-white tracking-tight truncate&quot;>${prod.nombre}</h3>
+                <span class=&quot;text-sm font-black text-emerald-400 ml-2&quot;>$${Number(prod.precio_unitario).toFixed(2)}</span>
+              </div>
+              <p class=&quot;text-[11px] text-slate-400 mt-1 line-clamp-2&quot;>${prod.descripcion || ''}</p>
+              <div class=&quot;flex items-center gap-2 mt-2&quot;>
+                <span class=&quot;text-[10px] text-amber-400 font-bold bg-amber-500/10 px-2 py-0.5 rounded-md border border-amber-500/20&quot;>⭐ Gourmet</span>
+                <span class=&quot;text-[10px] text-slate-400 font-semibold&quot;>${prod.categoria_nombre || ''}</span>
+              </div>
+            </div>
+          </div>
+          <div class=&quot;flex items-center justify-between gap-2 pt-2 border-t border-slate-800/80&quot;>
+            <button onclick=&quot;window.abrirModalPersonalizar(${prod.id});&quot; class=&quot;py-2 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-sky-400 border border-slate-700 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer&quot;>
+              <i class=&quot;fa-solid fa-sliders&quot;></i> Personalizar
+            </button>
+            <button onclick=&quot;window.agregarAlCarritoDirecto(${prod.id})&quot; class=&quot;${btnClass}&quot;>
+              ${btnTxt}
+            </button>
+          </div>
+        `;
       container.appendChild(card);
-      });
-      };
+    });
+  };
 
-      window.modalPersonalizacionState = {
-      prod: null,
-      cantidad: 1,
-      termino: '',
-      preferencias: [],
-      extras: [],
-      extraPrecioTotal: 0
-      };
+  window.modalPersonalizacionState = {
+    prod: null,
+    cantidad: 1,
+    termino: '',
+    preferencias: [],
+    extras: [],
+    extraPrecioTotal: 0
+  };
 
-      window.abrirModalPersonalizar = function(prodId) {
-      const prod = (window.vsMenuData || []).find(p => p.id === prodId);
-      if (!prod) return;
+  window.abrirModalPersonalizar = function(prodId) {
+    const prod = (window.vsMenuData || []).find(p => p.id === prodId);
+    if (!prod) return;
 
-      window.modalPersonalizacionState = {
+    window.modalPersonalizacionState = {
       prod: prod,
       cantidad: 1,
       termino: '',
       preferencias: [],
       extras: [],
       extraPrecioTotal: 0
-      };
+    };
 
-      document.getElementById('cliRecetaIcono').innerText = prod.icono || '🍳';
-      document.getElementById('cliRecetaCategoria').innerText = prod.categoria_nombre || 'Especialidades';
-      document.getElementById('cliRecetaTitulo').innerText = prod.nombre;
-      document.getElementById('cliRecetaDescripcion').innerText = prod.descripcion || 'Preparado al momento con ingredientes frescos de la más alta calidad.';
-      document.getElementById('cliRecetaPrecio').innerText = `$${Number(prod.precio_unitario).toFixed(2)}`;
-      document.getElementById('txtModalNotasEspeciales').value = '';
-      document.getElementById('txtModalCantidad').innerText = '1';
+    document.getElementById('cliRecetaIcono').innerText = prod.icono || '🍳';
+    document.getElementById('cliRecetaCategoria').innerText = prod.categoria_nombre || 'Especialidades';
+    document.getElementById('cliRecetaTitulo').innerText = prod.nombre;
+    document.getElementById('cliRecetaDescripcion').innerText = prod.descripcion || 'Preparado al momento con ingredientes frescos de la más alta calidad.';
+    document.getElementById('cliRecetaPrecio').innerText = `$${Number(prod.precio_unitario).toFixed(2)}`;
+    document.getElementById('txtModalNotasEspeciales').value = '';
+    document.getElementById('txtModalCantidad').innerText = '1';
 
-      // 1. Chips de Término / Preparación
-      const boxTermino = document.getElementById('boxTerminoPreparacion');
-      const containerTermino = document.getElementById('chipsTerminoContainer');
-      containerTermino.innerHTML = '';
+    // 1. Chips de Término / Preparación
+    const boxTermino = document.getElementById('boxTerminoPreparacion');
+    const containerTermino = document.getElementById('chipsTerminoContainer');
+    containerTermino.innerHTML = '';
 
-      let opcionesTermino = [];
-      const catLower = (prod.categoria_nombre || '').toLowerCase();
-      const nomLower = (prod.nombre || '').toLowerCase();
+    let opcionesTermino = [];
+    const catLower = (prod.categoria_nombre || '').toLowerCase();
+    const nomLower = (prod.nombre || '').toLowerCase();
 
-      if (nomLower.includes('huevo') || nomLower.includes('omelette')) {
+    if (nomLower.includes('huevo') || nomLower.includes('omelette')) {
       opcionesTermino = ['🍳 Revueltos', '🍳 Estrellados tiernos', '🍳 Bien cocidos', '🍳 Con yema tierna líquida', '🍳 En Omelette'];
-      } else if (nomLower.includes('café') || nomLower.includes('capuchino') || nomLower.includes('latte')) {
+    } else if (nomLower.includes('café') || nomLower.includes('capuchino') || nomLower.includes('latte')) {
       opcionesTermino = ['☕ Caliente tradicional', '🧊 Frappé / Frío (+ $10)', '🥛 Con leche entera', '🥛 Con leche deslactosada', '🥥 Leche de almendra (+ $15)'];
-      } else if (nomLower.includes('chilaquiles') || nomLower.includes('molletes') || nomLower.includes('enchiladas')) {
+    } else if (nomLower.includes('chilaquiles') || nomLower.includes('molletes') || nomLower.includes('enchiladas')) {
       opcionesTermino = ['🌿 Salsa Verde clásica', '🍅 Salsa Roja tatemada', '🌶️ Salsa Pasilla suave', '🔥 Salsa Habanero extra'];
-      } else if (nomLower.includes('rib eye') || nomLower.includes('carne') || nomLower.includes('corte')) {
+    } else if (nomLower.includes('rib eye') || nomLower.includes('carne') || nomLower.includes('corte')) {
       opcionesTermino = ['🥩 Término Medio (Jugoso)', '🥩 Tres Cuartos', '🥩 Bien Cocido'];
-      } else if (nomLower.includes('jugo')) {
+    } else if (nomLower.includes('jugo')) {
       opcionesTermino = ['🥤 Con hielo', '🥤 Sin hielo / Al tiempo', '🥤 Sin azúcar / Natural'];
-      }
+    }
 
-      if (opcionesTermino.length > 0) {
+    if (opcionesTermino.length > 0) {
       boxTermino.style.display = 'flex';
       window.modalPersonalizacionState.termino = opcionesTermino[0];
       opcionesTermino.forEach((opt, idx) => {
-      const chip = document.createElement('button');
-      chip.type = 'button';
-      chip.className = `px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer border ${idx === 0 ? 'bg-amber-500/30 text-amber-300 border-amber-500/60 shadow-sm' : 'bg-slate-900/80 text-slate-300 border-slate-700 hover:border-slate-500'}`;
-      chip.innerText = opt;
-      chip.onclick = function() {
-      window.modalPersonalizacionState.termino = opt;
-      Array.from(containerTermino.children).forEach(c => {
-      c.className = 'px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer border bg-slate-900/80 text-slate-300 border-slate-700 hover:border-slate-500';
+        const chip = document.createElement('button');
+        chip.type = 'button';
+        chip.className = `px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer border ${idx === 0 ? 'bg-amber-500/30 text-amber-300 border-amber-500/60 shadow-sm' : 'bg-slate-900/80 text-slate-300 border-slate-700 hover:border-slate-500'}`;
+        chip.innerText = opt;
+        chip.onclick = function() {
+          window.modalPersonalizacionState.termino = opt;
+          Array.from(containerTermino.children).forEach(c => {
+            c.className = 'px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer border bg-slate-900/80 text-slate-300 border-slate-700 hover:border-slate-500';
+          });
+          chip.className = 'px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer border bg-amber-500/30 text-amber-300 border-amber-500/60 shadow-sm';
+          window.actualizarModalPersonalizarUI();
+        };
+        containerTermino.appendChild(chip);
       });
-      chip.className = 'px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer border bg-amber-500/30 text-amber-300 border-amber-500/60 shadow-sm';
-      window.actualizarModalPersonalizarUI();
-      };
-      containerTermino.appendChild(chip);
-      });
-      } else {
+    } else {
       boxTermino.style.display = 'none';
-      }
+    }
 
-      // 2. Chips de Preferencias / Quitar
-      const containerPref = document.getElementById('chipsPreferenciasContainer');
-      containerPref.innerHTML = '';
-      const prefsList = ['🚫 Sin cebolla', '🌶️ Salsa aparte / Sin picante', '🌿 Sin cilantro', '🫘 Sin frijoles', '🥛 Sin lácteos / Sin crema', '🧂 Poca sal'];
+    // 2. Chips de Preferencias / Quitar
+    const containerPref = document.getElementById('chipsPreferenciasContainer');
+    containerPref.innerHTML = '';
+    const prefsList = ['🚫 Sin cebolla', '🌶️ Salsa aparte / Sin picante', '🌿 Sin cilantro', '🫘 Sin frijoles', '🥛 Sin lácteos / Sin crema', '🧂 Poca sal'];
 
-      prefsList.forEach(pref => {
+    prefsList.forEach(pref => {
       const chip = document.createElement('button');
       chip.type = 'button';
       chip.className = 'px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer border bg-slate-900/80 text-slate-300 border-slate-700 hover:border-slate-500';
       chip.innerText = pref;
       chip.onclick = function() {
-      const idx = window.modalPersonalizacionState.preferencias.indexOf(pref);
-      if (idx === -1) {
-      window.modalPersonalizacionState.preferencias.push(pref);
-      chip.className = 'px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer border bg-rose-500/20 text-rose-300 border-rose-500/50 shadow-sm';
-      } else {
-      window.modalPersonalizacionState.preferencias.splice(idx, 1);
-      chip.className = 'px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer border bg-slate-900/80 text-slate-300 border-slate-700 hover:border-slate-500';
-      }
+        const idx = window.modalPersonalizacionState.preferencias.indexOf(pref);
+        if (idx === -1) {
+          window.modalPersonalizacionState.preferencias.push(pref);
+          chip.className = 'px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer border bg-rose-500/20 text-rose-300 border-rose-500/50 shadow-sm';
+        } else {
+          window.modalPersonalizacionState.preferencias.splice(idx, 1);
+          chip.className = 'px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer border bg-slate-900/80 text-slate-300 border-slate-700 hover:border-slate-500';
+        }
       };
       containerPref.appendChild(chip);
-      });
+    });
 
-      // 3. Chips de Ingredientes Extras con costo
-      const containerExtras = document.getElementById('chipsExtrasContainer');
-      containerExtras.innerHTML = '';
-      const extrasList = [
-    { nombre: '+ Aguacate fresco', precio: 25.00 },
-    { nombre: '+ Tocino crocante dorado', precio: 35.00 },
-    { nombre: '+ Queso Gouda gratinado', precio: 25.00 },
-    { nombre: '+ Champiñones salteados', precio: 20.00 },
-    { nombre: '+ Huevo extra orgánico', precio: 20.00 },
-    { nombre: '+ Porción de frijoles refritos', precio: 20.00 }
-      ];
+    // 3. Chips de Ingredientes Extras con costo
+    const containerExtras = document.getElementById('chipsExtrasContainer');
+    containerExtras.innerHTML = '';
+    const extrasList = [
+      { nombre: '+ Aguacate fresco', precio: 25.00 },
+      { nombre: '+ Tocino crocante dorado', precio: 35.00 },
+      { nombre: '+ Queso Gouda gratinado', precio: 25.00 },
+      { nombre: '+ Champiñones salteados', precio: 20.00 },
+      { nombre: '+ Huevo extra orgánico', precio: 20.00 },
+      { nombre: '+ Porción de frijoles refritos', precio: 20.00 }
+    ];
 
-      extrasList.forEach(ex => {
+    extrasList.forEach(ex => {
       const chip = document.createElement('button');
       chip.type = 'button';
       chip.className = 'px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer border bg-slate-900/80 text-slate-300 border-slate-700 hover:border-slate-500 flex items-center gap-1';
       chip.innerHTML = `<span>${ex.nombre}</span> <b class=&quot;text-sky-400 font-extrabold&quot;>(+$${ex.precio})</b>`;
       chip.onclick = function() {
-      const idx = window.modalPersonalizacionState.extras.findIndex(e => e.nombre === ex.nombre);
-      if (idx === -1) {
-      window.modalPersonalizacionState.extras.push(ex);
-      chip.className = 'px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer border bg-sky-500/20 text-sky-300 border-sky-500/50 shadow-sm flex items-center gap-1';
-      } else {
-      window.modalPersonalizacionState.extras.splice(idx, 1);
-      chip.className = 'px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer border bg-slate-900/80 text-slate-300 border-slate-700 hover:border-slate-500 flex items-center gap-1';
-      }
-      window.actualizarModalPersonalizarUI();
+        const idx = window.modalPersonalizacionState.extras.findIndex(e => e.nombre === ex.nombre);
+        if (idx === -1) {
+          window.modalPersonalizacionState.extras.push(ex);
+          chip.className = 'px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer border bg-sky-500/20 text-sky-300 border-sky-500/50 shadow-sm flex items-center gap-1';
+        } else {
+          window.modalPersonalizacionState.extras.splice(idx, 1);
+          chip.className = 'px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer border bg-slate-900/80 text-slate-300 border-slate-700 hover:border-slate-500 flex items-center gap-1';
+        }
+        window.actualizarModalPersonalizarUI();
       };
       containerExtras.appendChild(chip);
-      });
+    });
 
-      window.actualizarModalPersonalizarUI();
+    window.actualizarModalPersonalizarUI();
 
-      const modal = document.getElementById('modalRecetaClienteBackdrop');
-      if (modal) {
+    const modal = document.getElementById('modalRecetaClienteBackdrop');
+    if (modal) {
       modal.style.display = 'flex';
-      }
-      };
+    }
+  };
 
-      // Alias para mantener compatibilidad
-      window.abrirModalRecetaCliente = window.abrirModalPersonalizar;
+  // Alias para mantener compatibilidad
+  window.abrirModalRecetaCliente = window.abrirModalPersonalizar;
 
-      window.actualizarModalPersonalizarUI = function() {
-      const state = window.modalPersonalizacionState;
-      if (!state.prod) return;
+  window.actualizarModalPersonalizarUI = function() {
+    const state = window.modalPersonalizacionState;
+    if (!state.prod) return;
 
-      let extraSum = 0;
-      if (state.termino &amp;&amp; state.termino.includes('(+ $10)')) extraSum += 10;
-      if (state.termino &amp;&amp; state.termino.includes('(+ $15)')) extraSum += 15;
-      state.extras.forEach(e => { extraSum += e.precio; });
+    let extraSum = 0;
+    if (state.termino &amp;&amp; state.termino.includes('(+ $10)')) extraSum += 10;
+    if (state.termino &amp;&amp; state.termino.includes('(+ $15)')) extraSum += 15;
+    state.extras.forEach(e => { extraSum += e.precio; });
 
-      state.extraPrecioTotal = extraSum;
-      const unitPrice = Number(state.prod.precio_unitario) + extraSum;
-      const totalOrder = unitPrice * state.cantidad;
+    state.extraPrecioTotal = extraSum;
+    const unitPrice = Number(state.prod.precio_unitario) + extraSum;
+    const totalOrder = unitPrice * state.cantidad;
 
-      const btnTxt = document.getElementById('btnModalConfirmarTxt');
-      if (btnTxt) {
+    const btnTxt = document.getElementById('btnModalConfirmarTxt');
+    if (btnTxt) {
       btnTxt.innerText = `Agregar ${state.cantidad} a Mi Pedido • $${totalOrder.toFixed(2)}`;
-      }
-      };
+    }
+  };
 
-      window.cambiarCantidadModal = function(delta) {
-      const state = window.modalPersonalizacionState;
-      state.cantidad = Math.max(1, (state.cantidad || 1) + delta);
-      document.getElementById('txtModalCantidad').innerText = state.cantidad;
-      window.actualizarModalPersonalizarUI();
-      };
+  window.cambiarCantidadModal = function(delta) {
+    const state = window.modalPersonalizacionState;
+    state.cantidad = Math.max(1, (state.cantidad || 1) + delta);
+    document.getElementById('txtModalCantidad').innerText = state.cantidad;
+    window.actualizarModalPersonalizarUI();
+  };
 
-      window.confirmarAgregarPlatilloPersonalizado = function() {
-      const state = window.modalPersonalizacionState;
-      if (!state.prod) return;
+  window.confirmarAgregarPlatilloPersonalizado = function() {
+    const state = window.modalPersonalizacionState;
+    if (!state.prod) return;
 
-      const prod = state.prod;
-      const cuentas = getStorageCuentas();
-      const mesaId = window.simMesaId || 1;
-      const dest = window.destinoPedido || 'mi_silla';
-      let key = '';
-      let comensalNom = '';
-      let qrId = '';
-      let esCentro = false;
-      let sillaNum = window.simSillaNum;
+    const prod = state.prod;
+    const cuentas = getStorageCuentas();
+    const mesaId = window.simMesaId || 1;
+    const dest = window.destinoPedido || 'mi_silla';
+    let key = '';
+    let comensalNom = '';
+    let qrId = '';
+    let esCentro = false;
+    let sillaNum = window.simSillaNum;
 
-      if (dest === 'centro') {
+    if (dest === 'centro') {
       key = mesaId + '-centro';
       comensalNom = `Mesa ${mesaId} (Al Centro / Compartido)`;
       qrId = `MESA-0${mesaId}`;
       esCentro = true;
       sillaNum = 0;
-      } else if (dest === 'mi_silla' || dest === window.simSillaNum) {
+    } else if (dest === 'mi_silla' || dest === window.simSillaNum) {
       key = mesaId + '-' + window.simSillaNum;
       comensalNom = `Comensal Silla ${window.simSillaNum}`;
       qrId = `PV-0${mesaId}${window.simSillaNum}`;
       sillaNum = window.simSillaNum;
-      } else {
+    } else {
       sillaNum = parseInt(dest);
       key = mesaId + '-' + sillaNum;
       comensalNom = `Comensal Silla ${sillaNum}`;
       qrId = `PV-0${mesaId}${sillaNum}`;
-      }
+    }
 
-      if (!cuentas[key]) {
+    if (!cuentas[key]) {
       cuentas[key] = {
-      id: Date.now(),
-      mesaId: mesaId,
-      sillaNum: sillaNum,
-      esCentro: esCentro,
-      qrId: qrId,
-      comensalNombre: comensalNom,
-      items: [],
-      estado: 'ocupada',
-      creadoPor: 'cliente_qr',
-      horaApertura: (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        id: Date.now(),
+        mesaId: mesaId,
+        sillaNum: sillaNum,
+        esCentro: esCentro,
+        qrId: qrId,
+        comensalNombre: comensalNom,
+        items: [],
+        estado: 'ocupada',
+        creadoPor: 'cliente_qr',
+        horaApertura: (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       };
-      }
+    }
 
-      // Armar detalle de personalización en notas
-      const partesNotas = [];
-      if (state.termino) partesNotas.push(state.termino);
-      if (state.preferencias &amp;&amp; state.preferencias.length > 0) partesNotas.push(state.preferencias.join(', '));
-      if (state.extras &amp;&amp; state.extras.length > 0) partesNotas.push(state.extras.map(e => e.nombre).join(', '));
-      const notasLibres = (document.getElementById('txtModalNotasEspeciales').value || '').trim();
-      if (notasLibres) partesNotas.push(`Nota: ${notasLibres}`);
+    // Armar detalle de personalización en notas
+    const partesNotas = [];
+    if (state.termino) partesNotas.push(state.termino);
+    if (state.preferencias &amp;&amp; state.preferencias.length > 0) partesNotas.push(state.preferencias.join(', '));
+    if (state.extras &amp;&amp; state.extras.length > 0) partesNotas.push(state.extras.map(e => e.nombre).join(', '));
+    const notasLibres = (document.getElementById('txtModalNotasEspeciales').value || '').trim();
+    if (notasLibres) partesNotas.push(`Nota: ${notasLibres}`);
 
-      const notasFinales = partesNotas.join(' • ');
-      const precioFinalUnit = Number(prod.precio_unitario) + state.extraPrecioTotal;
+    const notasFinales = partesNotas.join(' • ');
+    const precioFinalUnit = Number(prod.precio_unitario) + state.extraPrecioTotal;
 
-      const items = cuentas[key].items || [];
-      items.push({
+    const items = cuentas[key].items || [];
+    items.push({
       id: Date.now(),
       productoId: prod.id,
       nombre: prod.nombre,
@@ -2110,53 +2127,53 @@
       esCentro: esCentro,
       enviadoCocina: false,
       hora: (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-      });
+    });
 
-      cuentas[key].items = items;
-      cuentas[key].estado = 'ocupada';
+    cuentas[key].items = items;
+    cuentas[key].estado = 'ocupada';
 
-      saveStorageCuentas(cuentas);
-      window.sincronizarCuentaDesdeStorage();
-      window.cerrarModalRecetaCliente();
+    saveStorageCuentas(cuentas);
+    window.sincronizarCuentaDesdeStorage();
+    window.cerrarModalRecetaCliente();
 
-      // Sincronizar inmediatamente con el servidor de Anvil
-      try {
+    // Sincronizar inmediatamente con el servidor de Anvil
+    try {
       if (window.anvilSyncCuenta) {
-      window.anvilSyncCuenta(mesaId, sillaNum, JSON.stringify(cuentas[key].items), 'ocupada');
+        window.anvilSyncCuenta(mesaId, sillaNum, JSON.stringify(cuentas[key].items), 'ocupada');
       }
-      } catch(e) {
+    } catch(e) {
       console.error('Error sincronizando con Anvil:', e);
-      }
-      };
+    }
+  };
 
-      window.cerrarModalRecetaCliente = function() {
-      const modal = document.getElementById('modalRecetaClienteBackdrop');
-      if (modal) {
+  window.cerrarModalRecetaCliente = function() {
+    const modal = document.getElementById('modalRecetaClienteBackdrop');
+    if (modal) {
       modal.style.display = 'none';
-      }
-      };
+    }
+  };
 
-      window.navMenu = function (modulo) {
-      if (window.anvilAppNav) {
+  window.navMenu = function (modulo) {
+    if (window.anvilAppNav) {
       window.anvilAppNav(modulo);
-      } else {
+    } else {
       alert(`Navegación a módulo: ${modulo}`);
-      }
-      };
+    }
+  };
 
-      window.detectarParametrosQrUrl = function() {
-      try {
+  window.detectarParametrosQrUrl = function() {
+    try {
       var params = new URLSearchParams(window.location.search);
       var hash = window.location.hash || '';
 
       if (hash.includes('?')) {
-      var hashQuery = hash.substring(hash.indexOf('?') + 1);
-      var hashParams = new URLSearchParams(hashQuery);
-      hashParams.forEach(function(val, key) {
-      params.set(key, val);
-      });
+        var hashQuery = hash.substring(hash.indexOf('?') + 1);
+        var hashParams = new URLSearchParams(hashQuery);
+        hashParams.forEach(function(val, key) {
+          params.set(key, val);
+        });
       } else if (hash.startsWith('#PV-') || hash.startsWith('#MESA-')) {
-      params.set('qr', hash.replace('#', ''));
+        params.set('qr', hash.replace('#', ''));
       }
 
       var mesaParam = params.get('mesa');
@@ -2164,45 +2181,45 @@
       var qrParam = params.get('qr');
 
       if (qrParam &amp;&amp; (!mesaParam || !sillaParam)) {
-      var match = qrParam.match(/PV-0?(\d)(\d)/i);
-      if (match) {
-      mesaParam = match[1];
-      sillaParam = match[2];
-      }
+        var match = qrParam.match(/PV-0?(\d)(\d)/i);
+        if (match) {
+          mesaParam = match[1];
+          sillaParam = match[2];
+        }
       }
 
       if (mesaParam &amp;&amp; sillaParam) {
-      var m = parseInt(mesaParam);
-      var s = parseInt(sillaParam);
-      if (!isNaN(m) &amp;&amp; !isNaN(s)) {
-      window.simMesaId = m;
-      window.simSillaNum = s;
-      window.destinoPedido = 'mi_silla';
-      try {
-      if (window.anvilCheckinSilla) {
-      window.anvilCheckinSilla(m, s, qrParam || ('PV-0' + m + s));
+        var m = parseInt(mesaParam);
+        var s = parseInt(sillaParam);
+        if (!isNaN(m) &amp;&amp; !isNaN(s)) {
+          window.simMesaId = m;
+          window.simSillaNum = s;
+          window.destinoPedido = 'mi_silla';
+          try {
+            if (window.anvilCheckinSilla) {
+              window.anvilCheckinSilla(m, s, qrParam || ('PV-0' + m + s));
+            }
+          } catch(err) {
+            console.error('Error invoking anvilCheckinSilla from JS:', err);
+          }
+        }
       }
-      } catch(err) {
-      console.error('Error invoking anvilCheckinSilla from JS:', err);
-      }
-      }
-      }
-      } catch (e) {
+    } catch (e) {
       console.error('Error detectando QR de la URL:', e);
-      }
-      };
+    }
+  };
 
-      function initImmediate() {
-      window.cargarDatosMenu(window.vsMenuData, window.vsCategoriasData);
-      window.detectarParametrosQrUrl();
-      window.sincronizarCuentaDesdeStorage();
-      }
+  function initImmediate() {
+    window.cargarDatosMenu(window.vsMenuData, window.vsCategoriasData);
+    window.detectarParametrosQrUrl();
+    window.sincronizarCuentaDesdeStorage();
+  }
 
-      if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initImmediate);
-      } else {
-      initImmediate();
-      }
-      setTimeout(initImmediate, 10);
-      setTimeout(initImmediate, 100);
-      </script>"></anvil-form>
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initImmediate);
+  } else {
+    initImmediate();
+  }
+  setTimeout(initImmediate, 10);
+  setTimeout(initImmediate, 100);
+</script>"></anvil-form>

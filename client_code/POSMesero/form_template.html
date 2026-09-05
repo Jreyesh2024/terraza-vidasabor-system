@@ -936,7 +936,7 @@
         </span>
         <span id=&quot;popMenuMesaCentroTotalBadge&quot; style=&quot;font-weight: 900; font-size: 14px; color: #fde047;&quot;>$0.00</span>
       </div>
-
+      
       <div id=&quot;popMenuMesaCentroItemsList&quot; style=&quot;display: flex; flex-direction: column; gap: 5px; font-size: 11px; max-height: 140px; overflow-y: auto;&quot;>
         <!-- Lista de platillos pedidos al centro -->
       </div>
@@ -994,7 +994,7 @@
 <div id=&quot;modalPrecuentaBackdrop&quot; onclick=&quot;if (event.target === this) window.cerrarPrecuenta();&quot;>
   <div
     style=&quot;background: #ffffff !important; color: #0f172a !important; border-radius: 18px !important; padding: 22px !important; width: 100% !important; max-width: 480px !important; max-height: 92vh !important; overflow-y: auto !important; box-shadow: 0 25px 50px rgba(0,0,0,0.85) !important; font-family: 'Courier New', Courier, monospace !important; display: flex !important; flex-direction: column !important; gap: 10px !important;&quot;>
-
+    
     <!-- Encabezado Térmico -->
     <div style=&quot;text-align: center !important; border-bottom: 1px dashed #94a3b8 !important; padding-bottom: 8px !important;&quot;>
       <h3 style=&quot;font-size: 16px !important; font-weight: 900 !important; margin: 0 !important; text-transform: uppercase !important; color: #0f172a !important;&quot;>
@@ -2161,7 +2161,7 @@
       Object.keys(cuentasServidor).forEach(function(k) {
         var srv = cuentasServidor[k];
         if (!srv) return;
-
+        
         if (!window.palapaState.cuentas[k]) {
           window.palapaState.cuentas[k] = JSON.parse(JSON.stringify(srv));
           changed = true;
@@ -2200,16 +2200,27 @@
     };
 
     // Auto-polling en segundo plano para sincronizar check-ins de comensales en tiempo real
+    // NOTA: window.anvilGetCuentasServidor() devuelve una Promise (bridge Anvil JS→Python es async)
+    var _syncInFlight = false;
     setInterval(function() {
+      if (_syncInFlight) return; // evitar solapamiento de requests
       try {
         if (window.anvilGetCuentasServidor) {
-          var srvData = window.anvilGetCuentasServidor();
-          if (srvData) {
-            window.aplicarCuentasServidor(srvData);
+          _syncInFlight = true;
+          var maybePromise = window.anvilGetCuentasServidor();
+          // Manejar tanto Promise como valor síncrono (compatibilidad)
+          if (maybePromise &amp;&amp; typeof maybePromise.then === 'function') {
+            maybePromise.then(function(srvData) {
+              _syncInFlight = false;
+              if (srvData) { window.aplicarCuentasServidor(srvData); }
+            }).catch(function(e) { _syncInFlight = false; });
+          } else {
+            _syncInFlight = false;
+            if (maybePromise) { window.aplicarCuentasServidor(maybePromise); }
           }
         }
-      } catch (e) { }
-    }, 3000);
+      } catch (e) { _syncInFlight = false; }
+    }, 2000);
 
     function resetDemoState() {
       var initial = JSON.parse(JSON.stringify(DEFAULT_CUENTAS));
@@ -2855,7 +2866,7 @@
           itemsCentro.forEach(it => {
             const row = document.createElement('div');
             row.style.cssText = 'display: flex; justify-content: space-between; align-items: center; padding: 4px 8px; background: rgba(0,0,0,0.25); border-radius: 8px; border: 1px dashed rgba(234,179,8,0.25);';
-
+            
             let statusBadge = it.enviadoCocina ? `<span style=&quot;color: #34d399; font-size: 9px; font-weight: 800;&quot;>🟢 ${it.estadoCocina || 'Recibido'}</span>` : `<span style=&quot;color: #f59e0b; font-size: 9px; font-weight: 800;&quot;>⏳ Por Enviar</span>`;
 
             row.innerHTML = `
@@ -4538,7 +4549,7 @@
         // 1. TICKET DEL ANFITRIÓN
         var anfitrionBlock = document.createElement('div');
         anfitrionBlock.style.cssText = 'background: rgba(16, 185, 129, 0.12) !important; border: 2px solid #059669 !important; border-radius: 10px !important; padding: 8px 10px !important; margin-bottom: 6px !important;';
-
+        
         var anfitrionItemsDesc = [
           { nombre: `🥘 Total Alimentos de Toda la Mesa (${sillasActivas.length} comensales + centro)`, cantidad: 1, precio: totalAlimentosMesa, notas: 'Cubierto por el anfitrión' }
         ];
@@ -4747,7 +4758,7 @@
 
         var fullBlock = document.createElement('div');
         fullBlock.style.cssText = 'border: 1px solid #cbd5e1 !important; border-radius: 8px !important; padding: 8px !important; background: #ffffff !important;';
-
+        
         fullBlock.innerHTML = `
           <div style=&quot;font-size: 11px; font-weight: 900; color: #0f172a; margin-bottom: 6px;&quot;>DESGLOSE COMPLETO:</div>
           <div style=&quot;display: flex; flex-direction: column; gap: 3px; font-size: 10px; color: #334155;&quot;>
