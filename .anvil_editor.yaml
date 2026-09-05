@@ -1,6 +1,7 @@
 unique_ids:
   assets:
     menu.html: JEU4WN6EKVHPPS277B6E2WV2CR5QEKRS
+    pos_mesero.js: FQMAU2VTY7WLIN5LJSGNGVBSOSAOUT3Q
     standard-page.html: ZG3CH43UINNPSYVYDUAPNVUIKLLLBUQ7
     theme.css: BABMBJRVSJA3SPOO4U7IHA6TIN27CWQ5
   forms:
@@ -11,6 +12,7 @@ unique_ids:
     MonitorFiscal: UV7QGHD333KEVFOQAB3JB7TODUT6URPQ
     POSMesero: BVTQMNYG3WE4MO6VY4QFUGEJUYEAHUOM
   modules: {}
-  scripts: {}
+  scripts:
+    generar_qrs_portavasos: VOYMNEJQQTRRGOOOONSFFVP2LMSVALTF
   server_modules:
     ServerModule1: FE4LGYQYXT3FOJFM7K7VKJ7WHVXU5N77

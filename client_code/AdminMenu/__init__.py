@@ -8,28 +8,35 @@ class AdminMenu(AdminMenuTemplate):
   def __init__(self, **properties):
     self.init_components(**properties)
     try:
-      # Exponer funciones de navegación y acción directamente en window
-      # NOTA: Anvil no ejecuta <script> en HtmlTemplate, por eso se define
-      # window.navMenu desde Python para que siempre esté disponible.
-      anvil.js.window.navMenu = self.navegar_modulo
       anvil.js.window.anvilAppNav = self.navegar_modulo
       anvil.js.window.anvilGuardarProducto = self.guardar_producto_db
       anvil.js.window.anvilCambiarDisp = self.cambiar_disponibilidad_db
       anvil.js.window.anvilCargarDashboard = self.cargar_dashboard
-      # Exponer modales (fallback no-op para que no exploten botones de modal)
-      for fn_name in ['abrirModalAdminMenu', 'cerrarModalAdminMenu',
-                      'abrirModalPersonal', 'cerrarModalPersonal',
-                      'abrirModalInventario', 'cerrarModalInventario',
-                      'abrirModalCajaChica', 'cerrarModalCajaChica',
-                      'guardarPlatilloDB', 'nuevoPlatilloForm',
-                      'filtrarListaPlatillos']:
-        if not getattr(anvil.js.window, fn_name, None):
-          anvil.js.window[fn_name] = lambda *a, _n=fn_name: print(f"[AdminMenu] {_n} llamado")
-    except Exception as e:
-      print(f"[AdminMenu] Error exponiendo funciones en window: {e}")
+    except Exception:
+      pass
 
-    # Ejecutar scripts de plantilla directamente en el DOM
-    self.ejecutar_scripts_template()
+    # Enrutamiento inteligente por URL hash
+    try:
+      url_hash = anvil.get_url_hash()
+      if isinstance(url_hash, str) and url_hash:
+        url_lower = url_hash.lower()
+        if 'pos' in url_lower or 'palapa' in url_lower:
+          anvil.open_form('POSMesero')
+          return
+        elif 'kds' in url_lower or 'monitor_cocina' in url_lower or 'cocina' in url_lower:
+          anvil.open_form('MonitorCocina')
+          return
+        elif 'menu' in url_lower or 'qr' in url_lower or 'mesa=' in url_lower or 'silla=' in url_lower or 'pv-' in url_lower or 'cliente' in url_lower:
+          anvil.open_form('Menu')
+          return
+        elif 'fiscal' in url_lower or 'monitor_fiscal' in url_lower:
+          anvil.open_form('MonitorFiscal')
+          return
+        elif 'lealtad' in url_lower or 'rewards' in url_lower:
+          anvil.open_form('ClientesLealtad')
+          return
+    except Exception as e:
+      print(f"Error procesando enrutamiento en AdminMenu: {e}")
 
     # Cargar datos iniciales del Dashboard
     self.cargar_dashboard()
@@ -86,27 +93,3 @@ class AdminMenu(AdminMenuTemplate):
       target_form = 'AdminMenu'
 
     anvil.open_form(target_form)
-
-  def ejecutar_scripts_template(self):
-    try:
-      dom = anvil.js.get_dom_node(self)
-      if not dom:
-        return
-      doc = anvil.js.window.document
-      scripts = dom.querySelectorAll('script')
-      count = int(scripts.length) if hasattr(scripts, 'length') else len(scripts)
-      for i in range(count):
-        s = scripts.item(i) if hasattr(scripts, 'item') else scripts[i]
-        if not s.getAttribute('data-executed'):
-          s.setAttribute('data-executed', 'true')
-          code = str(s.textContent)
-          if code and code.strip():
-            try:
-              anvil.js.window.eval(code)
-            except Exception:
-              new_script = doc.createElement('script')
-              new_script.textContent = code
-              doc.head.appendChild(new_script)
-              doc.head.removeChild(new_script)
-    except Exception as e:
-      print(f"[AdminMenu] Error en ejecutar_scripts_template: {e}")

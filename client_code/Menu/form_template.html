@@ -1,6 +1,5 @@
-<anvil-form container="HtmlTemplate" prop:html="">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<anvil-form container="HtmlTemplate" prop:html="<link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css&quot;>
+<link rel=&quot;stylesheet&quot; href=&quot;https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css&quot;>
 <style>
   body,
   html {
@@ -17,13 +16,13 @@
 
 
 
-<!-- TAILWIND CSS CDN INJECTION & FONTS -->
-<script src="https://cdn.tailwindcss.com"></script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
-  rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<!-- TAILWIND CSS CDN INJECTION &amp; FONTS -->
+<script src=&quot;https://cdn.tailwindcss.com&quot;></script>
+<link rel=&quot;preconnect&quot; href=&quot;https://fonts.googleapis.com&quot;>
+<link rel=&quot;preconnect&quot; href=&quot;https://fonts.gstatic.com&quot; crossorigin>
+<link href=&quot;https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;display=swap&quot;
+  rel=&quot;stylesheet&quot;>
+<link rel=&quot;stylesheet&quot; href=&quot;https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css&quot;>
 
 <style>
   body,
@@ -51,122 +50,122 @@
   }
 </style>
 
-<div class="min-h-screen bg-[#090d16] text-slate-100 flex flex-col font-sans">
+<div class=&quot;min-h-screen bg-[#090d16] text-slate-100 flex flex-col font-sans&quot;>
 
-  <!-- HEADER BAR / BRANDING V&S (DESTACADO Y AMPLIADO) -->
-  <header class="glass-nav sticky top-0 z-50 px-6 py-5 flex flex-wrap items-center justify-between gap-4 shadow-xl">
-    <div class="flex items-center gap-3.5">
+  <!-- HEADER BAR / BRANDING V&amp;S (DESTACADO Y AMPLIADO) -->
+  <header class=&quot;glass-nav sticky top-0 z-50 px-6 py-5 flex flex-wrap items-center justify-between gap-4 shadow-xl&quot;>
+    <div class=&quot;flex items-center gap-3.5&quot;>
       <div
-        class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-emerald-500 to-teal-700 flex items-center justify-center font-black text-2xl text-white shadow-lg brand-glow flex-shrink-0">
-        V&S
+        class=&quot;w-12 h-12 rounded-2xl bg-gradient-to-tr from-emerald-500 to-teal-700 flex items-center justify-center font-black text-2xl text-white shadow-lg brand-glow flex-shrink-0&quot;>
+        V&amp;S
       </div>
       <div>
-        <h1 class="text-xl font-black tracking-tight text-white">La Terraza de Vida & Sabor</h1>
-        <p class="text-xs text-emerald-400 font-bold">Menú Digital & Comandas en Mesa</p>
+        <h1 class=&quot;text-xl font-black tracking-tight text-white&quot;>La Terraza de Vida &amp; Sabor</h1>
+        <p class=&quot;text-xs text-emerald-400 font-bold&quot;>Menú Digital &amp; Comandas en Mesa</p>
       </div>
     </div>
 
     <!-- ACCIONES RÁPIDAS DEL COMENSAL EN EL HEADER -->
-    <div class="flex items-center gap-1.5 sm:gap-2">
-      <button onclick="window.mostrarVistaHubMesa()"
-        title="Volver a Mi Silla"
-        class="px-2.5 py-1.5 sm:px-3 sm:py-2 text-xs font-black rounded-xl bg-emerald-950/80 border border-emerald-500/50 text-emerald-300 hover:bg-emerald-900/80 transition flex items-center gap-1.5 shadow-sm cursor-pointer">
-        <i class="fa-solid fa-chair text-emerald-400 text-xs"></i> <span>Mi Silla</span>
+    <div class=&quot;flex items-center gap-1.5 sm:gap-2&quot;>
+      <button onclick=&quot;window.mostrarVistaHubMesa()&quot;
+        title=&quot;Volver a Mi Silla&quot;
+        class=&quot;px-2.5 py-1.5 sm:px-3 sm:py-2 text-xs font-black rounded-xl bg-emerald-950/80 border border-emerald-500/50 text-emerald-300 hover:bg-emerald-900/80 transition flex items-center gap-1.5 shadow-sm cursor-pointer&quot;>
+        <i class=&quot;fa-solid fa-chair text-emerald-400 text-xs&quot;></i> <span>Mi Silla</span>
       </button>
-      <button onclick="window.solicitarAtencionMesero()"
-        title="Llamar al Mesero"
-        class="px-2.5 py-1.5 sm:px-3 sm:py-2 text-xs font-black rounded-xl bg-amber-500/20 border border-amber-500/50 text-amber-300 hover:bg-amber-500/30 transition flex items-center gap-1.5 shadow-sm cursor-pointer">
-        <i class="fa-solid fa-bell text-amber-400 text-xs"></i> <span>Mesero</span>
+      <button onclick=&quot;window.solicitarAtencionMesero()&quot;
+        title=&quot;Llamar al Mesero&quot;
+        class=&quot;px-2.5 py-1.5 sm:px-3 sm:py-2 text-xs font-black rounded-xl bg-amber-500/20 border border-amber-500/50 text-amber-300 hover:bg-amber-500/30 transition flex items-center gap-1.5 shadow-sm cursor-pointer&quot;>
+        <i class=&quot;fa-solid fa-bell text-amber-400 text-xs&quot;></i> <span>Mesero</span>
       </button>
-      <button onclick="window.solicitarCuentaComensal()"
-        title="Pedir la Cuenta"
-        class="px-2.5 py-1.5 sm:px-3 sm:py-2 text-xs font-black rounded-xl bg-sky-500/20 border border-sky-500/50 text-sky-300 hover:bg-sky-500/30 transition flex items-center gap-1.5 shadow-sm cursor-pointer">
-        <i class="fa-solid fa-receipt text-sky-400 text-xs"></i> <span>Cuenta</span>
+      <button onclick=&quot;window.solicitarCuentaComensal()&quot;
+        title=&quot;Pedir la Cuenta&quot;
+        class=&quot;px-2.5 py-1.5 sm:px-3 sm:py-2 text-xs font-black rounded-xl bg-sky-500/20 border border-sky-500/50 text-sky-300 hover:bg-sky-500/30 transition flex items-center gap-1.5 shadow-sm cursor-pointer&quot;>
+        <i class=&quot;fa-solid fa-receipt text-sky-400 text-xs&quot;></i> <span>Cuenta</span>
       </button>
     </div>
   </header>
 
   <!-- PANTALLA PRINCIPAL: HUB DE BIENVENIDA A TU MESA (SIMPLIFICADA) -->
-  <div id="vistaHubMesa" class="flex-1 w-full max-w-2xl mx-auto p-4 sm:p-6 flex flex-col gap-5 justify-center">
-    
-    <!-- TARJETA HERO COMPACTA (SOLO LUGAR Y QR) -->
-    <div class="glass-card p-6 sm:p-8 rounded-3xl border border-slate-700/80 shadow-2xl relative overflow-hidden text-center flex flex-col items-center gap-3">
-      <div class="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-emerald-500 via-teal-500 to-amber-500"></div>
+  <div id=&quot;vistaHubMesa&quot; class=&quot;flex-1 w-full max-w-2xl mx-auto p-4 sm:p-6 flex flex-col gap-5 justify-center&quot;>
 
-      <div class="flex flex-wrap items-center justify-center gap-2">
-        <span class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 font-black text-xs border border-emerald-500/40 shadow-sm">
-          <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span> SILLA OCUPADA
+    <!-- TARJETA HERO COMPACTA (SOLO LUGAR Y QR) -->
+    <div class=&quot;glass-card p-6 sm:p-8 rounded-3xl border border-slate-700/80 shadow-2xl relative overflow-hidden text-center flex flex-col items-center gap-3&quot;>
+      <div class=&quot;absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-emerald-500 via-teal-500 to-amber-500&quot;></div>
+
+      <div class=&quot;flex flex-wrap items-center justify-center gap-2&quot;>
+        <span class=&quot;inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 font-black text-xs border border-emerald-500/40 shadow-sm&quot;>
+          <span class=&quot;w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse&quot;></span> SILLA OCUPADA
         </span>
-        <span class="text-xs text-slate-400 font-bold bg-slate-900/90 px-3 py-1 rounded-full border border-slate-700" id="lblQrActivo">
+        <span class=&quot;text-xs text-slate-400 font-bold bg-slate-900/90 px-3 py-1 rounded-full border border-slate-700&quot; id=&quot;lblQrActivo&quot;>
           Portavasos #PV-011
         </span>
       </div>
 
-      <h1 class="text-2xl sm:text-3xl font-black text-white tracking-tight" id="lblUbicacionActiva">
-        ¡Hola! Estás en la <span class="text-emerald-400">Mesa 1 • Silla 1</span>
+      <h1 class=&quot;text-2xl sm:text-3xl font-black text-white tracking-tight&quot; id=&quot;lblUbicacionActiva&quot;>
+        ¡Hola! Estás en la <span class=&quot;text-emerald-400&quot;>Mesa 1 • Silla 1</span>
       </h1>
     </div>
 
     <!-- TARJETAS DE ACCIÓN PRINCIPALES DEL COMENSAL (4 ACCIONES DIRECTAS EN 2x2) -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-      
+    <div class=&quot;grid grid-cols-1 sm:grid-cols-2 gap-4&quot;>
+
       <!-- 1. ORDENAR PARA MI SILLA -->
-      <button type="button" onclick="window.abrirCatalogoConDestino('mi_silla')"
-        class="glass-card p-5 rounded-2xl border border-emerald-500/40 hover:border-emerald-400 hover:bg-emerald-950/20 text-left transition flex flex-col justify-between gap-3 cursor-pointer shadow-lg group">
-        <div class="flex items-center justify-between w-full">
-          <div class="w-12 h-12 rounded-2xl bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-2xl text-emerald-400 group-hover:scale-110 transition">
+      <button type=&quot;button&quot; onclick=&quot;window.abrirCatalogoConDestino('mi_silla')&quot;
+        class=&quot;glass-card p-5 rounded-2xl border border-emerald-500/40 hover:border-emerald-400 hover:bg-emerald-950/20 text-left transition flex flex-col justify-between gap-3 cursor-pointer shadow-lg group&quot;>
+        <div class=&quot;flex items-center justify-between w-full&quot;>
+          <div class=&quot;w-12 h-12 rounded-2xl bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-2xl text-emerald-400 group-hover:scale-110 transition&quot;>
             🍳
           </div>
-          <i class="fa-solid fa-arrow-right text-emerald-400 text-xs group-hover:translate-x-1 transition"></i>
+          <i class=&quot;fa-solid fa-arrow-right text-emerald-400 text-xs group-hover:translate-x-1 transition&quot;></i>
         </div>
         <div>
-          <h3 class="text-base font-black text-white">Ordenar a Mi Silla</h3>
-          <p class="text-xs text-slate-400 mt-1 leading-relaxed">Bebidas, cafés, huevos y platillos individuales a tu cuenta personal.</p>
+          <h3 class=&quot;text-base font-black text-white&quot;>Ordenar a Mi Silla</h3>
+          <p class=&quot;text-xs text-slate-400 mt-1 leading-relaxed&quot;>Bebidas, cafés, huevos y platillos individuales a tu cuenta personal.</p>
         </div>
       </button>
 
       <!-- 2. PEDIR AL CENTRO (COMPARTIR) -->
-      <button type="button" onclick="window.abrirCatalogoConDestino('centro')"
-        class="glass-card p-5 rounded-2xl border border-amber-500/40 hover:border-amber-400 hover:bg-amber-950/20 text-left transition flex flex-col justify-between gap-3 cursor-pointer shadow-lg group">
-        <div class="flex items-center justify-between w-full">
-          <div class="w-12 h-12 rounded-2xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-2xl text-amber-400 group-hover:scale-110 transition">
+      <button type=&quot;button&quot; onclick=&quot;window.abrirCatalogoConDestino('centro')&quot;
+        class=&quot;glass-card p-5 rounded-2xl border border-amber-500/40 hover:border-amber-400 hover:bg-amber-950/20 text-left transition flex flex-col justify-between gap-3 cursor-pointer shadow-lg group&quot;>
+        <div class=&quot;flex items-center justify-between w-full&quot;>
+          <div class=&quot;w-12 h-12 rounded-2xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-2xl text-amber-400 group-hover:scale-110 transition&quot;>
             🍲
           </div>
-          <i class="fa-solid fa-arrow-right text-amber-400 text-xs group-hover:translate-x-1 transition"></i>
+          <i class=&quot;fa-solid fa-arrow-right text-amber-400 text-xs group-hover:translate-x-1 transition&quot;></i>
         </div>
         <div>
-          <h3 class="text-base font-black text-white">Pedir al Centro</h3>
-          <p class="text-xs text-slate-400 mt-1 leading-relaxed">Botanas, chilaquiles o jarras para compartir con todos en tu mesa.</p>
+          <h3 class=&quot;text-base font-black text-white&quot;>Pedir al Centro</h3>
+          <p class=&quot;text-xs text-slate-400 mt-1 leading-relaxed&quot;>Botanas, chilaquiles o jarras para compartir con todos en tu mesa.</p>
         </div>
       </button>
 
       <!-- 3. MI COMANDA (PERSONAL) -->
-      <button type="button" onclick="window.mostrarVistaComanda()"
-        class="glass-card p-5 rounded-2xl border border-sky-500/40 hover:border-sky-400 hover:bg-sky-950/20 text-left transition flex flex-col justify-between gap-3 cursor-pointer shadow-lg group">
-        <div class="flex items-center justify-between w-full">
-          <div class="w-12 h-12 rounded-2xl bg-sky-500/20 border border-sky-500/40 flex items-center justify-center text-2xl text-sky-400 group-hover:scale-110 transition">
+      <button type=&quot;button&quot; onclick=&quot;window.mostrarVistaComanda()&quot;
+        class=&quot;glass-card p-5 rounded-2xl border border-sky-500/40 hover:border-sky-400 hover:bg-sky-950/20 text-left transition flex flex-col justify-between gap-3 cursor-pointer shadow-lg group&quot;>
+        <div class=&quot;flex items-center justify-between w-full&quot;>
+          <div class=&quot;w-12 h-12 rounded-2xl bg-sky-500/20 border border-sky-500/40 flex items-center justify-center text-2xl text-sky-400 group-hover:scale-110 transition&quot;>
             🧾
           </div>
-          <span class="text-xs font-black text-sky-400 bg-sky-950/80 px-2 py-0.5 rounded-md border border-sky-500/30" id="lblHubTotalComanda">$0.00</span>
+          <span class=&quot;text-xs font-black text-sky-400 bg-sky-950/80 px-2 py-0.5 rounded-md border border-sky-500/30&quot; id=&quot;lblHubTotalComanda&quot;>$0.00</span>
         </div>
         <div>
-          <h3 class="text-base font-black text-white">Mi Comanda (Personal)</h3>
-          <p class="text-xs text-slate-400 mt-1 leading-relaxed">Tus pedidos individuales, consulta de tu saldo personal y envío a cocina.</p>
+          <h3 class=&quot;text-base font-black text-white&quot;>Mi Comanda (Personal)</h3>
+          <p class=&quot;text-xs text-slate-400 mt-1 leading-relaxed&quot;>Tus pedidos individuales, consulta de tu saldo personal y envío a cocina.</p>
         </div>
       </button>
 
       <!-- 4. COMANDA DE LA MESA (AL CENTRO) -->
-      <button type="button" onclick="window.mostrarVistaComandaMesa()"
-        class="glass-card p-5 rounded-2xl border border-yellow-500/40 hover:border-yellow-400 hover:bg-yellow-950/20 text-left transition flex flex-col justify-between gap-3 cursor-pointer shadow-lg group">
-        <div class="flex items-center justify-between w-full">
-          <div class="w-12 h-12 rounded-2xl bg-yellow-500/20 border border-yellow-500/40 flex items-center justify-center text-2xl text-yellow-400 group-hover:scale-110 transition">
+      <button type=&quot;button&quot; onclick=&quot;window.mostrarVistaComandaMesa()&quot;
+        class=&quot;glass-card p-5 rounded-2xl border border-yellow-500/40 hover:border-yellow-400 hover:bg-yellow-950/20 text-left transition flex flex-col justify-between gap-3 cursor-pointer shadow-lg group&quot;>
+        <div class=&quot;flex items-center justify-between w-full&quot;>
+          <div class=&quot;w-12 h-12 rounded-2xl bg-yellow-500/20 border border-yellow-500/40 flex items-center justify-center text-2xl text-yellow-400 group-hover:scale-110 transition&quot;>
             ⭐
           </div>
-          <span class="text-xs font-black text-yellow-400 bg-yellow-950/80 px-2 py-0.5 rounded-md border border-yellow-500/30" id="lblHubTotalMesaCentro">$0.00</span>
+          <span class=&quot;text-xs font-black text-yellow-400 bg-yellow-950/80 px-2 py-0.5 rounded-md border border-yellow-500/30&quot; id=&quot;lblHubTotalMesaCentro&quot;>$0.00</span>
         </div>
         <div>
-          <h3 class="text-base font-black text-white">Comanda de la Mesa</h3>
-          <p class="text-xs text-slate-400 mt-1 leading-relaxed">Platillos al centro compartidos por todos. Nadie los tiene cargados individualmente.</p>
+          <h3 class=&quot;text-base font-black text-white&quot;>Comanda de la Mesa</h3>
+          <p class=&quot;text-xs text-slate-400 mt-1 leading-relaxed&quot;>Platillos al centro compartidos por todos. Nadie los tiene cargados individualmente.</p>
         </div>
       </button>
 
@@ -174,237 +173,237 @@
 
   </div>
 
-  <div id="vistaComandaMesa" class="flex-1 w-full max-w-lg mx-auto p-4 sm:p-6 pb-28 sm:pb-32 flex flex-col gap-4 hidden">
+  <div id=&quot;vistaComandaMesa&quot; class=&quot;flex-1 w-full max-w-lg mx-auto p-4 sm:p-6 pb-28 sm:pb-32 flex flex-col gap-4 hidden&quot;>
 
     <!-- Barra de navegación -->
-    <div class="flex items-center justify-between bg-slate-900/90 px-4 py-3 rounded-2xl border border-slate-800 shadow-md">
-      <button type="button" onclick="window.mostrarVistaHubMesa()"
-        class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold border border-slate-700 transition flex items-center gap-1.5 cursor-pointer">
-        <i class="fa-solid fa-arrow-left"></i> Volver a Mi Silla
+    <div class=&quot;flex items-center justify-between bg-slate-900/90 px-4 py-3 rounded-2xl border border-slate-800 shadow-md&quot;>
+      <button type=&quot;button&quot; onclick=&quot;window.mostrarVistaHubMesa()&quot;
+        class=&quot;px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold border border-slate-700 transition flex items-center gap-1.5 cursor-pointer&quot;>
+        <i class=&quot;fa-solid fa-arrow-left&quot;></i> Volver a Mi Silla
       </button>
-      <span class="text-sm font-black text-white flex items-center gap-2">
-        <span class="text-yellow-400">⭐</span>
+      <span class=&quot;text-sm font-black text-white flex items-center gap-2&quot;>
+        <span class=&quot;text-yellow-400&quot;>⭐</span>
         <span>Comanda de la Mesa</span>
       </span>
-      <button type="button" onclick="window.abrirCatalogoConDestino('centro')"
-        class="px-3 py-1.5 rounded-xl bg-amber-600 hover:bg-amber-500 text-white text-xs font-black border border-amber-500 transition flex items-center gap-1.5 cursor-pointer">
-        <i class="fa-solid fa-plus"></i> Pedir al Centro
+      <button type=&quot;button&quot; onclick=&quot;window.abrirCatalogoConDestino('centro')&quot;
+        class=&quot;px-3 py-1.5 rounded-xl bg-amber-600 hover:bg-amber-500 text-white text-xs font-black border border-amber-500 transition flex items-center gap-1.5 cursor-pointer&quot;>
+        <i class=&quot;fa-solid fa-plus&quot;></i> Pedir al Centro
       </button>
     </div>
 
     <!-- Banner explicativo: consumos compartidos -->
-    <div class="bg-amber-950/40 border border-amber-500/40 rounded-2xl p-3.5 flex items-start gap-3 shadow-md">
-      <span class="text-2xl flex-shrink-0">🍲</span>
-      <div class="text-xs text-amber-200/90 leading-relaxed">
-        <b class="text-amber-300 font-black block mb-0.5">Consumos Compartidos de la Mesa</b>
+    <div class=&quot;bg-amber-950/40 border border-amber-500/40 rounded-2xl p-3.5 flex items-start gap-3 shadow-md&quot;>
+      <span class=&quot;text-2xl flex-shrink-0&quot;>🍲</span>
+      <div class=&quot;text-xs text-amber-200/90 leading-relaxed&quot;>
+        <b class=&quot;text-amber-300 font-black block mb-0.5&quot;>Consumos Compartidos de la Mesa</b>
         Estos platillos son para compartir y <u>no se cargan a la cuenta personal de nadie</u>. Al final, el grupo decidirá quién los absorbe o cómo dividirlos.
       </div>
     </div>
 
     <!-- Tarjeta de comanda de la mesa -->
-    <div class="glass-card rounded-3xl border border-amber-500/30 shadow-2xl overflow-hidden">
+    <div class=&quot;glass-card rounded-3xl border border-amber-500/30 shadow-2xl overflow-hidden&quot;>
       <!-- Header de la tarjeta -->
-      <div class="bg-gradient-to-r from-amber-950/60 to-slate-900 px-5 py-4 border-b border-amber-500/20 flex items-center justify-between">
+      <div class=&quot;bg-gradient-to-r from-amber-950/60 to-slate-900 px-5 py-4 border-b border-amber-500/20 flex items-center justify-between&quot;>
         <div>
-          <div class="text-sm font-black text-white" id="lblComandaMesaUbicacion">Mesa 1 • Platillos al Centro</div>
-          <div class="text-[11px] text-amber-400 font-bold mt-0.5">Cuenta Compartida por Toda la Mesa</div>
+          <div class=&quot;text-sm font-black text-white&quot; id=&quot;lblComandaMesaUbicacion&quot;>Mesa 1 • Platillos al Centro</div>
+          <div class=&quot;text-[11px] text-amber-400 font-bold mt-0.5&quot;>Cuenta Compartida por Toda la Mesa</div>
         </div>
-        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 font-black text-xs border border-amber-500/40">
-          <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span> Mesa Activa
+        <span class=&quot;inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 font-black text-xs border border-amber-500/40&quot;>
+          <span class=&quot;w-2 h-2 rounded-full bg-amber-400 animate-pulse&quot;></span> Mesa Activa
         </span>
       </div>
 
       <!-- Lista de items al centro -->
-      <div class="px-5 py-4 min-h-24" id="comandaMesaItems">
-        <div class="text-center py-8 text-slate-500 text-xs">
-          No hay platillos pedidos al centro aún. ¡Toca "Pedir al Centro" para botanear o compartir!
+      <div class=&quot;px-5 py-4 min-h-24&quot; id=&quot;comandaMesaItems&quot;>
+        <div class=&quot;text-center py-8 text-slate-500 text-xs&quot;>
+          No hay platillos pedidos al centro aún. ¡Toca &quot;Pedir al Centro&quot; para botanear o compartir!
         </div>
       </div>
 
       <!-- Totales de la mesa al centro -->
-      <div class="px-5 py-4 border-t border-slate-800 space-y-1.5 bg-slate-950/40">
-        <div class="flex justify-between text-xs text-slate-400">
+      <div class=&quot;px-5 py-4 border-t border-slate-800 space-y-1.5 bg-slate-950/40&quot;>
+        <div class=&quot;flex justify-between text-xs text-slate-400&quot;>
           <span>Subtotal al Centro:</span>
-          <span class="font-semibold text-slate-200" id="lblComandaMesaSubtotal">$0.00</span>
+          <span class=&quot;font-semibold text-slate-200&quot; id=&quot;lblComandaMesaSubtotal&quot;>$0.00</span>
         </div>
-        <div class="flex justify-between text-xs text-slate-400">
+        <div class=&quot;flex justify-between text-xs text-slate-400&quot;>
           <span>IVA 16%:</span>
-          <span class="font-semibold text-slate-200" id="lblComandaMesaIVA">$0.00</span>
+          <span class=&quot;font-semibold text-slate-200&quot; id=&quot;lblComandaMesaIVA&quot;>$0.00</span>
         </div>
-        <div class="flex justify-between text-base font-black text-white pt-2 border-t border-slate-800">
+        <div class=&quot;flex justify-between text-base font-black text-white pt-2 border-t border-slate-800&quot;>
           <span>Total Acumulado al Centro:</span>
-          <span class="text-amber-400 text-lg font-black" id="lblComandaMesaTotal">$0.00</span>
+          <span class=&quot;text-amber-400 text-lg font-black&quot; id=&quot;lblComandaMesaTotal&quot;>$0.00</span>
         </div>
       </div>
     </div>
 
     <!-- Botón enviar al centro a cocina -->
-    <button id="btnComandaMesaEnviar" onclick="window.enviarPedidoCentroCocina();"
-      class="w-full py-3.5 px-4 rounded-2xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-sm shadow-lg shadow-amber-500/20 transition flex items-center justify-center gap-2 cursor-pointer"
-      disabled style="opacity:0.4;">
-      <i class="fa-solid fa-fire"></i> <span id="btnComandaMesaEnviarTxt">Enviar al Centro a Cocina</span>
+    <button id=&quot;btnComandaMesaEnviar&quot; onclick=&quot;window.enviarPedidoCentroCocina();&quot;
+      class=&quot;w-full py-3.5 px-4 rounded-2xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-sm shadow-lg shadow-amber-500/20 transition flex items-center justify-center gap-2 cursor-pointer&quot;
+      disabled style=&quot;opacity:0.4;&quot;>
+      <i class=&quot;fa-solid fa-fire&quot;></i> <span id=&quot;btnComandaMesaEnviarTxt&quot;>Enviar al Centro a Cocina</span>
     </button>
 
     <!-- Botón volver a comanda personal -->
-    <button type="button" onclick="window.mostrarVistaComanda()"
-      class="w-full py-3 px-4 rounded-2xl bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700 text-slate-300 text-xs font-bold transition flex items-center justify-center gap-2 cursor-pointer">
-      <i class="fa-solid fa-user text-emerald-400"></i> Ver Mi Comanda Personal
+    <button type=&quot;button&quot; onclick=&quot;window.mostrarVistaComanda()&quot;
+      class=&quot;w-full py-3 px-4 rounded-2xl bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700 text-slate-300 text-xs font-bold transition flex items-center justify-center gap-2 cursor-pointer&quot;>
+      <i class=&quot;fa-solid fa-user text-emerald-400&quot;></i> Ver Mi Comanda Personal
     </button>
 
   </div>
 
   <!-- VISTA LIMPIA: MI COMANDA (SOLO MIS ITEMS - SIN CATÁLOGO) -->
-  <div id="vistaComandaLimpia" class="flex-1 w-full max-w-lg mx-auto p-4 sm:p-6 pb-28 sm:pb-32 flex flex-col gap-4 hidden">
+  <div id=&quot;vistaComandaLimpia&quot; class=&quot;flex-1 w-full max-w-lg mx-auto p-4 sm:p-6 pb-28 sm:pb-32 flex flex-col gap-4 hidden&quot;>
 
     <!-- Barra de navegación -->
-    <div class="flex items-center justify-between bg-slate-900/90 px-4 py-3 rounded-2xl border border-slate-800">
-      <button type="button" onclick="window.mostrarVistaHubMesa()"
-        class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold border border-slate-700 transition flex items-center gap-1.5 cursor-pointer">
-        <i class="fa-solid fa-arrow-left"></i> Volver
+    <div class=&quot;flex items-center justify-between bg-slate-900/90 px-4 py-3 rounded-2xl border border-slate-800&quot;>
+      <button type=&quot;button&quot; onclick=&quot;window.mostrarVistaHubMesa()&quot;
+        class=&quot;px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold border border-slate-700 transition flex items-center gap-1.5 cursor-pointer&quot;>
+        <i class=&quot;fa-solid fa-arrow-left&quot;></i> Volver
       </button>
-      <span class="text-sm font-black text-white flex items-center gap-2">
-        <i class="fa-solid fa-receipt text-emerald-400"></i>
-        <span id="lblComandaLimpiaTitulo">Mi Comanda</span>
+      <span class=&quot;text-sm font-black text-white flex items-center gap-2&quot;>
+        <i class=&quot;fa-solid fa-receipt text-emerald-400&quot;></i>
+        <span id=&quot;lblComandaLimpiaTitulo&quot;>Mi Comanda</span>
       </span>
-      <div class="flex items-center gap-1.5">
-        <button type="button" onclick="window.abrirCatalogoConDestino('centro')"
-          class="px-2.5 py-1.5 rounded-xl bg-amber-600/20 hover:bg-amber-600/40 text-amber-300 text-xs font-bold border border-amber-500/40 transition flex items-center gap-1 cursor-pointer">
-          🍲 <span class="hidden sm:inline">Pedir</span> Al Centro
+      <div class=&quot;flex items-center gap-1.5&quot;>
+        <button type=&quot;button&quot; onclick=&quot;window.abrirCatalogoConDestino('centro')&quot;
+          class=&quot;px-2.5 py-1.5 rounded-xl bg-amber-600/20 hover:bg-amber-600/40 text-amber-300 text-xs font-bold border border-amber-500/40 transition flex items-center gap-1 cursor-pointer&quot;>
+          🍲 <span class=&quot;hidden sm:inline&quot;>Pedir</span> Al Centro
         </button>
-        <button type="button" onclick="window.abrirCatalogoConDestino('mi_silla')"
-          class="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-black border border-emerald-500 transition flex items-center gap-1.5 cursor-pointer">
-          <i class="fa-solid fa-plus"></i> Agregar
+        <button type=&quot;button&quot; onclick=&quot;window.abrirCatalogoConDestino('mi_silla')&quot;
+          class=&quot;px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-black border border-emerald-500 transition flex items-center gap-1.5 cursor-pointer&quot;>
+          <i class=&quot;fa-solid fa-plus&quot;></i> Agregar
         </button>
       </div>
     </div>
 
     <!-- Tarjeta de comanda limpia -->
-    <div class="glass-card rounded-3xl border border-emerald-500/30 shadow-2xl overflow-hidden">
+    <div class=&quot;glass-card rounded-3xl border border-emerald-500/30 shadow-2xl overflow-hidden&quot;>
       <!-- Header de la tarjeta -->
-      <div class="bg-gradient-to-r from-emerald-950/60 to-slate-900 px-5 py-4 border-b border-emerald-500/20 flex items-center justify-between">
+      <div class=&quot;bg-gradient-to-r from-emerald-950/60 to-slate-900 px-5 py-4 border-b border-emerald-500/20 flex items-center justify-between&quot;>
         <div>
-          <div class="text-sm font-black text-white" id="lblComandaLimpiaUbicacion">Mesa 1 · Silla 1</div>
-          <div class="text-[11px] text-emerald-400 font-bold mt-0.5" id="lblComandaLimpiaSub">Portavasos #PV-011</div>
+          <div class=&quot;text-sm font-black text-white&quot; id=&quot;lblComandaLimpiaUbicacion&quot;>Mesa 1 · Silla 1</div>
+          <div class=&quot;text-[11px] text-emerald-400 font-bold mt-0.5&quot; id=&quot;lblComandaLimpiaSub&quot;>Portavasos #PV-011</div>
         </div>
-        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 font-black text-xs border border-emerald-500/40">
-          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Cuenta Activa
+        <span class=&quot;inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 font-black text-xs border border-emerald-500/40&quot;>
+          <span class=&quot;w-2 h-2 rounded-full bg-emerald-400 animate-pulse&quot;></span> Cuenta Activa
         </span>
       </div>
 
       <!-- Lista de items de MI silla solamente -->
-      <div class="px-5 py-4 min-h-24" id="comandaLimpiaItems">
-        <div class="text-center py-8 text-slate-500 text-xs">
-          Aún no has pedido nada. ¡Toca "Agregar" para elegir del menú!
+      <div class=&quot;px-5 py-4 min-h-24&quot; id=&quot;comandaLimpiaItems&quot;>
+        <div class=&quot;text-center py-8 text-slate-500 text-xs&quot;>
+          Aún no has pedido nada. ¡Toca &quot;Agregar&quot; para elegir del menú!
         </div>
       </div>
 
       <!-- Totales -->
-      <div class="px-5 py-4 border-t border-slate-800 space-y-1.5 bg-slate-950/40">
-        <div class="flex justify-between text-xs text-slate-400">
+      <div class=&quot;px-5 py-4 border-t border-slate-800 space-y-1.5 bg-slate-950/40&quot;>
+        <div class=&quot;flex justify-between text-xs text-slate-400&quot;>
           <span>Subtotal:</span>
-          <span class="font-semibold text-slate-200" id="lblComandaLimpiaSubtotal">$0.00</span>
+          <span class=&quot;font-semibold text-slate-200&quot; id=&quot;lblComandaLimpiaSubtotal&quot;>$0.00</span>
         </div>
-        <div class="flex justify-between text-xs text-slate-400">
+        <div class=&quot;flex justify-between text-xs text-slate-400&quot;>
           <span>IVA 16%:</span>
-          <span class="font-semibold text-slate-200" id="lblComandaLimpiaIVA">$0.00</span>
+          <span class=&quot;font-semibold text-slate-200&quot; id=&quot;lblComandaLimpiaIVA&quot;>$0.00</span>
         </div>
-        <div class="flex justify-between text-xs text-slate-400">
+        <div class=&quot;flex justify-between text-xs text-slate-400&quot;>
           <span>Propina sugerida (10%):</span>
-          <span class="font-semibold text-slate-200" id="lblComandaLimpiaPropina">$0.00</span>
+          <span class=&quot;font-semibold text-slate-200&quot; id=&quot;lblComandaLimpiaPropina&quot;>$0.00</span>
         </div>
-        <div class="flex justify-between text-base font-black text-white pt-2 border-t border-slate-800">
+        <div class=&quot;flex justify-between text-base font-black text-white pt-2 border-t border-slate-800&quot;>
           <span>Total Estimado:</span>
-          <span class="text-emerald-400 text-lg" id="lblComandaLimpiaTotal">$0.00</span>
+          <span class=&quot;text-emerald-400 text-lg&quot; id=&quot;lblComandaLimpiaTotal&quot;>$0.00</span>
         </div>
       </div>
     </div>
 
     <!-- Botón enviar a cocina -->
-    <button id="btnComandaLimpiaEnviar" onclick="window.enviarPedidoClienteCocina(); window.renderComandaLimpia();"
-      class="w-full py-3.5 px-4 rounded-2xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-sm shadow-lg shadow-amber-500/20 transition flex items-center justify-center gap-2 cursor-pointer"
-      disabled style="opacity:0.4;">
-      <i class="fa-solid fa-fire"></i> <span id="btnComandaLimpiaEnviarTxt">Enviar a Cocina / Barra</span>
+    <button id=&quot;btnComandaLimpiaEnviar&quot; onclick=&quot;window.enviarPedidoClienteCocina(); window.renderComandaLimpia();&quot;
+      class=&quot;w-full py-3.5 px-4 rounded-2xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-sm shadow-lg shadow-amber-500/20 transition flex items-center justify-center gap-2 cursor-pointer&quot;
+      disabled style=&quot;opacity:0.4;&quot;>
+      <i class=&quot;fa-solid fa-fire&quot;></i> <span id=&quot;btnComandaLimpiaEnviarTxt&quot;>Enviar a Cocina / Barra</span>
     </button>
 
     <!-- Botones de cobro -->
-    <div class="grid grid-cols-2 gap-3">
-      <button onclick="window.solicitarAtencionMesero()"
-        class="py-3 px-3 rounded-2xl bg-amber-500/20 border border-amber-500/40 text-amber-300 text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer hover:bg-amber-500/30">
-        <i class="fa-solid fa-bell text-amber-400"></i> Llamar Mesero
+    <div class=&quot;grid grid-cols-2 gap-3&quot;>
+      <button onclick=&quot;window.solicitarAtencionMesero()&quot;
+        class=&quot;py-3 px-3 rounded-2xl bg-amber-500/20 border border-amber-500/40 text-amber-300 text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer hover:bg-amber-500/30&quot;>
+        <i class=&quot;fa-solid fa-bell text-amber-400&quot;></i> Llamar Mesero
       </button>
-      <button onclick="window.solicitarCuentaComensal()"
-        class="py-3 px-3 rounded-2xl bg-sky-500/20 border border-sky-500/40 text-sky-300 text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer hover:bg-sky-500/30">
-        <i class="fa-solid fa-receipt text-sky-400"></i> Pedir la Cuenta
+      <button onclick=&quot;window.solicitarCuentaComensal()&quot;
+        class=&quot;py-3 px-3 rounded-2xl bg-sky-500/20 border border-sky-500/40 text-sky-300 text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer hover:bg-sky-500/30&quot;>
+        <i class=&quot;fa-solid fa-receipt text-sky-400&quot;></i> Pedir la Cuenta
       </button>
     </div>
 
   </div>
 
   <!-- VISTA DEL CATÁLOGO DE PLATILLOS (SE MUESTRA AL ELEGIR ORDENAR) -->
-  <main id="vistaCatalogoPlatillos" class="flex-1 max-w-4xl w-full mx-auto p-4 sm:p-6 pb-28 sm:pb-32 flex flex-col gap-4 hidden">
-    
+  <main id=&quot;vistaCatalogoPlatillos&quot; class=&quot;flex-1 max-w-4xl w-full mx-auto p-4 sm:p-6 pb-28 sm:pb-32 flex flex-col gap-4 hidden&quot;>
+
     <!-- BARRA SUPERIOR DE NAVEGACIÓN DENTRO DEL CATÁLOGO -->
-    <div class="flex items-center justify-between bg-slate-900/90 px-4 py-3 rounded-2xl border border-slate-800 shadow-md">
-      <div class="flex items-center gap-2">
-        <button type="button" id="btnCatalogoBack" onclick="window.catalogoVolverAtras()"
-          class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold border border-slate-700 transition flex items-center gap-1.5 cursor-pointer">
-          <i class="fa-solid fa-arrow-left"></i> <span id="lblCatalogoBackTxt">Volver a Mi Silla</span>
+    <div class=&quot;flex items-center justify-between bg-slate-900/90 px-4 py-3 rounded-2xl border border-slate-800 shadow-md&quot;>
+      <div class=&quot;flex items-center gap-2&quot;>
+        <button type=&quot;button&quot; id=&quot;btnCatalogoBack&quot; onclick=&quot;window.catalogoVolverAtras()&quot;
+          class=&quot;px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold border border-slate-700 transition flex items-center gap-1.5 cursor-pointer&quot;>
+          <i class=&quot;fa-solid fa-arrow-left&quot;></i> <span id=&quot;lblCatalogoBackTxt&quot;>Volver a Mi Silla</span>
         </button>
-        <button type="button" onclick="window.mostrarVistaHubMesa()"
-          class="px-2.5 py-1.5 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-300 text-xs font-bold border border-slate-700 transition flex items-center gap-1 cursor-pointer" title="Ir al Inicio / Mi Silla">
-          <i class="fa-solid fa-house text-emerald-400"></i> Inicio
+        <button type=&quot;button&quot; onclick=&quot;window.mostrarVistaHubMesa()&quot;
+          class=&quot;px-2.5 py-1.5 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-300 text-xs font-bold border border-slate-700 transition flex items-center gap-1 cursor-pointer&quot; title=&quot;Ir al Inicio / Mi Silla&quot;>
+          <i class=&quot;fa-solid fa-house text-emerald-400&quot;></i> Inicio
         </button>
       </div>
-      <span class="text-xs text-slate-300 font-bold" id="lblCatalogoDestinoBadge">
+      <span class=&quot;text-xs text-slate-300 font-bold&quot; id=&quot;lblCatalogoDestinoBadge&quot;>
         🎯 Silla 1 (Tú)
       </span>
-      <button type="button" onclick="window.mostrarVistaComanda()"
-        class="px-3 py-1.5 rounded-xl bg-emerald-700/60 hover:bg-emerald-600/70 text-emerald-300 text-xs font-bold border border-emerald-600/40 transition flex items-center gap-1.5 cursor-pointer">
-        <i class="fa-solid fa-receipt"></i> <span id="lblCatBtnTotalNav">Mi Comanda</span>
+      <button type=&quot;button&quot; onclick=&quot;window.mostrarVistaComanda()&quot;
+        class=&quot;px-3 py-1.5 rounded-xl bg-emerald-700/60 hover:bg-emerald-600/70 text-emerald-300 text-xs font-bold border border-emerald-600/40 transition flex items-center gap-1.5 cursor-pointer&quot;>
+        <i class=&quot;fa-solid fa-receipt&quot;></i> <span id=&quot;lblCatBtnTotalNav&quot;>Mi Comanda</span>
       </button>
     </div>
 
     <!-- SECCIÓN PRINCIPAL DEL CATÁLOGO (OCUPA TODA LA ANCHURA) -->
-    <section class="w-full flex flex-col gap-4">
+    <section class=&quot;w-full flex flex-col gap-4&quot;>
 
       <!-- SUB-VISTA A: GRID DE CATEGORÍAS (se muestra al entrar al catálogo) -->
-      <div id="vistaCatCategorias">
-        <p class="text-xs text-slate-400 font-bold mb-3 px-1">¿Qué te apetece hoy?</p>
-        <div class="grid grid-cols-2 gap-3" id="categoriasGridContainer">
+      <div id=&quot;vistaCatCategorias&quot;>
+        <p class=&quot;text-xs text-slate-400 font-bold mb-3 px-1&quot;>¿Qué te apetece hoy?</p>
+        <div class=&quot;grid grid-cols-2 gap-3&quot; id=&quot;categoriasGridContainer&quot;>
           <!-- Generado dinámicamente por renderCategoriasGrid() -->
-          <div class="col-span-2 text-center py-8 text-slate-500 text-xs">
-            <i class="fa-solid fa-spinner animate-spin text-xl text-emerald-500 mb-2"></i>
+          <div class=&quot;col-span-2 text-center py-8 text-slate-500 text-xs&quot;>
+            <i class=&quot;fa-solid fa-spinner animate-spin text-xl text-emerald-500 mb-2&quot;></i>
             <p>Cargando menú...</p>
           </div>
         </div>
       </div>
 
       <!-- SUB-VISTA B: PRODUCTOS DE UNA CATEGORÍA (oculta hasta que el usuario elija) -->
-      <div id="vistaCatProductos" class="hidden flex-col gap-4">
+      <div id=&quot;vistaCatProductos&quot; class=&quot;hidden flex-col gap-4&quot;>
         <!-- Header de la categoría seleccionada -->
-        <div class="flex items-center justify-between px-3 py-2.5 bg-slate-900/70 rounded-2xl border border-slate-800 shadow-sm">
-          <div class="flex items-center gap-2.5">
-            <span id="lblCatSelIcono" class="text-2xl">🍽️</span>
+        <div class=&quot;flex items-center justify-between px-3 py-2.5 bg-slate-900/70 rounded-2xl border border-slate-800 shadow-sm&quot;>
+          <div class=&quot;flex items-center gap-2.5&quot;>
+            <span id=&quot;lblCatSelIcono&quot; class=&quot;text-2xl&quot;>🍽️</span>
             <div>
-              <div class="text-sm font-black text-white" id="lblCatSelNombre">Categoría</div>
-              <div class="text-[11px] text-slate-400" id="lblCatSelCount">0 opciones</div>
+              <div class=&quot;text-sm font-black text-white&quot; id=&quot;lblCatSelNombre&quot;>Categoría</div>
+              <div class=&quot;text-[11px] text-slate-400&quot; id=&quot;lblCatSelCount&quot;>0 opciones</div>
             </div>
           </div>
-          <div class="flex items-center gap-1.5">
-            <button type="button" onclick="window.mostrarGridCategorias();"
-              class="px-2.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold border border-slate-700 transition flex items-center gap-1 cursor-pointer">
-              <i class="fa-solid fa-arrow-left"></i> Categorías
+          <div class=&quot;flex items-center gap-1.5&quot;>
+            <button type=&quot;button&quot; onclick=&quot;window.mostrarGridCategorias();&quot;
+              class=&quot;px-2.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold border border-slate-700 transition flex items-center gap-1 cursor-pointer&quot;>
+              <i class=&quot;fa-solid fa-arrow-left&quot;></i> Categorías
             </button>
-            <button type="button" onclick="window.mostrarVistaHubMesa();"
-              class="px-2.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold border border-slate-700 transition flex items-center gap-1 cursor-pointer">
-              <i class="fa-solid fa-house text-emerald-400"></i> Inicio
+            <button type=&quot;button&quot; onclick=&quot;window.mostrarVistaHubMesa();&quot;
+              class=&quot;px-2.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold border border-slate-700 transition flex items-center gap-1 cursor-pointer&quot;>
+              <i class=&quot;fa-solid fa-house text-emerald-400&quot;></i> Inicio
             </button>
           </div>
         </div>
         <!-- Grid de productos -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3" id="productsGridContainer">
-          <div class="text-center py-10 text-slate-500 col-span-2">
-            <i class="fa-solid fa-spinner animate-spin text-xl text-emerald-500 mb-2"></i>
+        <div class=&quot;grid grid-cols-1 sm:grid-cols-2 gap-3&quot; id=&quot;productsGridContainer&quot;>
+          <div class=&quot;text-center py-10 text-slate-500 col-span-2&quot;>
+            <i class=&quot;fa-solid fa-spinner animate-spin text-xl text-emerald-500 mb-2&quot;></i>
             <p>Cargando platillos...</p>
           </div>
         </div>
@@ -413,79 +412,79 @@
     </section>
 
     <!-- SIDEBAR COMANDA (COMPLETAMENTE OCULTO EN CATÁLOGO; LA COMANDA SE GESTIONA EN 'MI COMANDA') -->
-    <aside id="sidebarComanda" class="hidden" style="display:none !important;">
+    <aside id=&quot;sidebarComanda&quot; class=&quot;hidden&quot; style=&quot;display:none !important;&quot;>
       <div>
-        <div class="flex justify-between items-center pb-3 border-b border-slate-800 mb-3">
+        <div class=&quot;flex justify-between items-center pb-3 border-b border-slate-800 mb-3&quot;>
           <div>
-            <h2 class="text-base font-bold text-white flex items-center gap-2">
-              <i class="fa-solid fa-receipt text-emerald-400"></i> <span id="txtTituloComanda">Mi Comanda (Silla 1)</span>
+            <h2 class=&quot;text-base font-bold text-white flex items-center gap-2&quot;>
+              <i class=&quot;fa-solid fa-receipt text-emerald-400&quot;></i> <span id=&quot;txtTituloComanda&quot;>Mi Comanda (Silla 1)</span>
             </h2>
-            <p class="text-xs text-slate-400" id="txtSubComanda">Mesa 1 • Portavasos #PV-011</p>
+            <p class=&quot;text-xs text-slate-400&quot; id=&quot;txtSubComanda&quot;>Mesa 1 • Portavasos #PV-011</p>
           </div>
-          <span class="px-2.5 py-1 text-[10px] font-black rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 uppercase">
+          <span class=&quot;px-2.5 py-1 text-[10px] font-black rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 uppercase&quot;>
             Activa
           </span>
         </div>
 
         <!-- LISTA DE ITEMS REGISTRADOS DE MI SILLA Y AL CENTRO -->
-        <div class="space-y-2.5 max-h-56 overflow-y-auto pr-1" id="cartItemsList">
-          <div class="text-center py-6 text-slate-500 text-xs">
+        <div class=&quot;space-y-2.5 max-h-56 overflow-y-auto pr-1&quot; id=&quot;cartItemsList&quot;>
+          <div class=&quot;text-center py-6 text-slate-500 text-xs&quot;>
             No hay consumos agregados a esta silla.
           </div>
         </div>
 
         <!-- SECCIÓN: PAGAR POR ACOMPAÑANTES EN MI MESA -->
-        <div class="mt-4 pt-3 border-t border-slate-800/80">
-          <div class="flex justify-between items-center mb-2">
-            <span class="text-xs font-bold text-slate-200 flex items-center gap-1.5">
-              <i class="fa-solid fa-users text-amber-400"></i> Pagar por otros en mi mesa:
+        <div class=&quot;mt-4 pt-3 border-t border-slate-800/80&quot;>
+          <div class=&quot;flex justify-between items-center mb-2&quot;>
+            <span class=&quot;text-xs font-bold text-slate-200 flex items-center gap-1.5&quot;>
+              <i class=&quot;fa-solid fa-users text-amber-400&quot;></i> Pagar por otros en mi mesa:
             </span>
-            <button onclick="window.seleccionarTodosAcompanantes()"
-              class="text-[10px] text-emerald-400 hover:underline font-semibold">Toda Mesa</button>
+            <button onclick=&quot;window.seleccionarTodosAcompanantes()&quot;
+              class=&quot;text-[10px] text-emerald-400 hover:underline font-semibold&quot;>Toda Mesa</button>
           </div>
 
-          <div id="listaAcompanantesMesa" class="space-y-1.5 max-h-36 overflow-y-auto pr-1 text-xs">
+          <div id=&quot;listaAcompanantesMesa&quot; class=&quot;space-y-1.5 max-h-36 overflow-y-auto pr-1 text-xs&quot;>
             <!-- Checklist populated dynamically -->
           </div>
         </div>
       </div>
 
       <!-- TOTALES Y ACCIONES DE COBRO -->
-      <div class="pt-3 border-t border-slate-800 space-y-3">
-        <div class="space-y-1.5 text-xs">
-          <div class="flex justify-between text-slate-400">
-            <span id="lblSubtotalDetalle">Subtotal (Mi Silla + Centro):</span>
-            <span class="font-semibold text-slate-200" id="txtSubtotal">$0.00</span>
+      <div class=&quot;pt-3 border-t border-slate-800 space-y-3&quot;>
+        <div class=&quot;space-y-1.5 text-xs&quot;>
+          <div class=&quot;flex justify-between text-slate-400&quot;>
+            <span id=&quot;lblSubtotalDetalle&quot;>Subtotal (Mi Silla + Centro):</span>
+            <span class=&quot;font-semibold text-slate-200&quot; id=&quot;txtSubtotal&quot;>$0.00</span>
           </div>
-          <div class="flex justify-between text-slate-400">
+          <div class=&quot;flex justify-between text-slate-400&quot;>
             <span>IVA 16% Trasladado:</span>
-            <span class="font-semibold text-slate-200" id="txtIVA">$0.00</span>
+            <span class=&quot;font-semibold text-slate-200&quot; id=&quot;txtIVA&quot;>$0.00</span>
           </div>
-          <div class="flex justify-between text-slate-400">
+          <div class=&quot;flex justify-between text-slate-400&quot;>
             <span>Propina Sugerida (10%):</span>
-            <span class="font-semibold text-slate-200" id="txtPropina">$0.00</span>
+            <span class=&quot;font-semibold text-slate-200&quot; id=&quot;txtPropina&quot;>$0.00</span>
           </div>
-          <div class="flex justify-between text-base font-black text-white pt-2 border-t border-slate-800">
-            <span id="lblTotalCobro">Total a Pagar:</span>
-            <span class="text-emerald-400 text-lg font-black" id="txtTotal">$0.00</span>
+          <div class=&quot;flex justify-between text-base font-black text-white pt-2 border-t border-slate-800&quot;>
+            <span id=&quot;lblTotalCobro&quot;>Total a Pagar:</span>
+            <span class=&quot;text-emerald-400 text-lg font-black&quot; id=&quot;txtTotal&quot;>$0.00</span>
           </div>
         </div>
 
         <!-- BOTÓN ENVIAR A COCINA / BARRA -->
-        <button id="btnClienteEnviarCocina" onclick="window.enviarPedidoClienteCocina();"
-          class="w-full py-2.5 px-3 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-xs shadow-lg shadow-amber-500/20 transition flex items-center justify-center gap-2 cursor-pointer">
-          <i class="fa-solid fa-fire"></i> <span id="btnClienteEnviarCocinaTxt">Enviar a Cocina / Barra</span>
+        <button id=&quot;btnClienteEnviarCocina&quot; onclick=&quot;window.enviarPedidoClienteCocina();&quot;
+          class=&quot;w-full py-2.5 px-3 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-xs shadow-lg shadow-amber-500/20 transition flex items-center justify-center gap-2 cursor-pointer&quot;>
+          <i class=&quot;fa-solid fa-fire&quot;></i> <span id=&quot;btnClienteEnviarCocinaTxt&quot;>Enviar a Cocina / Barra</span>
         </button>
 
         <!-- BOTONES DE COBRO MULTICANAL -->
-        <div class="grid grid-cols-2 gap-2">
-          <button onclick="window.abrirModalCobroCliente('santander')"
-            class="py-3 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-100 text-xs font-bold border border-slate-700 transition flex items-center justify-center gap-1.5 cursor-pointer">
-            <i class="fa-solid fa-credit-card text-sky-400"></i> Santander
+        <div class=&quot;grid grid-cols-2 gap-2&quot;>
+          <button onclick=&quot;window.abrirModalCobroCliente('santander')&quot;
+            class=&quot;py-3 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-100 text-xs font-bold border border-slate-700 transition flex items-center justify-center gap-1.5 cursor-pointer&quot;>
+            <i class=&quot;fa-solid fa-credit-card text-sky-400&quot;></i> Santander
           </button>
-          <button onclick="window.abrirModalCobroCliente('tarjeta')"
-            class="py-3 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold shadow-lg shadow-emerald-600/30 transition flex items-center justify-center gap-1.5 cursor-pointer">
-            <i class="fa-solid fa-check-double"></i> Pagar / Ticket (<span id="txtBtnPagarMonto">$0.00</span>)
+          <button onclick=&quot;window.abrirModalCobroCliente('tarjeta')&quot;
+            class=&quot;py-3 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold shadow-lg shadow-emerald-600/30 transition flex items-center justify-center gap-1.5 cursor-pointer&quot;>
+            <i class=&quot;fa-solid fa-check-double&quot;></i> Pagar / Ticket (<span id=&quot;txtBtnPagarMonto&quot;>$0.00</span>)
           </button>
         </div>
       </div>
@@ -495,173 +494,173 @@
   </main>
 
   <!-- MODAL DE COBRO Y PRECUENTA DIGITAL CLIENTE QR -->
-  <div id="modalCobroCliente"
-    class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden items-center justify-center p-4"
-    onclick="if(event.target === this) window.cerrarModalCobroCliente();">
+  <div id=&quot;modalCobroCliente&quot;
+    class=&quot;fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden items-center justify-center p-4&quot;
+    onclick=&quot;if(event.target === this) window.cerrarModalCobroCliente();&quot;>
     <div
-      class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-md p-6 shadow-2xl flex flex-col gap-4 text-slate-100">
-      <div class="flex justify-between items-start border-b border-slate-800 pb-3">
+      class=&quot;bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-md p-6 shadow-2xl flex flex-col gap-4 text-slate-100&quot;>
+      <div class=&quot;flex justify-between items-start border-b border-slate-800 pb-3&quot;>
         <div>
-          <h3 class="text-base font-bold text-white flex items-center gap-2">
-            <i class="fa-solid fa-receipt text-emerald-400"></i> Precuenta y Pago Digital
+          <h3 class=&quot;text-base font-bold text-white flex items-center gap-2&quot;>
+            <i class=&quot;fa-solid fa-receipt text-emerald-400&quot;></i> Precuenta y Pago Digital
           </h3>
-          <p class="text-xs text-slate-400" id="modalCobroSubtitulo">Mesa 2 • Portavasos #PV-021</p>
+          <p class=&quot;text-xs text-slate-400&quot; id=&quot;modalCobroSubtitulo&quot;>Mesa 2 • Portavasos #PV-021</p>
         </div>
-        <button onclick="window.cerrarModalCobroCliente();"
-          class="text-slate-400 hover:text-white text-lg cursor-pointer">✕</button>
+        <button onclick=&quot;window.cerrarModalCobroCliente();&quot;
+          class=&quot;text-slate-400 hover:text-white text-lg cursor-pointer&quot;>✕</button>
       </div>
 
       <!-- SELECTOR DE ALCANCE DEL PAGO -->
-      <div class="bg-slate-950/80 p-3 rounded-xl border border-slate-800/80 space-y-2">
-        <span class="text-xs font-bold text-slate-300 block"><i
-            class="fa-solid fa-hand-holding-dollar text-emerald-400 mr-1"></i> ¿Qué deseas pagar?</span>
-        <div class="grid grid-cols-2 gap-1.5 text-[11px]">
-          <button type="button" onclick="window.setModoPagoCliente('solo_yo')" id="btnModoSoloYo"
-            class="p-2 rounded-lg font-bold border text-center transition bg-emerald-600/30 text-emerald-300 border-emerald-500/50 cursor-pointer">
+      <div class=&quot;bg-slate-950/80 p-3 rounded-xl border border-slate-800/80 space-y-2&quot;>
+        <span class=&quot;text-xs font-bold text-slate-300 block&quot;><i
+            class=&quot;fa-solid fa-hand-holding-dollar text-emerald-400 mr-1&quot;></i> ¿Qué deseas pagar?</span>
+        <div class=&quot;grid grid-cols-2 gap-1.5 text-[11px]&quot;>
+          <button type=&quot;button&quot; onclick=&quot;window.setModoPagoCliente('solo_yo')&quot; id=&quot;btnModoSoloYo&quot;
+            class=&quot;p-2 rounded-lg font-bold border text-center transition bg-emerald-600/30 text-emerald-300 border-emerald-500/50 cursor-pointer&quot;>
             1. Solo Mi Silla
           </button>
-          <button type="button" onclick="window.setModoPagoCliente('split_centro')" id="btnModoSplitCentro"
-            class="p-2 rounded-lg font-bold border text-center transition bg-slate-800 text-slate-300 border-slate-700 cursor-pointer">
+          <button type=&quot;button&quot; onclick=&quot;window.setModoPagoCliente('split_centro')&quot; id=&quot;btnModoSplitCentro&quot;
+            class=&quot;p-2 rounded-lg font-bold border text-center transition bg-slate-800 text-slate-300 border-slate-700 cursor-pointer&quot;>
             2. Mi Silla + Dividir Centro
           </button>
-          <button type="button" onclick="window.setModoPagoCliente('absorber_centro')" id="btnModoAbsorberCentro"
-            class="p-2 rounded-lg font-bold border text-center transition bg-slate-800 text-slate-300 border-slate-700 cursor-pointer">
+          <button type=&quot;button&quot; onclick=&quot;window.setModoPagoCliente('absorber_centro')&quot; id=&quot;btnModoAbsorberCentro&quot;
+            class=&quot;p-2 rounded-lg font-bold border text-center transition bg-slate-800 text-slate-300 border-slate-700 cursor-pointer&quot;>
             3. Mi Silla + Todo el Centro
           </button>
-          <button type="button" onclick="window.setModoPagoCliente('split_toda_mesa')" id="btnModoSplitTodaMesa"
-            class="p-2 rounded-lg font-bold border text-center transition bg-slate-800 text-slate-300 border-slate-700 cursor-pointer">
+          <button type=&quot;button&quot; onclick=&quot;window.setModoPagoCliente('split_toda_mesa')&quot; id=&quot;btnModoSplitTodaMesa&quot;
+            class=&quot;p-2 rounded-lg font-bold border text-center transition bg-slate-800 text-slate-300 border-slate-700 cursor-pointer&quot;>
             4. Dividir Mesa Equitativa
           </button>
-          <button type="button" onclick="window.setModoPagoCliente('toda_mesa')" id="btnModoTodaMesa"
-            class="col-span-2 p-2 rounded-lg font-bold border text-center transition bg-slate-800 text-slate-300 border-slate-700 cursor-pointer">
+          <button type=&quot;button&quot; onclick=&quot;window.setModoPagoCliente('toda_mesa')&quot; id=&quot;btnModoTodaMesa&quot;
+            class=&quot;col-span-2 p-2 rounded-lg font-bold border text-center transition bg-slate-800 text-slate-300 border-slate-700 cursor-pointer&quot;>
             5. Toda la Mesa Completa (100%)
           </button>
         </div>
       </div>
 
       <!-- DESGLOSE DE CUENTAS INCLUIDAS -->
-      <div id="modalCobroDetalleTramos" class="space-y-2 max-h-56 overflow-y-auto pr-1 text-xs">
+      <div id=&quot;modalCobroDetalleTramos&quot; class=&quot;space-y-2 max-h-56 overflow-y-auto pr-1 text-xs&quot;>
         <!-- Generado dinámicamente -->
       </div>
 
       <!-- TOTALES -->
-      <div class="pt-3 border-t border-slate-800 space-y-1.5 text-xs">
-        <div class="flex justify-between text-slate-400"><span>Subtotal Neto:</span><span id="modalSubtotal"
-            class="text-slate-200 font-bold">$0.00</span></div>
-        <div class="flex justify-between text-slate-400"><span>IVA 16% Trasladado:</span><span id="modalIVA"
-            class="text-slate-200 font-bold">$0.00</span></div>
-        <div class="flex justify-between text-slate-400"><span>Propina Sugerida (10%):</span><span id="modalPropina"
-            class="text-slate-200 font-bold">$0.00</span></div>
-        <div class="flex justify-between text-base font-black text-white pt-2 border-t border-slate-800">
+      <div class=&quot;pt-3 border-t border-slate-800 space-y-1.5 text-xs&quot;>
+        <div class=&quot;flex justify-between text-slate-400&quot;><span>Subtotal Neto:</span><span id=&quot;modalSubtotal&quot;
+            class=&quot;text-slate-200 font-bold&quot;>$0.00</span></div>
+        <div class=&quot;flex justify-between text-slate-400&quot;><span>IVA 16% Trasladado:</span><span id=&quot;modalIVA&quot;
+            class=&quot;text-slate-200 font-bold&quot;>$0.00</span></div>
+        <div class=&quot;flex justify-between text-slate-400&quot;><span>Propina Sugerida (10%):</span><span id=&quot;modalPropina&quot;
+            class=&quot;text-slate-200 font-bold&quot;>$0.00</span></div>
+        <div class=&quot;flex justify-between text-base font-black text-white pt-2 border-t border-slate-800&quot;>
           <span>Total Final a Liquidar:</span>
-          <span id="modalTotal" class="text-emerald-400 text-lg font-black">$0.00</span>
+          <span id=&quot;modalTotal&quot; class=&quot;text-emerald-400 text-lg font-black&quot;>$0.00</span>
         </div>
       </div>
 
       <!-- BOTONES DE PROCESAR PAGO -->
-      <div class="grid grid-cols-3 gap-1.5 pt-2">
-        <button onclick="window.ejecutarPagoFinal('mercadopago')"
-          class="py-2.5 px-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-[11px] font-bold shadow-lg shadow-emerald-600/30 flex flex-col items-center justify-center gap-1 cursor-pointer">
-          <i class="fa-solid fa-mobile-screen"></i> Mercado Pago
+      <div class=&quot;grid grid-cols-3 gap-1.5 pt-2&quot;>
+        <button onclick=&quot;window.ejecutarPagoFinal('mercadopago')&quot;
+          class=&quot;py-2.5 px-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-[11px] font-bold shadow-lg shadow-emerald-600/30 flex flex-col items-center justify-center gap-1 cursor-pointer&quot;>
+          <i class=&quot;fa-solid fa-mobile-screen&quot;></i> Mercado Pago
         </button>
-        <button onclick="window.ejecutarPagoFinal('santander')"
-          class="py-2.5 px-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-sky-400 text-[11px] font-bold border border-slate-700 flex flex-col items-center justify-center gap-1 cursor-pointer">
-          <i class="fa-solid fa-credit-card"></i> Santander
+        <button onclick=&quot;window.ejecutarPagoFinal('santander')&quot;
+          class=&quot;py-2.5 px-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-sky-400 text-[11px] font-bold border border-slate-700 flex flex-col items-center justify-center gap-1 cursor-pointer&quot;>
+          <i class=&quot;fa-solid fa-credit-card&quot;></i> Santander
         </button>
-        <button onclick="window.ejecutarPagoFinal('efectivo')"
-          class="py-2.5 px-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-amber-300 text-[11px] font-bold border border-slate-700 flex flex-col items-center justify-center gap-1 cursor-pointer">
-          <i class="fa-solid fa-money-bill-wave"></i> Efectivo
+        <button onclick=&quot;window.ejecutarPagoFinal('efectivo')&quot;
+          class=&quot;py-2.5 px-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-amber-300 text-[11px] font-bold border border-slate-700 flex flex-col items-center justify-center gap-1 cursor-pointer&quot;>
+          <i class=&quot;fa-solid fa-money-bill-wave&quot;></i> Efectivo
         </button>
       </div>
     </div>
   </div>
 
   <!-- MODAL DE PERSONALIZACIÓN GOURMET DEL PLATILLO (CLIENTE QR) -->
-  <div id="modalRecetaClienteBackdrop"
-    style="display: none !important; position: fixed !important; inset: 0 !important; z-index: 100000 !important; background: rgba(2, 6, 23, 0.85) !important; backdrop-filter: blur(12px) !important; align-items: center !important; justify-content: center !important; padding: 16px !important;"
-    onclick="if(event.target === this) window.cerrarModalRecetaCliente();">
+  <div id=&quot;modalRecetaClienteBackdrop&quot;
+    style=&quot;display: none !important; position: fixed !important; inset: 0 !important; z-index: 100000 !important; background: rgba(2, 6, 23, 0.85) !important; backdrop-filter: blur(12px) !important; align-items: center !important; justify-content: center !important; padding: 16px !important;&quot;
+    onclick=&quot;if(event.target === this) window.cerrarModalRecetaCliente();&quot;>
     <div
-      style="background: #090d16 !important; border: 1px solid #334155 !important; border-radius: 24px !important; width: 100% !important; max-width: 520px !important; padding: 24px !important; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.8) !important; display: flex !important; flex-direction: column !important; gap: 16px !important; color: #f8fafc !important; max-height: 90vh !important; overflow-y: auto !important;">
-      
+      style=&quot;background: #090d16 !important; border: 1px solid #334155 !important; border-radius: 24px !important; width: 100% !important; max-width: 520px !important; padding: 24px !important; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.8) !important; display: flex !important; flex-direction: column !important; gap: 16px !important; color: #f8fafc !important; max-height: 90vh !important; overflow-y: auto !important;&quot;>
+
       <!-- HEADER -->
-      <div style="display: flex !important; justify-content: space-between !important; align-items: center !important; border-bottom: 1px solid #1e293b !important; padding-bottom: 12px !important;">
-        <div style="display: flex; align-items: center; gap: 12px;">
-          <div id="cliRecetaIcono" style="width: 50px; height: 50px; border-radius: 16px; background: linear-gradient(135deg, rgba(16,185,129,0.2), rgba(2,132,199,0.2)); display: flex; align-items: center; justify-content: center; font-size: 26px; border: 1.5px solid rgba(16,185,129,0.4);">🍳</div>
+      <div style=&quot;display: flex !important; justify-content: space-between !important; align-items: center !important; border-bottom: 1px solid #1e293b !important; padding-bottom: 12px !important;&quot;>
+        <div style=&quot;display: flex; align-items: center; gap: 12px;&quot;>
+          <div id=&quot;cliRecetaIcono&quot; style=&quot;width: 50px; height: 50px; border-radius: 16px; background: linear-gradient(135deg, rgba(16,185,129,0.2), rgba(2,132,199,0.2)); display: flex; align-items: center; justify-content: center; font-size: 26px; border: 1.5px solid rgba(16,185,129,0.4);&quot;>🍳</div>
           <div>
-            <span style="font-size: 11px; font-weight: 800; color: #38bdf8; text-transform: uppercase;" id="cliRecetaCategoria">Desayunos Gourmet</span>
-            <h2 style="font-size: 18px; font-weight: 900; color: #ffffff; margin: 2px 0 0 0;" id="cliRecetaTitulo">Platillo</h2>
+            <span style=&quot;font-size: 11px; font-weight: 800; color: #38bdf8; text-transform: uppercase;&quot; id=&quot;cliRecetaCategoria&quot;>Desayunos Gourmet</span>
+            <h2 style=&quot;font-size: 18px; font-weight: 900; color: #ffffff; margin: 2px 0 0 0;&quot; id=&quot;cliRecetaTitulo&quot;>Platillo</h2>
           </div>
         </div>
-        <button type="button" onclick="window.cerrarModalRecetaCliente();"
-          style="background: #1e293b !important; border: 1px solid #334155 !important; color: #cbd5e1 !important; padding: 6px 12px !important; border-radius: 10px !important; font-size: 12px !important; font-weight: 800 !important; cursor: pointer !important; display: flex; align-items: center; gap: 4px;">
-          <i class="fa-solid fa-arrow-left"></i> Volver
+        <button type=&quot;button&quot; onclick=&quot;window.cerrarModalRecetaCliente();&quot;
+          style=&quot;background: #1e293b !important; border: 1px solid #334155 !important; color: #cbd5e1 !important; padding: 6px 12px !important; border-radius: 10px !important; font-size: 12px !important; font-weight: 800 !important; cursor: pointer !important; display: flex; align-items: center; gap: 4px;&quot;>
+          <i class=&quot;fa-solid fa-arrow-left&quot;></i> Volver
         </button>
       </div>
 
-      <!-- DESCRIPCIÓN GOURMET & PRECIO BASE -->
-      <div style="background: #0f172a; border: 1px solid #1e293b; border-radius: 16px; padding: 14px;">
-        <p id="cliRecetaDescripcion" style="font-size: 13px; color: #cbd5e1; line-height: 1.5; margin: 0;"></p>
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px; padding-top: 8px; border-top: 1px dashed #1e293b;">
-          <span style="font-size: 11px; color: #94a3b8; font-weight: 600;">Precio base:</span>
-          <span id="cliRecetaPrecio" style="font-size: 16px; font-weight: 900; color: #34d399;">$0.00</span>
+      <!-- DESCRIPCIÓN GOURMET &amp; PRECIO BASE -->
+      <div style=&quot;background: #0f172a; border: 1px solid #1e293b; border-radius: 16px; padding: 14px;&quot;>
+        <p id=&quot;cliRecetaDescripcion&quot; style=&quot;font-size: 13px; color: #cbd5e1; line-height: 1.5; margin: 0;&quot;></p>
+        <div style=&quot;display: flex; justify-content: space-between; align-items: center; margin-top: 10px; padding-top: 8px; border-top: 1px dashed #1e293b;&quot;>
+          <span style=&quot;font-size: 11px; color: #94a3b8; font-weight: 600;&quot;>Precio base:</span>
+          <span id=&quot;cliRecetaPrecio&quot; style=&quot;font-size: 16px; font-weight: 900; color: #34d399;&quot;>$0.00</span>
         </div>
       </div>
 
       <!-- OPCIONES DE TÉRMINO / PREPARACIÓN -->
-      <div id="boxTerminoPreparacion" style="display: flex; flex-direction: column; gap: 8px;">
-        <span style="font-size: 12px; font-weight: 800; color: #fbbf24; display: flex; align-items: center; gap: 6px;">
-          <i class="fa-solid fa-fire-burner"></i> ¿Cómo deseas tu preparación / término?
+      <div id=&quot;boxTerminoPreparacion&quot; style=&quot;display: flex; flex-direction: column; gap: 8px;&quot;>
+        <span style=&quot;font-size: 12px; font-weight: 800; color: #fbbf24; display: flex; align-items: center; gap: 6px;&quot;>
+          <i class=&quot;fa-solid fa-fire-burner&quot;></i> ¿Cómo deseas tu preparación / término?
         </span>
-        <div id="chipsTerminoContainer" style="display: flex; flex-wrap: wrap; gap: 6px;">
+        <div id=&quot;chipsTerminoContainer&quot; style=&quot;display: flex; flex-wrap: wrap; gap: 6px;&quot;>
           <!-- Chips interactivos de término generados dinámicamente -->
         </div>
       </div>
 
       <!-- PREFERENCIAS / QUITAR INGREDIENTES -->
-      <div id="boxPreferenciasContainer" style="display: flex; flex-direction: column; gap: 8px;">
-        <span style="font-size: 12px; font-weight: 800; color: #38bdf8; display: flex; align-items: center; gap: 6px;">
-          <i class="fa-solid fa-sliders"></i> Preferencias / Exclusiones:
+      <div id=&quot;boxPreferenciasContainer&quot; style=&quot;display: flex; flex-direction: column; gap: 8px;&quot;>
+        <span style=&quot;font-size: 12px; font-weight: 800; color: #38bdf8; display: flex; align-items: center; gap: 6px;&quot;>
+          <i class=&quot;fa-solid fa-sliders&quot;></i> Preferencias / Exclusiones:
         </span>
-        <div id="chipsPreferenciasContainer" style="display: flex; flex-wrap: wrap; gap: 6px;">
+        <div id=&quot;chipsPreferenciasContainer&quot; style=&quot;display: flex; flex-wrap: wrap; gap: 6px;&quot;>
           <!-- Chips de quitar ingredientes -->
         </div>
       </div>
 
       <!-- INGREDIENTES EXTRAS (COBRO ADICIONAL) -->
-      <div id="boxExtrasContainer" style="display: flex; flex-direction: column; gap: 8px; background: rgba(56,189,248,0.06); border: 1px solid rgba(56,189,248,0.2); border-radius: 16px; padding: 12px;">
-        <span style="font-size: 12px; font-weight: 800; color: #38bdf8; display: flex; align-items: center; gap: 6px;">
-          <i class="fa-solid fa-circle-plus"></i> ¿Deseas agregar extras a tu platillo?
+      <div id=&quot;boxExtrasContainer&quot; style=&quot;display: flex; flex-direction: column; gap: 8px; background: rgba(56,189,248,0.06); border: 1px solid rgba(56,189,248,0.2); border-radius: 16px; padding: 12px;&quot;>
+        <span style=&quot;font-size: 12px; font-weight: 800; color: #38bdf8; display: flex; align-items: center; gap: 6px;&quot;>
+          <i class=&quot;fa-solid fa-circle-plus&quot;></i> ¿Deseas agregar extras a tu platillo?
         </span>
-        <div id="chipsExtrasContainer" style="display: flex; flex-wrap: wrap; gap: 6px;">
+        <div id=&quot;chipsExtrasContainer&quot; style=&quot;display: flex; flex-wrap: wrap; gap: 6px;&quot;>
           <!-- Checkbox chips de extras con costo -->
         </div>
       </div>
 
       <!-- NOTAS ESPECIALES PARA EL CHEF / BARISTA -->
-      <div style="display: flex; flex-direction: column; gap: 6px;">
-        <label for="txtModalNotasEspeciales" style="font-size: 11px; font-weight: 700; color: #94a3b8;">
-          <i class="fa-regular fa-comment-dots"></i> Instrucciones especiales para la cocina / barra:
+      <div style=&quot;display: flex; flex-direction: column; gap: 6px;&quot;>
+        <label for=&quot;txtModalNotasEspeciales&quot; style=&quot;font-size: 11px; font-weight: 700; color: #94a3b8;&quot;>
+          <i class=&quot;fa-regular fa-comment-dots&quot;></i> Instrucciones especiales para la cocina / barra:
         </label>
-        <input type="text" id="txtModalNotasEspeciales" placeholder="Ej. Bien frío con hielo, salsa aparte..."
-          style="width: 100%; box-sizing: border-box; padding: 10px 14px; background: #020617; border: 1px solid #334155; border-radius: 12px; color: #f8fafc; font-size: 12px; outline: none;">
+        <input type=&quot;text&quot; id=&quot;txtModalNotasEspeciales&quot; placeholder=&quot;Ej. Bien frío con hielo, salsa aparte...&quot;
+          style=&quot;width: 100%; box-sizing: border-box; padding: 10px 14px; background: #020617; border: 1px solid #334155; border-radius: 12px; color: #f8fafc; font-size: 12px; outline: none;&quot;>
       </div>
 
       <!-- CANTIDAD Y BOTÓN PRINCIPAL AGREGAR -->
-      <div style="display: flex; gap: 10px; align-items: center; padding-top: 12px; border-top: 1px solid #1e293b;">
-        <button type="button" onclick="window.cerrarModalRecetaCliente();"
-          style="padding: 12px 16px; background: #1e293b; color: #cbd5e1; border: 1px solid #334155; border-radius: 14px; font-size: 12px; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 6px;">
-          <i class="fa-solid fa-arrow-left"></i> Volver
+      <div style=&quot;display: flex; gap: 10px; align-items: center; padding-top: 12px; border-top: 1px solid #1e293b;&quot;>
+        <button type=&quot;button&quot; onclick=&quot;window.cerrarModalRecetaCliente();&quot;
+          style=&quot;padding: 12px 16px; background: #1e293b; color: #cbd5e1; border: 1px solid #334155; border-radius: 14px; font-size: 12px; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 6px;&quot;>
+          <i class=&quot;fa-solid fa-arrow-left&quot;></i> Volver
         </button>
 
-        <div style="display: flex; align-items: center; background: #020617; border: 1px solid #334155; border-radius: 12px; padding: 4px;">
-          <button type="button" onclick="window.cambiarCantidadModal(-1);" style="width: 30px; height: 30px; background: #1e293b; color: #ffffff; border: none; border-radius: 8px; font-weight: 900; font-size: 14px; cursor: pointer;">-</button>
-          <span id="txtModalCantidad" style="width: 32px; text-align: center; font-size: 14px; font-weight: 900; color: #ffffff;">1</span>
-          <button type="button" onclick="window.cambiarCantidadModal(1);" style="width: 30px; height: 30px; background: #1e293b; color: #ffffff; border: none; border-radius: 8px; font-weight: 900; font-size: 14px; cursor: pointer;">+</button>
+        <div style=&quot;display: flex; align-items: center; background: #020617; border: 1px solid #334155; border-radius: 12px; padding: 4px;&quot;>
+          <button type=&quot;button&quot; onclick=&quot;window.cambiarCantidadModal(-1);&quot; style=&quot;width: 30px; height: 30px; background: #1e293b; color: #ffffff; border: none; border-radius: 8px; font-weight: 900; font-size: 14px; cursor: pointer;&quot;>-</button>
+          <span id=&quot;txtModalCantidad&quot; style=&quot;width: 32px; text-align: center; font-size: 14px; font-weight: 900; color: #ffffff;&quot;>1</span>
+          <button type=&quot;button&quot; onclick=&quot;window.cambiarCantidadModal(1);&quot; style=&quot;width: 30px; height: 30px; background: #1e293b; color: #ffffff; border: none; border-radius: 8px; font-weight: 900; font-size: 14px; cursor: pointer;&quot;>+</button>
         </div>
 
-        <button type="button" onclick="window.confirmarAgregarPlatilloPersonalizado();"
-          style="flex: 1; padding: 13px; background: linear-gradient(135deg, #059669, #0d9488); color: #ffffff; border: none; border-radius: 14px; font-size: 13px; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; box-shadow: 0 4px 16px rgba(5,150,105,0.4);">
-          <i class="fa-solid fa-plus-circle"></i> <span id="btnModalConfirmarTxt">Agregar • $0.00</span>
+        <button type=&quot;button&quot; onclick=&quot;window.confirmarAgregarPlatilloPersonalizado();&quot;
+          style=&quot;flex: 1; padding: 13px; background: linear-gradient(135deg, #059669, #0d9488); color: #ffffff; border: none; border-radius: 14px; font-size: 13px; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; box-shadow: 0 4px 16px rgba(5,150,105,0.4);&quot;>
+          <i class=&quot;fa-solid fa-plus-circle&quot;></i> <span id=&quot;btnModalConfirmarTxt&quot;>Agregar • $0.00</span>
         </button>
       </div>
 
@@ -678,7 +677,7 @@
   window.vsMenuData = [];
   window.vsCategoriasData = [];
 
-  window.categoriaActual = "Al Centro (Para Compartir)";
+  window.categoriaActual = &quot;Al Centro (Para Compartir)&quot;;
   window.simMesaId = 1;
   window.simSillaNum = 1;
   window.sillasAcompanantesSeleccionadas = [];
@@ -687,10 +686,10 @@
     try {
       var prods = typeof prodsJson === 'string' ? JSON.parse(prodsJson) : prodsJson;
       var cats = typeof catsJson === 'string' ? JSON.parse(catsJson) : catsJson;
-      if (Array.isArray(prods) && prods.length > 0) {
+      if (Array.isArray(prods) &amp;&amp; prods.length > 0) {
         window.vsMenuData = prods;
       }
-      if (Array.isArray(cats) && cats.length > 0) {
+      if (Array.isArray(cats) &amp;&amp; cats.length > 0) {
         window.vsCategoriasData = cats;
         // Si la categoría actual no existe en el catálogo recibido, usar la primera categoría disponible
         if (!window.vsCategoriasData.some(function(c){ return c.nombre === window.categoriaActual; })) {
@@ -733,7 +732,7 @@
     var key = window.simMesaId + '-' + window.simSillaNum;
     var cuenta = cuentas[key];
     var total = 0;
-    if (cuenta && cuenta.items) {
+    if (cuenta &amp;&amp; cuenta.items) {
       cuenta.items.forEach(function(i) { total += (i.precio * i.cantidad); });
     }
     alert(`🧾 Cuenta Solicitada:\nMesa ${window.simMesaId} • Silla ${window.simSillaNum}\nTotal a Liquidar: $${total.toFixed(2)} MXN\n\nEl mesero acudirá con la cuenta y opciones de pago.`);
@@ -754,7 +753,7 @@
 
   window.abrirCatalogoConDestino = function (dest) {
     window.destinoPedido = dest;
-    
+
     // 1. Ocultar absolutamente todas las demás vistas (hub, comanda personal, comanda de la mesa)
     window.ocultarTodasLasVistas();
 
@@ -799,7 +798,7 @@
   // Volver inteligente: si estoy en productos -> vuelvo a categorias; si estoy en categorias -> vuelvo al hub
   window.catalogoVolverAtras = function () {
     var gProd = document.getElementById('vistaCatProductos');
-    var estaEnProductos = gProd && !gProd.classList.contains('hidden') && gProd.style.display !== 'none';
+    var estaEnProductos = gProd &amp;&amp; !gProd.classList.contains('hidden') &amp;&amp; gProd.style.display !== 'none';
     if (estaEnProductos) {
       window.mostrarGridCategorias();
     } else {
@@ -812,7 +811,7 @@
     var cuentas = getStorageCuentas();
     var mesaId = window.simMesaId || 1;
     var key = mesaId + '-' + (window.simSillaNum || 1);
-    var items = (cuentas[key] && cuentas[key].items) ? cuentas[key].items : [];
+    var items = (cuentas[key] &amp;&amp; cuentas[key].items) ? cuentas[key].items : [];
     var el = document.getElementById('lblCatBtnTotalNav');
     if (el) {
       el.textContent = items.length > 0 ? `Mi Comanda (${items.length})` : 'Mi Comanda';
@@ -830,7 +829,7 @@
       // Intentar extraer categorias desde los productos
       var seen = {};
       (window.vsMenuData || []).forEach(function (p) {
-        if (p.categoria_nombre && !seen[p.categoria_nombre]) {
+        if (p.categoria_nombre &amp;&amp; !seen[p.categoria_nombre]) {
           seen[p.categoria_nombre] = { nombre: p.categoria_nombre, icono: p.icono || '🍽️', count: 0 };
         }
         if (seen[p.categoria_nombre]) seen[p.categoria_nombre].count++;
@@ -846,10 +845,10 @@
 
     if (cats.length === 0) {
       container.innerHTML = `
-        <div class="col-span-2 text-center py-12 text-slate-400">
-          <div class="inline-block animate-spin text-3xl mb-3">⏳</div>
-          <p class="font-bold text-sm text-slate-300">Cargando menú oficial desde PostgreSQL...</p>
-          <p class="text-xs text-slate-500 mt-1">Conectando en tiempo real con dbterrazavidasabor</p>
+        <div class=&quot;col-span-2 text-center py-12 text-slate-400&quot;>
+          <div class=&quot;inline-block animate-spin text-3xl mb-3&quot;>⏳</div>
+          <p class=&quot;font-bold text-sm text-slate-300&quot;>Cargando menú oficial desde PostgreSQL...</p>
+          <p class=&quot;text-xs text-slate-500 mt-1&quot;>Conectando en tiempo real con dbterrazavidasabor</p>
         </div>
       `;
       return;
@@ -882,30 +881,30 @@
         // Cuadrado/Banner que abarca las 2 columnas completo
         tile.className = 'col-span-2 glass-card bg-gradient-to-r from-amber-950/80 via-yellow-950/60 to-amber-900/80 border-2 border-amber-500/60 hover:border-amber-400 rounded-3xl p-5 flex items-center justify-between text-left cursor-pointer hover:scale-[1.01] active:scale-[0.99] transition shadow-xl group';
         tile.innerHTML = `
-          <div class="flex items-center gap-4">
-            <div class="w-14 h-14 rounded-2xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-3xl text-amber-400 group-hover:scale-110 transition flex-shrink-0">
+          <div class=&quot;flex items-center gap-4&quot;>
+            <div class=&quot;w-14 h-14 rounded-2xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-3xl text-amber-400 group-hover:scale-110 transition flex-shrink-0&quot;>
               🍲
             </div>
             <div>
-              <div class="flex items-center gap-2">
-                <span class="text-[10px] font-black text-amber-400 uppercase tracking-wider bg-amber-500/20 px-2.5 py-0.5 rounded-full border border-amber-500/30">⭐ Para Compartir en la Mesa</span>
-                <span class="text-[11px] text-amber-300 font-bold">${cat.count || 0} opciones</span>
+              <div class=&quot;flex items-center gap-2&quot;>
+                <span class=&quot;text-[10px] font-black text-amber-400 uppercase tracking-wider bg-amber-500/20 px-2.5 py-0.5 rounded-full border border-amber-500/30&quot;>⭐ Para Compartir en la Mesa</span>
+                <span class=&quot;text-[11px] text-amber-300 font-bold&quot;>${cat.count || 0} opciones</span>
               </div>
-              <h3 class="text-base font-black text-white mt-1">Platillos y Botanas Al Centro</h3>
-              <p class="text-xs text-amber-200/80 mt-0.5 line-clamp-1">Guacamole con chicharrón, taquitos de camarón y carne, jarras y botanas para la mesa.</p>
+              <h3 class=&quot;text-base font-black text-white mt-1&quot;>Platillos y Botanas Al Centro</h3>
+              <p class=&quot;text-xs text-amber-200/80 mt-0.5 line-clamp-1&quot;>Guacamole con chicharrón, taquitos de camarón y carne, jarras y botanas para la mesa.</p>
             </div>
           </div>
-          <i class="fa-solid fa-chevron-right text-amber-400 text-sm ml-2 group-hover:translate-x-1 transition flex-shrink-0"></i>
+          <i class=&quot;fa-solid fa-chevron-right text-amber-400 text-sm ml-2 group-hover:translate-x-1 transition flex-shrink-0&quot;></i>
         `;
       } else {
         var c = colores[colorIdx % colores.length];
         colorIdx++;
         tile.className = `glass-card bg-gradient-to-br ${c.bg} border ${c.border} rounded-2xl p-5 flex flex-col items-center justify-center gap-3 text-center cursor-pointer hover:scale-105 active:scale-95 transition-transform shadow-lg`;
         tile.innerHTML = `
-          <div class="w-14 h-14 rounded-2xl ${c.icon} flex items-center justify-center text-3xl border ${c.border}">${cat.icono || '🍽️'}</div>
+          <div class=&quot;w-14 h-14 rounded-2xl ${c.icon} flex items-center justify-center text-3xl border ${c.border}&quot;>${cat.icono || '🍽️'}</div>
           <div>
-            <div class="text-sm font-black text-white leading-tight">${cat.nombre}</div>
-            <div class="text-[11px] ${c.text} font-bold mt-0.5">${cat.count || 0} opciones</div>
+            <div class=&quot;text-sm font-black text-white leading-tight&quot;>${cat.nombre}</div>
+            <div class=&quot;text-[11px] ${c.text} font-bold mt-0.5&quot;>${cat.count || 0} opciones</div>
           </div>
         `;
       }
@@ -957,7 +956,7 @@
     var qrId = 'PV-0' + mesaId + sillaNum;
     var cuentas = getStorageCuentas();
     var keySilla = mesaId + '-' + sillaNum;
-    var itemsSilla = (cuentas[keySilla] && cuentas[keySilla].items) ? cuentas[keySilla].items : [];
+    var itemsSilla = (cuentas[keySilla] &amp;&amp; cuentas[keySilla].items) ? cuentas[keySilla].items : [];
 
     // Platillos al Centro para checar si la mesa tiene consumos
     var keyCentro = mesaId + '-centro';
@@ -982,7 +981,7 @@
     var subtotal = 0;
 
     if (itemsSilla.length === 0) {
-      container.innerHTML = '<div class="text-center py-10 text-slate-500 text-sm">No tienes consumos personales en tu silla aún. Toca <b class="text-emerald-400">Agregar</b> para pedir algo.</div>';
+      container.innerHTML = '<div class=&quot;text-center py-10 text-slate-500 text-sm&quot;>No tienes consumos personales en tu silla aún. Toca <b class=&quot;text-emerald-400&quot;>Agregar</b> para pedir algo.</div>';
     } else {
       itemsSilla.forEach(function (it) {
         var monto = it.precio * it.cantidad;
@@ -992,14 +991,14 @@
         var row = document.createElement('div');
         row.className = 'flex items-center justify-between py-2.5 border-b border-slate-800/60 last:border-0';
         var estadoBadge = it.enviadoCocina
-          ? '<span class="text-[9px] font-black bg-emerald-950/60 text-emerald-300 border border-emerald-500/40 px-1.5 py-0.5 rounded flex items-center gap-1"><i class="fa-solid fa-fire text-[8px]"></i> En Cocina</span>'
-          : '<span class="text-[9px] font-black bg-amber-950/60 text-amber-300 border border-amber-500/40 px-1.5 py-0.5 rounded flex items-center gap-1"><i class="fa-solid fa-clock text-[8px]"></i> Pendiente</span>';
+          ? '<span class=&quot;text-[9px] font-black bg-emerald-950/60 text-emerald-300 border border-emerald-500/40 px-1.5 py-0.5 rounded flex items-center gap-1&quot;><i class=&quot;fa-solid fa-fire text-[8px]&quot;></i> En Cocina</span>'
+          : '<span class=&quot;text-[9px] font-black bg-amber-950/60 text-amber-300 border border-amber-500/40 px-1.5 py-0.5 rounded flex items-center gap-1&quot;><i class=&quot;fa-solid fa-clock text-[8px]&quot;></i> Pendiente</span>';
         row.innerHTML = `
-          <div class="flex-1 pr-2">
-            <div class="text-sm font-bold text-white">${it.nombre} <span class="text-slate-400 font-normal text-xs">x${it.cantidad}</span></div>
-            <div class="flex items-center gap-2 mt-0.5">${estadoBadge}${it.notas ? '<span class="text-[10px] text-slate-500">' + it.notas + '</span>' : ''}</div>
+          <div class=&quot;flex-1 pr-2&quot;>
+            <div class=&quot;text-sm font-bold text-white&quot;>${it.nombre} <span class=&quot;text-slate-400 font-normal text-xs&quot;>x${it.cantidad}</span></div>
+            <div class=&quot;flex items-center gap-2 mt-0.5&quot;>${estadoBadge}${it.notas ? '<span class=&quot;text-[10px] text-slate-500&quot;>' + it.notas + '</span>' : ''}</div>
           </div>
-          <span class="text-sm font-black text-emerald-400 ml-2">$${monto.toFixed(2)}</span>
+          <span class=&quot;text-sm font-black text-emerald-400 ml-2&quot;>$${monto.toFixed(2)}</span>
         `;
         container.appendChild(row);
       });
@@ -1013,14 +1012,14 @@
       bannerMesa.className = 'mt-3 p-3 rounded-2xl bg-amber-950/30 border border-amber-500/30 flex items-center justify-between text-xs cursor-pointer hover:bg-amber-950/50 transition';
       bannerMesa.onclick = function() { window.mostrarVistaComandaMesa(); };
       bannerMesa.innerHTML = `
-        <div class="flex items-center gap-2.5">
-          <span class="text-lg">🍲</span>
+        <div class=&quot;flex items-center gap-2.5&quot;>
+          <span class=&quot;text-lg&quot;>🍲</span>
           <div>
-            <div class="font-bold text-amber-200">Hay ${itemsCentro.length} platillo(s) al centro en tu mesa</div>
-            <div class="text-[10px] text-amber-400/80">Total al centro: $${totCentro.toFixed(2)} (no cargados a tu cuenta)</div>
+            <div class=&quot;font-bold text-amber-200&quot;>Hay ${itemsCentro.length} platillo(s) al centro en tu mesa</div>
+            <div class=&quot;text-[10px] text-amber-400/80&quot;>Total al centro: $${totCentro.toFixed(2)} (no cargados a tu cuenta)</div>
           </div>
         </div>
-        <span class="text-xs font-bold text-amber-300 flex items-center gap-1">Ver <i class="fa-solid fa-arrow-right text-[10px]"></i></span>
+        <span class=&quot;text-xs font-bold text-amber-300 flex items-center gap-1&quot;>Ver <i class=&quot;fa-solid fa-arrow-right text-[10px]&quot;></i></span>
       `;
       container.appendChild(bannerMesa);
     }
@@ -1046,7 +1045,7 @@
       } else if (itemsSilla.length > 0) {
         btn.disabled = true;
         btn.style.opacity = '0.65';
-        if (btnTxt) btnTxt.innerHTML = '<i class="fa-solid fa-check-double"></i> Todo enviado a Cocina';
+        if (btnTxt) btnTxt.innerHTML = '<i class=&quot;fa-solid fa-check-double&quot;></i> Todo enviado a Cocina';
       } else {
         btn.disabled = true;
         btn.style.opacity = '0.4';
@@ -1075,7 +1074,7 @@
     var subtotal = 0;
 
     if (itemsCentro.length === 0) {
-      container.innerHTML = '<div class="text-center py-10 text-slate-500 text-sm">No hay platillos pedidos al centro aún.<br>Toca <b class="text-amber-400">Pedir al Centro</b> para botanear o compartir.</div>';
+      container.innerHTML = '<div class=&quot;text-center py-10 text-slate-500 text-sm&quot;>No hay platillos pedidos al centro aún.<br>Toca <b class=&quot;text-amber-400&quot;>Pedir al Centro</b> para botanear o compartir.</div>';
     } else {
       itemsCentro.forEach(function (it) {
         var monto = it.precio * it.cantidad;
@@ -1085,14 +1084,14 @@
         var row = document.createElement('div');
         row.className = 'flex items-center justify-between py-2.5 border-b border-slate-800/60 last:border-0';
         var estadoBadge = it.enviadoCocina
-          ? '<span class="text-[9px] font-black bg-emerald-950/60 text-emerald-300 border border-emerald-500/40 px-1.5 py-0.5 rounded flex items-center gap-1"><i class="fa-solid fa-fire text-[8px]"></i> En Cocina</span>'
-          : '<span class="text-[9px] font-black bg-amber-950/60 text-amber-300 border border-amber-500/40 px-1.5 py-0.5 rounded flex items-center gap-1"><i class="fa-solid fa-clock text-[8px]"></i> Pendiente</span>';
+          ? '<span class=&quot;text-[9px] font-black bg-emerald-950/60 text-emerald-300 border border-emerald-500/40 px-1.5 py-0.5 rounded flex items-center gap-1&quot;><i class=&quot;fa-solid fa-fire text-[8px]&quot;></i> En Cocina</span>'
+          : '<span class=&quot;text-[9px] font-black bg-amber-950/60 text-amber-300 border border-amber-500/40 px-1.5 py-0.5 rounded flex items-center gap-1&quot;><i class=&quot;fa-solid fa-clock text-[8px]&quot;></i> Pendiente</span>';
         row.innerHTML = `
-          <div class="flex-1 pr-2">
-            <div class="text-sm font-bold text-amber-100">${it.nombre} <span class="text-slate-400 font-normal text-xs">x${it.cantidad}</span></div>
-            <div class="flex items-center gap-2 mt-0.5">${estadoBadge}${it.notas ? '<span class="text-[10px] text-slate-500">' + it.notas + '</span>' : ''}</div>
+          <div class=&quot;flex-1 pr-2&quot;>
+            <div class=&quot;text-sm font-bold text-amber-100&quot;>${it.nombre} <span class=&quot;text-slate-400 font-normal text-xs&quot;>x${it.cantidad}</span></div>
+            <div class=&quot;flex items-center gap-2 mt-0.5&quot;>${estadoBadge}${it.notas ? '<span class=&quot;text-[10px] text-slate-500&quot;>' + it.notas + '</span>' : ''}</div>
           </div>
-          <span class="text-sm font-black text-amber-400 ml-2">$${monto.toFixed(2)}</span>
+          <span class=&quot;text-sm font-black text-amber-400 ml-2&quot;>$${monto.toFixed(2)}</span>
         `;
         container.appendChild(row);
       });
@@ -1115,7 +1114,7 @@
       } else if (itemsCentro.length > 0) {
         btn.disabled = true;
         btn.style.opacity = '0.65';
-        if (btnTxt) btnTxt.innerHTML = '<i class="fa-solid fa-check-double"></i> Todo al Centro enviado a Cocina';
+        if (btnTxt) btnTxt.innerHTML = '<i class=&quot;fa-solid fa-check-double&quot;></i> Todo al Centro enviado a Cocina';
       } else {
         btn.disabled = true;
         btn.style.opacity = '0.4';
@@ -1208,13 +1207,13 @@
     btnMiSilla.className = isMiSillaActive
       ? 'px-3 py-1.5 text-xs font-black rounded-xl bg-emerald-500 text-slate-950 border border-emerald-400 flex items-center gap-1.5 shadow-md shadow-emerald-500/30 cursor-pointer scale-105 transition'
       : 'px-2.5 py-1.5 text-xs font-bold rounded-xl bg-slate-800 text-emerald-400 hover:bg-slate-700 border border-emerald-500/40 flex items-center gap-1.5 transition cursor-pointer';
-    btnMiSilla.innerHTML = `<i class="fa-solid fa-user-check text-[11px]"></i> Silla ${miSilla} (Tú)`;
+    btnMiSilla.innerHTML = `<i class=&quot;fa-solid fa-user-check text-[11px]&quot;></i> Silla ${miSilla} (Tú)`;
     container.appendChild(btnMiSilla);
 
     // 2. Botón: Al Centro (Para Compartir en la Mesa)
     var keyCentro = mesaId + '-centro';
     var cuentaCentro = cuentas[keyCentro];
-    var hasCentroItems = cuentaCentro && cuentaCentro.items && cuentaCentro.items.length > 0;
+    var hasCentroItems = cuentaCentro &amp;&amp; cuentaCentro.items &amp;&amp; cuentaCentro.items.length > 0;
     var isCentroActive = (dest === 'centro');
     var btnCentro = document.createElement('button');
     btnCentro.type = 'button';
@@ -1222,7 +1221,7 @@
     btnCentro.className = isCentroActive
       ? 'px-3 py-1.5 text-xs font-black rounded-xl bg-amber-500 text-slate-950 border border-amber-400 flex items-center gap-1.5 shadow-md shadow-amber-500/30 cursor-pointer scale-105 transition'
       : 'px-2.5 py-1.5 text-xs font-bold rounded-xl bg-slate-800 text-amber-300 hover:bg-slate-700 border border-amber-500/40 flex items-center gap-1.5 transition cursor-pointer';
-    btnCentro.innerHTML = `<i class="fa-solid fa-utensils text-[11px]"></i> Al Centro${hasCentroItems ? ' 🍲' : ''}`;
+    btnCentro.innerHTML = `<i class=&quot;fa-solid fa-utensils text-[11px]&quot;></i> Al Centro${hasCentroItems ? ' 🍲' : ''}`;
     container.appendChild(btnCentro);
 
     // 3. Botones: Otras Sillas de Mi Mesa (Acompañantes 1..4 excepto miSilla)
@@ -1231,7 +1230,7 @@
       var isTarget = (dest === s);
       var keyS = mesaId + '-' + s;
       var cS = cuentas[keyS];
-      var hasItemsS = cS && cS.items && cS.items.length > 0;
+      var hasItemsS = cS &amp;&amp; cS.items &amp;&amp; cS.items.length > 0;
 
       var btnS = document.createElement('button');
       btnS.type = 'button';
@@ -1318,7 +1317,7 @@
 
     // Sincronizar inmediatamente con el servidor de Anvil para que el mesero lo vea
     try {
-      if (window.anvilSyncCuenta && cuentas[key]) {
+      if (window.anvilSyncCuenta &amp;&amp; cuentas[key]) {
         window.anvilSyncCuenta(mesaId, sillaNum, JSON.stringify(cuentas[key].items || []), 'ocupada');
       }
     } catch(e) {
@@ -1336,7 +1335,7 @@
     window.simSillaNum = parseInt(parts[1]);
 
     // Si es Mesa 2 Silla 1 (Papá), sugerir niños seleccionados (3 y 4)
-    if (window.simMesaId === 2 && window.simSillaNum === 1) {
+    if (window.simMesaId === 2 &amp;&amp; window.simSillaNum === 1) {
       window.sillasAcompanantesSeleccionadas = [3, 4];
     } else {
       window.sillasAcompanantesSeleccionadas = [];
@@ -1371,7 +1370,7 @@
     }
 
     var cuentaActual = cuentas[key];
-    var comensalNom = (cuentaActual && cuentaActual.comensalNombre) ? cuentaActual.comensalNombre : ('Comensal Silla ' + window.simSillaNum);
+    var comensalNom = (cuentaActual &amp;&amp; cuentaActual.comensalNombre) ? cuentaActual.comensalNombre : ('Comensal Silla ' + window.simSillaNum);
 
     var lblQr = document.getElementById('lblQrActivo');
     var lblUbicacion = document.getElementById('lblUbicacionActiva');
@@ -1379,7 +1378,7 @@
     var txtSub = document.getElementById('txtSubComanda');
 
     if (lblQr) lblQr.innerText = 'Portavasos #' + qrId;
-    if (lblUbicacion) lblUbicacion.innerHTML = `¡Hola! Estás en la <span class="text-emerald-400">Mesa ${window.simMesaId} • Silla ${window.simSillaNum}</span>`;
+    if (lblUbicacion) lblUbicacion.innerHTML = `¡Hola! Estás en la <span class=&quot;text-emerald-400&quot;>Mesa ${window.simMesaId} • Silla ${window.simSillaNum}</span>`;
     if (txtTitulo) txtTitulo.innerText = `Mi Comanda (Silla ${window.simSillaNum})`;
     if (txtSub) txtSub.innerText = `Mesa ${window.simMesaId} • Portavasos #${qrId}`;
 
@@ -1392,7 +1391,7 @@
       if (window.anvilCheckinSilla) {
         window.anvilCheckinSilla(window.simMesaId, window.simSillaNum, qrId);
       }
-      if (window.anvilSyncCuenta && cuentaActual && cuentaActual.items) {
+      if (window.anvilSyncCuenta &amp;&amp; cuentaActual &amp;&amp; cuentaActual.items) {
         window.anvilSyncCuenta(window.simMesaId, window.simSillaNum, JSON.stringify(cuentaActual.items), 'ocupada');
       }
     } catch (e) { }
@@ -1415,14 +1414,14 @@
 
     var pendientesCount = 0;
 
-    if (itemsSilla.length === 0 && itemsCentro.length === 0) {
-      container.innerHTML = `<div class="text-center py-6 text-slate-500 text-xs">No hay consumos registrados en tu silla ni al centro.</div>`;
+    if (itemsSilla.length === 0 &amp;&amp; itemsCentro.length === 0) {
+      container.innerHTML = `<div class=&quot;text-center py-6 text-slate-500 text-xs&quot;>No hay consumos registrados en tu silla ni al centro.</div>`;
     } else {
       // 1. Consumos de Mi Silla
       if (itemsSilla.length > 0) {
         var hSilla = document.createElement('div');
         hSilla.className = 'text-[11px] font-bold text-emerald-400 mb-1 flex items-center gap-1';
-        hSilla.innerHTML = `<i class="fa-solid fa-user text-[10px]"></i> Tu Silla (${window.simSillaNum}):`;
+        hSilla.innerHTML = `<i class=&quot;fa-solid fa-user text-[10px]&quot;></i> Tu Silla (${window.simSillaNum}):`;
         container.appendChild(hSilla);
 
         itemsSilla.forEach((item) => {
@@ -1433,17 +1432,17 @@
           row.className = 'flex justify-between items-center bg-slate-900/80 p-2.5 rounded-xl border border-slate-800 text-xs mb-1.5';
           row.innerHTML = `
               <div>
-                <div class="flex items-center gap-1.5">
-                  <span class="font-bold text-white">${item.nombre} x${item.cantidad}</span>
+                <div class=&quot;flex items-center gap-1.5&quot;>
+                  <span class=&quot;font-bold text-white&quot;>${item.nombre} x${item.cantidad}</span>
                 </div>
-                <div class="flex items-center gap-2 mt-1">
-                  <span class="text-[10px] text-slate-400">${item.notas ? item.notas + ' • ' : ''}$${Number(item.precio).toFixed(2)} c/u</span>
+                <div class=&quot;flex items-center gap-2 mt-1&quot;>
+                  <span class=&quot;text-[10px] text-slate-400&quot;>${item.notas ? item.notas + ' • ' : ''}$${Number(item.precio).toFixed(2)} c/u</span>
                   ${item.enviadoCocina
-                    ? `<span class="bg-emerald-950/60 text-emerald-300 border border-emerald-500/40 text-[9px] font-bold px-1.5 py-0.5 rounded flex items-center gap-1"><i class="fa-solid fa-fire text-emerald-400"></i> En Cocina (${item.horaEnvioCocina || item.hora || ''})</span>`
-                    : `<span class="bg-amber-950/60 text-amber-300 border border-amber-500/40 text-[9px] font-bold px-1.5 py-0.5 rounded flex items-center gap-1"><i class="fa-solid fa-clock text-amber-400"></i> Pendiente</span>`}
+                    ? `<span class=&quot;bg-emerald-950/60 text-emerald-300 border border-emerald-500/40 text-[9px] font-bold px-1.5 py-0.5 rounded flex items-center gap-1&quot;><i class=&quot;fa-solid fa-fire text-emerald-400&quot;></i> En Cocina (${item.horaEnvioCocina || item.hora || ''})</span>`
+                    : `<span class=&quot;bg-amber-950/60 text-amber-300 border border-amber-500/40 text-[9px] font-bold px-1.5 py-0.5 rounded flex items-center gap-1&quot;><i class=&quot;fa-solid fa-clock text-amber-400&quot;></i> Pendiente</span>`}
                 </div>
               </div>
-              <span class="font-black text-emerald-400">$${itemSubtotal.toFixed(2)}</span>
+              <span class=&quot;font-black text-emerald-400&quot;>$${itemSubtotal.toFixed(2)}</span>
             `;
           container.appendChild(row);
         });
@@ -1453,7 +1452,7 @@
       if (itemsCentro.length > 0) {
         var hCentro = document.createElement('div');
         hCentro.className = 'text-[11px] font-bold text-amber-400 mt-2.5 mb-1 flex items-center gap-1';
-        hCentro.innerHTML = `<i class="fa-solid fa-utensils text-[10px]"></i> Al Centro (Compartido en Mesa):`;
+        hCentro.innerHTML = `<i class=&quot;fa-solid fa-utensils text-[10px]&quot;></i> Al Centro (Compartido en Mesa):`;
         container.appendChild(hCentro);
 
         itemsCentro.forEach((item) => {
@@ -1464,18 +1463,18 @@
           row.className = 'flex justify-between items-center bg-amber-950/20 p-2.5 rounded-xl border border-amber-500/30 text-xs mb-1.5';
           row.innerHTML = `
               <div>
-                <div class="flex items-center gap-1.5">
-                  <span class="font-bold text-amber-200">${item.nombre} x${item.cantidad}</span>
-                  <span class="text-[9px] font-bold bg-amber-500/20 text-amber-300 px-1.5 py-0.5 rounded">Centro</span>
+                <div class=&quot;flex items-center gap-1.5&quot;>
+                  <span class=&quot;font-bold text-amber-200&quot;>${item.nombre} x${item.cantidad}</span>
+                  <span class=&quot;text-[9px] font-bold bg-amber-500/20 text-amber-300 px-1.5 py-0.5 rounded&quot;>Centro</span>
                 </div>
-                <div class="flex items-center gap-2 mt-1">
-                  <span class="text-[10px] text-slate-400">${item.notas ? item.notas + ' • ' : ''}$${Number(item.precio).toFixed(2)} c/u</span>
+                <div class=&quot;flex items-center gap-2 mt-1&quot;>
+                  <span class=&quot;text-[10px] text-slate-400&quot;>${item.notas ? item.notas + ' • ' : ''}$${Number(item.precio).toFixed(2)} c/u</span>
                   ${item.enviadoCocina
-                    ? `<span class="bg-emerald-950/60 text-emerald-300 border border-emerald-500/40 text-[9px] font-bold px-1.5 py-0.5 rounded flex items-center gap-1"><i class="fa-solid fa-fire text-emerald-400"></i> En Cocina (${item.horaEnvioCocina || item.hora || ''})</span>`
-                    : `<span class="bg-amber-950/60 text-amber-300 border border-amber-500/40 text-[9px] font-bold px-1.5 py-0.5 rounded flex items-center gap-1"><i class="fa-solid fa-clock text-amber-400"></i> Pendiente</span>`}
+                    ? `<span class=&quot;bg-emerald-950/60 text-emerald-300 border border-emerald-500/40 text-[9px] font-bold px-1.5 py-0.5 rounded flex items-center gap-1&quot;><i class=&quot;fa-solid fa-fire text-emerald-400&quot;></i> En Cocina (${item.horaEnvioCocina || item.hora || ''})</span>`
+                    : `<span class=&quot;bg-amber-950/60 text-amber-300 border border-amber-500/40 text-[9px] font-bold px-1.5 py-0.5 rounded flex items-center gap-1&quot;><i class=&quot;fa-solid fa-clock text-amber-400&quot;></i> Pendiente</span>`}
                 </div>
               </div>
-              <span class="font-black text-amber-400">$${itemSubtotal.toFixed(2)}</span>
+              <span class=&quot;font-black text-amber-400&quot;>$${itemSubtotal.toFixed(2)}</span>
             `;
           container.appendChild(row);
         });
@@ -1484,7 +1483,7 @@
 
     const btnSendCocina = document.getElementById('btnClienteEnviarCocina');
     const btnSendCocinaTxt = document.getElementById('btnClienteEnviarCocinaTxt');
-    if (btnSendCocina && btnSendCocinaTxt) {
+    if (btnSendCocina &amp;&amp; btnSendCocinaTxt) {
       if (pendientesCount > 0) {
         btnSendCocina.disabled = false;
         btnSendCocina.style.opacity = '1';
@@ -1494,7 +1493,7 @@
         btnSendCocina.disabled = true;
         btnSendCocina.style.opacity = '0.65';
         btnSendCocina.style.cursor = 'default';
-        btnSendCocinaTxt.innerHTML = `<i class="fa-solid fa-check-double"></i> Todo enviado a Cocina`;
+        btnSendCocinaTxt.innerHTML = `<i class=&quot;fa-solid fa-check-double&quot;></i> Todo enviado a Cocina`;
       } else {
         btnSendCocina.disabled = true;
         btnSendCocina.style.opacity = '0.4';
@@ -1516,7 +1515,7 @@
     var pendientesCount = 0;
     var nowStr = (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
-    if (cuentas[keySilla] && cuentas[keySilla].items) {
+    if (cuentas[keySilla] &amp;&amp; cuentas[keySilla].items) {
       cuentas[keySilla].items.forEach(i => {
         if (!i.enviadoCocina) {
           i.enviadoCocina = true;
@@ -1526,7 +1525,7 @@
       });
     }
 
-    if (cuentas[keyCentro] && cuentas[keyCentro].items) {
+    if (cuentas[keyCentro] &amp;&amp; cuentas[keyCentro].items) {
       cuentas[keyCentro].items.forEach(i => {
         if (!i.enviadoCocina) {
           i.enviadoCocina = true;
@@ -1536,7 +1535,7 @@
       });
     }
 
-    if (cuentas[keyCentro0] && cuentas[keyCentro0].items) {
+    if (cuentas[keyCentro0] &amp;&amp; cuentas[keyCentro0].items) {
       cuentas[keyCentro0].items.forEach(i => {
         if (!i.enviadoCocina) {
           i.enviadoCocina = true;
@@ -1557,15 +1556,15 @@
       window.renderComandaLimpia();
     }
 
-    // Sincronizar estado "Enviado a Cocina" con el servidor en tiempo real
+    // Sincronizar estado &quot;Enviado a Cocina&quot; con el servidor en tiempo real
     try {
       if (window.anvilSyncCuenta) {
         // 1. Sincronizar consumos de Mi Silla
-        if (cuentas[keySilla] && cuentas[keySilla].items) {
+        if (cuentas[keySilla] &amp;&amp; cuentas[keySilla].items) {
           window.anvilSyncCuenta(mesaId, window.simSillaNum, JSON.stringify(cuentas[keySilla].items || []), 'ocupada');
         }
         // 2. Sincronizar consumos Al Centro (silla 0)
-        var itemsCentro = (cuentas[keyCentro] && cuentas[keyCentro].items) || (cuentas[keyCentro0] && cuentas[keyCentro0].items) || [];
+        var itemsCentro = (cuentas[keyCentro] &amp;&amp; cuentas[keyCentro].items) || (cuentas[keyCentro0] &amp;&amp; cuentas[keyCentro0].items) || [];
         if (itemsCentro.length > 0) {
           window.anvilSyncCuenta(mesaId, 0, JSON.stringify(itemsCentro), 'ocupada');
         }
@@ -1591,7 +1590,7 @@
       if (s !== miSilla) {
         var k = mesaId + '-' + s;
         var c = cuentas[k];
-        if (c && c.items && c.items.length > 0) {
+        if (c &amp;&amp; c.items &amp;&amp; c.items.length > 0) {
           var tot = 0;
           c.items.forEach(function (i) { tot += i.precio * i.cantidad; });
           otrasSillas.push({ sillaNum: s, cuenta: c, total: tot });
@@ -1600,7 +1599,7 @@
     }
 
     if (otrasSillas.length === 0) {
-      container.innerHTML = `<div class="text-slate-500 text-[11px] py-2">No hay otras sillas con consumos en tu mesa.</div>`;
+      container.innerHTML = `<div class=&quot;text-slate-500 text-[11px] py-2&quot;>No hay otras sillas con consumos en tu mesa.</div>`;
       return;
     }
 
@@ -1610,11 +1609,11 @@
       row.className = `flex items-center justify-between p-2 rounded-xl border transition cursor-pointer ${isSelected ? 'bg-emerald-950/40 border-emerald-500/40 text-emerald-300' : 'bg-slate-900/60 border-slate-800 text-slate-400'}`;
 
       row.innerHTML = `
-          <div class="flex items-center gap-2">
-            <input type="checkbox" onchange="window.toggleAcompanante(${item.sillaNum})" ${isSelected ? 'checked' : ''} class="rounded text-emerald-500 focus:ring-0">
-            <span class="font-bold text-xs">Silla ${item.sillaNum} ${item.cuenta.comensalNombre ? '(' + item.cuenta.comensalNombre + ')' : ''}</span>
+          <div class=&quot;flex items-center gap-2&quot;>
+            <input type=&quot;checkbox&quot; onchange=&quot;window.toggleAcompanante(${item.sillaNum})&quot; ${isSelected ? 'checked' : ''} class=&quot;rounded text-emerald-500 focus:ring-0&quot;>
+            <span class=&quot;font-bold text-xs&quot;>Silla ${item.sillaNum} ${item.cuenta.comensalNombre ? '(' + item.cuenta.comensalNombre + ')' : ''}</span>
           </div>
-          <span class="font-bold text-xs text-white">$${item.total.toFixed(2)}</span>
+          <span class=&quot;font-bold text-xs text-white&quot;>$${item.total.toFixed(2)}</span>
         `;
       container.appendChild(row);
     });
@@ -1637,7 +1636,7 @@
     var miSilla = window.simSillaNum;
     var all = [];
     for (var s = 1; s <= 4; s++) {
-      if (s !== miSilla && cuentas[mesaId + '-' + s] && cuentas[mesaId + '-' + s].items && cuentas[mesaId + '-' + s].items.length > 0) {
+      if (s !== miSilla &amp;&amp; cuentas[mesaId + '-' + s] &amp;&amp; cuentas[mesaId + '-' + s].items &amp;&amp; cuentas[mesaId + '-' + s].items.length > 0) {
         all.push(s);
       }
     }
@@ -1656,7 +1655,7 @@
     // 1. Mi Silla (Personal)
     var subtotalSilla = 0;
     var keySilla = mesaId + '-' + miSilla;
-    if (cuentas[keySilla] && cuentas[keySilla].items) {
+    if (cuentas[keySilla] &amp;&amp; cuentas[keySilla].items) {
       cuentas[keySilla].items.forEach(function (it) { subtotalSilla += it.precio * it.cantidad; });
     }
     var totalSilla = subtotalSilla * 1.16;
@@ -1666,7 +1665,7 @@
     var keyCentro = mesaId + '-centro';
     var keyCentro0 = mesaId + '-0';
     var ctaCentro = cuentas[keyCentro] || cuentas[keyCentro0];
-    if (ctaCentro && ctaCentro.items) {
+    if (ctaCentro &amp;&amp; ctaCentro.items) {
       ctaCentro.items.forEach(function (it) { subtotalCentro += it.precio * it.cantidad; });
     }
     var totalCentro = subtotalCentro * 1.16;
@@ -1675,7 +1674,7 @@
     var subtotalAcompanantes = 0;
     (window.sillasAcompanantesSeleccionadas || []).forEach(function (s) {
       var k = mesaId + '-' + s;
-      if (cuentas[k] && cuentas[k].items) {
+      if (cuentas[k] &amp;&amp; cuentas[k].items) {
         cuentas[k].items.forEach(function (it) { subtotalAcompanantes += it.precio * it.cantidad; });
       }
     });
@@ -1719,11 +1718,11 @@
     // Actualizar Banner Sticky Superior de Comanda
     var itemsCount = 0;
     var pendientesCount = 0;
-    if (cuentas[keySilla] && cuentas[keySilla].items) {
+    if (cuentas[keySilla] &amp;&amp; cuentas[keySilla].items) {
       itemsCount += cuentas[keySilla].items.length;
       cuentas[keySilla].items.forEach(function(i) { if (!i.enviadoCocina) pendientesCount++; });
     }
-    if (cuentas[keyCentro] && cuentas[keyCentro].items) {
+    if (cuentas[keyCentro] &amp;&amp; cuentas[keyCentro].items) {
       itemsCount += cuentas[keyCentro].items.length;
       cuentas[keyCentro].items.forEach(function(i) { if (!i.enviadoCocina) pendientesCount++; });
     }
@@ -1735,9 +1734,9 @@
     if (lblStickyTot) lblStickyTot.innerText = `$${total.toFixed(2)}`;
     if (lblStickyTit) {
       if (itemsCount === 0) {
-        lblStickyTit.innerHTML = `Mi Comanda: <span class="text-slate-400 font-semibold">Sin pedidos aún</span>`;
+        lblStickyTit.innerHTML = `Mi Comanda: <span class=&quot;text-slate-400 font-semibold&quot;>Sin pedidos aún</span>`;
       } else {
-        lblStickyTit.innerHTML = `Mi Comanda: <b class="text-emerald-400">${itemsCount} producto${itemsCount > 1 ? 's' : ''}</b> ${pendientesCount > 0 ? `<span class="text-amber-400 text-[10px] font-bold">(${pendientesCount} pendiente${pendientesCount > 1 ? 's' : ''})</span>` : `<span class="text-sky-400 text-[10px] font-bold">✓ En Cocina</span>`}`;
+        lblStickyTit.innerHTML = `Mi Comanda: <b class=&quot;text-emerald-400&quot;>${itemsCount} producto${itemsCount > 1 ? 's' : ''}</b> ${pendientesCount > 0 ? `<span class=&quot;text-amber-400 text-[10px] font-bold&quot;>(${pendientesCount} pendiente${pendientesCount > 1 ? 's' : ''})</span>` : `<span class=&quot;text-sky-400 text-[10px] font-bold&quot;>✓ En Cocina</span>`}`;
       }
     }
     if (lblStickySub) {
@@ -1816,11 +1815,11 @@
       }
     });
 
-    if (modo === 'solo_yo' && btnSoloYo) btnSoloYo.className = 'p-2 rounded-lg font-bold border text-center transition cursor-pointer ' + activeCls;
-    if (modo === 'split_centro' && btnSplitCentro) btnSplitCentro.className = 'p-2 rounded-lg font-bold border text-center transition cursor-pointer ' + activeCls;
-    if (modo === 'absorber_centro' && btnAbsorberCentro) btnAbsorberCentro.className = 'p-2 rounded-lg font-bold border text-center transition cursor-pointer ' + activeCls;
-    if (modo === 'split_toda_mesa' && btnSplitToda) btnSplitToda.className = 'p-2 rounded-lg font-bold border text-center transition cursor-pointer ' + activeCls;
-    if (modo === 'toda_mesa' && btnToda) btnToda.className = 'col-span-2 p-2 rounded-lg font-bold border text-center transition cursor-pointer ' + activeCls;
+    if (modo === 'solo_yo' &amp;&amp; btnSoloYo) btnSoloYo.className = 'p-2 rounded-lg font-bold border text-center transition cursor-pointer ' + activeCls;
+    if (modo === 'split_centro' &amp;&amp; btnSplitCentro) btnSplitCentro.className = 'p-2 rounded-lg font-bold border text-center transition cursor-pointer ' + activeCls;
+    if (modo === 'absorber_centro' &amp;&amp; btnAbsorberCentro) btnAbsorberCentro.className = 'p-2 rounded-lg font-bold border text-center transition cursor-pointer ' + activeCls;
+    if (modo === 'split_toda_mesa' &amp;&amp; btnSplitToda) btnSplitToda.className = 'p-2 rounded-lg font-bold border text-center transition cursor-pointer ' + activeCls;
+    if (modo === 'toda_mesa' &amp;&amp; btnToda) btnToda.className = 'col-span-2 p-2 rounded-lg font-bold border text-center transition cursor-pointer ' + activeCls;
 
     window.renderDetalleModalCobro();
   };
@@ -1844,7 +1843,7 @@
     var sillasActivas = [];
     for (var s = 1; s <= 4; s++) {
       var c = cuentas[mesaId + '-' + s];
-      if (c && (c.estado === 'ocupada' || (c.items && c.items.length > 0))) {
+      if (c &amp;&amp; (c.estado === 'ocupada' || (c.items &amp;&amp; c.items.length > 0))) {
         sillasActivas.push(s);
       }
     }
@@ -1876,22 +1875,22 @@
       var block = document.createElement('div');
       block.className = 'p-3 rounded-xl bg-slate-950/70 border border-emerald-500/30 mb-2';
       block.innerHTML = `
-        <div class="flex justify-between items-center font-bold text-emerald-400 mb-1.5 pb-1 border-b border-slate-800">
-          <span><i class="fa-solid fa-chair text-xs"></i> Tu Silla ${miSilla} (Consumos Personales)</span>
-          <span class="text-[10px] text-slate-500">QR: #PV-0${mesaId}${miSilla}</span>
+        <div class=&quot;flex justify-between items-center font-bold text-emerald-400 mb-1.5 pb-1 border-b border-slate-800&quot;>
+          <span><i class=&quot;fa-solid fa-chair text-xs&quot;></i> Tu Silla ${miSilla} (Consumos Personales)</span>
+          <span class=&quot;text-[10px] text-slate-500&quot;>QR: #PV-0${mesaId}${miSilla}</span>
         </div>
       `;
       if (itemsSilla.length === 0) {
-        block.innerHTML += `<div class="text-slate-500 text-xs py-2 text-center">No tienes consumos individuales registrados.</div>`;
+        block.innerHTML += `<div class=&quot;text-slate-500 text-xs py-2 text-center&quot;>No tienes consumos individuales registrados.</div>`;
       } else {
         itemsSilla.forEach(function (it) {
           var m = it.precio * it.cantidad;
-          block.innerHTML += `<div class="flex justify-between text-slate-300 py-0.5 text-xs"><span>${it.cantidad}x ${it.nombre}</span><span class="font-bold text-emerald-400">$${m.toFixed(2)}</span></div>`;
+          block.innerHTML += `<div class=&quot;flex justify-between text-slate-300 py-0.5 text-xs&quot;><span>${it.cantidad}x ${it.nombre}</span><span class=&quot;font-bold text-emerald-400&quot;>$${m.toFixed(2)}</span></div>`;
         });
       }
       block.innerHTML += `
-        <div class="flex justify-between text-slate-300 font-black pt-1.5 mt-1.5 border-t border-slate-800 text-xs">
-          <span>Subtotal Mi Silla:</span><span class="text-emerald-400">$${subtotalSilla.toFixed(2)}</span>
+        <div class=&quot;flex justify-between text-slate-300 font-black pt-1.5 mt-1.5 border-t border-slate-800 text-xs&quot;>
+          <span>Subtotal Mi Silla:</span><span class=&quot;text-emerald-400&quot;>$${subtotalSilla.toFixed(2)}</span>
         </div>
       `;
       container.appendChild(block);
@@ -1900,7 +1899,7 @@
         var notaCentro = document.createElement('div');
         notaCentro.className = 'p-2.5 rounded-xl bg-amber-950/25 border border-amber-500/25 text-[11px] text-amber-300/80 flex items-center justify-between';
         notaCentro.innerHTML = `
-          <span><i class="fa-solid fa-info-circle text-amber-400 mr-1"></i> Platillos al centro ($${subtotalCentro.toFixed(2)}) <b>NO incluidos</b> en este cobro (permanecen en la mesa).</span>
+          <span><i class=&quot;fa-solid fa-info-circle text-amber-400 mr-1&quot;></i> Platillos al centro ($${subtotalCentro.toFixed(2)}) <b>NO incluidos</b> en este cobro (permanecen en la mesa).</span>
         `;
         container.appendChild(notaCentro);
       }
@@ -1923,17 +1922,17 @@
       var block1 = document.createElement('div');
       block1.className = 'p-3 rounded-xl bg-slate-950/70 border border-emerald-500/30 mb-2';
       block1.innerHTML = `
-        <div class="flex justify-between items-center font-bold text-emerald-400 mb-1.5 pb-1 border-b border-slate-800">
-          <span><i class="fa-solid fa-chair text-xs"></i> 1. Alimentos de Tu Silla (${miSilla})</span>
-          <span class="text-xs font-black text-emerald-400">$${subtotalSilla.toFixed(2)}</span>
+        <div class=&quot;flex justify-between items-center font-bold text-emerald-400 mb-1.5 pb-1 border-b border-slate-800&quot;>
+          <span><i class=&quot;fa-solid fa-chair text-xs&quot;></i> 1. Alimentos de Tu Silla (${miSilla})</span>
+          <span class=&quot;text-xs font-black text-emerald-400&quot;>$${subtotalSilla.toFixed(2)}</span>
         </div>
       `;
       if (itemsSilla.length === 0) {
-        block1.innerHTML += `<div class="text-slate-500 text-xs py-1 text-center">Sin consumos individuales registrados.</div>`;
+        block1.innerHTML += `<div class=&quot;text-slate-500 text-xs py-1 text-center&quot;>Sin consumos individuales registrados.</div>`;
       } else {
         itemsSilla.forEach(function (it) {
           var m = it.precio * it.cantidad;
-          block1.innerHTML += `<div class="flex justify-between text-slate-300 py-0.5 text-xs"><span>${it.cantidad}x ${it.nombre}</span><span>$${m.toFixed(2)}</span></div>`;
+          block1.innerHTML += `<div class=&quot;flex justify-between text-slate-300 py-0.5 text-xs&quot;><span>${it.cantidad}x ${it.nombre}</span><span>$${m.toFixed(2)}</span></div>`;
         });
       }
       container.appendChild(block1);
@@ -1948,27 +1947,27 @@
         var cls = activo
           ? 'bg-amber-500/20 text-amber-300 border-amber-500 font-bold shadow-sm'
           : 'bg-slate-900/60 text-slate-500 border-slate-700 hover:text-slate-300';
-        return `<button type="button" onclick="window.toggleSillaSplitCentro(${s})" class="px-2.5 py-1 rounded-lg border text-[11px] transition cursor-pointer ${cls}">
+        return `<button type=&quot;button&quot; onclick=&quot;window.toggleSillaSplitCentro(${s})&quot; class=&quot;px-2.5 py-1 rounded-lg border text-[11px] transition cursor-pointer ${cls}&quot;>
           ${activo ? '✓ ' : ''}Silla ${s} ${esMiSilla ? '(Tú)' : ''}
         </button>`;
       }).join(' ');
 
       block2.innerHTML = `
-        <div class="flex justify-between items-center font-bold text-amber-300 mb-1.5 pb-1 border-b border-amber-500/20">
-          <span><i class="fa-solid fa-scale-balanced text-xs"></i> 2. Reparto de Platillos al Centro</span>
-          <span class="text-xs font-black text-amber-400">+$${aportacionCentro.toFixed(2)}</span>
+        <div class=&quot;flex justify-between items-center font-bold text-amber-300 mb-1.5 pb-1 border-b border-amber-500/20&quot;>
+          <span><i class=&quot;fa-solid fa-scale-balanced text-xs&quot;></i> 2. Reparto de Platillos al Centro</span>
+          <span class=&quot;text-xs font-black text-amber-400&quot;>+$${aportacionCentro.toFixed(2)}</span>
         </div>
-        <div class="flex items-center justify-between text-[11px] text-slate-300 mb-1.5">
+        <div class=&quot;flex items-center justify-between text-[11px] text-slate-300 mb-1.5&quot;>
           <span>¿Quiénes pagan el centro ($${subtotalCentro.toFixed(2)})?</span>
-          <button type="button" onclick="window.seleccionarTodasSillasSplitCentro()" class="text-[10px] text-amber-400 underline hover:text-amber-300 cursor-pointer">Todas</button>
+          <button type=&quot;button&quot; onclick=&quot;window.seleccionarTodasSillasSplitCentro()&quot; class=&quot;text-[10px] text-amber-400 underline hover:text-amber-300 cursor-pointer&quot;>Todas</button>
         </div>
-        <div class="flex flex-wrap gap-1.5 mb-2">
+        <div class=&quot;flex flex-wrap gap-1.5 mb-2&quot;>
           ${chipsHtml}
         </div>
-        <div class="p-2 rounded-lg bg-amber-950/40 border border-amber-500/20 text-[11px] text-amber-200/90 leading-relaxed">
-          <i class="fa-solid fa-calculator text-amber-400 mr-1"></i>
+        <div class=&quot;p-2 rounded-lg bg-amber-950/40 border border-amber-500/20 text-[11px] text-amber-200/90 leading-relaxed&quot;>
+          <i class=&quot;fa-solid fa-calculator text-amber-400 mr-1&quot;></i>
           Total centro <b>$${subtotalCentro.toFixed(2)}</b> ÷ <b>${numParticipantes} silla(s)</b> = <b>$${cuotaPorSilla.toFixed(2)}</b> c/u.
-          ${participaMiSilla ? `<span class="block mt-0.5 text-emerald-400 font-bold">✓ Tu Silla ${miSilla} aporta $${cuotaPorSilla.toFixed(2)}</span>` : `<span class="block mt-0.5 text-slate-400 italic">✗ Tu Silla ${miSilla} no participa (lo pagan las otras sillas).</span>`}
+          ${participaMiSilla ? `<span class=&quot;block mt-0.5 text-emerald-400 font-bold&quot;>✓ Tu Silla ${miSilla} aporta $${cuotaPorSilla.toFixed(2)}</span>` : `<span class=&quot;block mt-0.5 text-slate-400 italic&quot;>✗ Tu Silla ${miSilla} no participa (lo pagan las otras sillas).</span>`}
         </div>
       `;
       container.appendChild(block2);
@@ -1982,14 +1981,14 @@
       var bSilla = document.createElement('div');
       bSilla.className = 'p-3 rounded-xl bg-slate-950/70 border border-emerald-500/30 mb-2';
       bSilla.innerHTML = `
-        <div class="flex justify-between items-center font-bold text-emerald-400 mb-1 pb-1 border-b border-slate-800">
-          <span><i class="fa-solid fa-chair text-xs"></i> Tu Silla ${miSilla}</span>
-          <span class="text-xs font-black text-emerald-400">$${subtotalSilla.toFixed(2)}</span>
+        <div class=&quot;flex justify-between items-center font-bold text-emerald-400 mb-1 pb-1 border-b border-slate-800&quot;>
+          <span><i class=&quot;fa-solid fa-chair text-xs&quot;></i> Tu Silla ${miSilla}</span>
+          <span class=&quot;text-xs font-black text-emerald-400&quot;>$${subtotalSilla.toFixed(2)}</span>
         </div>
       `;
       itemsSilla.forEach(function (it) {
         var m = it.precio * it.cantidad;
-        bSilla.innerHTML += `<div class="flex justify-between text-slate-300 py-0.5 text-xs"><span>${it.cantidad}x ${it.nombre}</span><span>$${m.toFixed(2)}</span></div>`;
+        bSilla.innerHTML += `<div class=&quot;flex justify-between text-slate-300 py-0.5 text-xs&quot;><span>${it.cantidad}x ${it.nombre}</span><span>$${m.toFixed(2)}</span></div>`;
       });
       container.appendChild(bSilla);
 
@@ -1997,14 +1996,14 @@
       var bCentro = document.createElement('div');
       bCentro.className = 'p-3 rounded-xl bg-amber-950/30 border border-amber-500/40 mb-2';
       bCentro.innerHTML = `
-        <div class="flex justify-between items-center font-bold text-amber-300 mb-1 pb-1 border-b border-amber-500/20">
-          <span><i class="fa-solid fa-bowl-food text-xs"></i> 100% Platillos al Centro (Absorbidos por ti)</span>
-          <span class="text-xs font-black text-amber-400">$${subtotalCentro.toFixed(2)}</span>
+        <div class=&quot;flex justify-between items-center font-bold text-amber-300 mb-1 pb-1 border-b border-amber-500/20&quot;>
+          <span><i class=&quot;fa-solid fa-bowl-food text-xs&quot;></i> 100% Platillos al Centro (Absorbidos por ti)</span>
+          <span class=&quot;text-xs font-black text-amber-400&quot;>$${subtotalCentro.toFixed(2)}</span>
         </div>
       `;
       itemsCentro.forEach(function (it) {
         var m = it.precio * it.cantidad;
-        bCentro.innerHTML += `<div class="flex justify-between text-slate-300 py-0.5 text-xs"><span>${it.cantidad}x ${it.nombre}</span><span>$${m.toFixed(2)}</span></div>`;
+        bCentro.innerHTML += `<div class=&quot;flex justify-between text-slate-300 py-0.5 text-xs&quot;><span>${it.cantidad}x ${it.nombre}</span><span>$${m.toFixed(2)}</span></div>`;
       });
       container.appendChild(bCentro);
     }
@@ -2014,7 +2013,7 @@
       var grandSubMesa = 0;
       for (var s = 1; s <= 4; s++) {
         var cAcc = cuentas[mesaId + '-' + s];
-        if (cAcc && cAcc.items) {
+        if (cAcc &amp;&amp; cAcc.items) {
           cAcc.items.forEach(function (i) { grandSubMesa += i.precio * i.cantidad; });
         }
       }
@@ -2030,21 +2029,21 @@
       var bSplit = document.createElement('div');
       bSplit.className = 'p-3 rounded-xl bg-slate-950/70 border border-emerald-500/30 mb-2';
       bSplit.innerHTML = `
-        <div class="flex justify-between items-center font-bold text-emerald-400 mb-2 pb-1 border-b border-slate-800">
-          <span><i class="fa-solid fa-users text-xs"></i> Cuenta Total de la Mesa Dividida</span>
-          <span class="text-xs font-black text-emerald-400">$${grandSubMesa.toFixed(2)}</span>
+        <div class=&quot;flex justify-between items-center font-bold text-emerald-400 mb-2 pb-1 border-b border-slate-800&quot;>
+          <span><i class=&quot;fa-solid fa-users text-xs&quot;></i> Cuenta Total de la Mesa Dividida</span>
+          <span class=&quot;text-xs font-black text-emerald-400&quot;>$${grandSubMesa.toFixed(2)}</span>
         </div>
-        <div class="flex items-center justify-between bg-slate-900/80 p-2.5 rounded-xl border border-slate-800 mb-2">
-          <span class="text-xs text-slate-300 font-bold">Dividir equitativamente entre:</span>
-          <div class="flex items-center gap-2">
-            <button type="button" onclick="window.cambiarNumSplitMesa(-1)" class="w-7 h-7 rounded-lg bg-slate-800 hover:bg-slate-700 text-white font-black flex items-center justify-center border border-slate-700 cursor-pointer">-</button>
-            <span class="text-xs font-black text-emerald-400 px-1">${nPer} personas</span>
-            <button type="button" onclick="window.cambiarNumSplitMesa(1)" class="w-7 h-7 rounded-lg bg-slate-800 hover:bg-slate-700 text-white font-black flex items-center justify-center border border-slate-700 cursor-pointer">+</button>
+        <div class=&quot;flex items-center justify-between bg-slate-900/80 p-2.5 rounded-xl border border-slate-800 mb-2&quot;>
+          <span class=&quot;text-xs text-slate-300 font-bold&quot;>Dividir equitativamente entre:</span>
+          <div class=&quot;flex items-center gap-2&quot;>
+            <button type=&quot;button&quot; onclick=&quot;window.cambiarNumSplitMesa(-1)&quot; class=&quot;w-7 h-7 rounded-lg bg-slate-800 hover:bg-slate-700 text-white font-black flex items-center justify-center border border-slate-700 cursor-pointer&quot;>-</button>
+            <span class=&quot;text-xs font-black text-emerald-400 px-1&quot;>${nPer} personas</span>
+            <button type=&quot;button&quot; onclick=&quot;window.cambiarNumSplitMesa(1)&quot; class=&quot;w-7 h-7 rounded-lg bg-slate-800 hover:bg-slate-700 text-white font-black flex items-center justify-center border border-slate-700 cursor-pointer&quot;>+</button>
           </div>
         </div>
-        <div class="p-2 rounded-lg bg-emerald-950/30 border border-emerald-500/30 text-xs text-emerald-300 flex justify-between items-center">
+        <div class=&quot;p-2 rounded-lg bg-emerald-950/30 border border-emerald-500/30 text-xs text-emerald-300 flex justify-between items-center&quot;>
           <span>Tu cuota equitativa a liquidar:</span>
-          <span class="text-base font-black text-emerald-400">$${cuotaEquitativa.toFixed(2)}</span>
+          <span class=&quot;text-base font-black text-emerald-400&quot;>$${cuotaEquitativa.toFixed(2)}</span>
         </div>
       `;
       container.appendChild(bSplit);
@@ -2056,7 +2055,7 @@
       for (var s = 1; s <= 4; s++) {
         var cKey = mesaId + '-' + s;
         var cAcc = cuentas[cKey];
-        if (cAcc && cAcc.items && cAcc.items.length > 0) {
+        if (cAcc &amp;&amp; cAcc.items &amp;&amp; cAcc.items.length > 0) {
           var sSub = 0;
           cAcc.items.forEach(function (i) { sSub += i.precio * i.cantidad; });
           grandSub += sSub;
@@ -2064,12 +2063,12 @@
           var bRow = document.createElement('div');
           bRow.className = 'p-2.5 rounded-xl bg-slate-950/60 border border-slate-800 mb-1.5 text-xs';
           bRow.innerHTML = `
-            <div class="flex justify-between font-bold text-emerald-400 mb-1">
+            <div class=&quot;flex justify-between font-bold text-emerald-400 mb-1&quot;>
               <span>Silla ${s} ${s === miSilla ? '(Tú)' : ''}</span><span>$${sSub.toFixed(2)}</span>
             </div>
           `;
           cAcc.items.forEach(function (it) {
-            bRow.innerHTML += `<div class="flex justify-between text-slate-400 text-[11px]"><span>${it.cantidad}x ${it.nombre}</span><span>$${(it.precio * it.cantidad).toFixed(2)}</span></div>`;
+            bRow.innerHTML += `<div class=&quot;flex justify-between text-slate-400 text-[11px]&quot;><span>${it.cantidad}x ${it.nombre}</span><span>$${(it.precio * it.cantidad).toFixed(2)}</span></div>`;
           });
           container.appendChild(bRow);
         }
@@ -2080,12 +2079,12 @@
         var bCentRow = document.createElement('div');
         bCentRow.className = 'p-2.5 rounded-xl bg-amber-950/30 border border-amber-500/30 mb-1.5 text-xs';
         bCentRow.innerHTML = `
-          <div class="flex justify-between font-bold text-amber-300 mb-1">
+          <div class=&quot;flex justify-between font-bold text-amber-300 mb-1&quot;>
             <span>Al Centro (Mesa ${mesaId})</span><span>$${subtotalCentro.toFixed(2)}</span>
           </div>
         `;
         itemsCentro.forEach(function (it) {
-          bCentRow.innerHTML += `<div class="flex justify-between text-slate-400 text-[11px]"><span>${it.cantidad}x ${it.nombre}</span><span>$${(it.precio * it.cantidad).toFixed(2)}</span></div>`;
+          bCentRow.innerHTML += `<div class=&quot;flex justify-between text-slate-400 text-[11px]&quot;><span>${it.cantidad}x ${it.nombre}</span><span>$${(it.precio * it.cantidad).toFixed(2)}</span></div>`;
         });
         container.appendChild(bCentRow);
       }
@@ -2147,7 +2146,7 @@
       saveStorageCuentas(cuentas);
       window.cerrarModalCobroCliente();
       window.sincronizarCuentaDesdeStorage();
-      alert(`🎉 ¡Pago de ${totalText} procesado con éxito vía ${metodo.toUpperCase()}! Gracias por tu visita a La Terraza V&S.`);
+      alert(`🎉 ¡Pago de ${totalText} procesado con éxito vía ${metodo.toUpperCase()}! Gracias por tu visita a La Terraza V&amp;S.`);
     }
   };
 
@@ -2191,7 +2190,7 @@
 
     // Actualizar el header de la categoria
     var icono = catIcono || (window.vsCategoriasData || []).find(function(c){ return c.nombre === catNombre; });
-    if (icono && typeof icono === 'object') icono = icono.icono;
+    if (icono &amp;&amp; typeof icono === 'object') icono = icono.icono;
     var lblIcono = document.getElementById('lblCatSelIcono');
     var lblNombre = document.getElementById('lblCatSelNombre');
     var lblCount = document.getElementById('lblCatSelCount');
@@ -2221,20 +2220,20 @@
 
     const filtrados = (window.vsMenuData || []).filter(prod => {
       const matchCat = (!catActual || catActual === 'Todos' || prod.categoria_nombre === catActual);
-      const matchText = prod.nombre.toLowerCase().includes(query) || (prod.descripcion && prod.descripcion.toLowerCase().includes(query));
-      return matchCat && matchText;
+      const matchText = prod.nombre.toLowerCase().includes(query) || (prod.descripcion &amp;&amp; prod.descripcion.toLowerCase().includes(query));
+      return matchCat &amp;&amp; matchText;
     });
 
     if (filtrados.length === 0) {
-      container.innerHTML = `<div class="text-center py-12 text-slate-500 text-sm col-span-2">No se encontraron platillos o bebidas disponibles</div>`;
+      container.innerHTML = `<div class=&quot;text-center py-12 text-slate-500 text-sm col-span-2&quot;>No se encontraron platillos o bebidas disponibles</div>`;
       return;
     }
 
     const isCentro = (window.destinoPedido === 'centro');
     const destSilla = (window.destinoPedido === 'mi_silla' || !window.destinoPedido) ? window.simSillaNum : window.destinoPedido;
     const btnTxt = isCentro
-      ? '<i class="fa-solid fa-utensils text-amber-400"></i> Al Centro (Compartir)'
-      : `<i class="fa-solid fa-plus text-emerald-400"></i> Agregar a Silla ${destSilla}`;
+      ? '<i class=&quot;fa-solid fa-utensils text-amber-400&quot;></i> Al Centro (Compartir)'
+      : `<i class=&quot;fa-solid fa-plus text-emerald-400&quot;></i> Agregar a Silla ${destSilla}`;
     const btnClass = isCentro
       ? 'flex-1 py-2 px-3 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer shadow-sm'
       : 'flex-1 py-2 px-3 rounded-xl bg-emerald-600/30 hover:bg-emerald-500/40 text-emerald-300 border border-emerald-500/30 text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer shadow-sm';
@@ -2244,27 +2243,27 @@
       card.className = 'glass-card p-4 rounded-2xl flex flex-col justify-between hover:border-emerald-500/50 transition gap-3';
 
       card.innerHTML = `
-          <div class="flex items-start gap-3 cursor-pointer" onclick="window.abrirModalPersonalizar(${prod.id});">
-            <div class="w-12 h-12 rounded-xl bg-slate-800/90 border border-slate-700 flex items-center justify-center text-2xl flex-shrink-0">
+          <div class=&quot;flex items-start gap-3 cursor-pointer&quot; onclick=&quot;window.abrirModalPersonalizar(${prod.id});&quot;>
+            <div class=&quot;w-12 h-12 rounded-xl bg-slate-800/90 border border-slate-700 flex items-center justify-center text-2xl flex-shrink-0&quot;>
               ${prod.icono || '🍲'}
             </div>
-            <div class="flex-1 min-w-0">
-              <div class="flex justify-between items-start">
-                <h3 class="text-sm font-bold text-white tracking-tight truncate">${prod.nombre}</h3>
-                <span class="text-sm font-black text-emerald-400 ml-2">$${Number(prod.precio_unitario).toFixed(2)}</span>
+            <div class=&quot;flex-1 min-w-0&quot;>
+              <div class=&quot;flex justify-between items-start&quot;>
+                <h3 class=&quot;text-sm font-bold text-white tracking-tight truncate&quot;>${prod.nombre}</h3>
+                <span class=&quot;text-sm font-black text-emerald-400 ml-2&quot;>$${Number(prod.precio_unitario).toFixed(2)}</span>
               </div>
-              <p class="text-[11px] text-slate-400 mt-1 line-clamp-2">${prod.descripcion || ''}</p>
-              <div class="flex items-center gap-2 mt-2">
-                <span class="text-[10px] text-amber-400 font-bold bg-amber-500/10 px-2 py-0.5 rounded-md border border-amber-500/20">⭐ Gourmet</span>
-                <span class="text-[10px] text-slate-400 font-semibold">${prod.categoria_nombre || ''}</span>
+              <p class=&quot;text-[11px] text-slate-400 mt-1 line-clamp-2&quot;>${prod.descripcion || ''}</p>
+              <div class=&quot;flex items-center gap-2 mt-2&quot;>
+                <span class=&quot;text-[10px] text-amber-400 font-bold bg-amber-500/10 px-2 py-0.5 rounded-md border border-amber-500/20&quot;>⭐ Gourmet</span>
+                <span class=&quot;text-[10px] text-slate-400 font-semibold&quot;>${prod.categoria_nombre || ''}</span>
               </div>
             </div>
           </div>
-          <div class="flex items-center justify-between gap-2 pt-2 border-t border-slate-800/80">
-            <button onclick="window.abrirModalPersonalizar(${prod.id});" class="py-2 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-sky-400 border border-slate-700 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer">
-              <i class="fa-solid fa-sliders"></i> Personalizar
+          <div class=&quot;flex items-center justify-between gap-2 pt-2 border-t border-slate-800/80&quot;>
+            <button onclick=&quot;window.abrirModalPersonalizar(${prod.id});&quot; class=&quot;py-2 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-sky-400 border border-slate-700 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer&quot;>
+              <i class=&quot;fa-solid fa-sliders&quot;></i> Personalizar
             </button>
-            <button onclick="window.agregarAlCarritoDirecto(${prod.id})" class="${btnClass}">
+            <button onclick=&quot;window.agregarAlCarritoDirecto(${prod.id})&quot; class=&quot;${btnClass}&quot;>
               ${btnTxt}
             </button>
           </div>
@@ -2397,7 +2396,7 @@
         const chip = document.createElement('button');
         chip.type = 'button';
         chip.className = 'px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer border bg-slate-900/80 text-slate-300 border-slate-700 hover:border-slate-500 flex items-center gap-1';
-        chip.innerHTML = `<span>${ex.nombre}</span> ${ex.precio > 0 ? `<b class="text-sky-400 font-extrabold">(+$${ex.precio.toFixed(2)})</b>` : ''}`;
+        chip.innerHTML = `<span>${ex.nombre}</span> ${ex.precio > 0 ? `<b class=&quot;text-sky-400 font-extrabold&quot;>(+$${ex.precio.toFixed(2)})</b>` : ''}`;
         chip.onclick = function() {
           const idx = window.modalPersonalizacionState.extras.findIndex(e => e.nombre === ex.nombre);
           if (idx === -1) {
@@ -2431,8 +2430,8 @@
     if (!state.prod) return;
 
     let extraSum = 0;
-    if (state.termino && state.termino.includes('(+ $10)')) extraSum += 10;
-    if (state.termino && state.termino.includes('(+ $15)')) extraSum += 15;
+    if (state.termino &amp;&amp; state.termino.includes('(+ $10)')) extraSum += 10;
+    if (state.termino &amp;&amp; state.termino.includes('(+ $15)')) extraSum += 15;
     state.extras.forEach(e => { extraSum += e.precio; });
 
     state.extraPrecioTotal = extraSum;
@@ -2502,8 +2501,8 @@
     // Armar detalle de personalización en notas
     const partesNotas = [];
     if (state.termino) partesNotas.push(state.termino);
-    if (state.preferencias && state.preferencias.length > 0) partesNotas.push(state.preferencias.join(', '));
-    if (state.extras && state.extras.length > 0) partesNotas.push(state.extras.map(e => e.nombre).join(', '));
+    if (state.preferencias &amp;&amp; state.preferencias.length > 0) partesNotas.push(state.preferencias.join(', '));
+    if (state.extras &amp;&amp; state.extras.length > 0) partesNotas.push(state.extras.map(e => e.nombre).join(', '));
     const notasLibres = (document.getElementById('txtModalNotasEspeciales').value || '').trim();
     if (notasLibres) partesNotas.push(`Nota: ${notasLibres}`);
 
@@ -2576,7 +2575,7 @@
       var sillaParam = params.get('silla');
       var qrParam = params.get('qr');
 
-      if (qrParam && (!mesaParam || !sillaParam)) {
+      if (qrParam &amp;&amp; (!mesaParam || !sillaParam)) {
         var match = qrParam.match(/PV-0?(\d)(\d)/i);
         if (match) {
           mesaParam = match[1];
@@ -2584,10 +2583,10 @@
         }
       }
 
-      if (mesaParam && sillaParam) {
+      if (mesaParam &amp;&amp; sillaParam) {
         var m = parseInt(mesaParam);
         var s = parseInt(sillaParam);
-        if (!isNaN(m) && !isNaN(s)) {
+        if (!isNaN(m) &amp;&amp; !isNaN(s)) {
           window.simMesaId = m;
           window.simSillaNum = s;
           window.destinoPedido = 'mi_silla';
@@ -2609,7 +2608,7 @@
     window.cargarDatosMenu(window.vsMenuData, window.vsCategoriasData);
     window.detectarParametrosQrUrl();
     window.sincronizarCuentaDesdeStorage();
-    if ((!window.vsMenuData || window.vsMenuData.length === 0) && window.anvilRecargarCatalogo) {
+    if ((!window.vsMenuData || window.vsMenuData.length === 0) &amp;&amp; window.anvilRecargarCatalogo) {
       try { window.anvilRecargarCatalogo(); } catch(e){}
     }
   }
@@ -2621,5 +2620,4 @@
   }
   setTimeout(initImmediate, 10);
   setTimeout(initImmediate, 100);
-</script>
-</anvil-form>
+</script>"></anvil-form>

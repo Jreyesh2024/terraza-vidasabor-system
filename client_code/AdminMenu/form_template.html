@@ -1,8 +1,8 @@
-<anvil-form container="HtmlTemplate" prop:html="">
-<script src="https://cdn.tailwindcss.com"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<anvil-form container="HtmlTemplate" prop:html="
+<script src=&quot;https://cdn.tailwindcss.com&quot;></script>
+<link rel=&quot;stylesheet&quot; href=&quot;https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css&quot;>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&amp;display=swap');
   html, body {
     background-color: #0f1114 !important;
     color: #f8fafc !important;
@@ -27,248 +27,248 @@
   }
 </style>
 
-<div class="min-h-screen bg-[#0f1114] text-white font-sans overflow-x-hidden pb-12">
+<div class=&quot;min-h-screen bg-[#0f1114] text-white font-sans overflow-x-hidden pb-12&quot;>
 
   <!-- ENCABEZADO SUPERIOR (ESTILO VIDASPA) -->
-  <header class="bg-gradient-to-b from-[#1b2b3b] to-[#0f1114] pt-6 pb-8 px-6 md:px-8 border-b border-white/5 shadow-lg relative">
-    <div class="absolute inset-0 bg-emerald-500/5 mix-blend-overlay pointer-events-none"></div>
-    <div class="max-w-6xl mx-auto relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
-      
+  <header class=&quot;bg-gradient-to-b from-[#1b2b3b] to-[#0f1114] pt-6 pb-8 px-6 md:px-8 border-b border-white/5 shadow-lg relative&quot;>
+    <div class=&quot;absolute inset-0 bg-emerald-500/5 mix-blend-overlay pointer-events-none&quot;></div>
+    <div class=&quot;max-w-6xl mx-auto relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4&quot;>
+
       <!-- LOGO TEXTUAL -->
-      <div class="flex items-baseline gap-2">
-        <h1 class="text-3xl font-black tracking-tight">
-          <span class="text-[#34d399]">Terraza</span> <span class="text-white">Vida & Sabor</span>
+      <div class=&quot;flex items-baseline gap-2&quot;>
+        <h1 class=&quot;text-3xl font-black tracking-tight&quot;>
+          <span class=&quot;text-[#34d399]&quot;>Terraza</span> <span class=&quot;text-white&quot;>Vida &amp; Sabor</span>
         </h1>
-        <span class="text-xs tracking-widest text-[#34d399] uppercase opacity-80 font-bold">Restaurante & Palapa</span>
+        <span class=&quot;text-xs tracking-widest text-[#34d399] uppercase opacity-80 font-bold&quot;>Restaurante &amp; Palapa</span>
       </div>
 
       <!-- BADGES SUPERIORES -->
-      <div class="flex items-center gap-3 flex-wrap">
-        <div class="bg-white/10 backdrop-blur-sm rounded-full px-4 py-1.5 text-xs md:text-sm text-emerald-100 font-medium border border-white/10" id="ui_fecha_hoy">
+      <div class=&quot;flex items-center gap-3 flex-wrap&quot;>
+        <div class=&quot;bg-white/10 backdrop-blur-sm rounded-full px-4 py-1.5 text-xs md:text-sm text-emerald-100 font-medium border border-white/10&quot; id=&quot;ui_fecha_hoy&quot;>
           Cargando fecha...
         </div>
-        <div class="bg-emerald-500/20 backdrop-blur-sm rounded-full px-4 py-1.5 text-xs md:text-sm text-emerald-200 font-bold border border-emerald-500/30 flex items-center gap-1.5">
-          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Administración
+        <div class=&quot;bg-emerald-500/20 backdrop-blur-sm rounded-full px-4 py-1.5 text-xs md:text-sm text-emerald-200 font-bold border border-emerald-500/30 flex items-center gap-1.5&quot;>
+          <span class=&quot;w-2 h-2 rounded-full bg-emerald-400 animate-pulse&quot;></span> Administración
         </div>
-        <button onclick="window.navMenu('pos_mesero')" class="bg-blue-500/20 hover:bg-blue-500/30 text-blue-200 backdrop-blur-sm rounded-full px-4 py-1.5 text-xs md:text-sm font-bold border border-blue-500/30 transition flex items-center gap-1.5">
-          <i class="fa-solid fa-utensils"></i> Ir a Piso (POS)
+        <button onclick=&quot;window.navMenu('pos_mesero')&quot; class=&quot;bg-blue-500/20 hover:bg-blue-500/30 text-blue-200 backdrop-blur-sm rounded-full px-4 py-1.5 text-xs md:text-sm font-bold border border-blue-500/30 transition flex items-center gap-1.5&quot;>
+          <i class=&quot;fa-solid fa-utensils&quot;></i> Ir a Piso (POS)
         </button>
-        <button onclick="window.navMenu('salir')" class="bg-red-500/20 hover:bg-red-500/40 text-red-200 backdrop-blur-sm rounded-full px-4 py-1.5 text-xs md:text-sm font-medium border border-red-500/30 transition flex items-center gap-1.5" title="Cerrar sesión">
+        <button onclick=&quot;window.navMenu('salir')&quot; class=&quot;bg-red-500/20 hover:bg-red-500/40 text-red-200 backdrop-blur-sm rounded-full px-4 py-1.5 text-xs md:text-sm font-medium border border-red-500/30 transition flex items-center gap-1.5&quot; title=&quot;Cerrar sesión&quot;>
           <span>Salir</span>
-          <i class="fa-solid fa-arrow-right-from-bracket"></i>
+          <i class=&quot;fa-solid fa-arrow-right-from-bracket&quot;></i>
         </button>
       </div>
     </div>
   </header>
 
   <!-- CONTENIDO PRINCIPAL -->
-  <main class="max-w-6xl mx-auto px-4 sm:px-8 mt-8">
+  <main class=&quot;max-w-6xl mx-auto px-4 sm:px-8 mt-8&quot;>
 
     <!-- TÍTULO Y SUBTÍTULO -->
-    <div class="mb-8">
-      <h2 class="text-2xl md:text-3xl font-bold tracking-tight mb-1 text-white flex items-center gap-2">
-        Buen día, Terraza Vida & Sabor 👋
+    <div class=&quot;mb-8&quot;>
+      <h2 class=&quot;text-2xl md:text-3xl font-bold tracking-tight mb-1 text-white flex items-center gap-2&quot;>
+        Buen día, Terraza Vida &amp; Sabor 👋
       </h2>
-      <p class="text-[#a3a3a3] text-sm md:text-base font-light">
+      <p class=&quot;text-[#a3a3a3] text-sm md:text-base font-light&quot;>
         Panel de control gerencial y operación general — acceso rápido a todas las funciones del restaurante
       </p>
     </div>
 
     <!-- 4 FILA DE KPIS (ESTILO VIDASPA CON BARRAS SUPERIORES DE COLOR) -->
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+    <div class=&quot;grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8&quot;>
 
       <!-- KPI 1: VENTAS DE LA SEMANA -->
-      <div class="bg-[#1c1c1c] rounded-xl p-5 border border-[#3f3f3f] shadow-md relative overflow-hidden group">
-        <div class="absolute top-0 left-0 w-full h-1 bg-[#3e8f6e]"></div>
-        <div class="text-[10px] uppercase tracking-wider font-bold text-[#a3a3a3] mb-2 flex justify-between items-center">
+      <div class=&quot;bg-[#1c1c1c] rounded-xl p-5 border border-[#3f3f3f] shadow-md relative overflow-hidden group&quot;>
+        <div class=&quot;absolute top-0 left-0 w-full h-1 bg-[#3e8f6e]&quot;></div>
+        <div class=&quot;text-[10px] uppercase tracking-wider font-bold text-[#a3a3a3] mb-2 flex justify-between items-center&quot;>
           <span>Ventas de la semana</span>
-          <i class="fa-solid fa-chart-line text-[#3e8f6e]"></i>
+          <i class=&quot;fa-solid fa-chart-line text-[#3e8f6e]&quot;></i>
         </div>
-        <div class="text-2xl sm:text-3xl font-black text-white mb-1 flex items-baseline gap-1">
-          <span class="text-base text-[#a3a3a3]">$</span><span id="kpi_ventas_semana">14,850.00</span>
+        <div class=&quot;text-2xl sm:text-3xl font-black text-white mb-1 flex items-baseline gap-1&quot;>
+          <span class=&quot;text-base text-[#a3a3a3]&quot;>$</span><span id=&quot;kpi_ventas_semana&quot;>14,850.00</span>
         </div>
-        <div class="text-xs text-[#a3a3a3]"><span id="kpi_comandas_semana" class="text-emerald-400 font-bold">38</span> comandas atendidas</div>
+        <div class=&quot;text-xs text-[#a3a3a3]&quot;><span id=&quot;kpi_comandas_semana&quot; class=&quot;text-emerald-400 font-bold&quot;>38</span> comandas atendidas</div>
       </div>
 
       <!-- KPI 2: PLATILLO ESTRELLA -->
-      <div class="bg-[#1c1c1c] rounded-xl p-5 border border-[#3f3f3f] shadow-md relative overflow-hidden group">
-        <div class="absolute top-0 left-0 w-full h-1 bg-[#3a72b8]"></div>
-        <div class="text-[10px] uppercase tracking-wider font-bold text-[#a3a3a3] mb-2 flex justify-between items-center">
+      <div class=&quot;bg-[#1c1c1c] rounded-xl p-5 border border-[#3f3f3f] shadow-md relative overflow-hidden group&quot;>
+        <div class=&quot;absolute top-0 left-0 w-full h-1 bg-[#3a72b8]&quot;></div>
+        <div class=&quot;text-[10px] uppercase tracking-wider font-bold text-[#a3a3a3] mb-2 flex justify-between items-center&quot;>
           <span>Platillo Estrella</span>
-          <i class="fa-solid fa-trophy text-[#3a72b8]"></i>
+          <i class=&quot;fa-solid fa-trophy text-[#3a72b8]&quot;></i>
         </div>
-        <div class="text-lg sm:text-xl font-black text-white mb-1 truncate" id="kpi_platillo_nombre">
+        <div class=&quot;text-lg sm:text-xl font-black text-white mb-1 truncate&quot; id=&quot;kpi_platillo_nombre&quot;>
           🍳 Chilaquiles Rojos
         </div>
-        <div class="text-xs text-[#a3a3a3]"><span id="kpi_platillo_ordenes" class="text-sky-400 font-bold">42</span> órdenes esta semana</div>
+        <div class=&quot;text-xs text-[#a3a3a3]&quot;><span id=&quot;kpi_platillo_ordenes&quot; class=&quot;text-sky-400 font-bold&quot;>42</span> órdenes esta semana</div>
       </div>
 
-      <!-- KPI 3: CAJA CHICA & BANCOS -->
-      <div class="bg-[#1c1c1c] rounded-xl p-5 border border-[#3f3f3f] shadow-md relative overflow-hidden group">
-        <div class="absolute top-0 left-0 w-full h-1 bg-[#b56d35]"></div>
-        <div class="text-[10px] uppercase tracking-wider font-bold text-[#a3a3a3] mb-2 flex justify-between items-center">
-          <span>Caja Chica & Bancos</span>
-          <i class="fa-solid fa-vault text-[#b56d35]"></i>
+      <!-- KPI 3: CAJA CHICA &amp; BANCOS -->
+      <div class=&quot;bg-[#1c1c1c] rounded-xl p-5 border border-[#3f3f3f] shadow-md relative overflow-hidden group&quot;>
+        <div class=&quot;absolute top-0 left-0 w-full h-1 bg-[#b56d35]&quot;></div>
+        <div class=&quot;text-[10px] uppercase tracking-wider font-bold text-[#a3a3a3] mb-2 flex justify-between items-center&quot;>
+          <span>Caja Chica &amp; Bancos</span>
+          <i class=&quot;fa-solid fa-vault text-[#b56d35]&quot;></i>
         </div>
-        <div class="text-2xl sm:text-3xl font-black text-white mb-1 flex items-baseline gap-1">
-          <span class="text-base text-[#a3a3a3]">$</span><span id="kpi_efectivo_caja">5,400</span>
+        <div class=&quot;text-2xl sm:text-3xl font-black text-white mb-1 flex items-baseline gap-1&quot;>
+          <span class=&quot;text-base text-[#a3a3a3]&quot;>$</span><span id=&quot;kpi_efectivo_caja&quot;>5,400</span>
         </div>
-        <div class="text-xs text-[#a3a3a3]"><span id="kpi_bancos" class="text-amber-400 font-bold">$9,450.00</span> TPV Santander/MP</div>
+        <div class=&quot;text-xs text-[#a3a3a3]&quot;><span id=&quot;kpi_bancos&quot; class=&quot;text-amber-400 font-bold&quot;>$9,450.00</span> TPV Santander/MP</div>
       </div>
 
       <!-- KPI 4: OCUPACIÓN EN PISO -->
-      <div class="bg-[#1c1c1c] rounded-xl p-5 border border-[#3f3f3f] shadow-md relative overflow-hidden group">
-        <div class="absolute top-0 left-0 w-full h-1 bg-[#2e8b8b]"></div>
-        <div class="text-[10px] uppercase tracking-wider font-bold text-[#a3a3a3] mb-2 flex justify-between items-center">
+      <div class=&quot;bg-[#1c1c1c] rounded-xl p-5 border border-[#3f3f3f] shadow-md relative overflow-hidden group&quot;>
+        <div class=&quot;absolute top-0 left-0 w-full h-1 bg-[#2e8b8b]&quot;></div>
+        <div class=&quot;text-[10px] uppercase tracking-wider font-bold text-[#a3a3a3] mb-2 flex justify-between items-center&quot;>
           <span>Ocupación en Piso</span>
-          <i class="fa-solid fa-chair text-[#2e8b8b]"></i>
+          <i class=&quot;fa-solid fa-chair text-[#2e8b8b]&quot;></i>
         </div>
-        <div class="text-2xl sm:text-3xl font-black text-white mb-1" id="kpi_mesas_ocupadas">
+        <div class=&quot;text-2xl sm:text-3xl font-black text-white mb-1&quot; id=&quot;kpi_mesas_ocupadas&quot;>
           6 mesas activas
         </div>
-        <div class="text-xs text-[#a3a3a3]"><span id="kpi_comensales_activos" class="text-teal-400 font-bold">24</span> comensales en palapa</div>
+        <div class=&quot;text-xs text-[#a3a3a3]&quot;><span id=&quot;kpi_comensales_activos&quot; class=&quot;text-teal-400 font-bold&quot;>24</span> comensales en palapa</div>
       </div>
 
     </div>
 
     <!-- CUADRÍCULA DE 9 MÓDULOS (3X3 CON BARRAS LATERALES Y BADGES PILL) -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+    <div class=&quot;grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12&quot;>
 
-      <!-- MÓDULO 1: POS MESERO (PISO & MESAS) -->
-      <button onclick="window.navMenu('pos_mesero')" class="text-left bg-[#1c1c1c] rounded-2xl p-6 border border-[#3f3f3f] shadow-lg relative overflow-hidden hover:bg-[#252525] transition-all group flex flex-col h-full active:scale-[0.98]">
-        <div class="absolute top-0 left-0 h-full w-1.5 bg-[#3e8f6e] group-hover:w-2 transition-all"></div>
-        <div class="text-3xl mb-3 ml-2">🍽️</div>
-        <h3 class="text-xl font-bold mb-1.5 ml-2 text-white">POS Mesero & Piso</h3>
-        <p class="text-sm text-[#a3a3a3] font-light leading-relaxed mb-6 ml-2 flex-grow">Croquis interactivo de la palapa, 44 sillas con código QR, comanda al centro y cobro</p>
-        <div class="mt-auto ml-2">
-          <span class="inline-block bg-[#3e8f6e]/10 text-[#3e8f6e] text-[10px] uppercase tracking-wider font-black px-3 py-1 rounded-full border border-[#3e8f6e]/20">Operación</span>
+      <!-- MÓDULO 1: POS MESERO (PISO &amp; MESAS) -->
+      <button onclick=&quot;window.navMenu('pos_mesero')&quot; class=&quot;text-left bg-[#1c1c1c] rounded-2xl p-6 border border-[#3f3f3f] shadow-lg relative overflow-hidden hover:bg-[#252525] transition-all group flex flex-col h-full active:scale-[0.98]&quot;>
+        <div class=&quot;absolute top-0 left-0 h-full w-1.5 bg-[#3e8f6e] group-hover:w-2 transition-all&quot;></div>
+        <div class=&quot;text-3xl mb-3 ml-2&quot;>🍽️</div>
+        <h3 class=&quot;text-xl font-bold mb-1.5 ml-2 text-white&quot;>POS Mesero &amp; Piso</h3>
+        <p class=&quot;text-sm text-[#a3a3a3] font-light leading-relaxed mb-6 ml-2 flex-grow&quot;>Croquis interactivo de la palapa, 44 sillas con código QR, comanda al centro y cobro</p>
+        <div class=&quot;mt-auto ml-2&quot;>
+          <span class=&quot;inline-block bg-[#3e8f6e]/10 text-[#3e8f6e] text-[10px] uppercase tracking-wider font-black px-3 py-1 rounded-full border border-[#3e8f6e]/20&quot;>Operación</span>
         </div>
       </button>
 
       <!-- MÓDULO 2: MONITOR DE COCINA (KDS) -->
-      <button onclick="window.navMenu('monitor_cocina')" class="text-left bg-[#1c1c1c] rounded-2xl p-6 border border-[#3f3f3f] shadow-lg relative overflow-hidden hover:bg-[#252525] transition-all group flex flex-col h-full active:scale-[0.98]">
-        <div class="absolute top-0 left-0 h-full w-1.5 bg-[#3a72b8] group-hover:w-2 transition-all"></div>
-        <div class="text-3xl mb-3 ml-2">👨‍🍳</div>
-        <h3 class="text-xl font-bold mb-1.5 ml-2 text-white">Monitor Cocina (KDS)</h3>
-        <p class="text-sm text-[#a3a3a3] font-light leading-relaxed mb-6 ml-2 flex-grow">Comandas en tiempo real, semáforo de tiempos y fichas técnicas de recetas estandarizadas</p>
-        <div class="mt-auto ml-2">
-          <span class="inline-block bg-[#3a72b8]/10 text-[#3a72b8] text-[10px] uppercase tracking-wider font-black px-3 py-1 rounded-full border border-[#3a72b8]/20">Cocina</span>
+      <button onclick=&quot;window.navMenu('monitor_cocina')&quot; class=&quot;text-left bg-[#1c1c1c] rounded-2xl p-6 border border-[#3f3f3f] shadow-lg relative overflow-hidden hover:bg-[#252525] transition-all group flex flex-col h-full active:scale-[0.98]&quot;>
+        <div class=&quot;absolute top-0 left-0 h-full w-1.5 bg-[#3a72b8] group-hover:w-2 transition-all&quot;></div>
+        <div class=&quot;text-3xl mb-3 ml-2&quot;>👨‍🍳</div>
+        <h3 class=&quot;text-xl font-bold mb-1.5 ml-2 text-white&quot;>Monitor Cocina (KDS)</h3>
+        <p class=&quot;text-sm text-[#a3a3a3] font-light leading-relaxed mb-6 ml-2 flex-grow&quot;>Comandas en tiempo real, semáforo de tiempos y fichas técnicas de recetas estandarizadas</p>
+        <div class=&quot;mt-auto ml-2&quot;>
+          <span class=&quot;inline-block bg-[#3a72b8]/10 text-[#3a72b8] text-[10px] uppercase tracking-wider font-black px-3 py-1 rounded-full border border-[#3a72b8]/20&quot;>Cocina</span>
         </div>
       </button>
 
-      <!-- MÓDULO 3: GESTIÓN DE MENÚ & RECETAS (POSTGRESQL) -->
-      <button onclick="window.abrirModalAdminMenu()" class="text-left bg-[#1c1c1c] rounded-2xl p-6 border border-[#3f3f3f] shadow-lg relative overflow-hidden hover:bg-[#252525] transition-all group flex flex-col h-full active:scale-[0.98]">
-        <div class="absolute top-0 left-0 h-full w-1.5 bg-[#b56d35] group-hover:w-2 transition-all"></div>
-        <div class="text-3xl mb-3 ml-2">📋</div>
-        <h3 class="text-xl font-bold mb-1.5 ml-2 text-white">Gestión de Menú & Recetas</h3>
-        <p class="text-sm text-[#a3a3a3] font-light leading-relaxed mb-6 ml-2 flex-grow">Alta de platillos, precios de temporada, gramajes, términos y adicionales en PostgreSQL</p>
-        <div class="mt-auto ml-2">
-          <span class="inline-block bg-[#b56d35]/10 text-[#b56d35] text-[10px] uppercase tracking-wider font-black px-3 py-1 rounded-full border border-[#b56d35]/20">Catálogo DB</span>
+      <!-- MÓDULO 3: GESTIÓN DE MENÚ &amp; RECETAS (POSTGRESQL) -->
+      <button onclick=&quot;window.abrirModalAdminMenu()&quot; class=&quot;text-left bg-[#1c1c1c] rounded-2xl p-6 border border-[#3f3f3f] shadow-lg relative overflow-hidden hover:bg-[#252525] transition-all group flex flex-col h-full active:scale-[0.98]&quot;>
+        <div class=&quot;absolute top-0 left-0 h-full w-1.5 bg-[#b56d35] group-hover:w-2 transition-all&quot;></div>
+        <div class=&quot;text-3xl mb-3 ml-2&quot;>📋</div>
+        <h3 class=&quot;text-xl font-bold mb-1.5 ml-2 text-white&quot;>Gestión de Menú &amp; Recetas</h3>
+        <p class=&quot;text-sm text-[#a3a3a3] font-light leading-relaxed mb-6 ml-2 flex-grow&quot;>Alta de platillos, precios de temporada, gramajes, términos y adicionales en PostgreSQL</p>
+        <div class=&quot;mt-auto ml-2&quot;>
+          <span class=&quot;inline-block bg-[#b56d35]/10 text-[#b56d35] text-[10px] uppercase tracking-wider font-black px-3 py-1 rounded-full border border-[#b56d35]/20&quot;>Catálogo DB</span>
         </div>
       </button>
 
       <!-- MÓDULO 4: MENÚ DIGITAL QR (COMENSAL) -->
-      <button onclick="window.navMenu('menu')" class="text-left bg-[#1c1c1c] rounded-2xl p-6 border border-[#3f3f3f] shadow-lg relative overflow-hidden hover:bg-[#252525] transition-all group flex flex-col h-full active:scale-[0.98]">
-        <div class="absolute top-0 left-0 h-full w-1.5 bg-[#b54e35] group-hover:w-2 transition-all"></div>
-        <div class="text-3xl mb-3 ml-2">📱</div>
-        <h3 class="text-xl font-bold mb-1.5 ml-2 text-white">Menú Digital QR</h3>
-        <p class="text-sm text-[#a3a3a3] font-light leading-relaxed mb-6 ml-2 flex-grow">Vista en el celular del comensal con personalizaciones, exclusiones, extras y notas para cocina</p>
-        <div class="mt-auto ml-2">
-          <span class="inline-block bg-[#b54e35]/10 text-[#b54e35] text-[10px] uppercase tracking-wider font-black px-3 py-1 rounded-full border border-[#b54e35]/20">Clientes</span>
+      <button onclick=&quot;window.navMenu('menu')&quot; class=&quot;text-left bg-[#1c1c1c] rounded-2xl p-6 border border-[#3f3f3f] shadow-lg relative overflow-hidden hover:bg-[#252525] transition-all group flex flex-col h-full active:scale-[0.98]&quot;>
+        <div class=&quot;absolute top-0 left-0 h-full w-1.5 bg-[#b54e35] group-hover:w-2 transition-all&quot;></div>
+        <div class=&quot;text-3xl mb-3 ml-2&quot;>📱</div>
+        <h3 class=&quot;text-xl font-bold mb-1.5 ml-2 text-white&quot;>Menú Digital QR</h3>
+        <p class=&quot;text-sm text-[#a3a3a3] font-light leading-relaxed mb-6 ml-2 flex-grow&quot;>Vista en el celular del comensal con personalizaciones, exclusiones, extras y notas para cocina</p>
+        <div class=&quot;mt-auto ml-2&quot;>
+          <span class=&quot;inline-block bg-[#b54e35]/10 text-[#b54e35] text-[10px] uppercase tracking-wider font-black px-3 py-1 rounded-full border border-[#b54e35]/20&quot;>Clientes</span>
         </div>
       </button>
 
-      <!-- MÓDULO 5: REGISTRO DEL PERSONAL & IMSS -->
-      <button onclick="window.abrirModalPersonal()" class="text-left bg-[#1c1c1c] rounded-2xl p-6 border border-[#3f3f3f] shadow-lg relative overflow-hidden hover:bg-[#252525] transition-all group flex flex-col h-full active:scale-[0.98]">
-        <div class="absolute top-0 left-0 h-full w-1.5 bg-[#a87b42] group-hover:w-2 transition-all"></div>
-        <div class="text-3xl mb-3 ml-2">👥</div>
-        <h3 class="text-xl font-bold mb-1.5 ml-2 text-white">Registro de Personal & IMSS</h3>
-        <p class="text-sm text-[#a3a3a3] font-light leading-relaxed mb-6 ml-2 flex-grow">Alta de meseros y cocineras, expediente digital de documentos y cálculo estimado IMSS</p>
-        <div class="mt-auto ml-2">
-          <span class="inline-block bg-[#a87b42]/10 text-[#a87b42] text-[10px] uppercase tracking-wider font-black px-3 py-1 rounded-full border border-[#a87b42]/20">Personal</span>
+      <!-- MÓDULO 5: REGISTRO DEL PERSONAL &amp; IMSS -->
+      <button onclick=&quot;window.abrirModalPersonal()&quot; class=&quot;text-left bg-[#1c1c1c] rounded-2xl p-6 border border-[#3f3f3f] shadow-lg relative overflow-hidden hover:bg-[#252525] transition-all group flex flex-col h-full active:scale-[0.98]&quot;>
+        <div class=&quot;absolute top-0 left-0 h-full w-1.5 bg-[#a87b42] group-hover:w-2 transition-all&quot;></div>
+        <div class=&quot;text-3xl mb-3 ml-2&quot;>👥</div>
+        <h3 class=&quot;text-xl font-bold mb-1.5 ml-2 text-white&quot;>Registro de Personal &amp; IMSS</h3>
+        <p class=&quot;text-sm text-[#a3a3a3] font-light leading-relaxed mb-6 ml-2 flex-grow&quot;>Alta de meseros y cocineras, expediente digital de documentos y cálculo estimado IMSS</p>
+        <div class=&quot;mt-auto ml-2&quot;>
+          <span class=&quot;inline-block bg-[#a87b42]/10 text-[#a87b42] text-[10px] uppercase tracking-wider font-black px-3 py-1 rounded-full border border-[#a87b42]/20&quot;>Personal</span>
         </div>
       </button>
 
-      <!-- MÓDULO 6: TABLERO FISCAL & FINANZAS -->
-      <button onclick="window.navMenu('monitor_fiscal')" class="text-left bg-[#1c1c1c] rounded-2xl p-6 border border-[#3f3f3f] shadow-lg relative overflow-hidden hover:bg-[#252525] transition-all group flex flex-col h-full active:scale-[0.98]">
-        <div class="absolute top-0 left-0 h-full w-1.5 bg-[#c9a227] group-hover:w-2 transition-all"></div>
-        <div class="text-3xl mb-3 ml-2">🏛️</div>
-        <h3 class="text-xl font-bold mb-1.5 ml-2 text-white">Tablero Fiscal & SAT</h3>
-        <p class="text-sm text-[#a3a3a3] font-light leading-relaxed mb-6 ml-2 flex-grow">Ingresos bancarizados vs efectivo, desglose de IVA (16%), CFDI global y cotejo con el contador</p>
-        <div class="mt-auto ml-2">
-          <span class="inline-block bg-[#c9a227]/10 text-[#c9a227] text-[10px] uppercase tracking-wider font-black px-3 py-1 rounded-full border border-[#c9a227]/20">Fiscal</span>
+      <!-- MÓDULO 6: TABLERO FISCAL &amp; FINANZAS -->
+      <button onclick=&quot;window.navMenu('monitor_fiscal')&quot; class=&quot;text-left bg-[#1c1c1c] rounded-2xl p-6 border border-[#3f3f3f] shadow-lg relative overflow-hidden hover:bg-[#252525] transition-all group flex flex-col h-full active:scale-[0.98]&quot;>
+        <div class=&quot;absolute top-0 left-0 h-full w-1.5 bg-[#c9a227] group-hover:w-2 transition-all&quot;></div>
+        <div class=&quot;text-3xl mb-3 ml-2&quot;>🏛️</div>
+        <h3 class=&quot;text-xl font-bold mb-1.5 ml-2 text-white&quot;>Tablero Fiscal &amp; SAT</h3>
+        <p class=&quot;text-sm text-[#a3a3a3] font-light leading-relaxed mb-6 ml-2 flex-grow&quot;>Ingresos bancarizados vs efectivo, desglose de IVA (16%), CFDI global y cotejo con el contador</p>
+        <div class=&quot;mt-auto ml-2&quot;>
+          <span class=&quot;inline-block bg-[#c9a227]/10 text-[#c9a227] text-[10px] uppercase tracking-wider font-black px-3 py-1 rounded-full border border-[#c9a227]/20&quot;>Fiscal</span>
         </div>
       </button>
 
-      <!-- MÓDULO 7: CAJA CHICA & FLUJO DE GASTOS -->
-      <button onclick="window.abrirModalCajaChica()" class="text-left bg-[#1c1c1c] rounded-2xl p-6 border border-[#3f3f3f] shadow-lg relative overflow-hidden hover:bg-[#252525] transition-all group flex flex-col h-full active:scale-[0.98]">
-        <div class="absolute top-0 left-0 h-full w-1.5 bg-[#10b981] group-hover:w-2 transition-all"></div>
-        <div class="text-3xl mb-3 ml-2">💵</div>
-        <h3 class="text-xl font-bold mb-1.5 ml-2 text-white">Caja Chica & Gastos</h3>
-        <p class="text-sm text-[#a3a3a3] font-light leading-relaxed mb-6 ml-2 flex-grow">Arqueo diario de caja, retiros de efectivo, propinas del equipo y pago de servicios (luz/renta)</p>
-        <div class="mt-auto ml-2">
-          <span class="inline-block bg-[#10b981]/10 text-[#10b981] text-[10px] uppercase tracking-wider font-black px-3 py-1 rounded-full border border-[#10b981]/20">Caja Chica</span>
+      <!-- MÓDULO 7: CAJA CHICA &amp; FLUJO DE GASTOS -->
+      <button onclick=&quot;window.abrirModalCajaChica()&quot; class=&quot;text-left bg-[#1c1c1c] rounded-2xl p-6 border border-[#3f3f3f] shadow-lg relative overflow-hidden hover:bg-[#252525] transition-all group flex flex-col h-full active:scale-[0.98]&quot;>
+        <div class=&quot;absolute top-0 left-0 h-full w-1.5 bg-[#10b981] group-hover:w-2 transition-all&quot;></div>
+        <div class=&quot;text-3xl mb-3 ml-2&quot;>💵</div>
+        <h3 class=&quot;text-xl font-bold mb-1.5 ml-2 text-white&quot;>Caja Chica &amp; Gastos</h3>
+        <p class=&quot;text-sm text-[#a3a3a3] font-light leading-relaxed mb-6 ml-2 flex-grow&quot;>Arqueo diario de caja, retiros de efectivo, propinas del equipo y pago de servicios (luz/renta)</p>
+        <div class=&quot;mt-auto ml-2&quot;>
+          <span class=&quot;inline-block bg-[#10b981]/10 text-[#10b981] text-[10px] uppercase tracking-wider font-black px-3 py-1 rounded-full border border-[#10b981]/20&quot;>Caja Chica</span>
         </div>
       </button>
 
-      <!-- MÓDULO 8: ALMACÉN & COMPRAS (TICKET INTELLIGENT) -->
-      <button onclick="window.abrirModalInventario()" class="text-left bg-[#1c1c1c] rounded-2xl p-6 border border-[#3f3f3f] shadow-lg relative overflow-hidden hover:bg-[#252525] transition-all group flex flex-col h-full active:scale-[0.98]">
-        <div class="absolute top-0 left-0 h-full w-1.5 bg-[#2e8b8b] group-hover:w-2 transition-all"></div>
-        <div class="text-3xl mb-3 ml-2">🛒</div>
-        <h3 class="text-xl font-bold mb-1.5 ml-2 text-white">Almacén & Compras</h3>
-        <p class="text-sm text-[#a3a3a3] font-light leading-relaxed mb-6 ml-2 flex-grow">Alertas de stock crítico, compras semanales y enlace con la app Ticket Intelligent</p>
-        <div class="mt-auto ml-2">
-          <span class="inline-block bg-[#2e8b8b]/10 text-[#2e8b8b] text-[10px] uppercase tracking-wider font-black px-3 py-1 rounded-full border border-[#2e8b8b]/20">Inventarios API</span>
+      <!-- MÓDULO 8: ALMACÉN &amp; COMPRAS (TICKET INTELLIGENT) -->
+      <button onclick=&quot;window.abrirModalInventario()&quot; class=&quot;text-left bg-[#1c1c1c] rounded-2xl p-6 border border-[#3f3f3f] shadow-lg relative overflow-hidden hover:bg-[#252525] transition-all group flex flex-col h-full active:scale-[0.98]&quot;>
+        <div class=&quot;absolute top-0 left-0 h-full w-1.5 bg-[#2e8b8b] group-hover:w-2 transition-all&quot;></div>
+        <div class=&quot;text-3xl mb-3 ml-2&quot;>🛒</div>
+        <h3 class=&quot;text-xl font-bold mb-1.5 ml-2 text-white&quot;>Almacén &amp; Compras</h3>
+        <p class=&quot;text-sm text-[#a3a3a3] font-light leading-relaxed mb-6 ml-2 flex-grow&quot;>Alertas de stock crítico, compras semanales y enlace con la app Ticket Intelligent</p>
+        <div class=&quot;mt-auto ml-2&quot;>
+          <span class=&quot;inline-block bg-[#2e8b8b]/10 text-[#2e8b8b] text-[10px] uppercase tracking-wider font-black px-3 py-1 rounded-full border border-[#2e8b8b]/20&quot;>Inventarios API</span>
         </div>
       </button>
 
-      <!-- MÓDULO 9: CLIENTES & LEALTAD (REWARDS) -->
-      <button onclick="window.navMenu('clientes_lealtad')" class="text-left bg-[#1c1c1c] rounded-2xl p-6 border border-[#3f3f3f] shadow-lg relative overflow-hidden hover:bg-[#252525] transition-all group flex flex-col h-full active:scale-[0.98]">
-        <div class="absolute top-0 left-0 h-full w-1.5 bg-[#5642a8] group-hover:w-2 transition-all"></div>
-        <div class="text-3xl mb-3 ml-2">🎁</div>
-        <h3 class="text-xl font-bold mb-1.5 ml-2 text-white">Clientes & Lealtad</h3>
-        <p class="text-sm text-[#a3a3a3] font-light leading-relaxed mb-6 ml-2 flex-grow">Puntos acumulados por consumo, visitas frecuentes y beneficios de fidelización</p>
-        <div class="mt-auto ml-2">
-          <span class="inline-block bg-[#5642a8]/10 text-[#5642a8] text-[10px] uppercase tracking-wider font-black px-3 py-1 rounded-full border border-[#5642a8]/20">Lealtad</span>
+      <!-- MÓDULO 9: CLIENTES &amp; LEALTAD (REWARDS) -->
+      <button onclick=&quot;window.navMenu('clientes_lealtad')&quot; class=&quot;text-left bg-[#1c1c1c] rounded-2xl p-6 border border-[#3f3f3f] shadow-lg relative overflow-hidden hover:bg-[#252525] transition-all group flex flex-col h-full active:scale-[0.98]&quot;>
+        <div class=&quot;absolute top-0 left-0 h-full w-1.5 bg-[#5642a8] group-hover:w-2 transition-all&quot;></div>
+        <div class=&quot;text-3xl mb-3 ml-2&quot;>🎁</div>
+        <h3 class=&quot;text-xl font-bold mb-1.5 ml-2 text-white&quot;>Clientes &amp; Lealtad</h3>
+        <p class=&quot;text-sm text-[#a3a3a3] font-light leading-relaxed mb-6 ml-2 flex-grow&quot;>Puntos acumulados por consumo, visitas frecuentes y beneficios de fidelización</p>
+        <div class=&quot;mt-auto ml-2&quot;>
+          <span class=&quot;inline-block bg-[#5642a8]/10 text-[#5642a8] text-[10px] uppercase tracking-wider font-black px-3 py-1 rounded-full border border-[#5642a8]/20&quot;>Lealtad</span>
         </div>
       </button>
 
     </div>
 
     <!-- SECCIÓN INFERIOR: 2 WIDGETS EN PARALELO (ESTILO VIDASPA) -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+    <div class=&quot;grid grid-cols-1 lg:grid-cols-2 gap-8&quot;>
 
       <!-- WIDGET 1: COMANDAS ACTIVAS EN TIEMPO REAL -->
-      <div class="bg-[#1c1c1c] rounded-2xl p-6 border border-[#3f3f3f] shadow-lg">
-        <div class="flex items-center justify-between mb-6 pb-4 border-b border-white/5">
-          <h3 class="text-lg font-bold text-white flex items-center gap-2">
-            <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
+      <div class=&quot;bg-[#1c1c1c] rounded-2xl p-6 border border-[#3f3f3f] shadow-lg&quot;>
+        <div class=&quot;flex items-center justify-between mb-6 pb-4 border-b border-white/5&quot;>
+          <h3 class=&quot;text-lg font-bold text-white flex items-center gap-2&quot;>
+            <span class=&quot;w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping&quot;></span>
             Comandas Activas en Tiempo Real
           </h3>
-          <span class="bg-emerald-900/40 text-emerald-300 text-xs px-3 py-1 rounded-full font-bold border border-emerald-500/20" id="ui_badge_comandas">
+          <span class=&quot;bg-emerald-900/40 text-emerald-300 text-xs px-3 py-1 rounded-full font-bold border border-emerald-500/20&quot; id=&quot;ui_badge_comandas&quot;>
             4 activas
           </span>
         </div>
 
-        <div class="space-y-3" id="list_comandas_activas">
-          <div class="text-[#a3a3a3] text-sm text-center py-4">Cargando comandas en vivo...</div>
+        <div class=&quot;space-y-3&quot; id=&quot;list_comandas_activas&quot;>
+          <div class=&quot;text-[#a3a3a3] text-sm text-center py-4&quot;>Cargando comandas en vivo...</div>
         </div>
       </div>
 
       <!-- WIDGET 2: ALERTAS DE COMPRA SEMANAL (TICKET INTELLIGENT) -->
-      <div class="bg-[#1c1c1c] rounded-2xl p-6 border border-[#3f3f3f] shadow-lg">
-        <div class="flex items-center justify-between mb-6 pb-4 border-b border-white/5">
-          <h3 class="text-lg font-bold text-white flex items-center gap-2">
-            <i class="fa-solid fa-cart-flatbed text-amber-400"></i>
+      <div class=&quot;bg-[#1c1c1c] rounded-2xl p-6 border border-[#3f3f3f] shadow-lg&quot;>
+        <div class=&quot;flex items-center justify-between mb-6 pb-4 border-b border-white/5&quot;>
+          <h3 class=&quot;text-lg font-bold text-white flex items-center gap-2&quot;>
+            <i class=&quot;fa-solid fa-cart-flatbed text-amber-400&quot;></i>
             Alertas de Compra Semanal
           </h3>
-          <span class="bg-amber-900/40 text-amber-300 text-xs px-3 py-1 rounded-full font-bold border border-amber-500/20" id="ui_badge_insumos">
+          <span class=&quot;bg-amber-900/40 text-amber-300 text-xs px-3 py-1 rounded-full font-bold border border-amber-500/20&quot; id=&quot;ui_badge_insumos&quot;>
             5 insumos críticos
           </span>
         </div>
 
-        <div class="space-y-3" id="list_alertas_compras">
-          <div class="text-[#a3a3a3] text-sm text-center py-4">Cargando alertas de insumos...</div>
+        <div class=&quot;space-y-3&quot; id=&quot;list_alertas_compras&quot;>
+          <div class=&quot;text-[#a3a3a3] text-sm text-center py-4&quot;>Cargando alertas de insumos...</div>
         </div>
       </div>
 
@@ -278,150 +278,150 @@
 </div>
 
 <!-- ================================================================= -->
-<!-- MODAL: GESTIÓN DE MENÚ & RECETAS ESTANDARIZADAS (POSTGRESQL)      -->
+<!-- MODAL: GESTIÓN DE MENÚ &amp; RECETAS ESTANDARIZADAS (POSTGRESQL)      -->
 <!-- ================================================================= -->
-<div id="modalAdminMenu" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden items-center justify-center p-4">
-  <div class="bg-[#131720] border border-[#2b3548] rounded-3xl w-full max-w-5xl max-h-[92vh] flex flex-col shadow-2xl overflow-hidden">
-    
+<div id=&quot;modalAdminMenu&quot; class=&quot;fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden items-center justify-center p-4&quot;>
+  <div class=&quot;bg-[#131720] border border-[#2b3548] rounded-3xl w-full max-w-5xl max-h-[92vh] flex flex-col shadow-2xl overflow-hidden&quot;>
+
     <!-- HEADER MODAL -->
-    <div class="px-6 py-4 border-b border-[#2b3548] flex items-center justify-between bg-[#1a202c]">
-      <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-xl bg-amber-500/20 border border-amber-500/30 flex items-center justify-center text-amber-400 text-xl font-black">
+    <div class=&quot;px-6 py-4 border-b border-[#2b3548] flex items-center justify-between bg-[#1a202c]&quot;>
+      <div class=&quot;flex items-center gap-3&quot;>
+        <div class=&quot;w-10 h-10 rounded-xl bg-amber-500/20 border border-amber-500/30 flex items-center justify-center text-amber-400 text-xl font-black&quot;>
           📋
         </div>
         <div>
-          <h2 class="text-lg font-extrabold text-white">Administrador de Menú & Fichas Técnicas</h2>
-          <p class="text-xs text-amber-400">Base de datos PostgreSQL en tiempo real (`dbterrazavidasabor`)</p>
+          <h2 class=&quot;text-lg font-extrabold text-white&quot;>Administrador de Menú &amp; Fichas Técnicas</h2>
+          <p class=&quot;text-xs text-amber-400&quot;>Base de datos PostgreSQL en tiempo real (`dbterrazavidasabor`)</p>
         </div>
       </div>
-      <button onclick="window.cerrarModalAdminMenu()" class="text-slate-400 hover:text-white text-xl p-2 transition">
-        <i class="fa-solid fa-xmark"></i>
+      <button onclick=&quot;window.cerrarModalAdminMenu()&quot; class=&quot;text-slate-400 hover:text-white text-xl p-2 transition&quot;>
+        <i class=&quot;fa-solid fa-xmark&quot;></i>
       </button>
     </div>
 
     <!-- BODY CON COLUMNAS: CATÁLOGO IZQ / EDITOR DER -->
-    <div class="flex-1 overflow-y-auto custom-scrollbar p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
-      
+    <div class=&quot;flex-1 overflow-y-auto custom-scrollbar p-6 grid grid-cols-1 lg:grid-cols-12 gap-6&quot;>
+
       <!-- COLUMNA IZQ: LISTADO DE PLATILLOS (5 COLS) -->
-      <div class="lg:col-span-5 flex flex-col gap-4 border-r border-[#2b3548] pr-0 lg:pr-6">
-        <div class="flex items-center justify-between gap-2">
-          <input type="text" id="filtroPlatilloInput" oninput="window.filtrarListaPlatillos()" placeholder="🔍 Buscar platillo o categoría..." 
-            class="w-full bg-[#0b0e14] border border-[#2b3548] rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-500 transition">
-          <button onclick="window.nuevoPlatilloForm()" class="bg-amber-600 hover:bg-amber-500 text-white font-bold text-xs px-3 py-2 rounded-xl transition whitespace-nowrap flex items-center gap-1.5 shadow-lg shadow-amber-900/30">
-            <i class="fa-solid fa-plus"></i> Nuevo
+      <div class=&quot;lg:col-span-5 flex flex-col gap-4 border-r border-[#2b3548] pr-0 lg:pr-6&quot;>
+        <div class=&quot;flex items-center justify-between gap-2&quot;>
+          <input type=&quot;text&quot; id=&quot;filtroPlatilloInput&quot; oninput=&quot;window.filtrarListaPlatillos()&quot; placeholder=&quot;🔍 Buscar platillo o categoría...&quot; 
+            class=&quot;w-full bg-[#0b0e14] border border-[#2b3548] rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-500 transition&quot;>
+          <button onclick=&quot;window.nuevoPlatilloForm()&quot; class=&quot;bg-amber-600 hover:bg-amber-500 text-white font-bold text-xs px-3 py-2 rounded-xl transition whitespace-nowrap flex items-center gap-1.5 shadow-lg shadow-amber-900/30&quot;>
+            <i class=&quot;fa-solid fa-plus&quot;></i> Nuevo
           </button>
         </div>
 
-        <div id="listaPlatillosAdmin" class="space-y-2 overflow-y-auto max-h-[58vh] custom-scrollbar pr-1">
+        <div id=&quot;listaPlatillosAdmin&quot; class=&quot;space-y-2 overflow-y-auto max-h-[58vh] custom-scrollbar pr-1&quot;>
           <!-- Items generados dinámicamente -->
         </div>
       </div>
 
       <!-- COLUMNA DER: FORMULARIO DE ALTA / EDICIÓN (7 COLS) -->
-      <div class="lg:col-span-7 flex flex-col gap-5 overflow-y-auto max-h-[66vh] custom-scrollbar pr-2">
-        <div class="flex items-center justify-between pb-3 border-b border-[#2b3548]">
-          <h3 class="text-sm font-extrabold text-white flex items-center gap-2" id="formPlatilloTitulo">
-            ✏️ Editar Platillo & Ficha Técnica
+      <div class=&quot;lg:col-span-7 flex flex-col gap-5 overflow-y-auto max-h-[66vh] custom-scrollbar pr-2&quot;>
+        <div class=&quot;flex items-center justify-between pb-3 border-b border-[#2b3548]&quot;>
+          <h3 class=&quot;text-sm font-extrabold text-white flex items-center gap-2&quot; id=&quot;formPlatilloTitulo&quot;>
+            ✏️ Editar Platillo &amp; Ficha Técnica
           </h3>
-          <span class="text-[11px] text-slate-400" id="formPlatilloIdBadge">ID: -</span>
+          <span class=&quot;text-[11px] text-slate-400&quot; id=&quot;formPlatilloIdBadge&quot;>ID: -</span>
         </div>
 
-        <input type="hidden" id="formPlatilloId" value="">
+        <input type=&quot;hidden&quot; id=&quot;formPlatilloId&quot; value=&quot;&quot;>
 
         <!-- SECCIÓN 1: DATOS BÁSICOS -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div class=&quot;grid grid-cols-1 sm:grid-cols-2 gap-4&quot;>
           <div>
-            <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Nombre del Platillo</label>
-            <input type="text" id="formNombre" class="w-full bg-[#0b0e14] border border-[#2b3548] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-500 transition">
+            <label class=&quot;block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1&quot;>Nombre del Platillo</label>
+            <input type=&quot;text&quot; id=&quot;formNombre&quot; class=&quot;w-full bg-[#0b0e14] border border-[#2b3548] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-500 transition&quot;>
           </div>
           <div>
-            <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Categoría</label>
-            <select id="formCategoriaId" class="w-full bg-[#0b0e14] border border-[#2b3548] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-500 transition">
+            <label class=&quot;block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1&quot;>Categoría</label>
+            <select id=&quot;formCategoriaId&quot; class=&quot;w-full bg-[#0b0e14] border border-[#2b3548] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-500 transition&quot;>
               <!-- Categorías cargadas desde PostgreSQL -->
             </select>
           </div>
           <div>
-            <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Precio ($ MXN)</label>
-            <input type="number" step="0.50" id="formPrecio" class="w-full bg-[#0b0e14] border border-[#2b3548] rounded-xl px-3 py-2 text-xs text-emerald-400 font-bold focus:outline-none focus:border-emerald-500 transition">
+            <label class=&quot;block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1&quot;>Precio ($ MXN)</label>
+            <input type=&quot;number&quot; step=&quot;0.50&quot; id=&quot;formPrecio&quot; class=&quot;w-full bg-[#0b0e14] border border-[#2b3548] rounded-xl px-3 py-2 text-xs text-emerald-400 font-bold focus:outline-none focus:border-emerald-500 transition&quot;>
           </div>
           <div>
-            <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Estación de Cocina (KDS)</label>
-            <select id="formEstacion" class="w-full bg-[#0b0e14] border border-[#2b3548] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-500 transition">
-              <option value="Cocina Caliente">Cocina Caliente</option>
-              <option value="Cocina Fría">Cocina Fría</option>
-              <option value="Barra">Barra / Cafetería</option>
-              <option value="Repostería">Repostería & Dulces</option>
-              <option value="Infantil">Menú Infantil</option>
+            <label class=&quot;block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1&quot;>Estación de Cocina (KDS)</label>
+            <select id=&quot;formEstacion&quot; class=&quot;w-full bg-[#0b0e14] border border-[#2b3548] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-500 transition&quot;>
+              <option value=&quot;Cocina Caliente&quot;>Cocina Caliente</option>
+              <option value=&quot;Cocina Fría&quot;>Cocina Fría</option>
+              <option value=&quot;Barra&quot;>Barra / Cafetería</option>
+              <option value=&quot;Repostería&quot;>Repostería &amp; Dulces</option>
+              <option value=&quot;Infantil&quot;>Menú Infantil</option>
             </select>
           </div>
           <div>
-            <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Icono / Emoji</label>
-            <input type="text" id="formIcono" class="w-full bg-[#0b0e14] border border-[#2b3548] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-500 transition" placeholder="🍳">
+            <label class=&quot;block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1&quot;>Icono / Emoji</label>
+            <input type=&quot;text&quot; id=&quot;formIcono&quot; class=&quot;w-full bg-[#0b0e14] border border-[#2b3548] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-500 transition&quot; placeholder=&quot;🍳&quot;>
           </div>
           <div>
-            <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Tiempo Estimado</label>
-            <input type="text" id="formTiempo" class="w-full bg-[#0b0e14] border border-[#2b3548] rounded-xl px-3 py-2 text-xs text-sky-400 focus:outline-none focus:border-sky-500 transition" placeholder="8-10 min">
+            <label class=&quot;block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1&quot;>Tiempo Estimado</label>
+            <input type=&quot;text&quot; id=&quot;formTiempo&quot; class=&quot;w-full bg-[#0b0e14] border border-[#2b3548] rounded-xl px-3 py-2 text-xs text-sky-400 focus:outline-none focus:border-sky-500 transition&quot; placeholder=&quot;8-10 min&quot;>
           </div>
         </div>
 
         <div>
-          <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Descripción Breve (Menú Comensal)</label>
-          <textarea id="formDescripcion" rows="2" class="w-full bg-[#0b0e14] border border-[#2b3548] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-500 transition"></textarea>
+          <label class=&quot;block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1&quot;>Descripción Breve (Menú Comensal)</label>
+          <textarea id=&quot;formDescripcion&quot; rows=&quot;2&quot; class=&quot;w-full bg-[#0b0e14] border border-[#2b3548] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-500 transition&quot;></textarea>
         </div>
 
         <!-- SECCIÓN 2: PERSONALIZACIONES COMENSAL (TÉRMINOS, EXCLUSIONES, EXTRAS) -->
-        <div class="p-4 bg-[#0b0e14] rounded-2xl border border-[#232b3b] space-y-3">
-          <span class="text-xs font-black text-amber-400 uppercase tracking-wider flex items-center gap-1.5">
+        <div class=&quot;p-4 bg-[#0b0e14] rounded-2xl border border-[#232b3b] space-y-3&quot;>
+          <span class=&quot;text-xs font-black text-amber-400 uppercase tracking-wider flex items-center gap-1.5&quot;>
             📱 Opciones para el Celular del Comensal
           </span>
 
           <div>
-            <label class="block text-[10px] font-bold text-slate-400 mb-1">Términos de Preparación (separados por coma)</label>
-            <input type="text" id="formTerminos" class="w-full bg-[#131720] border border-[#2b3548] rounded-lg px-3 py-1.5 text-xs text-white" placeholder="Yema tierna, Yema bien cocida, Volteados">
+            <label class=&quot;block text-[10px] font-bold text-slate-400 mb-1&quot;>Términos de Preparación (separados por coma)</label>
+            <input type=&quot;text&quot; id=&quot;formTerminos&quot; class=&quot;w-full bg-[#131720] border border-[#2b3548] rounded-lg px-3 py-1.5 text-xs text-white&quot; placeholder=&quot;Yema tierna, Yema bien cocida, Volteados&quot;>
           </div>
 
           <div>
-            <label class="block text-[10px] font-bold text-slate-400 mb-1">Preferencias de Exclusión (separadas por coma)</label>
-            <input type="text" id="formExclusiones" class="w-full bg-[#131720] border border-[#2b3548] rounded-lg px-3 py-1.5 text-xs text-white" placeholder="Sin cebolla, Sin crema, Salsa aparte">
+            <label class=&quot;block text-[10px] font-bold text-slate-400 mb-1&quot;>Preferencias de Exclusión (separadas por coma)</label>
+            <input type=&quot;text&quot; id=&quot;formExclusiones&quot; class=&quot;w-full bg-[#131720] border border-[#2b3548] rounded-lg px-3 py-1.5 text-xs text-white&quot; placeholder=&quot;Sin cebolla, Sin crema, Salsa aparte&quot;>
           </div>
 
           <div>
-            <label class="block text-[10px] font-bold text-slate-400 mb-1">Adicionales / Extras Sugeridos (Formato: Nombre +$Precio)</label>
-            <input type="text" id="formExtras" class="w-full bg-[#131720] border border-[#2b3548] rounded-lg px-3 py-1.5 text-xs text-white" placeholder="Aguacate extra +$25.00, Queso gratinado +$20.00, Huevo extra +$15.00">
+            <label class=&quot;block text-[10px] font-bold text-slate-400 mb-1&quot;>Adicionales / Extras Sugeridos (Formato: Nombre +$Precio)</label>
+            <input type=&quot;text&quot; id=&quot;formExtras&quot; class=&quot;w-full bg-[#131720] border border-[#2b3548] rounded-lg px-3 py-1.5 text-xs text-white&quot; placeholder=&quot;Aguacate extra +$25.00, Queso gratinado +$20.00, Huevo extra +$15.00&quot;>
           </div>
         </div>
 
         <!-- SECCIÓN 3: FICHA TÉCNICA COCINA -->
-        <div class="p-4 bg-[#0b0e14] rounded-2xl border border-[#232b3b] space-y-3">
-          <span class="text-xs font-black text-sky-400 uppercase tracking-wider flex items-center gap-1.5">
+        <div class=&quot;p-4 bg-[#0b0e14] rounded-2xl border border-[#232b3b] space-y-3&quot;>
+          <span class=&quot;text-xs font-black text-sky-400 uppercase tracking-wider flex items-center gap-1.5&quot;>
             👨‍🍳 Ficha Técnica de Receta (Gramajes y Pasos)
           </span>
 
           <div>
-            <label class="block text-[10px] font-bold text-slate-400 mb-1">Ingredientes y Gramajes (uno por línea)</label>
-            <textarea id="formIngredientes" rows="3" class="w-full bg-[#131720] border border-[#2b3548] rounded-lg px-3 py-2 text-xs text-white font-mono" placeholder="120g totopos horneados&#10;150ml salsa tatemada roja&#10;2 huevos frescos de rancho"></textarea>
+            <label class=&quot;block text-[10px] font-bold text-slate-400 mb-1&quot;>Ingredientes y Gramajes (uno por línea)</label>
+            <textarea id=&quot;formIngredientes&quot; rows=&quot;3&quot; class=&quot;w-full bg-[#131720] border border-[#2b3548] rounded-lg px-3 py-2 text-xs text-white font-mono&quot; placeholder=&quot;120g totopos horneados&amp;#10;150ml salsa tatemada roja&amp;#10;2 huevos frescos de rancho&quot;></textarea>
           </div>
 
           <div>
-            <label class="block text-[10px] font-bold text-slate-400 mb-1">Pasos de Elaboración (uno por línea)</label>
-            <textarea id="formPasos" rows="3" class="w-full bg-[#131720] border border-[#2b3548] rounded-lg px-3 py-2 text-xs text-white" placeholder="1. Freír huevos al término seleccionado por el cliente&#10;2. Calentar salsa y bañar totopos en sartén caliente por 45 seg&#10;3. Emplatar con frijoles y servir de inmediato"></textarea>
+            <label class=&quot;block text-[10px] font-bold text-slate-400 mb-1&quot;>Pasos de Elaboración (uno por línea)</label>
+            <textarea id=&quot;formPasos&quot; rows=&quot;3&quot; class=&quot;w-full bg-[#131720] border border-[#2b3548] rounded-lg px-3 py-2 text-xs text-white&quot; placeholder=&quot;1. Freír huevos al término seleccionado por el cliente&amp;#10;2. Calentar salsa y bañar totopos en sartén caliente por 45 seg&amp;#10;3. Emplatar con frijoles y servir de inmediato&quot;></textarea>
           </div>
 
           <div>
-            <label class="block text-[10px] font-bold text-slate-400 mb-1">Vajilla y Notas de Montaje</label>
-            <input type="text" id="formNotasReceta" class="w-full bg-[#131720] border border-[#2b3548] rounded-lg px-3 py-1.5 text-xs text-white" placeholder="Plato ovalado de barro hondo. Salida inmediata a pase térmico.">
+            <label class=&quot;block text-[10px] font-bold text-slate-400 mb-1&quot;>Vajilla y Notas de Montaje</label>
+            <input type=&quot;text&quot; id=&quot;formNotasReceta&quot; class=&quot;w-full bg-[#131720] border border-[#2b3548] rounded-lg px-3 py-1.5 text-xs text-white&quot; placeholder=&quot;Plato ovalado de barro hondo. Salida inmediata a pase térmico.&quot;>
           </div>
         </div>
 
         <!-- FOOTER ACCIONES FORMULARIO -->
-        <div class="flex items-center justify-between pt-3 border-t border-[#2b3548]">
-          <label class="flex items-center gap-2 cursor-pointer">
-            <input type="checkbox" id="formDisponible" class="rounded bg-[#0b0e14] border-slate-700 text-emerald-500 focus:ring-0">
-            <span class="text-xs font-bold text-emerald-400">Platillo Activo / Disponible</span>
+        <div class=&quot;flex items-center justify-between pt-3 border-t border-[#2b3548]&quot;>
+          <label class=&quot;flex items-center gap-2 cursor-pointer&quot;>
+            <input type=&quot;checkbox&quot; id=&quot;formDisponible&quot; class=&quot;rounded bg-[#0b0e14] border-slate-700 text-emerald-500 focus:ring-0&quot;>
+            <span class=&quot;text-xs font-bold text-emerald-400&quot;>Platillo Activo / Disponible</span>
           </label>
 
-          <button onclick="window.guardarPlatilloDB()" class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-black text-xs rounded-xl shadow-lg shadow-emerald-900/40 transition flex items-center gap-2">
-            <i class="fa-solid fa-cloud-arrow-up"></i> Guardar en PostgreSQL
+          <button onclick=&quot;window.guardarPlatilloDB()&quot; class=&quot;px-5 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-black text-xs rounded-xl shadow-lg shadow-emerald-900/40 transition flex items-center gap-2&quot;>
+            <i class=&quot;fa-solid fa-cloud-arrow-up&quot;></i> Guardar en PostgreSQL
           </button>
         </div>
 
@@ -432,34 +432,34 @@
 </div>
 
 <!-- ================================================================= -->
-<!-- MODAL: REGISTRO DE PERSONAL & ESTIMADOR IMSS                      -->
+<!-- MODAL: REGISTRO DE PERSONAL &amp; ESTIMADOR IMSS                      -->
 <!-- ================================================================= -->
-<div id="modalPersonal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden items-center justify-center p-4">
-  <div class="bg-[#131720] border border-[#2b3548] rounded-3xl w-full max-w-3xl max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
-    <div class="px-6 py-4 border-b border-[#2b3548] flex items-center justify-between bg-[#1a202c]">
-      <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-xl bg-orange-500/20 border border-orange-500/30 flex items-center justify-center text-orange-400 text-xl font-black">
+<div id=&quot;modalPersonal&quot; class=&quot;fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden items-center justify-center p-4&quot;>
+  <div class=&quot;bg-[#131720] border border-[#2b3548] rounded-3xl w-full max-w-3xl max-h-[90vh] flex flex-col shadow-2xl overflow-hidden&quot;>
+    <div class=&quot;px-6 py-4 border-b border-[#2b3548] flex items-center justify-between bg-[#1a202c]&quot;>
+      <div class=&quot;flex items-center gap-3&quot;>
+        <div class=&quot;w-10 h-10 rounded-xl bg-orange-500/20 border border-orange-500/30 flex items-center justify-center text-orange-400 text-xl font-black&quot;>
           👥
         </div>
         <div>
-          <h2 class="text-lg font-extrabold text-white">Registro de Personal & Expediente Digital</h2>
-          <p class="text-xs text-orange-400">Control de meseros, cocineras y estimador de cuotas obrero-patronales IMSS</p>
+          <h2 class=&quot;text-lg font-extrabold text-white&quot;>Registro de Personal &amp; Expediente Digital</h2>
+          <p class=&quot;text-xs text-orange-400&quot;>Control de meseros, cocineras y estimador de cuotas obrero-patronales IMSS</p>
         </div>
       </div>
-      <button onclick="window.cerrarModalPersonal()" class="text-slate-400 hover:text-white text-xl p-2 transition">
-        <i class="fa-solid fa-xmark"></i>
+      <button onclick=&quot;window.cerrarModalPersonal()&quot; class=&quot;text-slate-400 hover:text-white text-xl p-2 transition&quot;>
+        <i class=&quot;fa-solid fa-xmark&quot;></i>
       </button>
     </div>
 
-    <div class="p-6 overflow-y-auto custom-scrollbar space-y-6">
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+    <div class=&quot;p-6 overflow-y-auto custom-scrollbar space-y-6&quot;>
+      <div class=&quot;grid grid-cols-1 sm:grid-cols-2 gap-4&quot;>
         <div>
-          <label class="block text-[11px] font-bold text-slate-400 mb-1">Nombre Completo</label>
-          <input type="text" placeholder="Ej. Carlos Mendoza Sánchez" class="w-full bg-[#0b0e14] border border-[#2b3548] rounded-xl px-3 py-2 text-xs text-white">
+          <label class=&quot;block text-[11px] font-bold text-slate-400 mb-1&quot;>Nombre Completo</label>
+          <input type=&quot;text&quot; placeholder=&quot;Ej. Carlos Mendoza Sánchez&quot; class=&quot;w-full bg-[#0b0e14] border border-[#2b3548] rounded-xl px-3 py-2 text-xs text-white&quot;>
         </div>
         <div>
-          <label class="block text-[11px] font-bold text-slate-400 mb-1">Puesto / Rol</label>
-          <select class="w-full bg-[#0b0e14] border border-[#2b3548] rounded-xl px-3 py-2 text-xs text-white">
+          <label class=&quot;block text-[11px] font-bold text-slate-400 mb-1&quot;>Puesto / Rol</label>
+          <select class=&quot;w-full bg-[#0b0e14] border border-[#2b3548] rounded-xl px-3 py-2 text-xs text-white&quot;>
             <option>Mesero / Piso Palapa</option>
             <option>Cocinera / Jefe de Línea</option>
             <option>Bartender / Barra de Café</option>
@@ -468,172 +468,172 @@
           </select>
         </div>
         <div>
-          <label class="block text-[11px] font-bold text-slate-400 mb-1">Salario Diario Integrado (SDI)</label>
-          <input type="number" value="320.00" class="w-full bg-[#0b0e14] border border-[#2b3548] rounded-xl px-3 py-2 text-xs text-emerald-400 font-bold">
+          <label class=&quot;block text-[11px] font-bold text-slate-400 mb-1&quot;>Salario Diario Integrado (SDI)</label>
+          <input type=&quot;number&quot; value=&quot;320.00&quot; class=&quot;w-full bg-[#0b0e14] border border-[#2b3548] rounded-xl px-3 py-2 text-xs text-emerald-400 font-bold&quot;>
         </div>
         <div>
-          <label class="block text-[11px] font-bold text-slate-400 mb-1">Número de Seguridad Social (NSS)</label>
-          <input type="text" placeholder="11 dígitos" class="w-full bg-[#0b0e14] border border-[#2b3548] rounded-xl px-3 py-2 text-xs text-white">
+          <label class=&quot;block text-[11px] font-bold text-slate-400 mb-1&quot;>Número de Seguridad Social (NSS)</label>
+          <input type=&quot;text&quot; placeholder=&quot;11 dígitos&quot; class=&quot;w-full bg-[#0b0e14] border border-[#2b3548] rounded-xl px-3 py-2 text-xs text-white&quot;>
         </div>
       </div>
 
       <!-- CHECKLIST DE EXPEDIENTE DIGITAL -->
-      <div class="p-4 bg-[#0b0e14] rounded-2xl border border-[#232b3b] space-y-3">
-        <span class="text-xs font-black text-orange-400 uppercase tracking-wider flex items-center gap-1.5">
-          📄 Expediente Digital & Documentos Escaneados
+      <div class=&quot;p-4 bg-[#0b0e14] rounded-2xl border border-[#232b3b] space-y-3&quot;>
+        <span class=&quot;text-xs font-black text-orange-400 uppercase tracking-wider flex items-center gap-1.5&quot;>
+          📄 Expediente Digital &amp; Documentos Escaneados
         </span>
-        <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 text-xs text-slate-300">
-          <label class="flex items-center gap-2 p-2 bg-[#131720] rounded-lg border border-[#2b3548]">
-            <input type="checkbox" checked class="text-emerald-500 rounded"> INE Escaneado
+        <div class=&quot;grid grid-cols-2 sm:grid-cols-3 gap-2 text-xs text-slate-300&quot;>
+          <label class=&quot;flex items-center gap-2 p-2 bg-[#131720] rounded-lg border border-[#2b3548]&quot;>
+            <input type=&quot;checkbox&quot; checked class=&quot;text-emerald-500 rounded&quot;> INE Escaneado
           </label>
-          <label class="flex items-center gap-2 p-2 bg-[#131720] rounded-lg border border-[#2b3548]">
-            <input type="checkbox" checked class="text-emerald-500 rounded"> CURP Oficial
+          <label class=&quot;flex items-center gap-2 p-2 bg-[#131720] rounded-lg border border-[#2b3548]&quot;>
+            <input type=&quot;checkbox&quot; checked class=&quot;text-emerald-500 rounded&quot;> CURP Oficial
           </label>
-          <label class="flex items-center gap-2 p-2 bg-[#131720] rounded-lg border border-[#2b3548]">
-            <input type="checkbox" checked class="text-emerald-500 rounded"> Constancia SAT
+          <label class=&quot;flex items-center gap-2 p-2 bg-[#131720] rounded-lg border border-[#2b3548]&quot;>
+            <input type=&quot;checkbox&quot; checked class=&quot;text-emerald-500 rounded&quot;> Constancia SAT
           </label>
-          <label class="flex items-center gap-2 p-2 bg-[#131720] rounded-lg border border-[#2b3548]">
-            <input type="checkbox" checked class="text-emerald-500 rounded"> Comprobante Dom.
+          <label class=&quot;flex items-center gap-2 p-2 bg-[#131720] rounded-lg border border-[#2b3548]&quot;>
+            <input type=&quot;checkbox&quot; checked class=&quot;text-emerald-500 rounded&quot;> Comprobante Dom.
           </label>
-          <label class="flex items-center gap-2 p-2 bg-[#131720] rounded-lg border border-[#2b3548]">
-            <input type="checkbox" checked class="text-emerald-500 rounded"> Contrato Firmado
+          <label class=&quot;flex items-center gap-2 p-2 bg-[#131720] rounded-lg border border-[#2b3548]&quot;>
+            <input type=&quot;checkbox&quot; checked class=&quot;text-emerald-500 rounded&quot;> Contrato Firmado
           </label>
-          <label class="flex items-center gap-2 p-2 bg-[#131720] rounded-lg border border-[#2b3548]">
-            <input type="checkbox" class="text-emerald-500 rounded"> Alta IDSE / IMSS
+          <label class=&quot;flex items-center gap-2 p-2 bg-[#131720] rounded-lg border border-[#2b3548]&quot;>
+            <input type=&quot;checkbox&quot; class=&quot;text-emerald-500 rounded&quot;> Alta IDSE / IMSS
           </label>
         </div>
       </div>
 
       <!-- ESTIMADOR IMSS -->
-      <div class="p-4 bg-orange-950/20 rounded-2xl border border-orange-500/30 flex items-center justify-between">
+      <div class=&quot;p-4 bg-orange-950/20 rounded-2xl border border-orange-500/30 flex items-center justify-between&quot;>
         <div>
-          <span class="text-xs font-bold text-orange-300 block">Cálculo Previo Estimado IMSS (Mes en curso)</span>
-          <span class="text-[11px] text-slate-400">Cotejo previo para comparar con la liquidación del contador</span>
+          <span class=&quot;text-xs font-bold text-orange-300 block&quot;>Cálculo Previo Estimado IMSS (Mes en curso)</span>
+          <span class=&quot;text-[11px] text-slate-400&quot;>Cotejo previo para comparar con la liquidación del contador</span>
         </div>
-        <span class="text-xl font-black text-orange-400">$2,460.00 / mes</span>
+        <span class=&quot;text-xl font-black text-orange-400&quot;>$2,460.00 / mes</span>
       </div>
 
-      <div class="flex justify-end gap-3 pt-2">
-        <button onclick="window.cerrarModalPersonal()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-xs font-bold rounded-xl text-slate-300">Cerrar</button>
-        <button onclick="alert('✅ Empleado registrado en el sistema local'); window.cerrarModalPersonal();" class="px-5 py-2 bg-orange-600 hover:bg-orange-500 text-xs font-bold rounded-xl text-white shadow-lg shadow-orange-900/40">Guardar Registro</button>
+      <div class=&quot;flex justify-end gap-3 pt-2&quot;>
+        <button onclick=&quot;window.cerrarModalPersonal()&quot; class=&quot;px-4 py-2 bg-slate-800 hover:bg-slate-700 text-xs font-bold rounded-xl text-slate-300&quot;>Cerrar</button>
+        <button onclick=&quot;alert('✅ Empleado registrado en el sistema local'); window.cerrarModalPersonal();&quot; class=&quot;px-5 py-2 bg-orange-600 hover:bg-orange-500 text-xs font-bold rounded-xl text-white shadow-lg shadow-orange-900/40&quot;>Guardar Registro</button>
       </div>
     </div>
   </div>
 </div>
 
 <!-- ================================================================= -->
-<!-- MODAL: TICKET INTELLIGENT & COMPRAS SEMANALES                     -->
+<!-- MODAL: TICKET INTELLIGENT &amp; COMPRAS SEMANALES                     -->
 <!-- ================================================================= -->
-<div id="modalInventario" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden items-center justify-center p-4">
-  <div class="bg-[#131720] border border-[#2b3548] rounded-3xl w-full max-w-3xl max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
-    <div class="px-6 py-4 border-b border-[#2b3548] flex items-center justify-between bg-[#1a202c]">
-      <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-xl bg-teal-500/20 border border-teal-500/30 flex items-center justify-center text-teal-400 text-xl font-black">
+<div id=&quot;modalInventario&quot; class=&quot;fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden items-center justify-center p-4&quot;>
+  <div class=&quot;bg-[#131720] border border-[#2b3548] rounded-3xl w-full max-w-3xl max-h-[90vh] flex flex-col shadow-2xl overflow-hidden&quot;>
+    <div class=&quot;px-6 py-4 border-b border-[#2b3548] flex items-center justify-between bg-[#1a202c]&quot;>
+      <div class=&quot;flex items-center gap-3&quot;>
+        <div class=&quot;w-10 h-10 rounded-xl bg-teal-500/20 border border-teal-500/30 flex items-center justify-center text-teal-400 text-xl font-black&quot;>
           🛒
         </div>
         <div>
-          <h2 class="text-lg font-extrabold text-white">Almacén & Microservicio Ticket Intelligent</h2>
-          <p class="text-xs text-teal-400">Arquitectura desacoplada por API para escaneo de facturas, luz, renta e insumos</p>
+          <h2 class=&quot;text-lg font-extrabold text-white&quot;>Almacén &amp; Microservicio Ticket Intelligent</h2>
+          <p class=&quot;text-xs text-teal-400&quot;>Arquitectura desacoplada por API para escaneo de facturas, luz, renta e insumos</p>
         </div>
       </div>
-      <button onclick="window.cerrarModalInventario()" class="text-slate-400 hover:text-white text-xl p-2 transition">
-        <i class="fa-solid fa-xmark"></i>
+      <button onclick=&quot;window.cerrarModalInventario()&quot; class=&quot;text-slate-400 hover:text-white text-xl p-2 transition&quot;>
+        <i class=&quot;fa-solid fa-xmark&quot;></i>
       </button>
     </div>
 
-    <div class="p-6 overflow-y-auto custom-scrollbar space-y-5">
-      <div class="p-4 bg-teal-950/20 rounded-2xl border border-teal-500/30">
-        <h4 class="text-xs font-bold text-teal-300 mb-1 flex items-center gap-2">
-          <i class="fa-solid fa-microchip"></i> Micro-App Ticket Intelligent Conectable vía API
+    <div class=&quot;p-6 overflow-y-auto custom-scrollbar space-y-5&quot;>
+      <div class=&quot;p-4 bg-teal-950/20 rounded-2xl border border-teal-500/30&quot;>
+        <h4 class=&quot;text-xs font-bold text-teal-300 mb-1 flex items-center gap-2&quot;>
+          <i class=&quot;fa-solid fa-microchip&quot;></i> Micro-App Ticket Intelligent Conectable vía API
         </h4>
-        <p class="text-xs text-slate-300 leading-relaxed">
+        <p class=&quot;text-xs text-slate-300 leading-relaxed&quot;>
           Esta aplicación procesa facturas y tickets escaneados mediante IA, clasificando automáticamente compras de alimentos, pagos de renta y energía eléctrica. Aquí se reciben las alertas de compras prioritarias semanales para La Terraza.
         </p>
       </div>
 
-      <h4 class="text-xs font-black text-white uppercase tracking-wider">Insumos Críticos Semanales Recomendados</h4>
-      <div class="space-y-2.5">
-        <div class="flex items-center justify-between p-3 bg-[#0b0e14] rounded-xl border border-[#2b3548]">
-          <div class="flex items-center gap-3">
-            <span class="text-xl">🥚</span>
+      <h4 class=&quot;text-xs font-black text-white uppercase tracking-wider&quot;>Insumos Críticos Semanales Recomendados</h4>
+      <div class=&quot;space-y-2.5&quot;>
+        <div class=&quot;flex items-center justify-between p-3 bg-[#0b0e14] rounded-xl border border-[#2b3548]&quot;>
+          <div class=&quot;flex items-center gap-3&quot;>
+            <span class=&quot;text-xl&quot;>🥚</span>
             <div>
-              <span class="text-xs font-bold text-white block">Huevos frescos de rancho</span>
-              <span class="text-[10px] text-slate-400">Consumo semanal: 15 rejas • Stock: 3 rejas</span>
+              <span class=&quot;text-xs font-bold text-white block&quot;>Huevos frescos de rancho</span>
+              <span class=&quot;text-[10px] text-slate-400&quot;>Consumo semanal: 15 rejas • Stock: 3 rejas</span>
             </div>
           </div>
-          <span class="px-2.5 py-1 bg-red-500/20 text-red-400 border border-red-500/30 rounded-lg text-[10px] font-bold">URGENTE (1 día)</span>
+          <span class=&quot;px-2.5 py-1 bg-red-500/20 text-red-400 border border-red-500/30 rounded-lg text-[10px] font-bold&quot;>URGENTE (1 día)</span>
         </div>
-        <div class="flex items-center justify-between p-3 bg-[#0b0e14] rounded-xl border border-[#2b3548]">
-          <div class="flex items-center gap-3">
-            <span class="text-xl">🌽</span>
+        <div class=&quot;flex items-center justify-between p-3 bg-[#0b0e14] rounded-xl border border-[#2b3548]&quot;>
+          <div class=&quot;flex items-center gap-3&quot;>
+            <span class=&quot;text-xl&quot;>🌽</span>
             <div>
-              <span class="text-xs font-bold text-white block">Totopos horneados de maíz</span>
-              <span class="text-[10px] text-slate-400">Consumo semanal: 25 kg • Stock: 4 kg</span>
+              <span class=&quot;text-xs font-bold text-white block&quot;>Totopos horneados de maíz</span>
+              <span class=&quot;text-[10px] text-slate-400&quot;>Consumo semanal: 25 kg • Stock: 4 kg</span>
             </div>
           </div>
-          <span class="px-2.5 py-1 bg-amber-500/20 text-amber-400 border border-amber-500/30 rounded-lg text-[10px] font-bold">PRÓXIMO (2 días)</span>
+          <span class=&quot;px-2.5 py-1 bg-amber-500/20 text-amber-400 border border-amber-500/30 rounded-lg text-[10px] font-bold&quot;>PRÓXIMO (2 días)</span>
         </div>
-        <div class="flex items-center justify-between p-3 bg-[#0b0e14] rounded-xl border border-[#2b3548]">
-          <div class="flex items-center gap-3">
-            <span class="text-xl">🧀</span>
+        <div class=&quot;flex items-center justify-between p-3 bg-[#0b0e14] rounded-xl border border-[#2b3548]&quot;>
+          <div class=&quot;flex items-center gap-3&quot;>
+            <span class=&quot;text-xl&quot;>🧀</span>
             <div>
-              <span class="text-xs font-bold text-white block">Queso fresco artesanal</span>
-              <span class="text-[10px] text-slate-400">Consumo semanal: 12 kg • Stock: 2.5 kg</span>
+              <span class=&quot;text-xs font-bold text-white block&quot;>Queso fresco artesanal</span>
+              <span class=&quot;text-[10px] text-slate-400&quot;>Consumo semanal: 12 kg • Stock: 2.5 kg</span>
             </div>
           </div>
-          <span class="px-2.5 py-1 bg-amber-500/20 text-amber-400 border border-amber-500/30 rounded-lg text-[10px] font-bold">PRÓXIMO (3 días)</span>
+          <span class=&quot;px-2.5 py-1 bg-amber-500/20 text-amber-400 border border-amber-500/30 rounded-lg text-[10px] font-bold&quot;>PRÓXIMO (3 días)</span>
         </div>
       </div>
 
-      <div class="flex justify-end pt-2">
-        <button onclick="window.cerrarModalInventario()" class="px-5 py-2 bg-teal-600 hover:bg-teal-500 text-xs font-bold rounded-xl text-white">Entendido</button>
+      <div class=&quot;flex justify-end pt-2&quot;>
+        <button onclick=&quot;window.cerrarModalInventario()&quot; class=&quot;px-5 py-2 bg-teal-600 hover:bg-teal-500 text-xs font-bold rounded-xl text-white&quot;>Entendido</button>
       </div>
     </div>
   </div>
 </div>
 
 <!-- ================================================================= -->
-<!-- MODAL: CAJA CHICA & FLUJO DE GASTOS                               -->
+<!-- MODAL: CAJA CHICA &amp; FLUJO DE GASTOS                               -->
 <!-- ================================================================= -->
-<div id="modalCajaChica" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden items-center justify-center p-4">
-  <div class="bg-[#131720] border border-[#2b3548] rounded-3xl w-full max-w-2xl max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
-    <div class="px-6 py-4 border-b border-[#2b3548] flex items-center justify-between bg-[#1a202c]">
-      <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-xl bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400 text-xl font-black">
+<div id=&quot;modalCajaChica&quot; class=&quot;fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden items-center justify-center p-4&quot;>
+  <div class=&quot;bg-[#131720] border border-[#2b3548] rounded-3xl w-full max-w-2xl max-h-[90vh] flex flex-col shadow-2xl overflow-hidden&quot;>
+    <div class=&quot;px-6 py-4 border-b border-[#2b3548] flex items-center justify-between bg-[#1a202c]&quot;>
+      <div class=&quot;flex items-center gap-3&quot;>
+        <div class=&quot;w-10 h-10 rounded-xl bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400 text-xl font-black&quot;>
           💵
         </div>
         <div>
-          <h2 class="text-lg font-extrabold text-white">Arqueo de Caja Chica & Propinas</h2>
-          <p class="text-xs text-emerald-400">Control de flujo físico en efectivo para piso y barra</p>
+          <h2 class=&quot;text-lg font-extrabold text-white&quot;>Arqueo de Caja Chica &amp; Propinas</h2>
+          <p class=&quot;text-xs text-emerald-400&quot;>Control de flujo físico en efectivo para piso y barra</p>
         </div>
       </div>
-      <button onclick="window.cerrarModalCajaChica()" class="text-slate-400 hover:text-white text-xl p-2 transition">
-        <i class="fa-solid fa-xmark"></i>
+      <button onclick=&quot;window.cerrarModalCajaChica()&quot; class=&quot;text-slate-400 hover:text-white text-xl p-2 transition&quot;>
+        <i class=&quot;fa-solid fa-xmark&quot;></i>
       </button>
     </div>
 
-    <div class="p-6 overflow-y-auto custom-scrollbar space-y-4">
-      <div class="grid grid-cols-2 gap-4">
-        <div class="p-4 bg-[#0b0e14] rounded-xl border border-[#2b3548]">
-          <span class="text-[10px] uppercase font-bold text-slate-400 block mb-1">Fondo Inicial de Caja</span>
-          <span class="text-xl font-black text-white">$1,500.00</span>
+    <div class=&quot;p-6 overflow-y-auto custom-scrollbar space-y-4&quot;>
+      <div class=&quot;grid grid-cols-2 gap-4&quot;>
+        <div class=&quot;p-4 bg-[#0b0e14] rounded-xl border border-[#2b3548]&quot;>
+          <span class=&quot;text-[10px] uppercase font-bold text-slate-400 block mb-1&quot;>Fondo Inicial de Caja</span>
+          <span class=&quot;text-xl font-black text-white&quot;>$1,500.00</span>
         </div>
-        <div class="p-4 bg-[#0b0e14] rounded-xl border border-[#2b3548]">
-          <span class="text-[10px] uppercase font-bold text-slate-400 block mb-1">Ingresos Efectivo Hoy</span>
-          <span class="text-xl font-black text-emerald-400">$3,900.00</span>
+        <div class=&quot;p-4 bg-[#0b0e14] rounded-xl border border-[#2b3548]&quot;>
+          <span class=&quot;text-[10px] uppercase font-bold text-slate-400 block mb-1&quot;>Ingresos Efectivo Hoy</span>
+          <span class=&quot;text-xl font-black text-emerald-400&quot;>$3,900.00</span>
         </div>
-        <div class="p-4 bg-[#0b0e14] rounded-xl border border-[#2b3548]">
-          <span class="text-[10px] uppercase font-bold text-slate-400 block mb-1">Pozo de Propinas Acumuladas</span>
-          <span class="text-xl font-black text-purple-400">$850.00</span>
+        <div class=&quot;p-4 bg-[#0b0e14] rounded-xl border border-[#2b3548]&quot;>
+          <span class=&quot;text-[10px] uppercase font-bold text-slate-400 block mb-1&quot;>Pozo de Propinas Acumuladas</span>
+          <span class=&quot;text-xl font-black text-purple-400&quot;>$850.00</span>
         </div>
-        <div class="p-4 bg-[#0b0e14] rounded-xl border border-[#2b3548]">
-          <span class="text-[10px] uppercase font-bold text-slate-400 block mb-1">Saldo en Cajón</span>
-          <span class="text-xl font-black text-amber-400">$5,400.00</span>
+        <div class=&quot;p-4 bg-[#0b0e14] rounded-xl border border-[#2b3548]&quot;>
+          <span class=&quot;text-[10px] uppercase font-bold text-slate-400 block mb-1&quot;>Saldo en Cajón</span>
+          <span class=&quot;text-xl font-black text-amber-400&quot;>$5,400.00</span>
         </div>
       </div>
 
-      <div class="flex justify-end gap-3 pt-3">
-        <button onclick="window.cerrarModalCajaChica()" class="px-5 py-2 bg-emerald-600 hover:bg-emerald-500 text-xs font-bold rounded-xl text-white">Aceptar</button>
+      <div class=&quot;flex justify-end gap-3 pt-3&quot;>
+        <button onclick=&quot;window.cerrarModalCajaChica()&quot; class=&quot;px-5 py-2 bg-emerald-600 hover:bg-emerald-500 text-xs font-bold rounded-xl text-white&quot;>Aceptar</button>
       </div>
     </div>
   </div>
@@ -661,13 +661,17 @@
     actualizarFecha();
 
     // 3. PUENTE DE NAVEGACIÓN
-    // window.navMenu es definido por Python (__init__.py) vía anvil.js.window.navMenu
-    // Este bloque solo define un fallback de seguridad si el form aún no terminó de cargar.
-    if (typeof window.navMenu !== 'function') {
-      window.navMenu = function (modulo) {
-        console.warn('[AdminMenu] window.navMenu aún no lista, módulo:', modulo);
-      };
-    }
+    window.navMenu = function (modulo) {
+      if (modulo === 'salir') {
+        window.navMenu('pos_mesero');
+        return;
+      }
+      if (typeof window.anvilAppNav === 'function') {
+        window.anvilAppNav(modulo);
+      } else {
+        console.log(&quot;Navegando a:&quot;, modulo);
+      }
+    };
 
     // 4. RENDER DEL DASHBOARD COMPLETO DESDE POSTGRESQL
     window.renderAdminDashboard = function (kpisJson, prodsJson, catsJson, mesasJson) {
@@ -722,24 +726,24 @@
         listCmd.innerHTML = '';
         const cmds = k.comandas_recientes || [];
         if (badgeCmd) badgeCmd.innerText = `${cmds.length} activas`;
-        
+
         cmds.forEach(cmd => {
           const row = document.createElement('div');
           row.className = 'flex items-center justify-between p-3 bg-[#0b0e14] rounded-xl border border-[#2b3548] hover:border-slate-600 transition cursor-pointer';
           row.onclick = function() { window.navMenu('pos_mesero'); };
           row.innerHTML = `
-            <div class="flex items-center gap-3">
-              <div class="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 font-bold flex items-center justify-center text-xs">
+            <div class=&quot;flex items-center gap-3&quot;>
+              <div class=&quot;w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 font-bold flex items-center justify-center text-xs&quot;>
                 ${cmd.mesa.includes('Centro') ? '⭐' : '🍽️'}
               </div>
               <div>
-                <span class="text-xs font-bold text-white block">${cmd.mesa} • <span class="text-slate-400 font-normal">${cmd.comensal}</span></span>
-                <span class="text-[10px] text-slate-500">${cmd.hora} • ${cmd.items_count} platillo(s)</span>
+                <span class=&quot;text-xs font-bold text-white block&quot;>${cmd.mesa} • <span class=&quot;text-slate-400 font-normal&quot;>${cmd.comensal}</span></span>
+                <span class=&quot;text-[10px] text-slate-500&quot;>${cmd.hora} • ${cmd.items_count} platillo(s)</span>
               </div>
             </div>
-            <div class="text-right">
-              <span class="text-xs font-black text-emerald-400 block">$${Number(cmd.monto).toFixed(2)}</span>
-              <span class="text-[9px] font-bold px-2 py-0.5 rounded-full bg-emerald-950 text-emerald-300 border border-emerald-800">${cmd.estado}</span>
+            <div class=&quot;text-right&quot;>
+              <span class=&quot;text-xs font-black text-emerald-400 block&quot;>$${Number(cmd.monto).toFixed(2)}</span>
+              <span class=&quot;text-[9px] font-bold px-2 py-0.5 rounded-full bg-emerald-950 text-emerald-300 border border-emerald-800&quot;>${cmd.estado}</span>
             </div>
           `;
           listCmd.appendChild(row);
@@ -758,14 +762,14 @@
           const row = document.createElement('div');
           row.className = 'flex items-center justify-between p-3 bg-[#0b0e14] rounded-xl border border-[#2b3548]';
           row.innerHTML = `
-            <div class="flex items-center gap-3">
-              <span class="w-2.5 h-2.5 rounded-full" style="background: ${a.color};"></span>
+            <div class=&quot;flex items-center gap-3&quot;>
+              <span class=&quot;w-2.5 h-2.5 rounded-full&quot; style=&quot;background: ${a.color};&quot;></span>
               <div>
-                <span class="text-xs font-bold text-white block">${a.insumo}</span>
-                <span class="text-[10px] text-slate-400">Stock actual: ${a.cant_actual} • Consumo: ${a.consumo_semanal}</span>
+                <span class=&quot;text-xs font-bold text-white block&quot;>${a.insumo}</span>
+                <span class=&quot;text-[10px] text-slate-400&quot;>Stock actual: ${a.cant_actual} • Consumo: ${a.consumo_semanal}</span>
               </div>
             </div>
-            <span class="px-2.5 py-1 rounded-lg text-[10px] font-bold" style="background: ${a.color}22; color: ${a.color}; border: 1px solid ${a.color}44;">
+            <span class=&quot;px-2.5 py-1 rounded-lg text-[10px] font-bold&quot; style=&quot;background: ${a.color}22; color: ${a.color}; border: 1px solid ${a.color}44;&quot;>
               ${a.urgencia} (${a.dias_restantes})
             </span>
           `;
@@ -821,7 +825,7 @@
       });
 
       if (filtrados.length === 0) {
-        container.innerHTML = '<div class="text-xs text-slate-500 text-center py-6">No se encontraron platillos</div>';
+        container.innerHTML = '<div class=&quot;text-xs text-slate-500 text-center py-6&quot;>No se encontraron platillos</div>';
         return;
       }
 
@@ -830,21 +834,21 @@
         item.className = 'p-3 bg-[#0b0e14] rounded-xl border border-[#2b3548] hover:border-amber-500/50 transition cursor-pointer flex items-center justify-between group';
         item.onclick = function () { window.cargarPlatilloEnForm(p.id); };
         item.innerHTML = `
-          <div class="flex items-center gap-2.5 truncate">
-            <span class="text-lg">${p.icono || '🍽️'}</span>
-            <div class="truncate">
-              <span class="text-xs font-bold text-white block truncate group-hover:text-amber-400 transition">${p.nombre}</span>
-              <span class="text-[10px] text-slate-400 block truncate">${p.categoria_nombre || 'General'} • $${Number(p.precio_unitario || p.precio || 0).toFixed(2)}</span>
+          <div class=&quot;flex items-center gap-2.5 truncate&quot;>
+            <span class=&quot;text-lg&quot;>${p.icono || '🍽️'}</span>
+            <div class=&quot;truncate&quot;>
+              <span class=&quot;text-xs font-bold text-white block truncate group-hover:text-amber-400 transition&quot;>${p.nombre}</span>
+              <span class=&quot;text-[10px] text-slate-400 block truncate&quot;>${p.categoria_nombre || 'General'} • $${Number(p.precio_unitario || p.precio || 0).toFixed(2)}</span>
             </div>
           </div>
-          <span class="text-[10px] font-bold px-2 py-0.5 rounded-md ${p.disponible ? 'bg-emerald-950 text-emerald-400 border border-emerald-800' : 'bg-red-950 text-red-400 border border-red-800'}">
+          <span class=&quot;text-[10px] font-bold px-2 py-0.5 rounded-md ${p.disponible ? 'bg-emerald-950 text-emerald-400 border border-emerald-800' : 'bg-red-950 text-red-400 border border-red-800'}&quot;>
             ${p.disponible ? 'Activo' : 'Pausado'}
           </span>
         `;
         container.appendChild(item);
       });
 
-      if (filtrados.length > 0 && !document.getElementById('formPlatilloId').value) {
+      if (filtrados.length > 0 &amp;&amp; !document.getElementById('formPlatilloId').value) {
         window.cargarPlatilloEnForm(filtrados[0].id);
       }
     }
@@ -957,7 +961,7 @@
         alert('✅ ¡Platillo y Ficha Técnica guardados exitosamente en PostgreSQL!');
         window.cerrarModalAdminMenu();
       } else {
-        console.log("Guardando:", prodPayload);
+        console.log(&quot;Guardando:&quot;, prodPayload);
         alert('✅ Guardado en memoria de prueba.');
         window.cerrarModalAdminMenu();
       }
@@ -992,5 +996,4 @@
     };
 
   })();
-</script>
-</anvil-form>
+</script>"></anvil-form>

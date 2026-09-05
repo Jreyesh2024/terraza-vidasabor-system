@@ -1,144 +1,142 @@
-<anvil-form container="HtmlTemplate" prop:html="">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<anvil-form container="HtmlTemplate" prop:html="<link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css&quot;>
+<link rel=&quot;stylesheet&quot; href=&quot;https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css&quot;>
 <style>
   body, html { background-color: #090d16 !important; color: #f8fafc !important; }
   .glass-card { background: rgba(22, 30, 46, 0.85) !important; border: 1px solid rgba(255, 255, 255, 0.12) !important; }
 </style>
 
-<script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src=&quot;https://cdn.tailwindcss.com&quot;></script>
+<link rel=&quot;stylesheet&quot; href=&quot;https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css&quot;>
 
-  <div class="min-h-screen bg-[#090d16] text-slate-100 p-4 md:p-6 font-sans">
-    <!-- TOP BAR -->
-    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-4 border-b border-slate-800 mb-6">
-      <div class="flex items-center gap-3">
-        <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-sky-500 to-indigo-600 flex items-center justify-center text-2xl text-white font-black shadow-lg shadow-sky-500/20">
-          <i class="fa-solid fa-chart-pie"></i>
-        </div>
-        <div>
-          <h1 class="text-xl font-extrabold text-white tracking-wide">Monitor Fiscal & Financiero (V&S)</h1>
-          <p class="text-xs text-sky-400 font-medium">La Terraza de Vida & Sabor • Desglose Bancarizado vs. Efectivo & IVA (16%)</p>
-        </div>
+<div class=&quot;min-h-screen bg-[#090d16] text-slate-100 p-4 md:p-6 font-sans&quot;>
+  <!-- TOP BAR -->
+  <div class=&quot;flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-4 border-b border-slate-800 mb-6&quot;>
+    <div class=&quot;flex items-center gap-3&quot;>
+      <div class=&quot;w-12 h-12 rounded-2xl bg-gradient-to-tr from-sky-500 to-indigo-600 flex items-center justify-center text-2xl text-white font-black shadow-lg shadow-sky-500/20&quot;>
+        <i class=&quot;fa-solid fa-chart-pie&quot;></i>
       </div>
-      <div class="flex items-center gap-2">
-        <button onclick="window.navMenu && window.navMenu('admin_menu')" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-emerald-400 border border-emerald-500/30 text-xs font-bold rounded-xl shadow-lg transition flex items-center gap-2">
-          <i class="fa-solid fa-house"></i> Inicio / Hub
-        </button>
-        <button onclick="window.navMenu && window.navMenu('pos_mesero')" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-xl shadow-lg shadow-emerald-900/30 transition flex items-center gap-2">
-          <i class="fa-solid fa-arrow-left"></i> Volver a Mesas (POS)
-        </button>
+      <div>
+        <h1 class=&quot;text-xl font-extrabold text-white tracking-wide&quot;>Monitor Fiscal &amp; Financiero (V&amp;S)</h1>
+        <p class=&quot;text-xs text-sky-400 font-medium&quot;>La Terraza de Vida &amp; Sabor • Desglose Bancarizado vs. Efectivo &amp; IVA (16%)</p>
       </div>
     </div>
-
-    <!-- KPIS CARDS -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-      <div class="bg-slate-900/90 border border-slate-800 p-5 rounded-2xl shadow-lg backdrop-blur-xl">
-        <div class="flex justify-between items-center mb-2">
-          <span class="text-xs text-slate-400 font-bold uppercase tracking-wider">Bancarizado</span>
-          <div class="w-8 h-8 rounded-lg bg-sky-500/10 text-sky-400 flex items-center justify-center text-sm">
-            <i class="fa-solid fa-credit-card"></i>
-          </div>
-        </div>
-        <span class="text-3xl font-black text-sky-400 tracking-tight">,450.00</span>
-        <span class="text-[11px] text-slate-500 block mt-2 font-medium">Santander TPV & Mercado Pago</span>
-      </div>
-
-      <div class="bg-slate-900/90 border border-slate-800 p-5 rounded-2xl shadow-lg backdrop-blur-xl">
-        <div class="flex justify-between items-center mb-2">
-          <span class="text-xs text-slate-400 font-bold uppercase tracking-wider">Efectivo Caja</span>
-          <div class="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-sm">
-            <i class="fa-solid fa-money-bill-wave"></i>
-          </div>
-        </div>
-        <span class="text-3xl font-black text-emerald-400 tracking-tight">,400.00</span>
-        <span class="text-[11px] text-slate-500 block mt-2 font-medium">Caja Chica V&S</span>
-      </div>
-
-      <div class="bg-slate-900/90 border border-slate-800 p-5 rounded-2xl shadow-lg backdrop-blur-xl">
-        <div class="flex justify-between items-center mb-2">
-          <span class="text-xs text-slate-400 font-bold uppercase tracking-wider">IVA Trasladado (16%)</span>
-          <div class="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-400 flex items-center justify-center text-sm">
-            <i class="fa-solid fa-receipt"></i>
-          </div>
-        </div>
-        <span class="text-3xl font-black text-amber-400 tracking-tight">.96</span>
-        <span class="text-[11px] text-slate-500 block mt-2 font-medium">Desglose Fiscal SAT</span>
-      </div>
-
-      <div class="bg-slate-900/90 border border-slate-800 p-5 rounded-2xl shadow-lg backdrop-blur-xl">
-        <div class="flex justify-between items-center mb-2">
-          <span class="text-xs text-slate-400 font-bold uppercase tracking-wider">Propinas Equipo</span>
-          <div class="w-8 h-8 rounded-lg bg-purple-500/10 text-purple-400 flex items-center justify-center text-sm">
-            <i class="fa-solid fa-hand-holding-dollar"></i>
-          </div>
-        </div>
-        <span class="text-3xl font-black text-purple-400 tracking-tight">.00</span>
-        <span class="text-[11px] text-slate-500 block mt-2 font-medium">No acumulable fiscal</span>
-      </div>
-    </div>
-
-    <!-- TICKET FISCAL TABLE -->
-    <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-6 shadow-xl backdrop-blur-xl space-y-4">
-      <div class="flex justify-between items-center pb-4 border-b border-slate-800">
-        <h2 class="text-base font-extrabold text-white flex items-center gap-2">
-          <i class="fa-solid fa-list-check text-sky-400"></i> Historial de Transacciones del Día
-        </h2>
-        <button class="px-3.5 py-2 bg-sky-600 hover:bg-sky-500 text-white font-bold text-xs rounded-xl shadow-md transition flex items-center gap-2">
-          <i class="fa-solid fa-file-invoice-dollar"></i> Generar CFDI Global
-        </button>
-      </div>
-
-      <div class="overflow-x-auto">
-        <table class="w-full text-left text-xs text-slate-300">
-          <thead class="bg-slate-800/60 text-slate-400 uppercase text-[10px] tracking-wider border-b border-slate-800">
-            <tr>
-              <th class="py-3 px-4">Folio</th>
-              <th class="py-3 px-4">Hora</th>
-              <th class="py-3 px-4">Método</th>
-              <th class="py-3 px-4">Mesa</th>
-              <th class="py-3 px-4">Total</th>
-              <th class="py-3 px-4">Estatus CFDI</th>
-              <th class="py-3 px-4 text-right">Acción</th>
-            </tr>
-          </thead>
-          <tbody class="divide-y divide-slate-800/60 font-medium">
-            <tr class="hover:bg-slate-800/30 transition">
-              <td class="py-3 px-4 font-bold text-amber-400">VS-TICK-8492</td>
-              <td class="py-3 px-4 text-slate-400">14:32 hrs</td>
-              <td class="py-3 px-4"><span class="px-2 py-0.5 rounded bg-sky-500/10 text-sky-400 border border-sky-500/20 font-bold">Tarjeta Cred</span></td>
-              <td class="py-3 px-4">Mesa 3</td>
-              <td class="py-3 px-4 font-bold text-white">.00</td>
-              <td class="py-3 px-4"><span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-[10px] font-bold">Facturado CFDI 4.0</span></td>
-              <td class="py-3 px-4 text-right">
-                <button onclick="alert('Descargando XML/PDF')" class="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg text-[11px] font-bold transition">PDF/XML</button>
-              </td>
-            </tr>
-            <tr class="hover:bg-slate-800/30 transition">
-              <td class="py-3 px-4 font-bold text-amber-400">VS-TICK-8491</td>
-              <td class="py-3 px-4 text-slate-400">13:50 hrs</td>
-              <td class="py-3 px-4"><span class="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-bold">Efectivo</span></td>
-              <td class="py-3 px-4">Mesa 1</td>
-              <td class="py-3 px-4 font-bold text-white">.00</td>
-              <td class="py-3 px-4"><span class="px-2 py-0.5 rounded bg-slate-800 text-slate-400 border border-slate-700 text-[10px] font-bold">Público General</span></td>
-              <td class="py-3 px-4 text-right">
-                <button onclick="alert('Generar factura a cliente')" class="px-2.5 py-1 bg-sky-600/30 hover:bg-sky-600/50 text-sky-300 border border-sky-500/30 rounded-lg text-[11px] font-bold transition">Facturar</button>
-              </td>
-            </tr>
-            <tr class="hover:bg-slate-800/30 transition">
-              <td class="py-3 px-4 font-bold text-amber-400">VS-TICK-8490</td>
-              <td class="py-3 px-4 text-slate-400">13:15 hrs</td>
-              <td class="py-3 px-4"><span class="px-2 py-0.5 rounded bg-purple-500/10 text-purple-400 border border-purple-500/20 font-bold">Mercado Pago</span></td>
-              <td class="py-3 px-4">Mesa 5</td>
-              <td class="py-3 px-4 font-bold text-white">.00</td>
-              <td class="py-3 px-4"><span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-[10px] font-bold">Facturado CFDI 4.0</span></td>
-              <td class="py-3 px-4 text-right">
-                <button onclick="alert('Descargando XML/PDF')" class="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg text-[11px] font-bold transition">PDF/XML</button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+    <div class=&quot;flex items-center gap-2&quot;>
+      <button onclick=&quot;window.navMenu &amp;&amp; window.navMenu('admin_menu')&quot; class=&quot;px-4 py-2 bg-slate-800 hover:bg-slate-700 text-emerald-400 border border-emerald-500/30 text-xs font-bold rounded-xl shadow-lg transition flex items-center gap-2&quot;>
+        <i class=&quot;fa-solid fa-house&quot;></i> Inicio / Hub
+      </button>
+      <button onclick=&quot;window.navMenu &amp;&amp; window.navMenu('pos_mesero')&quot; class=&quot;px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-xl shadow-lg shadow-emerald-900/30 transition flex items-center gap-2&quot;>
+        <i class=&quot;fa-solid fa-arrow-left&quot;></i> Volver a Mesas (POS)
+      </button>
     </div>
   </div>
-</anvil-form>
+
+  <!-- KPIS CARDS -->
+  <div class=&quot;grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8&quot;>
+    <div class=&quot;bg-slate-900/90 border border-slate-800 p-5 rounded-2xl shadow-lg backdrop-blur-xl&quot;>
+      <div class=&quot;flex justify-between items-center mb-2&quot;>
+        <span class=&quot;text-xs text-slate-400 font-bold uppercase tracking-wider&quot;>Bancarizado</span>
+        <div class=&quot;w-8 h-8 rounded-lg bg-sky-500/10 text-sky-400 flex items-center justify-center text-sm&quot;>
+          <i class=&quot;fa-solid fa-credit-card&quot;></i>
+        </div>
+      </div>
+      <span class=&quot;text-3xl font-black text-sky-400 tracking-tight&quot;>,450.00</span>
+      <span class=&quot;text-[11px] text-slate-500 block mt-2 font-medium&quot;>Santander TPV &amp; Mercado Pago</span>
+    </div>
+
+    <div class=&quot;bg-slate-900/90 border border-slate-800 p-5 rounded-2xl shadow-lg backdrop-blur-xl&quot;>
+      <div class=&quot;flex justify-between items-center mb-2&quot;>
+        <span class=&quot;text-xs text-slate-400 font-bold uppercase tracking-wider&quot;>Efectivo Caja</span>
+        <div class=&quot;w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-sm&quot;>
+          <i class=&quot;fa-solid fa-money-bill-wave&quot;></i>
+        </div>
+      </div>
+      <span class=&quot;text-3xl font-black text-emerald-400 tracking-tight&quot;>,400.00</span>
+      <span class=&quot;text-[11px] text-slate-500 block mt-2 font-medium&quot;>Caja Chica V&amp;S</span>
+    </div>
+
+    <div class=&quot;bg-slate-900/90 border border-slate-800 p-5 rounded-2xl shadow-lg backdrop-blur-xl&quot;>
+      <div class=&quot;flex justify-between items-center mb-2&quot;>
+        <span class=&quot;text-xs text-slate-400 font-bold uppercase tracking-wider&quot;>IVA Trasladado (16%)</span>
+        <div class=&quot;w-8 h-8 rounded-lg bg-amber-500/10 text-amber-400 flex items-center justify-center text-sm&quot;>
+          <i class=&quot;fa-solid fa-receipt&quot;></i>
+        </div>
+      </div>
+      <span class=&quot;text-3xl font-black text-amber-400 tracking-tight&quot;>.96</span>
+      <span class=&quot;text-[11px] text-slate-500 block mt-2 font-medium&quot;>Desglose Fiscal SAT</span>
+    </div>
+
+    <div class=&quot;bg-slate-900/90 border border-slate-800 p-5 rounded-2xl shadow-lg backdrop-blur-xl&quot;>
+      <div class=&quot;flex justify-between items-center mb-2&quot;>
+        <span class=&quot;text-xs text-slate-400 font-bold uppercase tracking-wider&quot;>Propinas Equipo</span>
+        <div class=&quot;w-8 h-8 rounded-lg bg-purple-500/10 text-purple-400 flex items-center justify-center text-sm&quot;>
+          <i class=&quot;fa-solid fa-hand-holding-dollar&quot;></i>
+        </div>
+      </div>
+      <span class=&quot;text-3xl font-black text-purple-400 tracking-tight&quot;>.00</span>
+      <span class=&quot;text-[11px] text-slate-500 block mt-2 font-medium&quot;>No acumulable fiscal</span>
+    </div>
+  </div>
+
+  <!-- TICKET FISCAL TABLE -->
+  <div class=&quot;bg-slate-900/90 border border-slate-800 rounded-2xl p-6 shadow-xl backdrop-blur-xl space-y-4&quot;>
+    <div class=&quot;flex justify-between items-center pb-4 border-b border-slate-800&quot;>
+      <h2 class=&quot;text-base font-extrabold text-white flex items-center gap-2&quot;>
+        <i class=&quot;fa-solid fa-list-check text-sky-400&quot;></i> Historial de Transacciones del Día
+      </h2>
+      <button class=&quot;px-3.5 py-2 bg-sky-600 hover:bg-sky-500 text-white font-bold text-xs rounded-xl shadow-md transition flex items-center gap-2&quot;>
+        <i class=&quot;fa-solid fa-file-invoice-dollar&quot;></i> Generar CFDI Global
+      </button>
+    </div>
+
+    <div class=&quot;overflow-x-auto&quot;>
+      <table class=&quot;w-full text-left text-xs text-slate-300&quot;>
+        <thead class=&quot;bg-slate-800/60 text-slate-400 uppercase text-[10px] tracking-wider border-b border-slate-800&quot;>
+          <tr>
+            <th class=&quot;py-3 px-4&quot;>Folio</th>
+            <th class=&quot;py-3 px-4&quot;>Hora</th>
+            <th class=&quot;py-3 px-4&quot;>Método</th>
+            <th class=&quot;py-3 px-4&quot;>Mesa</th>
+            <th class=&quot;py-3 px-4&quot;>Total</th>
+            <th class=&quot;py-3 px-4&quot;>Estatus CFDI</th>
+            <th class=&quot;py-3 px-4 text-right&quot;>Acción</th>
+          </tr>
+        </thead>
+        <tbody class=&quot;divide-y divide-slate-800/60 font-medium&quot;>
+          <tr class=&quot;hover:bg-slate-800/30 transition&quot;>
+            <td class=&quot;py-3 px-4 font-bold text-amber-400&quot;>VS-TICK-8492</td>
+            <td class=&quot;py-3 px-4 text-slate-400&quot;>14:32 hrs</td>
+            <td class=&quot;py-3 px-4&quot;><span class=&quot;px-2 py-0.5 rounded bg-sky-500/10 text-sky-400 border border-sky-500/20 font-bold&quot;>Tarjeta Cred</span></td>
+            <td class=&quot;py-3 px-4&quot;>Mesa 3</td>
+            <td class=&quot;py-3 px-4 font-bold text-white&quot;>.00</td>
+            <td class=&quot;py-3 px-4&quot;><span class=&quot;px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-[10px] font-bold&quot;>Facturado CFDI 4.0</span></td>
+            <td class=&quot;py-3 px-4 text-right&quot;>
+              <button onclick=&quot;alert('Descargando XML/PDF')&quot; class=&quot;px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg text-[11px] font-bold transition&quot;>PDF/XML</button>
+            </td>
+          </tr>
+          <tr class=&quot;hover:bg-slate-800/30 transition&quot;>
+            <td class=&quot;py-3 px-4 font-bold text-amber-400&quot;>VS-TICK-8491</td>
+            <td class=&quot;py-3 px-4 text-slate-400&quot;>13:50 hrs</td>
+            <td class=&quot;py-3 px-4&quot;><span class=&quot;px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-bold&quot;>Efectivo</span></td>
+            <td class=&quot;py-3 px-4&quot;>Mesa 1</td>
+            <td class=&quot;py-3 px-4 font-bold text-white&quot;>.00</td>
+            <td class=&quot;py-3 px-4&quot;><span class=&quot;px-2 py-0.5 rounded bg-slate-800 text-slate-400 border border-slate-700 text-[10px] font-bold&quot;>Público General</span></td>
+            <td class=&quot;py-3 px-4 text-right&quot;>
+              <button onclick=&quot;alert('Generar factura a cliente')&quot; class=&quot;px-2.5 py-1 bg-sky-600/30 hover:bg-sky-600/50 text-sky-300 border border-sky-500/30 rounded-lg text-[11px] font-bold transition&quot;>Facturar</button>
+            </td>
+          </tr>
+          <tr class=&quot;hover:bg-slate-800/30 transition&quot;>
+            <td class=&quot;py-3 px-4 font-bold text-amber-400&quot;>VS-TICK-8490</td>
+            <td class=&quot;py-3 px-4 text-slate-400&quot;>13:15 hrs</td>
+            <td class=&quot;py-3 px-4&quot;><span class=&quot;px-2 py-0.5 rounded bg-purple-500/10 text-purple-400 border border-purple-500/20 font-bold&quot;>Mercado Pago</span></td>
+            <td class=&quot;py-3 px-4&quot;>Mesa 5</td>
+            <td class=&quot;py-3 px-4 font-bold text-white&quot;>.00</td>
+            <td class=&quot;py-3 px-4&quot;><span class=&quot;px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-[10px] font-bold&quot;>Facturado CFDI 4.0</span></td>
+            <td class=&quot;py-3 px-4 text-right&quot;>
+              <button onclick=&quot;alert('Descargando XML/PDF')&quot; class=&quot;px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg text-[11px] font-bold transition&quot;>PDF/XML</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>"></anvil-form>
