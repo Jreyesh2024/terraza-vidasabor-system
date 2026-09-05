@@ -311,7 +311,8 @@
     display: flex !important;
   }
 
-  #mainCanvasGrid.mode-overview #viewSidebarComanda {
+  #mainCanvasGrid.mode-overview #viewSidebarComanda,
+  #mainCanvasGrid.mode-overview #panelMenuCatalogo {
     display: none !important;
   }
 
@@ -516,17 +517,17 @@
 
             <div id="table-box-1" class="table-box-220"
               style="position: relative !important; width: 250px !important; height: 230px !important; display: flex !important; align-items: center !important; justify-content: center !important; margin: 0 auto !important;">
-              <div id="table-circle-1" class="table-square-fixed"
+              <div id="table-circle-1" class="table-square-fixed" onclick="window.clickMesa(1);"
                 style="width: 104px !important; height: 104px !important; border-radius: 16px !important; background: #ecfdf5 !important; border: 3px solid #10b981 !important; box-shadow: 0 2px 8px rgba(16, 185, 129, 0.2) !important; display: flex !important; flex-direction: column !important; align-items: center !important; justify-content: center !important; cursor: pointer !important; z-index: 10 !important;">
                 <span
                   style="font-size: 18px !important; font-weight: 900 !important; color: #065f46 !important; margin: 0 !important; line-height: 1 !important;">M1</span>
                 <span id="table-status-1"
                   style="font-size: 9px !important; font-weight: 800 !important; color: #059669 !important; text-transform: uppercase !important; margin-top: 2px !important;">Libre</span>
               </div>
-              <div id="chair-1-1" class="chair-btn-fixed chair-state-free" draggable="true" style="position: absolute !important; top: 2px; left: 50%; transform: translateX(-50%); z-index: 25 !important; cursor: pointer !important; white-space: nowrap !important;" title="Mesa 1 Silla 1 (Disponible) • Arrastra o clic para comanda">Silla 1</div>
-              <div id="chair-1-2" class="chair-btn-fixed chair-state-free" draggable="true" style="position: absolute !important; right: 2px; top: 50%; transform: translateY(-50%); z-index: 25 !important; cursor: pointer !important; white-space: nowrap !important;" title="Mesa 1 Silla 2 (Disponible) • Arrastra o clic para comanda">Silla 2</div>
-              <div id="chair-1-3" class="chair-btn-fixed chair-state-free" draggable="true" style="position: absolute !important; bottom: 2px; left: 50%; transform: translateX(-50%); z-index: 25 !important; cursor: pointer !important; white-space: nowrap !important;" title="Mesa 1 Silla 3 (Disponible) • Arrastra o clic para comanda">Silla 3</div>
-              <div id="chair-1-4" class="chair-btn-fixed chair-state-free" draggable="true" style="position: absolute !important; left: 2px; top: 50%; transform: translateY(-50%); z-index: 25 !important; cursor: pointer !important; white-space: nowrap !important;" title="Mesa 1 Silla 4 (Disponible) • Arrastra o clic para comanda">Silla 4</div>
+              <div id="chair-1-1" class="chair-btn-fixed chair-state-free" onclick="window.clickSilla(1, 1);" draggable="true" style="position: absolute !important; top: 2px; left: 50%; transform: translateX(-50%); z-index: 25 !important; cursor: pointer !important; white-space: nowrap !important;" title="Mesa 1 Silla 1 (Disponible) • Arrastra o clic para comanda">Silla 1</div>
+              <div id="chair-1-2" class="chair-btn-fixed chair-state-free" onclick="window.clickSilla(1, 2);" draggable="true" style="position: absolute !important; right: 2px; top: 50%; transform: translateY(-50%); z-index: 25 !important; cursor: pointer !important; white-space: nowrap !important;" title="Mesa 1 Silla 2 (Disponible) • Arrastra o clic para comanda">Silla 2</div>
+              <div id="chair-1-3" class="chair-btn-fixed chair-state-free" onclick="window.clickSilla(1, 3);" draggable="true" style="position: absolute !important; bottom: 2px; left: 50%; transform: translateX(-50%); z-index: 25 !important; cursor: pointer !important; white-space: nowrap !important;" title="Mesa 1 Silla 3 (Disponible) • Arrastra o clic para comanda">Silla 3</div>
+              <div id="chair-1-4" class="chair-btn-fixed chair-state-free" onclick="window.clickSilla(1, 4);" draggable="true" style="position: absolute !important; left: 2px; top: 50%; transform: translateY(-50%); z-index: 25 !important; cursor: pointer !important; white-space: nowrap !important;" title="Mesa 1 Silla 4 (Disponible) • Arrastra o clic para comanda">Silla 4</div>
             </div>
 
             <span id="table-label-1"
@@ -543,17 +544,17 @@
 
             <div id="table-box-2" class="table-box-220"
               style="position: relative !important; width: 250px !important; height: 230px !important; display: flex !important; align-items: center !important; justify-content: center !important; margin: 0 auto !important;">
-              <div id="table-circle-2" class="table-square-fixed"
+              <div id="table-circle-2" class="table-square-fixed" onclick="window.clickMesa(2);"
                 style="width: 104px !important; height: 104px !important; border-radius: 16px !important; background: #ecfdf5 !important; border: 3px solid #10b981 !important; box-shadow: 0 2px 8px rgba(16, 185, 129, 0.2) !important; display: flex !important; flex-direction: column !important; align-items: center !important; justify-content: center !important; cursor: pointer !important; z-index: 10 !important;">
                 <span
                   style="font-size: 18px !important; font-weight: 900 !important; color: #065f46 !important; margin: 0 !important; line-height: 1 !important;">M2</span>
                 <span id="table-status-2"
                   style="font-size: 9px !important; font-weight: 800 !important; color: #059669 !important; text-transform: uppercase !important; margin-top: 2px !important;">Libre</span>
               </div>
-              <div id="chair-2-1" class="chair-btn-fixed chair-state-free" draggable="true" style="position: absolute !important; top: 2px; left: 50%; transform: translateX(-50%); z-index: 25 !important; cursor: pointer !important; white-space: nowrap !important;" title="Mesa 2 Silla 1 (Disponible) • Arrastra o clic para comanda">Silla 1</div>
-              <div id="chair-2-2" class="chair-btn-fixed chair-state-free" draggable="true" style="position: absolute !important; right: 2px; top: 50%; transform: translateY(-50%); z-index: 25 !important; cursor: pointer !important; white-space: nowrap !important;" title="Mesa 2 Silla 2 (Disponible) • Arrastra o clic para comanda">Silla 2</div>
-              <div id="chair-2-3" class="chair-btn-fixed chair-state-free" draggable="true" style="position: absolute !important; bottom: 2px; left: 50%; transform: translateX(-50%); z-index: 25 !important; cursor: pointer !important; white-space: nowrap !important;" title="Mesa 2 Silla 3 (Disponible) • Arrastra o clic para comanda">Silla 3</div>
-              <div id="chair-2-4" class="chair-btn-fixed chair-state-free" draggable="true" style="position: absolute !important; left: 2px; top: 50%; transform: translateY(-50%); z-index: 25 !important; cursor: pointer !important; white-space: nowrap !important;" title="Mesa 2 Silla 4 (Disponible) • Arrastra o clic para comanda">Silla 4</div>
+              <div id="chair-2-1" class="chair-btn-fixed chair-state-free" onclick="window.clickSilla(2, 1);" draggable="true" style="position: absolute !important; top: 2px; left: 50%; transform: translateX(-50%); z-index: 25 !important; cursor: pointer !important; white-space: nowrap !important;" title="Mesa 2 Silla 1 (Disponible) • Arrastra o clic para comanda">Silla 1</div>
+              <div id="chair-2-2" class="chair-btn-fixed chair-state-free" onclick="window.clickSilla(2, 2);" draggable="true" style="position: absolute !important; right: 2px; top: 50%; transform: translateY(-50%); z-index: 25 !important; cursor: pointer !important; white-space: nowrap !important;" title="Mesa 2 Silla 2 (Disponible) • Arrastra o clic para comanda">Silla 2</div>
+              <div id="chair-2-3" class="chair-btn-fixed chair-state-free" onclick="window.clickSilla(2, 3);" draggable="true" style="position: absolute !important; bottom: 2px; left: 50%; transform: translateX(-50%); z-index: 25 !important; cursor: pointer !important; white-space: nowrap !important;" title="Mesa 2 Silla 3 (Disponible) • Arrastra o clic para comanda">Silla 3</div>
+              <div id="chair-2-4" class="chair-btn-fixed chair-state-free" onclick="window.clickSilla(2, 4);" draggable="true" style="position: absolute !important; left: 2px; top: 50%; transform: translateY(-50%); z-index: 25 !important; cursor: pointer !important; white-space: nowrap !important;" title="Mesa 2 Silla 4 (Disponible) • Arrastra o clic para comanda">Silla 4</div>
             </div>
 
             <span id="table-label-2"
@@ -570,7 +571,7 @@
 
             <div id="table-box-3" class="table-box-220"
               style="position: relative !important; width: 250px !important; height: 230px !important; display: flex !important; align-items: center !important; justify-content: center !important; margin: 0 auto !important;">
-              <div id="table-circle-3" class="table-square-fixed"
+              <div id="table-circle-3" class="table-square-fixed" onclick="window.clickMesa(3);"
                 style="width: 104px !important; height: 104px !important; border-radius: 16px !important; background: #fffbeb !important; border: 3px solid #f59e0b !important; box-shadow: 0 2px 8px rgba(245, 158, 11, 0.2) !important; display: flex !important; flex-direction: column !important; align-items: center !important; justify-content: center !important; cursor: pointer !important; z-index: 10 !important;">
                 <span
                   style="font-size: 18px !important; font-weight: 900 !important; color: #92400e !important; margin: 0 !important; line-height: 1 !important;">M3</span>
@@ -578,10 +579,10 @@
                   style="font-size: 9px !important; font-weight: 800 !important; color: #d97706 !important; text-transform: uppercase !important; margin-top: 2px !important;">2
                   Ocupadas</span>
               </div>
-              <div id="chair-3-1" class="chair-btn-fixed chair-state-busy" draggable="true" style="position: absolute !important; top: 2px; left: 50%; transform: translateX(-50%); z-index: 25 !important; cursor: pointer !important; white-space: nowrap !important;" title="Mesa 3 Silla 1 (Ocupada) • Arrastra o clic para comanda">Silla 1 <span style="display:inline-block;background:#d97706;color:#fff;border-radius:10px;padding:0px 5px;font-size:9px;font-weight:900;margin-left:2px;">1</span></div>
-              <div id="chair-3-2" class="chair-btn-fixed chair-state-busy" draggable="true" style="position: absolute !important; right: 2px; top: 50%; transform: translateY(-50%); z-index: 25 !important; cursor: pointer !important; white-space: nowrap !important;" title="Mesa 3 Silla 2 (Ocupada) • Arrastra o clic para comanda">Silla 2 <span style="display:inline-block;background:#d97706;color:#fff;border-radius:10px;padding:0px 5px;font-size:9px;font-weight:900;margin-left:2px;">1</span></div>
-              <div id="chair-3-3" class="chair-btn-fixed chair-state-free" draggable="true" style="position: absolute !important; bottom: 2px; left: 50%; transform: translateX(-50%); z-index: 25 !important; cursor: pointer !important; white-space: nowrap !important;" title="Mesa 3 Silla 3 (Disponible) • Arrastra o clic para comanda">Silla 3</div>
-              <div id="chair-3-4" class="chair-btn-fixed chair-state-free" draggable="true" style="position: absolute !important; left: 2px; top: 50%; transform: translateY(-50%); z-index: 25 !important; cursor: pointer !important; white-space: nowrap !important;" title="Mesa 3 Silla 4 (Disponible) • Arrastra o clic para comanda">Silla 4</div>
+              <div id="chair-3-1" class="chair-btn-fixed chair-state-busy" onclick="window.clickSilla(3, 1);" draggable="true" style="position: absolute !important; top: 2px; left: 50%; transform: translateX(-50%); z-index: 25 !important; cursor: pointer !important; white-space: nowrap !important;" title="Mesa 3 Silla 1 (Ocupada) • Arrastra o clic para comanda">Silla 1 <span style="display:inline-block;background:#d97706;color:#fff;border-radius:10px;padding:0px 5px;font-size:9px;font-weight:900;margin-left:2px;">1</span></div>
+              <div id="chair-3-2" class="chair-btn-fixed chair-state-busy" onclick="window.clickSilla(3, 2);" draggable="true" style="position: absolute !important; right: 2px; top: 50%; transform: translateY(-50%); z-index: 25 !important; cursor: pointer !important; white-space: nowrap !important;" title="Mesa 3 Silla 2 (Ocupada) • Arrastra o clic para comanda">Silla 2 <span style="display:inline-block;background:#d97706;color:#fff;border-radius:10px;padding:0px 5px;font-size:9px;font-weight:900;margin-left:2px;">1</span></div>
+              <div id="chair-3-3" class="chair-btn-fixed chair-state-free" onclick="window.clickSilla(3, 3);" draggable="true" style="position: absolute !important; bottom: 2px; left: 50%; transform: translateX(-50%); z-index: 25 !important; cursor: pointer !important; white-space: nowrap !important;" title="Mesa 3 Silla 3 (Disponible) • Arrastra o clic para comanda">Silla 3</div>
+              <div id="chair-3-4" class="chair-btn-fixed chair-state-free" onclick="window.clickSilla(3, 4);" draggable="true" style="position: absolute !important; left: 2px; top: 50%; transform: translateY(-50%); z-index: 25 !important; cursor: pointer !important; white-space: nowrap !important;" title="Mesa 3 Silla 4 (Disponible) • Arrastra o clic para comanda">Silla 4</div>
             </div>
 
             <span id="table-label-3"
@@ -602,7 +603,7 @@
 
       <!-- VISTA 2: SIDEBAR COMPACTO DE COMANDA & GESTIÓN DE MESA -->
       <div id="viewSidebarComanda"
-        style="display: none !important; flex-direction: column !important; justify-content: space-between !important; height: 100% !important; gap: 12px !important;">
+        style="flex-direction: column !important; justify-content: space-between !important; height: 100% !important; gap: 12px !important;">
         <!-- Top Table Info Header (Comanda focused) -->
         <div
           style="display: flex !important; justify-content: space-between !important; align-items: center !important; border-bottom: 1px solid #1e293b !important; padding-bottom: 8px !important;">
@@ -703,7 +704,7 @@
 
     <!-- RIGHT PANEL: WAITER MENU CATALOG (AMPLIADO A PANTALLA ANCHA) -->
     <div id="panelMenuCatalogo"
-      style="display: none !important; background: rgba(15, 23, 42, 0.95) !important; border: 1px solid #1e293b !important; border-radius: 20px !important; padding: 24px !important; flex-direction: column !important; justify-content: space-between !important; gap: 16px !important; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5) !important;">
+      style="background: rgba(15, 23, 42, 0.95) !important; border: 1px solid #1e293b !important; border-radius: 20px !important; padding: 24px !important; flex-direction: column !important; justify-content: space-between !important; gap: 16px !important; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5) !important;">
 
       <div style="display: flex !important; flex-direction: column !important; gap: 14px !important;">
         <div
@@ -1725,11 +1726,13 @@
       // 2. SessionStorage
       try {
         sessionStorage.setItem('palapa_cuentas_v1', JSON.stringify(data));
+        sessionStorage.setItem('palapa_croquis_state_v1', JSON.stringify({ cuentas: data }));
       } catch (e) { }
 
       // 3. LocalStorage
       try {
         localStorage.setItem('palapa_cuentas_v1', JSON.stringify(data));
+        localStorage.setItem('palapa_croquis_state_v1', JSON.stringify({ cuentas: data }));
       } catch (e) { }
     }
 
@@ -2412,8 +2415,21 @@
       }
 
       window.palapaState.mesaSeleccionadaId = mesaId;
-      abrirPopMenuMesa(mesaId);
+      if (typeof window.abrirPopMenuMesa === 'function') {
+        window.abrirPopMenuMesa(mesaId);
+      }
     }
+
+    function abrirPopMenuMesa(mesaId) {
+      if (typeof window.abrirPopMenuMesa === 'function') {
+        window.abrirPopMenuMesa(mesaId);
+      }
+    }
+
+    window.handleSillaClick = handleSillaClick;
+    window.handleMesaClick = handleMesaClick;
+    window.clickSilla = handleSillaClick;
+    window.clickMesa = handleMesaClick;
 
     // PRORRATEAR CUENTA DE MESA (AL CENTRO) ENTRE LAS SILLAS ACTIVAS
     window.prorratearCuentaMesaEntreSillas = function (mesaId) {
@@ -4849,6 +4865,11 @@
 
         chairEl.className = `chair-btn-fixed ${stateClass}`;
         chairEl.style.cssText = `position: absolute !important; ${posCss} z-index: 25 !important; cursor: pointer !important; white-space: nowrap !important;`;
+        chairEl.onclick = function (e) {
+          if (_wasDrag) return;
+          if (e) e.stopPropagation();
+          window.clickSilla(m, s);
+        };
 
         const paidCheck = isPaid ? ' ✓' : '';
 
@@ -4964,7 +4985,7 @@
           box1.style.setProperty('align-items', 'center', 'important');
           box1.style.setProperty('justify-content', 'center', 'important');
           box1.innerHTML = `
-            <div id="table-circle-1" class="table-square-fixed" style="width: 440px !important; height: 104px !important; border-radius: 18px !important; background: #fffbeb !important; border: 3px solid #f59e0b !important; box-shadow: 0 4px 14px rgba(245, 158, 11, 0.2) !important; display: flex !important; align-items: stretch !important; position: relative !important; cursor: pointer !important; z-index: 10 !important;">
+            <div id="table-circle-1" class="table-square-fixed" onclick="window.clickMesa(1);" style="width: 440px !important; height: 104px !important; border-radius: 18px !important; background: #fffbeb !important; border: 3px solid #f59e0b !important; box-shadow: 0 4px 14px rgba(245, 158, 11, 0.2) !important; display: flex !important; align-items: stretch !important; position: relative !important; cursor: pointer !important; z-index: 10 !important;">
               <div style="flex: 1 !important; display: flex !important; flex-direction: column !important; align-items: center !important; justify-content: center !important; border-right: 2px dashed #f59e0b !important;">
                 <span style="font-size: 18px !important; font-weight: 900 !important; color: #92400e !important; line-height: 1 !important;">M1</span>
                 <span style="font-size: 9px !important; font-weight: 800 !important; color: #d97706 !important; text-transform: uppercase !important; margin-top: 2px !important;">Sector 1</span>
@@ -5274,7 +5295,7 @@
 
           if (currentBox) {
             currentBox.innerHTML = `
-              <div id="table-circle-${m}" class="table-square-fixed" style="width: 104px !important; height: 104px !important; border-radius: 16px !important; background: #ecfdf5 !important; border: 3px solid #10b981 !important; display: flex !important; flex-direction: column !important; align-items: center !important; justify-content: center !important; cursor: pointer !important; z-index: 10 !important;">
+              <div id="table-circle-${m}" class="table-square-fixed" onclick="window.clickMesa(${m});" style="width: 104px !important; height: 104px !important; border-radius: 16px !important; background: #ecfdf5 !important; border: 3px solid #10b981 !important; display: flex !important; flex-direction: column !important; align-items: center !important; justify-content: center !important; cursor: pointer !important; z-index: 10 !important;">
                 <span style="font-size: 18px !important; font-weight: 900 !important; color: #065f46 !important; line-height: 1 !important;">M${m}</span>
                 <span id="table-status-${m}" style="font-size: 9px !important; font-weight: 800 !important; color: #059669 !important; text-transform: uppercase !important; margin-top: 2px !important;">Libre</span>
               </div>
@@ -5814,6 +5835,14 @@
 
       saveStateToStorage();
       renderStateUI();
+      try {
+        if (typeof window.anvilSyncCuenta === 'function') {
+          const syncSilla = (sillaNum === 'centro') ? 0 : (sillaNum || 0);
+          window.anvilSyncCuenta(mesaId, syncSilla, JSON.stringify(window.palapaState.cuentas[key].items), 'ocupada');
+        }
+      } catch (err) {
+        console.warn('Error sincronizando con servidor al agregar platillo:', err);
+      }
       const modalBackdrop = document.getElementById('modalComandaBackdrop');
       if (modalBackdrop && modalBackdrop.classList.contains('show')) {
         abrirModalComandaActual();
@@ -5821,6 +5850,8 @@
       const destinoTxt = esMesa ? '⭐ Cuenta de MESA (Al Centro)' : `Silla ${sillaNum}`;
       showDragToast(`➕ ${prod.nombre} agregado a ${destinoTxt} (Pendiente de enviar)`, 'ok');
     }
+
+    window.agregarPlatilloDirecto = agregarPlatilloDirecto;
 
     window.filtrarCategoria = function (catNombre) {
       window.palapaState.categoriaFiltro = catNombre;
@@ -5848,11 +5879,15 @@
       window.filtrarCategoria(catNombre);
     }
 
-    // Exponer funciones clave globalmente para que Python pueda forzar un re-render
-    // cuando el catálogo de DB o cuentas lleguen después del montaje inicial
+    // Exponer funciones clave globalmente para que Python y llamadas onclick directas puedan interactuar
     window.renderStateUI = renderStateUI;
     window.setupDragListeners = setupDragListeners;
     window.renderChairBadge = renderChairBadge;
+    window.handleSillaClick = handleSillaClick;
+    window.handleMesaClick = handleMesaClick;
+    window.clickSilla = handleSillaClick;
+    window.clickMesa = handleMesaClick;
+    window.agregarPlatilloDirecto = agregarPlatilloDirecto;
 
     try {
       renderStateUI();

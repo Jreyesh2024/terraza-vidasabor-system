@@ -371,6 +371,91 @@
       }
     };
 
+    window.setKDSCuentasFromDB = function (cuentasJson) {
+      try {
+        const cuentas = typeof cuentasJson === 'string' ? JSON.parse(cuentasJson) : cuentasJson;
+        if (cuentas && typeof cuentas === 'object') {
+          window.kdsCuentasServer = cuentas;
+          if (typeof window.cargarKDS === 'function') {
+            window.cargarKDS();
+          }
+        }
+      } catch (e) {
+        console.error('Error cargando cuentas en KDS desde DB:', e);
+      }
+    };
+
+    function syncKDSItemToAllStoragesAndServer(keyCuenta, idxInCuenta, newEstado, newTimestamp) {
+      if (!keyCuenta) return;
+      var parts = keyCuenta.split('-');
+      var mesaId = parseInt(parts[0]) || 1;
+      var sillaNum = parseInt(parts[1]) || 0;
+
+      // 1. En window.kdsCuentasServer
+      var updatedItems = null;
+      if (window.kdsCuentasServer && window.kdsCuentasServer[keyCuenta]) {
+        var ctaSrv = window.kdsCuentasServer[keyCuenta];
+        if (ctaSrv.items && ctaSrv.items[idxInCuenta]) {
+          ctaSrv.items[idxInCuenta].estadoCocina = newEstado;
+          if (newTimestamp) ctaSrv.items[idxInCuenta].timestampInicioCocina = newTimestamp;
+          updatedItems = ctaSrv.items;
+        }
+      }
+
+      // 2. En palapa_croquis_state_v1
+      try {
+        var raw = localStorage.getItem('palapa_croquis_state_v1');
+        if (raw) {
+          var state = JSON.parse(raw);
+          if (state && state.cuentas && state.cuentas[keyCuenta] && state.cuentas[keyCuenta].items) {
+            if (state.cuentas[keyCuenta].items[idxInCuenta]) {
+              state.cuentas[keyCuenta].items[idxInCuenta].estadoCocina = newEstado;
+              if (newTimestamp) state.cuentas[keyCuenta].items[idxInCuenta].timestampInicioCocina = newTimestamp;
+              localStorage.setItem('palapa_croquis_state_v1', JSON.stringify(state));
+              sessionStorage.setItem('palapa_croquis_state_v1', JSON.stringify(state));
+              if (!updatedItems) updatedItems = state.cuentas[keyCuenta].items;
+            }
+          }
+        }
+      } catch (e) { }
+
+      // 3. En palapa_cuentas_v1
+      try {
+        var rawCuentas = localStorage.getItem('palapa_cuentas_v1');
+        if (rawCuentas) {
+          var ctas = JSON.parse(rawCuentas);
+          if (ctas && ctas[keyCuenta] && ctas[keyCuenta].items) {
+            if (ctas[keyCuenta].items[idxInCuenta]) {
+              ctas[keyCuenta].items[idxInCuenta].estadoCocina = newEstado;
+              if (newTimestamp) ctas[keyCuenta].items[idxInCuenta].timestampInicioCocina = newTimestamp;
+              localStorage.setItem('palapa_cuentas_v1', JSON.stringify(ctas));
+              sessionStorage.setItem('palapa_cuentas_v1', JSON.stringify(ctas));
+              if (!updatedItems) updatedItems = ctas[keyCuenta].items;
+            }
+          }
+        }
+      } catch (e) { }
+
+      // 4. En window.palapaState si existe
+      if (window.palapaState && window.palapaState.cuentas && window.palapaState.cuentas[keyCuenta]) {
+        var pItems = window.palapaState.cuentas[keyCuenta].items;
+        if (pItems && pItems[idxInCuenta]) {
+          pItems[idxInCuenta].estadoCocina = newEstado;
+          if (newTimestamp) pItems[idxInCuenta].timestampInicioCocina = newTimestamp;
+          if (!updatedItems) updatedItems = pItems;
+        }
+      }
+
+      // 5. Enviar actualización al servidor Python / Uplink
+      if (updatedItems && typeof window.anvilSyncCuenta === 'function') {
+        try {
+          window.anvilSyncCuenta(mesaId, sillaNum, JSON.stringify(updatedItems), 'ocupada');
+        } catch (err) {
+          console.warn('Error sincronizando estado de cocina con servidor:', err);
+        }
+      }
+    }
+
     window.setMesasCocinaFromDB = function (mesasJson, areasJson) {
       try {
         const mesas = typeof mesasJson === 'string' ? JSON.parse(mesasJson) : mesasJson;
@@ -497,13 +582,20 @@
         window.kdsState.mesaFiltro = requestedMesa;
       }
 
-      var raw = localStorage.getItem('palapa_croquis_state_v1');
       var state = null;
-      if (raw) {
-        try { state = JSON.parse(raw); } catch (e) { }
-      }
-      if (!state && window.palapaState) {
-        state = window.palapaState;
+      if (window.kdsCuentasServer && typeof window.kdsCuentasServer === 'object' && Object.keys(window.kdsCuentasServer).length > 0) {
+        state = { cuentas: window.kdsCuentasServer };
+      } else {
+        var raw = localStorage.getItem('palapa_cuentas_v1') || localStorage.getItem('palapa_croquis_state_v1');
+        if (raw) {
+          try {
+            var parsed = JSON.parse(raw);
+            state = (parsed && parsed.cuentas) ? parsed : { cuentas: parsed };
+          } catch (e) { }
+        }
+        if (!state && window.palapaState && window.palapaState.cuentas) {
+          state = window.palapaState;
+        }
       }
 
       var ticketsMap = {};
@@ -514,7 +606,7 @@
           if (cta && cta.items && cta.items.length > 0) {
             // Filtrar items que hayan sido enviados a cocina y no estén completamente servidos
             var enviados = cta.items.filter(function (it) {
-              return it.enviadoCocina === true && it.estadoCocina !== 'servido';
+              return (it.enviadoCocina === true || it.enviadoCocina === 'true') && it.estadoCocina !== 'servido';
             });
 
             if (enviados.length > 0) {
@@ -1171,22 +1263,9 @@
       it.estado = 'preparando';
       it.timestampInicio = Date.now();
 
-      // Sincronizar con cuenta en storage
+      // Sincronizar con cuenta en storage y servidor
       if (it.keyCuenta) {
-        var raw = localStorage.getItem('palapa_croquis_state_v1');
-        if (raw) {
-          try {
-            var state = JSON.parse(raw);
-            if (state && state.cuentas && state.cuentas[it.keyCuenta]) {
-              var cItems = state.cuentas[it.keyCuenta].items;
-              if (cItems && cItems[it.idxInCuenta]) {
-                cItems[it.idxInCuenta].estadoCocina = 'preparando';
-                cItems[it.idxInCuenta].timestampInicioCocina = it.timestampInicio;
-                localStorage.setItem('palapa_croquis_state_v1', JSON.stringify(state));
-              }
-            }
-          } catch (e) { }
-        }
+        syncKDSItemToAllStoragesAndServer(it.keyCuenta, it.idxInCuenta, 'preparando', it.timestampInicio);
       }
 
       renderKDSUI();
@@ -1203,20 +1282,7 @@
           it.estado = 'preparando';
           it.timestampInicio = now;
           if (it.keyCuenta) {
-            var raw = localStorage.getItem('palapa_croquis_state_v1');
-            if (raw) {
-              try {
-                var state = JSON.parse(raw);
-                if (state && state.cuentas && state.cuentas[it.keyCuenta]) {
-                  var cItems = state.cuentas[it.keyCuenta].items;
-                  if (cItems && cItems[it.idxInCuenta]) {
-                    cItems[it.idxInCuenta].estadoCocina = 'preparando';
-                    cItems[it.idxInCuenta].timestampInicioCocina = now;
-                    localStorage.setItem('palapa_croquis_state_v1', JSON.stringify(state));
-                  }
-                }
-              } catch (e) { }
-            }
+            syncKDSItemToAllStoragesAndServer(it.keyCuenta, it.idxInCuenta, 'preparando', now);
           }
         }
       });
@@ -1233,19 +1299,7 @@
       it.estado = 'listo';
 
       if (it.keyCuenta) {
-        var raw = localStorage.getItem('palapa_croquis_state_v1');
-        if (raw) {
-          try {
-            var state = JSON.parse(raw);
-            if (state && state.cuentas && state.cuentas[it.keyCuenta]) {
-              var cItems = state.cuentas[it.keyCuenta].items;
-              if (cItems && cItems[it.idxInCuenta]) {
-                cItems[it.idxInCuenta].estadoCocina = 'listo';
-                localStorage.setItem('palapa_croquis_state_v1', JSON.stringify(state));
-              }
-            }
-          } catch (e) { }
-        }
+        syncKDSItemToAllStoragesAndServer(it.keyCuenta, it.idxInCuenta, 'listo', null);
       }
 
       renderKDSUI();
@@ -1259,19 +1313,7 @@
       ticket.items.forEach(it => {
         it.estado = 'servido';
         if (it.keyCuenta) {
-          var raw = localStorage.getItem('palapa_croquis_state_v1');
-          if (raw) {
-            try {
-              var state = JSON.parse(raw);
-              if (state && state.cuentas && state.cuentas[it.keyCuenta]) {
-                var cItems = state.cuentas[it.keyCuenta].items;
-                if (cItems && cItems[it.idxInCuenta]) {
-                  cItems[it.idxInCuenta].estadoCocina = 'servido';
-                  localStorage.setItem('palapa_croquis_state_v1', JSON.stringify(state));
-                }
-              }
-            } catch (e) { }
-          }
+          syncKDSItemToAllStoragesAndServer(it.keyCuenta, it.idxInCuenta, 'servido', null);
         }
       });
 
