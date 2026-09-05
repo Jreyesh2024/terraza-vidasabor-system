@@ -560,6 +560,36 @@ def uplink_get_dashboard_kpis():
         return {}
 
 # ----------------------------------------------------
+# ALIASES REQUERIDOS POR AdminMenu (nombres _terraza)
+# AdminMenu llama funciones con sufijo _terraza.
+# Aquí mapeamos esos nombres a las funciones reales.
+# ----------------------------------------------------
+
+@anvil.server.callable('get_dashboard_kpis_terraza')
+def alias_get_dashboard_kpis_terraza():
+    return uplink_get_dashboard_kpis()
+
+@anvil.server.callable('get_productos_terraza')
+def alias_get_productos_terraza():
+    return uplink_get_productos()
+
+@anvil.server.callable('get_categorias_terraza')
+def alias_get_categorias_terraza():
+    return uplink_get_categorias()
+
+@anvil.server.callable('get_mesas_terraza')
+def alias_get_mesas_terraza():
+    return uplink_get_mesas()
+
+@anvil.server.callable('guardar_producto_terraza')
+def alias_guardar_producto_terraza(prod_dict):
+    return uplink_guardar_producto(prod_dict)
+
+@anvil.server.callable('cambiar_disponibilidad_producto_terraza')
+def alias_cambiar_disponibilidad_terraza(prod_id, disponible):
+    return uplink_cambiar_disponibilidad_producto(prod_id, disponible)
+
+# ----------------------------------------------------
 # CONEXIÓN PRINCIPAL UPLINK DE ANVIL
 # ----------------------------------------------------
 
