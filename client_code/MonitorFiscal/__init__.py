@@ -7,6 +7,7 @@ class MonitorFiscal(MonitorFiscalTemplate):
     self.init_components(**properties)
     try:
       anvil.js.window.anvilAppNav = self.navegar_modulo
+      anvil.js.window.navMenu = self.navegar_modulo
     except Exception:
       pass
 

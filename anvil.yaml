@@ -3,6 +3,15 @@ metadata: {title: VidaSabor Terraza}
 name: La Terraza de Vida & Sabor
 native_deps: |
   <script>
+    window.navMenu = function(modulo) {
+      if (typeof window.anvilAppNav === 'function') {
+        window.anvilAppNav(modulo);
+      } else if (typeof window.navMenuPy === 'function') {
+        window.navMenuPy(modulo);
+      } else {
+        console.log("Navegando a:", modulo);
+      }
+    };
     if (!window.clickSilla) window.clickSilla = function(m, s) { if (window.handleSillaClick) window.handleSillaClick(m, s); };
     if (!window.clickMesa) window.clickMesa = function(m) { if (window.handleMesaClick) window.handleMesaClick(m); };
     if (!window.filtrarCategoria) window.filtrarCategoria = function(c) { if (window.handleFiltrarCategoria) window.handleFiltrarCategoria(c); };

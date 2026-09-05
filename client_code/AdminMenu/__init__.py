@@ -9,11 +9,34 @@ class AdminMenu(AdminMenuTemplate):
     self.init_components(**properties)
     try:
       anvil.js.window.anvilAppNav = self.navegar_modulo
+      anvil.js.window.navMenu = self.navegar_modulo
       anvil.js.window.anvilGuardarProducto = self.guardar_producto_db
       anvil.js.window.anvilCambiarDisp = self.cambiar_disponibilidad_db
       anvil.js.window.anvilCargarDashboard = self.cargar_dashboard
     except Exception:
       pass
+
+    # Garantizar ejecución de scripts en custom HTML por si el navegador omitió innerHTML scripts
+    try:
+      anvil.js.window.eval("""
+        (function() {
+          if (!window.renderAdminDashboard) {
+            var scripts = document.querySelectorAll('script');
+            for (var i = 0; i < scripts.length; i++) {
+              var s = scripts[i];
+              if (!s.src && s.textContent && (s.textContent.includes('renderAdminDashboard') || s.textContent.includes('adminState'))) {
+                try {
+                  window.eval(s.textContent);
+                } catch (err) {
+                  console.error('Error evaluando script AdminMenu:', err);
+                }
+              }
+            }
+          }
+        })();
+      """)
+    except Exception as e:
+      print("Aviso al evaluar scripts de AdminMenu:", e)
 
     # Enrutamiento inteligente por URL hash
     try:

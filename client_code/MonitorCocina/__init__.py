@@ -9,6 +9,7 @@ class MonitorCocina(MonitorCocinaTemplate):
     self.init_components(**properties)
     try:
       anvil.js.window.anvilAppNav = self.navegar_modulo
+      anvil.js.window.navMenu = self.navegar_modulo
       anvil.js.window.scrollTo(0, 0)
     except Exception:
       pass

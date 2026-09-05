@@ -10,6 +10,7 @@ class POSMesero(POSMeseroTemplate):
     self.init_components(**properties)
     try:
       anvil.js.window.anvilAppNav = self.navegar_modulo
+      anvil.js.window.navMenu = self.navegar_modulo
       anvil.js.window.anvilGetCuentasServidor = self.obtener_cuentas_servidor
       anvil.js.window.anvilSyncCuenta = self.sincronizar_cuenta_servidor
     except Exception:

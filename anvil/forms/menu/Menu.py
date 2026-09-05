@@ -7,6 +7,7 @@ class Menu(MenuTemplate):
     self.init_components(**properties)
     try:
       anvil.js.window.anvilAppNav = self.navegar_modulo
+      anvil.js.window.navMenu = self.navegar_modulo
       anvil.js.window.anvilCheckinSilla = self.hacer_checkin_silla
       anvil.js.window.anvilSyncCuenta = self.sincronizar_cuenta_servidor
       anvil.js.window.anvilRecargarCatalogo = self.cargar_catalogo_db
