@@ -18,6 +18,75 @@
         console.log("Navegando a:", modulo);
       }
     };
+
+    window.runFormScripts = function(node) {
+      if (!node) node = document.body;
+      var root = (node && node.nodeType === 1) ? node : document;
+      var scripts = (root.tagName === 'SCRIPT') ? [root] : root.querySelectorAll('script');
+      scripts.forEach(function(s) {
+        if (!s.dataset.executed) {
+          s.dataset.executed = 'true';
+          try {
+            var newScript = document.createElement('script');
+            Array.from(s.attributes).forEach(function(attr) {
+              newScript.setAttribute(attr.name, attr.value);
+            });
+            newScript.textContent = s.textContent;
+            document.body.appendChild(newScript);
+            newScript.remove();
+          } catch(e) {
+            console.warn("Error ejecutando script de formulario:", e);
+          }
+        }
+      });
+    };
+
+    window.clickSilla = function(m, s) {
+      if (typeof window.handleSillaClick !== 'function') {
+        window.runFormScripts();
+      }
+      if (typeof window.handleSillaClick === 'function') {
+        window.handleSillaClick(m, s);
+      } else {
+        console.warn('handleSillaClick aún no está disponible para Mesa', m, 'Silla', s);
+      }
+    };
+
+    window.clickMesa = function(m) {
+      if (typeof window.handleMesaClick !== 'function' && typeof window.abrirPopMenuMesa !== 'function') {
+        window.runFormScripts();
+      }
+      if (typeof window.handleMesaClick === 'function') {
+        window.handleMesaClick(m);
+      } else if (typeof window.abrirPopMenuMesa === 'function') {
+        window.abrirPopMenuMesa(m);
+      } else {
+        console.warn('handleMesaClick aún no está disponible para Mesa', m);
+      }
+    };
+
+    try {
+      var formObserver = new MutationObserver(function(mutations) {
+        mutations.forEach(function(m) {
+          m.addedNodes.forEach(function(n) {
+            if (n && n.nodeType === 1) {
+              window.runFormScripts(n);
+            }
+          });
+        });
+      });
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function() {
+          formObserver.observe(document.body, { childList: true, subtree: true });
+          window.runFormScripts(document.body);
+        });
+      } else {
+        formObserver.observe(document.body, { childList: true, subtree: true });
+        window.runFormScripts(document.body);
+      }
+    } catch(e) {
+      console.warn("Observer error:", e);
+    }
   </script>
   <style>
     body, .anvil-container, html {

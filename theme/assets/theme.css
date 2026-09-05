@@ -188,3 +188,26 @@ html, body, .anvil-container, div[anvil-slot] {
   justify-content: center !important;
   padding: 20px !important;
 }
+
+/* Layout Dual POSMesero: Croquis Overview vs Comanda & Catalogo */
+#mainCanvasGrid.mode-overview #viewOverviewCroquis {
+  display: flex !important;
+}
+#mainCanvasGrid.mode-overview #viewSidebarComanda,
+#mainCanvasGrid.mode-overview #panelMenuCatalogo {
+  display: none !important;
+}
+#mainCanvasGrid.mode-comanda #panelCroquisMesas {
+  width: 420px !important;
+  max-width: 420px !important;
+}
+#mainCanvasGrid.mode-comanda #viewOverviewCroquis {
+  display: none !important;
+}
+#mainCanvasGrid.mode-comanda #viewSidebarComanda {
+  display: flex !important;
+}
+#mainCanvasGrid.mode-comanda #panelMenuCatalogo {
+  display: flex !important;
+}
+
