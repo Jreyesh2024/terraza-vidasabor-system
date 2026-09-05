@@ -10,7 +10,6 @@ class POSMesero(POSMeseroTemplate):
     self.init_components(**properties)
     try:
       anvil.js.window.anvilAppNav = self.navegar_modulo
-      anvil.js.window.navMenu = self.navegar_modulo
       anvil.js.window.anvilGetCuentasServidor = self.obtener_cuentas_servidor
       anvil.js.window.anvilSyncCuenta = self.sincronizar_cuenta_servidor
     except Exception:
@@ -18,23 +17,14 @@ class POSMesero(POSMeseroTemplate):
 
     try:
       url_hash = anvil.get_url_hash()
-      # Solo redirigir a Menu si la URL trae explícitamente parámetros de comensal/QR/mesa
+      # Solo redirigir a Menu si la URL trae explícitamente parámetros de escaneo QR de mesa/silla
       if isinstance(url_hash, str) and url_hash:
         url_lower = url_hash.lower()
-        if 'menu' in url_lower or 'qr' in url_lower or 'mesa=' in url_lower or 'silla=' in url_lower or 'pv-' in url_lower or 'cliente' in url_lower:
+        if ('mesa=' in url_lower and 'silla=' in url_lower) or 'pv-' in url_lower:
           anvil.open_form('Menu')
           return
-        elif 'monitor_cocina' in url_lower or 'kds' in url_lower:
-          anvil.open_form('MonitorCocina')
-          return
-        elif 'monitor_fiscal' in url_lower or 'fiscal' in url_lower:
-          anvil.open_form('MonitorFiscal')
-          return
-        elif 'clientes_lealtad' in url_lower or 'rewards' in url_lower:
-          anvil.open_form('ClientesLealtad')
-          return
       elif isinstance(url_hash, dict) and url_hash:
-        if url_hash.get('form') in ['menu', 'cliente_qr'] or 'mesa' in url_hash or 'qr' in url_hash:
+        if ('mesa' in url_hash and 'silla' in url_hash) or 'qr' in url_hash:
           anvil.open_form('Menu')
           return
     except Exception as e:

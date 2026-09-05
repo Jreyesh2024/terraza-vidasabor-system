@@ -693,22 +693,30 @@
 
       const k = window.adminState.kpis;
 
-      // Actualizar 4 KPIs Superiores
+      // Actualizar 4 KPIs Superiores con comprobación segura
       if (k.ventas) {
-        document.getElementById('kpi_ventas_semana').innerText = Number(k.ventas.total_semana || 14850).toLocaleString('es-MX', { minimumFractionDigits: 2 });
-        document.getElementById('kpi_comandas_semana').innerText = k.ventas.comandas_semana || 38;
+        const elVS = document.getElementById('kpi_ventas_semana');
+        if (elVS) elVS.innerText = Number(k.ventas.total_semana || 14850).toLocaleString('es-MX', { minimumFractionDigits: 2 });
+        const elCS = document.getElementById('kpi_comandas_semana');
+        if (elCS) elCS.innerText = k.ventas.comandas_semana || 38;
       }
       if (k.platillo_estrella) {
-        document.getElementById('kpi_platillo_nombre').innerText = (k.platillo_estrella.icono || '🍳') + ' ' + (k.platillo_estrella.nombre || 'Chilaquiles');
-        document.getElementById('kpi_platillo_ordenes').innerText = k.platillo_estrella.ordenes_semana || 42;
+        const elPN = document.getElementById('kpi_platillo_nombre');
+        if (elPN) elPN.innerText = (k.platillo_estrella.icono || '🍳') + ' ' + (k.platillo_estrella.nombre || 'Chilaquiles');
+        const elPO = document.getElementById('kpi_platillo_ordenes');
+        if (elPO) elPO.innerText = k.platillo_estrella.ordenes_semana || 42;
       }
       if (k.flujo_caja) {
-        document.getElementById('kpi_efectivo_caja').innerText = Number(k.flujo_caja.efectivo || 5400).toLocaleString('es-MX');
-        document.getElementById('kpi_bancos').innerText = '$' + Number(k.flujo_caja.bancarizado || 9450).toLocaleString('es-MX', { minimumFractionDigits: 2 });
+        const elEC = document.getElementById('kpi_efectivo_caja');
+        if (elEC) elEC.innerText = Number(k.flujo_caja.efectivo || 5400).toLocaleString('es-MX');
+        const elBC = document.getElementById('kpi_bancos');
+        if (elBC) elBC.innerText = '$' + Number(k.flujo_caja.bancarizado || 9450).toLocaleString('es-MX', { minimumFractionDigits: 2 });
       }
       if (k.mesas) {
-        document.getElementById('kpi_mesas_ocupadas').innerText = (k.mesas.ocupadas || 6) + ' mesas activas';
-        document.getElementById('kpi_comensales_activos').innerText = k.mesas.comensales_activos || 24;
+        const elMO = document.getElementById('kpi_mesas_ocupadas');
+        if (elMO) elMO.innerText = (k.mesas.ocupadas || 6) + ' mesas activas';
+        const elCA = document.getElementById('kpi_comensales_activos');
+        if (elCA) elCA.innerText = k.mesas.comensales_activos || 24;
       }
 
       // Render Comandas Activas (Widget 1)

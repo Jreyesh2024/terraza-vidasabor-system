@@ -9,57 +9,11 @@ class AdminMenu(AdminMenuTemplate):
     self.init_components(**properties)
     try:
       anvil.js.window.anvilAppNav = self.navegar_modulo
-      anvil.js.window.navMenu = self.navegar_modulo
       anvil.js.window.anvilGuardarProducto = self.guardar_producto_db
       anvil.js.window.anvilCambiarDisp = self.cambiar_disponibilidad_db
       anvil.js.window.anvilCargarDashboard = self.cargar_dashboard
     except Exception:
       pass
-
-    # Garantizar ejecución de scripts en custom HTML por si el navegador omitió innerHTML scripts
-    try:
-      anvil.js.window.eval("""
-        (function() {
-          if (!window.renderAdminDashboard) {
-            var scripts = document.querySelectorAll('script');
-            for (var i = 0; i < scripts.length; i++) {
-              var s = scripts[i];
-              if (!s.src && s.textContent && (s.textContent.includes('renderAdminDashboard') || s.textContent.includes('adminState'))) {
-                try {
-                  window.eval(s.textContent);
-                } catch (err) {
-                  console.error('Error evaluando script AdminMenu:', err);
-                }
-              }
-            }
-          }
-        })();
-      """)
-    except Exception as e:
-      print("Aviso al evaluar scripts de AdminMenu:", e)
-
-    # Enrutamiento inteligente por URL hash
-    try:
-      url_hash = anvil.get_url_hash()
-      if isinstance(url_hash, str) and url_hash:
-        url_lower = url_hash.lower()
-        if 'pos' in url_lower or 'palapa' in url_lower:
-          anvil.open_form('POSMesero')
-          return
-        elif 'kds' in url_lower or 'monitor_cocina' in url_lower or 'cocina' in url_lower:
-          anvil.open_form('MonitorCocina')
-          return
-        elif 'menu' in url_lower or 'qr' in url_lower or 'mesa=' in url_lower or 'silla=' in url_lower or 'pv-' in url_lower or 'cliente' in url_lower:
-          anvil.open_form('Menu')
-          return
-        elif 'fiscal' in url_lower or 'monitor_fiscal' in url_lower:
-          anvil.open_form('MonitorFiscal')
-          return
-        elif 'lealtad' in url_lower or 'rewards' in url_lower:
-          anvil.open_form('ClientesLealtad')
-          return
-    except Exception as e:
-      print(f"Error procesando enrutamiento en AdminMenu: {e}")
 
     # Cargar datos iniciales del Dashboard
     self.cargar_dashboard()

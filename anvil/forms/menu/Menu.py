@@ -7,7 +7,6 @@ class Menu(MenuTemplate):
     self.init_components(**properties)
     try:
       anvil.js.window.anvilAppNav = self.navegar_modulo
-      anvil.js.window.navMenu = self.navegar_modulo
       anvil.js.window.anvilCheckinSilla = self.hacer_checkin_silla
       anvil.js.window.anvilSyncCuenta = self.sincronizar_cuenta_servidor
       anvil.js.window.anvilRecargarCatalogo = self.cargar_catalogo_db
@@ -21,21 +20,6 @@ class Menu(MenuTemplate):
       mesa_num = 1
       silla_num = 1
       qr_str = ""
-
-      if isinstance(url_hash, str) and url_hash:
-        url_lower = url_hash.lower()
-        if 'pos_mesero' in url_lower or 'croquis' in url_lower:
-          anvil.open_form('POSMesero')
-          return
-        elif 'monitor_cocina' in url_lower or 'kds' in url_lower:
-          anvil.open_form('MonitorCocina')
-          return
-        elif 'monitor_fiscal' in url_lower or 'fiscal' in url_lower:
-          anvil.open_form('MonitorFiscal')
-          return
-        elif 'clientes_lealtad' in url_lower or 'rewards' in url_lower:
-          anvil.open_form('ClientesLealtad')
-          return
 
         # Extraer mesa, silla y qr desde la URL
         q_idx = url_hash.find('?')
