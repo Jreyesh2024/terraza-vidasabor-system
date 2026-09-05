@@ -4359,6 +4359,8 @@
         console.warn("[initPOSMesero] Error inicializando UI:", err);
       }
     };
+
+    try {
       renderStateUI();
       setupDragListeners();
     } catch (e) {
