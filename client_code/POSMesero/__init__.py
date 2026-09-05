@@ -59,7 +59,9 @@ class POSMesero(POSMeseroTemplate):
 
     # Disparar renderizado visual de sillas y mesas
     try:
-      if hasattr(anvil.js.window, 'renderStateUI'):
+      if hasattr(anvil.js.window, 'initPOSMesero'):
+        anvil.js.window.initPOSMesero()
+      elif hasattr(anvil.js.window, 'renderStateUI'):
         anvil.js.window.renderStateUI()
     except Exception as e:
       print(f"[POSMesero] Error en renderStateUI inicial: {e}")
