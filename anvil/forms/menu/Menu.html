@@ -1,4 +1,3 @@
-<anvil-form container="HtmlTemplate" prop:html="">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
@@ -53,37 +52,37 @@
 
 <div class="min-h-screen bg-[#090d16] text-slate-100 flex flex-col font-sans">
 
-  <!-- HEADER BAR / BRANDING V&S -->
-  <header class="glass-nav sticky top-0 z-50 px-6 py-4 flex items-center justify-between">
-    <div class="flex items-center gap-3">
+  <!-- HEADER BAR / BRANDING V&S (DESTACADO Y AMPLIADO) -->
+  <header class="glass-nav sticky top-0 z-50 px-6 py-5 flex flex-wrap items-center justify-between gap-4 shadow-xl">
+    <div class="flex items-center gap-3.5">
       <div
-        class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-700 flex items-center justify-center font-black text-xl text-white shadow-lg brand-glow">
+        class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-emerald-500 to-teal-700 flex items-center justify-center font-black text-2xl text-white shadow-lg brand-glow flex-shrink-0">
         V&S
       </div>
       <div>
-        <h1 class="text-lg font-bold tracking-tight text-white">La Terraza de Vida & Sabor</h1>
-        <p class="text-xs text-slate-400 font-medium">Menú Digital & Comandas en Mesa</p>
+        <h1 class="text-xl font-black tracking-tight text-white">La Terraza de Vida & Sabor</h1>
+        <p class="text-xs text-emerald-400 font-bold">Menú Digital & Comandas en Mesa</p>
       </div>
     </div>
 
-    <!-- ACCIONES RÁPIDAS DEL COMENSAL -->
-    <div class="flex items-center gap-2">
+    <!-- ACCIONES RÁPIDAS DEL COMENSAL EN EL HEADER -->
+    <div class="flex items-center gap-2.5">
       <button onclick="window.solicitarAtencionMesero()"
-        class="px-3 py-1.5 text-xs font-bold rounded-xl bg-amber-500/20 border border-amber-500/40 text-amber-300 hover:bg-amber-500/30 transition flex items-center gap-1.5 shadow-sm">
-        <i class="fa-solid fa-bell text-amber-400"></i> Llamar Mesero
+        class="px-4 py-2 text-xs font-black rounded-xl bg-amber-500/20 border border-amber-500/50 text-amber-300 hover:bg-amber-500/30 transition flex items-center gap-2 shadow-sm cursor-pointer">
+        <i class="fa-solid fa-bell text-amber-400 text-sm"></i> Llamar Mesero
       </button>
       <button onclick="window.solicitarCuentaComensal()"
-        class="px-3 py-1.5 text-xs font-bold rounded-xl bg-sky-500/20 border border-sky-500/40 text-sky-300 hover:bg-sky-500/30 transition flex items-center gap-1.5 shadow-sm">
-        <i class="fa-solid fa-receipt text-sky-400"></i> Pedir Cuenta
+        class="px-4 py-2 text-xs font-black rounded-xl bg-sky-500/20 border border-sky-500/50 text-sky-300 hover:bg-sky-500/30 transition flex items-center gap-2 shadow-sm cursor-pointer">
+        <i class="fa-solid fa-receipt text-sky-400 text-sm"></i> Pedir Cuenta
       </button>
     </div>
   </header>
 
-  <!-- PANTALLA PRINCIPAL: HUB DE BIENVENIDA A TU MESA -->
-  <div id="vistaHubMesa" class="flex-1 max-w-4xl w-full mx-auto p-4 sm:p-6 flex flex-col gap-6">
+  <!-- PANTALLA PRINCIPAL: HUB DE BIENVENIDA A TU MESA (SIMPLIFICADA) -->
+  <div id="vistaHubMesa" class="flex-1 w-full max-w-2xl mx-auto p-4 sm:p-6 flex flex-col gap-5 justify-center">
     
-    <!-- TARJETA HERO: BIENVENIDA Y LUGAR ASIGNADO -->
-    <div class="glass-card p-6 sm:p-8 rounded-3xl border border-slate-700/80 shadow-2xl relative overflow-hidden text-center flex flex-col items-center gap-4">
+    <!-- TARJETA HERO COMPACTA (SOLO LUGAR Y QR) -->
+    <div class="glass-card p-6 sm:p-8 rounded-3xl border border-slate-700/80 shadow-2xl relative overflow-hidden text-center flex flex-col items-center gap-3">
       <div class="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-emerald-500 via-teal-500 to-amber-500"></div>
 
       <div class="flex flex-wrap items-center justify-center gap-2">
@@ -95,95 +94,140 @@
         </span>
       </div>
 
-      <div>
-        <h1 class="text-2xl sm:text-4xl font-black text-white tracking-tight" id="lblUbicacionActiva">
-          ¡Hola! Estás en la <span class="text-emerald-400">Mesa 1 • Silla 1</span>
-        </h1>
-        <p class="text-xs sm:text-sm text-slate-300 mt-2 max-w-lg mx-auto leading-relaxed">
-          ✨ <b>Este es tu lugar.</b> Tu asiento ha sido registrado automáticamente en el sistema. Puedes empezar a ordenar platillos individuales o pedir al centro para compartir.
-        </p>
-      </div>
-
-      <!-- DIAGRAMA VISUAL DE LA MESA Y SUS 4 LUGARES -->
-      <div class="bg-slate-950/80 p-4 rounded-2xl border border-slate-800 w-full max-w-md flex flex-col items-center gap-2.5 my-1">
-        <div class="flex items-center justify-between w-full text-xs font-bold text-slate-300">
-          <span class="flex items-center gap-1.5 text-slate-200">
-            <i class="fa-solid fa-chair text-emerald-400"></i> Distribución de tu Mesa (<span id="lblMesaIdHeader">Mesa 1</span>)
-          </span>
-          <span class="text-[10px] text-emerald-400 bg-emerald-950/80 px-2 py-0.5 rounded-md border border-emerald-500/30">
-            4 Sillas
-          </span>
-        </div>
-
-        <div class="flex flex-wrap items-center justify-center gap-2.5 w-full" id="chipsSillasMesa">
-          <!-- Sillas renderizadas dinámicamente -->
-        </div>
-      </div>
+      <h1 class="text-2xl sm:text-3xl font-black text-white tracking-tight" id="lblUbicacionActiva">
+        ¡Hola! Estás en la <span class="text-emerald-400">Mesa 1 • Silla 1</span>
+      </h1>
     </div>
 
-    <!-- TARJETAS DE ACCIÓN PRINCIPALES DEL COMENSAL -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+    <!-- TARJETAS DE ACCIÓN PRINCIPALES DEL COMENSAL (3 ACCIONES DIRECTAS) -->
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
       
       <!-- 1. ORDENAR PARA MI SILLA -->
       <button type="button" onclick="window.abrirCatalogoConDestino('mi_silla')"
-        class="glass-card p-5 rounded-2xl border border-emerald-500/40 hover:border-emerald-400 hover:bg-emerald-950/20 text-left transition flex items-center gap-4 cursor-pointer shadow-lg group">
-        <div class="w-14 h-14 rounded-2xl bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-2xl text-emerald-400 flex-shrink-0 group-hover:scale-110 transition">
-          🍳
-        </div>
-        <div class="flex-1 min-w-0">
-          <div class="flex items-center justify-between">
-            <h3 class="text-base font-black text-white">Ordenar a Mi Silla</h3>
-            <i class="fa-solid fa-arrow-right text-emerald-400 text-xs group-hover:translate-x-1 transition"></i>
+        class="glass-card p-5 rounded-2xl border border-emerald-500/40 hover:border-emerald-400 hover:bg-emerald-950/20 text-left transition flex flex-col justify-between gap-3 cursor-pointer shadow-lg group">
+        <div class="flex items-center justify-between w-full">
+          <div class="w-12 h-12 rounded-2xl bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-2xl text-emerald-400 group-hover:scale-110 transition">
+            🍳
           </div>
-          <p class="text-xs text-slate-400 mt-1">Bebidas, cafés, huevos y platillos individuales a tu cuenta personal.</p>
+          <i class="fa-solid fa-arrow-right text-emerald-400 text-xs group-hover:translate-x-1 transition"></i>
+        </div>
+        <div>
+          <h3 class="text-base font-black text-white">Ordenar a Mi Silla</h3>
+          <p class="text-xs text-slate-400 mt-1 leading-relaxed">Bebidas, cafés, huevos y platillos individuales a tu cuenta personal.</p>
         </div>
       </button>
 
       <!-- 2. PEDIR AL CENTRO (COMPARTIR) -->
       <button type="button" onclick="window.abrirCatalogoConDestino('centro')"
-        class="glass-card p-5 rounded-2xl border border-amber-500/40 hover:border-amber-400 hover:bg-amber-950/20 text-left transition flex items-center gap-4 cursor-pointer shadow-lg group">
-        <div class="w-14 h-14 rounded-2xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-2xl text-amber-400 flex-shrink-0 group-hover:scale-110 transition">
-          🍲
-        </div>
-        <div class="flex-1 min-w-0">
-          <div class="flex items-center justify-between">
-            <h3 class="text-base font-black text-white">Pedir al Centro</h3>
-            <i class="fa-solid fa-arrow-right text-amber-400 text-xs group-hover:translate-x-1 transition"></i>
+        class="glass-card p-5 rounded-2xl border border-amber-500/40 hover:border-amber-400 hover:bg-amber-950/20 text-left transition flex flex-col justify-between gap-3 cursor-pointer shadow-lg group">
+        <div class="flex items-center justify-between w-full">
+          <div class="w-12 h-12 rounded-2xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-2xl text-amber-400 group-hover:scale-110 transition">
+            🍲
           </div>
-          <p class="text-xs text-slate-400 mt-1">Botanas, chilaquiles o jarras para compartir con todos en tu mesa.</p>
+          <i class="fa-solid fa-arrow-right text-amber-400 text-xs group-hover:translate-x-1 transition"></i>
+        </div>
+        <div>
+          <h3 class="text-base font-black text-white">Pedir al Centro</h3>
+          <p class="text-xs text-slate-400 mt-1 leading-relaxed">Botanas, chilaquiles o jarras para compartir con todos en tu mesa.</p>
         </div>
       </button>
 
-      <!-- 3. VER MI COMANDA Y CUENTA -->
+      <!-- 3. MI COMANDA (VISUALIZAR PEDIDOS) -->
       <button type="button" onclick="window.mostrarVistaComanda()"
-        class="glass-card p-5 rounded-2xl border border-sky-500/40 hover:border-sky-400 hover:bg-sky-950/20 text-left transition flex items-center gap-4 cursor-pointer shadow-lg group">
-        <div class="w-14 h-14 rounded-2xl bg-sky-500/20 border border-sky-500/40 flex items-center justify-center text-2xl text-sky-400 flex-shrink-0 group-hover:scale-110 transition">
-          🧾
-        </div>
-        <div class="flex-1 min-w-0">
-          <div class="flex items-center justify-between">
-            <h3 class="text-base font-black text-white">Mi Comanda & Cuenta</h3>
-            <span class="text-xs font-black text-sky-400" id="lblHubTotalComanda">$0.00</span>
+        class="glass-card p-5 rounded-2xl border border-sky-500/40 hover:border-sky-400 hover:bg-sky-950/20 text-left transition flex flex-col justify-between gap-3 cursor-pointer shadow-lg group">
+        <div class="flex items-center justify-between w-full">
+          <div class="w-12 h-12 rounded-2xl bg-sky-500/20 border border-sky-500/40 flex items-center justify-center text-2xl text-sky-400 group-hover:scale-110 transition">
+            🧾
           </div>
-          <p class="text-xs text-slate-400 mt-1">Revisa tus consumos, envía a cocina y solicita tu cuenta o pago digital.</p>
+          <span class="text-xs font-black text-sky-400 bg-sky-950/80 px-2 py-0.5 rounded-md border border-sky-500/30" id="lblHubTotalComanda">$0.00</span>
+        </div>
+        <div>
+          <h3 class="text-base font-black text-white">Mi Comanda</h3>
+          <p class="text-xs text-slate-400 mt-1 leading-relaxed">Visualiza los platillos que has marcado, envíalos a cocina y consulta tu saldo.</p>
         </div>
       </button>
 
-      <!-- 4. LLAMAR AL MESERO -->
-      <button type="button" onclick="window.solicitarAtencionMesero()"
-        class="glass-card p-5 rounded-2xl border border-purple-500/40 hover:border-purple-400 hover:bg-purple-950/20 text-left transition flex items-center gap-4 cursor-pointer shadow-lg group">
-        <div class="w-14 h-14 rounded-2xl bg-purple-500/20 border border-purple-500/40 flex items-center justify-center text-2xl text-purple-400 flex-shrink-0 group-hover:scale-110 transition">
-          🔔
-        </div>
-        <div class="flex-1 min-w-0">
-          <div class="flex items-center justify-between">
-            <h3 class="text-base font-black text-white">Llamar al Mesero</h3>
-            <i class="fa-solid fa-bell text-purple-400 text-xs"></i>
-          </div>
-          <p class="text-xs text-slate-400 mt-1">Solicita asistencia o cubiertos en tu mesa con un solo toque.</p>
-        </div>
-      </button>
+    </div>
 
+  </div>
+
+  <!-- VISTA LIMPIA: MI COMANDA (SOLO MIS ITEMS - SIN CATÁLOGO) -->
+  <div id="vistaComandaLimpia" class="flex-1 w-full max-w-lg mx-auto p-4 sm:p-6 flex flex-col gap-4 hidden">
+
+    <!-- Barra de navegación -->
+    <div class="flex items-center justify-between bg-slate-900/90 px-4 py-3 rounded-2xl border border-slate-800">
+      <button type="button" onclick="window.mostrarVistaHubMesa()"
+        class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold border border-slate-700 transition flex items-center gap-1.5 cursor-pointer">
+        <i class="fa-solid fa-arrow-left"></i> Volver
+      </button>
+      <span class="text-sm font-black text-white flex items-center gap-2">
+        <i class="fa-solid fa-receipt text-emerald-400"></i>
+        <span id="lblComandaLimpiaTitulo">Mi Comanda</span>
+      </span>
+      <button type="button" onclick="window.abrirCatalogoConDestino('mi_silla')"
+        class="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-black border border-emerald-500 transition flex items-center gap-1.5 cursor-pointer">
+        <i class="fa-solid fa-plus"></i> Agregar
+      </button>
+    </div>
+
+    <!-- Tarjeta de comanda limpia -->
+    <div class="glass-card rounded-3xl border border-emerald-500/30 shadow-2xl overflow-hidden">
+      <!-- Header de la tarjeta -->
+      <div class="bg-gradient-to-r from-emerald-950/60 to-slate-900 px-5 py-4 border-b border-emerald-500/20 flex items-center justify-between">
+        <div>
+          <div class="text-sm font-black text-white" id="lblComandaLimpiaUbicacion">Mesa 1 · Silla 1</div>
+          <div class="text-[11px] text-emerald-400 font-bold mt-0.5" id="lblComandaLimpiaSub">Portavasos #PV-011</div>
+        </div>
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 font-black text-xs border border-emerald-500/40">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Cuenta Activa
+        </span>
+      </div>
+
+      <!-- Lista de items de MI silla solamente -->
+      <div class="px-5 py-4 min-h-24" id="comandaLimpiaItems">
+        <div class="text-center py-8 text-slate-500 text-xs">
+          Aún no has pedido nada. ¡Toca "Agregar" para elegir del menú!
+        </div>
+      </div>
+
+      <!-- Totales -->
+      <div class="px-5 py-4 border-t border-slate-800 space-y-1.5 bg-slate-950/40">
+        <div class="flex justify-between text-xs text-slate-400">
+          <span>Subtotal:</span>
+          <span class="font-semibold text-slate-200" id="lblComandaLimpiaSubtotal">$0.00</span>
+        </div>
+        <div class="flex justify-between text-xs text-slate-400">
+          <span>IVA 16%:</span>
+          <span class="font-semibold text-slate-200" id="lblComandaLimpiaIVA">$0.00</span>
+        </div>
+        <div class="flex justify-between text-xs text-slate-400">
+          <span>Propina sugerida (10%):</span>
+          <span class="font-semibold text-slate-200" id="lblComandaLimpiaPropina">$0.00</span>
+        </div>
+        <div class="flex justify-between text-base font-black text-white pt-2 border-t border-slate-800">
+          <span>Total Estimado:</span>
+          <span class="text-emerald-400 text-lg" id="lblComandaLimpiaTotal">$0.00</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Botón enviar a cocina -->
+    <button id="btnComandaLimpiaEnviar" onclick="window.enviarPedidoClienteCocina(); window.renderComandaLimpia();"
+      class="w-full py-3.5 px-4 rounded-2xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-sm shadow-lg shadow-amber-500/20 transition flex items-center justify-center gap-2 cursor-pointer"
+      disabled style="opacity:0.4;">
+      <i class="fa-solid fa-fire"></i> <span id="btnComandaLimpiaEnviarTxt">Enviar a Cocina / Barra</span>
+    </button>
+
+    <!-- Botones de cobro -->
+    <div class="grid grid-cols-2 gap-3">
+      <button onclick="window.solicitarAtencionMesero()"
+        class="py-3 px-3 rounded-2xl bg-amber-500/20 border border-amber-500/40 text-amber-300 text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer hover:bg-amber-500/30">
+        <i class="fa-solid fa-bell text-amber-400"></i> Llamar Mesero
+      </button>
+      <button onclick="window.solicitarCuentaComensal()"
+        class="py-3 px-3 rounded-2xl bg-sky-500/20 border border-sky-500/40 text-sky-300 text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer hover:bg-sky-500/30">
+        <i class="fa-solid fa-receipt text-sky-400"></i> Pedir la Cuenta
+      </button>
     </div>
 
   </div>
@@ -202,14 +246,33 @@
           🎯 Agregando a: Silla 1 (Tú)
         </span>
       </div>
-      <button type="button" onclick="window.mostrarVistaComanda()"
-        class="px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-black transition flex items-center gap-1.5 cursor-pointer shadow-md shadow-emerald-600/30">
-        <i class="fa-solid fa-receipt"></i> Ver Comanda (<span id="lblCatBtnTotal">$0.00</span>)
-      </button>
     </div>
 
     <!-- SECCIÓN IZQUIERDA: CATÁLOGO Y PRODUCTOS -->
-    <section class="lg:col-span-2 flex flex-col gap-6">
+    <section class="lg:col-span-2 flex flex-col gap-4">
+
+      <!-- BANNER SUPERIOR DE ESTADO DE COMANDA (SIEMPRE VISIBLE PARA EL COMENSAL) -->
+      <div id="stickyComandaBarCliente" class="bg-gradient-to-r from-slate-900 to-slate-950 p-4 rounded-2xl border border-emerald-500/40 shadow-xl flex flex-wrap items-center justify-between gap-3">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-xl text-emerald-400">
+            🧾
+          </div>
+          <div>
+            <div class="text-xs font-black text-white flex items-center gap-2" id="lblStickyComandaTitulo">
+              Mi Comanda: 0 productos
+            </div>
+            <div class="text-[11px] text-slate-400 mt-0.5" id="lblStickyComandaSubtitulo">
+              Selecciona una categoría y agrega platillos a tu cuenta
+            </div>
+          </div>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="text-sm font-black text-emerald-400 bg-emerald-950/80 px-2.5 py-1 rounded-lg border border-emerald-500/30" id="lblStickyComandaTotal">$0.00</span>
+          <button type="button" onclick="window.mostrarVistaComanda()" class="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-black transition flex items-center gap-1.5 shadow-md shadow-emerald-600/30 cursor-pointer">
+            <i class="fa-solid fa-receipt"></i> Mi Comanda
+          </button>
+        </div>
+      </div>
 
       <!-- BUSCADOR & BARRA DE CATEGORÍAS -->
       <div class="flex flex-col sm:flex-row gap-4 justify-between items-center">
@@ -392,70 +455,88 @@
     </div>
   </div>
 
-  <!-- MODAL DE FICHA TÉCNICA Y RECETA DE COCINA (CLIENTE QR) -->
+  <!-- MODAL DE PERSONALIZACIÓN GOURMET DEL PLATILLO (CLIENTE QR) -->
   <div id="modalRecetaClienteBackdrop"
     style="display: none !important; position: fixed !important; inset: 0 !important; z-index: 100000 !important; background: rgba(2, 6, 23, 0.85) !important; backdrop-filter: blur(12px) !important; align-items: center !important; justify-content: center !important; padding: 16px !important;"
     onclick="if(event.target === this) window.cerrarModalRecetaCliente();">
     <div
-      style="background: #090d16 !important; border: 1px solid #334155 !important; border-radius: 20px !important; width: 100% !important; max-width: 540px !important; padding: 20px !important; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.8) !important; display: flex !important; flex-direction: column !important; gap: 12px !important; color: #f8fafc !important; max-height: 90vh !important; overflow-y: auto !important;">
+      style="background: #090d16 !important; border: 1px solid #334155 !important; border-radius: 24px !important; width: 100% !important; max-width: 520px !important; padding: 24px !important; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.8) !important; display: flex !important; flex-direction: column !important; gap: 16px !important; color: #f8fafc !important; max-height: 90vh !important; overflow-y: auto !important;">
       
       <!-- HEADER -->
-      <div style="display: flex !important; justify-content: space-between !important; align-items: flex-start !important; border-bottom: 1px solid #1e293b !important; padding-bottom: 10px !important;">
+      <div style="display: flex !important; justify-content: space-between !important; align-items: flex-start !important; border-bottom: 1px solid #1e293b !important; padding-bottom: 12px !important;">
         <div style="display: flex; align-items: center; gap: 12px;">
-          <div id="cliRecetaIcono" style="width: 44px; height: 44px; border-radius: 12px; background: #1e293b; display: flex; align-items: center; justify-content: center; font-size: 24px; border: 1px solid #334155;">🍳</div>
+          <div id="cliRecetaIcono" style="width: 50px; height: 50px; border-radius: 16px; background: linear-gradient(135deg, rgba(16,185,129,0.2), rgba(2,132,199,0.2)); display: flex; align-items: center; justify-content: center; font-size: 26px; border: 1.5px solid rgba(16,185,129,0.4);">🍳</div>
           <div>
-            <span style="font-size: 10px; font-weight: 800; color: #38bdf8; text-transform: uppercase;" id="cliRecetaCategoria">Especialidades</span>
-            <h2 style="font-size: 16px; font-weight: 900; color: #ffffff; margin: 0;" id="cliRecetaTitulo">Platillo</h2>
+            <span style="font-size: 11px; font-weight: 800; color: #38bdf8; text-transform: uppercase;" id="cliRecetaCategoria">Desayunos Gourmet</span>
+            <h2 style="font-size: 18px; font-weight: 900; color: #ffffff; margin: 2px 0 0 0;" id="cliRecetaTitulo">Platillo</h2>
           </div>
         </div>
         <button onclick="window.cerrarModalRecetaCliente();"
-          style="background: #1e293b !important; border: none !important; color: #94a3b8 !important; width: 30px !important; height: 30px !important; border-radius: 8px !important; font-weight: bold !important; cursor: pointer !important;">✕</button>
+          style="background: #1e293b !important; border: 1px solid #334155 !important; color: #94a3b8 !important; width: 32px !important; height: 32px !important; border-radius: 10px !important; font-weight: bold !important; cursor: pointer !important; display: flex; align-items: center; justify-content: center;">✕</button>
       </div>
 
-      <!-- METRICS BAR -->
-      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; background: #020617; padding: 10px; border-radius: 12px; border: 1px solid #1e293b; text-align: center;">
-        <div>
-          <span style="font-size: 10px; color: #94a3b8; display: block;">⏱️ Preparación</span>
-          <span id="cliRecetaTiempo" style="font-size: 12px; font-weight: 800; color: #fbbf24;">15 min</span>
-        </div>
-        <div>
-          <span style="font-size: 10px; color: #94a3b8; display: block;">👤 Porción</span>
-          <span id="cliRecetaPorcion" style="font-size: 12px; font-weight: 800; color: #38bdf8;">1 persona</span>
-        </div>
-        <div>
-          <span style="font-size: 10px; color: #94a3b8; display: block;">💲 Precio</span>
-          <span id="cliRecetaPrecio" style="font-size: 12px; font-weight: 900; color: #34d399;">$0.00</span>
+      <!-- DESCRIPCIÓN GOURMET & PRECIO BASE -->
+      <div style="background: #0f172a; border: 1px solid #1e293b; border-radius: 16px; padding: 14px;">
+        <p id="cliRecetaDescripcion" style="font-size: 13px; color: #cbd5e1; line-height: 1.5; margin: 0;"></p>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px; padding-top: 8px; border-top: 1px dashed #1e293b;">
+          <span style="font-size: 11px; color: #94a3b8; font-weight: 600;">Precio base:</span>
+          <span id="cliRecetaPrecio" style="font-size: 16px; font-weight: 900; color: #34d399;">$0.00</span>
         </div>
       </div>
 
-      <!-- INGREDIENTES -->
-      <div style="background: #0f172a; border: 1px solid #1e293b; border-radius: 12px; padding: 12px;">
-        <span style="font-size: 11px; font-weight: 800; color: #38bdf8; display: block; margin-bottom: 6px;">
-          <i class="fa-solid fa-carrot"></i> Ingredientes y Porciones:
+      <!-- OPCIONES DE TÉRMINO / PREPARACIÓN -->
+      <div id="boxTerminoPreparacion" style="display: flex; flex-direction: column; gap: 8px;">
+        <span style="font-size: 12px; font-weight: 800; color: #fbbf24; display: flex; align-items: center; gap: 6px;">
+          <i class="fa-solid fa-fire-burner"></i> ¿Cómo deseas tu preparación / término?
         </span>
-        <ul id="cliRecetaIngredientesList" style="margin: 0; padding-left: 18px; font-size: 11px; color: #cbd5e1; display: flex; flex-direction: column; gap: 3px;"></ul>
+        <div id="chipsTerminoContainer" style="display: flex; flex-wrap: wrap; gap: 6px;">
+          <!-- Chips interactivos de término generados dinámicamente -->
+        </div>
       </div>
 
-      <!-- PREPARACIÓN -->
-      <div style="background: #0f172a; border: 1px solid #1e293b; border-radius: 12px; padding: 12px;">
-        <span style="font-size: 11px; font-weight: 800; color: #34d399; display: block; margin-bottom: 6px;">
-          <i class="fa-solid fa-fire"></i> Preparación:
+      <!-- PREFERENCIAS / QUITAR INGREDIENTES -->
+      <div style="display: flex; flex-direction: column; gap: 8px;">
+        <span style="font-size: 12px; font-weight: 800; color: #38bdf8; display: flex; align-items: center; gap: 6px;">
+          <i class="fa-solid fa-sliders"></i> Preferencias / Exclusiones:
         </span>
-        <ol id="cliRecetaPasosList" style="margin: 0; padding-left: 18px; font-size: 11px; color: #e2e8f0; display: flex; flex-direction: column; gap: 4px;"></ol>
+        <div id="chipsPreferenciasContainer" style="display: flex; flex-wrap: wrap; gap: 6px;">
+          <!-- Chips de quitar ingredientes -->
+        </div>
       </div>
 
-      <!-- ADICIONALES POR SEPARADO -->
-      <div id="boxCliRecetaAdicionales" style="background: rgba(56,189,248,0.08); border: 1px solid rgba(56,189,248,0.25); border-radius: 12px; padding: 12px; display: none;">
-        <span style="font-size: 11px; font-weight: 800; color: #38bdf8; display: block; margin-bottom: 6px;">
-          <i class="fa-solid fa-circle-plus"></i> Ingredientes Extras / Adicionales (Cobro por separado):
+      <!-- INGREDIENTES EXTRAS (COBRO ADICIONAL) -->
+      <div style="display: flex; flex-direction: column; gap: 8px; background: rgba(56,189,248,0.06); border: 1px solid rgba(56,189,248,0.2); border-radius: 16px; padding: 12px;">
+        <span style="font-size: 12px; font-weight: 800; color: #38bdf8; display: flex; align-items: center; gap: 6px;">
+          <i class="fa-solid fa-circle-plus"></i> ¿Deseas agregar extras a tu platillo?
         </span>
-        <div id="cliRecetaAdicionalesList" style="display: flex; flex-wrap: wrap; gap: 6px;"></div>
+        <div id="chipsExtrasContainer" style="display: flex; flex-wrap: wrap; gap: 6px;">
+          <!-- Checkbox chips de extras con costo -->
+        </div>
       </div>
 
-      <button onclick="window.cerrarModalRecetaCliente();"
-        style="padding: 10px !important; background: #1e293b !important; color: #f8fafc !important; border: 1px solid #334155 !important; border-radius: 10px !important; font-size: 12px !important; font-weight: 800 !important; cursor: pointer !important;">
-        Cerrar Detalle
-      </button>
+      <!-- NOTAS ESPECIALES PARA EL CHEF / BARISTA -->
+      <div style="display: flex; flex-direction: column; gap: 6px;">
+        <label for="txtModalNotasEspeciales" style="font-size: 11px; font-weight: 700; color: #94a3b8;">
+          <i class="fa-regular fa-comment-dots"></i> Instrucciones especiales para la cocina:
+        </label>
+        <input type="text" id="txtModalNotasEspeciales" placeholder="Ej. Salsa verde bien caliente, poca sal..."
+          style="width: 100%; box-sizing: border-box; padding: 10px 14px; background: #020617; border: 1px solid #334155; border-radius: 12px; color: #f8fafc; font-size: 12px; outline: none;">
+      </div>
+
+      <!-- CANTIDAD Y BOTÓN PRINCIPAL AGREGAR -->
+      <div style="display: flex; gap: 12px; align-items: center; padding-top: 10px; border-top: 1px solid #1e293b;">
+        <div style="display: flex; align-items: center; background: #020617; border: 1px solid #334155; border-radius: 12px; padding: 4px;">
+          <button type="button" onclick="window.cambiarCantidadModal(-1);" style="width: 32px; height: 32px; background: #1e293b; color: #ffffff; border: none; border-radius: 8px; font-weight: 900; font-size: 14px; cursor: pointer;">-</button>
+          <span id="txtModalCantidad" style="width: 36px; text-align: center; font-size: 14px; font-weight: 900; color: #ffffff;">1</span>
+          <button type="button" onclick="window.cambiarCantidadModal(1);" style="width: 32px; height: 32px; background: #1e293b; color: #ffffff; border: none; border-radius: 8px; font-weight: 900; font-size: 14px; cursor: pointer;">+</button>
+        </div>
+
+        <button type="button" onclick="window.confirmarAgregarPlatilloPersonalizado();"
+          style="flex: 1; padding: 14px; background: linear-gradient(135deg, #059669, #0d9488); color: #ffffff; border: none; border-radius: 14px; font-size: 13px; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 16px rgba(5,150,105,0.4);">
+          <i class="fa-solid fa-plus-circle"></i> <span id="btnModalConfirmarTxt">Agregar a Mi Pedido • $0.00</span>
+        </button>
+      </div>
+
     </div>
   </div>
 
@@ -1016,6 +1097,23 @@
   window.simSillaNum = 1;
   window.sillasAcompanantesSeleccionadas = [];
 
+  window.setMenuDataFromPostgreSQL = function(prodsJson, catsJson) {
+    try {
+      var prods = typeof prodsJson === 'string' ? JSON.parse(prodsJson) : prodsJson;
+      var cats = typeof catsJson === 'string' ? JSON.parse(catsJson) : catsJson;
+      if (Array.isArray(prods) && prods.length > 0) {
+        window.vsMenuData = prods;
+      }
+      if (Array.isArray(cats) && cats.length > 0) {
+        window.vsCategoriasData = cats;
+        if (typeof window.renderCategoriasTabs === 'function') window.renderCategoriasTabs();
+      }
+      if (typeof window.renderMenuGrid === 'function') window.renderMenuGrid();
+    } catch(e) {
+      console.error('Error cargando catalogo PostgreSQL:', e);
+    }
+  };
+
   function getStorageCuentas() {
     try {
       var raw = localStorage.getItem('palapa_cuentas_v1');
@@ -1051,7 +1149,9 @@
     window.destinoPedido = dest;
     var hub = document.getElementById('vistaHubMesa');
     var cat = document.getElementById('vistaCatalogoPlatillos');
+    var comanda = document.getElementById('vistaComandaLimpia');
     if (hub) hub.classList.add('hidden');
+    if (comanda) comanda.classList.add('hidden');
     if (cat) cat.classList.remove('hidden');
 
     var badge = document.getElementById('lblCatalogoDestinoBadge');
@@ -1074,8 +1174,10 @@
   window.mostrarVistaHubMesa = function () {
     var hub = document.getElementById('vistaHubMesa');
     var cat = document.getElementById('vistaCatalogoPlatillos');
+    var comanda = document.getElementById('vistaComandaLimpia');
     if (hub) hub.classList.remove('hidden');
     if (cat) cat.classList.add('hidden');
+    if (comanda) comanda.classList.add('hidden');
     window.sincronizarCuentaDesdeStorage();
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -1083,17 +1185,90 @@
   window.mostrarVistaComanda = function () {
     var hub = document.getElementById('vistaHubMesa');
     var cat = document.getElementById('vistaCatalogoPlatillos');
+    var comanda = document.getElementById('vistaComandaLimpia');
     if (hub) hub.classList.add('hidden');
-    if (cat) cat.classList.remove('hidden');
-    
-    var badge = document.getElementById('lblCatalogoDestinoBadge');
-    if (badge) {
-      badge.innerHTML = `🧾 <span class="text-sky-400 font-black">Revisando Comanda & Cuenta</span>`;
+    if (cat) cat.classList.add('hidden');
+    if (comanda) comanda.classList.remove('hidden');
+    window.renderComandaLimpia();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  // Renderiza la vista limpia de comanda (solo items de MI silla)
+  window.renderComandaLimpia = function () {
+    var mesaId = window.simMesaId || 1;
+    var sillaNum = window.simSillaNum || 1;
+    var qrId = 'PV-0' + mesaId + sillaNum;
+    var cuentas = getStorageCuentas();
+    var keySilla = mesaId + '-' + sillaNum;
+    var itemsSilla = (cuentas[keySilla] && cuentas[keySilla].items) ? cuentas[keySilla].items : [];
+
+    // Actualizar títulos
+    var tit = document.getElementById('lblComandaLimpiaTitulo');
+    var ubi = document.getElementById('lblComandaLimpiaUbicacion');
+    var sub = document.getElementById('lblComandaLimpiaSub');
+    if (tit) tit.textContent = 'Mi Comanda — Silla ' + sillaNum;
+    if (ubi) ubi.textContent = 'Mesa ' + mesaId + ' · Silla ' + sillaNum;
+    if (sub) sub.textContent = 'Portavasos #' + qrId;
+
+    // Renderizar items
+    var container = document.getElementById('comandaLimpiaItems');
+    if (!container) return;
+    container.innerHTML = '';
+
+    var pendientes = 0;
+    var subtotal = 0;
+
+    if (itemsSilla.length === 0) {
+      container.innerHTML = '<div class="text-center py-10 text-slate-500 text-sm">¡Aún no has pedido nada! Toca <b class="text-emerald-400">Agregar</b> para elegir del menú.</div>';
+    } else {
+      itemsSilla.forEach(function (it) {
+        var monto = it.precio * it.cantidad;
+        subtotal += monto;
+        if (!it.enviadoCocina) pendientes++;
+
+        var row = document.createElement('div');
+        row.className = 'flex items-center justify-between py-3 border-b border-slate-800/60 last:border-0';
+        var estadoBadge = it.enviadoCocina
+          ? '<span class="text-[9px] font-black bg-emerald-950/60 text-emerald-300 border border-emerald-500/40 px-1.5 py-0.5 rounded flex items-center gap-1"><i class="fa-solid fa-fire text-[8px]"></i> En Cocina</span>'
+          : '<span class="text-[9px] font-black bg-amber-950/60 text-amber-300 border border-amber-500/40 px-1.5 py-0.5 rounded flex items-center gap-1"><i class="fa-solid fa-clock text-[8px]"></i> Pendiente</span>';
+        row.innerHTML = `
+          <div class="flex-1">
+            <div class="text-sm font-bold text-white">${it.nombre} <span class="text-slate-400 font-normal text-xs">x${it.cantidad}</span></div>
+            <div class="flex items-center gap-2 mt-0.5">${estadoBadge}${it.notas ? '<span class="text-[10px] text-slate-500">' + it.notas + '</span>' : ''}</div>
+          </div>
+          <span class="text-sm font-black text-emerald-400 ml-3">$${monto.toFixed(2)}</span>
+        `;
+        container.appendChild(row);
+      });
     }
-    window.renderCarrito();
-    var sidebar = document.getElementById('sidebarComanda');
-    if (sidebar) {
-      sidebar.scrollIntoView({ behavior: 'smooth' });
+
+    // Calcular totales
+    var iva = subtotal * 0.16;
+    var propina = subtotal * 0.10;
+    var total = subtotal + iva + propina;
+    var el = function(id) { return document.getElementById(id); };
+    if (el('lblComandaLimpiaSubtotal')) el('lblComandaLimpiaSubtotal').textContent = '$' + subtotal.toFixed(2);
+    if (el('lblComandaLimpiaIVA')) el('lblComandaLimpiaIVA').textContent = '$' + iva.toFixed(2);
+    if (el('lblComandaLimpiaPropina')) el('lblComandaLimpiaPropina').textContent = '$' + propina.toFixed(2);
+    if (el('lblComandaLimpiaTotal')) el('lblComandaLimpiaTotal').textContent = '$' + total.toFixed(2);
+
+    // Habilitar/deshabilitar botón enviar
+    var btn = document.getElementById('btnComandaLimpiaEnviar');
+    var btnTxt = document.getElementById('btnComandaLimpiaEnviarTxt');
+    if (btn) {
+      if (pendientes > 0) {
+        btn.disabled = false;
+        btn.style.opacity = '1';
+        if (btnTxt) btnTxt.textContent = 'Enviar a Cocina / Barra (' + pendientes + ' pendiente' + (pendientes > 1 ? 's' : '') + ')';
+      } else if (itemsSilla.length > 0) {
+        btn.disabled = true;
+        btn.style.opacity = '0.65';
+        if (btnTxt) btnTxt.innerHTML = '<i class="fa-solid fa-check-double"></i> Todo enviado a Cocina';
+      } else {
+        btn.disabled = true;
+        btn.style.opacity = '0.4';
+        if (btnTxt) btnTxt.textContent = 'Enviar a Cocina / Barra';
+      }
     }
   };
 
@@ -1245,6 +1420,15 @@
     saveStorageCuentas(cuentas);
     window.sincronizarCuentaDesdeStorage();
 
+    // Sincronizar inmediatamente con el servidor de Anvil para que el mesero lo vea
+    try {
+      if (window.anvilSyncCuenta && cuentas[key]) {
+        window.anvilSyncCuenta(mesaId, sillaNum, JSON.stringify(cuentas[key].items || []), 'ocupada');
+      }
+    } catch(e) {
+      console.error('Error sincronizando con Anvil:', e);
+    }
+
     var destNombre = esCentro ? 'al Centro de la Mesa' : `a la Silla ${sillaNum}`;
     // Feedback visual sutil
     console.log(`✅ Agregado: ${prod.nombre} (${destNombre})`);
@@ -1307,10 +1491,13 @@
     window.renderCarrito();
     window.renderAcompanantesMesa();
 
-    // Notificar al servidor en tiempo real para iluminar la silla en la pantalla del mesero
+    // Notificar al servidor en tiempo real para iluminar la silla y sincronizar items con la pantalla del mesero
     try {
       if (window.anvilCheckinSilla) {
         window.anvilCheckinSilla(window.simMesaId, window.simSillaNum, qrId);
+      }
+      if (window.anvilSyncCuenta && cuentaActual && cuentaActual.items) {
+        window.anvilSyncCuenta(window.simMesaId, window.simSillaNum, JSON.stringify(cuentaActual.items), 'ocupada');
       }
     } catch (e) { }
   };
@@ -1459,6 +1646,14 @@
 
     saveStorageCuentas(cuentas);
     window.renderCarrito();
+
+    // Sincronizar estado "Enviado a Cocina" con el servidor en tiempo real
+    try {
+      if (window.anvilSyncCuenta && cuentas[keySilla]) {
+        window.anvilSyncCuenta(mesaId, window.simSillaNum, JSON.stringify(cuentas[keySilla].items || []), 'ocupada');
+      }
+    } catch (e) { }
+
     alert(`🚀 ¡${pendientesCount} producto(s) enviados a Cocina / Barra de Café (${nowStr})! La preparación ha iniciado.`);
   };
 
@@ -1587,6 +1782,38 @@
     if (lblHubTotal) lblHubTotal.innerText = `$${total.toFixed(2)}`;
     var lblCatBtnTotal = document.getElementById('lblCatBtnTotal');
     if (lblCatBtnTotal) lblCatBtnTotal.innerText = `$${total.toFixed(2)}`;
+
+    // Actualizar Banner Sticky Superior de Comanda
+    var itemsCount = 0;
+    var pendientesCount = 0;
+    if (cuentas[keySilla] && cuentas[keySilla].items) {
+      itemsCount += cuentas[keySilla].items.length;
+      cuentas[keySilla].items.forEach(function(i) { if (!i.enviadoCocina) pendientesCount++; });
+    }
+    if (cuentas[keyCentro] && cuentas[keyCentro].items) {
+      itemsCount += cuentas[keyCentro].items.length;
+      cuentas[keyCentro].items.forEach(function(i) { if (!i.enviadoCocina) pendientesCount++; });
+    }
+
+    var lblStickyTit = document.getElementById('lblStickyComandaTitulo');
+    var lblStickySub = document.getElementById('lblStickyComandaSubtitulo');
+    var lblStickyTot = document.getElementById('lblStickyComandaTotal');
+
+    if (lblStickyTot) lblStickyTot.innerText = `$${total.toFixed(2)}`;
+    if (lblStickyTit) {
+      if (itemsCount === 0) {
+        lblStickyTit.innerHTML = `Mi Comanda: <span class="text-slate-400 font-semibold">Sin pedidos aún</span>`;
+      } else {
+        lblStickyTit.innerHTML = `Mi Comanda: <b class="text-emerald-400">${itemsCount} producto${itemsCount > 1 ? 's' : ''}</b> ${pendientesCount > 0 ? `<span class="text-amber-400 text-[10px] font-bold">(${pendientesCount} pendiente${pendientesCount > 1 ? 's' : ''})</span>` : `<span class="text-sky-400 text-[10px] font-bold">✓ En Cocina</span>`}`;
+      }
+    }
+    if (lblStickySub) {
+      if (itemsCount === 0) {
+        lblStickySub.innerText = `Mesa ${mesaId} • Silla ${miSilla} • Selecciona platillos para agregar a tu cuenta`;
+      } else {
+        lblStickySub.innerText = `Mesa ${mesaId} • Silla ${miSilla} • Total acumulado con IVA: $${total.toFixed(2)}`;
+      }
+    }
   };
 
   window.modoPagoCliente = 'solo_yo'; // 'solo_yo' | 'incluir_ninos' | 'toda_mesa'
@@ -1790,7 +2017,7 @@
       card.className = 'glass-card p-4 rounded-2xl flex flex-col justify-between hover:border-emerald-500/50 transition gap-3';
 
       card.innerHTML = `
-          <div class="flex items-start gap-3 cursor-pointer" onclick="window.abrirModalRecetaCliente(${prod.id});">
+          <div class="flex items-start gap-3 cursor-pointer" onclick="window.abrirModalPersonalizar(${prod.id});">
             <div class="w-12 h-12 rounded-xl bg-slate-800/90 border border-slate-700 flex items-center justify-center text-2xl flex-shrink-0">
               ${prod.icono || '🍲'}
             </div>
@@ -1801,14 +2028,14 @@
               </div>
               <p class="text-[11px] text-slate-400 mt-1 line-clamp-2">${prod.descripcion || ''}</p>
               <div class="flex items-center gap-2 mt-2">
-                <span class="text-[10px] text-sky-400 font-bold bg-sky-500/10 px-2 py-0.5 rounded-md border border-sky-500/20">⏱️ ${prod.tiempo || '8–10 min'}</span>
-                <span class="text-[10px] text-slate-400 font-semibold">${prod.porciones || '1 persona'}</span>
+                <span class="text-[10px] text-amber-400 font-bold bg-amber-500/10 px-2 py-0.5 rounded-md border border-amber-500/20">⭐ Gourmet</span>
+                <span class="text-[10px] text-slate-400 font-semibold">${prod.categoria_nombre || ''}</span>
               </div>
             </div>
           </div>
           <div class="flex items-center justify-between gap-2 pt-2 border-t border-slate-800/80">
-            <button onclick="window.abrirModalRecetaCliente(${prod.id});" class="py-2 px-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-sky-400 border border-slate-700 text-xs font-bold transition flex items-center gap-1 cursor-pointer">
-              <i class="fa-solid fa-book-open"></i> Receta
+            <button onclick="window.abrirModalPersonalizar(${prod.id});" class="py-2 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-sky-400 border border-slate-700 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer">
+              <i class="fa-solid fa-sliders"></i> Personalizar
             </button>
             <button onclick="window.agregarAlCarritoDirecto(${prod.id})" class="${btnClass}">
               ${btnTxt}
@@ -1819,57 +2046,257 @@
     });
   };
 
-  window.abrirModalRecetaCliente = function(prodId) {
+  window.modalPersonalizacionState = {
+    prod: null,
+    cantidad: 1,
+    termino: '',
+    preferencias: [],
+    extras: [],
+    extraPrecioTotal: 0
+  };
+
+  window.abrirModalPersonalizar = function(prodId) {
     const prod = (window.vsMenuData || []).find(p => p.id === prodId);
     if (!prod) return;
 
+    window.modalPersonalizacionState = {
+      prod: prod,
+      cantidad: 1,
+      termino: '',
+      preferencias: [],
+      extras: [],
+      extraPrecioTotal: 0
+    };
+
     document.getElementById('cliRecetaIcono').innerText = prod.icono || '🍳';
-    document.getElementById('cliRecetaCategoria').innerText = prod.categoria_nombre || 'Desayuno';
+    document.getElementById('cliRecetaCategoria').innerText = prod.categoria_nombre || 'Especialidades';
     document.getElementById('cliRecetaTitulo').innerText = prod.nombre;
-    document.getElementById('cliRecetaTiempo').innerText = prod.tiempo || '8–10 min';
-    document.getElementById('cliRecetaPorcion').innerText = prod.porciones || '1 persona';
+    document.getElementById('cliRecetaDescripcion').innerText = prod.descripcion || 'Preparado al momento con ingredientes frescos de la más alta calidad.';
     document.getElementById('cliRecetaPrecio').innerText = `$${Number(prod.precio_unitario).toFixed(2)}`;
+    document.getElementById('txtModalNotasEspeciales').value = '';
+    document.getElementById('txtModalCantidad').innerText = '1';
 
-    const listIng = document.getElementById('cliRecetaIngredientesList');
-    if (listIng) {
-      listIng.innerHTML = '';
-      (prod.ingredientes || ['Ingredientes frescos según receta']).forEach(ing => {
-        const li = document.createElement('li');
-        li.innerText = ing;
-        listIng.appendChild(li);
+    // 1. Chips de Término / Preparación
+    const boxTermino = document.getElementById('boxTerminoPreparacion');
+    const containerTermino = document.getElementById('chipsTerminoContainer');
+    containerTermino.innerHTML = '';
+
+    let opcionesTermino = [];
+    const catLower = (prod.categoria_nombre || '').toLowerCase();
+    const nomLower = (prod.nombre || '').toLowerCase();
+
+    if (nomLower.includes('huevo') || nomLower.includes('omelette')) {
+      opcionesTermino = ['🍳 Revueltos', '🍳 Estrellados tiernos', '🍳 Bien cocidos', '🍳 Con yema tierna líquida', '🍳 En Omelette'];
+    } else if (nomLower.includes('café') || nomLower.includes('capuchino') || nomLower.includes('latte')) {
+      opcionesTermino = ['☕ Caliente tradicional', '🧊 Frappé / Frío (+ $10)', '🥛 Con leche entera', '🥛 Con leche deslactosada', '🥥 Leche de almendra (+ $15)'];
+    } else if (nomLower.includes('chilaquiles') || nomLower.includes('molletes') || nomLower.includes('enchiladas')) {
+      opcionesTermino = ['🌿 Salsa Verde clásica', '🍅 Salsa Roja tatemada', '🌶️ Salsa Pasilla suave', '🔥 Salsa Habanero extra'];
+    } else if (nomLower.includes('rib eye') || nomLower.includes('carne') || nomLower.includes('corte')) {
+      opcionesTermino = ['🥩 Término Medio (Jugoso)', '🥩 Tres Cuartos', '🥩 Bien Cocido'];
+    } else if (nomLower.includes('jugo')) {
+      opcionesTermino = ['🥤 Con hielo', '🥤 Sin hielo / Al tiempo', '🥤 Sin azúcar / Natural'];
+    }
+
+    if (opcionesTermino.length > 0) {
+      boxTermino.style.display = 'flex';
+      window.modalPersonalizacionState.termino = opcionesTermino[0];
+      opcionesTermino.forEach((opt, idx) => {
+        const chip = document.createElement('button');
+        chip.type = 'button';
+        chip.className = `px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer border ${idx === 0 ? 'bg-amber-500/30 text-amber-300 border-amber-500/60 shadow-sm' : 'bg-slate-900/80 text-slate-300 border-slate-700 hover:border-slate-500'}`;
+        chip.innerText = opt;
+        chip.onclick = function() {
+          window.modalPersonalizacionState.termino = opt;
+          Array.from(containerTermino.children).forEach(c => {
+            c.className = 'px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer border bg-slate-900/80 text-slate-300 border-slate-700 hover:border-slate-500';
+          });
+          chip.className = 'px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer border bg-amber-500/30 text-amber-300 border-amber-500/60 shadow-sm';
+          window.actualizarModalPersonalizarUI();
+        };
+        containerTermino.appendChild(chip);
       });
+    } else {
+      boxTermino.style.display = 'none';
     }
 
-    const listPasos = document.getElementById('cliRecetaPasosList');
-    if (listPasos) {
-      listPasos.innerHTML = '';
-      (prod.pasos || ['Preparar al momento siguiendo receta']).forEach(paso => {
-        const li = document.createElement('li');
-        li.innerText = paso;
-        listPasos.appendChild(li);
-      });
-    }
+    // 2. Chips de Preferencias / Quitar
+    const containerPref = document.getElementById('chipsPreferenciasContainer');
+    containerPref.innerHTML = '';
+    const prefsList = ['🚫 Sin cebolla', '🌶️ Salsa aparte / Sin picante', '🌿 Sin cilantro', '🫘 Sin frijoles', '🥛 Sin lácteos / Sin crema', '🧂 Poca sal'];
 
-    const boxAdic = document.getElementById('boxCliRecetaAdicionales');
-    const listAdic = document.getElementById('cliRecetaAdicionalesList');
-    if (boxAdic && listAdic) {
-      if (prod.adicionales && prod.adicionales.length > 0) {
-        boxAdic.style.display = 'block';
-        listAdic.innerHTML = '';
-        prod.adicionales.forEach(adic => {
-          const chip = document.createElement('span');
-          chip.style.cssText = 'background: #020617; border: 1px solid #0284c7; color: #7dd3fc; font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 6px;';
-          chip.innerText = `+ ${adic}`;
-          listAdic.appendChild(chip);
-        });
-      } else {
-        boxAdic.style.display = 'none';
-      }
-    }
+    prefsList.forEach(pref => {
+      const chip = document.createElement('button');
+      chip.type = 'button';
+      chip.className = 'px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer border bg-slate-900/80 text-slate-300 border-slate-700 hover:border-slate-500';
+      chip.innerText = pref;
+      chip.onclick = function() {
+        const idx = window.modalPersonalizacionState.preferencias.indexOf(pref);
+        if (idx === -1) {
+          window.modalPersonalizacionState.preferencias.push(pref);
+          chip.className = 'px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer border bg-rose-500/20 text-rose-300 border-rose-500/50 shadow-sm';
+        } else {
+          window.modalPersonalizacionState.preferencias.splice(idx, 1);
+          chip.className = 'px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer border bg-slate-900/80 text-slate-300 border-slate-700 hover:border-slate-500';
+        }
+      };
+      containerPref.appendChild(chip);
+    });
+
+    // 3. Chips de Ingredientes Extras con costo
+    const containerExtras = document.getElementById('chipsExtrasContainer');
+    containerExtras.innerHTML = '';
+    const extrasList = [
+      { nombre: '+ Aguacate fresco', precio: 25.00 },
+      { nombre: '+ Tocino crocante dorado', precio: 35.00 },
+      { nombre: '+ Queso Gouda gratinado', precio: 25.00 },
+      { nombre: '+ Champiñones salteados', precio: 20.00 },
+      { nombre: '+ Huevo extra orgánico', precio: 20.00 },
+      { nombre: '+ Porción de frijoles refritos', precio: 20.00 }
+    ];
+
+    extrasList.forEach(ex => {
+      const chip = document.createElement('button');
+      chip.type = 'button';
+      chip.className = 'px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer border bg-slate-900/80 text-slate-300 border-slate-700 hover:border-slate-500 flex items-center gap-1';
+      chip.innerHTML = `<span>${ex.nombre}</span> <b class="text-sky-400 font-extrabold">(+$${ex.precio})</b>`;
+      chip.onclick = function() {
+        const idx = window.modalPersonalizacionState.extras.findIndex(e => e.nombre === ex.nombre);
+        if (idx === -1) {
+          window.modalPersonalizacionState.extras.push(ex);
+          chip.className = 'px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer border bg-sky-500/20 text-sky-300 border-sky-500/50 shadow-sm flex items-center gap-1';
+        } else {
+          window.modalPersonalizacionState.extras.splice(idx, 1);
+          chip.className = 'px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer border bg-slate-900/80 text-slate-300 border-slate-700 hover:border-slate-500 flex items-center gap-1';
+        }
+        window.actualizarModalPersonalizarUI();
+      };
+      containerExtras.appendChild(chip);
+    });
+
+    window.actualizarModalPersonalizarUI();
 
     const modal = document.getElementById('modalRecetaClienteBackdrop');
     if (modal) {
       modal.style.display = 'flex';
+    }
+  };
+
+  // Alias para mantener compatibilidad
+  window.abrirModalRecetaCliente = window.abrirModalPersonalizar;
+
+  window.actualizarModalPersonalizarUI = function() {
+    const state = window.modalPersonalizacionState;
+    if (!state.prod) return;
+
+    let extraSum = 0;
+    if (state.termino && state.termino.includes('(+ $10)')) extraSum += 10;
+    if (state.termino && state.termino.includes('(+ $15)')) extraSum += 15;
+    state.extras.forEach(e => { extraSum += e.precio; });
+
+    state.extraPrecioTotal = extraSum;
+    const unitPrice = Number(state.prod.precio_unitario) + extraSum;
+    const totalOrder = unitPrice * state.cantidad;
+
+    const btnTxt = document.getElementById('btnModalConfirmarTxt');
+    if (btnTxt) {
+      btnTxt.innerText = `Agregar ${state.cantidad} a Mi Pedido • $${totalOrder.toFixed(2)}`;
+    }
+  };
+
+  window.cambiarCantidadModal = function(delta) {
+    const state = window.modalPersonalizacionState;
+    state.cantidad = Math.max(1, (state.cantidad || 1) + delta);
+    document.getElementById('txtModalCantidad').innerText = state.cantidad;
+    window.actualizarModalPersonalizarUI();
+  };
+
+  window.confirmarAgregarPlatilloPersonalizado = function() {
+    const state = window.modalPersonalizacionState;
+    if (!state.prod) return;
+
+    const prod = state.prod;
+    const cuentas = getStorageCuentas();
+    const mesaId = window.simMesaId || 1;
+    const dest = window.destinoPedido || 'mi_silla';
+    let key = '';
+    let comensalNom = '';
+    let qrId = '';
+    let esCentro = false;
+    let sillaNum = window.simSillaNum;
+
+    if (dest === 'centro') {
+      key = mesaId + '-centro';
+      comensalNom = `Mesa ${mesaId} (Al Centro / Compartido)`;
+      qrId = `MESA-0${mesaId}`;
+      esCentro = true;
+      sillaNum = 0;
+    } else if (dest === 'mi_silla' || dest === window.simSillaNum) {
+      key = mesaId + '-' + window.simSillaNum;
+      comensalNom = `Comensal Silla ${window.simSillaNum}`;
+      qrId = `PV-0${mesaId}${window.simSillaNum}`;
+      sillaNum = window.simSillaNum;
+    } else {
+      sillaNum = parseInt(dest);
+      key = mesaId + '-' + sillaNum;
+      comensalNom = `Comensal Silla ${sillaNum}`;
+      qrId = `PV-0${mesaId}${sillaNum}`;
+    }
+
+    if (!cuentas[key]) {
+      cuentas[key] = {
+        id: Date.now(),
+        mesaId: mesaId,
+        sillaNum: sillaNum,
+        esCentro: esCentro,
+        qrId: qrId,
+        comensalNombre: comensalNom,
+        items: [],
+        estado: 'ocupada',
+        creadoPor: 'cliente_qr',
+        horaApertura: (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      };
+    }
+
+    // Armar detalle de personalización en notas
+    const partesNotas = [];
+    if (state.termino) partesNotas.push(state.termino);
+    if (state.preferencias && state.preferencias.length > 0) partesNotas.push(state.preferencias.join(', '));
+    if (state.extras && state.extras.length > 0) partesNotas.push(state.extras.map(e => e.nombre).join(', '));
+    const notasLibres = (document.getElementById('txtModalNotasEspeciales').value || '').trim();
+    if (notasLibres) partesNotas.push(`Nota: ${notasLibres}`);
+
+    const notasFinales = partesNotas.join(' • ');
+    const precioFinalUnit = Number(prod.precio_unitario) + state.extraPrecioTotal;
+
+    const items = cuentas[key].items || [];
+    items.push({
+      id: Date.now(),
+      productoId: prod.id,
+      nombre: prod.nombre,
+      notas: notasFinales,
+      precio: precioFinalUnit,
+      cantidad: state.cantidad,
+      mesaId: mesaId,
+      sillaNum: sillaNum,
+      esCentro: esCentro,
+      enviadoCocina: false,
+      hora: (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+    });
+
+    cuentas[key].items = items;
+    cuentas[key].estado = 'ocupada';
+
+    saveStorageCuentas(cuentas);
+    window.sincronizarCuentaDesdeStorage();
+    window.cerrarModalRecetaCliente();
+
+    // Sincronizar inmediatamente con el servidor de Anvil
+    try {
+      if (window.anvilSyncCuenta) {
+        window.anvilSyncCuenta(mesaId, sillaNum, JSON.stringify(cuentas[key].items), 'ocupada');
+      }
+    } catch(e) {
+      console.error('Error sincronizando con Anvil:', e);
     }
   };
 
@@ -1922,6 +2349,13 @@
           window.simMesaId = m;
           window.simSillaNum = s;
           window.destinoPedido = 'mi_silla';
+          try {
+            if (window.anvilCheckinSilla) {
+              window.anvilCheckinSilla(m, s, qrParam || ('PV-0' + m + s));
+            }
+          } catch(err) {
+            console.error('Error invoking anvilCheckinSilla from JS:', err);
+          }
         }
       }
     } catch (e) {
@@ -1943,4 +2377,3 @@
   setTimeout(initImmediate, 10);
   setTimeout(initImmediate, 100);
 </script>
-</anvil-form>
