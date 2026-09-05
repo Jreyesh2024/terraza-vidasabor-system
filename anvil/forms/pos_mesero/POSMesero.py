@@ -9,21 +9,32 @@ class POSMesero(POSMeseroTemplate):
   def __init__(self, **properties):
     self.init_components(**properties)
     try:
-      # Exponer navegación directamente en window
+      # Exponer navegación y sincronización directamente en window
       anvil.js.window.navMenu = self.navegar_modulo
       anvil.js.window.anvilAppNav = self.navegar_modulo
       anvil.js.window.anvilGetCuentasServidor = self.obtener_cuentas_servidor
       anvil.js.window.anvilSyncCuenta = self.sincronizar_cuenta_servidor
+
+      # Fallbacks inmediatos para evitar TypeError antes o durante la carga de scripts
+      def _py_click_silla(m, s):
+        if hasattr(anvil.js.window, 'handleSillaClick'):
+          anvil.js.window.handleSillaClick(m, s)
+        else:
+          print(f"[POSMesero] clickSilla({m}, {s}) ejecutado")
+
+      def _py_click_mesa(m):
+        if hasattr(anvil.js.window, 'handleMesaClick'):
+          anvil.js.window.handleMesaClick(m)
+        else:
+          print(f"[POSMesero] clickMesa({m}) ejecutado")
+
+      anvil.js.window.clickSilla = _py_click_silla
+      anvil.js.window.clickMesa = _py_click_mesa
     except Exception as e:
       print(f"[POSMesero] Error exponiendo funciones en window: {e}")
 
-    # Ejecutar scripts del template HtmlTemplate para garantizar funciones y listeners
-    try:
-      dom = anvil.js.get_dom_node(self)
-      if hasattr(anvil.js.window, 'runFormScripts'):
-        anvil.js.window.runFormScripts(dom)
-    except Exception as e:
-      print(f"[POSMesero] Error ejecutando runFormScripts: {e}")
+    # Ejecutar scripts de la plantilla HtmlTemplate directamente en el DOM
+    self.ejecutar_scripts_template()
 
     try:
       url_hash = anvil.get_url_hash()
@@ -139,3 +150,27 @@ class POSMesero(POSMeseroTemplate):
       target_form = 'AdminMenu'
     
     anvil.open_form(target_form)
+
+  def ejecutar_scripts_template(self):
+    try:
+      dom = anvil.js.get_dom_node(self)
+      if not dom:
+        return
+      doc = anvil.js.window.document
+      scripts = dom.querySelectorAll('script')
+      for s in scripts:
+        if not s.getAttribute('data-executed'):
+          s.setAttribute('data-executed', 'true')
+          code = s.textContent
+          if code and code.strip():
+            new_script = doc.createElement('script')
+            for attr in s.attributes:
+              try:
+                new_script.setAttribute(attr.name, attr.value)
+              except Exception:
+                pass
+            new_script.textContent = code
+            doc.head.appendChild(new_script)
+            doc.head.removeChild(new_script)
+    except Exception as e:
+      print(f"[POSMesero] Error en ejecutar_scripts_template: {e}")

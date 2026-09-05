@@ -21,13 +21,8 @@ class Menu(MenuTemplate):
     except Exception as e:
       print(f"[Menu] Error exponiendo funciones en window: {e}")
 
-    # Ejecutar scripts de plantilla
-    try:
-      dom = anvil.js.get_dom_node(self)
-      if hasattr(anvil.js.window, 'runFormScripts'):
-        anvil.js.window.runFormScripts(dom)
-    except Exception:
-      pass
+    # Ejecutar scripts de plantilla directamente en el DOM
+    self.ejecutar_scripts_template()
 
     # Leer parámetros QR de la URL para auto-registrar check-in
     try:
@@ -159,3 +154,27 @@ class Menu(MenuTemplate):
     elif modulo_nombre in ['admin', 'admin_menu', 'inicio', 'dashboard']:
       target_form = 'AdminMenu'
     anvil.open_form(target_form)
+
+  def ejecutar_scripts_template(self):
+    try:
+      dom = anvil.js.get_dom_node(self)
+      if not dom:
+        return
+      doc = anvil.js.window.document
+      scripts = dom.querySelectorAll('script')
+      for s in scripts:
+        if not s.getAttribute('data-executed'):
+          s.setAttribute('data-executed', 'true')
+          code = s.textContent
+          if code and code.strip():
+            new_script = doc.createElement('script')
+            for attr in s.attributes:
+              try:
+                new_script.setAttribute(attr.name, attr.value)
+              except Exception:
+                pass
+            new_script.textContent = code
+            doc.head.appendChild(new_script)
+            doc.head.removeChild(new_script)
+    except Exception as e:
+      print(f"[Menu] Error en ejecutar_scripts_template: {e}")
