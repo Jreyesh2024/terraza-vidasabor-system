@@ -11,6 +11,7 @@ class POSMesero(POSMeseroTemplate):
     try:
       anvil.js.window.anvilAppNav = self.navegar_modulo
       anvil.js.window.anvilGetCuentasServidor = self.obtener_cuentas_servidor
+      anvil.js.window.anvilSyncCuenta = self.sincronizar_cuenta_servidor
     except Exception:
       pass
 
@@ -71,6 +72,27 @@ class POSMesero(POSMeseroTemplate):
           pass
     except Exception as e:
       print(f"Error sincronizando servidor en POSMesero: {e}")
+
+  def sincronizar_cuenta_servidor(self, mesa_id, silla_id, items, estado='ocupada'):
+    try:
+      if isinstance(items, str):
+        try:
+          items_clean = json.loads(items)
+        except Exception:
+          items_clean = []
+      elif isinstance(items, list):
+        items_clean = items
+      else:
+        try:
+          items_clean = json.loads(json.dumps(items))
+        except Exception:
+          items_clean = []
+      print(f"📡 [POSMESERO] sincronizando con servidor: Mesa {mesa_id} Silla {silla_id} -> {len(items_clean)} items ({estado})")
+      res = anvil.server.call('actualizar_cuenta_silla', int(mesa_id), int(silla_id), items_clean, str(estado))
+      return res
+    except Exception as e:
+      print(f"Error en sincronizar_cuenta_servidor desde POSMesero: {e}")
+      return None
 
   def navegar_modulo(self, modulo_nombre):
     target_form = 'POSMesero'

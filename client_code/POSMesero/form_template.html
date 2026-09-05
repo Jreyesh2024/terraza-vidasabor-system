@@ -2207,8 +2207,22 @@
             changed = true;
           }
           if (srv.items &amp;&amp; Array.isArray(srv.items)) {
-            if (JSON.stringify(curr.items || []) !== JSON.stringify(srv.items)) {
-              curr.items = JSON.parse(JSON.stringify(srv.items));
+            var localItems = curr.items || [];
+            var mergedItems = srv.items.map(function(sItem, sIdx) {
+              var lItem = localItems[sIdx] || localItems.find(function(it) {
+                return (it.id &amp;&amp; it.id === sItem.id) || (it.nombre === sItem.nombre &amp;&amp; it.precio === sItem.precio);
+              });
+              if (lItem &amp;&amp; lItem.enviadoCocina &amp;&amp; !sItem.enviadoCocina) {
+                return Object.assign({}, sItem, {
+                  enviadoCocina: true,
+                  horaEnvioCocina: lItem.horaEnvioCocina || sItem.horaEnvioCocina
+                });
+              }
+              return sItem;
+            });
+
+            if (JSON.stringify(curr.items || []) !== JSON.stringify(mergedItems)) {
+              curr.items = mergedItems;
               curr.estado = srv.estado || (curr.items.length > 0 ? 'ocupada' : curr.estado);
               changed = true;
             }
@@ -5052,13 +5066,22 @@
     };
 
     window.enviarItemIndividualACocina = function (idx) {
-      const mesaId = window.palapaState.mesaSeleccionadaId;
-      const sillaNum = window.palapaState.sillaSeleccionadaNum;
-      if (!mesaId || sillaNum === null || sillaNum === undefined) return;
+      const mesaId = window.palapaState.mesaSeleccionadaId || 1;
+      let sillaNum = window.palapaState.sillaSeleccionadaNum;
+      if (sillaNum === null || sillaNum === undefined) {
+        sillaNum = 0; // Cuenta de mesa al centro
+      }
 
-      const key = `${mesaId}-${sillaNum}`;
-      const cuenta = window.palapaState.cuentas[key];
-      if (!cuenta || !cuenta.items || !cuenta.items[idx]) return;
+      let key = `${mesaId}-${sillaNum}`;
+      let cuenta = window.palapaState.cuentas[key];
+      if (!cuenta &amp;&amp; (sillaNum === 0 || sillaNum === 'centro')) {
+        key = `${mesaId}-centro`;
+        cuenta = window.palapaState.cuentas[key];
+      }
+      if (!cuenta || !cuenta.items || !cuenta.items[idx]) {
+        console.warn('No se encontró el item a enviar:', { mesaId, sillaNum, key, idx });
+        return;
+      }
 
       const item = cuenta.items[idx];
       const nowStr = (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -5067,16 +5090,34 @@
 
       saveStateToStorage();
       renderStateUI();
+
+      // Sincronizar inmediatamente con el servidor persistente
+      try {
+        if (window.anvilSyncCuenta) {
+          const syncSilla = (sillaNum === 'centro') ? 0 : sillaNum;
+          window.anvilSyncCuenta(mesaId, syncSilla, JSON.stringify(cuenta.items), cuenta.estado || 'ocupada');
+        }
+      } catch (err) {
+        console.error('Error sincronizando item individual con servidor:', err);
+      }
+
       showDragToast(`🚀 ¡${item.nombre} enviado a Cocina / Barra (${nowStr})!`, 'ok');
     };
 
     window.enviarACocinaComandaActiva = function () {
-      const mesaId = window.palapaState.mesaSeleccionadaId;
-      const sillaNum = window.palapaState.sillaSeleccionadaNum;
-      if (!mesaId || sillaNum === null || sillaNum === undefined) return;
+      const mesaId = window.palapaState.mesaSeleccionadaId || 1;
+      let sillaNum = window.palapaState.sillaSeleccionadaNum;
+      if (sillaNum === null || sillaNum === undefined) {
+        sillaNum = 0; // Cuenta de mesa al centro
+      }
 
-      const key = `${mesaId}-${sillaNum}`;
-      const cuenta = window.palapaState.cuentas[key];
+      let key = `${mesaId}-${sillaNum}`;
+      let cuenta = window.palapaState.cuentas[key];
+      if (!cuenta &amp;&amp; (sillaNum === 0 || sillaNum === 'centro')) {
+        key = `${mesaId}-centro`;
+        cuenta = window.palapaState.cuentas[key];
+      }
+
       if (!cuenta || !cuenta.items || cuenta.items.length === 0) {
         showDragToast('ℹ Agrega al menos un producto a la comanda antes de enviar a cocina.', 'warn');
         return;
@@ -5096,6 +5137,17 @@
 
       saveStateToStorage();
       renderStateUI();
+
+      // Sincronizar inmediatamente con el servidor persistente
+      try {
+        if (window.anvilSyncCuenta) {
+          const syncSilla = (sillaNum === 'centro') ? 0 : sillaNum;
+          window.anvilSyncCuenta(mesaId, syncSilla, JSON.stringify(cuenta.items), cuenta.estado || 'ocupada');
+        }
+      } catch (err) {
+        console.error('Error sincronizando comanda activa con servidor:', err);
+      }
+
       showDragToast(`🚀 ¡${pendientes.length} producto(s) enviados a Cocina / Barra (KDS)! (${nowStr})`, 'ok');
     };
 

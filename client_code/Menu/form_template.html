@@ -87,7 +87,7 @@
 
   <!-- PANTALLA PRINCIPAL: HUB DE BIENVENIDA A TU MESA (SIMPLIFICADA) -->
   <div id=&quot;vistaHubMesa&quot; class=&quot;flex-1 w-full max-w-2xl mx-auto p-4 sm:p-6 flex flex-col gap-5 justify-center&quot;>
-
+    
     <!-- TARJETA HERO COMPACTA (SOLO LUGAR Y QR) -->
     <div class=&quot;glass-card p-6 sm:p-8 rounded-3xl border border-slate-700/80 shadow-2xl relative overflow-hidden text-center flex flex-col items-center gap-3&quot;>
       <div class=&quot;absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-emerald-500 via-teal-500 to-amber-500&quot;></div>
@@ -108,7 +108,7 @@
 
     <!-- TARJETAS DE ACCIÓN PRINCIPALES DEL COMENSAL (3 ACCIONES DIRECTAS) -->
     <div class=&quot;grid grid-cols-1 sm:grid-cols-3 gap-4&quot;>
-
+      
       <!-- 1. ORDENAR PARA MI SILLA -->
       <button type=&quot;button&quot; onclick=&quot;window.abrirCatalogoConDestino('mi_silla')&quot;
         class=&quot;glass-card p-5 rounded-2xl border border-emerald-500/40 hover:border-emerald-400 hover:bg-emerald-950/20 text-left transition flex flex-col justify-between gap-3 cursor-pointer shadow-lg group&quot;>
@@ -241,7 +241,7 @@
 
   <!-- VISTA DEL CATÁLOGO DE PLATILLOS (SE MUESTRA AL ELEGIR ORDENAR) -->
   <main id=&quot;vistaCatalogoPlatillos&quot; class=&quot;flex-1 max-w-4xl w-full mx-auto p-4 sm:p-6 flex flex-col gap-4 hidden&quot;>
-
+    
     <!-- BARRA SUPERIOR DE NAVEGACIÓN DENTRO DEL CATÁLOGO -->
     <div class=&quot;flex items-center justify-between bg-slate-900/90 px-4 py-3 rounded-2xl border border-slate-800 shadow-md&quot;>
       <button type=&quot;button&quot; id=&quot;btnCatalogoBack&quot; onclick=&quot;window.catalogoVolverAtras()&quot;
@@ -395,7 +395,7 @@
       <!-- SELECTOR DE ALCANCE DEL PAGO -->
       <div class=&quot;bg-slate-950/80 p-3 rounded-xl border border-slate-800/80 space-y-2&quot;>
         <span class=&quot;text-xs font-bold text-slate-300 block&quot;><i
-                                                               class=&quot;fa-solid fa-hand-holding-dollar text-emerald-400 mr-1&quot;></i> ¿Qué deseas pagar?</span>
+            class=&quot;fa-solid fa-hand-holding-dollar text-emerald-400 mr-1&quot;></i> ¿Qué deseas pagar?</span>
         <div class=&quot;grid grid-cols-3 gap-1.5 text-[11px]&quot;>
           <button type=&quot;button&quot; onclick=&quot;window.setModoPagoCliente('solo_yo')&quot; id=&quot;btnModoSoloYo&quot;
             class=&quot;p-2 rounded-lg font-bold border text-center transition bg-slate-800 text-slate-300 border-slate-700 cursor-pointer&quot;>Solo
@@ -416,11 +416,11 @@
       <!-- TOTALES -->
       <div class=&quot;pt-3 border-t border-slate-800 space-y-1.5 text-xs&quot;>
         <div class=&quot;flex justify-between text-slate-400&quot;><span>Subtotal Neto:</span><span id=&quot;modalSubtotal&quot;
-                                                                                      class=&quot;text-slate-200 font-bold&quot;>$0.00</span></div>
+            class=&quot;text-slate-200 font-bold&quot;>$0.00</span></div>
         <div class=&quot;flex justify-between text-slate-400&quot;><span>IVA 16% Trasladado:</span><span id=&quot;modalIVA&quot;
-                                                                                           class=&quot;text-slate-200 font-bold&quot;>$0.00</span></div>
+            class=&quot;text-slate-200 font-bold&quot;>$0.00</span></div>
         <div class=&quot;flex justify-between text-slate-400&quot;><span>Propina Sugerida (10%):</span><span id=&quot;modalPropina&quot;
-                                                                                               class=&quot;text-slate-200 font-bold&quot;>$0.00</span></div>
+            class=&quot;text-slate-200 font-bold&quot;>$0.00</span></div>
         <div class=&quot;flex justify-between text-base font-black text-white pt-2 border-t border-slate-800&quot;>
           <span>Total Final a Liquidar:</span>
           <span id=&quot;modalTotal&quot; class=&quot;text-emerald-400 text-lg font-black&quot;>$0.00</span>
@@ -451,7 +451,7 @@
     onclick=&quot;if(event.target === this) window.cerrarModalRecetaCliente();&quot;>
     <div
       style=&quot;background: #090d16 !important; border: 1px solid #334155 !important; border-radius: 24px !important; width: 100% !important; max-width: 520px !important; padding: 24px !important; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.8) !important; display: flex !important; flex-direction: column !important; gap: 16px !important; color: #f8fafc !important; max-height: 90vh !important; overflow-y: auto !important;&quot;>
-
+      
       <!-- HEADER -->
       <div style=&quot;display: flex !important; justify-content: space-between !important; align-items: flex-start !important; border-bottom: 1px solid #1e293b !important; padding-bottom: 12px !important;&quot;>
         <div style=&quot;display: flex; align-items: center; gap: 12px;&quot;>
@@ -1275,7 +1275,7 @@
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  // Renderiza la vista limpia de comanda (solo items de MI silla)
+  // Renderiza la vista limpia de comanda (items de MI silla + items al centro de la mesa)
   window.renderComandaLimpia = function () {
     var mesaId = window.simMesaId || 1;
     var sillaNum = window.simSillaNum || 1;
@@ -1283,6 +1283,12 @@
     var cuentas = getStorageCuentas();
     var keySilla = mesaId + '-' + sillaNum;
     var itemsSilla = (cuentas[keySilla] &amp;&amp; cuentas[keySilla].items) ? cuentas[keySilla].items : [];
+
+    // Consumos al Centro de la Mesa
+    var keyCentro = mesaId + '-centro';
+    var keyCentro0 = mesaId + '-0';
+    var ctaCentro = cuentas[keyCentro] || cuentas[keyCentro0] || { items: [] };
+    var itemsCentro = ctaCentro.items || [];
 
     // Actualizar títulos
     var tit = document.getElementById('lblComandaLimpiaTitulo');
@@ -1299,30 +1305,67 @@
 
     var pendientes = 0;
     var subtotal = 0;
+    var totalItemsCount = itemsSilla.length + itemsCentro.length;
 
-    if (itemsSilla.length === 0) {
-    container.innerHTML = '<div class=&quot;text-center py-10 text-slate-500 text-sm&quot;>¡Aún no has pedido nada! Toca <b class=&quot;text-emerald-400&quot;>Agregar</b> para elegir del menú.</div>';
-  } else {
-    itemsSilla.forEach(function (it) {
-    var monto = it.precio * it.cantidad;
-    subtotal += monto;
-    if (!it.enviadoCocina) pendientes++;
+    if (totalItemsCount === 0) {
+      container.innerHTML = '<div class=&quot;text-center py-10 text-slate-500 text-sm&quot;>¡Aún no has pedido nada! Toca <b class=&quot;text-emerald-400&quot;>Agregar</b> para elegir del menú.</div>';
+    } else {
+      // 1. Platillos de Mi Silla
+      if (itemsSilla.length > 0) {
+        var hSilla = document.createElement('div');
+        hSilla.className = 'text-xs font-black text-emerald-400 uppercase tracking-wider pt-2 pb-1.5 flex items-center gap-1.5 border-b border-emerald-500/20 mb-1';
+        hSilla.innerHTML = `<i class=&quot;fa-solid fa-chair text-[11px]&quot;></i> Tu Silla (${sillaNum}):`;
+        container.appendChild(hSilla);
 
-    var row = document.createElement('div');
-    row.className = 'flex items-center justify-between py-3 border-b border-slate-800/60 last:border-0';
-    var estadoBadge = it.enviadoCocina
-    ? '<span class=&quot;text-[9px] font-black bg-emerald-950/60 text-emerald-300 border border-emerald-500/40 px-1.5 py-0.5 rounded flex items-center gap-1&quot;><i class=&quot;fa-solid fa-fire text-[8px]&quot;></i> En Cocina</span>'
-    : '<span class=&quot;text-[9px] font-black bg-amber-950/60 text-amber-300 border border-amber-500/40 px-1.5 py-0.5 rounded flex items-center gap-1&quot;><i class=&quot;fa-solid fa-clock text-[8px]&quot;></i> Pendiente</span>';
-    row.innerHTML = `
-    <div class=&quot;flex-1&quot;>
-    <div class=&quot;text-sm font-bold text-white&quot;>${it.nombre} <span class=&quot;text-slate-400 font-normal text-xs&quot;>x${it.cantidad}</span></div>
-    <div class=&quot;flex items-center gap-2 mt-0.5&quot;>${estadoBadge}${it.notas ? '<span class=&quot;text-[10px] text-slate-500&quot;>' + it.notas + '</span>' : ''}</div>
-    </div>
-    <span class=&quot;text-sm font-black text-emerald-400 ml-3&quot;>$${monto.toFixed(2)}</span>
-    `;
-    container.appendChild(row);
-  });
-  }
+        itemsSilla.forEach(function (it) {
+          var monto = it.precio * it.cantidad;
+          subtotal += monto;
+          if (!it.enviadoCocina) pendientes++;
+
+          var row = document.createElement('div');
+          row.className = 'flex items-center justify-between py-2.5 border-b border-slate-800/60 last:border-0';
+          var estadoBadge = it.enviadoCocina
+            ? '<span class=&quot;text-[9px] font-black bg-emerald-950/60 text-emerald-300 border border-emerald-500/40 px-1.5 py-0.5 rounded flex items-center gap-1&quot;><i class=&quot;fa-solid fa-fire text-[8px]&quot;></i> En Cocina</span>'
+            : '<span class=&quot;text-[9px] font-black bg-amber-950/60 text-amber-300 border border-amber-500/40 px-1.5 py-0.5 rounded flex items-center gap-1&quot;><i class=&quot;fa-solid fa-clock text-[8px]&quot;></i> Pendiente</span>';
+          row.innerHTML = `
+            <div class=&quot;flex-1 pr-2&quot;>
+              <div class=&quot;text-sm font-bold text-white&quot;>${it.nombre} <span class=&quot;text-slate-400 font-normal text-xs&quot;>x${it.cantidad}</span></div>
+              <div class=&quot;flex items-center gap-2 mt-0.5&quot;>${estadoBadge}${it.notas ? '<span class=&quot;text-[10px] text-slate-500&quot;>' + it.notas + '</span>' : ''}</div>
+            </div>
+            <span class=&quot;text-sm font-black text-emerald-400 ml-2&quot;>$${monto.toFixed(2)}</span>
+          `;
+          container.appendChild(row);
+        });
+      }
+
+      // 2. Platillos Al Centro (Compartidos para la Mesa)
+      if (itemsCentro.length > 0) {
+        var hCentro = document.createElement('div');
+        hCentro.className = 'text-xs font-black text-amber-400 uppercase tracking-wider pt-3 pb-1.5 flex items-center gap-1.5 border-b border-amber-500/20 mb-1 mt-2';
+        hCentro.innerHTML = `<i class=&quot;fa-solid fa-bowl-food text-[11px]&quot;></i> Al Centro (Para Compartir):`;
+        container.appendChild(hCentro);
+
+        itemsCentro.forEach(function (it) {
+          var monto = it.precio * it.cantidad;
+          subtotal += monto;
+          if (!it.enviadoCocina) pendientes++;
+
+          var row = document.createElement('div');
+          row.className = 'flex items-center justify-between py-2.5 border-b border-slate-800/60 last:border-0';
+          var estadoBadge = it.enviadoCocina
+            ? '<span class=&quot;text-[9px] font-black bg-emerald-950/60 text-emerald-300 border border-emerald-500/40 px-1.5 py-0.5 rounded flex items-center gap-1&quot;><i class=&quot;fa-solid fa-fire text-[8px]&quot;></i> En Cocina</span>'
+            : '<span class=&quot;text-[9px] font-black bg-amber-950/60 text-amber-300 border border-amber-500/40 px-1.5 py-0.5 rounded flex items-center gap-1&quot;><i class=&quot;fa-solid fa-clock text-[8px]&quot;></i> Pendiente</span>';
+          row.innerHTML = `
+            <div class=&quot;flex-1 pr-2&quot;>
+              <div class=&quot;text-sm font-bold text-amber-100&quot;>${it.nombre} <span class=&quot;text-slate-400 font-normal text-xs&quot;>x${it.cantidad}</span></div>
+              <div class=&quot;flex items-center gap-2 mt-0.5&quot;>${estadoBadge}${it.notas ? '<span class=&quot;text-[10px] text-slate-500&quot;>' + it.notas + '</span>' : ''}</div>
+            </div>
+            <span class=&quot;text-sm font-black text-amber-400 ml-2&quot;>$${monto.toFixed(2)}</span>
+          `;
+          container.appendChild(row);
+        });
+      }
+    }
 
     // Calcular totales
     var iva = subtotal * 0.16;
@@ -1338,42 +1381,42 @@
     var btn = document.getElementById('btnComandaLimpiaEnviar');
     var btnTxt = document.getElementById('btnComandaLimpiaEnviarTxt');
     if (btn) {
-    if (pendientes > 0) {
-    btn.disabled = false;
-    btn.style.opacity = '1';
-    if (btnTxt) btnTxt.textContent = 'Enviar a Cocina / Barra (' + pendientes + ' pendiente' + (pendientes > 1 ? 's' : '') + ')';
-  } else if (itemsSilla.length > 0) {
-    btn.disabled = true;
-    btn.style.opacity = '0.65';
-    if (btnTxt) btnTxt.innerHTML = '<i class=&quot;fa-solid fa-check-double&quot;></i> Todo enviado a Cocina';
-  } else {
-    btn.disabled = true;
-    btn.style.opacity = '0.4';
-    if (btnTxt) btnTxt.textContent = 'Enviar a Cocina / Barra';
-  }
-  }
+      if (pendientes > 0) {
+        btn.disabled = false;
+        btn.style.opacity = '1';
+        if (btnTxt) btnTxt.textContent = 'Enviar a Cocina / Barra (' + pendientes + ' pendiente' + (pendientes > 1 ? 's' : '') + ')';
+      } else if (totalItemsCount > 0) {
+        btn.disabled = true;
+        btn.style.opacity = '0.65';
+        if (btnTxt) btnTxt.innerHTML = '<i class=&quot;fa-solid fa-check-double&quot;></i> Todo enviado a Cocina';
+      } else {
+        btn.disabled = true;
+        btn.style.opacity = '0.4';
+        if (btnTxt) btnTxt.textContent = 'Enviar a Cocina / Barra';
+      }
+    }
   };
 
-    window.seleccionarDestinoPedido = function (dest) {
+  window.seleccionarDestinoPedido = function (dest) {
     window.destinoPedido = dest;
     var destTxt = document.getElementById('lblDestinoActualTxt');
     if (destTxt) {
-    if (dest === 'centro') {
-    destTxt.innerText = '🎯 Destino: Al Centro (Para Compartir)';
-    destTxt.className = 'text-[10px] text-amber-400 font-bold bg-amber-950/80 px-2 py-0.5 rounded-md border border-amber-500/30';
-  } else if (dest === 'mi_silla' || dest === window.simSillaNum) {
-    destTxt.innerText = `🎯 Destino: Silla ${window.simSillaNum} (Tú)`;
-    destTxt.className = 'text-[10px] text-emerald-400 font-bold bg-emerald-950/80 px-2 py-0.5 rounded-md border border-emerald-500/30';
-  } else {
-    destTxt.innerText = `🎯 Destino: Silla ${dest} (Acompañante)`;
-    destTxt.className = 'text-[10px] text-sky-400 font-bold bg-sky-950/80 px-2 py-0.5 rounded-md border border-sky-500/30';
-  }
-  }
+      if (dest === 'centro') {
+        destTxt.innerText = '🎯 Destino: Al Centro (Para Compartir)';
+        destTxt.className = 'text-[10px] text-amber-400 font-bold bg-amber-950/80 px-2 py-0.5 rounded-md border border-amber-500/30';
+      } else if (dest === 'mi_silla' || dest === window.simSillaNum) {
+        destTxt.innerText = `🎯 Destino: Silla ${window.simSillaNum} (Tú)`;
+        destTxt.className = 'text-[10px] text-emerald-400 font-bold bg-emerald-950/80 px-2 py-0.5 rounded-md border border-emerald-500/30';
+      } else {
+        destTxt.innerText = `🎯 Destino: Silla ${dest} (Acompañante)`;
+        destTxt.className = 'text-[10px] text-sky-400 font-bold bg-sky-950/80 px-2 py-0.5 rounded-md border border-sky-500/30';
+      }
+    }
     window.renderSillasMesaBar();
     window.filtrarProductos();
   };
 
-    window.renderSillasMesaBar = function () {
+  window.renderSillasMesaBar = function () {
     var container = document.getElementById('chipsSillasMesa');
     if (!container) return;
     container.innerHTML = '';
@@ -1392,8 +1435,8 @@
     btnMiSilla.onclick = function() { window.seleccionarDestinoPedido('mi_silla'); };
     var isMiSillaActive = (dest === 'mi_silla' || dest === miSilla);
     btnMiSilla.className = isMiSillaActive
-    ? 'px-3 py-1.5 text-xs font-black rounded-xl bg-emerald-500 text-slate-950 border border-emerald-400 flex items-center gap-1.5 shadow-md shadow-emerald-500/30 cursor-pointer scale-105 transition'
-    : 'px-2.5 py-1.5 text-xs font-bold rounded-xl bg-slate-800 text-emerald-400 hover:bg-slate-700 border border-emerald-500/40 flex items-center gap-1.5 transition cursor-pointer';
+      ? 'px-3 py-1.5 text-xs font-black rounded-xl bg-emerald-500 text-slate-950 border border-emerald-400 flex items-center gap-1.5 shadow-md shadow-emerald-500/30 cursor-pointer scale-105 transition'
+      : 'px-2.5 py-1.5 text-xs font-bold rounded-xl bg-slate-800 text-emerald-400 hover:bg-slate-700 border border-emerald-500/40 flex items-center gap-1.5 transition cursor-pointer';
     btnMiSilla.innerHTML = `<i class=&quot;fa-solid fa-user-check text-[11px]&quot;></i> Silla ${miSilla} (Tú)`;
     container.appendChild(btnMiSilla);
 
@@ -1406,34 +1449,34 @@
     btnCentro.type = 'button';
     btnCentro.onclick = function() { window.seleccionarDestinoPedido('centro'); };
     btnCentro.className = isCentroActive
-    ? 'px-3 py-1.5 text-xs font-black rounded-xl bg-amber-500 text-slate-950 border border-amber-400 flex items-center gap-1.5 shadow-md shadow-amber-500/30 cursor-pointer scale-105 transition'
-    : 'px-2.5 py-1.5 text-xs font-bold rounded-xl bg-slate-800 text-amber-300 hover:bg-slate-700 border border-amber-500/40 flex items-center gap-1.5 transition cursor-pointer';
+      ? 'px-3 py-1.5 text-xs font-black rounded-xl bg-amber-500 text-slate-950 border border-amber-400 flex items-center gap-1.5 shadow-md shadow-amber-500/30 cursor-pointer scale-105 transition'
+      : 'px-2.5 py-1.5 text-xs font-bold rounded-xl bg-slate-800 text-amber-300 hover:bg-slate-700 border border-amber-500/40 flex items-center gap-1.5 transition cursor-pointer';
     btnCentro.innerHTML = `<i class=&quot;fa-solid fa-utensils text-[11px]&quot;></i> Al Centro${hasCentroItems ? ' 🍲' : ''}`;
     container.appendChild(btnCentro);
 
     // 3. Botones: Otras Sillas de Mi Mesa (Acompañantes 1..4 excepto miSilla)
     for (var s = 1; s <= 4; s++) {
-    if (s === miSilla) continue;
-    var isTarget = (dest === s);
-    var keyS = mesaId + '-' + s;
-    var cS = cuentas[keyS];
-    var hasItemsS = cS &amp;&amp; cS.items &amp;&amp; cS.items.length > 0;
+      if (s === miSilla) continue;
+      var isTarget = (dest === s);
+      var keyS = mesaId + '-' + s;
+      var cS = cuentas[keyS];
+      var hasItemsS = cS &amp;&amp; cS.items &amp;&amp; cS.items.length > 0;
 
-    var btnS = document.createElement('button');
-    btnS.type = 'button';
-    btnS.onclick = (function(sNum) {
-    return function() { window.seleccionarDestinoPedido(sNum); };
-  })(s);
+      var btnS = document.createElement('button');
+      btnS.type = 'button';
+      btnS.onclick = (function(sNum) {
+        return function() { window.seleccionarDestinoPedido(sNum); };
+      })(s);
 
-    btnS.className = isTarget
-    ? 'px-3 py-1.5 text-xs font-black rounded-xl bg-sky-500 text-slate-950 border border-sky-400 flex items-center gap-1.5 shadow-md shadow-sky-500/30 cursor-pointer scale-105 transition'
-    : 'px-2.5 py-1.5 text-xs font-semibold rounded-xl bg-slate-800 text-slate-400 hover:bg-slate-700 hover:text-white border border-slate-700 flex items-center gap-1.5 transition cursor-pointer';
-    btnS.innerHTML = `Silla ${s}${hasItemsS ? ' 🍽️' : ''}`;
-    container.appendChild(btnS);
-  }
+      btnS.className = isTarget
+        ? 'px-3 py-1.5 text-xs font-black rounded-xl bg-sky-500 text-slate-950 border border-sky-400 flex items-center gap-1.5 shadow-md shadow-sky-500/30 cursor-pointer scale-105 transition'
+        : 'px-2.5 py-1.5 text-xs font-semibold rounded-xl bg-slate-800 text-slate-400 hover:bg-slate-700 hover:text-white border border-slate-700 flex items-center gap-1.5 transition cursor-pointer';
+      btnS.innerHTML = `Silla ${s}${hasItemsS ? ' 🍽️' : ''}`;
+      container.appendChild(btnS);
+    }
   };
 
-    window.agregarAlCarritoDirecto = function (prodId) {
+  window.agregarAlCarritoDirecto = function (prodId) {
     var prod = (window.vsMenuData || []).find(p => p.id === prodId);
     if (!prod) return;
 
@@ -1447,55 +1490,55 @@
     var sillaNum = window.simSillaNum;
 
     if (dest === 'centro') {
-    key = mesaId + '-centro';
-    comensalNom = `Mesa ${mesaId} (Al Centro / Compartido)`;
-    qrId = `MESA-0${mesaId}`;
-    esCentro = true;
-    sillaNum = 0;
-  } else if (dest === 'mi_silla' || dest === window.simSillaNum) {
-    key = mesaId + '-' + window.simSillaNum;
-    comensalNom = `Comensal Silla ${window.simSillaNum}`;
-    qrId = `PV-0${mesaId}${window.simSillaNum}`;
-    sillaNum = window.simSillaNum;
-  } else {
-    sillaNum = parseInt(dest);
-    key = mesaId + '-' + sillaNum;
-    comensalNom = `Comensal Silla ${sillaNum}`;
-    qrId = `PV-0${mesaId}${sillaNum}`;
-  }
+      key = mesaId + '-centro';
+      comensalNom = `Mesa ${mesaId} (Al Centro / Compartido)`;
+      qrId = `MESA-0${mesaId}`;
+      esCentro = true;
+      sillaNum = 0;
+    } else if (dest === 'mi_silla' || dest === window.simSillaNum) {
+      key = mesaId + '-' + window.simSillaNum;
+      comensalNom = `Comensal Silla ${window.simSillaNum}`;
+      qrId = `PV-0${mesaId}${window.simSillaNum}`;
+      sillaNum = window.simSillaNum;
+    } else {
+      sillaNum = parseInt(dest);
+      key = mesaId + '-' + sillaNum;
+      comensalNom = `Comensal Silla ${sillaNum}`;
+      qrId = `PV-0${mesaId}${sillaNum}`;
+    }
 
     if (!cuentas[key]) {
-    cuentas[key] = {
-    id: Date.now(),
-    mesaId: mesaId,
-    sillaNum: sillaNum,
-    esCentro: esCentro,
-    qrId: qrId,
-    comensalNombre: comensalNom,
-    items: [],
-    estado: 'ocupada',
-    creadoPor: 'cliente_qr',
-    horaApertura: (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-  };
-  }
+      cuentas[key] = {
+        id: Date.now(),
+        mesaId: mesaId,
+        sillaNum: sillaNum,
+        esCentro: esCentro,
+        qrId: qrId,
+        comensalNombre: comensalNom,
+        items: [],
+        estado: 'ocupada',
+        creadoPor: 'cliente_qr',
+        horaApertura: (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      };
+    }
 
     var items = cuentas[key].items || [];
     var existing = items.find(i => i.id === prod.id);
     if (existing) {
-    existing.cantidad += 1;
-  } else {
-    items.push({
-    id: prod.id,
-    nombre: prod.nombre,
-    precio: Number(prod.precio_unitario),
-    cantidad: 1,
-    mesaId: mesaId,
-    sillaNum: sillaNum,
-    esCentro: esCentro,
-    enviadoCocina: false,
-    hora: (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-  });
-  }
+      existing.cantidad += 1;
+    } else {
+      items.push({
+        id: prod.id,
+        nombre: prod.nombre,
+        precio: Number(prod.precio_unitario),
+        cantidad: 1,
+        mesaId: mesaId,
+        sillaNum: sillaNum,
+        esCentro: esCentro,
+        enviadoCocina: false,
+        hora: (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      });
+    }
     cuentas[key].items = items;
     cuentas[key].estado = 'ocupada';
 
@@ -1504,57 +1547,57 @@
 
     // Sincronizar inmediatamente con el servidor de Anvil para que el mesero lo vea
     try {
-    if (window.anvilSyncCuenta &amp;&amp; cuentas[key]) {
-    window.anvilSyncCuenta(mesaId, sillaNum, JSON.stringify(cuentas[key].items || []), 'ocupada');
-  }
-  } catch(e) {
-    console.error('Error sincronizando con Anvil:', e);
-  }
+      if (window.anvilSyncCuenta &amp;&amp; cuentas[key]) {
+        window.anvilSyncCuenta(mesaId, sillaNum, JSON.stringify(cuentas[key].items || []), 'ocupada');
+      }
+    } catch(e) {
+      console.error('Error sincronizando con Anvil:', e);
+    }
 
     var destNombre = esCentro ? 'al Centro de la Mesa' : `a la Silla ${sillaNum}`;
     // Feedback visual sutil
     console.log(`✅ Agregado: ${prod.nombre} (${destNombre})`);
   };
 
-    window.cambiarSimulacionQr = function (keyStr) {
+  window.cambiarSimulacionQr = function (keyStr) {
     var parts = keyStr.split('-');
     window.simMesaId = parseInt(parts[0]);
     window.simSillaNum = parseInt(parts[1]);
 
     // Si es Mesa 2 Silla 1 (Papá), sugerir niños seleccionados (3 y 4)
     if (window.simMesaId === 2 &amp;&amp; window.simSillaNum === 1) {
-    window.sillasAcompanantesSeleccionadas = [3, 4];
-  } else {
-    window.sillasAcompanantesSeleccionadas = [];
-  }
+      window.sillasAcompanantesSeleccionadas = [3, 4];
+    } else {
+      window.sillasAcompanantesSeleccionadas = [];
+    }
 
     window.sincronizarCuentaDesdeStorage();
   };
 
-    window.sincronizarCuentaDesdeStorage = function () {
+  window.sincronizarCuentaDesdeStorage = function () {
     var cuentas = getStorageCuentas();
     var key = window.simMesaId + '-' + window.simSillaNum;
     var qrId = 'PV-0' + window.simMesaId + window.simSillaNum;
 
     // Asegurar que la silla esté marcada automáticamente como OCUPADA / ACTIVA
     if (!cuentas[key]) {
-    cuentas[key] = {
-    id: Date.now(),
-    mesaId: window.simMesaId,
-    sillaNum: window.simSillaNum,
-    qrId: qrId,
-    comensalNombre: 'Comensal Silla ' + window.simSillaNum,
-    items: [],
-    estado: 'ocupada',
-    creadoPor: 'cliente_qr',
-    horaApertura: (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-  };
-    saveStorageCuentas(cuentas);
-  } else {
-    cuentas[key].estado = 'ocupada';
-    if (!cuentas[key].qrId) cuentas[key].qrId = qrId;
-    saveStorageCuentas(cuentas);
-  }
+      cuentas[key] = {
+        id: Date.now(),
+        mesaId: window.simMesaId,
+        sillaNum: window.simSillaNum,
+        qrId: qrId,
+        comensalNombre: 'Comensal Silla ' + window.simSillaNum,
+        items: [],
+        estado: 'ocupada',
+        creadoPor: 'cliente_qr',
+        horaApertura: (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      };
+      saveStorageCuentas(cuentas);
+    } else {
+      cuentas[key].estado = 'ocupada';
+      if (!cuentas[key].qrId) cuentas[key].qrId = qrId;
+      saveStorageCuentas(cuentas);
+    }
 
     var cuentaActual = cuentas[key];
     var comensalNom = (cuentaActual &amp;&amp; cuentaActual.comensalNombre) ? cuentaActual.comensalNombre : ('Comensal Silla ' + window.simSillaNum);
@@ -1575,16 +1618,16 @@
 
     // Notificar al servidor en tiempo real para iluminar la silla y sincronizar items con la pantalla del mesero
     try {
-    if (window.anvilCheckinSilla) {
-    window.anvilCheckinSilla(window.simMesaId, window.simSillaNum, qrId);
-  }
-    if (window.anvilSyncCuenta &amp;&amp; cuentaActual &amp;&amp; cuentaActual.items) {
-    window.anvilSyncCuenta(window.simMesaId, window.simSillaNum, JSON.stringify(cuentaActual.items), 'ocupada');
-  }
-  } catch (e) { }
+      if (window.anvilCheckinSilla) {
+        window.anvilCheckinSilla(window.simMesaId, window.simSillaNum, qrId);
+      }
+      if (window.anvilSyncCuenta &amp;&amp; cuentaActual &amp;&amp; cuentaActual.items) {
+        window.anvilSyncCuenta(window.simMesaId, window.simSillaNum, JSON.stringify(cuentaActual.items), 'ocupada');
+      }
+    } catch (e) { }
   };
 
-    window.renderCarrito = function () {
+  window.renderCarrito = function () {
     const container = document.getElementById('cartItemsList');
     if (!container) return;
     container.innerHTML = '';
@@ -1602,144 +1645,168 @@
     var pendientesCount = 0;
 
     if (itemsSilla.length === 0 &amp;&amp; itemsCentro.length === 0) {
-    container.innerHTML = `<div class=&quot;text-center py-6 text-slate-500 text-xs&quot;>No hay consumos registrados en tu silla ni al centro.</div>`;
-  } else {
-    // 1. Consumos de Mi Silla
-    if (itemsSilla.length > 0) {
-    var hSilla = document.createElement('div');
-    hSilla.className = 'text-[11px] font-bold text-emerald-400 mb-1 flex items-center gap-1';
-    hSilla.innerHTML = `<i class=&quot;fa-solid fa-user text-[10px]&quot;></i> Tu Silla (${window.simSillaNum}):`;
-    container.appendChild(hSilla);
+      container.innerHTML = `<div class=&quot;text-center py-6 text-slate-500 text-xs&quot;>No hay consumos registrados en tu silla ni al centro.</div>`;
+    } else {
+      // 1. Consumos de Mi Silla
+      if (itemsSilla.length > 0) {
+        var hSilla = document.createElement('div');
+        hSilla.className = 'text-[11px] font-bold text-emerald-400 mb-1 flex items-center gap-1';
+        hSilla.innerHTML = `<i class=&quot;fa-solid fa-user text-[10px]&quot;></i> Tu Silla (${window.simSillaNum}):`;
+        container.appendChild(hSilla);
 
-    itemsSilla.forEach((item) => {
-    const itemSubtotal = item.precio * item.cantidad;
-    if (!item.enviadoCocina) pendientesCount++;
+        itemsSilla.forEach((item) => {
+          const itemSubtotal = item.precio * item.cantidad;
+          if (!item.enviadoCocina) pendientesCount++;
 
-    const row = document.createElement('div');
-    row.className = 'flex justify-between items-center bg-slate-900/80 p-2.5 rounded-xl border border-slate-800 text-xs mb-1.5';
-    row.innerHTML = `
-    <div>
-    <div class=&quot;flex items-center gap-1.5&quot;>
-    <span class=&quot;font-bold text-white&quot;>${item.nombre} x${item.cantidad}</span>
-    </div>
-    <div class=&quot;flex items-center gap-2 mt-1&quot;>
-    <span class=&quot;text-[10px] text-slate-400&quot;>${item.notas ? item.notas + ' • ' : ''}$${Number(item.precio).toFixed(2)} c/u</span>
-    ${item.enviadoCocina
-    ? `<span class=&quot;bg-emerald-950/60 text-emerald-300 border border-emerald-500/40 text-[9px] font-bold px-1.5 py-0.5 rounded flex items-center gap-1&quot;><i class=&quot;fa-solid fa-fire text-emerald-400&quot;></i> En Cocina (${item.horaEnvioCocina || item.hora || ''})</span>`
-    : `<span class=&quot;bg-amber-950/60 text-amber-300 border border-amber-500/40 text-[9px] font-bold px-1.5 py-0.5 rounded flex items-center gap-1&quot;><i class=&quot;fa-solid fa-clock text-amber-400&quot;></i> Pendiente</span>`}
-    </div>
-    </div>
-    <span class=&quot;font-black text-emerald-400&quot;>$${itemSubtotal.toFixed(2)}</span>
-    `;
-    container.appendChild(row);
-  });
-  }
+          const row = document.createElement('div');
+          row.className = 'flex justify-between items-center bg-slate-900/80 p-2.5 rounded-xl border border-slate-800 text-xs mb-1.5';
+          row.innerHTML = `
+              <div>
+                <div class=&quot;flex items-center gap-1.5&quot;>
+                  <span class=&quot;font-bold text-white&quot;>${item.nombre} x${item.cantidad}</span>
+                </div>
+                <div class=&quot;flex items-center gap-2 mt-1&quot;>
+                  <span class=&quot;text-[10px] text-slate-400&quot;>${item.notas ? item.notas + ' • ' : ''}$${Number(item.precio).toFixed(2)} c/u</span>
+                  ${item.enviadoCocina
+                    ? `<span class=&quot;bg-emerald-950/60 text-emerald-300 border border-emerald-500/40 text-[9px] font-bold px-1.5 py-0.5 rounded flex items-center gap-1&quot;><i class=&quot;fa-solid fa-fire text-emerald-400&quot;></i> En Cocina (${item.horaEnvioCocina || item.hora || ''})</span>`
+                    : `<span class=&quot;bg-amber-950/60 text-amber-300 border border-amber-500/40 text-[9px] font-bold px-1.5 py-0.5 rounded flex items-center gap-1&quot;><i class=&quot;fa-solid fa-clock text-amber-400&quot;></i> Pendiente</span>`}
+                </div>
+              </div>
+              <span class=&quot;font-black text-emerald-400&quot;>$${itemSubtotal.toFixed(2)}</span>
+            `;
+          container.appendChild(row);
+        });
+      }
 
-    // 2. Consumos al Centro (Compartidos)
-    if (itemsCentro.length > 0) {
-    var hCentro = document.createElement('div');
-    hCentro.className = 'text-[11px] font-bold text-amber-400 mt-2.5 mb-1 flex items-center gap-1';
-    hCentro.innerHTML = `<i class=&quot;fa-solid fa-utensils text-[10px]&quot;></i> Al Centro (Compartido en Mesa):`;
-    container.appendChild(hCentro);
+      // 2. Consumos al Centro (Compartidos)
+      if (itemsCentro.length > 0) {
+        var hCentro = document.createElement('div');
+        hCentro.className = 'text-[11px] font-bold text-amber-400 mt-2.5 mb-1 flex items-center gap-1';
+        hCentro.innerHTML = `<i class=&quot;fa-solid fa-utensils text-[10px]&quot;></i> Al Centro (Compartido en Mesa):`;
+        container.appendChild(hCentro);
 
-    itemsCentro.forEach((item) => {
-    const itemSubtotal = item.precio * item.cantidad;
-    if (!item.enviadoCocina) pendientesCount++;
+        itemsCentro.forEach((item) => {
+          const itemSubtotal = item.precio * item.cantidad;
+          if (!item.enviadoCocina) pendientesCount++;
 
-    const row = document.createElement('div');
-    row.className = 'flex justify-between items-center bg-amber-950/20 p-2.5 rounded-xl border border-amber-500/30 text-xs mb-1.5';
-    row.innerHTML = `
-    <div>
-    <div class=&quot;flex items-center gap-1.5&quot;>
-    <span class=&quot;font-bold text-amber-200&quot;>${item.nombre} x${item.cantidad}</span>
-    <span class=&quot;text-[9px] font-bold bg-amber-500/20 text-amber-300 px-1.5 py-0.5 rounded&quot;>Centro</span>
-    </div>
-    <div class=&quot;flex items-center gap-2 mt-1&quot;>
-    <span class=&quot;text-[10px] text-slate-400&quot;>${item.notas ? item.notas + ' • ' : ''}$${Number(item.precio).toFixed(2)} c/u</span>
-    ${item.enviadoCocina
-    ? `<span class=&quot;bg-emerald-950/60 text-emerald-300 border border-emerald-500/40 text-[9px] font-bold px-1.5 py-0.5 rounded flex items-center gap-1&quot;><i class=&quot;fa-solid fa-fire text-emerald-400&quot;></i> En Cocina (${item.horaEnvioCocina || item.hora || ''})</span>`
-    : `<span class=&quot;bg-amber-950/60 text-amber-300 border border-amber-500/40 text-[9px] font-bold px-1.5 py-0.5 rounded flex items-center gap-1&quot;><i class=&quot;fa-solid fa-clock text-amber-400&quot;></i> Pendiente</span>`}
-    </div>
-    </div>
-    <span class=&quot;font-black text-amber-400&quot;>$${itemSubtotal.toFixed(2)}</span>
-    `;
-    container.appendChild(row);
-  });
-  }
-  }
+          const row = document.createElement('div');
+          row.className = 'flex justify-between items-center bg-amber-950/20 p-2.5 rounded-xl border border-amber-500/30 text-xs mb-1.5';
+          row.innerHTML = `
+              <div>
+                <div class=&quot;flex items-center gap-1.5&quot;>
+                  <span class=&quot;font-bold text-amber-200&quot;>${item.nombre} x${item.cantidad}</span>
+                  <span class=&quot;text-[9px] font-bold bg-amber-500/20 text-amber-300 px-1.5 py-0.5 rounded&quot;>Centro</span>
+                </div>
+                <div class=&quot;flex items-center gap-2 mt-1&quot;>
+                  <span class=&quot;text-[10px] text-slate-400&quot;>${item.notas ? item.notas + ' • ' : ''}$${Number(item.precio).toFixed(2)} c/u</span>
+                  ${item.enviadoCocina
+                    ? `<span class=&quot;bg-emerald-950/60 text-emerald-300 border border-emerald-500/40 text-[9px] font-bold px-1.5 py-0.5 rounded flex items-center gap-1&quot;><i class=&quot;fa-solid fa-fire text-emerald-400&quot;></i> En Cocina (${item.horaEnvioCocina || item.hora || ''})</span>`
+                    : `<span class=&quot;bg-amber-950/60 text-amber-300 border border-amber-500/40 text-[9px] font-bold px-1.5 py-0.5 rounded flex items-center gap-1&quot;><i class=&quot;fa-solid fa-clock text-amber-400&quot;></i> Pendiente</span>`}
+                </div>
+              </div>
+              <span class=&quot;font-black text-amber-400&quot;>$${itemSubtotal.toFixed(2)}</span>
+            `;
+          container.appendChild(row);
+        });
+      }
+    }
 
     const btnSendCocina = document.getElementById('btnClienteEnviarCocina');
     const btnSendCocinaTxt = document.getElementById('btnClienteEnviarCocinaTxt');
     if (btnSendCocina &amp;&amp; btnSendCocinaTxt) {
-    if (pendientesCount > 0) {
-    btnSendCocina.disabled = false;
-    btnSendCocina.style.opacity = '1';
-    btnSendCocina.style.cursor = 'pointer';
-    btnSendCocinaTxt.innerHTML = `<b>Enviar a Cocina / Barra</b> (${pendientesCount} pendiente${pendientesCount > 1 ? 's' : ''})`;
-  } else if (itemsSilla.length > 0 || itemsCentro.length > 0) {
-    btnSendCocina.disabled = true;
-    btnSendCocina.style.opacity = '0.65';
-    btnSendCocina.style.cursor = 'default';
-    btnSendCocinaTxt.innerHTML = `<i class=&quot;fa-solid fa-check-double&quot;></i> Todo enviado a Cocina`;
-  } else {
-    btnSendCocina.disabled = true;
-    btnSendCocina.style.opacity = '0.4';
-    btnSendCocina.style.cursor = 'not-allowed';
-    btnSendCocinaTxt.innerHTML = `Enviar a Cocina / Barra`;
-  }
-  }
+      if (pendientesCount > 0) {
+        btnSendCocina.disabled = false;
+        btnSendCocina.style.opacity = '1';
+        btnSendCocina.style.cursor = 'pointer';
+        btnSendCocinaTxt.innerHTML = `<b>Enviar a Cocina / Barra</b> (${pendientesCount} pendiente${pendientesCount > 1 ? 's' : ''})`;
+      } else if (itemsSilla.length > 0 || itemsCentro.length > 0) {
+        btnSendCocina.disabled = true;
+        btnSendCocina.style.opacity = '0.65';
+        btnSendCocina.style.cursor = 'default';
+        btnSendCocinaTxt.innerHTML = `<i class=&quot;fa-solid fa-check-double&quot;></i> Todo enviado a Cocina`;
+      } else {
+        btnSendCocina.disabled = true;
+        btnSendCocina.style.opacity = '0.4';
+        btnSendCocina.style.cursor = 'not-allowed';
+        btnSendCocinaTxt.innerHTML = `Enviar a Cocina / Barra`;
+      }
+    }
 
     window.recalcularTotalesCompletos();
   };
 
-    window.enviarPedidoClienteCocina = function () {
+  window.enviarPedidoClienteCocina = function () {
     var cuentas = getStorageCuentas();
     var mesaId = window.simMesaId || 1;
     var keySilla = mesaId + '-' + window.simSillaNum;
     var keyCentro = mesaId + '-centro';
+    var keyCentro0 = mesaId + '-0';
 
     var pendientesCount = 0;
     var nowStr = (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
     if (cuentas[keySilla] &amp;&amp; cuentas[keySilla].items) {
-    cuentas[keySilla].items.forEach(i => {
-    if (!i.enviadoCocina) {
-    i.enviadoCocina = true;
-    i.horaEnvioCocina = nowStr;
-    pendientesCount++;
-  }
-  });
-  }
+      cuentas[keySilla].items.forEach(i => {
+        if (!i.enviadoCocina) {
+          i.enviadoCocina = true;
+          i.horaEnvioCocina = nowStr;
+          pendientesCount++;
+        }
+      });
+    }
 
     if (cuentas[keyCentro] &amp;&amp; cuentas[keyCentro].items) {
-    cuentas[keyCentro].items.forEach(i => {
-    if (!i.enviadoCocina) {
-    i.enviadoCocina = true;
-    i.horaEnvioCocina = nowStr;
-    pendientesCount++;
-  }
-  });
-  }
+      cuentas[keyCentro].items.forEach(i => {
+        if (!i.enviadoCocina) {
+          i.enviadoCocina = true;
+          i.horaEnvioCocina = nowStr;
+          pendientesCount++;
+        }
+      });
+    }
+
+    if (cuentas[keyCentro0] &amp;&amp; cuentas[keyCentro0].items) {
+      cuentas[keyCentro0].items.forEach(i => {
+        if (!i.enviadoCocina) {
+          i.enviadoCocina = true;
+          i.horaEnvioCocina = nowStr;
+          pendientesCount++;
+        }
+      });
+    }
 
     if (pendientesCount === 0) {
-    alert('Todos tus productos ya fueron enviados a Cocina / Barra de Café.');
-    return;
-  }
+      alert('Todos tus productos ya fueron enviados a Cocina / Barra de Café.');
+      return;
+    }
 
     saveStorageCuentas(cuentas);
     window.renderCarrito();
+    if (typeof window.renderComandaLimpia === 'function') {
+      window.renderComandaLimpia();
+    }
 
     // Sincronizar estado &quot;Enviado a Cocina&quot; con el servidor en tiempo real
     try {
-    if (window.anvilSyncCuenta &amp;&amp; cuentas[keySilla]) {
-    window.anvilSyncCuenta(mesaId, window.simSillaNum, JSON.stringify(cuentas[keySilla].items || []), 'ocupada');
-  }
-  } catch (e) { }
+      if (window.anvilSyncCuenta) {
+        // 1. Sincronizar consumos de Mi Silla
+        if (cuentas[keySilla] &amp;&amp; cuentas[keySilla].items) {
+          window.anvilSyncCuenta(mesaId, window.simSillaNum, JSON.stringify(cuentas[keySilla].items || []), 'ocupada');
+        }
+        // 2. Sincronizar consumos Al Centro (silla 0)
+        var itemsCentro = (cuentas[keyCentro] &amp;&amp; cuentas[keyCentro].items) || (cuentas[keyCentro0] &amp;&amp; cuentas[keyCentro0].items) || [];
+        if (itemsCentro.length > 0) {
+          window.anvilSyncCuenta(mesaId, 0, JSON.stringify(itemsCentro), 'ocupada');
+        }
+      }
+    } catch (e) {
+      console.error('Error sincronizando envío a cocina:', e);
+    }
 
     alert(`🚀 ¡${pendientesCount} producto(s) enviados a Cocina / Barra de Café (${nowStr})! La preparación ha iniciado.`);
   };
 
-    window.renderAcompanantesMesa = function () {
+  window.renderAcompanantesMesa = function () {
     const container = document.getElementById('listaAcompanantesMesa');
     if (!container) return;
     container.innerHTML = '';
@@ -1750,65 +1817,65 @@
 
     var otrasSillas = [];
     for (var s = 1; s <= 4; s++) {
-    if (s !== miSilla) {
-    var k = mesaId + '-' + s;
-    var c = cuentas[k];
-    if (c &amp;&amp; c.items &amp;&amp; c.items.length > 0) {
-    var tot = 0;
-    c.items.forEach(function (i) { tot += i.precio * i.cantidad; });
-    otrasSillas.push({ sillaNum: s, cuenta: c, total: tot });
-  }
-  }
-  }
+      if (s !== miSilla) {
+        var k = mesaId + '-' + s;
+        var c = cuentas[k];
+        if (c &amp;&amp; c.items &amp;&amp; c.items.length > 0) {
+          var tot = 0;
+          c.items.forEach(function (i) { tot += i.precio * i.cantidad; });
+          otrasSillas.push({ sillaNum: s, cuenta: c, total: tot });
+        }
+      }
+    }
 
     if (otrasSillas.length === 0) {
-    container.innerHTML = `<div class=&quot;text-slate-500 text-[11px] py-2&quot;>No hay otras sillas con consumos en tu mesa.</div>`;
-    return;
-  }
+      container.innerHTML = `<div class=&quot;text-slate-500 text-[11px] py-2&quot;>No hay otras sillas con consumos en tu mesa.</div>`;
+      return;
+    }
 
     otrasSillas.forEach(item => {
-    const isSelected = window.sillasAcompanantesSeleccionadas.includes(item.sillaNum);
-    const row = document.createElement('label');
-    row.className = `flex items-center justify-between p-2 rounded-xl border transition cursor-pointer ${isSelected ? 'bg-emerald-950/40 border-emerald-500/40 text-emerald-300' : 'bg-slate-900/60 border-slate-800 text-slate-400'}`;
+      const isSelected = window.sillasAcompanantesSeleccionadas.includes(item.sillaNum);
+      const row = document.createElement('label');
+      row.className = `flex items-center justify-between p-2 rounded-xl border transition cursor-pointer ${isSelected ? 'bg-emerald-950/40 border-emerald-500/40 text-emerald-300' : 'bg-slate-900/60 border-slate-800 text-slate-400'}`;
 
-    row.innerHTML = `
-    <div class=&quot;flex items-center gap-2&quot;>
-    <input type=&quot;checkbox&quot; onchange=&quot;window.toggleAcompanante(${item.sillaNum})&quot; ${isSelected ? 'checked' : ''} class=&quot;rounded text-emerald-500 focus:ring-0&quot;>
-    <span class=&quot;font-bold text-xs&quot;>Silla ${item.sillaNum} ${item.cuenta.comensalNombre ? '(' + item.cuenta.comensalNombre + ')' : ''}</span>
-    </div>
-    <span class=&quot;font-bold text-xs text-white&quot;>$${item.total.toFixed(2)}</span>
-    `;
-    container.appendChild(row);
-  });
+      row.innerHTML = `
+          <div class=&quot;flex items-center gap-2&quot;>
+            <input type=&quot;checkbox&quot; onchange=&quot;window.toggleAcompanante(${item.sillaNum})&quot; ${isSelected ? 'checked' : ''} class=&quot;rounded text-emerald-500 focus:ring-0&quot;>
+            <span class=&quot;font-bold text-xs&quot;>Silla ${item.sillaNum} ${item.cuenta.comensalNombre ? '(' + item.cuenta.comensalNombre + ')' : ''}</span>
+          </div>
+          <span class=&quot;font-bold text-xs text-white&quot;>$${item.total.toFixed(2)}</span>
+        `;
+      container.appendChild(row);
+    });
   };
 
-    window.toggleAcompanante = function (sillaNum) {
+  window.toggleAcompanante = function (sillaNum) {
     const idx = window.sillasAcompanantesSeleccionadas.indexOf(sillaNum);
     if (idx > -1) {
-    window.sillasAcompanantesSeleccionadas.splice(idx, 1);
-  } else {
-    window.sillasAcompanantesSeleccionadas.push(sillaNum);
-  }
+      window.sillasAcompanantesSeleccionadas.splice(idx, 1);
+    } else {
+      window.sillasAcompanantesSeleccionadas.push(sillaNum);
+    }
     window.renderAcompanantesMesa();
     window.recalcularTotalesCompletos();
   };
 
-    window.seleccionarTodosAcompanantes = function () {
+  window.seleccionarTodosAcompanantes = function () {
     var cuentas = getStorageCuentas();
     var mesaId = window.simMesaId;
     var miSilla = window.simSillaNum;
     var all = [];
     for (var s = 1; s <= 4; s++) {
-    if (s !== miSilla &amp;&amp; cuentas[mesaId + '-' + s] &amp;&amp; cuentas[mesaId + '-' + s].items &amp;&amp; cuentas[mesaId + '-' + s].items.length > 0) {
-    all.push(s);
-  }
-  }
+      if (s !== miSilla &amp;&amp; cuentas[mesaId + '-' + s] &amp;&amp; cuentas[mesaId + '-' + s].items &amp;&amp; cuentas[mesaId + '-' + s].items.length > 0) {
+        all.push(s);
+      }
+    }
     window.sillasAcompanantesSeleccionadas = all;
     window.renderAcompanantesMesa();
     window.recalcularTotalesCompletos();
   };
 
-    window.recalcularTotalesCompletos = function () {
+  window.recalcularTotalesCompletos = function () {
     var cuentas = getStorageCuentas();
     var mesaId = window.simMesaId || 1;
     var miSilla = window.simSillaNum || 1;
@@ -1818,22 +1885,22 @@
     // 1. Mi Silla
     var keySilla = mesaId + '-' + miSilla;
     if (cuentas[keySilla] &amp;&amp; cuentas[keySilla].items) {
-    cuentas[keySilla].items.forEach(function (it) { subtotalNeto += it.precio * it.cantidad; });
-  }
+      cuentas[keySilla].items.forEach(function (it) { subtotalNeto += it.precio * it.cantidad; });
+    }
 
     // 2. Al Centro
     var keyCentro = mesaId + '-centro';
     if (cuentas[keyCentro] &amp;&amp; cuentas[keyCentro].items) {
-    cuentas[keyCentro].items.forEach(function (it) { subtotalNeto += it.precio * it.cantidad; });
-  }
+      cuentas[keyCentro].items.forEach(function (it) { subtotalNeto += it.precio * it.cantidad; });
+    }
 
     // 3. Acompañantes
     (window.sillasAcompanantesSeleccionadas || []).forEach(function (s) {
-    var k = mesaId + '-' + s;
-    if (cuentas[k] &amp;&amp; cuentas[k].items) {
-    cuentas[k].items.forEach(function (it) { subtotalNeto += it.precio * it.cantidad; });
-  }
-  });
+      var k = mesaId + '-' + s;
+      if (cuentas[k] &amp;&amp; cuentas[k].items) {
+        cuentas[k].items.forEach(function (it) { subtotalNeto += it.precio * it.cantidad; });
+      }
+    });
 
     var iva = subtotalNeto * 0.16;
     var propina = subtotalNeto * 0.10;
@@ -1847,12 +1914,12 @@
     var lblSubtotalDetalle = document.getElementById('lblSubtotalDetalle');
 
     if (lblSubtotalDetalle) {
-    if (window.sillasAcompanantesSeleccionadas.length > 0) {
-    lblSubtotalDetalle.innerText = `Subtotal (Silla ${miSilla} + Centro + ${window.sillasAcompanantesSeleccionadas.length} Acompañantes):`;
-  } else {
-    lblSubtotalDetalle.innerText = `Subtotal (Silla ${miSilla} + Centro):`;
-  }
-  }
+      if (window.sillasAcompanantesSeleccionadas.length > 0) {
+        lblSubtotalDetalle.innerText = `Subtotal (Silla ${miSilla} + Centro + ${window.sillasAcompanantesSeleccionadas.length} Acompañantes):`;
+      } else {
+        lblSubtotalDetalle.innerText = `Subtotal (Silla ${miSilla} + Centro):`;
+      }
+    }
 
     if (txtSubtotal) txtSubtotal.innerText = `$${subtotalNeto.toFixed(2)}`;
     if (txtIVA) txtIVA.innerText = `$${iva.toFixed(2)}`;
@@ -1869,13 +1936,13 @@
     var itemsCount = 0;
     var pendientesCount = 0;
     if (cuentas[keySilla] &amp;&amp; cuentas[keySilla].items) {
-    itemsCount += cuentas[keySilla].items.length;
-    cuentas[keySilla].items.forEach(function(i) { if (!i.enviadoCocina) pendientesCount++; });
-  }
+      itemsCount += cuentas[keySilla].items.length;
+      cuentas[keySilla].items.forEach(function(i) { if (!i.enviadoCocina) pendientesCount++; });
+    }
     if (cuentas[keyCentro] &amp;&amp; cuentas[keyCentro].items) {
-    itemsCount += cuentas[keyCentro].items.length;
-    cuentas[keyCentro].items.forEach(function(i) { if (!i.enviadoCocina) pendientesCount++; });
-  }
+      itemsCount += cuentas[keyCentro].items.length;
+      cuentas[keyCentro].items.forEach(function(i) { if (!i.enviadoCocina) pendientesCount++; });
+    }
 
     var lblStickyTit = document.getElementById('lblStickyComandaTitulo');
     var lblStickySub = document.getElementById('lblStickyComandaSubtitulo');
@@ -1883,41 +1950,41 @@
 
     if (lblStickyTot) lblStickyTot.innerText = `$${total.toFixed(2)}`;
     if (lblStickyTit) {
-    if (itemsCount === 0) {
-    lblStickyTit.innerHTML = `Mi Comanda: <span class=&quot;text-slate-400 font-semibold&quot;>Sin pedidos aún</span>`;
-  } else {
-    lblStickyTit.innerHTML = `Mi Comanda: <b class=&quot;text-emerald-400&quot;>${itemsCount} producto${itemsCount > 1 ? 's' : ''}</b> ${pendientesCount > 0 ? `<span class=&quot;text-amber-400 text-[10px] font-bold&quot;>(${pendientesCount} pendiente${pendientesCount > 1 ? 's' : ''})</span>` : `<span class=&quot;text-sky-400 text-[10px] font-bold&quot;>✓ En Cocina</span>`}`;
-  }
-  }
+      if (itemsCount === 0) {
+        lblStickyTit.innerHTML = `Mi Comanda: <span class=&quot;text-slate-400 font-semibold&quot;>Sin pedidos aún</span>`;
+      } else {
+        lblStickyTit.innerHTML = `Mi Comanda: <b class=&quot;text-emerald-400&quot;>${itemsCount} producto${itemsCount > 1 ? 's' : ''}</b> ${pendientesCount > 0 ? `<span class=&quot;text-amber-400 text-[10px] font-bold&quot;>(${pendientesCount} pendiente${pendientesCount > 1 ? 's' : ''})</span>` : `<span class=&quot;text-sky-400 text-[10px] font-bold&quot;>✓ En Cocina</span>`}`;
+      }
+    }
     if (lblStickySub) {
-    if (itemsCount === 0) {
-    lblStickySub.innerText = `Mesa ${mesaId} • Silla ${miSilla} • Selecciona platillos para agregar a tu cuenta`;
-  } else {
-    lblStickySub.innerText = `Mesa ${mesaId} • Silla ${miSilla} • Total acumulado con IVA: $${total.toFixed(2)}`;
-  }
-  }
+      if (itemsCount === 0) {
+        lblStickySub.innerText = `Mesa ${mesaId} • Silla ${miSilla} • Selecciona platillos para agregar a tu cuenta`;
+      } else {
+        lblStickySub.innerText = `Mesa ${mesaId} • Silla ${miSilla} • Total acumulado con IVA: $${total.toFixed(2)}`;
+      }
+    }
   };
 
-    window.modoPagoCliente = 'solo_yo'; // 'solo_yo' | 'incluir_ninos' | 'toda_mesa'
+  window.modoPagoCliente = 'solo_yo'; // 'solo_yo' | 'incluir_ninos' | 'toda_mesa'
 
-    window.abrirModalCobroCliente = function (metodo) {
+  window.abrirModalCobroCliente = function (metodo) {
     const modal = document.getElementById('modalCobroCliente');
     if (modal) {
-    modal.classList.remove('hidden');
-    modal.classList.add('flex');
-  }
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
     window.setModoPagoCliente(window.modoPagoCliente || 'solo_yo');
   };
 
-    window.cerrarModalCobroCliente = function () {
+  window.cerrarModalCobroCliente = function () {
     const modal = document.getElementById('modalCobroCliente');
     if (modal) {
-    modal.classList.add('hidden');
-    modal.classList.remove('flex');
-  }
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
   };
 
-    window.setModoPagoCliente = function (modo) {
+  window.setModoPagoCliente = function (modo) {
     window.modoPagoCliente = modo;
     const btnSoloYo = document.getElementById('btnModoSoloYo');
     const btnNinos = document.getElementById('btnModoNinos');
@@ -1927,10 +1994,10 @@
     const inactiveCls = 'bg-slate-800 text-slate-300 border-slate-700';
 
     [btnSoloYo, btnNinos, btnToda].forEach(b => {
-    if (b) {
-    b.className = 'p-2 rounded-lg font-bold border text-center transition cursor-pointer ' + inactiveCls;
-  }
-  });
+      if (b) {
+        b.className = 'p-2 rounded-lg font-bold border text-center transition cursor-pointer ' + inactiveCls;
+      }
+    });
 
     if (modo === 'solo_yo' &amp;&amp; btnSoloYo) btnSoloYo.className = 'p-2 rounded-lg font-bold border text-center transition cursor-pointer ' + activeCls;
     if (modo === 'incluir_ninos' &amp;&amp; btnNinos) btnNinos.className = 'p-2 rounded-lg font-bold border text-center transition cursor-pointer ' + activeCls;
@@ -1939,7 +2006,7 @@
     window.renderDetalleModalCobro();
   };
 
-    window.renderDetalleModalCobro = function () {
+  window.renderDetalleModalCobro = function () {
     const container = document.getElementById('modalItemsDesglose');
     const subtotalEl = document.getElementById('modalSubtotal');
     const ivaEl = document.getElementById('modalIVA');
@@ -1955,45 +2022,45 @@
 
     var keysAIncluir = [mesaId + '-' + miSilla, mesaId + '-centro'];
     if (window.modoPagoCliente === 'incluir_ninos') {
-    (window.sillasAcompanantesSeleccionadas || []).forEach(s => keysAIncluir.push(mesaId + '-' + s));
-  } else if (window.modoPagoCliente === 'toda_mesa') {
-    for (var s = 1; s <= 4; s++) keysAIncluir.push(mesaId + '-' + s);
-  }
+      (window.sillasAcompanantesSeleccionadas || []).forEach(s => keysAIncluir.push(mesaId + '-' + s));
+    } else if (window.modoPagoCliente === 'toda_mesa') {
+      for (var s = 1; s <= 4; s++) keysAIncluir.push(mesaId + '-' + s);
+    }
     keysAIncluir = keysAIncluir.filter((v, i, a) => a.indexOf(v) === i);
 
     var totalNeto = 0;
 
     keysAIncluir.forEach(k => {
-    var c = cuentas[k];
-    if (!c || !c.items || c.items.length === 0) return;
+      var c = cuentas[k];
+      if (!c || !c.items || c.items.length === 0) return;
 
-    var subBlock = 0;
-    var block = document.createElement('div');
-    block.className = 'p-2.5 rounded-xl bg-slate-950/60 border border-slate-800/80 mb-2';
+      var subBlock = 0;
+      var block = document.createElement('div');
+      block.className = 'p-2.5 rounded-xl bg-slate-950/60 border border-slate-800/80 mb-2';
 
-    var h = document.createElement('div');
-    h.className = 'flex justify-between items-center font-bold text-emerald-400 mb-1';
-    var nom = c.esCentro ? 'Al Centro (Compartido)' : `Silla ${c.sillaNum}`;
-    h.innerHTML = `<span>${nom}</span><span class=&quot;text-[10px] text-slate-500&quot;>QR: #${c.qrId || 'PV-0' + mesaId}</span>`;
-    block.appendChild(h);
+      var h = document.createElement('div');
+      h.className = 'flex justify-between items-center font-bold text-emerald-400 mb-1';
+      var nom = c.esCentro ? 'Al Centro (Compartido)' : `Silla ${c.sillaNum}`;
+      h.innerHTML = `<span>${nom}</span><span class=&quot;text-[10px] text-slate-500&quot;>QR: #${c.qrId || 'PV-0' + mesaId}</span>`;
+      block.appendChild(h);
 
-    c.items.forEach(it => {
-    var itTotal = it.precio * it.cantidad;
-    subBlock += itTotal;
-    totalNeto += itTotal;
-    var row = document.createElement('div');
-    row.className = 'flex justify-between text-slate-300 py-0.5 text-xs';
-    row.innerHTML = `<span>${it.cantidad}x ${it.nombre}</span><span>$${itTotal.toFixed(2)}</span>`;
-    block.appendChild(row);
-  });
+      c.items.forEach(it => {
+        var itTotal = it.precio * it.cantidad;
+        subBlock += itTotal;
+        totalNeto += itTotal;
+        var row = document.createElement('div');
+        row.className = 'flex justify-between text-slate-300 py-0.5 text-xs';
+        row.innerHTML = `<span>${it.cantidad}x ${it.nombre}</span><span>$${itTotal.toFixed(2)}</span>`;
+        block.appendChild(row);
+      });
 
-    var subRow = document.createElement('div');
-    subRow.className = 'flex justify-between text-slate-400 font-bold pt-1 mt-1 border-t border-slate-900 text-[11px]';
-    subRow.innerHTML = `<span>Subtotal ${nom}:</span><span class=&quot;text-amber-400&quot;>$${subBlock.toFixed(2)}</span>`;
-    block.appendChild(subRow);
+      var subRow = document.createElement('div');
+      subRow.className = 'flex justify-between text-slate-400 font-bold pt-1 mt-1 border-t border-slate-900 text-[11px]';
+      subRow.innerHTML = `<span>Subtotal ${nom}:</span><span class=&quot;text-amber-400&quot;>$${subBlock.toFixed(2)}</span>`;
+      block.appendChild(subRow);
 
-    container.appendChild(block);
-  });
+      container.appendChild(block);
+    });
 
     var iva = totalNeto * 0.16;
     var propina = totalNeto * 0.10;
@@ -2005,34 +2072,34 @@
     if (totalEl) totalEl.innerText = `$${granTotal.toFixed(2)}`;
   };
 
-    window.ejecutarPagoFinal = function (metodo) {
+  window.ejecutarPagoFinal = function (metodo) {
     var cuentas = getStorageCuentas();
     var mesaId = window.simMesaId || 1;
     var miSilla = window.simSillaNum || 1;
 
     var keysAIncluir = [mesaId + '-' + miSilla, mesaId + '-centro'];
     if (window.modoPagoCliente === 'incluir_ninos') {
-    (window.sillasAcompanantesSeleccionadas || []).forEach(s => keysAIncluir.push(mesaId + '-' + s));
-  } else if (window.modoPagoCliente === 'toda_mesa') {
-    for (var s = 1; s <= 4; s++) keysAIncluir.push(mesaId + '-' + s);
-  }
+      (window.sillasAcompanantesSeleccionadas || []).forEach(s => keysAIncluir.push(mesaId + '-' + s));
+    } else if (window.modoPagoCliente === 'toda_mesa') {
+      for (var s = 1; s <= 4; s++) keysAIncluir.push(mesaId + '-' + s);
+    }
     keysAIncluir = keysAIncluir.filter((v, i, a) => a.indexOf(v) === i);
 
     var totalText = document.getElementById('modalTotal') ? document.getElementById('modalTotal').innerText : '$0.00';
 
     if (confirm(`¿Confirmar liquidación vía ${metodo.toUpperCase()} para Mesa ${mesaId} por ${totalText}?`)) {
-    keysAIncluir.forEach(function (k) {
-    delete cuentas[k];
-  });
+      keysAIncluir.forEach(function (k) {
+        delete cuentas[k];
+      });
 
-    saveStorageCuentas(cuentas);
-    window.cerrarModalCobroCliente();
-    window.sincronizarCuentaDesdeStorage();
-    alert(`🎉 ¡Pago de ${totalText} procesado con éxito vía ${metodo.toUpperCase()}! Gracias por tu visita a La Terraza V&amp;S.`);
-  }
+      saveStorageCuentas(cuentas);
+      window.cerrarModalCobroCliente();
+      window.sincronizarCuentaDesdeStorage();
+      alert(`🎉 ¡Pago de ${totalText} procesado con éxito vía ${metodo.toUpperCase()}! Gracias por tu visita a La Terraza V&amp;S.`);
+    }
   };
 
-    window.cargarDatosMenu = function (productos, categorias) {
+  window.cargarDatosMenu = function (productos, categorias) {
     if (productos) window.vsMenuData = productos;
     if (categorias) window.vsCategoriasData = categorias;
     if (typeof window.renderCategoriasGrid === 'function') window.renderCategoriasGrid();
@@ -2040,7 +2107,7 @@
     window.filtrarProductos();
   };
 
-    window.renderCategoriasChips = function () {
+  window.renderCategoriasChips = function () {
     const container = document.getElementById('categoriesChips');
     if (!container) return;
     container.innerHTML = '';
@@ -2052,16 +2119,16 @@
     container.appendChild(allBtn);
 
     (window.vsCategoriasData || []).forEach(cat => {
-    const btn = document.createElement('button');
-    const isActive = (window.categoriaActual === cat.nombre);
-    btn.className = `cat-chip ${isActive ? 'active bg-emerald-500 text-slate-950 font-black shadow-md shadow-emerald-500/20' : 'bg-slate-900/80 text-slate-300 border border-slate-700 hover:bg-slate-800'} px-4 py-2 text-xs font-bold rounded-xl whitespace-nowrap transition flex items-center gap-1.5 cursor-pointer`;
-    btn.innerHTML = `<span>${cat.icono || '🍽️'}</span> <span>${cat.nombre}</span>`;
-    btn.onclick = () => window.seleccionarCategoria(cat.nombre);
-    container.appendChild(btn);
-  });
+      const btn = document.createElement('button');
+      const isActive = (window.categoriaActual === cat.nombre);
+      btn.className = `cat-chip ${isActive ? 'active bg-emerald-500 text-slate-950 font-black shadow-md shadow-emerald-500/20' : 'bg-slate-900/80 text-slate-300 border border-slate-700 hover:bg-slate-800'} px-4 py-2 text-xs font-bold rounded-xl whitespace-nowrap transition flex items-center gap-1.5 cursor-pointer`;
+      btn.innerHTML = `<span>${cat.icono || '🍽️'}</span> <span>${cat.nombre}</span>`;
+      btn.onclick = () => window.seleccionarCategoria(cat.nombre);
+      container.appendChild(btn);
+    });
   };
 
-    window.seleccionarCategoria = function (catNombre, catIcono) {
+  window.seleccionarCategoria = function (catNombre, catIcono) {
     window.categoriaActual = catNombre;
 
     // Cambiar a sub-vista B (productos)
@@ -2092,7 +2159,7 @@
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-    window.filtrarProductos = function () {
+  window.filtrarProductos = function () {
     const container = document.getElementById('productsGridContainer');
     if (!container) return;
     container.innerHTML = '';
@@ -2101,60 +2168,60 @@
     const catActual = window.categoriaActual;
 
     const filtrados = (window.vsMenuData || []).filter(prod => {
-    const matchCat = (!catActual || catActual === 'Todos' || prod.categoria_nombre === catActual);
-    const matchText = prod.nombre.toLowerCase().includes(query) || (prod.descripcion &amp;&amp; prod.descripcion.toLowerCase().includes(query));
-    return matchCat &amp;&amp; matchText;
-  });
+      const matchCat = (!catActual || catActual === 'Todos' || prod.categoria_nombre === catActual);
+      const matchText = prod.nombre.toLowerCase().includes(query) || (prod.descripcion &amp;&amp; prod.descripcion.toLowerCase().includes(query));
+      return matchCat &amp;&amp; matchText;
+    });
 
     if (filtrados.length === 0) {
-    container.innerHTML = `<div class=&quot;text-center py-12 text-slate-500 text-sm col-span-2&quot;>No se encontraron platillos o bebidas disponibles</div>`;
-    return;
-  }
+      container.innerHTML = `<div class=&quot;text-center py-12 text-slate-500 text-sm col-span-2&quot;>No se encontraron platillos o bebidas disponibles</div>`;
+      return;
+    }
 
     const isCentro = (window.destinoPedido === 'centro');
     const destSilla = (window.destinoPedido === 'mi_silla' || !window.destinoPedido) ? window.simSillaNum : window.destinoPedido;
     const btnTxt = isCentro
-    ? '<i class=&quot;fa-solid fa-utensils text-amber-400&quot;></i> Al Centro (Compartir)'
-    : `<i class=&quot;fa-solid fa-plus text-emerald-400&quot;></i> Agregar a Silla ${destSilla}`;
+      ? '<i class=&quot;fa-solid fa-utensils text-amber-400&quot;></i> Al Centro (Compartir)'
+      : `<i class=&quot;fa-solid fa-plus text-emerald-400&quot;></i> Agregar a Silla ${destSilla}`;
     const btnClass = isCentro
-    ? 'flex-1 py-2 px-3 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer shadow-sm'
-    : 'flex-1 py-2 px-3 rounded-xl bg-emerald-600/30 hover:bg-emerald-500/40 text-emerald-300 border border-emerald-500/30 text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer shadow-sm';
+      ? 'flex-1 py-2 px-3 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer shadow-sm'
+      : 'flex-1 py-2 px-3 rounded-xl bg-emerald-600/30 hover:bg-emerald-500/40 text-emerald-300 border border-emerald-500/30 text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer shadow-sm';
 
     filtrados.forEach(prod => {
-    const card = document.createElement('div');
-    card.className = 'glass-card p-4 rounded-2xl flex flex-col justify-between hover:border-emerald-500/50 transition gap-3';
+      const card = document.createElement('div');
+      card.className = 'glass-card p-4 rounded-2xl flex flex-col justify-between hover:border-emerald-500/50 transition gap-3';
 
-    card.innerHTML = `
-    <div class=&quot;flex items-start gap-3 cursor-pointer&quot; onclick=&quot;window.abrirModalPersonalizar(${prod.id});&quot;>
-    <div class=&quot;w-12 h-12 rounded-xl bg-slate-800/90 border border-slate-700 flex items-center justify-center text-2xl flex-shrink-0&quot;>
-    ${prod.icono || '🍲'}
-    </div>
-    <div class=&quot;flex-1 min-w-0&quot;>
-    <div class=&quot;flex justify-between items-start&quot;>
-    <h3 class=&quot;text-sm font-bold text-white tracking-tight truncate&quot;>${prod.nombre}</h3>
-    <span class=&quot;text-sm font-black text-emerald-400 ml-2&quot;>$${Number(prod.precio_unitario).toFixed(2)}</span>
-    </div>
-    <p class=&quot;text-[11px] text-slate-400 mt-1 line-clamp-2&quot;>${prod.descripcion || ''}</p>
-    <div class=&quot;flex items-center gap-2 mt-2&quot;>
-    <span class=&quot;text-[10px] text-amber-400 font-bold bg-amber-500/10 px-2 py-0.5 rounded-md border border-amber-500/20&quot;>⭐ Gourmet</span>
-    <span class=&quot;text-[10px] text-slate-400 font-semibold&quot;>${prod.categoria_nombre || ''}</span>
-    </div>
-    </div>
-    </div>
-    <div class=&quot;flex items-center justify-between gap-2 pt-2 border-t border-slate-800/80&quot;>
-    <button onclick=&quot;window.abrirModalPersonalizar(${prod.id});&quot; class=&quot;py-2 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-sky-400 border border-slate-700 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer&quot;>
-    <i class=&quot;fa-solid fa-sliders&quot;></i> Personalizar
-    </button>
-    <button onclick=&quot;window.agregarAlCarritoDirecto(${prod.id})&quot; class=&quot;${btnClass}&quot;>
-    ${btnTxt}
-    </button>
-    </div>
-    `;
-    container.appendChild(card);
-  });
+      card.innerHTML = `
+          <div class=&quot;flex items-start gap-3 cursor-pointer&quot; onclick=&quot;window.abrirModalPersonalizar(${prod.id});&quot;>
+            <div class=&quot;w-12 h-12 rounded-xl bg-slate-800/90 border border-slate-700 flex items-center justify-center text-2xl flex-shrink-0&quot;>
+              ${prod.icono || '🍲'}
+            </div>
+            <div class=&quot;flex-1 min-w-0&quot;>
+              <div class=&quot;flex justify-between items-start&quot;>
+                <h3 class=&quot;text-sm font-bold text-white tracking-tight truncate&quot;>${prod.nombre}</h3>
+                <span class=&quot;text-sm font-black text-emerald-400 ml-2&quot;>$${Number(prod.precio_unitario).toFixed(2)}</span>
+              </div>
+              <p class=&quot;text-[11px] text-slate-400 mt-1 line-clamp-2&quot;>${prod.descripcion || ''}</p>
+              <div class=&quot;flex items-center gap-2 mt-2&quot;>
+                <span class=&quot;text-[10px] text-amber-400 font-bold bg-amber-500/10 px-2 py-0.5 rounded-md border border-amber-500/20&quot;>⭐ Gourmet</span>
+                <span class=&quot;text-[10px] text-slate-400 font-semibold&quot;>${prod.categoria_nombre || ''}</span>
+              </div>
+            </div>
+          </div>
+          <div class=&quot;flex items-center justify-between gap-2 pt-2 border-t border-slate-800/80&quot;>
+            <button onclick=&quot;window.abrirModalPersonalizar(${prod.id});&quot; class=&quot;py-2 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-sky-400 border border-slate-700 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer&quot;>
+              <i class=&quot;fa-solid fa-sliders&quot;></i> Personalizar
+            </button>
+            <button onclick=&quot;window.agregarAlCarritoDirecto(${prod.id})&quot; class=&quot;${btnClass}&quot;>
+              ${btnTxt}
+            </button>
+          </div>
+        `;
+      container.appendChild(card);
+    });
   };
 
-    window.modalPersonalizacionState = {
+  window.modalPersonalizacionState = {
     prod: null,
     cantidad: 1,
     termino: '',
@@ -2163,18 +2230,18 @@
     extraPrecioTotal: 0
   };
 
-    window.abrirModalPersonalizar = function(prodId) {
+  window.abrirModalPersonalizar = function(prodId) {
     const prod = (window.vsMenuData || []).find(p => p.id === prodId);
     if (!prod) return;
 
     window.modalPersonalizacionState = {
-    prod: prod,
-    cantidad: 1,
-    termino: '',
-    preferencias: [],
-    extras: [],
-    extraPrecioTotal: 0
-  };
+      prod: prod,
+      cantidad: 1,
+      termino: '',
+      preferencias: [],
+      extras: [],
+      extraPrecioTotal: 0
+    };
 
     document.getElementById('cliRecetaIcono').innerText = prod.icono || '🍳';
     document.getElementById('cliRecetaCategoria').innerText = prod.categoria_nombre || 'Especialidades';
@@ -2194,38 +2261,38 @@
     const nomLower = (prod.nombre || '').toLowerCase();
 
     if (nomLower.includes('huevo') || nomLower.includes('omelette')) {
-    opcionesTermino = ['🍳 Revueltos', '🍳 Estrellados tiernos', '🍳 Bien cocidos', '🍳 Con yema tierna líquida', '🍳 En Omelette'];
-  } else if (nomLower.includes('café') || nomLower.includes('capuchino') || nomLower.includes('latte')) {
-    opcionesTermino = ['☕ Caliente tradicional', '🧊 Frappé / Frío (+ $10)', '🥛 Con leche entera', '🥛 Con leche deslactosada', '🥥 Leche de almendra (+ $15)'];
-  } else if (nomLower.includes('chilaquiles') || nomLower.includes('molletes') || nomLower.includes('enchiladas')) {
-    opcionesTermino = ['🌿 Salsa Verde clásica', '🍅 Salsa Roja tatemada', '🌶️ Salsa Pasilla suave', '🔥 Salsa Habanero extra'];
-  } else if (nomLower.includes('rib eye') || nomLower.includes('carne') || nomLower.includes('corte')) {
-    opcionesTermino = ['🥩 Término Medio (Jugoso)', '🥩 Tres Cuartos', '🥩 Bien Cocido'];
-  } else if (nomLower.includes('jugo')) {
-    opcionesTermino = ['🥤 Con hielo', '🥤 Sin hielo / Al tiempo', '🥤 Sin azúcar / Natural'];
-  }
+      opcionesTermino = ['🍳 Revueltos', '🍳 Estrellados tiernos', '🍳 Bien cocidos', '🍳 Con yema tierna líquida', '🍳 En Omelette'];
+    } else if (nomLower.includes('café') || nomLower.includes('capuchino') || nomLower.includes('latte')) {
+      opcionesTermino = ['☕ Caliente tradicional', '🧊 Frappé / Frío (+ $10)', '🥛 Con leche entera', '🥛 Con leche deslactosada', '🥥 Leche de almendra (+ $15)'];
+    } else if (nomLower.includes('chilaquiles') || nomLower.includes('molletes') || nomLower.includes('enchiladas')) {
+      opcionesTermino = ['🌿 Salsa Verde clásica', '🍅 Salsa Roja tatemada', '🌶️ Salsa Pasilla suave', '🔥 Salsa Habanero extra'];
+    } else if (nomLower.includes('rib eye') || nomLower.includes('carne') || nomLower.includes('corte')) {
+      opcionesTermino = ['🥩 Término Medio (Jugoso)', '🥩 Tres Cuartos', '🥩 Bien Cocido'];
+    } else if (nomLower.includes('jugo')) {
+      opcionesTermino = ['🥤 Con hielo', '🥤 Sin hielo / Al tiempo', '🥤 Sin azúcar / Natural'];
+    }
 
     if (opcionesTermino.length > 0) {
-    boxTermino.style.display = 'flex';
-    window.modalPersonalizacionState.termino = opcionesTermino[0];
-    opcionesTermino.forEach((opt, idx) => {
-    const chip = document.createElement('button');
-    chip.type = 'button';
-    chip.className = `px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer border ${idx === 0 ? 'bg-amber-500/30 text-amber-300 border-amber-500/60 shadow-sm' : 'bg-slate-900/80 text-slate-300 border-slate-700 hover:border-slate-500'}`;
-    chip.innerText = opt;
-    chip.onclick = function() {
-    window.modalPersonalizacionState.termino = opt;
-    Array.from(containerTermino.children).forEach(c => {
-    c.className = 'px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer border bg-slate-900/80 text-slate-300 border-slate-700 hover:border-slate-500';
-  });
-    chip.className = 'px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer border bg-amber-500/30 text-amber-300 border-amber-500/60 shadow-sm';
-    window.actualizarModalPersonalizarUI();
-  };
-    containerTermino.appendChild(chip);
-  });
-  } else {
-    boxTermino.style.display = 'none';
-  }
+      boxTermino.style.display = 'flex';
+      window.modalPersonalizacionState.termino = opcionesTermino[0];
+      opcionesTermino.forEach((opt, idx) => {
+        const chip = document.createElement('button');
+        chip.type = 'button';
+        chip.className = `px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer border ${idx === 0 ? 'bg-amber-500/30 text-amber-300 border-amber-500/60 shadow-sm' : 'bg-slate-900/80 text-slate-300 border-slate-700 hover:border-slate-500'}`;
+        chip.innerText = opt;
+        chip.onclick = function() {
+          window.modalPersonalizacionState.termino = opt;
+          Array.from(containerTermino.children).forEach(c => {
+            c.className = 'px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer border bg-slate-900/80 text-slate-300 border-slate-700 hover:border-slate-500';
+          });
+          chip.className = 'px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer border bg-amber-500/30 text-amber-300 border-amber-500/60 shadow-sm';
+          window.actualizarModalPersonalizarUI();
+        };
+        containerTermino.appendChild(chip);
+      });
+    } else {
+      boxTermino.style.display = 'none';
+    }
 
     // 2. Chips de Preferencias / Quitar
     const containerPref = document.getElementById('chipsPreferenciasContainer');
@@ -2233,66 +2300,66 @@
     const prefsList = ['🚫 Sin cebolla', '🌶️ Salsa aparte / Sin picante', '🌿 Sin cilantro', '🫘 Sin frijoles', '🥛 Sin lácteos / Sin crema', '🧂 Poca sal'];
 
     prefsList.forEach(pref => {
-    const chip = document.createElement('button');
-    chip.type = 'button';
-    chip.className = 'px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer border bg-slate-900/80 text-slate-300 border-slate-700 hover:border-slate-500';
-    chip.innerText = pref;
-    chip.onclick = function() {
-    const idx = window.modalPersonalizacionState.preferencias.indexOf(pref);
-    if (idx === -1) {
-    window.modalPersonalizacionState.preferencias.push(pref);
-    chip.className = 'px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer border bg-rose-500/20 text-rose-300 border-rose-500/50 shadow-sm';
-  } else {
-    window.modalPersonalizacionState.preferencias.splice(idx, 1);
-    chip.className = 'px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer border bg-slate-900/80 text-slate-300 border-slate-700 hover:border-slate-500';
-  }
-  };
-    containerPref.appendChild(chip);
-  });
+      const chip = document.createElement('button');
+      chip.type = 'button';
+      chip.className = 'px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer border bg-slate-900/80 text-slate-300 border-slate-700 hover:border-slate-500';
+      chip.innerText = pref;
+      chip.onclick = function() {
+        const idx = window.modalPersonalizacionState.preferencias.indexOf(pref);
+        if (idx === -1) {
+          window.modalPersonalizacionState.preferencias.push(pref);
+          chip.className = 'px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer border bg-rose-500/20 text-rose-300 border-rose-500/50 shadow-sm';
+        } else {
+          window.modalPersonalizacionState.preferencias.splice(idx, 1);
+          chip.className = 'px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer border bg-slate-900/80 text-slate-300 border-slate-700 hover:border-slate-500';
+        }
+      };
+      containerPref.appendChild(chip);
+    });
 
     // 3. Chips de Ingredientes Extras con costo
     const containerExtras = document.getElementById('chipsExtrasContainer');
     containerExtras.innerHTML = '';
     const extrasList = [
-    { nombre: '+ Aguacate fresco', precio: 25.00 },
-    { nombre: '+ Tocino crocante dorado', precio: 35.00 },
-    { nombre: '+ Queso Gouda gratinado', precio: 25.00 },
-    { nombre: '+ Champiñones salteados', precio: 20.00 },
-    { nombre: '+ Huevo extra orgánico', precio: 20.00 },
-    { nombre: '+ Porción de frijoles refritos', precio: 20.00 }
+      { nombre: '+ Aguacate fresco', precio: 25.00 },
+      { nombre: '+ Tocino crocante dorado', precio: 35.00 },
+      { nombre: '+ Queso Gouda gratinado', precio: 25.00 },
+      { nombre: '+ Champiñones salteados', precio: 20.00 },
+      { nombre: '+ Huevo extra orgánico', precio: 20.00 },
+      { nombre: '+ Porción de frijoles refritos', precio: 20.00 }
     ];
 
     extrasList.forEach(ex => {
-    const chip = document.createElement('button');
-    chip.type = 'button';
-    chip.className = 'px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer border bg-slate-900/80 text-slate-300 border-slate-700 hover:border-slate-500 flex items-center gap-1';
-    chip.innerHTML = `<span>${ex.nombre}</span> <b class=&quot;text-sky-400 font-extrabold&quot;>(+$${ex.precio})</b>`;
-    chip.onclick = function() {
-    const idx = window.modalPersonalizacionState.extras.findIndex(e => e.nombre === ex.nombre);
-    if (idx === -1) {
-    window.modalPersonalizacionState.extras.push(ex);
-    chip.className = 'px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer border bg-sky-500/20 text-sky-300 border-sky-500/50 shadow-sm flex items-center gap-1';
-  } else {
-    window.modalPersonalizacionState.extras.splice(idx, 1);
-    chip.className = 'px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer border bg-slate-900/80 text-slate-300 border-slate-700 hover:border-slate-500 flex items-center gap-1';
-  }
-    window.actualizarModalPersonalizarUI();
-  };
-    containerExtras.appendChild(chip);
-  });
+      const chip = document.createElement('button');
+      chip.type = 'button';
+      chip.className = 'px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer border bg-slate-900/80 text-slate-300 border-slate-700 hover:border-slate-500 flex items-center gap-1';
+      chip.innerHTML = `<span>${ex.nombre}</span> <b class=&quot;text-sky-400 font-extrabold&quot;>(+$${ex.precio})</b>`;
+      chip.onclick = function() {
+        const idx = window.modalPersonalizacionState.extras.findIndex(e => e.nombre === ex.nombre);
+        if (idx === -1) {
+          window.modalPersonalizacionState.extras.push(ex);
+          chip.className = 'px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer border bg-sky-500/20 text-sky-300 border-sky-500/50 shadow-sm flex items-center gap-1';
+        } else {
+          window.modalPersonalizacionState.extras.splice(idx, 1);
+          chip.className = 'px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer border bg-slate-900/80 text-slate-300 border-slate-700 hover:border-slate-500 flex items-center gap-1';
+        }
+        window.actualizarModalPersonalizarUI();
+      };
+      containerExtras.appendChild(chip);
+    });
 
     window.actualizarModalPersonalizarUI();
 
     const modal = document.getElementById('modalRecetaClienteBackdrop');
     if (modal) {
-    modal.style.display = 'flex';
-  }
+      modal.style.display = 'flex';
+    }
   };
 
-    // Alias para mantener compatibilidad
-    window.abrirModalRecetaCliente = window.abrirModalPersonalizar;
+  // Alias para mantener compatibilidad
+  window.abrirModalRecetaCliente = window.abrirModalPersonalizar;
 
-    window.actualizarModalPersonalizarUI = function() {
+  window.actualizarModalPersonalizarUI = function() {
     const state = window.modalPersonalizacionState;
     if (!state.prod) return;
 
@@ -2307,18 +2374,18 @@
 
     const btnTxt = document.getElementById('btnModalConfirmarTxt');
     if (btnTxt) {
-    btnTxt.innerText = `Agregar ${state.cantidad} a Mi Pedido • $${totalOrder.toFixed(2)}`;
-  }
+      btnTxt.innerText = `Agregar ${state.cantidad} a Mi Pedido • $${totalOrder.toFixed(2)}`;
+    }
   };
 
-    window.cambiarCantidadModal = function(delta) {
+  window.cambiarCantidadModal = function(delta) {
     const state = window.modalPersonalizacionState;
     state.cantidad = Math.max(1, (state.cantidad || 1) + delta);
     document.getElementById('txtModalCantidad').innerText = state.cantidad;
     window.actualizarModalPersonalizarUI();
   };
 
-    window.confirmarAgregarPlatilloPersonalizado = function() {
+  window.confirmarAgregarPlatilloPersonalizado = function() {
     const state = window.modalPersonalizacionState;
     if (!state.prod) return;
 
@@ -2333,37 +2400,37 @@
     let sillaNum = window.simSillaNum;
 
     if (dest === 'centro') {
-    key = mesaId + '-centro';
-    comensalNom = `Mesa ${mesaId} (Al Centro / Compartido)`;
-    qrId = `MESA-0${mesaId}`;
-    esCentro = true;
-    sillaNum = 0;
-  } else if (dest === 'mi_silla' || dest === window.simSillaNum) {
-    key = mesaId + '-' + window.simSillaNum;
-    comensalNom = `Comensal Silla ${window.simSillaNum}`;
-    qrId = `PV-0${mesaId}${window.simSillaNum}`;
-    sillaNum = window.simSillaNum;
-  } else {
-    sillaNum = parseInt(dest);
-    key = mesaId + '-' + sillaNum;
-    comensalNom = `Comensal Silla ${sillaNum}`;
-    qrId = `PV-0${mesaId}${sillaNum}`;
-  }
+      key = mesaId + '-centro';
+      comensalNom = `Mesa ${mesaId} (Al Centro / Compartido)`;
+      qrId = `MESA-0${mesaId}`;
+      esCentro = true;
+      sillaNum = 0;
+    } else if (dest === 'mi_silla' || dest === window.simSillaNum) {
+      key = mesaId + '-' + window.simSillaNum;
+      comensalNom = `Comensal Silla ${window.simSillaNum}`;
+      qrId = `PV-0${mesaId}${window.simSillaNum}`;
+      sillaNum = window.simSillaNum;
+    } else {
+      sillaNum = parseInt(dest);
+      key = mesaId + '-' + sillaNum;
+      comensalNom = `Comensal Silla ${sillaNum}`;
+      qrId = `PV-0${mesaId}${sillaNum}`;
+    }
 
     if (!cuentas[key]) {
-    cuentas[key] = {
-    id: Date.now(),
-    mesaId: mesaId,
-    sillaNum: sillaNum,
-    esCentro: esCentro,
-    qrId: qrId,
-    comensalNombre: comensalNom,
-    items: [],
-    estado: 'ocupada',
-    creadoPor: 'cliente_qr',
-    horaApertura: (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-  };
-  }
+      cuentas[key] = {
+        id: Date.now(),
+        mesaId: mesaId,
+        sillaNum: sillaNum,
+        esCentro: esCentro,
+        qrId: qrId,
+        comensalNombre: comensalNom,
+        items: [],
+        estado: 'ocupada',
+        creadoPor: 'cliente_qr',
+        horaApertura: (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      };
+    }
 
     // Armar detalle de personalización en notas
     const partesNotas = [];
@@ -2378,18 +2445,18 @@
 
     const items = cuentas[key].items || [];
     items.push({
-    id: Date.now(),
-    productoId: prod.id,
-    nombre: prod.nombre,
-    notas: notasFinales,
-    precio: precioFinalUnit,
-    cantidad: state.cantidad,
-    mesaId: mesaId,
-    sillaNum: sillaNum,
-    esCentro: esCentro,
-    enviadoCocina: false,
-    hora: (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-  });
+      id: Date.now(),
+      productoId: prod.id,
+      nombre: prod.nombre,
+      notas: notasFinales,
+      precio: precioFinalUnit,
+      cantidad: state.cantidad,
+      mesaId: mesaId,
+      sillaNum: sillaNum,
+      esCentro: esCentro,
+      enviadoCocina: false,
+      hora: (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+    });
 
     cuentas[key].items = items;
     cuentas[key].estado = 'ocupada';
@@ -2400,88 +2467,88 @@
 
     // Sincronizar inmediatamente con el servidor de Anvil
     try {
-    if (window.anvilSyncCuenta) {
-    window.anvilSyncCuenta(mesaId, sillaNum, JSON.stringify(cuentas[key].items), 'ocupada');
-  }
-  } catch(e) {
-    console.error('Error sincronizando con Anvil:', e);
-  }
+      if (window.anvilSyncCuenta) {
+        window.anvilSyncCuenta(mesaId, sillaNum, JSON.stringify(cuentas[key].items), 'ocupada');
+      }
+    } catch(e) {
+      console.error('Error sincronizando con Anvil:', e);
+    }
   };
 
-    window.cerrarModalRecetaCliente = function() {
+  window.cerrarModalRecetaCliente = function() {
     const modal = document.getElementById('modalRecetaClienteBackdrop');
     if (modal) {
-    modal.style.display = 'none';
-  }
+      modal.style.display = 'none';
+    }
   };
 
-    window.navMenu = function (modulo) {
+  window.navMenu = function (modulo) {
     if (window.anvilAppNav) {
-    window.anvilAppNav(modulo);
-  } else {
-    alert(`Navegación a módulo: ${modulo}`);
-  }
+      window.anvilAppNav(modulo);
+    } else {
+      alert(`Navegación a módulo: ${modulo}`);
+    }
   };
 
-    window.detectarParametrosQrUrl = function() {
+  window.detectarParametrosQrUrl = function() {
     try {
-    var params = new URLSearchParams(window.location.search);
-    var hash = window.location.hash || '';
+      var params = new URLSearchParams(window.location.search);
+      var hash = window.location.hash || '';
 
-    if (hash.includes('?')) {
-    var hashQuery = hash.substring(hash.indexOf('?') + 1);
-    var hashParams = new URLSearchParams(hashQuery);
-    hashParams.forEach(function(val, key) {
-    params.set(key, val);
-  });
-  } else if (hash.startsWith('#PV-') || hash.startsWith('#MESA-')) {
-    params.set('qr', hash.replace('#', ''));
-  }
+      if (hash.includes('?')) {
+        var hashQuery = hash.substring(hash.indexOf('?') + 1);
+        var hashParams = new URLSearchParams(hashQuery);
+        hashParams.forEach(function(val, key) {
+          params.set(key, val);
+        });
+      } else if (hash.startsWith('#PV-') || hash.startsWith('#MESA-')) {
+        params.set('qr', hash.replace('#', ''));
+      }
 
-    var mesaParam = params.get('mesa');
-    var sillaParam = params.get('silla');
-    var qrParam = params.get('qr');
+      var mesaParam = params.get('mesa');
+      var sillaParam = params.get('silla');
+      var qrParam = params.get('qr');
 
-    if (qrParam &amp;&amp; (!mesaParam || !sillaParam)) {
-    var match = qrParam.match(/PV-0?(\d)(\d)/i);
-    if (match) {
-    mesaParam = match[1];
-    sillaParam = match[2];
-  }
-  }
+      if (qrParam &amp;&amp; (!mesaParam || !sillaParam)) {
+        var match = qrParam.match(/PV-0?(\d)(\d)/i);
+        if (match) {
+          mesaParam = match[1];
+          sillaParam = match[2];
+        }
+      }
 
-    if (mesaParam &amp;&amp; sillaParam) {
-    var m = parseInt(mesaParam);
-    var s = parseInt(sillaParam);
-    if (!isNaN(m) &amp;&amp; !isNaN(s)) {
-    window.simMesaId = m;
-    window.simSillaNum = s;
-    window.destinoPedido = 'mi_silla';
-    try {
-    if (window.anvilCheckinSilla) {
-    window.anvilCheckinSilla(m, s, qrParam || ('PV-0' + m + s));
-  }
-  } catch(err) {
-    console.error('Error invoking anvilCheckinSilla from JS:', err);
-  }
-  }
-  }
-  } catch (e) {
-    console.error('Error detectando QR de la URL:', e);
-  }
+      if (mesaParam &amp;&amp; sillaParam) {
+        var m = parseInt(mesaParam);
+        var s = parseInt(sillaParam);
+        if (!isNaN(m) &amp;&amp; !isNaN(s)) {
+          window.simMesaId = m;
+          window.simSillaNum = s;
+          window.destinoPedido = 'mi_silla';
+          try {
+            if (window.anvilCheckinSilla) {
+              window.anvilCheckinSilla(m, s, qrParam || ('PV-0' + m + s));
+            }
+          } catch(err) {
+            console.error('Error invoking anvilCheckinSilla from JS:', err);
+          }
+        }
+      }
+    } catch (e) {
+      console.error('Error detectando QR de la URL:', e);
+    }
   };
 
-    function initImmediate() {
+  function initImmediate() {
     window.cargarDatosMenu(window.vsMenuData, window.vsCategoriasData);
     window.detectarParametrosQrUrl();
     window.sincronizarCuentaDesdeStorage();
   }
 
-    if (document.readyState === 'loading') {
+  if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initImmediate);
   } else {
     initImmediate();
   }
-    setTimeout(initImmediate, 10);
-    setTimeout(initImmediate, 100);
-    </script>"></anvil-form>
+  setTimeout(initImmediate, 10);
+  setTimeout(initImmediate, 100);
+</script>"></anvil-form>
