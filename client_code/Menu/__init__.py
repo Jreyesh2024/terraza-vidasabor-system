@@ -1,158 +1,353 @@
+"""
+Menu — form del cliente (teléfono / QR) v2.
+
+Arquitectura:
+- Estructura HTML declarativa + data-action; Python monta UN listener delegado.
+- Al cargar: leer QR de la URL, hacer auto check-in via checkin_silla_qr,
+  saludar con datos reales de la sesión.
+- Sin onclick inline, sin <script> embebidos, sin shims.
+
+Los endpoints de admin (guardar_producto, etc.) NO viven aquí — pertenecen al
+form de Gestión de Menú futuro (Bloque H).
+
+Bloque C.3 agregará: selector "estás pidiendo para", catálogo interactivo,
+resumen por silla, botón enviar a cocina.
+"""
+
 from ._anvil_designer import MenuTemplate
 import anvil
 import anvil.js
+import anvil.server
+import json
+
 
 class Menu(MenuTemplate):
-  def __init__(self, **properties):
-    self.init_components(**properties)
-    try:
-      anvil.js.window.anvilAppNav = self.navegar_modulo
-      anvil.js.window.anvilCheckinSilla = self.hacer_checkin_silla
-      anvil.js.window.anvilSyncCuenta = self.sincronizar_cuenta_servidor
-      anvil.js.window.anvilRecargarCatalogo = self.cargar_catalogo_db
-      anvil.js.window.anvilGuardarProducto = self.guardar_producto
-      anvil.js.window.anvilCambiarDisponibilidad = self.cambiar_disponibilidad
-    except Exception:
-      pass
+    def __init__(self, **properties):
+        self.init_components(**properties)
+        self._root = None
+        self._click_handler = None
+        self._sesion_info = None  # {mesa_num, silla_num, qr, ocupacionId, ...}
 
-    try:
-      url_hash = anvil.get_url_hash()
-      mesa_num = 1
-      silla_num = 1
-      qr_str = ""
+        self.set_event_handler("show", self.form_show)
+        self.set_event_handler("hide", self.form_hide)
 
-      if isinstance(url_hash, str) and url_hash:
-        url_lower = url_hash.lower()
-        if 'pos_mesero' in url_lower or 'croquis' in url_lower:
-          anvil.open_form('POSMesero')
-          return
-        elif 'monitor_cocina' in url_lower or 'kds' in url_lower:
-          anvil.open_form('MonitorCocina')
-          return
-        elif 'monitor_fiscal' in url_lower or 'fiscal' in url_lower:
-          anvil.open_form('MonitorFiscal')
-          return
-        elif 'clientes_lealtad' in url_lower or 'rewards' in url_lower:
-          anvil.open_form('ClientesLealtad')
-          return
-
-        # Extraer mesa, silla y qr desde la URL
-        q_idx = url_hash.find('?')
-        query_str = url_hash[q_idx+1:] if q_idx != -1 else url_hash
-        params = {}
-        for part in query_str.split('&'):
-          if '=' in part:
-            k, v = part.split('=', 1)
-            params[k.strip().lower()] = v.strip()
-
-        if 'mesa' in params:
-          try: mesa_num = int(params['mesa'])
-          except: pass
-        if 'silla' in params:
-          try: silla_num = int(params['silla'])
-          except: pass
-        if 'qr' in params:
-          qr_str = params['qr']
+    # ─────────────────────────── ciclo de vida ───────────────────────────
+    def form_show(self, **event_args):
+        self._root = anvil.js.get_dom_node(self)
+        self._bind_events()
+        info_qr = self._parsear_qr_de_url()
+        if info_qr is not None:
+            self._auto_checkin(info_qr)
         else:
-          qr_str = f"PV-0{mesa_num}{silla_num}"
+            self._render_esperando_qr()
 
-      elif isinstance(url_hash, dict) and url_hash:
-        try: mesa_num = int(url_hash.get('mesa', 1))
-        except: pass
-        try: silla_num = int(url_hash.get('silla', 1))
-        except: pass
-        qr_str = url_hash.get('qr', f"PV-0{mesa_num}{silla_num}")
+    def form_hide(self, **event_args):
+        self._unbind_events()
 
-      # Registrar check-in de inmediato en el servidor
-      if mesa_num and silla_num:
-        self.hacer_checkin_silla(mesa_num, silla_num, qr_str)
+    # ─────────────────── event delegation (Python owns) ──────────────────
+    def _bind_events(self):
+        if self._root is None:
+            return
+        self._click_handler = self._on_root_click
+        self._root.addEventListener("click", self._click_handler)
 
-      # Cargar catálogo de platillos y categorías directamente desde PostgreSQL
-      self.cargar_catalogo_db()
-    except Exception as e:
-      print(f"Error procesando check-in en Menu: {e}")
+    def _unbind_events(self):
+        if self._root is not None and self._click_handler is not None:
+            try:
+                self._root.removeEventListener("click", self._click_handler)
+            except Exception:
+                pass
+        self._click_handler = None
 
-  def cargar_catalogo_db(self):
-    try:
-      import anvil.server
-      import json
-      prods = anvil.server.call('get_productos_terraza')
-      cats = anvil.server.call('get_categorias_terraza')
-      print(f"📦 [MENU] Catálogo cargado de DB: {len(prods) if prods else 0} platillos, {len(cats) if cats else 0} categorías")
-      if prods and hasattr(anvil.js.window, 'setMenuDataFromPostgreSQL'):
-        anvil.js.window.setMenuDataFromPostgreSQL(json.dumps(prods), json.dumps(cats) if cats else "[]")
-      return True
-    except Exception as e:
-      print(f"Error cargando catálogo desde PostgreSQL: {e}")
-      return False
+    def _on_root_click(self, event):
+        target = event.target
+        if target is None:
+            return
+        el = target.closest("[data-action]")
+        if el is None:
+            return
+        action = getattr(el.dataset, "action", None)
+        args_raw = getattr(el.dataset, "args", None)
+        args = [a.strip() for a in (args_raw or "").split(",") if a.strip()] if args_raw else []
+        if action == "navHub":
+            anvil.open_form("AdminMenu")
+        elif action == "tab":
+            self._cambiar_tab(args[0] if args else "silla")
+        elif action == "llamarMesero":
+            self._llamar_mesero()
+        elif action == "solicitarCuenta":
+            self._solicitar_cuenta()
+        elif action == "reescanearQR":
+            self._render_esperando_qr()
 
-  def guardar_producto(self, prod_dict):
-    try:
-      import anvil.server
-      import json
-      if isinstance(prod_dict, str):
-        prod_dict = json.loads(prod_dict)
-      res = anvil.server.call('guardar_producto_terraza', prod_dict)
-      self.cargar_catalogo_db()
-      return res
-    except Exception as e:
-      print(f"Error guardando producto: {e}")
-      return {"success": False, "error": str(e)}
-
-  def cambiar_disponibilidad(self, prod_id, disponible):
-    try:
-      import anvil.server
-      res = anvil.server.call('cambiar_disponibilidad_producto_terraza', int(prod_id), bool(disponible))
-      self.cargar_catalogo_db()
-      return res
-    except Exception as e:
-      print(f"Error cambiando disponibilidad: {e}")
-      return {"success": False, "error": str(e)}
-
-  def hacer_checkin_silla(self, mesa_id, silla_id, qr_id=''):
-    try:
-      import anvil.server
-      res = anvil.server.call('checkin_silla_qr', int(mesa_id), int(silla_id), str(qr_id))
-      return res
-    except Exception as e:
-      print(f"Error en checkin_silla: {e}")
-      return None
-
-  def sincronizar_cuenta_servidor(self, mesa_id, silla_id, items, estado='ocupada'):
-    try:
-      import anvil.server
-      import json
-      if isinstance(items, str):
+    # ─────────────────── parsing del hash de URL con QR ──────────────────
+    def _parsear_qr_de_url(self):
+        """Retorna dict {mesa_num, silla_num, qr} o None."""
         try:
-          items_clean = json.loads(items)
+            url_hash = anvil.get_url_hash() or ""
         except Exception:
-          items_clean = []
-      elif isinstance(items, list):
-        items_clean = items
-      else:
-        try:
-          # Convertir proxy o iterable de JS
-          items_clean = json.loads(json.dumps(items))
-        except Exception:
-          items_clean = []
-      print(f"📡 [MENU.PY] sincronizando con servidor: Mesa {mesa_id} Silla {silla_id} -> {len(items_clean)} items ({estado})")
-      res = anvil.server.call('actualizar_cuenta_silla', int(mesa_id), int(silla_id), items_clean, str(estado))
-      return res
-    except Exception as e:
-      print(f"Error en sincronizar_cuenta_servidor: {e}")
-      return None
+            return None
+        if not url_hash:
+            return None
+        if isinstance(url_hash, dict):
+            return self._dict_a_info(url_hash)
+        # Cadena tipo "qr=PV-P-01-01" o "mesa=1&silla=1&qr=..."
+        s = str(url_hash).lstrip("#").lstrip("?")
+        params = {}
+        for part in s.split("&"):
+            if "=" in part:
+                k, v = part.split("=", 1)
+                params[k.strip().lower()] = v.strip()
+        # También aceptamos el QR completo pegado directo (sin key=value)
+        if not params and s.upper().startswith("PV-"):
+            params["qr"] = s
+        return self._dict_a_info(params) if params else None
 
-  def navegar_modulo(self, modulo_nombre):
-    target_form = 'POSMesero'
-    if modulo_nombre in ['pos_mesero', 'croquis', 'palapa']:
-      target_form = 'POSMesero'
-    elif modulo_nombre in ['menu', 'cliente_qr']:
-      target_form = 'Menu'
-    elif modulo_nombre in ['monitor_cocina', 'kds']:
-      target_form = 'MonitorCocina'
-    elif modulo_nombre in ['monitor_fiscal', 'fiscal']:
-      target_form = 'MonitorFiscal'
-    elif modulo_nombre in ['clientes_lealtad', 'rewards']:
-      target_form = 'ClientesLealtad'
-    
-    anvil.open_form(target_form)
+    def _dict_a_info(self, params):
+        qr = str(params.get("qr", "")).upper()
+        mesa_num = params.get("mesa")
+        silla_num = params.get("silla")
+        # Decodificar el QR PV-P-MM-SS
+        if qr and qr.startswith("PV-P-"):
+            partes = qr.split("-")
+            # Formatos válidos: PV-P-MM-SS o PV-P-EX-NN
+            if len(partes) == 4:
+                if partes[2] == "EX":
+                    # Extra del pool
+                    return {"qr": qr, "mesa_num": 0, "silla_num": int(partes[3]),
+                            "es_extra": True}
+                try:
+                    mesa_num = int(partes[2])
+                    silla_num = int(partes[3])
+                except ValueError:
+                    pass
+        try:
+            mesa_num = int(mesa_num) if mesa_num is not None else None
+            silla_num = int(silla_num) if silla_num is not None else None
+        except (ValueError, TypeError):
+            return None
+        if mesa_num is None or silla_num is None:
+            return None
+        return {"qr": qr, "mesa_num": mesa_num, "silla_num": silla_num, "es_extra": False}
+
+    # ─────────────────────── auto check-in por QR ────────────────────────
+    def _auto_checkin(self, info):
+        try:
+            resp = anvil.server.call(
+                "checkin_silla_qr",
+                info["mesa_num"], info["silla_num"], info["qr"]
+            )
+        except Exception as e:
+            print(f"[Menu] Error en checkin_silla_qr: {e}")
+            self._render_error("No pude registrar tu llegada. Intenta escanear de nuevo.")
+            return
+        if not isinstance(resp, dict) or resp.get("error"):
+            msg = (resp or {}).get("error", "Silla no encontrada")
+            self._render_error(f"Portavasos no reconocido: {msg}")
+            return
+        self._sesion_info = {**info, **resp}
+        self._render_bienvenida()
+
+    # ─────────────────────── renderers de pantallas ──────────────────────
+    def _render_esperando_qr(self):
+        html = """
+        <div class="max-w-md mx-auto min-h-screen flex flex-col items-center
+                    justify-center px-6 text-center bg-[#090d16] text-slate-100">
+          <div class="w-20 h-20 rounded-3xl bg-gradient-to-tr from-emerald-500
+                      to-teal-700 flex items-center justify-center text-3xl
+                      font-black text-white mb-6 shadow-xl">
+            V&amp;S
+          </div>
+          <h1 class="text-2xl font-black">La Terraza de Vida &amp; Sabor</h1>
+          <p class="mt-2 text-emerald-400 font-semibold">Menú Digital</p>
+          <p class="mt-8 text-slate-400 text-sm max-w-xs">
+            Escanea el <b>código QR</b> del portavasos de tu silla para
+            comenzar tu experiencia.
+          </p>
+          <div class="mt-8 w-32 h-32 rounded-2xl border-2 border-dashed
+                      border-slate-700 flex items-center justify-center">
+            <i class="fa-solid fa-qrcode text-5xl text-slate-600"></i>
+          </div>
+          <button data-action="navHub"
+                  class="mt-10 text-xs text-slate-500 hover:text-slate-300
+                         underline underline-offset-4">
+            Soy staff — ir al Hub
+          </button>
+        </div>
+        """
+        self._reemplazar_contenido(html)
+
+    def _render_error(self, mensaje):
+        html = f"""
+        <div class="max-w-md mx-auto min-h-screen flex flex-col items-center
+                    justify-center px-6 text-center bg-[#090d16] text-slate-100">
+          <div class="w-16 h-16 rounded-full bg-red-500/20 border border-red-500/50
+                      flex items-center justify-center mb-4">
+            <i class="fa-solid fa-triangle-exclamation text-red-400 text-2xl"></i>
+          </div>
+          <h2 class="text-xl font-bold">Algo no cuadró</h2>
+          <p class="mt-2 text-slate-400 text-sm max-w-xs">{mensaje}</p>
+          <button data-action="reescanearQR"
+                  class="mt-8 px-6 py-3 rounded-2xl bg-emerald-600
+                         hover:bg-emerald-500 text-white font-bold text-sm">
+            Escanear otra vez
+          </button>
+        </div>
+        """
+        self._reemplazar_contenido(html)
+
+    def _render_bienvenida(self):
+        info = self._sesion_info or {}
+        mesa = info.get("mesa_num", "?")
+        silla = info.get("sillaId") or info.get("silla_num", "?")
+        qr = info.get("qrId") or info.get("qr", "")
+        estado = info.get("estado", "ocupada")
+        badge_txt = "SILLA OCUPADA" if estado == "ocupada" else "DISPONIBLE"
+        badge_bg = "bg-emerald-500/20 border-emerald-500 text-emerald-300"
+
+        html = f"""
+        <div class="max-w-md mx-auto min-h-screen bg-[#090d16] text-slate-100
+                    font-sans pb-24">
+          <header class="sticky top-0 z-40 backdrop-blur bg-[#0f172ad9]
+                         border-b border-white/10 px-4 py-3
+                         flex items-center justify-between gap-2">
+            <div class="flex items-center gap-2.5">
+              <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-emerald-500
+                          to-teal-700 flex items-center justify-center
+                          text-sm font-black text-white shadow">V&amp;S</div>
+              <div>
+                <h1 class="text-sm font-black leading-tight">La Terraza de Vida &amp; Sabor</h1>
+                <p class="text-[10px] text-emerald-400 font-bold uppercase
+                          tracking-wider">Menú Digital</p>
+              </div>
+            </div>
+            <div class="flex gap-1.5">
+              <button data-action="llamarMesero"
+                      class="px-2.5 py-1.5 text-[11px] font-bold rounded-lg
+                             bg-amber-500/20 border border-amber-500/50
+                             text-amber-300 flex items-center gap-1.5">
+                <i class="fa-solid fa-bell text-xs"></i> Mesero
+              </button>
+              <button data-action="solicitarCuenta"
+                      class="px-2.5 py-1.5 text-[11px] font-bold rounded-lg
+                             bg-sky-500/20 border border-sky-500/50
+                             text-sky-300 flex items-center gap-1.5">
+                <i class="fa-solid fa-receipt text-xs"></i> Cuenta
+              </button>
+            </div>
+          </header>
+
+          <section class="px-4 mt-5">
+            <div class="rounded-2xl border border-emerald-500/30
+                        bg-gradient-to-br from-emerald-950/60 to-slate-900/60
+                        p-5 shadow-xl">
+              <div class="flex items-center justify-between mb-3 flex-wrap gap-2">
+                <span class="text-[10px] font-black px-2.5 py-1 rounded-full
+                             {badge_bg} border tracking-wider">{badge_txt}</span>
+                <span class="text-[10px] font-mono text-slate-400
+                             bg-slate-800/60 px-2 py-1 rounded-full">
+                  Portavasos {qr}
+                </span>
+              </div>
+              <h2 class="text-lg font-black text-white leading-tight">
+                ¡Hola! Estás en la <span class="text-emerald-400">Mesa {mesa}</span> ·
+                Silla {silla}
+              </h2>
+              <p class="text-sm text-slate-400 mt-1">
+                Ya registramos tu llegada. Desde aquí puedes ordenar cuando gustes.
+              </p>
+            </div>
+          </section>
+
+          <section class="px-4 mt-6 grid gap-3">
+            <button data-action="tab" data-args="silla"
+                    class="text-left rounded-2xl bg-slate-900/60 border
+                           border-white/5 hover:border-emerald-500/40 p-4
+                           transition flex items-center gap-3">
+              <div class="w-11 h-11 rounded-xl bg-emerald-500/15 border
+                          border-emerald-500/30 flex items-center justify-center
+                          text-lg">🍳</div>
+              <div class="flex-1">
+                <div class="text-sm font-black">Ordenar a Mi Silla</div>
+                <div class="text-[11px] text-slate-400">
+                  Bebidas, huevos y platillos individuales a tu cuenta.
+                </div>
+              </div>
+              <i class="fa-solid fa-arrow-right text-slate-500 text-sm"></i>
+            </button>
+            <button data-action="tab" data-args="centro"
+                    class="text-left rounded-2xl bg-slate-900/60 border
+                           border-white/5 hover:border-amber-500/40 p-4
+                           transition flex items-center gap-3">
+              <div class="w-11 h-11 rounded-xl bg-amber-500/15 border
+                          border-amber-500/30 flex items-center justify-center
+                          text-lg">🍲</div>
+              <div class="flex-1">
+                <div class="text-sm font-black">Pedir al Centro</div>
+                <div class="text-[11px] text-slate-400">
+                  Botanas, chilaquiles o jarras para compartir en tu mesa.
+                </div>
+              </div>
+              <i class="fa-solid fa-arrow-right text-slate-500 text-sm"></i>
+            </button>
+            <button data-action="tab" data-args="comanda"
+                    class="text-left rounded-2xl bg-slate-900/60 border
+                           border-white/5 hover:border-sky-500/40 p-4
+                           transition flex items-center gap-3">
+              <div class="w-11 h-11 rounded-xl bg-sky-500/15 border
+                          border-sky-500/30 flex items-center justify-center
+                          text-lg">🧾</div>
+              <div class="flex-1">
+                <div class="text-sm font-black">Mi Comanda</div>
+                <div class="text-[11px] text-slate-400">
+                  Consulta lo que llevas hasta el momento.
+                </div>
+              </div>
+              <i class="fa-solid fa-arrow-right text-slate-500 text-sm"></i>
+            </button>
+          </section>
+
+          <div id="menuMainPanel" class="px-4 mt-6"></div>
+
+          <div class="text-center mt-10 text-[10px] text-slate-600">
+            La Terraza de Vida &amp; Sabor · Menú Cliente v2
+          </div>
+        </div>
+        """
+        self._reemplazar_contenido(html)
+
+    def _reemplazar_contenido(self, html):
+        """Reemplaza el contenido dentro del root del form con el HTML dado."""
+        if self._root is None:
+            return
+        self._root.innerHTML = html
+
+    # ─────────────────────── acciones (placeholders para C.3) ────────────
+    def _cambiar_tab(self, tab_id):
+        """Placeholder: Bloque C.3 renderiza aquí el catálogo/resumen."""
+        panel = anvil.js.window.document.getElementById("menuMainPanel")
+        if panel is None:
+            return
+        titulos = {
+            "silla":   "🍳 Ordenar a Mi Silla",
+            "centro":  "🍲 Pedir al Centro",
+            "comanda": "🧾 Mi Comanda",
+        }
+        titulo = titulos.get(tab_id, "Sección")
+        panel.innerHTML = (
+            "<div class='rounded-2xl bg-slate-900/60 border border-white/5 "
+            "p-6 text-center'>"
+            f"<h3 class='text-base font-black text-white'>{titulo}</h3>"
+            "<p class='text-xs text-slate-400 mt-2'>"
+            "El catálogo interactivo llega en el siguiente paso (Bloque C.3)."
+            "</p></div>"
+        )
+
+    def _llamar_mesero(self):
+        alert("Se avisó al mesero. Alguien llegará pronto.", title="Mesero notificado")
+        # Bloque G: se conectará con crear_llamada_mesero real.
+
+    def _solicitar_cuenta(self):
+        alert("Notificamos tu solicitud. El mesero te traerá la cuenta.",
+              title="Cuenta solicitada")
+        # Bloque G: se conectará con crear_llamada_mesero tipo='solicitar_cuenta'.
