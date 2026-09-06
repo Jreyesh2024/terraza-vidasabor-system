@@ -170,6 +170,16 @@ class POSMesero(POSMeseroTemplate):
             js_fn(*args)
         except Exception as e:
             print(f"[POSMesero] Error ejecutando window.{action}({args}): {e}")
+        # Red de contención: cualquier acción puede haber cambiado
+        # palapaState. Forzamos un repintado inmediato para que el layout dual
+        # (croquis vs. comanda+catálogo) y los colores de sillas reflejen el
+        # estado actual sin depender de que el handler llame a renderStateUI.
+        render = getattr(anvil.js.window, "renderStateUI", None)
+        if render is not None:
+            try:
+                render()
+            except Exception as e:
+                print(f"[POSMesero] renderStateUI post-dispatch falló: {e}")
 
     # ───────────────────────── navegación entre forms ────────────────────
     def _nav(self, target_form, *_):
