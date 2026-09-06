@@ -316,12 +316,91 @@ class POSMesero(POSMeseroTemplate):
 
     def _on_pos_mesero_js_ready(self, *_):
         print("[POSMesero] pos_mesero.js cargado, iniciando UI.")
+        # Envolver renderStateUI ANTES de arrancar UI, para que cualquier
+        # llamada posterior (initPOSMesero, aplicarCuentasServidor, click de
+        # silla vía onclick directo, timer, etc.) aplique nuestro post-proceso.
+        self._hijack_render_state_ui()
         self._cargar_catalogo_pos_db()
         self._sincronizar_con_servidor()
         self._boot_js()
-        # Aplicar layout inicial (por si el usuario ya venía con
-        # modoComandaActiva de una sesión previa).
         self._ajustar_layout_grid()
+
+    def _hijack_render_state_ui(self):
+        """
+        Envuelve window.renderStateUI para que después de cada ejecución
+        Python (1) fuerce inline grid-template-columns según el modo actual
+        (workaround: CSS del theme no aplica correctamente), y (2) marque
+        ocupada la silla seleccionada cuando se entra en modo comanda (bug:
+        handleSillaClick sólo marca ocupada si la cuenta no existía).
+        """
+        w = anvil.js.window
+        original = getattr(w, "renderStateUI", None)
+        if original is None:
+            print("[POSMesero] hijack: renderStateUI no existe todavía")
+            return
+        if getattr(self, "_render_hijacked", False):
+            return  # ya envuelto
+        self_ref = self
+        def wrapped():
+            try:
+                original()
+            except Exception as e:
+                print(f"[POSMesero] renderStateUI original falló: {e}")
+            try:
+                self_ref._ajustar_layout_grid()
+            except Exception as e:
+                print(f"[POSMesero] _ajustar_layout_grid post-render falló: {e}")
+            try:
+                self_ref._forzar_ocupada_silla_seleccionada()
+            except Exception as e:
+                print(f"[POSMesero] _forzar_ocupada falló: {e}")
+        w.renderStateUI = wrapped
+        self._render_hijacked = True
+        print("[POSMesero] renderStateUI envuelto con post-proceso Python.")
+
+    def _forzar_ocupada_silla_seleccionada(self):
+        """
+        Cuando modoComandaActiva=true y hay una silla seleccionada cuyo
+        estado no es 'ocupada', la marca ocupada y persiste al servidor.
+        Corrige el bug donde handleSillaClick no marca ocupada si la cuenta
+        ya existía con estado 'disponible' (venida del servidor).
+        """
+        w = anvil.js.window
+        state = getattr(w, "palapaState", None)
+        if state is None:
+            return
+        try:
+            if not state.modoComandaActiva:
+                return
+            mesa_id = state.mesaSeleccionadaId
+            silla_num = state.sillaSeleccionadaNum
+        except Exception:
+            return
+        if not mesa_id or not silla_num:
+            return
+        try:
+            cuenta = state.cuentas[f"{int(mesa_id)}-{int(silla_num)}"]
+        except Exception:
+            return
+        if cuenta is None:
+            return
+        try:
+            estado_actual = str(getattr(cuenta, "estado", "") or "")
+        except Exception:
+            estado_actual = ""
+        if estado_actual == "ocupada":
+            return  # ya estaba, no hacer nada
+        try:
+            cuenta.estado = "ocupada"
+        except Exception as e:
+            print(f"[POSMesero] Error marcando ocupada localmente: {e}")
+            return
+        try:
+            self._sincronizar_cuenta_servidor(
+                int(mesa_id), int(silla_num), [], "ocupada"
+            )
+        except Exception as e:
+            print(f"[POSMesero] Error persistiendo ocupada al servidor: {e}")
 
     # ─────────────────────── UI: refresh y ajuste de layout ──────────────
     def _refrescar_ui(self):
