@@ -107,6 +107,17 @@ class POSMesero(POSMeseroTemplate):
         self._unbind_events()
         self._detener_timer_sync()
         self._retirar_puente_python()
+        self._desinstalar_mutation_observer()
+
+    def _desinstalar_mutation_observer(self):
+        obs = getattr(self, "_mo_observer", None)
+        if obs is not None:
+            try:
+                obs.disconnect()
+            except Exception:
+                pass
+        self._mo_observer = None
+        self._mo_installed = False
 
     # ─────────────────────── binding (event delegation) ──────────────────
     def _bind_events(self):
@@ -316,47 +327,44 @@ class POSMesero(POSMeseroTemplate):
 
     def _on_pos_mesero_js_ready(self, *_):
         print("[POSMesero] pos_mesero.js cargado, iniciando UI.")
-        # Envolver renderStateUI ANTES de arrancar UI, para que cualquier
-        # llamada posterior (initPOSMesero, aplicarCuentasServidor, click de
-        # silla vía onclick directo, timer, etc.) aplique nuestro post-proceso.
-        self._hijack_render_state_ui()
         self._cargar_catalogo_pos_db()
         self._sincronizar_con_servidor()
         self._boot_js()
         self._ajustar_layout_grid()
+        # MutationObserver: observa cambios de clase en #mainCanvasGrid.
+        # El JS del theme llama renderStateUI() (referencia local del IIFE,
+        # NO window.renderStateUI), por lo que envolver window no intercepta
+        # nada. Observando el DOM directamente sí capturamos cada cambio.
+        self._install_mutation_observer()
 
-    def _hijack_render_state_ui(self):
+    def _install_mutation_observer(self):
         """
-        Envuelve window.renderStateUI para que después de cada ejecución
-        Python (1) fuerce inline grid-template-columns según el modo actual
-        (workaround: CSS del theme no aplica correctamente), y (2) marque
-        ocupada la silla seleccionada cuando se entra en modo comanda (bug:
-        handleSillaClick sólo marca ocupada si la cuenta no existía).
+        Instala un MutationObserver sobre #mainCanvasGrid que dispara ajust
+        del layout + marcar ocupada cada vez que la clase (mode-overview /
+        mode-comanda) cambie.
         """
-        w = anvil.js.window
-        original = getattr(w, "renderStateUI", None)
-        if original is None:
-            print("[POSMesero] hijack: renderStateUI no existe todavía")
+        if getattr(self, "_mo_installed", False):
             return
-        if getattr(self, "_render_hijacked", False):
-            return  # ya envuelto
+        w = anvil.js.window
+        grid = w.document.getElementById("mainCanvasGrid")
+        if grid is None:
+            print("[POSMesero] MutationObserver: no encontró mainCanvasGrid")
+            return
+        MO = getattr(w, "MutationObserver", None)
+        if MO is None:
+            return
         self_ref = self
-        def wrapped():
-            try:
-                original()
-            except Exception as e:
-                print(f"[POSMesero] renderStateUI original falló: {e}")
+        def on_mutation(mutations, observer):
             try:
                 self_ref._ajustar_layout_grid()
-            except Exception as e:
-                print(f"[POSMesero] _ajustar_layout_grid post-render falló: {e}")
-            try:
                 self_ref._forzar_ocupada_silla_seleccionada()
             except Exception as e:
-                print(f"[POSMesero] _forzar_ocupada falló: {e}")
-        w.renderStateUI = wrapped
-        self._render_hijacked = True
-        print("[POSMesero] renderStateUI envuelto con post-proceso Python.")
+                print(f"[POSMesero] callback MutationObserver falló: {e}")
+        observer = MO(on_mutation)
+        observer.observe(grid, {"attributes": True, "attributeFilter": ["class"]})
+        self._mo_observer = observer
+        self._mo_installed = True
+        print("[POSMesero] MutationObserver instalado en #mainCanvasGrid.")
 
     def _forzar_ocupada_silla_seleccionada(self):
         """
