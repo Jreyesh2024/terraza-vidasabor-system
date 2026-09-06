@@ -170,16 +170,9 @@ class POSMesero(POSMeseroTemplate):
             js_fn(*args)
         except Exception as e:
             print(f"[POSMesero] Error ejecutando window.{action}({args}): {e}")
-        # Red de contención: cualquier acción puede haber cambiado
-        # palapaState. Forzamos un repintado inmediato para que el layout dual
-        # (croquis vs. comanda+catálogo) y los colores de sillas reflejen el
-        # estado actual sin depender de que el handler llame a renderStateUI.
-        render = getattr(anvil.js.window, "renderStateUI", None)
-        if render is not None:
-            try:
-                render()
-            except Exception as e:
-                print(f"[POSMesero] renderStateUI post-dispatch falló: {e}")
+        # Red de contención: refresco visual + persistir estado si aplica.
+        self._refrescar_ui()
+        self._persistir_estado_si_aplica(action, args)
 
     # ───────────────────────── navegación entre forms ────────────────────
     def _nav(self, target_form, *_):
@@ -326,6 +319,48 @@ class POSMesero(POSMeseroTemplate):
         self._cargar_catalogo_pos_db()
         self._sincronizar_con_servidor()
         self._boot_js()
+        # Aplicar layout inicial (por si el usuario ya venía con
+        # modoComandaActiva de una sesión previa).
+        self._ajustar_layout_grid()
+
+    # ─────────────────────── UI: refresh y ajuste de layout ──────────────
+    def _refrescar_ui(self):
+        """Refresco post-dispatch: re-renderiza JS + fuerza layout inline."""
+        render = getattr(anvil.js.window, "renderStateUI", None)
+        if render is not None:
+            try:
+                render()
+            except Exception as e:
+                print(f"[POSMesero] renderStateUI post-dispatch falló: {e}")
+        self._ajustar_layout_grid()
+
+    def _ajustar_layout_grid(self):
+        """
+        Workaround: el <style> con `grid-template-columns: 420px 1fr !important`
+        no siempre se respeta cuando el HtmlTemplate lo inyecta Skulpt.
+        Forzamos el valor inline con !important — inline gana sobre stylesheet.
+        """
+        grid = anvil.js.window.document.getElementById("mainCanvasGrid")
+        if grid is None:
+            return
+        cls = str(getattr(grid, "className", "") or "")
+        if "mode-comanda" in cls:
+            grid.style.setProperty("grid-template-columns", "420px 1fr", "important")
+        else:
+            grid.style.setProperty("grid-template-columns", "1fr", "important")
+
+    def _persistir_estado_si_aplica(self, action, args):
+        """
+        Cuando el mesero abre una silla, marca ocupada en local (handleSillaClick)
+        pero NO envía al servidor. El timer sync trae del servidor "disponible"
+        cada 2s y pisa la ocupada local. Solución: al despachar clickSilla,
+        Python persiste 'ocupada' al servidor de inmediato.
+        """
+        if action == "clickSilla" and len(args) >= 2:
+            try:
+                self._sincronizar_cuenta_servidor(args[0], args[1], [], "ocupada")
+            except Exception as e:
+                print(f"[POSMesero] Error persistiendo ocupada: {e}")
 
     def _on_pos_mesero_js_error(self, *_):
         print("[POSMesero] ERROR: no se pudo cargar _/theme/pos_mesero.js")
