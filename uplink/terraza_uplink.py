@@ -42,62 +42,136 @@ def get_db_connection():
 
 
 # ============================================================================
-# ESTADO EN MEMORIA (transición)
+# ITEMS EN MEMORIA (transición Bloque B → Bloque C)
 # ============================================================================
-# CUENTAS_TERRAZA vive en memoria del uplink. Al arranque se puebla desde la BD
-# leyendo mesas + sillas reales. Al ejecutar clicks/QR se actualiza en memoria.
-# En el Bloque B del roadmap se sustituirá por queries a ocupaciones_silla +
-# sesiones_mesa + detalle_comanda (persistencia real).
+# El estado ocupada/disponible ahora vive en la BD (sesiones_mesa +
+# ocupaciones_silla). Solo los ITEMS del carrito antes de mandar a cocina viven
+# en memoria hasta que el Bloque C los mueva a detalle_comanda.
+# Formato: {"<mesaNum>-<sillaNum>": [{item}, {item}, ...]}
 # ============================================================================
-CUENTAS_TERRAZA = {}
+ITEMS_MEMORIA = {}
+
+# Mesero default (mientras no haya login). Se resuelve al primer uso.
+_MESERO_DEFAULT_ID = None
 
 
-def _init_cuentas_desde_db():
-    """Puebla CUENTAS_TERRAZA con una entrada por silla (regular y del pool)
-    en estado 'disponible' e items vacíos. Se llama al arranque del uplink."""
-    global CUENTAS_TERRAZA
-    CUENTAS_TERRAZA = {}
-    try:
-        conn = get_db_connection()
-        with conn.cursor() as cur:
-            cur.execute("""
-                SELECT s.id           AS silla_id,
-                       s.mesa_id      AS mesa_id,
-                       s.numero_en_mesa,
-                       s.codigo_qr,
-                       s.es_adicional,
-                       m.numero_mesa
-                FROM sillas s
-                LEFT JOIN mesas m ON s.mesa_id = m.id
-                WHERE s.activa = TRUE
-                ORDER BY s.es_adicional, m.numero_mesa NULLS LAST, s.numero_en_mesa NULLS LAST;
-            """)
-            rows = cur.fetchall()
-        conn.close()
-        for r in rows:
-            if r["es_adicional"] or r["mesa_id"] is None:
-                # sillas del pool: key = 'EX-01', 'EX-02', ...
-                pool_num = r["codigo_qr"].split("-")[-1]
-                key = f"EX-{pool_num}"
-                mesa_key = 0
-                silla_key = 0
-            else:
-                # sillas regulares: key = '<mesaNum>-<sillaNumEnMesa>'
-                mesa_key = int(r["numero_mesa"])
-                silla_key = int(r["numero_en_mesa"])
-                key = f"{mesa_key}-{silla_key}"
-            CUENTAS_TERRAZA[key] = {
-                "mesaId": mesa_key,
-                "sillaId": silla_key,
-                "qrId": r["codigo_qr"],
-                "estado": "disponible",
-                "comensalNombre": (f"Silla {silla_key}" if silla_key else f"Extra {pool_num}"),
-                "items": [],
-                "esAdicional": bool(r["es_adicional"]),
-            }
-        print(f"✅ [UPLINK] CUENTAS_TERRAZA inicializado con {len(CUENTAS_TERRAZA)} sillas desde BD.")
-    except Exception as e:
-        print(f"⚠️  [UPLINK] No pude inicializar CUENTAS_TERRAZA desde BD: {e}")
+def _get_mesero_default_id(cur):
+    """Devuelve el id del mesero de arranque (Atención General V&S)."""
+    global _MESERO_DEFAULT_ID
+    if _MESERO_DEFAULT_ID is not None:
+        return _MESERO_DEFAULT_ID
+    cur.execute("SELECT id FROM meseros WHERE codigo_empleado = 'MES-000' LIMIT 1;")
+    row = cur.fetchone()
+    if row:
+        _MESERO_DEFAULT_ID = int(row['id'])
+    return _MESERO_DEFAULT_ID
+
+
+# ============================================================================
+# HELPERS: SESIONES DE MESA Y OCUPACIONES DE SILLA
+# ============================================================================
+# Reglas del modelo v2:
+# - Una sesion_mesa se abre cuando la primera silla de una mesa se ocupa.
+# - Se cierra automáticamente cuando la última silla se libera.
+# - Una ocupacion_silla vive dentro de una sesion_mesa activa.
+# - Ocupación es idempotente: si la silla ya está ocupada, no duplica.
+# ============================================================================
+
+def _silla_por_qr(cur, codigo_qr):
+    """Retorna dict {silla_id, mesa_id, numero_en_mesa, numero_mesa, es_adicional}."""
+    cur.execute("""
+        SELECT s.id AS silla_id, s.mesa_id, s.numero_en_mesa, s.codigo_qr,
+               s.es_adicional, m.numero_mesa
+        FROM sillas s LEFT JOIN mesas m ON s.mesa_id = m.id
+        WHERE s.codigo_qr = %s AND s.activa = TRUE;
+    """, (codigo_qr,))
+    return cur.fetchone()
+
+
+def _silla_por_mesa_y_numero(cur, numero_mesa, numero_en_mesa):
+    """Lookup silla por (número de mesa visible, número de silla en la mesa)."""
+    cur.execute("""
+        SELECT s.id AS silla_id, s.mesa_id, s.numero_en_mesa, s.codigo_qr,
+               s.es_adicional, m.numero_mesa
+        FROM sillas s JOIN mesas m ON s.mesa_id = m.id
+        WHERE m.numero_mesa = %s AND s.numero_en_mesa = %s AND s.activa = TRUE;
+    """, (int(numero_mesa), int(numero_en_mesa)))
+    return cur.fetchone()
+
+
+def _abrir_o_reusar_sesion_mesa(cur, mesa_id):
+    """Busca sesión activa para esa mesa; si no existe, crea una nueva.
+    Retorna el sesion_mesa_id."""
+    cur.execute("""
+        SELECT id FROM sesiones_mesa
+        WHERE mesa_id = %s AND cerrada_at IS NULL
+        ORDER BY abierta_at DESC LIMIT 1;
+    """, (int(mesa_id),))
+    row = cur.fetchone()
+    if row:
+        return int(row['id'])
+    cur.execute("""
+        INSERT INTO sesiones_mesa (mesa_id) VALUES (%s) RETURNING id;
+    """, (int(mesa_id),))
+    return int(cur.fetchone()['id'])
+
+
+def _abrir_ocupacion_silla(cur, silla_id, mesa_id, origen, cliente_display_name=None):
+    """Abre ocupacion en la silla dentro de una sesion_mesa (crea o reusa).
+    Idempotente: si la silla ya tiene ocupacion activa, la retorna.
+    Retorna (ocupacion_id, sesion_mesa_id)."""
+    # ¿Ya hay ocupacion abierta en esta silla?
+    cur.execute("""
+        SELECT id, sesion_mesa_id FROM ocupaciones_silla
+        WHERE silla_id = %s AND cerrada_at IS NULL
+        ORDER BY abierta_at DESC LIMIT 1;
+    """, (int(silla_id),))
+    row = cur.fetchone()
+    if row:
+        return int(row['id']), int(row['sesion_mesa_id'])
+    # Abrir/reusar sesion de la mesa y crear ocupacion
+    sesion_id = _abrir_o_reusar_sesion_mesa(cur, mesa_id)
+    cur.execute("""
+        INSERT INTO ocupaciones_silla (sesion_mesa_id, silla_id, cliente_display_name, origen)
+        VALUES (%s, %s, %s, %s) RETURNING id;
+    """, (sesion_id, int(silla_id), cliente_display_name, origen))
+    ocup_id = int(cur.fetchone()['id'])
+    return ocup_id, sesion_id
+
+
+def _cerrar_ocupacion_silla(cur, silla_id, cerrada_por_mesero_id=None):
+    """Cierra la ocupación activa de la silla si existe.
+    Retorna el sesion_mesa_id de la ocupación cerrada, o None si no había."""
+    cur.execute("""
+        SELECT id, sesion_mesa_id FROM ocupaciones_silla
+        WHERE silla_id = %s AND cerrada_at IS NULL
+        ORDER BY abierta_at DESC LIMIT 1;
+    """, (int(silla_id),))
+    row = cur.fetchone()
+    if not row:
+        return None
+    cur.execute("""
+        UPDATE ocupaciones_silla
+        SET cerrada_at = NOW(),
+            cerrada_por_mesero_id = %s
+        WHERE id = %s;
+    """, (cerrada_por_mesero_id, int(row['id'])))
+    return int(row['sesion_mesa_id'])
+
+
+def _cerrar_sesion_si_vacia(cur, sesion_id):
+    """Si la sesión no tiene ocupaciones activas, la cierra. Retorna True si cerró."""
+    cur.execute("""
+        SELECT count(*) AS abiertas FROM ocupaciones_silla
+        WHERE sesion_mesa_id = %s AND cerrada_at IS NULL;
+    """, (int(sesion_id),))
+    if int(cur.fetchone()['abiertas']) == 0:
+        cur.execute("""
+            UPDATE sesiones_mesa SET cerrada_at = NOW()
+            WHERE id = %s AND cerrada_at IS NULL;
+        """, (int(sesion_id),))
+        return True
+    return False
 
 
 # ============================================================================
@@ -187,8 +261,8 @@ def uplink_get_areas():
 
 @anvil.server.callable
 def uplink_get_mesas():
-    """Mesas con su área y sillas (schema v2). El estado 'ocupada/disponible' de
-    cada silla se toma de CUENTAS_TERRAZA en memoria (Bloque B lo pasará a BD)."""
+    """Mesas con su área y sillas. Estado ocupada/disponible se resuelve por
+    JOIN a ocupaciones_silla activas (Bloque B: schema v2 persistente)."""
     try:
         conn = get_db_connection()
         with conn.cursor() as cur:
@@ -203,29 +277,26 @@ def uplink_get_mesas():
                                'numero_silla',    s.numero_en_mesa,
                                'codigo_qr',       s.codigo_qr,
                                'posicion',        s.posicion,
-                               'es_adicional',    s.es_adicional
+                               'es_adicional',    s.es_adicional,
+                               'estado',          CASE WHEN o.id IS NULL
+                                                       THEN 'disponible'
+                                                       ELSE 'ocupada' END,
+                               'comensal_nombre', COALESCE(o.cliente_display_name,
+                                                           'Silla ' || s.numero_en_mesa)
                            ) ORDER BY s.numero_en_mesa
                        ) FILTER (WHERE s.id IS NOT NULL), '[]'::json) AS sillas
                 FROM mesas m
                 LEFT JOIN areas a  ON m.area_id = a.id
                 LEFT JOIN sillas s ON m.id = s.mesa_id AND s.activa = TRUE
+                LEFT JOIN ocupaciones_silla o
+                       ON o.silla_id = s.id AND o.cerrada_at IS NULL
                 WHERE m.activa = TRUE
                 GROUP BY m.id, a.nombre, a.icono, a.orden_display
                 ORDER BY COALESCE(a.orden_display, 99), m.numero_mesa ASC;
             """)
             rows = cur.fetchall()
         conn.close()
-        # Enriquecer con estado desde CUENTAS_TERRAZA (memoria)
-        result = []
-        for r in rows:
-            d = clean_row(r)
-            for s in d.get("sillas", []):
-                key = f"{d['numero_mesa']}-{s['numero_silla']}"
-                cta = CUENTAS_TERRAZA.get(key, {})
-                s["estado"] = cta.get("estado", "disponible")
-                s["comensal_nombre"] = cta.get("comensalNombre", f"Silla {s['numero_silla']}")
-            result.append(d)
-        return result
+        return [clean_row(r) for r in rows]
     except Exception as e:
         print(f"Error en uplink_get_mesas: {e}")
         return []
@@ -257,56 +328,200 @@ def uplink_get_sillas(mesa_id=None):
 
 
 # ============================================================================
-# COMANDAS EN MEMORIA (transición — Bloque B moverá a BD real)
+# COMANDAS — Estado persistente en BD (sesiones + ocupaciones)
+# Los items del carrito siguen en memoria hasta Bloque C.
 # ============================================================================
+
+def _construir_dict_cuentas_desde_db():
+    """Retorna el dict CUENTAS con formato compatible con JS legacy:
+    keys = "MM-SS" para sillas regulares, "EX-NN" para pool.
+    estado se lee de ocupaciones_silla (activa = ocupada).
+    items se toma de ITEMS_MEMORIA."""
+    resultado = {}
+    conn = get_db_connection()
+    try:
+        with conn.cursor() as cur:
+            cur.execute("""
+                SELECT
+                    s.id           AS silla_id,
+                    s.mesa_id,
+                    s.numero_en_mesa,
+                    s.codigo_qr,
+                    s.es_adicional,
+                    m.numero_mesa,
+                    o.id           AS ocupacion_id,
+                    o.sesion_mesa_id,
+                    o.cliente_display_name,
+                    o.abierta_at,
+                    o.origen
+                FROM sillas s
+                LEFT JOIN mesas m ON s.mesa_id = m.id
+                LEFT JOIN ocupaciones_silla o
+                       ON o.silla_id = s.id AND o.cerrada_at IS NULL
+                WHERE s.activa = TRUE
+                ORDER BY s.es_adicional, m.numero_mesa NULLS LAST,
+                         s.numero_en_mesa NULLS LAST;
+            """)
+            rows = cur.fetchall()
+        for r in rows:
+            if r["es_adicional"] or r["mesa_id"] is None:
+                pool_num = r["codigo_qr"].split("-")[-1]
+                key = f"EX-{pool_num}"
+                mesa_key = 0
+                silla_key = 0
+                nombre_default = f"Extra {pool_num}"
+            else:
+                mesa_key = int(r["numero_mesa"])
+                silla_key = int(r["numero_en_mesa"])
+                key = f"{mesa_key}-{silla_key}"
+                nombre_default = f"Silla {silla_key}"
+            estado = "ocupada" if r["ocupacion_id"] else "disponible"
+            resultado[key] = {
+                "mesaId": mesa_key,
+                "sillaId": silla_key,
+                "sillaDbId": int(r["silla_id"]),
+                "qrId": r["codigo_qr"],
+                "estado": estado,
+                "comensalNombre": r["cliente_display_name"] or nombre_default,
+                "items": ITEMS_MEMORIA.get(key, []),
+                "esAdicional": bool(r["es_adicional"]),
+                "ocupacionId": int(r["ocupacion_id"]) if r["ocupacion_id"] else None,
+                "sesionMesaId": int(r["sesion_mesa_id"]) if r["sesion_mesa_id"] else None,
+                "origen": r["origen"],
+                "abiertaAt": r["abierta_at"].isoformat() if r["abierta_at"] else None,
+            }
+    finally:
+        conn.close()
+    return resultado
+
 
 @anvil.server.callable('get_cuentas_terraza')
 @anvil.server.callable('uplink_get_cuentas_terraza')
 def uplink_get_cuentas_terraza():
-    return CUENTAS_TERRAZA
+    """Lee estado en tiempo real desde BD (sillas + ocupaciones activas)."""
+    try:
+        return _construir_dict_cuentas_desde_db()
+    except Exception as e:
+        print(f"[UPLINK] Error en get_cuentas_terraza: {e}")
+        return {}
 
 
 @anvil.server.callable('checkin_silla_qr')
 @anvil.server.callable('uplink_checkin_silla_qr')
 def uplink_checkin_silla_qr(mesa_id, silla_id, qr_id=''):
-    mesa_id = int(mesa_id)
-    silla_id = int(silla_id)
-    key = f"{mesa_id}-{silla_id}"
-    if key not in CUENTAS_TERRAZA:
-        CUENTAS_TERRAZA[key] = {
-            "mesaId": mesa_id, "sillaId": silla_id,
-            "qrId": qr_id or f"PV-P-{mesa_id:02d}-{silla_id:02d}",
-            "estado": "ocupada",
-            "comensalNombre": f"Comensal Silla {silla_id}",
-            "items": [], "esAdicional": False,
-        }
-    else:
-        CUENTAS_TERRAZA[key]["estado"] = "ocupada"
-        if qr_id:
-            CUENTAS_TERRAZA[key]["qrId"] = qr_id
-    print(f"🔔 [UPLINK] Check-in QR: Mesa {mesa_id} Silla {silla_id} ({qr_id}) -> OCUPADA")
-    return CUENTAS_TERRAZA[key]
+    """Cliente escaneó QR → abre ocupacion en BD (origen='qr'). Idempotente."""
+    conn = get_db_connection()
+    try:
+        with conn.cursor() as cur:
+            # Prioridad: si viene qr_id explícito, resolvemos por él (es el más confiable)
+            silla_row = None
+            if qr_id:
+                silla_row = _silla_por_qr(cur, qr_id)
+            if silla_row is None:
+                silla_row = _silla_por_mesa_y_numero(cur, mesa_id, silla_id)
+            if silla_row is None:
+                print(f"⚠️  [UPLINK] checkin_qr: silla no encontrada "
+                      f"(mesa={mesa_id} silla={silla_id} qr={qr_id})")
+                return {"error": "silla no encontrada"}
+            _abrir_ocupacion_silla(
+                cur,
+                silla_id=silla_row['silla_id'],
+                mesa_id=silla_row['mesa_id'],
+                origen='qr',
+            )
+        conn.commit()
+        print(f"🔔 [UPLINK] Check-in QR: silla_id={silla_row['silla_id']} "
+              f"(qr={silla_row['codigo_qr']}) → OCUPADA")
+    except Exception as e:
+        conn.rollback()
+        print(f"[UPLINK] Error en checkin_silla_qr: {e}")
+        return {"error": str(e)}
+    finally:
+        conn.close()
+    # Retorna el estado actualizado de esa silla en formato legacy
+    all_cuentas = _construir_dict_cuentas_desde_db()
+    key = (f"{silla_row['numero_mesa']}-{silla_row['numero_en_mesa']}"
+           if not silla_row['es_adicional']
+           else f"EX-{silla_row['codigo_qr'].split('-')[-1]}")
+    return all_cuentas.get(key, {})
 
 
 @anvil.server.callable('actualizar_cuenta_silla')
 @anvil.server.callable('uplink_actualizar_cuenta_silla')
 def uplink_actualizar_cuenta_silla(mesa_id, silla_id, items, estado='ocupada'):
+    """Actualiza items en memoria + estado en BD (ocupada abre ocupacion,
+    disponible cierra). Sirve como el "clic silla" desde POSMesero.
+    Bloque C moverá items también a BD."""
     mesa_id = int(mesa_id)
     silla_id = int(silla_id)
     key = f"{mesa_id}-{silla_id}"
-    if key in CUENTAS_TERRAZA:
-        CUENTAS_TERRAZA[key]["items"] = items
-        CUENTAS_TERRAZA[key]["estado"] = estado
-    else:
-        CUENTAS_TERRAZA[key] = {
-            "mesaId": mesa_id, "sillaId": silla_id,
-            "qrId": f"PV-P-{mesa_id:02d}-{silla_id:02d}",
-            "estado": estado,
-            "comensalNombre": f"Comensal Silla {silla_id}",
-            "items": items, "esAdicional": False,
-        }
-    print(f"📝 [UPLINK] Cuenta actualizada: Mesa {mesa_id} Silla {silla_id} -> {len(items)} items ({estado})")
-    return CUENTAS_TERRAZA
+
+    # Items siempre en memoria (Bloque C los pasa a detalle_comanda)
+    ITEMS_MEMORIA[key] = items or []
+
+    conn = get_db_connection()
+    try:
+        with conn.cursor() as cur:
+            silla_row = _silla_por_mesa_y_numero(cur, mesa_id, silla_id)
+            if silla_row is None:
+                print(f"⚠️  [UPLINK] actualizar_cuenta: silla no encontrada "
+                      f"(mesa={mesa_id} silla={silla_id})")
+                return _construir_dict_cuentas_desde_db()
+            if estado == 'ocupada':
+                _abrir_ocupacion_silla(
+                    cur, silla_id=silla_row['silla_id'],
+                    mesa_id=silla_row['mesa_id'], origen='mesero'
+                )
+            elif estado in ('disponible', 'libre'):
+                sesion_cerrada = _cerrar_ocupacion_silla(
+                    cur, silla_id=silla_row['silla_id'],
+                    cerrada_por_mesero_id=_get_mesero_default_id(cur)
+                )
+                if sesion_cerrada:
+                    _cerrar_sesion_si_vacia(cur, sesion_cerrada)
+                # Al liberar, olvidar items en memoria
+                ITEMS_MEMORIA.pop(key, None)
+        conn.commit()
+        print(f"📝 [UPLINK] Cuenta actualizada BD: Mesa {mesa_id} Silla {silla_id} "
+              f"→ {len(items or [])} items ({estado})")
+    except Exception as e:
+        conn.rollback()
+        print(f"[UPLINK] Error en actualizar_cuenta_silla: {e}")
+    finally:
+        conn.close()
+    return _construir_dict_cuentas_desde_db()
+
+
+@anvil.server.callable('liberar_silla')
+@anvil.server.callable('uplink_liberar_silla')
+def uplink_liberar_silla(mesa_id, silla_id):
+    """Endpoint explícito para que el mesero libere una silla.
+    Cierra ocupacion + sesion si es la última."""
+    conn = get_db_connection()
+    try:
+        with conn.cursor() as cur:
+            silla_row = _silla_por_mesa_y_numero(cur, int(mesa_id), int(silla_id))
+            if silla_row is None:
+                return {"error": "silla no encontrada"}
+            sesion_cerrada = _cerrar_ocupacion_silla(
+                cur, silla_id=silla_row['silla_id'],
+                cerrada_por_mesero_id=_get_mesero_default_id(cur)
+            )
+            sesion_tambien_cerrada = False
+            if sesion_cerrada:
+                sesion_tambien_cerrada = _cerrar_sesion_si_vacia(cur, sesion_cerrada)
+        conn.commit()
+        key = f"{int(mesa_id)}-{int(silla_id)}"
+        ITEMS_MEMORIA.pop(key, None)
+        print(f"🔓 [UPLINK] Silla liberada: Mesa {mesa_id} Silla {silla_id} "
+              f"{'(sesion cerrada)' if sesion_tambien_cerrada else ''}")
+        return {"ok": True, "sesion_cerrada": sesion_tambien_cerrada}
+    except Exception as e:
+        conn.rollback()
+        print(f"[UPLINK] Error en liberar_silla: {e}")
+        return {"error": str(e)}
+    finally:
+        conn.close()
 
 
 # ============================================================================
@@ -532,10 +747,12 @@ def uplink_get_dashboard_kpis():
             total_mesas = cur.fetchone()['count']
         conn.close()
 
+        # Estado en tiempo real desde BD (v2)
+        cuentas = _construir_dict_cuentas_desde_db()
         ocupadas_count = 0
         comensales_count = 0
         comandas_recientes = []
-        for key, cta in CUENTAS_TERRAZA.items():
+        for key, cta in cuentas.items():
             if cta and cta.get('estado') == 'ocupada' and cta.get('items'):
                 ocupadas_count += 1
                 items_count = len(cta.get('items', []))
@@ -653,7 +870,6 @@ def alias_get_areas_terraza():
 if __name__ == '__main__':
     print("🌿 Conectando 'La Terraza de Vida & Sabor' (V&S) Anvil Uplink a Anvil.works...")
     print(f"🔑 Key: {ANVIL_UPLINK_KEY[:15]}...")
-    _init_cuentas_desde_db()
     anvil.server.connect(ANVIL_UPLINK_KEY)
-    print("✅ ¡Conexión Anvil Uplink V&S establecida — schema v2!")
+    print("✅ ¡Conexión Anvil Uplink V&S establecida — schema v2 + sesiones persistentes!")
     anvil.server.wait_forever()
