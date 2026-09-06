@@ -175,6 +175,75 @@ def _cerrar_sesion_si_vacia(cur, sesion_id):
 
 
 # ============================================================================
+# HELPERS: COMANDAS Y DETALLE_COMANDA (Bloque C.1)
+# ============================================================================
+
+def _abrir_o_reusar_comanda(cur, sesion_mesa_id, tipo, silla_id=None):
+    """Busca comanda activa (estado 'abierta') para esa sesion + tipo + silla,
+    o crea una nueva. Retorna comanda_id.
+    tipo: 'silla' → silla_id requerido; 'al_centro' → silla_id se ignora."""
+    if tipo == 'silla':
+        assert silla_id is not None, "silla_id requerido para tipo='silla'"
+        cur.execute("""
+            SELECT id FROM comandas
+            WHERE sesion_mesa_id = %s AND tipo = 'silla'
+              AND silla_id = %s AND estado = 'abierta'
+            LIMIT 1;
+        """, (int(sesion_mesa_id), int(silla_id)))
+    else:
+        cur.execute("""
+            SELECT id FROM comandas
+            WHERE sesion_mesa_id = %s AND tipo = 'al_centro'
+              AND estado = 'abierta'
+            LIMIT 1;
+        """, (int(sesion_mesa_id),))
+    row = cur.fetchone()
+    if row:
+        return int(row['id'])
+    # Crear nueva
+    if tipo == 'silla':
+        cur.execute("""
+            INSERT INTO comandas (sesion_mesa_id, tipo, silla_id, mesero_id, estado)
+            VALUES (%s, 'silla', %s, %s, 'abierta') RETURNING id;
+        """, (int(sesion_mesa_id), int(silla_id), _get_mesero_default_id(cur)))
+    else:
+        cur.execute("""
+            INSERT INTO comandas (sesion_mesa_id, tipo, silla_id, mesero_id, estado)
+            VALUES (%s, 'al_centro', NULL, %s, 'abierta') RETURNING id;
+        """, (int(sesion_mesa_id), _get_mesero_default_id(cur)))
+    return int(cur.fetchone()['id'])
+
+
+def _snapshot_producto(cur, producto_id):
+    """Devuelve {precio, nombre, estacion_id} congelados al momento."""
+    cur.execute("""
+        SELECT precio_unitario, nombre, estacion_id
+        FROM productos_menu WHERE id = %s;
+    """, (int(producto_id),))
+    row = cur.fetchone()
+    if not row:
+        raise ValueError(f"Producto {producto_id} no existe")
+    return {
+        "precio": float(row['precio_unitario']),
+        "nombre": row['nombre'],
+        "estacion_id": int(row['estacion_id']) if row['estacion_id'] else None,
+    }
+
+
+def _sesion_activa_de_silla(cur, silla_id):
+    """Retorna la sesion_mesa_id activa de la mesa de esta silla, o None."""
+    cur.execute("""
+        SELECT ses.id AS sesion_id
+        FROM sesiones_mesa ses
+        JOIN sillas s ON s.mesa_id = ses.mesa_id
+        WHERE s.id = %s AND ses.cerrada_at IS NULL
+        ORDER BY ses.abierta_at DESC LIMIT 1;
+    """, (int(silla_id),))
+    row = cur.fetchone()
+    return int(row['sesion_id']) if row else None
+
+
+# ============================================================================
 # HELPERS DE SERIALIZACIÓN
 # ============================================================================
 
@@ -662,6 +731,304 @@ def uplink_guardar_categoria(cat_dict):
     except Exception as e:
         print(f"Error en uplink_guardar_categoria: {e}")
         return {"success": False, "error": str(e)}
+
+
+# ============================================================================
+# MENÚS POR ROL (Bloque C.1) — vistas SQL: vw_menu_cliente / vw_menu_mesero
+# ============================================================================
+
+@anvil.server.callable('get_menu_cliente')
+@anvil.server.callable('uplink_get_menu_cliente')
+def uplink_get_menu_cliente():
+    """Menú visible al cliente (teléfono/QR). Sin recetas ni costos."""
+    try:
+        conn = get_db_connection()
+        with conn.cursor() as cur:
+            cur.execute("SELECT * FROM vw_menu_cliente ORDER BY categoria_orden, id;")
+            rows = cur.fetchall()
+        conn.close()
+        return [clean_row(r) for r in rows]
+    except Exception as e:
+        print(f"Error en get_menu_cliente: {e}")
+        return []
+
+
+@anvil.server.callable('get_menu_mesero')
+@anvil.server.callable('uplink_get_menu_mesero')
+def uplink_get_menu_mesero():
+    """Menú operativo para el mesero (iPad). Sin receta técnica ni costos."""
+    try:
+        conn = get_db_connection()
+        with conn.cursor() as cur:
+            cur.execute("SELECT * FROM vw_menu_mesero ORDER BY categoria_orden, id;")
+            rows = cur.fetchall()
+        conn.close()
+        return [clean_row(r) for r in rows]
+    except Exception as e:
+        print(f"Error en get_menu_mesero: {e}")
+        return []
+
+
+# ============================================================================
+# ITEMS DE COMANDA (Bloque C.1) — agregar / eliminar / leer
+# ============================================================================
+
+@anvil.server.callable('agregar_item_a_comanda')
+@anvil.server.callable('uplink_agregar_item_a_comanda')
+def uplink_agregar_item_a_comanda(
+    mesa_num, silla_num_pedido_por, producto_id, cantidad=1,
+    para_silla_num=None,           # None = mismo que silla_num_pedido_por; 0 = al centro
+    extras=None, exclusiones=None, opciones_termino=None, notas_cliente=''
+):
+    """Cliente/mesero agrega un item a una comanda.
+    - para_silla_num=0 → item al centro (tipo comanda 'al_centro').
+    - para_silla_num=None → default: para la misma silla que ordena.
+    - pedido_por_silla_num identifica quién físicamente ordenó (mamá pide por hijo).
+    Guarda snapshot de precio + nombre. NO envía a cocina (queda estado 'borrador')."""
+    mesa_num = int(mesa_num)
+    silla_num_pedido_por = int(silla_num_pedido_por)
+    cantidad = max(1, int(cantidad or 1))
+    if para_silla_num is None:
+        para_silla_num = silla_num_pedido_por
+    para_silla_num = int(para_silla_num)  # 0 = al centro
+    es_al_centro = (para_silla_num == 0)
+
+    conn = get_db_connection()
+    try:
+        with conn.cursor() as cur:
+            # Resolver sillas
+            silla_pedido_por_row = _silla_por_mesa_y_numero(cur, mesa_num, silla_num_pedido_por)
+            if silla_pedido_por_row is None:
+                return {"error": f"Silla {mesa_num}-{silla_num_pedido_por} no encontrada"}
+            silla_para_row = None
+            if not es_al_centro:
+                silla_para_row = _silla_por_mesa_y_numero(cur, mesa_num, para_silla_num)
+                if silla_para_row is None:
+                    return {"error": f"Silla destino {mesa_num}-{para_silla_num} no encontrada"}
+
+            # Asegurar sesión + ocupación de quien ordena
+            _abrir_ocupacion_silla(
+                cur, silla_id=silla_pedido_por_row['silla_id'],
+                mesa_id=silla_pedido_por_row['mesa_id'], origen='qr',
+            )
+            sesion_id = _sesion_activa_de_silla(cur, silla_pedido_por_row['silla_id'])
+
+            # Si es individual, también aseguramos ocupación de la silla destino
+            if not es_al_centro:
+                _abrir_ocupacion_silla(
+                    cur, silla_id=silla_para_row['silla_id'],
+                    mesa_id=silla_para_row['mesa_id'], origen='mesero',
+                )
+
+            # Abrir o reusar la comanda apropiada
+            if es_al_centro:
+                comanda_id = _abrir_o_reusar_comanda(cur, sesion_id, tipo='al_centro')
+            else:
+                comanda_id = _abrir_o_reusar_comanda(
+                    cur, sesion_id, tipo='silla',
+                    silla_id=silla_para_row['silla_id']
+                )
+
+            # Snapshot del producto
+            snap = _snapshot_producto(cur, producto_id)
+
+            cur.execute("""
+                INSERT INTO detalle_comanda (
+                    comanda_id, producto_id,
+                    para_silla_id, pedido_por_silla_id, es_al_centro,
+                    tipo_consumo, cantidad,
+                    precio_unitario_snapshot, producto_nombre_snapshot,
+                    extras_seleccionados, exclusiones,
+                    opciones_termino_seleccionadas, notas_cliente,
+                    estado
+                )
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, 'borrador')
+                RETURNING id, precio_unitario_snapshot, subtotal;
+            """, (
+                comanda_id, int(producto_id),
+                None if es_al_centro else silla_para_row['silla_id'],
+                silla_pedido_por_row['silla_id'],
+                es_al_centro,
+                'comida',  # tipo_consumo — Bloque D lo puede refinar según categoría
+                cantidad,
+                snap['precio'], snap['nombre'],
+                Json(extras or []),
+                Json(exclusiones or []),
+                Json(opciones_termino or []),
+                notas_cliente or '',
+            ))
+            row = cur.fetchone()
+        conn.commit()
+        print(f"➕ [UPLINK] Item agregado: {snap['nombre']} x{cantidad} "
+              f"→ {'AL CENTRO' if es_al_centro else f'Silla {para_silla_num}'} "
+              f"(pedido por Silla {silla_num_pedido_por}) [comanda #{comanda_id}]")
+        return {
+            "ok": True,
+            "detalle_id": int(row['id']),
+            "comanda_id": comanda_id,
+            "precio_unitario": float(row['precio_unitario_snapshot']),
+            "subtotal": float(row['subtotal']),
+            "estado": "borrador",
+        }
+    except Exception as e:
+        conn.rollback()
+        print(f"[UPLINK] Error en agregar_item_a_comanda: {e}")
+        return {"error": str(e)}
+    finally:
+        conn.close()
+
+
+@anvil.server.callable('eliminar_item_comanda')
+@anvil.server.callable('uplink_eliminar_item_comanda')
+def uplink_eliminar_item_comanda(detalle_id):
+    """Elimina item si está en 'borrador'. Si ya fue enviado a cocina, lo marca
+    'cancelado' (para trazabilidad)."""
+    conn = get_db_connection()
+    try:
+        with conn.cursor() as cur:
+            cur.execute("SELECT estado FROM detalle_comanda WHERE id = %s;",
+                        (int(detalle_id),))
+            row = cur.fetchone()
+            if row is None:
+                return {"error": "detalle no encontrado"}
+            if row['estado'] == 'borrador':
+                cur.execute("DELETE FROM detalle_comanda WHERE id = %s;", (int(detalle_id),))
+                accion = 'eliminado'
+            else:
+                cur.execute("""
+                    UPDATE detalle_comanda SET estado = 'cancelado' WHERE id = %s;
+                """, (int(detalle_id),))
+                accion = 'cancelado'
+        conn.commit()
+        print(f"🗑️  [UPLINK] Item #{detalle_id} {accion}.")
+        return {"ok": True, "accion": accion}
+    except Exception as e:
+        conn.rollback()
+        print(f"[UPLINK] Error en eliminar_item_comanda: {e}")
+        return {"error": str(e)}
+    finally:
+        conn.close()
+
+
+@anvil.server.callable('get_items_por_silla')
+@anvil.server.callable('uplink_get_items_por_silla')
+def uplink_get_items_por_silla(mesa_num, silla_num):
+    """Retorna los items abiertos de una silla dentro de la sesión activa.
+    Separa en items_individuales (comanda de silla) y items_al_centro
+    (comanda al_centro donde esta silla es parte de la mesa)."""
+    conn = get_db_connection()
+    try:
+        with conn.cursor() as cur:
+            silla_row = _silla_por_mesa_y_numero(cur, int(mesa_num), int(silla_num))
+            if silla_row is None:
+                return {"items_individuales": [], "items_al_centro": []}
+            sesion_id = _sesion_activa_de_silla(cur, silla_row['silla_id'])
+            if sesion_id is None:
+                return {"items_individuales": [], "items_al_centro": []}
+            # Items individuales de esta silla
+            cur.execute("""
+                SELECT d.id, d.producto_id, d.cantidad,
+                       d.precio_unitario_snapshot, d.producto_nombre_snapshot,
+                       d.subtotal, d.extras_seleccionados, d.exclusiones,
+                       d.opciones_termino_seleccionadas, d.notas_cliente,
+                       d.estado, d.hora_creado
+                FROM detalle_comanda d
+                JOIN comandas c ON d.comanda_id = c.id
+                WHERE c.sesion_mesa_id = %s AND c.tipo = 'silla'
+                  AND c.silla_id = %s AND c.estado = 'abierta'
+                  AND d.estado <> 'cancelado'
+                ORDER BY d.hora_creado ASC;
+            """, (sesion_id, silla_row['silla_id']))
+            items_indiv = [clean_row(r) for r in cur.fetchall()]
+            # Items al centro de la mesa (visibles a todas las sillas de la sesión)
+            cur.execute("""
+                SELECT d.id, d.producto_id, d.cantidad,
+                       d.precio_unitario_snapshot, d.producto_nombre_snapshot,
+                       d.subtotal, d.extras_seleccionados, d.exclusiones,
+                       d.opciones_termino_seleccionadas, d.notas_cliente,
+                       d.estado, d.hora_creado, d.pedido_por_silla_id
+                FROM detalle_comanda d
+                JOIN comandas c ON d.comanda_id = c.id
+                WHERE c.sesion_mesa_id = %s AND c.tipo = 'al_centro'
+                  AND c.estado = 'abierta'
+                  AND d.estado <> 'cancelado'
+                ORDER BY d.hora_creado ASC;
+            """, (sesion_id,))
+            items_centro = [clean_row(r) for r in cur.fetchall()]
+        return {
+            "items_individuales": items_indiv,
+            "items_al_centro": items_centro,
+            "sesion_id": sesion_id,
+        }
+    except Exception as e:
+        print(f"[UPLINK] Error en get_items_por_silla: {e}")
+        return {"error": str(e)}
+    finally:
+        conn.close()
+
+
+@anvil.server.callable('enviar_items_a_cocina')
+@anvil.server.callable('uplink_enviar_items_a_cocina')
+def uplink_enviar_items_a_cocina(detalle_ids):
+    """Toma una lista de detalle_comanda_ids en estado 'borrador' y los envía
+    a cocina. Agrupa por estación → crea 1 envio_cocina por estación → asigna.
+    Versión simple SIN buffer inteligente (eso es Bloque D)."""
+    if not detalle_ids:
+        return {"ok": True, "enviados": 0, "envios": []}
+    ids_list = [int(x) for x in detalle_ids]
+    conn = get_db_connection()
+    envios_creados = []
+    try:
+        with conn.cursor() as cur:
+            # Obtener items válidos (estado borrador) + su estacion via producto
+            cur.execute("""
+                SELECT d.id, d.comanda_id, c.sesion_mesa_id, p.estacion_id
+                FROM detalle_comanda d
+                JOIN comandas c ON d.comanda_id = c.id
+                JOIN productos_menu p ON d.producto_id = p.id
+                WHERE d.id = ANY(%s) AND d.estado = 'borrador';
+            """, (ids_list,))
+            candidatos = cur.fetchall()
+            if not candidatos:
+                return {"ok": True, "enviados": 0, "envios": [],
+                        "aviso": "ningún item en estado borrador"}
+            # Agrupar por (sesion_id, estacion_id)
+            grupos = {}
+            for c in candidatos:
+                if c['estacion_id'] is None:
+                    continue  # skip items sin estación asignada
+                key = (int(c['sesion_mesa_id']), int(c['estacion_id']))
+                grupos.setdefault(key, []).append(int(c['id']))
+            # Por cada grupo, crear envio_cocina y marcar items
+            for (sesion_id, estacion_id), item_ids in grupos.items():
+                cur.execute("""
+                    INSERT INTO envios_cocina (sesion_mesa_id, estacion_id)
+                    VALUES (%s, %s) RETURNING id;
+                """, (sesion_id, estacion_id))
+                envio_id = int(cur.fetchone()['id'])
+                cur.execute("""
+                    UPDATE detalle_comanda
+                    SET envio_cocina_id = %s,
+                        estado = 'enviado_cocina',
+                        hora_enviado_cocina = NOW()
+                    WHERE id = ANY(%s);
+                """, (envio_id, item_ids))
+                envios_creados.append({
+                    "envio_id": envio_id,
+                    "estacion_id": estacion_id,
+                    "item_ids": item_ids,
+                })
+        conn.commit()
+        total = sum(len(e['item_ids']) for e in envios_creados)
+        print(f"🍳 [UPLINK] Enviados a cocina: {total} items en "
+              f"{len(envios_creados)} envío(s).")
+        return {"ok": True, "enviados": total, "envios": envios_creados}
+    except Exception as e:
+        conn.rollback()
+        print(f"[UPLINK] Error en enviar_items_a_cocina: {e}")
+        return {"error": str(e)}
+    finally:
+        conn.close()
 
 
 # ============================================================================
