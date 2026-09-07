@@ -161,6 +161,39 @@ def _cerrar_ocupacion_silla(cur, silla_id, cerrada_por_mesero_id=None):
     return int(row['sesion_mesa_id'])
 
 
+def _cerrar_ocupacion_por_qr(cur, qr_codigo):
+    """Cierra la ocupación activa asociada al QR dado (silla y sus posibles
+    referencias en la sesion). Usado para 'cambio de lugar silencioso' cuando
+    el mismo cliente escanea una silla nueva desde su teléfono."""
+    silla = _silla_por_qr(cur, qr_codigo)
+    if silla is None:
+        return None
+    sesion_cerrada = _cerrar_ocupacion_silla(
+        cur, silla_id=silla['silla_id'], cerrada_por_mesero_id=None
+    )
+    if sesion_cerrada:
+        _cerrar_sesion_si_vacia(cur, sesion_cerrada)
+    return sesion_cerrada
+
+
+def _crear_llamada_conflicto(cur, silla_id, tipo='conflicto_silla_ocupada',
+                              notas=None):
+    """Registra una llamada al mesero por conflicto en la silla. Deduplica:
+    si ya hay una del mismo tipo abierta para esa silla, no crea otra."""
+    cur.execute("""
+        SELECT id FROM llamadas_mesero
+        WHERE silla_id = %s AND tipo = %s AND atendida_at IS NULL
+        LIMIT 1;
+    """, (int(silla_id), tipo))
+    if cur.fetchone():
+        return None
+    cur.execute("""
+        INSERT INTO llamadas_mesero (silla_id, tipo, notas)
+        VALUES (%s, %s, %s) RETURNING id;
+    """, (int(silla_id), tipo, notas))
+    return int(cur.fetchone()['id'])
+
+
 def _cerrar_sesion_si_vacia(cur, sesion_id):
     """Si la sesión no tiene ocupaciones activas, la cierra. Retorna True si cerró."""
     cur.execute("""
@@ -479,12 +512,20 @@ def uplink_get_cuentas_terraza():
 
 @anvil.server.callable('checkin_silla_qr')
 @anvil.server.callable('uplink_checkin_silla_qr')
-def uplink_checkin_silla_qr(mesa_id, silla_id, qr_id=''):
-    """Cliente escaneó QR → abre ocupacion en BD (origen='qr'). Idempotente."""
+def uplink_checkin_silla_qr(mesa_id, silla_id, qr_id='', qr_previo=None):
+    """Cliente escaneó QR → abre ocupacion en BD (origen='qr').
+    Políticas:
+      - Silla libre + sin qr_previo: check-in normal.
+      - Silla libre + qr_previo distinto: cambio de lugar silencioso (cierra
+        la ocupación del qr_previo, abre la nueva).
+      - Silla ocupada + qr_previo COINCIDE con la silla: "es yo mismo",
+        bienvenida normal (idempotente).
+      - Silla ocupada + qr_previo NO coincide (o falta): CONFLICTO — crea
+        llamada al mesero y retorna error 'silla_ocupada_por_otro'.
+    """
     conn = get_db_connection()
     try:
         with conn.cursor() as cur:
-            # Prioridad: si viene qr_id explícito, resolvemos por él (es el más confiable)
             silla_row = None
             if qr_id:
                 silla_row = _silla_por_qr(cur, qr_id)
@@ -494,6 +535,38 @@ def uplink_checkin_silla_qr(mesa_id, silla_id, qr_id=''):
                 print(f"⚠️  [UPLINK] checkin_qr: silla no encontrada "
                       f"(mesa={mesa_id} silla={silla_id} qr={qr_id})")
                 return {"error": "silla no encontrada"}
+
+            # ¿Esa silla ya tiene ocupación activa?
+            cur.execute("""
+                SELECT id FROM ocupaciones_silla
+                WHERE silla_id = %s AND cerrada_at IS NULL LIMIT 1;
+            """, (int(silla_row['silla_id']),))
+            silla_ya_ocupada = cur.fetchone() is not None
+
+            es_yo_mismo = bool(qr_previo) and qr_previo == silla_row['codigo_qr']
+
+            if silla_ya_ocupada and not es_yo_mismo:
+                # CONFLICTO: silla ocupada por otro comensal. Crea alerta.
+                llamada_id = _crear_llamada_conflicto(
+                    cur, silla_row['silla_id'],
+                    notas=f"Escaneo conflictivo desde teléfono. qr_previo={qr_previo or 'ninguno'}"
+                )
+                conn.commit()
+                print(f"⚠️  [UPLINK] CONFLICTO silla ocupada: "
+                      f"qr={silla_row['codigo_qr']} qr_previo={qr_previo} "
+                      f"→ llamada mesero #{llamada_id}")
+                return {
+                    "error": "silla_ocupada_por_otro",
+                    "ya_ocupada": True,
+                    "qrId": silla_row['codigo_qr'],
+                    "llamada_id": llamada_id,
+                }
+
+            # Cambio de lugar silencioso: cierro la ocupación del QR anterior
+            # (si viene, no coincide con esta silla, y la silla anterior existe).
+            if qr_previo and qr_previo != silla_row['codigo_qr']:
+                _cerrar_ocupacion_por_qr(cur, qr_previo)
+
             _ocup_id, _sesion_id, was_new = _abrir_ocupacion_silla(
                 cur,
                 silla_id=silla_row['silla_id'],
@@ -501,7 +574,11 @@ def uplink_checkin_silla_qr(mesa_id, silla_id, qr_id=''):
                 origen='qr',
             )
         conn.commit()
-        estado_txt = "NUEVA OCUPACIÓN" if was_new else "YA ESTABA OCUPADA"
+        estado_txt = (
+            "MISMA SESIÓN" if es_yo_mismo else
+            "CAMBIO DE LUGAR (silencioso)" if qr_previo else
+            "NUEVA OCUPACIÓN"
+        )
         print(f"🔔 [UPLINK] Check-in QR: silla_id={silla_row['silla_id']} "
               f"(qr={silla_row['codigo_qr']}) → {estado_txt}")
     except Exception as e:
@@ -510,13 +587,12 @@ def uplink_checkin_silla_qr(mesa_id, silla_id, qr_id=''):
         return {"error": str(e)}
     finally:
         conn.close()
-    # Retorna el estado actualizado de esa silla en formato legacy + flag ya_ocupada
     all_cuentas = _construir_dict_cuentas_desde_db()
     key = (f"{silla_row['numero_mesa']}-{silla_row['numero_en_mesa']}"
            if not silla_row['es_adicional']
            else f"EX-{silla_row['codigo_qr'].split('-')[-1]}")
     result = dict(all_cuentas.get(key, {}))
-    result["ya_ocupada"] = (not was_new)  # True = silla estaba ocupada antes del scan
+    result["ya_ocupada"] = (not was_new)
     return result
 
 
@@ -1031,6 +1107,97 @@ def uplink_enviar_items_a_cocina(detalle_ids):
     except Exception as e:
         conn.rollback()
         print(f"[UPLINK] Error en enviar_items_a_cocina: {e}")
+        return {"error": str(e)}
+    finally:
+        conn.close()
+
+
+# ============================================================================
+# LLAMADAS AL MESERO (Bloque G — versión mínima para P2)
+# ============================================================================
+
+@anvil.server.callable('get_llamadas_pendientes')
+@anvil.server.callable('uplink_get_llamadas_pendientes')
+def uplink_get_llamadas_pendientes(area_codigo=None):
+    """Lista las llamadas no atendidas. Si area_codigo se pasa, filtra por
+    esa área (para meseros que atienden solo una)."""
+    try:
+        conn = get_db_connection()
+        with conn.cursor() as cur:
+            cur.execute("""
+                SELECT l.id, l.tipo, l.creada_at, l.notas,
+                       s.id AS silla_id, s.codigo_qr, s.numero_en_mesa,
+                       s.es_adicional,
+                       m.numero_mesa,
+                       a.codigo AS area_codigo, a.nombre AS area_nombre
+                FROM llamadas_mesero l
+                JOIN sillas s ON l.silla_id = s.id
+                LEFT JOIN mesas m ON s.mesa_id = m.id
+                LEFT JOIN areas a ON m.area_id = a.id
+                WHERE l.atendida_at IS NULL
+                  AND (%s::text IS NULL OR a.codigo = %s::text)
+                ORDER BY l.creada_at ASC;
+            """, (area_codigo, area_codigo))
+            rows = cur.fetchall()
+        conn.close()
+        return [clean_row(r) for r in rows]
+    except Exception as e:
+        print(f"[UPLINK] Error en get_llamadas_pendientes: {e}")
+        return []
+
+
+@anvil.server.callable('atender_llamada')
+@anvil.server.callable('uplink_atender_llamada')
+def uplink_atender_llamada(llamada_id, mesero_id=None):
+    """Marca la llamada como atendida por el mesero (primero que responde)."""
+    conn = get_db_connection()
+    try:
+        with conn.cursor() as cur:
+            mid = int(mesero_id) if mesero_id else _get_mesero_default_id(cur)
+            cur.execute("""
+                UPDATE llamadas_mesero
+                SET atendida_at = NOW(), atendida_por_mesero_id = %s
+                WHERE id = %s AND atendida_at IS NULL
+                RETURNING id;
+            """, (mid, int(llamada_id)))
+            row = cur.fetchone()
+        conn.commit()
+        atendida = row is not None
+        print(f"✅ [UPLINK] Llamada #{llamada_id} atendida por mesero_id={mid}"
+              if atendida else
+              f"⚠️  [UPLINK] Llamada #{llamada_id} ya estaba atendida")
+        return {"ok": True, "atendida": atendida}
+    except Exception as e:
+        conn.rollback()
+        print(f"[UPLINK] Error en atender_llamada: {e}")
+        return {"error": str(e)}
+    finally:
+        conn.close()
+
+
+@anvil.server.callable('crear_llamada_mesero')
+@anvil.server.callable('uplink_crear_llamada_mesero')
+def uplink_crear_llamada_mesero(mesa_num, silla_num, tipo='llamar_mesero',
+                                 notas=None):
+    """Cliente pulsa botón 'llamar mesero' / 'solicitar cuenta' en el Menu."""
+    conn = get_db_connection()
+    try:
+        with conn.cursor() as cur:
+            silla = _silla_por_mesa_y_numero(cur, int(mesa_num), int(silla_num))
+            if silla is None:
+                return {"error": "silla no encontrada"}
+            cur.execute("""
+                INSERT INTO llamadas_mesero (silla_id, tipo, notas)
+                VALUES (%s, %s, %s) RETURNING id;
+            """, (silla['silla_id'], str(tipo), notas))
+            llamada_id = int(cur.fetchone()['id'])
+        conn.commit()
+        print(f"🔔 [UPLINK] Llamada tipo={tipo} creada #{llamada_id} "
+              f"Mesa {mesa_num} Silla {silla_num}")
+        return {"ok": True, "llamada_id": llamada_id}
+    except Exception as e:
+        conn.rollback()
+        print(f"[UPLINK] Error en crear_llamada_mesero: {e}")
         return {"error": str(e)}
     finally:
         conn.close()

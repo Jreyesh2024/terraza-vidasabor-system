@@ -136,35 +136,42 @@ class Menu(MenuTemplate):
 
     # ─────────────────────── auto check-in por QR ────────────────────────
     def _auto_checkin(self, info):
-        try:
-            resp = anvil.server.call(
-                "checkin_silla_qr",
-                info["mesa_num"], info["silla_num"], info["qr"]
-            )
-        except Exception as e:
-            print(f"[Menu] Error en checkin_silla_qr: {e}")
-            self._render_error("No pude registrar tu llegada. Intenta escanear de nuevo.")
-            return
-        if not isinstance(resp, dict) or resp.get("error"):
-            self._render_error(
-                "Hubo un problema al registrar tu llegada. "
-                "Por favor llama al mesero para que te ayude."
-            )
-            return
-        # Detectar si la silla ya estaba ocupada por OTRA persona.
-        # Guardamos en localStorage el QR de la sesión actual del cliente
-        # para distinguir "mismo cliente re-escaneando" vs "otro cliente".
-        ya_ocupada = bool(resp.get("ya_ocupada"))
+        # qr_previo permite al backend distinguir 3 escenarios:
+        # - Silla libre + qr_previo distinto → cambio de lugar silencioso
+        #   (cierra la ocupación previa, abre la nueva).
+        # - Silla ocupada + qr_previo COINCIDE → misma sesión (idempotente).
+        # - Silla ocupada + qr_previo NO coincide → CONFLICTO
+        #   (backend crea alerta al mesero, retorna error 'silla_ocupada_por_otro').
         mi_qr_previo = None
         try:
             mi_qr_previo = anvil.js.window.localStorage.getItem("vs_mi_qr_actual")
         except Exception:
             pass
-        if ya_ocupada and mi_qr_previo != info["qr"]:
-            # Silla está ocupada por alguien más (mi localStorage no coincide).
+        try:
+            resp = anvil.server.call(
+                "checkin_silla_qr",
+                info["mesa_num"], info["silla_num"], info["qr"],
+                qr_previo=mi_qr_previo,
+            )
+        except Exception as e:
+            print(f"[Menu] Error en checkin_silla_qr: {e}")
+            self._render_error("No pude registrar tu llegada. Intenta escanear de nuevo.")
+            return
+        if not isinstance(resp, dict):
+            self._render_error("Respuesta inesperada del servidor.")
+            return
+        err = resp.get("error")
+        if err == "silla_ocupada_por_otro":
+            # El backend ya creó la alerta al mesero. Le decimos al cliente.
             self._render_silla_ajena(info["qr"])
             return
-        # Check-in exitoso propio: guardar QR en localStorage.
+        if err:
+            self._render_error(
+                "Hubo un problema al registrar tu llegada. "
+                "Por favor llama al mesero para que te ayude."
+            )
+            return
+        # Check-in exitoso: guardar mi QR en localStorage (usado en próximo escaneo).
         try:
             anvil.js.window.localStorage.setItem("vs_mi_qr_actual", info["qr"])
         except Exception:
@@ -398,11 +405,29 @@ class Menu(MenuTemplate):
         )
 
     def _llamar_mesero(self):
-        anvil.alert("Se avisó al mesero. Alguien llegará pronto.",
-                    title="Mesero notificado")
-        # Bloque G: se conectará con crear_llamada_mesero real.
+        self._enviar_llamada("llamar_mesero",
+                             "Se avisó al mesero. Alguien llegará pronto.")
 
     def _solicitar_cuenta(self):
-        anvil.alert("Notificamos tu solicitud. El mesero te traerá la cuenta.",
-                    title="Cuenta solicitada")
-        # Bloque G: se conectará con crear_llamada_mesero tipo='solicitar_cuenta'.
+        self._enviar_llamada("solicitar_cuenta",
+                             "Notificamos tu solicitud. El mesero te traerá la cuenta.")
+
+    def _enviar_llamada(self, tipo, mensaje_ok):
+        info = self._sesion_info or {}
+        mesa = info.get("mesa_num")
+        silla = info.get("silla_num")
+        if not mesa or not silla:
+            anvil.alert("Primero registra tu llegada escaneando el QR.",
+                        title="Sin silla activa")
+            return
+        try:
+            resp = anvil.server.call("crear_llamada_mesero", mesa, silla, tipo)
+        except Exception as e:
+            print(f"[Menu] Error en crear_llamada_mesero: {e}")
+            anvil.alert("No pudimos avisar al mesero. Intenta otra vez.",
+                        title="Error")
+            return
+        if isinstance(resp, dict) and resp.get("ok"):
+            anvil.alert(mensaje_ok, title="Aviso enviado")
+        else:
+            anvil.alert("No pudimos avisar al mesero.", title="Error")

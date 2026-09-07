@@ -32,6 +32,10 @@ _ACCIONES_NATIVAS = {
     # Composites: reemplazan onclicks compuestos "foo(); bar();" del HTML original.
     "cerrarModalComandaYVolverCroquis": ("_composite_cerrar_y_volver_croquis",),
     "volverAlCroquisYRecargar": ("_composite_volver_y_recargar",),
+    # Alertas / llamadas al mesero (Bloque G v1)
+    "verAlertas":     ("_ver_alertas",),
+    "cerrarAlertas":  ("_cerrar_alertas",),
+    "atenderAlerta":  ("_atender_alerta",),
 }
 
 
@@ -101,11 +105,14 @@ class POSMesero(POSMeseroTemplate):
         # cuando el archivo termine de cargar.
         self._asegurar_pos_mesero_js_y_arrancar()
         self._iniciar_timer_sync()
+        self._instalar_badge_alertas()
+        self._iniciar_timer_alertas()
 
     def form_hide(self, **event_args):
         """Limpieza al salir del form. Evita listeners fantasma y timers colgados."""
         self._unbind_events()
         self._detener_timer_sync()
+        self._detener_timer_alertas()
         self._retirar_puente_python()
         self._desinstalar_mutation_observer()
 
@@ -320,7 +327,8 @@ class POSMesero(POSMeseroTemplate):
             return
         script = document.createElement("script")
         script.src = "_/theme/pos_mesero.js"
-        script.async = False  # respeta el orden si se añaden más adelante
+        # `async` es palabra reservada en Python, usamos setattr con string.
+        setattr(script, "async", False)  # respeta el orden si se añaden más adelante
         script.onload = self._on_pos_mesero_js_ready
         script.onerror = self._on_pos_mesero_js_error
         document.head.appendChild(script)
@@ -488,3 +496,170 @@ class POSMesero(POSMeseroTemplate):
 
     def _tick_sync(self, **event_args):
         self._sincronizar_con_servidor()
+
+    # ═══════════════════════ ALERTAS AL MESERO (Bloque G v1) ═══════════════
+    def _instalar_badge_alertas(self):
+        """Inyecta un badge fijo arriba a la derecha con conteo de alertas."""
+        doc = anvil.js.window.document
+        if doc.getElementById("vs-alertas-badge") is not None:
+            return
+        badge = doc.createElement("div")
+        badge.id = "vs-alertas-badge"
+        badge.setAttribute("data-action", "verAlertas")
+        badge.style.cssText = (
+            "position: fixed; top: 12px; right: 16px; z-index: 9998; "
+            "min-width: 56px; height: 44px; padding: 0 14px; "
+            "display: flex; align-items: center; justify-content: center; gap: 6px; "
+            "border-radius: 999px; font-weight: 900; font-size: 13px; "
+            "cursor: pointer; box-shadow: 0 6px 18px rgba(0,0,0,0.5); "
+            "transition: transform 0.15s ease; user-select: none; "
+            "background: #1e293b; color: #64748b; border: 1px solid #334155;"
+        )
+        badge.innerHTML = '<i class="fa-solid fa-bell"></i><span id="vs-alertas-count">0</span>'
+        doc.body.appendChild(badge)
+
+    def _iniciar_timer_alertas(self):
+        try:
+            self._timer_alertas = anvil.Timer(interval=4)
+            self._timer_alertas.set_event_handler("tick", self._tick_alertas)
+            self.add_component(self._timer_alertas)
+            # Poll inmediato para no esperar 4s en el primer render.
+            self._tick_alertas()
+        except Exception as e:
+            print(f"[POSMesero] Error iniciando timer alertas: {e}")
+            self._timer_alertas = None
+
+    def _detener_timer_alertas(self):
+        t = getattr(self, "_timer_alertas", None)
+        if t is not None:
+            try:
+                t.interval = 0
+            except Exception:
+                pass
+        self._timer_alertas = None
+
+    def _tick_alertas(self, **event_args):
+        try:
+            llamadas = anvil.server.call("get_llamadas_pendientes") or []
+        except Exception as e:
+            print(f"[POSMesero] Error consultando llamadas: {e}")
+            return
+        self._llamadas_pendientes = llamadas
+        self._pintar_badge_alertas(len(llamadas))
+
+    def _pintar_badge_alertas(self, n):
+        doc = anvil.js.window.document
+        badge = doc.getElementById("vs-alertas-badge")
+        count_span = doc.getElementById("vs-alertas-count")
+        if badge is None or count_span is None:
+            return
+        count_span.innerHTML = str(n)
+        if n > 0:
+            badge.style.background = "linear-gradient(135deg,#dc2626,#991b1b)"
+            badge.style.color = "#ffffff"
+            badge.style.border = "1px solid #f87171"
+            badge.style.animation = "vs-blink 1s ease-in-out infinite"
+            # Inyectar keyframes una sola vez
+            if doc.getElementById("vs-blink-css") is None:
+                st = doc.createElement("style")
+                st.id = "vs-blink-css"
+                st.textContent = (
+                    "@keyframes vs-blink {"
+                    " 0%,100% { transform: scale(1); box-shadow: 0 6px 18px rgba(220,38,38,0.4); }"
+                    " 50% { transform: scale(1.08); box-shadow: 0 10px 28px rgba(220,38,38,0.9); } }"
+                )
+                doc.head.appendChild(st)
+        else:
+            badge.style.background = "#1e293b"
+            badge.style.color = "#64748b"
+            badge.style.border = "1px solid #334155"
+            badge.style.animation = ""
+
+    def _ver_alertas(self, *_):
+        """Renderiza modal overlay con lista de llamadas pendientes."""
+        doc = anvil.js.window.document
+        # Quitar modal anterior si existe
+        prev = doc.getElementById("vs-alertas-modal")
+        if prev is not None:
+            prev.remove()
+        llamadas = getattr(self, "_llamadas_pendientes", []) or []
+        etiqueta = {
+            "conflicto_silla_ocupada": ("⚠️ Conflicto: silla ocupada",
+                                        "linear-gradient(135deg,#dc2626,#991b1b)"),
+            "llamar_mesero":           ("🔔 Llamada de silla", "#0f766e"),
+            "solicitar_cuenta":        ("🧾 Pide su cuenta",   "#0369a1"),
+        }
+        cards_html = ""
+        for l in llamadas:
+            tipo = l.get("tipo", "?")
+            lab, color = etiqueta.get(tipo, (f"🔔 {tipo}", "#334155"))
+            mesa = l.get("numero_mesa", "?")
+            silla = l.get("numero_en_mesa", "?")
+            qr = l.get("codigo_qr", "")
+            hora = str(l.get("creada_at", ""))[11:16]
+            cards_html += (
+                f'<div style="background:#0f172a;border:1px solid #334155;'
+                f'border-radius:14px;padding:14px 16px;margin-bottom:10px;'
+                f'display:flex;flex-direction:column;gap:8px;">'
+                f'  <div style="display:flex;align-items:center;justify-content:space-between;">'
+                f'    <span style="font-size:12px;font-weight:900;padding:6px 12px;'
+                f'      border-radius:999px;background:{color};color:#fff;">{lab}</span>'
+                f'    <span style="font-size:11px;color:#94a3b8;font-family:monospace;">{hora}</span>'
+                f'  </div>'
+                f'  <div style="font-size:15px;font-weight:800;color:#f1f5f9;">'
+                f'    Mesa {mesa} · Silla {silla}'
+                f'    <span style="font-size:11px;color:#64748b;font-family:monospace;margin-left:8px;">{qr}</span>'
+                f'  </div>'
+                f'  <button data-action="atenderAlerta" data-args="{l.get("id")}" '
+                f'    style="align-self:flex-end;padding:8px 18px;border-radius:10px;'
+                f'    background:#059669;color:#fff;font-weight:900;font-size:12px;'
+                f'    border:none;cursor:pointer;">Atender esta llamada</button>'
+                f'</div>'
+            )
+        if not cards_html:
+            cards_html = ('<div style="text-align:center;padding:32px;color:#64748b;">'
+                          '<i class="fa-solid fa-check-circle" style="font-size:36px;'
+                          'color:#10b981;margin-bottom:12px;"></i>'
+                          '<div style="font-weight:700;">Sin alertas pendientes</div>'
+                          '</div>')
+        modal = doc.createElement("div")
+        modal.id = "vs-alertas-modal"
+        modal.setAttribute("data-backdrop-action", "cerrarAlertas")
+        modal.style.cssText = (
+            "position:fixed;inset:0;z-index:10000;background:rgba(0,0,0,0.72);"
+            "display:flex;align-items:flex-start;justify-content:center;padding:40px 16px;"
+            "backdrop-filter:blur(6px);"
+        )
+        modal.innerHTML = (
+            '<div style="width:100%;max-width:520px;background:#020617;'
+            'border:1px solid #1e293b;border-radius:20px;padding:20px 20px 24px 20px;'
+            'box-shadow:0 20px 60px rgba(0,0,0,0.7);">'
+            '  <div style="display:flex;align-items:center;justify-content:space-between;'
+            '    margin-bottom:14px;">'
+            '    <h2 style="font-size:18px;font-weight:900;color:#f1f5f9;">'
+            '      Alertas al Mesero</h2>'
+            '    <button data-action="cerrarAlertas" '
+            '      style="background:#1e293b;border:none;color:#cbd5e1;'
+            '      width:36px;height:36px;border-radius:10px;cursor:pointer;'
+            '      font-size:16px;">✕</button>'
+            '  </div>'
+            f'  <div>{cards_html}</div>'
+            '</div>'
+        )
+        doc.body.appendChild(modal)
+
+    def _cerrar_alertas(self, *_):
+        doc = anvil.js.window.document
+        modal = doc.getElementById("vs-alertas-modal")
+        if modal is not None:
+            modal.remove()
+
+    def _atender_alerta(self, llamada_id, *_):
+        try:
+            anvil.server.call("atender_llamada", int(llamada_id))
+        except Exception as e:
+            print(f"[POSMesero] Error atendiendo llamada {llamada_id}: {e}")
+            return
+        # Refresco inmediato del badge y del modal
+        self._tick_alertas()
+        self._ver_alertas()
