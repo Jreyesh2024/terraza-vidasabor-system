@@ -2,6 +2,16 @@ app_id: terraza_vidasabor_app
 metadata: {title: VidaSabor Terraza}
 name: La Terraza de Vida & Sabor
 native_deps: |
+  <meta name="theme-color" content="#090d16">
+  <style>
+    /* Aplica antes que cualquier cosa: elimina el flash blanco del runner de Anvil */
+    html { background: #090d16 !important; }
+    body { background: #090d16 !important; color: #f8fafc !important; margin: 0 !important; }
+    .anvil-container, .anvil-panel, .anvil-panel-section {
+      background: #090d16 !important;
+      color: #f8fafc !important;
+    }
+  </style>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="_/theme/theme.css">
   <script src="_/theme/pos_mesero.js"></script>
