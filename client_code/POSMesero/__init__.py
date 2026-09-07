@@ -588,28 +588,33 @@ class POSMesero(POSMeseroTemplate):
             banner.style.setProperty("display", "none", "important")
 
     def _ver_alertas(self, *_):
-        """Renderiza modal overlay con lista de llamadas pendientes."""
+        """Modal con dos secciones: Pendientes (arriba) + Atendidas recientes."""
         doc = anvil.js.window.document
-        # Quitar modal anterior si existe
         prev = doc.getElementById("vs-alertas-modal")
         if prev is not None:
             prev.remove()
         llamadas = getattr(self, "_llamadas_pendientes", []) or []
+        # Cargar atendidas recientes (últimas 10) — se refresca al abrir el modal.
+        try:
+            atendidas = anvil.server.call("get_llamadas_recientes", 10) or []
+        except Exception as e:
+            print(f"[POSMesero] Error get_llamadas_recientes: {e}")
+            atendidas = []
         etiqueta = {
-            "conflicto_silla_ocupada": ("⚠️ Conflicto: silla ocupada",
+            "conflicto_silla_ocupada": ("⚠️ Silla ocupada — conflicto",
                                         "linear-gradient(135deg,#dc2626,#991b1b)"),
-            "llamar_mesero":           ("🔔 Llamada de silla", "#0f766e"),
-            "solicitar_cuenta":        ("🧾 Pide su cuenta",   "#0369a1"),
+            "llamar_mesero":           ("🔔 Llamada al mesero", "#0f766e"),
+            "solicitar_cuenta":        ("🧾 Pide su cuenta",     "#0369a1"),
+            "ayuda_pedido":            ("🤝 Ayuda con pedido",   "#7c3aed"),
         }
-        cards_html = ""
-        for l in llamadas:
+        def _card_pendiente(l):
             tipo = l.get("tipo", "?")
             lab, color = etiqueta.get(tipo, (f"🔔 {tipo}", "#334155"))
             mesa = l.get("numero_mesa", "?")
             silla = l.get("numero_en_mesa", "?")
             qr = l.get("codigo_qr", "")
             hora = str(l.get("creada_at", ""))[11:16]
-            cards_html += (
+            return (
                 f'<div style="background:#0f172a;border:1px solid #334155;'
                 f'border-radius:14px;padding:14px 16px;margin-bottom:10px;'
                 f'display:flex;flex-direction:column;gap:8px;">'
@@ -625,15 +630,63 @@ class POSMesero(POSMeseroTemplate):
                 f'  <button data-action="atenderAlerta" data-args="{l.get("id")}" '
                 f'    style="align-self:flex-end;padding:8px 18px;border-radius:10px;'
                 f'    background:#059669;color:#fff;font-weight:900;font-size:12px;'
-                f'    border:none;cursor:pointer;">Atender esta llamada</button>'
+                f'    border:none;cursor:pointer;">Yo la atiendo</button>'
                 f'</div>'
             )
-        if not cards_html:
-            cards_html = ('<div style="text-align:center;padding:32px;color:#64748b;">'
-                          '<i class="fa-solid fa-check-circle" style="font-size:36px;'
-                          'color:#10b981;margin-bottom:12px;"></i>'
-                          '<div style="font-weight:700;">Sin alertas pendientes</div>'
-                          '</div>')
+
+        def _card_atendida(l):
+            tipo = l.get("tipo", "?")
+            lab, color = etiqueta.get(tipo, (f"🔔 {tipo}", "#334155"))
+            mesa = l.get("numero_mesa", "?")
+            silla = l.get("numero_en_mesa", "?")
+            hora_llamada = str(l.get("creada_at", ""))[11:16]
+            hora_atendida = str(l.get("atendida_at", ""))[11:16]
+            por = l.get("atendida_por") or "Mesero"
+            return (
+                f'<div style="background:#0a0f1a;border:1px solid #1e293b;'
+                f'border-radius:12px;padding:12px 14px;margin-bottom:8px;'
+                f'opacity:0.85;">'
+                f'  <div style="display:flex;align-items:center;justify-content:space-between;'
+                f'    margin-bottom:6px;">'
+                f'    <span style="font-size:11px;font-weight:800;padding:4px 10px;'
+                f'      border-radius:999px;background:{color};color:#fff;opacity:0.75;">{lab}</span>'
+                f'    <span style="font-size:10px;color:#64748b;font-family:monospace;">'
+                f'      {hora_llamada} → {hora_atendida}</span>'
+                f'  </div>'
+                f'  <div style="font-size:13px;color:#cbd5e1;">'
+                f'    Mesa {mesa} · Silla {silla}'
+                f'    <span style="color:#10b981;margin-left:8px;font-weight:700;">'
+                f'      ✓ atendida por {por}</span>'
+                f'  </div>'
+                f'</div>'
+            )
+
+        pendientes_html = ""
+        if llamadas:
+            pendientes_html = (
+                '<div style="font-size:11px;font-weight:900;color:#f87171;text-transform:uppercase;'
+                'letter-spacing:0.05em;margin:4px 0 10px 0;">Pendientes'
+                f' ({len(llamadas)})</div>'
+                + "".join(_card_pendiente(l) for l in llamadas)
+            )
+        else:
+            pendientes_html = (
+                '<div style="text-align:center;padding:20px;color:#64748b;">'
+                '<i class="fa-solid fa-check-circle" style="font-size:28px;'
+                'color:#10b981;margin-bottom:8px;"></i>'
+                '<div style="font-weight:700;font-size:13px;">Sin alertas pendientes</div>'
+                '</div>'
+            )
+        atendidas_html = ""
+        if atendidas:
+            atendidas_html = (
+                '<div style="font-size:11px;font-weight:900;color:#94a3b8;text-transform:uppercase;'
+                'letter-spacing:0.05em;margin:18px 0 10px 0;'
+                'border-top:1px solid #1e293b;padding-top:14px;">'
+                f'Historial reciente ({len(atendidas)})</div>'
+                + "".join(_card_atendida(l) for l in atendidas)
+            )
+        cards_html = pendientes_html + atendidas_html
         modal = doc.createElement("div")
         modal.id = "vs-alertas-modal"
         modal.style.cssText = (

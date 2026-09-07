@@ -465,51 +465,119 @@ class Menu(MenuTemplate):
     def _render_tab_ordenar(self, destino):
         self._destino_actual = destino
         self._asegurar_menu_cargado()
-        # Header contextual según destino
         cabeceras = {
-            "mi_silla":  ("🍳 Ordenar a Mi Silla",
+            "mi_silla":  ("🍳", "Ordenar a Mi Silla",
+                          "emerald",
                           "Los platillos que elijas se cargan a TU cuenta."),
-            "al_centro": ("🍲 Pedir al Centro",
-                          "Se comparten con toda la mesa. La cuenta al centro es aparte."),
-            "otra_silla": (
-                f"👨‍👧 Pedir para Silla {self._silla_destino_num or '?'}",
-                f"Los platillos se cargan a la cuenta de la Silla {self._silla_destino_num}, "
-                "no a la tuya.",
-            ),
+            "al_centro": ("🍲", "Pedir al Centro",
+                          "amber",
+                          "Se comparten con toda la mesa. Cuenta aparte."),
+            "otra_silla": ("👨‍👧",
+                          f"Pedir para Silla {self._silla_destino_num or '?'}",
+                          "purple",
+                          f"Se carga a la Silla {self._silla_destino_num}, no a la tuya."),
         }
-        titulo, sub = cabeceras.get(destino, ("Menú", ""))
-        # Filtrar categorías: si es 'al_centro' priorizamos las flagged es_al_centro,
-        # pero también dejamos ver bebidas y demás (el cliente decide).
+        icono, titulo, tono, sub = cabeceras.get(destino, ("🍽️", "Menú", "emerald", ""))
+        tono_border = {
+            "emerald": "hover:border-emerald-400 from-emerald-500/30",
+            "amber":   "hover:border-amber-400 from-amber-500/30",
+            "purple":  "hover:border-purple-400 from-purple-500/30",
+        }[tono]
+        # Resumen "Al centro" si corresponde: le mostramos TODO lo pedido al centro.
+        resumen_al_centro = ""
+        if destino == "al_centro":
+            resumen_al_centro = self._resumen_al_centro_html()
         cats_html = ""
-        # Excluir categorías Al Centro cuando el destino NO es al_centro (evita duplicar).
         for c in self._menu_categorias:
-            es_al_centro = "al centro" in (c.get("nombre", "").lower())
-            if destino != "al_centro" and es_al_centro:
+            es_al_centro_cat = "al centro" in (c.get("nombre", "").lower())
+            if destino != "al_centro" and es_al_centro_cat:
                 continue
             cats_html += (
                 f'<button data-action="abrirCategoria" data-args="{c["id"]}"'
-                f' class="rounded-2xl border border-white/5 bg-slate-900/60'
-                f' hover:border-emerald-500/40 p-4 flex flex-col items-center'
-                f' justify-center gap-2 min-h-[110px] transition text-center">'
-                f'  <span style="font-size:36px;line-height:1;">{c["icono"]}</span>'
-                f'  <span class="text-[13px] font-bold text-slate-100">{c["nombre"]}</span>'
+                f' class="rounded-3xl border border-white/10 bg-gradient-to-br'
+                f' {tono_border} to-slate-900/70 p-5 flex flex-col items-center'
+                f' justify-center gap-3 min-h-[130px] transition-all'
+                f' shadow-lg hover:shadow-2xl active:scale-95 text-center">'
+                f'  <span style="font-size:42px;line-height:1;filter:drop-shadow(0 2px 8px rgba(0,0,0,0.4));">{c["icono"]}</span>'
+                f'  <span class="text-[13px] font-black text-white leading-tight">{c["nombre"]}</span>'
                 f'</button>'
             )
         html = f"""
         {self._header_html()}
-        <section class="px-4 mt-4 max-w-md mx-auto">
+        <section class="px-4 pt-4 max-w-md mx-auto">
           <button data-action="volverInicio"
-            class="text-xs text-slate-400 flex items-center gap-2 mb-2">
+            class="text-[11px] text-slate-400 hover:text-white flex items-center gap-2 mb-3">
             <i class="fa-solid fa-arrow-left"></i> Inicio
           </button>
-          <h2 class="text-lg font-black text-white">{titulo}</h2>
-          <p class="text-xs text-slate-400 mt-1">{sub}</p>
+          <div class="rounded-2xl border border-white/10 bg-gradient-to-br
+                      from-slate-800/80 to-slate-900/80 p-4 shadow-lg">
+            <div class="flex items-center gap-3">
+              <div class="w-11 h-11 rounded-xl bg-slate-950/60 border border-white/10
+                          flex items-center justify-center text-2xl">{icono}</div>
+              <div>
+                <div class="text-base font-black text-white leading-tight">{titulo}</div>
+                <div class="text-[11px] text-slate-400 mt-0.5">{sub}</div>
+              </div>
+            </div>
+          </div>
         </section>
-        <section class="px-4 mt-4 max-w-md mx-auto grid grid-cols-2 gap-3 pb-24">
-          {cats_html or '<div class="col-span-2 text-center text-slate-500 py-10">No hay categorías disponibles todavía.</div>'}
+        {resumen_al_centro}
+        <section class="px-4 mt-4 max-w-md mx-auto grid grid-cols-2 gap-3 pb-32">
+          {cats_html or '<div class="col-span-2 text-center text-slate-500 py-10">No hay categorías disponibles.</div>'}
         </section>
         """
         self._reemplazar_contenido(html)
+
+    def _resumen_al_centro_html(self):
+        """HTML con los items ya pedidos al centro para esta mesa. Visible a
+        TODAS las sillas cuando entran a 'Pedir al Centro'."""
+        info = self._sesion_info or {}
+        mesa = info.get("mesa_num")
+        silla = info.get("silla_num")
+        try:
+            data = anvil.server.call("get_items_por_silla", mesa, silla) or {}
+        except Exception:
+            data = {}
+        items_centro = data.get("items_al_centro", []) or []
+        if not items_centro:
+            return ""
+        filas = ""
+        total = 0.0
+        for it in items_centro:
+            precio = float(it.get("precio_unitario_snapshot") or 0)
+            cant = int(it.get("cantidad") or 1)
+            subt = float(it.get("subtotal") or (precio * cant))
+            total += subt
+            estado = it.get("estado", "borrador")
+            badge = ('<span class="text-[10px] text-emerald-400 font-bold ml-1">'
+                     '· en cocina</span>' if estado != "borrador" else "")
+            nombre = it.get("producto_nombre_snapshot", "?")
+            filas += (
+                f'<div class="flex items-center justify-between py-2 border-b border-white/5 text-sm">'
+                f'  <div class="flex-1 truncate">'
+                f'    <span class="text-amber-200 font-bold">{cant}×</span> '
+                f'    <span class="text-white">{nombre}</span>{badge}'
+                f'  </div>'
+                f'  <div class="text-white font-black ml-2">${subt:,.2f}</div>'
+                f'</div>'
+            )
+        return f"""
+        <section class="px-4 mt-3 max-w-md mx-auto">
+          <div class="rounded-2xl border border-amber-500/30
+                      bg-gradient-to-br from-amber-950/40 to-slate-900/60 p-4 shadow-lg">
+            <div class="flex items-center justify-between mb-2">
+              <div class="text-[11px] font-black uppercase tracking-wider text-amber-400">
+                🍲 Ya pedido al centro
+              </div>
+              <div class="text-sm font-black text-white">${total:,.2f}</div>
+            </div>
+            {filas}
+            <div class="mt-2 text-[10px] text-slate-400 text-center">
+              Todos en la mesa pueden ver esto.
+            </div>
+          </div>
+        </section>
+        """
 
     # ─────────────────── vista PRODUCTOS DE UNA CATEGORÍA ────────────────
     def _render_productos_de_categoria(self, cat_id):
@@ -648,8 +716,9 @@ class Menu(MenuTemplate):
         info = self._sesion_info or {}
         mesa = info.get("mesa_num")
         silla = info.get("silla_num")
+        print(f"[Menu] Agregando item: producto={producto_id} mesa={mesa} silla={silla} destino={self._destino_actual}")
         if not mesa or not silla:
-            anvil.alert("No detecté tu silla activa. Escanea el QR de nuevo.")
+            self._toast("Escanea el QR de tu silla para poder ordenar.", "warn")
             return
         para_silla_num = None
         if self._destino_actual == "al_centro":
@@ -664,15 +733,58 @@ class Menu(MenuTemplate):
                 para_silla_num=para_silla_num,
             )
         except Exception as e:
-            print(f"[Menu] Error agregar_item_a_comanda: {e}")
-            anvil.alert("No pude agregar el platillo. Intenta de nuevo.")
+            print(f"[Menu] Excepción agregar_item_a_comanda: {e}")
+            self._toast("No pude agregar el platillo. Intenta de nuevo.", "err")
             return
+        print(f"[Menu] Respuesta agregar: {resp}")
         if not isinstance(resp, dict) or resp.get("error"):
-            anvil.alert("No pude agregar el platillo: " + str((resp or {}).get("error", "")))
+            self._toast("Error: " + str((resp or {}).get("error", "?")), "err")
             return
-        # Cierra el modal y muestra un toast en la vista de productos.
+        p = getattr(self, "_producto_actual", {}) or {}
+        cant = getattr(self, "_cantidad_actual", 1)
         self._cerrar_modal_producto()
-        anvil.alert("Agregado a tu comanda.", title="✓")
+        self._toast(f"✓ Agregado: {cant}× {p.get('nombre','?')}", "ok")
+
+    def _toast(self, mensaje, tipo="ok"):
+        """Toast in-page que aparece 2.4s en la parte inferior, sin bloquear."""
+        doc = anvil.js.window.document
+        prev = doc.getElementById("menuToast")
+        if prev is not None:
+            prev.remove()
+        colores = {
+            "ok":   ("linear-gradient(135deg,#10b981,#059669)", "#ffffff"),
+            "warn": ("linear-gradient(135deg,#f59e0b,#d97706)", "#ffffff"),
+            "err":  ("linear-gradient(135deg,#ef4444,#b91c1c)", "#ffffff"),
+            "info": ("linear-gradient(135deg,#0ea5e9,#0369a1)", "#ffffff"),
+        }
+        bg, color = colores.get(tipo, colores["ok"])
+        toast = doc.createElement("div")
+        toast.id = "menuToast"
+        toast.style.cssText = (
+            f"position: fixed; bottom: 24px; left: 50%; "
+            f"transform: translateX(-50%) translateY(80px); "
+            f"z-index: 100000; padding: 14px 24px; "
+            f"background: {bg}; color: {color}; "
+            f"border-radius: 999px; font-weight: 800; font-size: 14px; "
+            f"box-shadow: 0 12px 32px rgba(0,0,0,0.5); "
+            f"max-width: 92vw; opacity: 0; "
+            f"transition: transform 0.35s cubic-bezier(.34,1.56,.64,1), opacity 0.35s ease;"
+        )
+        toast.textContent = mensaje
+        doc.body.appendChild(toast)
+        anvil.js.window.setTimeout(
+            lambda: (
+                toast.style.setProperty("transform", "translateX(-50%) translateY(0)"),
+                toast.style.setProperty("opacity", "1"),
+            ), 20
+        )
+        anvil.js.window.setTimeout(
+            lambda: (
+                toast.style.setProperty("transform", "translateX(-50%) translateY(80px)"),
+                toast.style.setProperty("opacity", "0"),
+            ), 2400
+        )
+        anvil.js.window.setTimeout(lambda: toast.remove() if toast else None, 2900)
 
     def _cerrar_modal_producto(self):
         doc = anvil.js.window.document
@@ -957,17 +1069,100 @@ class Menu(MenuTemplate):
         mesa = info.get("mesa_num")
         silla = info.get("silla_num")
         if not mesa or not silla:
-            anvil.alert("Primero registra tu llegada escaneando el QR.",
-                        title="Sin silla activa")
+            self._toast("Primero registra tu llegada escaneando el QR.", "warn")
             return
         try:
             resp = anvil.server.call("crear_llamada_mesero", mesa, silla, tipo)
         except Exception as e:
             print(f"[Menu] Error en crear_llamada_mesero: {e}")
-            anvil.alert("No pudimos avisar al mesero. Intenta otra vez.",
-                        title="Error")
+            self._toast("No pudimos avisar al mesero. Intenta otra vez.", "err")
             return
-        if isinstance(resp, dict) and resp.get("ok"):
-            anvil.alert(mensaje_ok, title="Aviso enviado")
-        else:
-            anvil.alert("No pudimos avisar al mesero.", title="Error")
+        if not (isinstance(resp, dict) and resp.get("ok")):
+            self._toast("No pudimos avisar al mesero.", "err")
+            return
+        llamada_id = resp.get("llamada_id")
+        self._toast(mensaje_ok, "ok")
+        # Banner persistente en pantalla + polling hasta que el mesero atienda.
+        if llamada_id:
+            self._mostrar_banner_llamada(llamada_id, tipo)
+
+    def _mostrar_banner_llamada(self, llamada_id, tipo):
+        doc = anvil.js.window.document
+        prev = doc.getElementById("menuBannerLlamada")
+        if prev is not None:
+            prev.remove()
+        etiqueta = {
+            "llamar_mesero":    "Estamos avisando al mesero…",
+            "solicitar_cuenta": "Te traen la cuenta…",
+        }.get(tipo, "Aviso enviado…")
+        banner = doc.createElement("div")
+        banner.id = "menuBannerLlamada"
+        banner.style.cssText = (
+            "position:fixed;left:0;right:0;bottom:0;z-index:9999;"
+            "background:linear-gradient(90deg,#f59e0b,#d97706);"
+            "color:#fff;font-weight:900;font-size:14px;"
+            "padding:14px 18px;text-align:center;"
+            "box-shadow:0 -6px 24px rgba(0,0,0,0.5);"
+            "display:flex;align-items:center;justify-content:center;gap:10px;"
+            "animation:vs-notif-pulse 1.3s ease-in-out infinite;"
+        )
+        banner.innerHTML = (
+            '<i class="fa-solid fa-bell" style="font-size:16px;'
+            'animation:vs-shake-menu 0.7s ease-in-out infinite;"></i>'
+            f'<span>{etiqueta}</span>'
+        )
+        doc.body.appendChild(banner)
+        # Keyframes inline (una vez)
+        if doc.getElementById("vs-notif-css") is None:
+            st = doc.createElement("style")
+            st.id = "vs-notif-css"
+            st.textContent = (
+                "@keyframes vs-notif-pulse {"
+                " 0%,100% { filter: brightness(1); }"
+                " 50% { filter: brightness(1.15); } } "
+                "@keyframes vs-shake-menu {"
+                " 0%,100% { transform: rotate(-10deg); }"
+                " 50% { transform: rotate(10deg); } }"
+            )
+            doc.head.appendChild(st)
+        # Polling cada 3s hasta que se atienda.
+        self._iniciar_polling_llamada(int(llamada_id))
+
+    def _iniciar_polling_llamada(self, llamada_id):
+        # Guarda el timer para poder detenerlo en form_hide.
+        try:
+            t = anvil.Timer(interval=3)
+        except Exception:
+            return
+        self._timer_llamada = t
+        self._llamada_id_pollend = int(llamada_id)
+        def on_tick(**e):
+            self._chequear_llamada_atendida()
+        t.set_event_handler("tick", on_tick)
+        self.add_component(t)
+
+    def _chequear_llamada_atendida(self):
+        lid = getattr(self, "_llamada_id_pollend", None)
+        if not lid:
+            return
+        try:
+            resp = anvil.server.call("get_llamada_estado", lid) or {}
+        except Exception:
+            return
+        if resp.get("atendida_at"):
+            self._quitar_banner_llamada(resp.get("atendida_por"))
+
+    def _quitar_banner_llamada(self, atendida_por=None):
+        # Muestra un toast rápido de éxito antes de quitar el banner.
+        nombre = atendida_por or "el mesero"
+        self._toast(f"✓ {nombre} está en camino a tu mesa.", "ok")
+        doc = anvil.js.window.document
+        b = doc.getElementById("menuBannerLlamada")
+        if b is not None:
+            b.remove()
+        t = getattr(self, "_timer_llamada", None)
+        if t is not None:
+            try: t.interval = 0
+            except Exception: pass
+        self._timer_llamada = None
+        self._llamada_id_pollend = None

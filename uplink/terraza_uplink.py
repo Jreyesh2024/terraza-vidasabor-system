@@ -1146,6 +1146,56 @@ def uplink_get_llamadas_pendientes(area_codigo=None):
         return []
 
 
+@anvil.server.callable('get_llamada_estado')
+@anvil.server.callable('uplink_get_llamada_estado')
+def uplink_get_llamada_estado(llamada_id):
+    """Devuelve el estado de una llamada (para que el cliente sepa cuando
+    su solicitud fue atendida y quitar el aviso de su pantalla)."""
+    conn = get_db_connection()
+    try:
+        with conn.cursor() as cur:
+            cur.execute("""
+                SELECT l.id, l.tipo, l.creada_at, l.atendida_at,
+                       m.nombre_completo AS atendida_por
+                FROM llamadas_mesero l
+                LEFT JOIN meseros m ON l.atendida_por_mesero_id = m.id
+                WHERE l.id = %s;
+            """, (int(llamada_id),))
+            row = cur.fetchone()
+        if row is None:
+            return {"error": "llamada no encontrada"}
+        return clean_row(row)
+    finally:
+        conn.close()
+
+
+@anvil.server.callable('get_llamadas_recientes')
+@anvil.server.callable('uplink_get_llamadas_recientes')
+def uplink_get_llamadas_recientes(limit=25):
+    """Lista las últimas llamadas atendidas (para el historial de meseros)."""
+    try:
+        conn = get_db_connection()
+        with conn.cursor() as cur:
+            cur.execute("""
+                SELECT l.id, l.tipo, l.creada_at, l.atendida_at, l.notas,
+                       s.codigo_qr, s.numero_en_mesa,
+                       m.numero_mesa,
+                       mes.nombre_completo AS atendida_por
+                FROM llamadas_mesero l
+                JOIN sillas s ON l.silla_id = s.id
+                LEFT JOIN mesas m ON s.mesa_id = m.id
+                LEFT JOIN meseros mes ON l.atendida_por_mesero_id = mes.id
+                WHERE l.atendida_at IS NOT NULL
+                ORDER BY l.atendida_at DESC LIMIT %s;
+            """, (int(limit),))
+            rows = cur.fetchall()
+        conn.close()
+        return [clean_row(r) for r in rows]
+    except Exception as e:
+        print(f"[UPLINK] Error en get_llamadas_recientes: {e}")
+        return []
+
+
 @anvil.server.callable('atender_llamada')
 @anvil.server.callable('uplink_atender_llamada')
 def uplink_atender_llamada(llamada_id, mesero_id=None):
