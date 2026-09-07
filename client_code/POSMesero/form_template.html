@@ -762,9 +762,21 @@
             Menú Infantil</button>
         </div>
 
-        <!-- MENU ITEMS GRID (AMPLIO EN 3-4 COLUMNAS) -->
+        <!-- HEADER de vista de categoría (visible sólo cuando se seleccionó una) -->
+        <div id="waiterCatHeader"
+             style="display: none !important; align-items: center !important; gap: 12px !important; margin-bottom: 12px !important; padding-bottom: 10px !important; border-bottom: 1px solid #1e293b !important;">
+          <button data-action="volverAcategorias"
+                  style="display: flex !important; align-items: center !important; gap: 6px !important; padding: 8px 14px !important; background: #1e293b !important; color: #cbd5e1 !important; border: 1px solid #334155 !important; border-radius: 10px !important; font-size: 12px !important; font-weight: 800 !important; cursor: pointer !important;">
+            <i class="fa-solid fa-arrow-left"></i> Volver a categorías
+          </button>
+          <div id="waiterCatTitle"
+               style="font-size: 16px !important; font-weight: 900 !important; color: #f1f5f9 !important; display: flex !important; align-items: center !important; gap: 8px !important;">
+          </div>
+        </div>
+
+        <!-- MENU ITEMS GRID (ocupa el espacio completo del panel cuando visible) -->
         <div id="waiterMenuGrid"
-          style="display: grid !important; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)) !important; gap: 12px !important; max-height: 480px !important; overflow-y: auto !important; padding-right: 2px !important;">
+          style="display: none !important; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)) !important; gap: 12px !important; max-height: 520px !important; overflow-y: auto !important; padding-right: 2px !important;">
           <!-- Product cards rendered dynamically -->
         </div>
       </div>

@@ -78,39 +78,71 @@
       const container = document.getElementById('waiterCatChips');
       if (!container || !window.catalogCategories || window.catalogCategories.length === 0) return;
       container.innerHTML = '';
-      const catActual = window.palapaState.categoriaFiltro || window.catalogCategories[0].nombre;
-
       window.catalogCategories.forEach(function (cat) {
         const btn = document.createElement('button');
         btn.dataset.cat = cat.nombre;
         btn.onclick = function () { window.filtrarCategoria(cat.nombre); };
-        const isActive = (cat.nombre === catActual);
-        // Botón grande "vistoso" tipo tarjeta: emoji arriba + nombre abajo.
+        // Tarjeta cuadrada grande estilo AdminMenu.
         btn.style.cssText = [
           'display: flex !important',
           'flex-direction: column !important',
           'align-items: center !important',
           'justify-content: center !important',
-          'gap: 8px !important',
-          'min-height: 96px !important',
-          'padding: 14px 10px !important',
-          'font-size: 13px !important',
+          'gap: 10px !important',
+          'min-height: 140px !important',
+          'padding: 18px 12px !important',
+          'font-size: 14px !important',
           'font-weight: 800 !important',
           'text-align: center !important',
-          'line-height: 1.2 !important',
-          'border-radius: 16px !important',
+          'line-height: 1.25 !important',
+          'border-radius: 20px !important',
           'cursor: pointer !important',
-          'transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease',
-          isActive
-            ? 'border: 2px solid #34d399 !important; background: linear-gradient(180deg, #059669 0%, #047857 100%) !important; color: #ffffff !important; box-shadow: 0 6px 18px rgba(5,150,105,0.35) !important;'
-            : 'border: 2px solid #334155 !important; background: #1e293b !important; color: #cbd5e1 !important; box-shadow: 0 2px 6px rgba(0,0,0,0.25) !important;'
+          'transition: transform 0.15s ease, box-shadow 0.15s ease',
+          'border: 2px solid #334155 !important',
+          'background: linear-gradient(160deg, #1e293b 0%, #0f172a 100%) !important',
+          'color: #f1f5f9 !important',
+          'box-shadow: 0 4px 14px rgba(0,0,0,0.35) !important'
         ].join('; ');
+        btn.onmouseenter = function () {
+          btn.style.transform = 'translateY(-3px)';
+          btn.style.boxShadow = '0 10px 24px rgba(16,185,129,0.30)';
+          btn.style.borderColor = '#34d399';
+        };
+        btn.onmouseleave = function () {
+          btn.style.transform = '';
+          btn.style.boxShadow = '0 4px 14px rgba(0,0,0,0.35)';
+          btn.style.borderColor = '#334155';
+        };
         btn.innerHTML =
-          '<span style="font-size:28px; line-height:1;">' + (cat.icono || '🍽️') + '</span>' +
-          '<span style="font-weight: 800;">' + cat.nombre + '</span>';
+          '<span style="font-size:40px; line-height:1;">' + (cat.icono || '🍽️') + '</span>' +
+          '<span>' + cat.nombre + '</span>';
         container.appendChild(btn);
       });
     }
+
+    // Mostrar/ocultar entre vista "categorías" y vista "productos de categoría"
+    function mostrarVistaCategorias() {
+      const chips  = document.getElementById('waiterCatChips');
+      const header = document.getElementById('waiterCatHeader');
+      const grid   = document.getElementById('waiterMenuGrid');
+      if (chips)  chips.style.setProperty('display', 'grid', 'important');
+      if (header) header.style.setProperty('display', 'none', 'important');
+      if (grid)   grid.style.setProperty('display', 'none', 'important');
+      window.palapaState.categoriaFiltro = null;
+    }
+    function mostrarVistaProductos(catNombre, catIcono) {
+      const chips  = document.getElementById('waiterCatChips');
+      const header = document.getElementById('waiterCatHeader');
+      const grid   = document.getElementById('waiterMenuGrid');
+      const title  = document.getElementById('waiterCatTitle');
+      if (chips)  chips.style.setProperty('display', 'none', 'important');
+      if (header) header.style.setProperty('display', 'flex', 'important');
+      if (grid)   grid.style.setProperty('display', 'grid', 'important');
+      if (title)  title.innerHTML =
+        '<span style="font-size:22px;">' + (catIcono || '🍽️') + '</span>' +
+        '<span>' + catNombre + '</span>';
+    }
+    window.volverAcategorias = function () { mostrarVistaCategorias(); };
 
     var DEFAULT_CUENTAS = {
       // MESA 1: 100% Libre / Disponible (0 comensales)
@@ -852,6 +884,10 @@
       window.palapaState.mesaSeleccionadaId = mesaId;
       window.palapaState.sillaSeleccionadaNum = sillaNum;
       window.palapaState.modoComandaActiva = true;
+      // Al abrir una silla, arrancamos siempre en la vista de categorías.
+      if (typeof mostrarVistaCategorias === 'function') {
+        mostrarVistaCategorias();
+      }
       renderStateUI();
     }
 
@@ -4338,8 +4374,14 @@
 
     window.filtrarCategoria = function (catNombre) {
       window.palapaState.categoriaFiltro = catNombre;
-      // Re-render los chips con el estilo tarjeta consistente (activo/inactivo).
-      renderWaiterCatChips();
+      // Buscar el icono de la categoría para mostrarlo en el header.
+      var cat = (window.catalogCategories || []).find(function (c) {
+        return c.nombre === catNombre;
+      }) || {};
+      // Toggle: ocultar tarjetas y mostrar productos de esta categoría.
+      if (typeof mostrarVistaProductos === 'function') {
+        mostrarVistaProductos(catNombre, cat.icono);
+      }
       renderWaiterMenuGrid();
     };
 
