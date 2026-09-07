@@ -4395,6 +4395,215 @@
       window.filtrarCategoria(catNombre);
     }
 
+    // ─────────── HOVER TOOLTIPS SOBRE SILLAS Y MESAS ────────────
+    // El mesero pasa el mouse sobre silla/mesa y ve el estado sin dar clic.
+    // Muestra: estado (libre/ocupada), tiempo ocupada, items con status,
+    // total. Para mesa: total mesa + sillas ocupadas.
+    var _vsHoverTooltip = null;
+    function _vsEnsureTooltipEl() {
+      if (_vsHoverTooltip) return _vsHoverTooltip;
+      var el = document.createElement('div');
+      el.id = 'vs-hover-tooltip';
+      el.style.cssText = [
+        'position:fixed', 'z-index:99999', 'pointer-events:none',
+        'display:none', 'min-width:220px', 'max-width:320px',
+        'background:linear-gradient(160deg,#0f172a 0%,#020617 100%)',
+        'border:1px solid #334155', 'border-radius:14px',
+        'padding:12px 14px', 'color:#f1f5f9',
+        'font-family:Inter,system-ui,sans-serif', 'font-size:12px',
+        'box-shadow:0 20px 50px rgba(0,0,0,0.75)',
+        'transition:opacity 0.15s ease', 'opacity:0'
+      ].join(';');
+      document.body.appendChild(el);
+      _vsHoverTooltip = el;
+      return el;
+    }
+    function _vsMostrarTooltip(html, x, y) {
+      var el = _vsEnsureTooltipEl();
+      el.innerHTML = html;
+      var w = 320, h = 200;
+      var left = Math.min(window.innerWidth - w - 12, Math.max(12, x + 16));
+      var top = Math.min(window.innerHeight - h - 12, Math.max(12, y - 8));
+      el.style.left = left + 'px';
+      el.style.top  = top  + 'px';
+      el.style.display = 'block';
+      requestAnimationFrame(function () { el.style.opacity = '1'; });
+    }
+    function _vsOcultarTooltip() {
+      if (!_vsHoverTooltip) return;
+      _vsHoverTooltip.style.opacity = '0';
+      _vsHoverTooltip.style.display = 'none';
+    }
+    function _vsFormatoHace(iso) {
+      if (!iso) return '';
+      try {
+        var t = new Date(iso).getTime();
+        var mins = Math.max(0, Math.floor((Date.now() - t) / 60000));
+        if (mins < 1) return 'hace <1 min';
+        if (mins < 60) return 'hace ' + mins + ' min';
+        var h = Math.floor(mins / 60);
+        return 'hace ' + h + 'h ' + (mins % 60) + 'm';
+      } catch (e) { return ''; }
+    }
+    function _vsBadgeItem(estado) {
+      var colores = {
+        'borrador':       ['#334155', '#cbd5e1', 'Pendiente'],
+        'buffer':         ['#7c2d12', '#fdba74', 'En espera'],
+        'enviado_cocina': ['#7c2d12', '#fdba74', 'En cocina'],
+        'preparando':     ['#c2410c', '#fed7aa', 'Preparando'],
+        'listo':          ['#065f46', '#6ee7b7', 'Listo'],
+        'servido':        ['#164e63', '#67e8f9', 'Servido'],
+        'cancelado':      ['#7f1d1d', '#fca5a5', 'Cancelado'],
+      };
+      var c = colores[estado || 'borrador'] || colores.borrador;
+      return '<span style="display:inline-block;padding:2px 8px;border-radius:999px;'
+             + 'background:' + c[0] + ';color:' + c[1] + ';font-size:10px;'
+             + 'font-weight:800;">' + c[2] + '</span>';
+    }
+    function _vsTooltipHTMLSilla(mesa, silla) {
+      var st = window.palapaState || {};
+      var key = mesa + '-' + silla;
+      var cta = (st.cuentas || {})[key];
+      if (!cta) {
+        return '<div style="font-weight:900;font-size:13px;">Silla ' + silla + '</div>'
+             + '<div style="color:#94a3b8;font-size:11px;margin-top:4px;">Sin datos</div>';
+      }
+      var estado = cta.estado || 'disponible';
+      var items = cta.items || [];
+      if (estado !== 'ocupada' && items.length === 0) {
+        return ''
+          + '<div style="font-weight:900;font-size:13px;">Mesa ' + mesa + ' · Silla ' + silla + '</div>'
+          + '<div style="margin-top:6px;">'
+          + '  <span style="display:inline-block;padding:3px 10px;border-radius:999px;'
+          + '    background:#065f46;color:#6ee7b7;font-size:11px;font-weight:800;">✓ Libre</span>'
+          + '</div>'
+          + '<div style="color:#64748b;font-size:11px;margin-top:6px;">Silla disponible para nuevo cliente.</div>';
+      }
+      var hace = _vsFormatoHace(cta.abiertaAt);
+      var total = items.reduce(function (s, i) {
+        return s + (parseFloat(i.precio) || 0) * (parseInt(i.cantidad) || 1);
+      }, 0);
+      var lineas = '';
+      if (items.length === 0) {
+        lineas = '<div style="color:#64748b;font-size:11px;padding:6px 0;">'
+               + '⚠️ Ocupada pero sin pedido aún</div>';
+      } else {
+        items.slice(0, 6).forEach(function (it) {
+          lineas += '<div style="display:flex;align-items:center;justify-content:space-between;'
+                 +  'gap:8px;padding:4px 0;border-bottom:1px solid #1e293b;">'
+                 +  '<div style="flex:1;min-width:0;">'
+                 +   '<div style="font-size:11px;color:#f1f5f9;font-weight:600;'
+                 +     'overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'
+                 +     (it.cantidad || 1) + '× ' + (it.nombre || '?')
+                 +   '</div>'
+                 +   '<div style="margin-top:2px;">' + _vsBadgeItem(it.estado) + '</div>'
+                 +  '</div>'
+                 +  '<div style="font-size:11px;font-weight:800;color:#e5e7eb;">$'
+                 +    ((parseFloat(it.precio) || 0) * (parseInt(it.cantidad) || 1)).toFixed(2)
+                 +  '</div>'
+                 + '</div>';
+        });
+        if (items.length > 6) {
+          lineas += '<div style="text-align:center;color:#94a3b8;font-size:10px;padding-top:4px;">'
+                  + '… y ' + (items.length - 6) + ' más</div>';
+        }
+      }
+      var comensal = cta.comensalNombre || ('Silla ' + silla);
+      var qr = cta.qrId || '';
+      return ''
+        + '<div style="display:flex;align-items:center;justify-content:space-between;'
+        +   'padding-bottom:8px;margin-bottom:8px;border-bottom:1px solid #334155;">'
+        + '  <div>'
+        + '    <div style="font-weight:900;font-size:13px;">Mesa ' + mesa + ' · Silla ' + silla + '</div>'
+        + '    <div style="color:#94a3b8;font-size:10px;margin-top:2px;">' + comensal + '</div>'
+        + '  </div>'
+        + '  <div style="text-align:right;">'
+        + '    <span style="display:inline-block;padding:3px 10px;border-radius:999px;'
+        + '      background:#78350f;color:#fbbf24;font-size:11px;font-weight:800;">Ocupada</span>'
+        + '    <div style="color:#64748b;font-size:10px;margin-top:2px;font-family:monospace;">' + qr + '</div>'
+        + '  </div>'
+        + '</div>'
+        + (hace ? '<div style="color:#94a3b8;font-size:11px;margin-bottom:6px;">🕐 ' + hace + '</div>' : '')
+        + lineas
+        + (items.length > 0 ? ''
+          + '<div style="display:flex;justify-content:space-between;padding-top:8px;'
+          +   'margin-top:6px;border-top:1px solid #334155;">'
+          + '  <span style="color:#94a3b8;font-size:11px;">Total silla</span>'
+          + '  <span style="color:#fff;font-weight:900;font-size:13px;">$' + total.toFixed(2) + '</span>'
+          + '</div>' : '');
+    }
+    function _vsTooltipHTMLMesa(mesa) {
+      var st = window.palapaState || {};
+      var cuentas = st.cuentas || {};
+      var sillasOcupadas = 0, sillasTotal = 0, totalMesa = 0;
+      var sinPedido = [];
+      Object.keys(cuentas).forEach(function (k) {
+        var c = cuentas[k];
+        if (!c || c.mesaId !== parseInt(mesa)) return;
+        sillasTotal++;
+        if (c.estado === 'ocupada') {
+          sillasOcupadas++;
+          var items = c.items || [];
+          items.forEach(function (i) {
+            totalMesa += (parseFloat(i.precio) || 0) * (parseInt(i.cantidad) || 1);
+          });
+          if (items.length === 0) sinPedido.push(c.sillaId);
+        }
+      });
+      var alertaSinPedido = '';
+      if (sinPedido.length > 0) {
+        alertaSinPedido = '<div style="margin-top:8px;padding:8px 10px;'
+                        + 'background:#7c2d12;color:#fdba74;border-radius:10px;'
+                        + 'font-size:11px;font-weight:700;">'
+                        + '⚠️ Silla(s) ' + sinPedido.join(', ')
+                        + ' ocupada(s) sin ordenar aún</div>';
+      }
+      return ''
+        + '<div style="font-weight:900;font-size:13px;">Mesa ' + mesa + '</div>'
+        + '<div style="margin-top:8px;display:flex;justify-content:space-between;'
+        +   'padding:6px 0;border-bottom:1px solid #1e293b;">'
+        + '  <span style="color:#94a3b8;font-size:11px;">Sillas ocupadas</span>'
+        + '  <span style="font-weight:800;font-size:12px;">' + sillasOcupadas + ' / ' + sillasTotal + '</span>'
+        + '</div>'
+        + '<div style="display:flex;justify-content:space-between;padding:6px 0;'
+        +   'border-bottom:1px solid #1e293b;">'
+        + '  <span style="color:#94a3b8;font-size:11px;">Total mesa</span>'
+        + '  <span style="font-weight:900;color:#10b981;font-size:14px;">$' + totalMesa.toFixed(2) + '</span>'
+        + '</div>'
+        + alertaSinPedido
+        + '<div style="color:#64748b;font-size:10px;margin-top:8px;text-align:center;">'
+        + '  Clic para pedir al centro</div>';
+    }
+    window.installHoverTooltips = function () {
+      var root = document.body;
+      if (root._vsHoverInstalled) return;
+      root._vsHoverInstalled = true;
+      root.addEventListener('mouseover', function (ev) {
+        var sillaEl = ev.target.closest ? ev.target.closest('[data-action="clickSilla"]') : null;
+        if (sillaEl) {
+          var args = (sillaEl.dataset.args || '').split(',');
+          if (args.length === 2) {
+            _vsMostrarTooltip(_vsTooltipHTMLSilla(args[0].trim(), args[1].trim()),
+                              ev.clientX, ev.clientY);
+          }
+          return;
+        }
+        var mesaEl = ev.target.closest ? ev.target.closest('[data-action="clickMesa"]') : null;
+        if (mesaEl) {
+          _vsMostrarTooltip(_vsTooltipHTMLMesa((mesaEl.dataset.args || '').trim()),
+                            ev.clientX, ev.clientY);
+        }
+      });
+      root.addEventListener('mouseout', function (ev) {
+        var to = ev.relatedTarget;
+        if (!to) return _vsOcultarTooltip();
+        // Si el mouse va hacia otra silla/mesa, no ocultar (se re-abrirá en mouseover).
+        if (to.closest && (to.closest('[data-action="clickSilla"]') ||
+                           to.closest('[data-action="clickMesa"]'))) return;
+        _vsOcultarTooltip();
+      });
+    };
+
     // Exponer funciones clave globalmente para que Python y llamadas onclick directas puedan interactuar
     window.renderStateUI = renderStateUI;
     window.setupDragListeners = setupDragListeners;
@@ -4407,6 +4616,9 @@
       try {
         renderStateUI();
         setupDragListeners();
+        if (typeof window.installHoverTooltips === 'function') {
+          window.installHoverTooltips();
+        }
       } catch (err) {
         console.warn("[initPOSMesero] Error inicializando UI:", err);
       }
