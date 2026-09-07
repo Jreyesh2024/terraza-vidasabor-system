@@ -4406,13 +4406,13 @@
       el.id = 'vs-hover-tooltip';
       el.style.cssText = [
         'position:fixed', 'z-index:99999', 'pointer-events:none',
-        'display:none', 'min-width:220px', 'max-width:320px',
-        'background:linear-gradient(160deg,#0f172a 0%,#020617 100%)',
-        'border:1px solid #334155', 'border-radius:14px',
-        'padding:12px 14px', 'color:#f1f5f9',
+        'display:none', 'width:280px',
+        'background:transparent', 'border-radius:20px',
+        'padding:0', 'color:#f1f5f9',
         'font-family:Inter,system-ui,sans-serif', 'font-size:12px',
-        'box-shadow:0 20px 50px rgba(0,0,0,0.75)',
-        'transition:opacity 0.15s ease', 'opacity:0'
+        'box-shadow:0 25px 60px rgba(0,0,0,0.85)',
+        'transition:opacity 0.15s ease', 'opacity:0',
+        'overflow:hidden'
       ].join(';');
       document.body.appendChild(el);
       _vsHoverTooltip = el;
@@ -4445,92 +4445,164 @@
         return 'hace ' + h + 'h ' + (mins % 60) + 'm';
       } catch (e) { return ''; }
     }
-    function _vsBadgeItem(estado) {
+    function _vsBadgeItem(item) {
+      // Deriva un estado normalizado leyendo TANTO los campos legacy
+      // (enviadoCocina, enFuego, listo, servido) como el estado v2 nuevo.
+      var estado = item.estado || 'borrador';
+      // Mapeo desde flags legacy del JS de KDS al modelo v2
+      if (item.servido)               estado = 'servido';
+      else if (item.listo)            estado = 'listo';
+      else if (item.enFuego || item.enPreparacion) estado = 'preparando';
+      else if (item.enviadoCocina || estado === 'recibido') estado = 'enviado_cocina';
       var colores = {
-        'borrador':       ['#334155', '#cbd5e1', 'Pendiente'],
-        'buffer':         ['#7c2d12', '#fdba74', 'En espera'],
-        'enviado_cocina': ['#7c2d12', '#fdba74', 'En cocina'],
-        'preparando':     ['#c2410c', '#fed7aa', 'Preparando'],
-        'listo':          ['#065f46', '#6ee7b7', 'Listo'],
-        'servido':        ['#164e63', '#67e8f9', 'Servido'],
-        'cancelado':      ['#7f1d1d', '#fca5a5', 'Cancelado'],
+        'borrador':       ['linear-gradient(135deg,#475569,#334155)', '#cbd5e1', '📝 Pendiente'],
+        'buffer':         ['linear-gradient(135deg,#b45309,#78350f)', '#fef3c7', '⏳ En espera'],
+        'enviado_cocina': ['linear-gradient(135deg,#c2410c,#7c2d12)', '#fed7aa', '🍳 En cocina'],
+        'preparando':     ['linear-gradient(135deg,#dc2626,#991b1b)', '#fecaca', '🔥 En preparación'],
+        'listo':          ['linear-gradient(135deg,#16a34a,#166534)', '#dcfce7', '✅ Listo'],
+        'servido':        ['linear-gradient(135deg,#0284c7,#075985)', '#e0f2fe', '🍽️ Servido'],
+        'cancelado':      ['linear-gradient(135deg,#dc2626,#7f1d1d)', '#fecaca', '✕ Cancelado'],
       };
-      var c = colores[estado || 'borrador'] || colores.borrador;
-      return '<span style="display:inline-block;padding:2px 8px;border-radius:999px;'
+      var c = colores[estado] || colores.borrador;
+      return '<span style="display:inline-block;padding:3px 10px;border-radius:999px;'
              + 'background:' + c[0] + ';color:' + c[1] + ';font-size:10px;'
-             + 'font-weight:800;">' + c[2] + '</span>';
+             + 'font-weight:900;letter-spacing:0.02em;'
+             + 'box-shadow:0 2px 6px rgba(0,0,0,0.35);">' + c[2] + '</span>';
     }
     function _vsTooltipHTMLSilla(mesa, silla) {
       var st = window.palapaState || {};
       var key = mesa + '-' + silla;
       var cta = (st.cuentas || {})[key];
       if (!cta) {
-        return '<div style="font-weight:900;font-size:13px;">Silla ' + silla + '</div>'
-             + '<div style="color:#94a3b8;font-size:11px;margin-top:4px;">Sin datos</div>';
+        return _vsTarjetaBase(
+          'linear-gradient(135deg,#334155,#1e293b)', '#94a3b8',
+          'Silla ' + silla, 'Sin datos',
+          '<div style="color:#94a3b8;font-size:11px;padding:16px;text-align:center;">'
+          + 'No hay información de esta silla.</div>'
+        );
       }
       var estado = cta.estado || 'disponible';
       var items = cta.items || [];
+      // ────── SILLA LIBRE ──────
       if (estado !== 'ocupada' && items.length === 0) {
-        return ''
-          + '<div style="font-weight:900;font-size:13px;">Mesa ' + mesa + ' · Silla ' + silla + '</div>'
-          + '<div style="margin-top:6px;">'
-          + '  <span style="display:inline-block;padding:3px 10px;border-radius:999px;'
-          + '    background:#065f46;color:#6ee7b7;font-size:11px;font-weight:800;">✓ Libre</span>'
+        return _vsTarjetaBase(
+          'linear-gradient(135deg,#10b981,#059669)', '#a7f3d0',
+          'Mesa ' + mesa + ' · Silla ' + silla, '✓ SILLA LIBRE',
+          '<div style="padding:18px 16px;text-align:center;">'
+          + '  <div style="font-size:36px;margin-bottom:6px;">🪑</div>'
+          + '  <div style="color:#e5e7eb;font-size:12px;font-weight:600;">Disponible para nuevo cliente</div>'
+          + '  <div style="color:#94a3b8;font-size:10px;margin-top:6px;">'
+          + '    Escanea el QR o clic para asignarla</div>'
           + '</div>'
-          + '<div style="color:#64748b;font-size:11px;margin-top:6px;">Silla disponible para nuevo cliente.</div>';
+        );
       }
+      // ────── SILLA OCUPADA ──────
       var hace = _vsFormatoHace(cta.abiertaAt);
       var total = items.reduce(function (s, i) {
         return s + (parseFloat(i.precio) || 0) * (parseInt(i.cantidad) || 1);
       }, 0);
+      // Contadores rápidos por estado
+      var pendientes = 0, encocina = 0, listos = 0, servidos = 0;
+      items.forEach(function (i) {
+        if (i.servido) servidos++;
+        else if (i.listo) listos++;
+        else if (i.enFuego || i.enPreparacion) encocina++;
+        else if (i.enviadoCocina) encocina++;
+        else pendientes++;
+      });
+      var contadores = '';
+      if (items.length > 0) {
+        contadores = '<div style="display:grid;grid-template-columns:repeat(4,1fr);'
+                   +  'gap:4px;padding:10px;background:#020617;">'
+                   +  _vsMiniStat(pendientes, '#94a3b8', 'Pend.')
+                   +  _vsMiniStat(encocina,   '#fdba74', 'Cocina')
+                   +  _vsMiniStat(listos,     '#6ee7b7', 'Listo')
+                   +  _vsMiniStat(servidos,   '#67e8f9', 'Servido')
+                   +  '</div>';
+      }
       var lineas = '';
       if (items.length === 0) {
-        lineas = '<div style="color:#64748b;font-size:11px;padding:6px 0;">'
-               + '⚠️ Ocupada pero sin pedido aún</div>';
+        lineas = '<div style="padding:16px;text-align:center;">'
+               + '  <div style="font-size:28px;">⚠️</div>'
+               + '  <div style="color:#fbbf24;font-size:12px;font-weight:700;margin-top:4px;">'
+               + '    Ocupada SIN pedido</div>'
+               + '  <div style="color:#94a3b8;font-size:10px;margin-top:4px;">'
+               + '    Considera acercarte a ofrecer atención</div>'
+               + '</div>';
       } else {
+        var lineasArr = [];
         items.slice(0, 6).forEach(function (it) {
-          lineas += '<div style="display:flex;align-items:center;justify-content:space-between;'
-                 +  'gap:8px;padding:4px 0;border-bottom:1px solid #1e293b;">'
-                 +  '<div style="flex:1;min-width:0;">'
-                 +   '<div style="font-size:11px;color:#f1f5f9;font-weight:600;'
-                 +     'overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'
-                 +     (it.cantidad || 1) + '× ' + (it.nombre || '?')
-                 +   '</div>'
-                 +   '<div style="margin-top:2px;">' + _vsBadgeItem(it.estado) + '</div>'
-                 +  '</div>'
-                 +  '<div style="font-size:11px;font-weight:800;color:#e5e7eb;">$'
-                 +    ((parseFloat(it.precio) || 0) * (parseInt(it.cantidad) || 1)).toFixed(2)
-                 +  '</div>'
-                 + '</div>';
+          lineasArr.push(
+            '<div style="padding:10px 12px;border-bottom:1px solid #1e293b;">'
+          +   '<div style="display:flex;justify-content:space-between;align-items:flex-start;'
+          +     'gap:8px;margin-bottom:6px;">'
+          +   '  <div style="flex:1;min-width:0;font-size:12px;color:#f1f5f9;font-weight:700;'
+          +     'overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'
+          +     '<span style="color:#fbbf24;">' + (it.cantidad || 1) + '×</span> '
+          +     (it.nombre || '?')
+          +   '</div>'
+          +   '  <div style="font-size:12px;font-weight:900;color:#10b981;">$'
+          +     ((parseFloat(it.precio) || 0) * (parseInt(it.cantidad) || 1)).toFixed(2)
+          +   '</div>'
+          +   '</div>'
+          +   '<div>' + _vsBadgeItem(it) + '</div>'
+          + '</div>'
+          );
         });
+        lineas = lineasArr.join('');
         if (items.length > 6) {
-          lineas += '<div style="text-align:center;color:#94a3b8;font-size:10px;padding-top:4px;">'
-                  + '… y ' + (items.length - 6) + ' más</div>';
+          lineas += '<div style="text-align:center;color:#94a3b8;font-size:10px;padding:6px;">'
+                  + '… y ' + (items.length - 6) + ' platillos más</div>';
         }
       }
       var comensal = cta.comensalNombre || ('Silla ' + silla);
       var qr = cta.qrId || '';
-      return ''
-        + '<div style="display:flex;align-items:center;justify-content:space-between;'
-        +   'padding-bottom:8px;margin-bottom:8px;border-bottom:1px solid #334155;">'
-        + '  <div>'
-        + '    <div style="font-weight:900;font-size:13px;">Mesa ' + mesa + ' · Silla ' + silla + '</div>'
-        + '    <div style="color:#94a3b8;font-size:10px;margin-top:2px;">' + comensal + '</div>'
+      var body = ''
+        + '<div style="padding:8px 12px;background:#020617;border-bottom:1px solid #1e293b;">'
+        + '  <div style="display:flex;justify-content:space-between;align-items:center;">'
+        + '    <div style="color:#94a3b8;font-size:11px;">👤 ' + comensal + '</div>'
+        + '    <div style="color:#64748b;font-size:9px;font-family:monospace;">' + qr + '</div>'
         + '  </div>'
-        + '  <div style="text-align:right;">'
-        + '    <span style="display:inline-block;padding:3px 10px;border-radius:999px;'
-        + '      background:#78350f;color:#fbbf24;font-size:11px;font-weight:800;">Ocupada</span>'
-        + '    <div style="color:#64748b;font-size:10px;margin-top:2px;font-family:monospace;">' + qr + '</div>'
-        + '  </div>'
+        + (hace ? '<div style="color:#94a3b8;font-size:10px;margin-top:2px;">🕐 ' + hace + '</div>' : '')
         + '</div>'
-        + (hace ? '<div style="color:#94a3b8;font-size:11px;margin-bottom:6px;">🕐 ' + hace + '</div>' : '')
-        + lineas
-        + (items.length > 0 ? ''
-          + '<div style="display:flex;justify-content:space-between;padding-top:8px;'
-          +   'margin-top:6px;border-top:1px solid #334155;">'
-          + '  <span style="color:#94a3b8;font-size:11px;">Total silla</span>'
-          + '  <span style="color:#fff;font-weight:900;font-size:13px;">$' + total.toFixed(2) + '</span>'
+        + contadores
+        + '<div>' + lineas + '</div>'
+        + (items.length > 0
+          ? '<div style="display:flex;justify-content:space-between;align-items:center;'
+          +   'padding:12px;background:linear-gradient(180deg,#020617,#0f172a);'
+          +   'border-top:2px solid #10b981;">'
+          + '  <span style="color:#94a3b8;font-size:11px;font-weight:700;">Total silla</span>'
+          + '  <span style="color:#10b981;font-weight:900;font-size:16px;">$' + total.toFixed(2) + '</span>'
           + '</div>' : '');
+      return _vsTarjetaBase(
+        'linear-gradient(135deg,#d97706,#b45309)', '#fde68a',
+        'Mesa ' + mesa + ' · Silla ' + silla, '● OCUPADA',
+        body
+      );
+    }
+
+    function _vsTarjetaBase(gradienteHeader, colorAccento, titulo, subtitulo, bodyHTML) {
+      // Contenedor "tarjeta" vertical con cabecera coloreada arriba.
+      return ''
+        + '<div style="background:#0f172a;border-radius:20px;overflow:hidden;'
+        +   'border:2px solid ' + colorAccento + ';">'
+        + '  <div style="background:' + gradienteHeader + ';padding:12px 16px;">'
+        + '    <div style="font-weight:900;font-size:14px;color:#fff;'
+        +       'letter-spacing:0.02em;">' + titulo + '</div>'
+        + '    <div style="font-size:10px;font-weight:900;color:' + colorAccento + ';'
+        +       'margin-top:2px;letter-spacing:0.06em;">' + subtitulo + '</div>'
+        + '  </div>'
+        + bodyHTML
+        + '</div>';
+    }
+
+    function _vsMiniStat(n, color, label) {
+      return '<div style="text-align:center;padding:6px 4px;background:#0f172a;'
+           +   'border-radius:8px;">'
+           +   '<div style="font-size:16px;font-weight:900;color:' + color + ';">' + n + '</div>'
+           +   '<div style="font-size:8px;color:#64748b;font-weight:700;'
+           +     'text-transform:uppercase;letter-spacing:0.05em;">' + label + '</div>'
+           + '</div>';
     }
     function _vsTooltipHTMLMesa(mesa) {
       var st = window.palapaState || {};
@@ -4550,29 +4622,45 @@
           if (items.length === 0) sinPedido.push(c.sillaId);
         }
       });
+      var esOcupada = sillasOcupadas > 0;
+      var titulo = 'Mesa ' + mesa;
+      var subtitulo = esOcupada ? '● OCUPADA' : '○ LIBRE';
+      var gradiente = esOcupada
+        ? 'linear-gradient(135deg,#7c3aed,#5b21b6)'
+        : 'linear-gradient(135deg,#10b981,#059669)';
+      var acento = esOcupada ? '#c4b5fd' : '#a7f3d0';
       var alertaSinPedido = '';
       if (sinPedido.length > 0) {
-        alertaSinPedido = '<div style="margin-top:8px;padding:8px 10px;'
-                        + 'background:#7c2d12;color:#fdba74;border-radius:10px;'
-                        + 'font-size:11px;font-weight:700;">'
+        alertaSinPedido = '<div style="margin:10px;padding:10px 12px;'
+                        + 'background:linear-gradient(135deg,#c2410c,#7c2d12);'
+                        + 'color:#fed7aa;border-radius:12px;'
+                        + 'font-size:11px;font-weight:800;text-align:center;'
+                        + 'border:1px solid #fdba74;">'
                         + '⚠️ Silla(s) ' + sinPedido.join(', ')
-                        + ' ocupada(s) sin ordenar aún</div>';
+                        + '<br>ocupada(s) sin ordenar aún</div>';
       }
-      return ''
-        + '<div style="font-weight:900;font-size:13px;">Mesa ' + mesa + '</div>'
-        + '<div style="margin-top:8px;display:flex;justify-content:space-between;'
-        +   'padding:6px 0;border-bottom:1px solid #1e293b;">'
-        + '  <span style="color:#94a3b8;font-size:11px;">Sillas ocupadas</span>'
-        + '  <span style="font-weight:800;font-size:12px;">' + sillasOcupadas + ' / ' + sillasTotal + '</span>'
-        + '</div>'
-        + '<div style="display:flex;justify-content:space-between;padding:6px 0;'
-        +   'border-bottom:1px solid #1e293b;">'
-        + '  <span style="color:#94a3b8;font-size:11px;">Total mesa</span>'
-        + '  <span style="font-weight:900;color:#10b981;font-size:14px;">$' + totalMesa.toFixed(2) + '</span>'
-        + '</div>'
-        + alertaSinPedido
-        + '<div style="color:#64748b;font-size:10px;margin-top:8px;text-align:center;">'
-        + '  Clic para pedir al centro</div>';
+      var stats = '<div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;'
+                +   'background:#334155;padding:1px;">'
+                + '  <div style="background:#0f172a;padding:14px;text-align:center;">'
+                + '    <div style="color:#94a3b8;font-size:10px;font-weight:700;'
+                +       'text-transform:uppercase;letter-spacing:0.05em;">Ocupadas</div>'
+                + '    <div style="color:#fbbf24;font-size:24px;font-weight:900;margin-top:2px;">'
+                +       sillasOcupadas + '<span style="color:#64748b;font-size:14px;"> / '
+                +       sillasTotal + '</span></div>'
+                + '  </div>'
+                + '  <div style="background:#0f172a;padding:14px;text-align:center;">'
+                + '    <div style="color:#94a3b8;font-size:10px;font-weight:700;'
+                +       'text-transform:uppercase;letter-spacing:0.05em;">Total</div>'
+                + '    <div style="color:#10b981;font-size:20px;font-weight:900;margin-top:2px;">$'
+                +       totalMesa.toFixed(2) + '</div>'
+                + '  </div>'
+                + '</div>';
+      var pie = '<div style="padding:10px;text-align:center;color:#64748b;'
+              +   'font-size:10px;font-weight:600;background:#020617;'
+              +   'border-top:1px solid #1e293b;">'
+              +   'Clic para pedir <b style="color:#fbbf24;">al centro</b> de la mesa</div>';
+      return _vsTarjetaBase(gradiente, acento, titulo, subtitulo,
+                            stats + alertaSinPedido + pie);
     }
     window.installHoverTooltips = function () {
       var root = document.body;

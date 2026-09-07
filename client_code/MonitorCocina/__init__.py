@@ -8,17 +8,46 @@ class MonitorCocina(MonitorCocinaTemplate):
   def __init__(self, **properties):
     self.init_components(**properties)
     try:
-      # Exponer TANTO anvilAppNav como navMenu para que el JS embebido
-      # del form (window.navMenu que hace fallback a alert) tenga la
-      # función real disponible y no muestre el alert "Navegando a ...".
       anvil.js.window.anvilAppNav = self.navegar_modulo
       anvil.js.window.navMenu = self.navegar_modulo
       anvil.js.window.scrollTo(0, 0)
     except Exception:
       pass
 
+    # Botón flotante SIEMPRE visible para salir a POSMesero,
+    # independiente del HTML embebido del form (defensivo).
+    self.set_event_handler("show", self._form_show)
+
     # Cargar recetas y mesas dinámicas desde PostgreSQL
     self.cargar_recetario_db()
+
+  def _form_show(self, **event_args):
+    self._instalar_boton_salida()
+
+  def _instalar_boton_salida(self):
+    try:
+      doc = anvil.js.window.document
+      prev = doc.getElementById("vs-salir-cocina")
+      if prev is not None:
+        prev.remove()
+      btn = doc.createElement("button")
+      btn.id = "vs-salir-cocina"
+      btn.innerHTML = ('<i class="fa-solid fa-arrow-left"></i>'
+                      ' <span>Volver a Mesas</span>')
+      btn.style.cssText = (
+        "position: fixed; top: 12px; left: 16px; z-index: 99998; "
+        "padding: 10px 18px; "
+        "background: linear-gradient(135deg,#059669,#0f766e); color:#fff; "
+        "border: 2px solid #34d399; border-radius: 999px; "
+        "font-weight: 900; font-size: 13px; "
+        "cursor: pointer; user-select: none; "
+        "box-shadow: 0 6px 20px rgba(16,185,129,0.5); "
+        "display: flex; align-items: center; gap: 8px;"
+      )
+      btn.addEventListener("click", lambda ev: anvil.open_form("POSMesero"))
+      doc.body.appendChild(btn)
+    except Exception as e:
+      print(f"[MonitorCocina] Error instalando botón salida: {e}")
 
   def cargar_recetario_db(self):
     try:
