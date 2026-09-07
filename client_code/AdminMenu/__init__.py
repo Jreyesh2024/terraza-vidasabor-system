@@ -8,7 +8,11 @@ class AdminMenu(AdminMenuTemplate):
   def __init__(self, **properties):
     self.init_components(**properties)
     try:
+      # Exponer TANTO anvilAppNav como navMenu para que los onclick embebidos
+      # de los botones (window.navMenu('pos_mesero')) funcionen sin fallback
+      # al alert nativo del navegador.
       anvil.js.window.anvilAppNav = self.navegar_modulo
+      anvil.js.window.navMenu = self.navegar_modulo
       anvil.js.window.anvilGuardarProducto = self.guardar_producto_db
       anvil.js.window.anvilCambiarDisp = self.cambiar_disponibilidad_db
       anvil.js.window.anvilCargarDashboard = self.cargar_dashboard

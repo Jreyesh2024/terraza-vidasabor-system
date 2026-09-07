@@ -13,13 +13,49 @@ native_deps: |
         s.setProperty('color', '#f8fafc', 'important');
       } catch (e) {}
     })();
+    // Shim global no reconfigurable de window.navMenu: cualquier form que
+    // intente definir su propio window.navMenu (con fallback a alert) es
+    // silenciosamente ignorado. Delega siempre en window.anvilAppNav que
+    // cada form Python expone en su __init__.
+    (function () {
+      try {
+        var _fn = function (modulo) {
+          if (typeof window.anvilAppNav === 'function') {
+            window.anvilAppNav(modulo);
+          } else {
+            console.warn('[navMenu] anvilAppNav aún no disponible; módulo:', modulo);
+          }
+        };
+        Object.defineProperty(window, 'navMenu', {
+          value: _fn,
+          writable: false,
+          configurable: false,
+          enumerable: true
+        });
+      } catch (e) {
+        window.navMenu = function (m) {
+          if (window.anvilAppNav) window.anvilAppNav(m);
+        };
+      }
+    })();
   </script>
   <style>
-    html { background: #090d16 !important; }
-    body { background: #090d16 !important; color: #f8fafc !important; margin: 0 !important; }
+    html, body {
+      background: #090d16 !important;
+      color: #f8fafc !important;
+      margin: 0 !important;
+      /* Asegurar scroll vertical natural — evita headers cortados */
+      overflow-x: hidden !important;
+      overflow-y: auto !important;
+      min-height: 100vh !important;
+      -webkit-overflow-scrolling: touch !important;
+    }
     .anvil-container, .anvil-panel, .anvil-panel-section {
       background: #090d16 !important;
       color: #f8fafc !important;
+      /* Estos contenedores no deben limitar el scroll del body */
+      overflow: visible !important;
+      max-height: none !important;
     }
     /* SPLASH DESDE CSS PURO (aplica antes que cualquier JS).
        Usa body::before para cubrir la app apenas el CSSOM procesa este bloque.
