@@ -107,6 +107,34 @@ class POSMesero(POSMeseroTemplate):
         self._iniciar_timer_sync()
         self._instalar_badge_alertas()
         self._iniciar_timer_alertas()
+        # Re-instalar el hover tooltip en cada montaje: cuando el usuario
+        # vuelve al POSMesero desde otro form, el body puede haber perdido
+        # sus listeners. Delay 300ms para que el DOM esté listo.
+        anvil.js.window.setTimeout(self._reinstalar_hover_tooltips, 300)
+        # Quitar cualquier botón flotante residual del MonitorCocina
+        # (por si el hide del otro form no alcanzó a limpiarlo).
+        self._limpiar_botones_flotantes_extranos()
+
+    def _reinstalar_hover_tooltips(self, *_):
+        try:
+            body = anvil.js.window.document.body
+            # Forzar re-instalación resetando el guard.
+            setattr(body, "_vsHoverInstalled", False)
+            install = getattr(anvil.js.window, "installHoverTooltips", None)
+            if install is not None:
+                install()
+        except Exception as e:
+            print(f"[POSMesero] Error reinstalando hover tooltips: {e}")
+
+    def _limpiar_botones_flotantes_extranos(self):
+        try:
+            doc = anvil.js.window.document
+            for _id in ("vs-salir-cocina",):
+                el = doc.getElementById(_id)
+                if el is not None:
+                    el.remove()
+        except Exception:
+            pass
 
     def form_hide(self, **event_args):
         """Limpieza al salir del form. Evita listeners fantasma y timers colgados."""

@@ -4666,6 +4666,20 @@
       var root = document.body;
       if (root._vsHoverInstalled) return;
       root._vsHoverInstalled = true;
+      // Vaciar el title nativo de sillas/mesas para que el navegador no
+      // muestre su tooltip default en blanco y negro sobre nuestro tooltip.
+      var neutralizeTitles = function () {
+        var els = document.querySelectorAll('[data-action="clickSilla"], [data-action="clickMesa"]');
+        for (var i = 0; i < els.length; i++) {
+          if (els[i].getAttribute('title')) {
+            els[i].dataset.origtitle = els[i].getAttribute('title');
+            els[i].removeAttribute('title');
+          }
+        }
+      };
+      neutralizeTitles();
+      // Re-neutralizar cada 2s por si el JS re-renderiza los divs.
+      setInterval(neutralizeTitles, 2000);
       root.addEventListener('mouseover', function (ev) {
         var sillaEl = ev.target.closest ? ev.target.closest('[data-action="clickSilla"]') : null;
         if (sillaEl) {

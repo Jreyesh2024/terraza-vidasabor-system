@@ -14,40 +14,55 @@ class MonitorCocina(MonitorCocinaTemplate):
     except Exception:
       pass
 
-    # Botón flotante SIEMPRE visible para salir a POSMesero,
-    # independiente del HTML embebido del form (defensivo).
     self.set_event_handler("show", self._form_show)
+    self.set_event_handler("hide", self._form_hide)
 
     # Cargar recetas y mesas dinámicas desde PostgreSQL
     self.cargar_recetario_db()
 
   def _form_show(self, **event_args):
-    self._instalar_boton_salida()
+    # Adjuntar listener directo al botón "Volver a Mesa & POS" del header y
+    # a cualquier otro botón dentro del form que quiera navegar a POSMesero.
+    # Delay 200ms para que el DOM del form esté completamente inyectado.
+    anvil.js.window.setTimeout(self._reforzar_botones_salida, 200)
+    # Insurance: reintenta a los 800ms por si el HTML se reinyectó.
+    anvil.js.window.setTimeout(self._reforzar_botones_salida, 800)
 
-  def _instalar_boton_salida(self):
+  def _form_hide(self, **event_args):
+    # Limpiar cualquier resto que hayamos podido inyectar en body.
     try:
       doc = anvil.js.window.document
-      prev = doc.getElementById("vs-salir-cocina")
-      if prev is not None:
-        prev.remove()
-      btn = doc.createElement("button")
-      btn.id = "vs-salir-cocina"
-      btn.innerHTML = ('<i class="fa-solid fa-arrow-left"></i>'
-                      ' <span>Volver a Mesas</span>')
-      btn.style.cssText = (
-        "position: fixed; top: 12px; left: 16px; z-index: 99998; "
-        "padding: 10px 18px; "
-        "background: linear-gradient(135deg,#059669,#0f766e); color:#fff; "
-        "border: 2px solid #34d399; border-radius: 999px; "
-        "font-weight: 900; font-size: 13px; "
-        "cursor: pointer; user-select: none; "
-        "box-shadow: 0 6px 20px rgba(16,185,129,0.5); "
-        "display: flex; align-items: center; gap: 8px;"
-      )
-      btn.addEventListener("click", lambda ev: anvil.open_form("POSMesero"))
-      doc.body.appendChild(btn)
+      leftover = doc.getElementById("vs-salir-cocina")
+      if leftover is not None:
+        leftover.remove()
+    except Exception:
+      pass
+
+  def _reforzar_botones_salida(self, *_):
+    """Enlaza directamente un handler Python al botón 'Volver a Mesa & POS'
+    del header del MonitorCocina, sin depender de window.navMenu ni de
+    scripts embebidos. Idempotente."""
+    try:
+      doc = anvil.js.window.document
+      # Cualquier botón cuyo texto contenga "Volver a Mesa" o "Volver a Mesas"
+      botones = doc.querySelectorAll("button")
+      for i in range(int(botones.length)):
+        btn = botones.item(i)
+        txt = (btn.textContent or "").strip().lower()
+        if ("volver a mesa" in txt or "volver a mesas" in txt) \
+           and not getattr(btn, "_vsHooked", False):
+          setattr(btn, "_vsHooked", True)
+          btn.addEventListener("click", lambda ev: self._salir_a_pos())
     except Exception as e:
-      print(f"[MonitorCocina] Error instalando botón salida: {e}")
+      print(f"[MonitorCocina] Error reforzando botones salida: {e}")
+
+  def _salir_a_pos(self, *_):
+    """Sale a POSMesero limpiando el hash de URL para evitar redirects."""
+    try:
+      anvil.set_url_hash("", set_in_history=False)
+    except Exception:
+      pass
+    anvil.open_form("POSMesero")
 
   def cargar_recetario_db(self):
     try:
