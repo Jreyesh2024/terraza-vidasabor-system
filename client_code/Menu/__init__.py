@@ -151,8 +151,47 @@ class Menu(MenuTemplate):
                 "Por favor llama al mesero para que te ayude."
             )
             return
+        # Detectar si la silla ya estaba ocupada por OTRA persona.
+        # Guardamos en localStorage el QR de la sesión actual del cliente
+        # para distinguir "mismo cliente re-escaneando" vs "otro cliente".
+        ya_ocupada = bool(resp.get("ya_ocupada"))
+        mi_qr_previo = None
+        try:
+            mi_qr_previo = anvil.js.window.localStorage.getItem("vs_mi_qr_actual")
+        except Exception:
+            pass
+        if ya_ocupada and mi_qr_previo != info["qr"]:
+            # Silla está ocupada por alguien más (mi localStorage no coincide).
+            self._render_silla_ajena(info["qr"])
+            return
+        # Check-in exitoso propio: guardar QR en localStorage.
+        try:
+            anvil.js.window.localStorage.setItem("vs_mi_qr_actual", info["qr"])
+        except Exception:
+            pass
         self._sesion_info = {**info, **resp}
         self._render_bienvenida()
+
+    def _render_silla_ajena(self, qr):
+        html = f"""
+        <div class="max-w-md mx-auto min-h-screen flex flex-col items-center
+                    justify-center px-6 text-center bg-[#090d16] text-slate-100">
+          <div class="w-16 h-16 rounded-full bg-amber-500/20 border
+                      border-amber-500/50 flex items-center justify-center mb-4">
+            <i class="fa-solid fa-user-lock text-amber-400 text-2xl"></i>
+          </div>
+          <h2 class="text-xl font-bold">Silla ocupada</h2>
+          <p class="mt-3 text-slate-400 text-sm max-w-xs">
+            El portavasos <b class="text-slate-200">{qr}</b> ya está en uso
+            por otro comensal.
+          </p>
+          <p class="mt-4 text-slate-500 text-xs max-w-xs">
+            Si te acabas de sentar aquí, por favor llama al mesero para que
+            te acomode.
+          </p>
+        </div>
+        """
+        self._reemplazar_contenido(html)
 
     # ─────────────────────── renderers de pantallas ──────────────────────
     def _render_esperando_qr(self):

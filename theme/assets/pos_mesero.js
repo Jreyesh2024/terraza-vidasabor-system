@@ -78,7 +78,13 @@
       const container = document.getElementById('waiterCatChips');
       if (!container || !window.catalogCategories || window.catalogCategories.length === 0) return;
       container.innerHTML = '';
-      window.catalogCategories.forEach(function (cat) {
+      // "Al Centro" se accede haciendo clic en la mesa del croquis, no aquí.
+      // Filtramos para que este menú de categorías quede más limpio.
+      var categorias = window.catalogCategories.filter(function (cat) {
+        return !cat.es_al_centro
+            && !(cat.nombre || '').toLowerCase().includes('al centro');
+      });
+      categorias.forEach(function (cat) {
         const btn = document.createElement('button');
         btn.dataset.cat = cat.nombre;
         btn.onclick = function () { window.filtrarCategoria(cat.nombre); };

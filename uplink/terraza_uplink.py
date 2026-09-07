@@ -119,7 +119,9 @@ def _abrir_o_reusar_sesion_mesa(cur, mesa_id):
 def _abrir_ocupacion_silla(cur, silla_id, mesa_id, origen, cliente_display_name=None):
     """Abre ocupacion en la silla dentro de una sesion_mesa (crea o reusa).
     Idempotente: si la silla ya tiene ocupacion activa, la retorna.
-    Retorna (ocupacion_id, sesion_mesa_id)."""
+    Retorna (ocupacion_id, sesion_mesa_id, was_new).
+    was_new=True si esta llamada CREÓ la ocupación (silla estaba libre).
+    was_new=False si ya existía (idempotente, silla ya estaba ocupada)."""
     # ¿Ya hay ocupacion abierta en esta silla?
     cur.execute("""
         SELECT id, sesion_mesa_id FROM ocupaciones_silla
@@ -128,7 +130,7 @@ def _abrir_ocupacion_silla(cur, silla_id, mesa_id, origen, cliente_display_name=
     """, (int(silla_id),))
     row = cur.fetchone()
     if row:
-        return int(row['id']), int(row['sesion_mesa_id'])
+        return int(row['id']), int(row['sesion_mesa_id']), False
     # Abrir/reusar sesion de la mesa y crear ocupacion
     sesion_id = _abrir_o_reusar_sesion_mesa(cur, mesa_id)
     cur.execute("""
@@ -136,7 +138,7 @@ def _abrir_ocupacion_silla(cur, silla_id, mesa_id, origen, cliente_display_name=
         VALUES (%s, %s, %s, %s) RETURNING id;
     """, (sesion_id, int(silla_id), cliente_display_name, origen))
     ocup_id = int(cur.fetchone()['id'])
-    return ocup_id, sesion_id
+    return ocup_id, sesion_id, True
 
 
 def _cerrar_ocupacion_silla(cur, silla_id, cerrada_por_mesero_id=None):
@@ -492,27 +494,30 @@ def uplink_checkin_silla_qr(mesa_id, silla_id, qr_id=''):
                 print(f"⚠️  [UPLINK] checkin_qr: silla no encontrada "
                       f"(mesa={mesa_id} silla={silla_id} qr={qr_id})")
                 return {"error": "silla no encontrada"}
-            _abrir_ocupacion_silla(
+            _ocup_id, _sesion_id, was_new = _abrir_ocupacion_silla(
                 cur,
                 silla_id=silla_row['silla_id'],
                 mesa_id=silla_row['mesa_id'],
                 origen='qr',
             )
         conn.commit()
+        estado_txt = "NUEVA OCUPACIÓN" if was_new else "YA ESTABA OCUPADA"
         print(f"🔔 [UPLINK] Check-in QR: silla_id={silla_row['silla_id']} "
-              f"(qr={silla_row['codigo_qr']}) → OCUPADA")
+              f"(qr={silla_row['codigo_qr']}) → {estado_txt}")
     except Exception as e:
         conn.rollback()
         print(f"[UPLINK] Error en checkin_silla_qr: {e}")
         return {"error": str(e)}
     finally:
         conn.close()
-    # Retorna el estado actualizado de esa silla en formato legacy
+    # Retorna el estado actualizado de esa silla en formato legacy + flag ya_ocupada
     all_cuentas = _construir_dict_cuentas_desde_db()
     key = (f"{silla_row['numero_mesa']}-{silla_row['numero_en_mesa']}"
            if not silla_row['es_adicional']
            else f"EX-{silla_row['codigo_qr'].split('-')[-1]}")
-    return all_cuentas.get(key, {})
+    result = dict(all_cuentas.get(key, {}))
+    result["ya_ocupada"] = (not was_new)  # True = silla estaba ocupada antes del scan
+    return result
 
 
 @anvil.server.callable('actualizar_cuenta_silla')
