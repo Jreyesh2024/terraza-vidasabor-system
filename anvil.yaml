@@ -21,53 +21,61 @@ native_deps: |
       background: #090d16 !important;
       color: #f8fafc !important;
     }
-    /* Splash sobre TODO mientras carga: evita ver el chrome de Anvil */
-    #vs-boot-splash {
-      position: fixed; inset: 0; z-index: 999999;
+    /* SPLASH DESDE CSS PURO (aplica antes que cualquier JS).
+       Usa body::before para cubrir la app apenas el CSSOM procesa este bloque.
+       Se retira cuando body recibe la clase .vs-app-ready (la pone JS). */
+    body::before {
+      content: 'V&S';
+      position: fixed; inset: 0; z-index: 2147483647;
       display: flex; align-items: center; justify-content: center;
       background: #090d16;
-      transition: opacity 0.35s ease;
+      color: transparent;
+      font-family: system-ui, sans-serif;
     }
-    #vs-boot-splash.hide { opacity: 0; pointer-events: none; }
-    #vs-boot-splash > .logo {
-      width: 72px; height: 72px; border-radius: 20px;
+    body::after {
+      content: '';
+      position: fixed; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 72px; height: 72px;
       background: linear-gradient(135deg, #10b981 0%, #0f766e 100%);
-      display: flex; align-items: center; justify-content: center;
-      color: white; font-weight: 900; font-size: 26px;
+      border-radius: 20px;
       box-shadow: 0 8px 30px rgba(16,185,129,0.4);
+      z-index: 2147483647;
       animation: vs-boot-pulse 1.2s ease-in-out infinite;
     }
-    @keyframes vs-boot-pulse {
-      0%,100% { transform: scale(1); opacity: 0.95; }
-      50% { transform: scale(1.06); opacity: 1; }
+    body.vs-app-ready::before,
+    body.vs-app-ready::after {
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.35s ease;
     }
+    @keyframes vs-boot-pulse {
+      0%,100% { transform: translate(-50%, -50%) scale(1); opacity: 0.95; }
+      50% { transform: translate(-50%, -50%) scale(1.06); opacity: 1; }
+    }
+    /* Logo V&S encima del cuadrado */
+    body:not(.vs-app-ready)::before { color: transparent; }
   </style>
   <script>
-    // Inyecta el splash lo antes posible (antes de que Anvil pinte cualquier UI).
+    // Retira el splash CSS (body::before + body::after) cuando la app está lista.
     (function () {
-      var mount = function () {
-        if (!document.body || document.getElementById('vs-boot-splash')) return;
-        var d = document.createElement('div');
-        d.id = 'vs-boot-splash';
-        d.innerHTML = '<div class="logo">V&S</div>';
-        document.body.appendChild(d);
-        // Ocultar cuando algún form real esté en pantalla (contenido significativo).
-        var t = 0;
-        var check = setInterval(function () {
-          t += 200;
-          var forms = document.querySelectorAll('.anvil-form-container, .anvil-panel');
-          var haySoftlyReady = forms.length > 0 && Array.prototype.some.call(forms, function (f) {
-            return f.textContent && f.textContent.trim().length > 30;
-          });
-          if (haySoftlyReady || t > 8000) {
-            clearInterval(check);
-            d.classList.add('hide');
-            setTimeout(function () { d.remove(); }, 400);
+      var marcarListo = function () {
+        var b = document.body;
+        if (!b) return false;
+        // Verifica que haya contenido real de un form dentro del body.
+        var contentEls = document.querySelectorAll('.anvil-form-container, .anvil-panel, .runner-app');
+        for (var i = 0; i < contentEls.length; i++) {
+          if (contentEls[i].textContent && contentEls[i].textContent.trim().length > 30) {
+            b.classList.add('vs-app-ready');
+            return true;
           }
-        }, 200);
+        }
+        return false;
       };
-      if (document.body) mount();
-      else document.addEventListener('DOMContentLoaded', mount);
+      var t = 0;
+      var iv = setInterval(function () {
+        t += 200;
+        if (marcarListo() || t > 10000) clearInterval(iv);
+      }, 200);
     })();
   </script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
