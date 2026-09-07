@@ -8,7 +8,11 @@ class MonitorCocina(MonitorCocinaTemplate):
   def __init__(self, **properties):
     self.init_components(**properties)
     try:
+      # Exponer TANTO anvilAppNav como navMenu para que el JS embebido
+      # del form (window.navMenu que hace fallback a alert) tenga la
+      # función real disponible y no muestre el alert "Navegando a ...".
       anvil.js.window.anvilAppNav = self.navegar_modulo
+      anvil.js.window.navMenu = self.navegar_modulo
       anvil.js.window.scrollTo(0, 0)
     except Exception:
       pass

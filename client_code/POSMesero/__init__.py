@@ -528,6 +528,9 @@ class POSMesero(POSMeseroTemplate):
             'border-radius:999px;font-size:14px;">Toca para atender</span>'
         )
         doc.body.appendChild(banner)
+        # Listener directo (el banner vive en <body>, fuera del root del form,
+        # así que la delegación de form_show no lo captura).
+        banner.addEventListener("click", lambda ev: self._ver_alertas())
         # Inyecta keyframes una sola vez
         if doc.getElementById("vs-banner-css") is None:
             st = doc.createElement("style")
@@ -633,7 +636,6 @@ class POSMesero(POSMeseroTemplate):
                           '</div>')
         modal = doc.createElement("div")
         modal.id = "vs-alertas-modal"
-        modal.setAttribute("data-backdrop-action", "cerrarAlertas")
         modal.style.cssText = (
             "position:fixed;inset:0;z-index:10000;background:rgba(0,0,0,0.72);"
             "display:flex;align-items:flex-start;justify-content:center;padding:40px 16px;"
@@ -647,7 +649,7 @@ class POSMesero(POSMeseroTemplate):
             '    margin-bottom:14px;">'
             '    <h2 style="font-size:18px;font-weight:900;color:#f1f5f9;">'
             '      Alertas al Mesero</h2>'
-            '    <button data-action="cerrarAlertas" '
+            '    <button id="vs-alertas-close" '
             '      style="background:#1e293b;border:none;color:#cbd5e1;'
             '      width:36px;height:36px;border-radius:10px;cursor:pointer;'
             '      font-size:16px;">✕</button>'
@@ -656,6 +658,22 @@ class POSMesero(POSMeseroTemplate):
             '</div>'
         )
         doc.body.appendChild(modal)
+        # Listeners directos (el modal vive en <body>, fuera del form root).
+        def _on_backdrop(ev):
+            if ev.target.isSameNode(modal):
+                self._cerrar_alertas()
+        modal.addEventListener("click", _on_backdrop)
+        close_btn = doc.getElementById("vs-alertas-close")
+        if close_btn is not None:
+            close_btn.addEventListener("click", lambda ev: self._cerrar_alertas())
+        # Botones "Atender esta llamada" — un listener por cada botón.
+        atender_btns = modal.querySelectorAll("[data-action='atenderAlerta']")
+        for i in range(int(atender_btns.length)):
+            btn = atender_btns.item(i)
+            lid = int(btn.dataset.args)
+            def _make_handler(llamada_id):
+                return lambda ev: self._atender_alerta(llamada_id)
+            btn.addEventListener("click", _make_handler(lid))
 
     def _cerrar_alertas(self, *_):
         doc = anvil.js.window.document
