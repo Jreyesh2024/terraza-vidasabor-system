@@ -499,24 +499,48 @@ class POSMesero(POSMeseroTemplate):
 
     # ═══════════════════════ ALERTAS AL MESERO (Bloque G v1) ═══════════════
     def _instalar_badge_alertas(self):
-        """Inyecta un badge fijo arriba a la derecha con conteo de alertas."""
+        """Inyecta un BANNER horizontal fijo arriba, ancho, muy visible.
+        Sólo aparece cuando hay alertas pendientes. Al hacer clic dispara
+        data-action='verAlertas' (event delegation Python)."""
         doc = anvil.js.window.document
-        if doc.getElementById("vs-alertas-badge") is not None:
+        if doc.getElementById("vs-alertas-banner") is not None:
             return
-        badge = doc.createElement("div")
-        badge.id = "vs-alertas-badge"
-        badge.setAttribute("data-action", "verAlertas")
-        badge.style.cssText = (
-            "position: fixed; top: 12px; right: 16px; z-index: 9998; "
-            "min-width: 56px; height: 44px; padding: 0 14px; "
-            "display: flex; align-items: center; justify-content: center; gap: 6px; "
-            "border-radius: 999px; font-weight: 900; font-size: 13px; "
-            "cursor: pointer; box-shadow: 0 6px 18px rgba(0,0,0,0.5); "
-            "transition: transform 0.15s ease; user-select: none; "
-            "background: #1e293b; color: #64748b; border: 1px solid #334155;"
+        banner = doc.createElement("div")
+        banner.id = "vs-alertas-banner"
+        banner.setAttribute("data-action", "verAlertas")
+        banner.style.cssText = (
+            "position: fixed; top: 0; left: 0; right: 0; z-index: 9998; "
+            "min-height: 68px; padding: 14px 20px; "
+            "display: none; align-items: center; justify-content: center; gap: 14px; "
+            "font-weight: 900; font-size: 17px; letter-spacing: 0.3px; "
+            "cursor: pointer; user-select: none; "
+            "background: linear-gradient(90deg,#dc2626 0%,#b91c1c 50%,#dc2626 100%); "
+            "color: #ffffff; border-bottom: 3px solid #7f1d1d; "
+            "box-shadow: 0 6px 24px rgba(220,38,38,0.55); "
+            "animation: vs-banner-pulse 1.05s ease-in-out infinite; "
+            "text-shadow: 0 1px 2px rgba(0,0,0,0.35);"
         )
-        badge.innerHTML = '<i class="fa-solid fa-bell"></i><span id="vs-alertas-count">0</span>'
-        doc.body.appendChild(badge)
+        banner.innerHTML = (
+            '<i class="fa-solid fa-bell" style="font-size:22px;'
+            'animation: vs-shake 0.6s ease-in-out infinite;"></i>'
+            '<span id="vs-alertas-texto">Llamadas pendientes</span>'
+            '<span style="margin-left:8px;padding:4px 12px;background:rgba(0,0,0,0.25);'
+            'border-radius:999px;font-size:14px;">Toca para atender</span>'
+        )
+        doc.body.appendChild(banner)
+        # Inyecta keyframes una sola vez
+        if doc.getElementById("vs-banner-css") is None:
+            st = doc.createElement("style")
+            st.id = "vs-banner-css"
+            st.textContent = (
+                "@keyframes vs-banner-pulse {"
+                " 0%,100% { filter: brightness(1); box-shadow: 0 6px 24px rgba(220,38,38,0.55); }"
+                " 50% { filter: brightness(1.15); box-shadow: 0 10px 34px rgba(220,38,38,0.9); } } "
+                "@keyframes vs-shake {"
+                " 0%,100% { transform: rotate(-8deg); }"
+                " 50% { transform: rotate(8deg); } }"
+            )
+            doc.head.appendChild(st)
 
     def _iniciar_timer_alertas(self):
         try:
@@ -549,31 +573,16 @@ class POSMesero(POSMeseroTemplate):
 
     def _pintar_badge_alertas(self, n):
         doc = anvil.js.window.document
-        badge = doc.getElementById("vs-alertas-badge")
-        count_span = doc.getElementById("vs-alertas-count")
-        if badge is None or count_span is None:
+        banner = doc.getElementById("vs-alertas-banner")
+        texto = doc.getElementById("vs-alertas-texto")
+        if banner is None or texto is None:
             return
-        count_span.innerHTML = str(n)
         if n > 0:
-            badge.style.background = "linear-gradient(135deg,#dc2626,#991b1b)"
-            badge.style.color = "#ffffff"
-            badge.style.border = "1px solid #f87171"
-            badge.style.animation = "vs-blink 1s ease-in-out infinite"
-            # Inyectar keyframes una sola vez
-            if doc.getElementById("vs-blink-css") is None:
-                st = doc.createElement("style")
-                st.id = "vs-blink-css"
-                st.textContent = (
-                    "@keyframes vs-blink {"
-                    " 0%,100% { transform: scale(1); box-shadow: 0 6px 18px rgba(220,38,38,0.4); }"
-                    " 50% { transform: scale(1.08); box-shadow: 0 10px 28px rgba(220,38,38,0.9); } }"
-                )
-                doc.head.appendChild(st)
+            plural = "llamada pendiente" if n == 1 else "llamadas pendientes"
+            texto.innerHTML = f"{n} {plural}"
+            banner.style.setProperty("display", "flex", "important")
         else:
-            badge.style.background = "#1e293b"
-            badge.style.color = "#64748b"
-            badge.style.border = "1px solid #334155"
-            badge.style.animation = ""
+            banner.style.setProperty("display", "none", "important")
 
     def _ver_alertas(self, *_):
         """Renderiza modal overlay con lista de llamadas pendientes."""

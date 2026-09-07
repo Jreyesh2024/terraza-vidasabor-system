@@ -3,15 +3,73 @@ metadata: {title: VidaSabor Terraza}
 name: La Terraza de Vida & Sabor
 native_deps: |
   <meta name="theme-color" content="#090d16">
+  <script>
+    // Ejecución síncrona: pinta el fondo antes de que el navegador dibuje
+    // el primer frame (evita el flash blanco del runner de Anvil).
+    (function () {
+      try {
+        var s = document.documentElement.style;
+        s.setProperty('background-color', '#090d16', 'important');
+        s.setProperty('color', '#f8fafc', 'important');
+      } catch (e) {}
+    })();
+  </script>
   <style>
-    /* Aplica antes que cualquier cosa: elimina el flash blanco del runner de Anvil */
     html { background: #090d16 !important; }
     body { background: #090d16 !important; color: #f8fafc !important; margin: 0 !important; }
     .anvil-container, .anvil-panel, .anvil-panel-section {
       background: #090d16 !important;
       color: #f8fafc !important;
     }
+    /* Splash sobre TODO mientras carga: evita ver el chrome de Anvil */
+    #vs-boot-splash {
+      position: fixed; inset: 0; z-index: 999999;
+      display: flex; align-items: center; justify-content: center;
+      background: #090d16;
+      transition: opacity 0.35s ease;
+    }
+    #vs-boot-splash.hide { opacity: 0; pointer-events: none; }
+    #vs-boot-splash > .logo {
+      width: 72px; height: 72px; border-radius: 20px;
+      background: linear-gradient(135deg, #10b981 0%, #0f766e 100%);
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-weight: 900; font-size: 26px;
+      box-shadow: 0 8px 30px rgba(16,185,129,0.4);
+      animation: vs-boot-pulse 1.2s ease-in-out infinite;
+    }
+    @keyframes vs-boot-pulse {
+      0%,100% { transform: scale(1); opacity: 0.95; }
+      50% { transform: scale(1.06); opacity: 1; }
+    }
   </style>
+  <script>
+    // Inyecta el splash lo antes posible (antes de que Anvil pinte cualquier UI).
+    (function () {
+      var mount = function () {
+        if (!document.body || document.getElementById('vs-boot-splash')) return;
+        var d = document.createElement('div');
+        d.id = 'vs-boot-splash';
+        d.innerHTML = '<div class="logo">V&S</div>';
+        document.body.appendChild(d);
+        // Ocultar cuando algún form real esté en pantalla (contenido significativo).
+        var t = 0;
+        var check = setInterval(function () {
+          t += 200;
+          var forms = document.querySelectorAll('.anvil-form-container, .anvil-panel');
+          var haySoftlyReady = forms.length > 0 && Array.prototype.some.call(forms, function (f) {
+            return f.textContent && f.textContent.trim().length > 30;
+          });
+          if (haySoftlyReady || t > 8000) {
+            clearInterval(check);
+            d.classList.add('hide');
+            setTimeout(function () { d.remove(); }, 400);
+          }
+        }, 200);
+      };
+      if (document.body) mount();
+      else document.addEventListener('DOMContentLoaded', mount);
+    })();
+  </script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="_/theme/theme.css">
   <script src="_/theme/pos_mesero.js"></script>
