@@ -85,9 +85,29 @@
         btn.dataset.cat = cat.nombre;
         btn.onclick = function () { window.filtrarCategoria(cat.nombre); };
         const isActive = (cat.nombre === catActual);
-        btn.style.cssText = 'padding: 6px 11px !important; font-size: 11px !important; font-weight: 800 !important; border-radius: 10px !important; cursor: pointer !important; white-space: nowrap !important; transition: all 0.2s; ' +
-          (isActive ? 'border: 1px solid #34d399 !important; background: #059669 !important; color: #ffffff !important;' : 'border: 1px solid #334155 !important; background: #1e293b !important; color: #cbd5e1 !important;');
-        btn.innerHTML = (cat.icono ? (cat.icono + ' ') : '') + cat.nombre;
+        // Botón grande "vistoso" tipo tarjeta: emoji arriba + nombre abajo.
+        btn.style.cssText = [
+          'display: flex !important',
+          'flex-direction: column !important',
+          'align-items: center !important',
+          'justify-content: center !important',
+          'gap: 8px !important',
+          'min-height: 96px !important',
+          'padding: 14px 10px !important',
+          'font-size: 13px !important',
+          'font-weight: 800 !important',
+          'text-align: center !important',
+          'line-height: 1.2 !important',
+          'border-radius: 16px !important',
+          'cursor: pointer !important',
+          'transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease',
+          isActive
+            ? 'border: 2px solid #34d399 !important; background: linear-gradient(180deg, #059669 0%, #047857 100%) !important; color: #ffffff !important; box-shadow: 0 6px 18px rgba(5,150,105,0.35) !important;'
+            : 'border: 2px solid #334155 !important; background: #1e293b !important; color: #cbd5e1 !important; box-shadow: 0 2px 6px rgba(0,0,0,0.25) !important;'
+        ].join('; ');
+        btn.innerHTML =
+          '<span style="font-size:28px; line-height:1;">' + (cat.icono || '🍽️') + '</span>' +
+          '<span style="font-weight: 800;">' + cat.nombre + '</span>';
         container.appendChild(btn);
       });
     }
@@ -4318,23 +4338,8 @@
 
     window.filtrarCategoria = function (catNombre) {
       window.palapaState.categoriaFiltro = catNombre;
-
-      const container = document.getElementById('waiterCatChips');
-      if (container) {
-        const buttons = container.querySelectorAll('button');
-        buttons.forEach(function (btn) {
-          if (btn.dataset.cat === catNombre) {
-            btn.style.background = "#059669";
-            btn.style.color = "#ffffff";
-            btn.style.border = "1px solid #34d399";
-          } else {
-            btn.style.background = "#1e293b";
-            btn.style.color = "#cbd5e1";
-            btn.style.border = "1px solid #334155";
-          }
-        });
-      }
-
+      // Re-render los chips con el estilo tarjeta consistente (activo/inactivo).
+      renderWaiterCatChips();
       renderWaiterMenuGrid();
     };
 
