@@ -77,8 +77,12 @@ class Menu(MenuTemplate):
             self._llamar_mesero()
         elif action == "solicitarCuenta":
             self._solicitar_cuenta()
-        elif action == "reescanearQR":
-            self._render_esperando_qr()
+        elif action == "reintentarCheckin":
+            info = self._parsear_qr_de_url()
+            if info:
+                self._auto_checkin(info)
+            else:
+                self._render_esperando_qr()
 
     # ─────────────────── parsing del hash de URL con QR ──────────────────
     def _parsear_qr_de_url(self):
@@ -142,37 +146,31 @@ class Menu(MenuTemplate):
             self._render_error("No pude registrar tu llegada. Intenta escanear de nuevo.")
             return
         if not isinstance(resp, dict) or resp.get("error"):
-            msg = (resp or {}).get("error", "Silla no encontrada")
-            self._render_error(f"Portavasos no reconocido: {msg}")
+            self._render_error(
+                "Hubo un problema al registrar tu llegada. "
+                "Por favor llama al mesero para que te ayude."
+            )
             return
         self._sesion_info = {**info, **resp}
         self._render_bienvenida()
 
     # ─────────────────────── renderers de pantallas ──────────────────────
     def _render_esperando_qr(self):
+        """Pantalla mínima si alguien entra sin QR. En el flujo real el cliente
+        siempre llega con QR desde su cámara."""
         html = """
         <div class="max-w-md mx-auto min-h-screen flex flex-col items-center
                     justify-center px-6 text-center bg-[#090d16] text-slate-100">
-          <div class="w-20 h-20 rounded-3xl bg-gradient-to-tr from-emerald-500
-                      to-teal-700 flex items-center justify-center text-3xl
-                      font-black text-white mb-6 shadow-xl">
+          <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-emerald-500
+                      to-teal-700 flex items-center justify-center text-xl
+                      font-black text-white mb-5 shadow-lg">
             V&amp;S
           </div>
-          <h1 class="text-2xl font-black">La Terraza de Vida &amp; Sabor</h1>
-          <p class="mt-2 text-emerald-400 font-semibold">Menú Digital</p>
-          <p class="mt-8 text-slate-400 text-sm max-w-xs">
-            Escanea el <b>código QR</b> del portavasos de tu silla para
-            comenzar tu experiencia.
+          <h1 class="text-xl font-black">La Terraza de Vida &amp; Sabor</h1>
+          <p class="mt-4 text-slate-400 text-sm max-w-xs">
+            Escanea el código QR del portavasos de tu silla para comenzar.
           </p>
-          <div class="mt-8 w-32 h-32 rounded-2xl border-2 border-dashed
-                      border-slate-700 flex items-center justify-center">
-            <i class="fa-solid fa-qrcode text-5xl text-slate-600"></i>
-          </div>
-          <button data-action="navHub"
-                  class="mt-10 text-xs text-slate-500 hover:text-slate-300
-                         underline underline-offset-4">
-            Soy staff — ir al Hub
-          </button>
+          <i class="fa-solid fa-qrcode text-4xl text-slate-600 mt-6"></i>
         </div>
         """
         self._reemplazar_contenido(html)
@@ -187,10 +185,10 @@ class Menu(MenuTemplate):
           </div>
           <h2 class="text-xl font-bold">Algo no cuadró</h2>
           <p class="mt-2 text-slate-400 text-sm max-w-xs">{mensaje}</p>
-          <button data-action="reescanearQR"
+          <button data-action="reintentarCheckin"
                   class="mt-8 px-6 py-3 rounded-2xl bg-emerald-600
                          hover:bg-emerald-500 text-white font-bold text-sm">
-            Escanear otra vez
+            Reintentar
           </button>
         </div>
         """
@@ -259,21 +257,21 @@ class Menu(MenuTemplate):
             </div>
           </section>
 
-          <section class="px-4 mt-6 grid gap-3">
+          <section class="px-4 mt-6 flex flex-col gap-3">
             <button data-action="tab" data-args="silla"
                     class="text-left rounded-2xl bg-slate-900/60 border
                            border-white/5 hover:border-emerald-500/40 p-4
                            transition flex items-center gap-3">
               <div class="w-11 h-11 rounded-xl bg-emerald-500/15 border
                           border-emerald-500/30 flex items-center justify-center
-                          text-lg">🍳</div>
-              <div class="flex-1">
+                          text-lg flex-shrink-0">🍳</div>
+              <div class="flex-1 min-w-0">
                 <div class="text-sm font-black">Ordenar a Mi Silla</div>
                 <div class="text-[11px] text-slate-400">
                   Bebidas, huevos y platillos individuales a tu cuenta.
                 </div>
               </div>
-              <i class="fa-solid fa-arrow-right text-slate-500 text-sm"></i>
+              <i class="fa-solid fa-arrow-right text-slate-500 text-sm flex-shrink-0"></i>
             </button>
             <button data-action="tab" data-args="centro"
                     class="text-left rounded-2xl bg-slate-900/60 border
@@ -281,14 +279,30 @@ class Menu(MenuTemplate):
                            transition flex items-center gap-3">
               <div class="w-11 h-11 rounded-xl bg-amber-500/15 border
                           border-amber-500/30 flex items-center justify-center
-                          text-lg">🍲</div>
-              <div class="flex-1">
+                          text-lg flex-shrink-0">🍲</div>
+              <div class="flex-1 min-w-0">
                 <div class="text-sm font-black">Pedir al Centro</div>
                 <div class="text-[11px] text-slate-400">
                   Botanas, chilaquiles o jarras para compartir en tu mesa.
                 </div>
               </div>
-              <i class="fa-solid fa-arrow-right text-slate-500 text-sm"></i>
+              <i class="fa-solid fa-arrow-right text-slate-500 text-sm flex-shrink-0"></i>
+            </button>
+            <button data-action="tab" data-args="para_otra"
+                    class="text-left rounded-2xl bg-slate-900/60 border
+                           border-white/5 hover:border-purple-500/40 p-4
+                           transition flex items-center gap-3">
+              <div class="w-11 h-11 rounded-xl bg-purple-500/15 border
+                          border-purple-500/30 flex items-center justify-center
+                          text-lg flex-shrink-0">👨‍👧</div>
+              <div class="flex-1 min-w-0">
+                <div class="text-sm font-black">Pedir para Otra Silla</div>
+                <div class="text-[11px] text-slate-400">
+                  Ayuda a un niño, adulto mayor o compañero de mesa
+                  con su orden.
+                </div>
+              </div>
+              <i class="fa-solid fa-arrow-right text-slate-500 text-sm flex-shrink-0"></i>
             </button>
             <button data-action="tab" data-args="comanda"
                     class="text-left rounded-2xl bg-slate-900/60 border
@@ -296,14 +310,14 @@ class Menu(MenuTemplate):
                            transition flex items-center gap-3">
               <div class="w-11 h-11 rounded-xl bg-sky-500/15 border
                           border-sky-500/30 flex items-center justify-center
-                          text-lg">🧾</div>
-              <div class="flex-1">
+                          text-lg flex-shrink-0">🧾</div>
+              <div class="flex-1 min-w-0">
                 <div class="text-sm font-black">Mi Comanda</div>
                 <div class="text-[11px] text-slate-400">
                   Consulta lo que llevas hasta el momento.
                 </div>
               </div>
-              <i class="fa-solid fa-arrow-right text-slate-500 text-sm"></i>
+              <i class="fa-solid fa-arrow-right text-slate-500 text-sm flex-shrink-0"></i>
             </button>
           </section>
 
@@ -329,9 +343,10 @@ class Menu(MenuTemplate):
         if panel is None:
             return
         titulos = {
-            "silla":   "🍳 Ordenar a Mi Silla",
-            "centro":  "🍲 Pedir al Centro",
-            "comanda": "🧾 Mi Comanda",
+            "silla":     "🍳 Ordenar a Mi Silla",
+            "centro":    "🍲 Pedir al Centro",
+            "para_otra": "👨‍👧 Pedir para Otra Silla",
+            "comanda":   "🧾 Mi Comanda",
         }
         titulo = titulos.get(tab_id, "Sección")
         panel.innerHTML = (
@@ -344,10 +359,11 @@ class Menu(MenuTemplate):
         )
 
     def _llamar_mesero(self):
-        alert("Se avisó al mesero. Alguien llegará pronto.", title="Mesero notificado")
+        anvil.alert("Se avisó al mesero. Alguien llegará pronto.",
+                    title="Mesero notificado")
         # Bloque G: se conectará con crear_llamada_mesero real.
 
     def _solicitar_cuenta(self):
-        alert("Notificamos tu solicitud. El mesero te traerá la cuenta.",
-              title="Cuenta solicitada")
+        anvil.alert("Notificamos tu solicitud. El mesero te traerá la cuenta.",
+                    title="Cuenta solicitada")
         # Bloque G: se conectará con crear_llamada_mesero tipo='solicitar_cuenta'.
