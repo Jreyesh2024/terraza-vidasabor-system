@@ -1,14 +1,9 @@
 """
 Menu — form del cliente (teléfono / QR) v2.
-
 Arquitectura:
-- Estructura HTML declarativa + data-action; Python monta UN listener delegado.
-- Al cargar: leer QR de la URL, hacer auto check-in via checkin_silla_qr,
-  saludar con datos reales de la sesión.
-- Sin onclick inline, sin <script> embebidos, sin shims.
-
-Los endpoints de admin (guardar_producto, etc.) pertenecen al form de
-Gestión de Menú futuro (Bloque H).
+- Estructura HTML declarativa con clases .vs-* y estilos Vanilla CSS directos.
+- Python monta UN listener delegado en root.
+- Cero dependencia de frameworks CSS externos.
 """
 
 from ._anvil_designer import MenuTemplate
@@ -23,12 +18,11 @@ class Menu(MenuTemplate):
         self.init_components(**properties)
         self._root = None
         self._click_handler = None
-        self._sesion_info = None  # {mesa_num, silla_num, qr, ocupacionId, ...}
-        # Estado del catálogo
-        self._menu_productos = []      # array de productos desde vw_menu_cliente
-        self._menu_categorias = []     # array de categorías únicas ordenadas
-        self._destino_actual = "mi_silla"  # 'mi_silla' | 'al_centro' | 'otra_silla'
-        self._silla_destino_num = None      # cuando 'otra_silla'
+        self._sesion_info = None
+        self._menu_productos = []
+        self._menu_categorias = []
+        self._destino_actual = "mi_silla"
+        self._silla_destino_num = None
         self._timer_llamada = None
         self._llamada_id_pollend = None
 
@@ -85,7 +79,7 @@ class Menu(MenuTemplate):
         elif action == "tab":
             args_procesados = self._preprocesar_args_tab(args)
             if args_procesados is None:
-                return  # ya fue manejado por el prefijo __setSilla
+                return
             self._cambiar_tab(args_procesados[0] if args_procesados else "silla")
         elif action == "llamarMesero":
             self._llamar_mesero()
@@ -124,7 +118,6 @@ class Menu(MenuTemplate):
 
     # ─────────────────── parsing del hash de URL con QR ──────────────────
     def _parsear_qr_de_url(self):
-        """Retorna dict {mesa_num, silla_num, qr} o None."""
         try:
             url_hash = anvil.get_url_hash() or ""
         except Exception:
@@ -146,7 +139,6 @@ class Menu(MenuTemplate):
                 k, v = part.split("=", 1)
                 params[k.strip().lower()] = v.strip()
 
-        # También aceptamos el QR completo pegado directo (sin key=value)
         if not params and (s.upper().startswith("PV-") or s.upper().startswith("PV")):
             params["qr"] = s
 
@@ -157,7 +149,6 @@ class Menu(MenuTemplate):
         mesa_num = params.get("mesa")
         silla_num = params.get("silla")
 
-        # Formato v2: PV-P-MM-SS (Palapa) o PV-P-EX-NN
         if qr and qr.startswith("PV-P-"):
             partes = qr.split("-")
             if len(partes) == 4:
@@ -169,7 +160,6 @@ class Menu(MenuTemplate):
                 except ValueError:
                     pass
 
-        # Formato abreviado: PV-011, PV-012, PV-021, etc.
         elif qr and (qr.startswith("PV-0") or qr.startswith("PV-1") or qr.startswith("PV-2") or qr.startswith("PV-3")):
             digitos = qr.replace("PV-", "").replace("PV", "")
             if len(digitos) >= 3:
@@ -222,10 +212,7 @@ class Menu(MenuTemplate):
             return
 
         if err:
-            self._render_error(
-                "Hubo un problema al registrar tu llegada. "
-                "Por favor solicita ayuda a tu mesero."
-            )
+            self._render_error("Hubo un problema al registrar tu llegada. Solicita ayuda a tu mesero.")
             return
 
         try:
@@ -238,54 +225,39 @@ class Menu(MenuTemplate):
 
     def _render_silla_ajena(self, qr):
         html = f"""
-        <div class="min-h-screen max-w-md mx-auto px-6 py-12 flex flex-col items-center justify-center text-center bg-[#090d16] text-slate-100 font-sans">
-          <div class="w-20 h-20 rounded-3xl bg-amber-500/10 border-2 border-amber-500/40 flex items-center justify-center mb-6 shadow-2xl shadow-amber-500/20">
-            <i class="fa-solid fa-chair text-amber-400 text-3xl"></i>
+        <div class="vs-mobile-wrap" style="display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px 24px;">
+          <div style="width:80px;height:80px;border-radius:24px;background:rgba(245,158,11,0.15);border:2px solid rgba(245,158,11,0.5);display:flex;align-items:center;justify-content:center;font-size:36px;margin-bottom:20px;box-shadow:0 10px 30px rgba(245,158,11,0.2);">
+            🔒
           </div>
-          <span class="px-3 py-1 rounded-full bg-amber-500/20 border border-amber-500/40 text-amber-300 text-xs font-black uppercase tracking-wider mb-3">
-            Silla Ocupada
+          <span style="font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:1px;color:#fcd34d;background:rgba(245,158,11,0.2);padding:4px 12px;border-radius:99px;border:1px solid rgba(245,158,11,0.4);margin-bottom:12px;">
+            Silla en Uso
           </span>
-          <h2 class="text-2xl font-black text-white tracking-tight">Portavasos en Uso</h2>
-          <p class="mt-3 text-slate-400 text-sm leading-relaxed max-w-xs">
-            El código <b class="text-white font-mono">{qr}</b> ya está asignado a otro comensal en esta mesa.
+          <h2 style="font-size:24px;font-weight:900;color:#ffffff;margin:0 0 10px 0;">Portavasos Ocupado</h2>
+          <p style="font-size:14px;color:#94a3b8;line-height:1.5;max-width:320px;margin:0 0 24px 0;">
+            El portavasos <b style="color:#ffffff;font-family:monospace;">{qr}</b> ya está en uso por otro comensal.
           </p>
-          <div class="w-full mt-8 p-4 rounded-2xl bg-slate-900/80 border border-white/10 text-xs text-slate-300">
-            <p>Si te acabas de sentar aquí, el mesero ya fue notificado para reasignarte.</p>
-          </div>
-          <button data-action="reintentarCheckin"
-                  class="w-full mt-6 py-3.5 px-6 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-black text-sm shadow-lg active:scale-95 transition">
-            <i class="fa-solid fa-rotate-right mr-2"></i> Reintentar escaneo
+          <button data-action="reintentarCheckin" class="vs-cta-btn">
+            🔄 Reintentar escaneo
           </button>
         </div>
         """
         self._reemplazar_contenido(html)
 
     def _render_esperando_qr(self):
-        """Pantalla ilustrada cuando se abre la app sin parámetros de QR."""
         html = """
-        <div class="min-h-screen max-w-md mx-auto px-6 py-12 flex flex-col items-center justify-center text-center bg-[#090d16] text-slate-100 font-sans">
-          <div class="w-24 h-24 rounded-3xl bg-gradient-to-tr from-emerald-500 via-teal-600 to-emerald-400 p-0.5 shadow-[0_0_40px_rgba(16,185,129,0.35)] mb-6 flex items-center justify-center">
-            <div class="w-full h-full bg-[#090d16] rounded-[22px] flex items-center justify-center">
-              <span class="text-3xl font-black bg-gradient-to-r from-emerald-400 to-teal-200 bg-clip-text text-transparent">V&amp;S</span>
-            </div>
+        <div class="vs-mobile-wrap" style="display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px 24px;">
+          <div style="width:90px;height:90px;border-radius:26px;background:linear-gradient(135deg,#10b981 0%,#0f766e 100%);display:flex;align-items:center;justify-content:center;font-size:34px;font-weight:900;color:#ffffff;box-shadow:0 12px 35px rgba(16,185,129,0.4);margin-bottom:24px;">
+            V&amp;S
           </div>
+          <h1 style="font-size:24px;font-weight:900;color:#ffffff;margin:0 0 4px 0;letter-spacing:-0.5px;">La Terraza de Vida &amp; Sabor</h1>
+          <p style="font-size:12px;font-weight:800;color:#10b981;text-transform:uppercase;letter-spacing:2px;margin:0 0 32px 0;">Menú Digital Interactivo</p>
           
-          <h1 class="text-2xl font-black text-white tracking-tight leading-tight">La Terraza de Vida &amp; Sabor</h1>
-          <p class="text-emerald-400 font-bold text-xs uppercase tracking-widest mt-1 mb-6">Menú Digital Interactivo</p>
-          
-          <div class="w-full p-5 rounded-3xl bg-slate-900/80 border border-white/10 shadow-xl backdrop-blur-md text-center">
-            <div class="w-14 h-14 mx-auto rounded-2xl bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-2xl text-emerald-400 mb-3">
-              <i class="fa-solid fa-qrcode"></i>
-            </div>
-            <h3 class="text-base font-black text-white">Escanea tu Portavasos</h3>
-            <p class="mt-2 text-xs text-slate-400 leading-relaxed">
-              Abre la cámara de tu celular y apunta al código QR ubicado en el portavasos de tu silla para ordenar al instante.
+          <div style="background:rgba(15,23,42,0.85);border:1px solid rgba(255,255,255,0.1);border-radius:24px;padding:24px 20px;box-shadow:0 12px 30px rgba(0,0,0,0.4);backdrop-filter:blur(10px);width:100%;box-sizing:border-box;">
+            <div style="font-size:40px;margin-bottom:12px;">📱</div>
+            <h3 style="font-size:17px;font-weight:900;color:#ffffff;margin:0 0 8px 0;">Escanea tu Portavasos</h3>
+            <p style="font-size:13px;color:#94a3b8;line-height:1.5;margin:0;">
+              Apunta la cámara de tu celular al código QR ubicado en tu mesa o portavasos para comenzar a ordenar.
             </p>
-          </div>
-
-          <div class="mt-8 text-center text-[11px] text-slate-500 flex items-center justify-center gap-2">
-            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-            Sistema activo · Palapa La Terraza
           </div>
         </div>
         """
@@ -293,15 +265,14 @@ class Menu(MenuTemplate):
 
     def _render_error(self, mensaje):
         html = f"""
-        <div class="min-h-screen max-w-md mx-auto px-6 py-12 flex flex-col items-center justify-center text-center bg-[#090d16] text-slate-100 font-sans">
-          <div class="w-20 h-20 rounded-3xl bg-red-500/15 border-2 border-red-500/40 flex items-center justify-center mb-5 shadow-2xl shadow-red-500/20">
-            <i class="fa-solid fa-triangle-exclamation text-red-400 text-3xl"></i>
+        <div class="vs-mobile-wrap" style="display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px 24px;">
+          <div style="width:80px;height:80px;border-radius:24px;background:rgba(239,68,68,0.15);border:2px solid rgba(239,68,68,0.5);display:flex;align-items:center;justify-content:center;font-size:36px;margin-bottom:20px;box-shadow:0 10px 30px rgba(239,68,68,0.2);">
+            ⚠️
           </div>
-          <h2 class="text-xl font-black text-white">No pudimos conectar</h2>
-          <p class="mt-2 text-slate-400 text-sm max-w-xs leading-relaxed">{mensaje}</p>
-          <button data-action="reintentarCheckin"
-                  class="w-full mt-8 py-3.5 px-6 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-black text-sm shadow-lg active:scale-95 transition">
-            <i class="fa-solid fa-rotate-right mr-2"></i> Reintentar
+          <h2 style="font-size:22px;font-weight:900;color:#ffffff;margin:0 0 10px 0;">No pudimos conectar</h2>
+          <p style="font-size:14px;color:#94a3b8;line-height:1.5;max-width:320px;margin:0 0 24px 0;">{mensaje}</p>
+          <button data-action="reintentarCheckin" class="vs-cta-btn">
+            🔄 Reintentar
           </button>
         </div>
         """
@@ -315,115 +286,101 @@ class Menu(MenuTemplate):
         comensal = info.get("comensalNombre") or f"Comensal Silla {silla}"
 
         html = f"""
-        <div class="min-h-screen max-w-md mx-auto bg-[#090d16] text-slate-100 font-sans pb-28">
+        <div class="vs-mobile-wrap">
           {self._header_html()}
 
           <!-- HERO CARD DE BIENVENIDA -->
-          <section class="px-4 mt-4">
-            <div class="relative overflow-hidden rounded-3xl border border-emerald-500/30 bg-gradient-to-br from-emerald-950/60 via-slate-900/90 to-teal-950/40 p-5 shadow-[0_15px_35px_-10px_rgba(16,185,129,0.25)]">
-              <div class="flex items-center justify-between gap-2 mb-3">
-                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-500/50 text-emerald-300 text-[10px] font-black uppercase tracking-wider">
-                  <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                  Sesión Activa
-                </span>
-                <span class="font-mono text-[11px] text-slate-300 bg-slate-800/80 px-2.5 py-0.5 rounded-full border border-white/5">
-                  {qr}
-                </span>
-              </div>
-              
-              <h2 class="text-xl font-black text-white leading-tight">
-                ¡Hola! <span class="text-emerald-400">Mesa {mesa}</span> · Silla {silla}
-              </h2>
-              <p class="text-xs text-slate-300 mt-1">
-                {comensal}. Explora nuestro menú y ordena directamente a tu silla o comparte con tu mesa.
-              </p>
+          <div class="vs-hero-card">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+              <span class="vs-badge-active">
+                <span class="vs-pulse-dot"></span>
+                Sesión Activa
+              </span>
+              <span style="font-family:monospace;font-size:11px;font-weight:800;color:#94a3b8;background:rgba(0,0,0,0.3);padding:3px 10px;border-radius:99px;border:1px solid rgba(255,255,255,0.05);">
+                {qr}
+              </span>
             </div>
-          </section>
+            
+            <h2 style="font-size:22px;font-weight:900;color:#ffffff;margin:0 0 6px 0;line-height:1.2;">
+              ¡Hola! <span style="color:#34d399;">Mesa {mesa}</span> · Silla {silla}
+            </h2>
+            <p style="font-size:13px;color:#cbd5e1;line-height:1.45;margin:0;">
+              {comensal}. Explora nuestro menú y ordena directamente a tu silla o comparte con tu mesa.
+            </p>
+          </div>
 
           <!-- 4 TARJETAS PRINCIPALES DE ACCIÓN -->
-          <section class="px-4 mt-5 flex flex-col gap-3">
+          <div style="display:flex;flex-direction:column;gap:4px;">
             <!-- 1. ORDENAR A MI SILLA -->
-            <button data-action="tab" data-args="silla"
-                    class="w-full text-left rounded-3xl bg-slate-900/80 border border-emerald-500/30 hover:border-emerald-400/80 p-4 transition-all shadow-lg active:scale-[0.98] flex items-center gap-3.5 group">
-              <div class="w-13 h-13 w-[52px] h-[52px] rounded-2xl bg-gradient-to-tr from-emerald-500/25 to-teal-500/10 border border-emerald-500/40 flex items-center justify-center text-2xl flex-shrink-0 shadow-inner group-hover:scale-105 transition">
+            <div data-action="tab" data-args="silla" class="vs-action-card vs-card-emerald">
+              <div class="vs-icon-box" style="background:rgba(16,185,129,0.2);border:1px solid rgba(16,185,129,0.4);">
                 🍳
               </div>
-              <div class="flex-1 min-w-0">
-                <div class="text-[15px] font-black text-white flex items-center gap-2">
+              <div style="flex:1;min-width:0;">
+                <div style="font-size:15px;font-weight:900;color:#ffffff;display:flex;align-items:center;gap:8px;">
                   Ordenar a Mi Silla
-                  <span class="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">Personal</span>
+                  <span style="font-size:10px;font-weight:800;color:#6ee7b7;background:rgba(16,185,129,0.25);border:1px solid rgba(16,185,129,0.4);padding:2px 8px;border-radius:99px;">Personal</span>
                 </div>
-                <div class="text-[11px] text-slate-400 mt-0.5 leading-snug">
-                  Bebidas, desayunos y platillos que se cargan a tu cuenta.
+                <div style="font-size:11.5px;color:#94a3b8;margin-top:2px;line-height:1.35;">
+                  Bebidas, desayunos y platillos a tu cuenta personal.
                 </div>
               </div>
-              <div class="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 group-hover:text-emerald-400 group-hover:bg-emerald-500/10 transition">
-                <i class="fa-solid fa-chevron-right text-xs"></i>
-              </div>
-            </button>
+              <div style="color:#34d399;font-size:14px;font-weight:900;">➔</div>
+            </div>
 
             <!-- 2. PEDIR AL CENTRO -->
-            <button data-action="tab" data-args="centro"
-                    class="w-full text-left rounded-3xl bg-slate-900/80 border border-amber-500/30 hover:border-amber-400/80 p-4 transition-all shadow-lg active:scale-[0.98] flex items-center gap-3.5 group">
-              <div class="w-[52px] h-[52px] rounded-2xl bg-gradient-to-tr from-amber-500/25 to-orange-500/10 border border-amber-500/40 flex items-center justify-center text-2xl flex-shrink-0 shadow-inner group-hover:scale-105 transition">
+            <div data-action="tab" data-args="centro" class="vs-action-card vs-card-amber">
+              <div class="vs-icon-box" style="background:rgba(245,158,11,0.2);border:1px solid rgba(245,158,11,0.4);">
                 🍲
               </div>
-              <div class="flex-1 min-w-0">
-                <div class="text-[15px] font-black text-white flex items-center gap-2">
+              <div style="flex:1;min-width:0;">
+                <div style="font-size:15px;font-weight:900;color:#ffffff;display:flex;align-items:center;gap:8px;">
                   Pedir al Centro
-                  <span class="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30">Compartido</span>
+                  <span style="font-size:10px;font-weight:800;color:#fcd34d;background:rgba(245,158,11,0.25);border:1px solid rgba(245,158,11,0.4);padding:2px 8px;border-radius:99px;">Compartido</span>
                 </div>
-                <div class="text-[11px] text-slate-400 mt-0.5 leading-snug">
+                <div style="font-size:11.5px;color:#94a3b8;margin-top:2px;line-height:1.35;">
                   Entradas, botanas o jarras para todos en la mesa.
                 </div>
               </div>
-              <div class="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 group-hover:text-amber-400 group-hover:bg-amber-500/10 transition">
-                <i class="fa-solid fa-chevron-right text-xs"></i>
-              </div>
-            </button>
+              <div style="color:#fbbf24;font-size:14px;font-weight:900;">➔</div>
+            </div>
 
             <!-- 3. PEDIR PARA OTRA SILLA -->
-            <button data-action="tab" data-args="para_otra"
-                    class="w-full text-left rounded-3xl bg-slate-900/80 border border-purple-500/30 hover:border-purple-400/80 p-4 transition-all shadow-lg active:scale-[0.98] flex items-center gap-3.5 group">
-              <div class="w-[52px] h-[52px] rounded-2xl bg-gradient-to-tr from-purple-500/25 to-indigo-500/10 border border-purple-500/40 flex items-center justify-center text-2xl flex-shrink-0 shadow-inner group-hover:scale-105 transition">
+            <div data-action="tab" data-args="para_otra" class="vs-action-card vs-card-purple">
+              <div class="vs-icon-box" style="background:rgba(168,85,247,0.2);border:1px solid rgba(168,85,247,0.4);">
                 👨‍👧
               </div>
-              <div class="flex-1 min-w-0">
-                <div class="text-[15px] font-black text-white flex items-center gap-2">
+              <div style="flex:1;min-width:0;">
+                <div style="font-size:15px;font-weight:900;color:#ffffff;display:flex;align-items:center;gap:8px;">
                   Pedir para Otra Silla
-                  <span class="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30">Ayuda</span>
+                  <span style="font-size:10px;font-weight:800;color:#d8b4fe;background:rgba(168,85,247,0.25);border:1px solid rgba(168,85,247,0.4);padding:2px 8px;border-radius:99px;">Ayuda</span>
                 </div>
-                <div class="text-[11px] text-slate-400 mt-0.5 leading-snug">
-                  Pide a nombre de niños, adultos mayores o acompañantes.
+                <div style="font-size:11.5px;color:#94a3b8;margin-top:2px;line-height:1.35;">
+                  Pide a nombre de niños o acompañantes de mesa.
                 </div>
               </div>
-              <div class="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 group-hover:text-purple-400 group-hover:bg-purple-500/10 transition">
-                <i class="fa-solid fa-chevron-right text-xs"></i>
-              </div>
-            </button>
+              <div style="color:#c084fc;font-size:14px;font-weight:900;">➔</div>
+            </div>
 
             <!-- 4. MI COMANDA Y CUENTA -->
-            <button data-action="tab" data-args="comanda"
-                    class="w-full text-left rounded-3xl bg-slate-900/80 border border-sky-500/30 hover:border-sky-400/80 p-4 transition-all shadow-lg active:scale-[0.98] flex items-center gap-3.5 group">
-              <div class="w-[52px] h-[52px] rounded-2xl bg-gradient-to-tr from-sky-500/25 to-blue-500/10 border border-sky-500/40 flex items-center justify-center text-2xl flex-shrink-0 shadow-inner group-hover:scale-105 transition">
+            <div data-action="tab" data-args="comanda" class="vs-action-card vs-card-sky">
+              <div class="vs-icon-box" style="background:rgba(14,165,233,0.2);border:1px solid rgba(14,165,233,0.4);">
                 🧾
               </div>
-              <div class="flex-1 min-w-0">
-                <div class="text-[15px] font-black text-white flex items-center gap-2">
+              <div style="flex:1;min-width:0;">
+                <div style="font-size:15px;font-weight:900;color:#ffffff;display:flex;align-items:center;gap:8px;">
                   Mi Comanda &amp; Cuenta
-                  <span class="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-sky-500/20 text-sky-300 border border-sky-500/30">En Vivo</span>
+                  <span style="font-size:10px;font-weight:800;color:#7dd3fc;background:rgba(14,165,233,0.25);border:1px solid rgba(14,165,233,0.4);padding:2px 8px;border-radius:99px;">En Vivo</span>
                 </div>
-                <div class="text-[11px] text-slate-400 mt-0.5 leading-snug">
+                <div style="font-size:11.5px;color:#94a3b8;margin-top:2px;line-height:1.35;">
                   Revisa platillos pedidos, estado de cocina y subtotal.
                 </div>
               </div>
-              <div class="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 group-hover:text-sky-400 group-hover:bg-sky-500/10 transition">
-                <i class="fa-solid fa-chevron-right text-xs"></i>
-              </div>
-            </button>
-          </section>
+              <div style="color:#38bdf8;font-size:14px;font-weight:900;">➔</div>
+            </div>
+          </div>
 
-          <div class="mt-8 text-center text-[11px] text-slate-500">
+          <div style="text-align:center;font-size:11px;color:#64748b;margin-top:28px;">
             La Terraza de Vida &amp; Sabor · Experiencia Digital
           </div>
         </div>
@@ -431,7 +388,6 @@ class Menu(MenuTemplate):
         self._reemplazar_contenido(html)
 
     def _reemplazar_contenido(self, html):
-        """Reemplaza el contenido dentro del root del form con el HTML dado."""
         if self._root is None:
             return
         self._root.innerHTML = html
@@ -481,29 +437,11 @@ class Menu(MenuTemplate):
         self._destino_actual = destino
         self._asegurar_menu_cargado()
         cabeceras = {
-            "mi_silla":  ("🍳", "Ordenar a Mi Silla", "emerald", "Platillos individuales para tu comanda."),
-            "al_centro": ("🍲", "Pedir al Centro", "amber", "Platillos para compartir en la mesa."),
-            "otra_silla": ("👨‍👧", f"Pedir para Silla {self._silla_destino_num or '?'}", "purple", f"Se cargará a la Silla {self._silla_destino_num}."),
+            "mi_silla":  ("🍳", "Ordenar a Mi Silla", "border-color:rgba(16,185,129,0.4);background:linear-gradient(135deg,rgba(16,185,129,0.2) 0%,rgba(15,23,42,0.9) 100%);", "Platillos individuales para tu comanda."),
+            "al_centro": ("🍲", "Pedir al Centro", "border-color:rgba(245,158,11,0.4);background:linear-gradient(135deg,rgba(245,158,11,0.2) 0%,rgba(15,23,42,0.9) 100%);", "Platillos para compartir en la mesa."),
+            "otra_silla": ("👨‍👧", f"Pedir para Silla {self._silla_destino_num or '?'}", "border-color:rgba(168,85,247,0.4);background:linear-gradient(135deg,rgba(168,85,247,0.2) 0%,rgba(15,23,42,0.9) 100%);", f"Se cargará a la Silla {self._silla_destino_num}."),
         }
-        icono, titulo, tono, sub = cabeceras.get(destino, ("🍽️", "Menú", "emerald", ""))
-
-        color_styles = {
-            "emerald": {
-                "bg": "from-emerald-500/20 to-slate-900/80",
-                "border": "border-emerald-500/30 hover:border-emerald-400",
-                "badge": "bg-emerald-500/20 text-emerald-300 border-emerald-500/40",
-            },
-            "amber": {
-                "bg": "from-amber-500/20 to-slate-900/80",
-                "border": "border-amber-500/30 hover:border-amber-400",
-                "badge": "bg-amber-500/20 text-amber-300 border-amber-500/40",
-            },
-            "purple": {
-                "bg": "from-purple-500/20 to-slate-900/80",
-                "border": "border-purple-500/30 hover:border-purple-400",
-                "badge": "bg-purple-500/20 text-purple-300 border-purple-500/40",
-            }
-        }[tono]
+        icono, titulo, card_style, sub = cabeceras.get(destino, ("🍽️", "Menú", "", ""))
 
         resumen_al_centro = ""
         if destino == "al_centro":
@@ -516,48 +454,46 @@ class Menu(MenuTemplate):
                 continue
             
             cats_html += f"""
-            <button data-action="abrirCategoria" data-args="{c['id']}"
-                    class="rounded-3xl border border-white/10 bg-gradient-to-b from-slate-800/80 to-slate-900/90 hover:border-emerald-400/50 p-4 flex flex-col items-center justify-center gap-2.5 min-h-[135px] transition-all shadow-lg active:scale-95 text-center group">
-              <div class="w-14 h-14 rounded-2xl bg-slate-950/70 border border-white/10 flex items-center justify-center text-3xl group-hover:scale-110 transition drop-shadow-md">
+            <div data-action="abrirCategoria" data-args="{c['id']}" class="vs-cat-btn">
+              <div style="width:54px;height:54px;border-radius:18px;background:rgba(0,0,0,0.4);border:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;font-size:30px;box-shadow:inset 0 2px 5px rgba(0,0,0,0.5);">
                 {c['icono']}
               </div>
-              <span class="text-xs font-black text-white leading-tight mt-1">{c['nombre']}</span>
-            </button>
+              <span style="font-size:13px;font-weight:900;color:#ffffff;line-height:1.2;margin-top:4px;">{c['nombre']}</span>
+            </div>
             """
 
         html = f"""
-        <div class="min-h-screen max-w-md mx-auto bg-[#090d16] text-slate-100 font-sans pb-28">
+        <div class="vs-mobile-wrap">
           {self._header_html()}
           
-          <section class="px-4 pt-4">
-            <button data-action="volverInicio"
-                    class="inline-flex items-center gap-2 text-xs text-slate-400 hover:text-white py-1.5 px-3 rounded-xl bg-slate-900/60 border border-white/5 mb-3 transition">
-              <i class="fa-solid fa-arrow-left text-[11px]"></i> Volver al inicio
+          <div style="padding:16px 16px 0 16px;">
+            <button data-action="volverInicio" style="background:rgba(15,23,42,0.8);border:1px solid rgba(255,255,255,0.1);color:#94a3b8;font-size:12px;font-weight:800;padding:6px 12px;border-radius:12px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;margin-bottom:12px;">
+              ⬅ Volver al inicio
             </button>
 
-            <div class="rounded-3xl border {color_styles['border']} bg-gradient-to-br {color_styles['bg']} p-4 shadow-xl">
-              <div class="flex items-center gap-3.5">
-                <div class="w-12 h-12 rounded-2xl bg-slate-950/70 border border-white/10 flex items-center justify-center text-2xl flex-shrink-0">
+            <div style="border-radius:24px;border:1px solid rgba(255,255,255,0.1);padding:16px;box-shadow:0 12px 30px rgba(0,0,0,0.4);{card_style}">
+              <div style="display:flex;align-items:center;gap:14px;">
+                <div style="width:48px;height:48px;border-radius:16px;background:rgba(0,0,0,0.4);border:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;">
                   {icono}
                 </div>
                 <div>
-                  <div class="text-base font-black text-white leading-tight">{titulo}</div>
-                  <div class="text-xs text-slate-300 mt-0.5">{sub}</div>
+                  <div style="font-size:16px;font-weight:900;color:#ffffff;line-height:1.2;">{titulo}</div>
+                  <div style="font-size:12px;color:#cbd5e1;margin-top:2px;">{sub}</div>
                 </div>
               </div>
             </div>
-          </section>
+          </div>
 
           {resumen_al_centro}
 
-          <section class="px-4 mt-5">
-            <div class="text-[11px] font-black uppercase tracking-wider text-slate-400 mb-3 px-1">
+          <div style="padding:16px 16px 0 16px;">
+            <div style="font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:1px;color:#94a3b8;margin-bottom:8px;">
               Selecciona una categoría
             </div>
-            <div class="grid grid-cols-2 gap-3 pb-8">
-              {cats_html or '<div class="col-span-2 text-center text-slate-500 py-10">No hay categorías disponibles.</div>'}
+            <div class="vs-cats-grid" style="padding:0;margin:0;">
+              {cats_html or '<div style="grid-column:span 2;text-align:center;color:#64748b;padding:40px 0;">No hay categorías disponibles.</div>'}
             </div>
-          </section>
+          </div>
         </div>
         """
         self._reemplazar_contenido(html)
@@ -582,33 +518,33 @@ class Menu(MenuTemplate):
             subt = float(it.get("subtotal") or (precio * cant))
             total += subt
             estado = it.get("estado", "borrador")
-            badge = '<span class="text-[10px] text-emerald-400 font-bold ml-1.5">· en cocina</span>' if estado != "borrador" else ""
+            badge = '<span style="font-size:10px;font-weight:900;color:#34d399;background:rgba(16,185,129,0.2);padding:2px 6px;border-radius:6px;margin-left:6px;">en cocina</span>' if estado != "borrador" else ""
             nombre = it.get("producto_nombre_snapshot", "?")
             filas += f"""
-            <div class="flex items-center justify-between py-2 border-b border-white/5 text-xs">
-              <div class="flex-1 truncate">
-                <span class="text-amber-300 font-black">{cant}×</span> 
-                <span class="text-white ml-1 font-medium">{nombre}</span>{badge}
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.05);font-size:12.5px;">
+              <div style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">
+                <span style="color:#fcd34d;font-weight:900;">{cant}×</span> 
+                <span style="color:#ffffff;margin-left:4px;font-weight:600;">{nombre}</span>{badge}
               </div>
-              <div class="text-white font-black ml-2">${subt:,.2f}</div>
+              <div style="color:#ffffff;font-weight:900;margin-left:8px;">${subt:,.2f}</div>
             </div>
             """
 
         return f"""
-        <section class="px-4 mt-3">
-          <div class="rounded-3xl border border-amber-500/30 bg-gradient-to-br from-amber-950/40 via-slate-900/90 to-slate-900/60 p-4 shadow-xl">
-            <div class="flex items-center justify-between mb-2">
-              <div class="text-[11px] font-black uppercase tracking-wider text-amber-400 flex items-center gap-1.5">
-                <i class="fa-solid fa-users text-xs"></i> Ya pedido al centro de la mesa
+        <div style="padding:12px 16px 0 16px;">
+          <div style="border-radius:22px;border:1px solid rgba(245,158,11,0.35);background:linear-gradient(135deg,rgba(245,158,11,0.15) 0%,rgba(15,23,42,0.9) 100%);padding:14px;box-shadow:0 8px 25px rgba(0,0,0,0.3);">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+              <div style="font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:1px;color:#fbbf24;">
+                🍲 Ya pedido al centro
               </div>
-              <div class="text-xs font-black text-amber-300">${total:,.2f}</div>
+              <div style="font-size:13px;font-weight:900;color:#fcd34d;">${total:,.2f}</div>
             </div>
             {filas}
-            <div class="mt-2 text-[10px] text-slate-400 text-center">
-              Visible para todos los comensales en esta mesa.
+            <div style="margin-top:6px;font-size:10px;color:#94a3b8;text-align:center;">
+              Visible para todos los comensales en la mesa.
             </div>
           </div>
-        </section>
+        </div>
         """
 
     # ─────────────────── vista PRODUCTOS DE UNA CATEGORÍA ────────────────
@@ -628,49 +564,47 @@ class Menu(MenuTemplate):
             desc = (p.get("descripcion") or "").strip()
             
             items_html += f"""
-            <button data-action="abrirProducto" data-args="{p['id']}"
-                    class="w-full text-left rounded-3xl bg-slate-900/80 border border-white/10 hover:border-emerald-500/50 p-4 flex items-center gap-3.5 transition-all shadow-md active:scale-[0.98] group">
-              <div class="w-14 h-14 rounded-2xl bg-slate-950/70 border border-white/10 flex items-center justify-center text-3xl flex-shrink-0 group-hover:scale-105 transition shadow-inner">
+            <div data-action="abrirProducto" data-args="{p['id']}" class="vs-product-card">
+              <div style="width:52px;height:52px;border-radius:16px;background:rgba(0,0,0,0.5);border:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0;box-shadow:inset 0 2px 4px rgba(0,0,0,0.4);">
                 {p.get('icono','🍽️')}
               </div>
-              <div class="flex-1 min-w-0">
-                <div class="text-sm font-black text-white truncate group-hover:text-emerald-300 transition">{p['nombre']}</div>
-                {'<div class="text-[11px] text-slate-400 line-clamp-1 mt-0.5">' + desc + '</div>' if desc else ''}
-                <div class="flex items-center gap-2 mt-1.5">
-                  <span class="text-xs font-black text-emerald-400 bg-emerald-500/15 px-2 py-0.5 rounded-lg border border-emerald-500/30">
+              <div style="flex:1;min-width:0;">
+                <div style="font-size:14.5px;font-weight:900;color:#ffffff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{p['nombre']}</div>
+                {'<div style="font-size:11.5px;color:#94a3b8;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + desc + '</div>' if desc else ''}
+                <div style="display:flex;align-items:center;gap:8px;margin-top:6px;">
+                  <span style="font-size:12.5px;font-weight:900;color:#34d399;background:rgba(16,185,129,0.18);padding:3px 8px;border-radius:8px;border:1px solid rgba(16,185,129,0.35);">
                     ${precio:,.2f}
                   </span>
-                  {('<span class="text-[10px] text-slate-400"><i class="fa-regular fa-clock mr-1"></i>' + tiempo + '</span>') if tiempo else ''}
+                  {('<span style="font-size:10.5px;color:#94a3b8;">⏱ ' + tiempo + '</span>') if tiempo else ''}
                 </div>
               </div>
-              <div class="w-9 h-9 rounded-2xl bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400 group-hover:bg-emerald-500 group-hover:text-white transition flex-shrink-0">
-                <i class="fa-solid fa-plus text-xs"></i>
+              <div style="width:36px;height:36px;border-radius:12px;background:rgba(16,185,129,0.2);border:1px solid rgba(16,185,129,0.4);color:#34d399;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:900;flex-shrink:0;">
+                +
               </div>
-            </button>
+            </div>
             """
 
         cat_nombre = (cat or {}).get("nombre", "Menú")
         cat_icono = (cat or {}).get("icono", "🍽️")
 
         html = f"""
-        <div class="min-h-screen max-w-md mx-auto bg-[#090d16] text-slate-100 font-sans pb-28">
+        <div class="vs-mobile-wrap">
           {self._header_html()}
 
-          <section class="px-4 pt-4">
-            <button data-action="volverCategorias"
-                    class="inline-flex items-center gap-2 text-xs text-slate-400 hover:text-white py-1.5 px-3 rounded-xl bg-slate-900/60 border border-white/5 mb-3 transition">
-              <i class="fa-solid fa-arrow-left text-[11px]"></i> Volver a categorías
+          <div style="padding:16px 16px 8px 16px;">
+            <button data-action="volverCategorias" style="background:rgba(15,23,42,0.8);border:1px solid rgba(255,255,255,0.1);color:#94a3b8;font-size:12px;font-weight:800;padding:6px 12px;border-radius:12px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;margin-bottom:10px;">
+              ⬅ Volver a categorías
             </button>
-            <div class="flex items-center gap-2.5 mb-1">
-              <span class="text-2xl">{cat_icono}</span>
-              <h2 class="text-xl font-black text-white">{cat_nombre}</h2>
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px;">
+              <span style="font-size:26px;">{cat_icono}</span>
+              <h2 style="font-size:20px;font-weight:900;color:#ffffff;margin:0;">{cat_nombre}</h2>
             </div>
-            <p class="text-xs text-slate-400 px-0.5">Toca un platillo para ver opciones y agregarlo a tu orden.</p>
-          </section>
+            <p style="font-size:12px;color:#94a3b8;margin:0;">Toca un platillo para ver detalles y agregarlo a tu orden.</p>
+          </div>
 
-          <section class="px-4 mt-4 flex flex-col gap-3 pb-8">
+          <div style="display:flex;flex-direction:column;gap:2px;margin-top:8px;">
             {items_html}
-          </section>
+          </div>
         </div>
         """
         self._reemplazar_contenido(html)
@@ -700,53 +634,46 @@ class Menu(MenuTemplate):
         }.get(self._destino_actual, "")
 
         html = f"""
-        <div id="menuProductoOverlay"
-             class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-end justify-center p-0 font-sans animate-fade-in">
-          <div class="w-full max-w-md bg-slate-900 border-t border-x border-white/15 rounded-t-[32px] p-6 shadow-2xl pb-10">
-            <!-- PULL BAR -->
-            <div class="w-12 h-1.5 bg-slate-700 rounded-full mx-auto mb-4"></div>
+        <div id="menuProductoOverlay" class="vs-modal-overlay">
+          <div class="vs-modal-sheet">
+            <div style="width:48px;height:5px;background:#334155;border-radius:99px;margin:0 auto 16px auto;"></div>
 
-            <div class="flex items-start justify-between gap-3 mb-2">
-              <div class="flex-1">
-                <span class="inline-block text-[10px] font-black text-emerald-400 bg-emerald-500/15 border border-emerald-500/30 px-2.5 py-0.5 rounded-full uppercase tracking-wider mb-1.5">
+            <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:10px;">
+              <div style="flex:1;">
+                <span style="font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:1px;color:#34d399;background:rgba(16,185,129,0.18);padding:3px 8px;border-radius:8px;border:1px solid rgba(16,185,129,0.35);display:inline-block;margin-bottom:6px;">
                   {etiqueta_destino}
                 </span>
-                <h3 class="text-xl font-black text-white leading-tight flex items-center gap-2">
+                <h3 style="font-size:20px;font-weight:900;color:#ffffff;margin:0;line-height:1.2;display:flex;align-items:center;gap:8px;">
                   <span>{p.get('icono','🍽️')}</span>
                   <span>{p['nombre']}</span>
                 </h3>
               </div>
-              <button data-action="cerrarProducto"
-                      class="w-9 h-9 rounded-full bg-slate-800 text-slate-400 hover:text-white flex items-center justify-center text-lg active:scale-90 transition">
+              <button data-action="cerrarProducto" style="width:36px;height:36px;border-radius:12px;background:rgba(255,255,255,0.08);border:none;color:#94a3b8;font-size:18px;font-weight:900;cursor:pointer;display:flex;align-items:center;justify-content:center;">
                 ✕
               </button>
             </div>
 
-            {'<p class="text-xs text-slate-300 leading-relaxed mt-2 p-3 rounded-2xl bg-slate-950/60 border border-white/5">' + desc + '</p>' if desc else ''}
+            {'<p style="font-size:13px;color:#cbd5e1;line-height:1.5;background:rgba(0,0,0,0.3);padding:12px;border-radius:16px;border:1px solid rgba(255,255,255,0.05);margin:12px 0;">' + desc + '</p>' if desc else ''}
 
             <!-- SELECTOR DE CANTIDAD -->
-            <div class="flex items-center justify-between rounded-2xl border border-white/10 bg-slate-950/70 p-3.5 mt-4">
-              <span class="text-xs font-black text-slate-300 uppercase tracking-wider">Cantidad</span>
-              <div class="flex items-center gap-3">
-                <button data-action="cambiarCantidad" data-args="-1"
-                        class="w-10 h-10 rounded-xl bg-slate-800 border border-white/10 text-white text-xl font-black active:scale-90 transition flex items-center justify-center">
+            <div style="display:flex;align-items:center;justify-content:space-between;background:rgba(0,0,0,0.4);border:1px solid rgba(255,255,255,0.1);padding:12px 16px;border-radius:18px;margin-top:16px;">
+              <span style="font-size:13px;font-weight:900;color:#e2e8f0;">Cantidad</span>
+              <div style="display:flex;align-items:center;gap:12px;">
+                <button data-action="cambiarCantidad" data-args="-1" style="width:40px;height:40px;border-radius:12px;background:#1e293b;border:1px solid rgba(255,255,255,0.1);color:#ffffff;font-size:20px;font-weight:900;cursor:pointer;display:flex;align-items:center;justify-content:center;">
                   −
                 </button>
-                <span class="text-lg font-black text-white min-w-[28px] text-center font-mono">
+                <span style="font-size:18px;font-weight:900;color:#ffffff;font-family:monospace;min-width:28px;text-align:center;">
                   {cantidad}
                 </span>
-                <button data-action="cambiarCantidad" data-args="1"
-                        class="w-10 h-10 rounded-xl bg-slate-800 border border-white/10 text-white text-xl font-black active:scale-90 transition flex items-center justify-center">
+                <button data-action="cambiarCantidad" data-args="1" style="width:40px;height:40px;border-radius:12px;background:#1e293b;border:1px solid rgba(255,255,255,0.1);color:#ffffff;font-size:20px;font-weight:900;cursor:pointer;display:flex;align-items:center;justify-content:center;">
                   +
                 </button>
               </div>
             </div>
 
             <!-- BOTON AGREGAR CTA -->
-            <button data-action="agregarItem" data-args="{p['id']}"
-                    class="w-full mt-5 rounded-2xl bg-gradient-to-r from-emerald-500 via-teal-600 to-emerald-500 hover:from-emerald-400 hover:to-teal-500 text-white font-black text-sm py-4 shadow-[0_10px_25px_rgba(16,185,129,0.3)] flex items-center justify-center gap-2 active:scale-95 transition">
-              <i class="fa-solid fa-plus text-xs"></i>
-              Agregar a la Orden · ${subtotal:,.2f}
+            <button data-action="agregarItem" data-args="{p['id']}" class="vs-cta-btn">
+              ➕ Agregar a la Orden · ${subtotal:,.2f}
             </button>
           </div>
         </div>
@@ -811,7 +738,6 @@ class Menu(MenuTemplate):
         self._toast(f"✓ Agregado: {cant}× {p.get('nombre','?')}", "ok")
 
     def _toast(self, mensaje, tipo="ok"):
-        """Toast in-page moderno y no intrusivo."""
         doc = anvil.js.window.document
         prev = doc.getElementById("menuToast")
         if prev is not None:
@@ -830,9 +756,9 @@ class Menu(MenuTemplate):
         toast.style.cssText = (
             f"position: fixed; bottom: 30px; left: 50%; "
             f"transform: translateX(-50%) translateY(90px); "
-            f"z-index: 100000; padding: 12px 22px; "
+            f"z-index: 100000; padding: 12px 24px; "
             f"background: {bg}; color: {color}; "
-            f"border-radius: 9999px; font-weight: 800; font-size: 13px; font-family: 'Plus Jakarta Sans', system-ui, sans-serif; "
+            f"border-radius: 9999px; font-weight: 800; font-size: 13.5px; font-family: 'Plus Jakarta Sans', system-ui, sans-serif; "
             f"box-shadow: 0 14px 35px rgba(0,0,0,0.6); "
             f"max-width: 90vw; opacity: 0; "
             f"transition: transform 0.35s cubic-bezier(.34,1.56,.64,1), opacity 0.3s ease;"
@@ -879,32 +805,32 @@ class Menu(MenuTemplate):
 
             badge = ""
             if estado != "borrador":
-                badge = '<span class="text-[10px] font-black text-emerald-400 bg-emerald-500/15 border border-emerald-500/30 px-2 py-0.5 rounded-md ml-2">🍳 En cocina</span>'
+                badge = '<span style="font-size:10px;font-weight:900;color:#34d399;background:rgba(16,185,129,0.18);padding:2px 8px;border-radius:6px;border:1px solid rgba(16,185,129,0.35);margin-left:6px;">🍳 En cocina</span>'
             else:
-                badge = '<span class="text-[10px] font-black text-amber-400 bg-amber-500/15 border border-amber-500/30 px-2 py-0.5 rounded-md ml-2">🟡 Por enviar</span>'
+                badge = '<span style="font-size:10px;font-weight:900;color:#fbbf24;background:rgba(245,158,11,0.18);padding:2px 8px;border-radius:6px;border:1px solid rgba(245,158,11,0.35);margin-left:6px;">🟡 Por enviar</span>'
 
             del_btn = ""
             if editable and estado == "borrador":
                 del_btn = f"""
                 <button data-action="eliminarItem" data-args="{item['id']}"
-                        class="w-8 h-8 rounded-xl bg-red-500/10 hover:bg-red-500/20 text-red-400 flex items-center justify-center text-xs ml-2 active:scale-90 transition">
-                  <i class="fa-solid fa-trash"></i>
+                        style="width:32px;height:32px;border-radius:10px;background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,0.3);color:#f87171;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;margin-left:8px;">
+                  🗑️
                 </button>
                 """
 
             return f"""
-            <div class="flex items-center gap-3 py-3 border-b border-white/5">
-              <div class="w-8 h-8 rounded-xl bg-slate-800 text-white text-xs font-black flex items-center justify-center flex-shrink-0 font-mono">
+            <div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.05);">
+              <div style="width:32px;height:32px;border-radius:10px;background:#1e293b;color:#ffffff;font-size:13px;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:monospace;">
                 {cantidad}×
               </div>
-              <div class="flex-1 min-w-0">
-                <div class="text-xs font-black text-white truncate flex items-center">
+              <div style="flex:1;min-width:0;">
+                <div style="font-size:13px;font-weight:900;color:#ffffff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:flex;align-items:center;">
                   <span>{nombre}</span>
                   {badge}
                 </div>
-                <div class="text-[11px] text-slate-400 mt-0.5">${precio:,.2f} c/u</div>
+                <div style="font-size:11px;color:#94a3b8;margin-top:2px;">${precio:,.2f} c/u</div>
               </div>
-              <div class="text-xs font-black text-white">${subtotal:,.2f}</div>
+              <div style="font-size:13px;font-weight:900;color:#ffffff;">${subtotal:,.2f}</div>
               {del_btn}
             </div>
             """
@@ -914,69 +840,64 @@ class Menu(MenuTemplate):
         gran_total = subtotal_indiv + subtotal_centro
 
         indiv_html = "".join(_fila(i) for i in indiv) if indiv else """
-        <div class="text-center py-6 text-slate-500 text-xs">
-          <i class="fa-solid fa-utensils text-2xl mb-2 opacity-40"></i>
-          <p>Aún no has agregado platillos a tu silla.</p>
+        <div style="text-align:center;padding:24px 0;color:#64748b;font-size:12px;">
+          <div style="font-size:28px;margin-bottom:6px;opacity:0.4;">🍽️</div>
+          Aún no has agregado platillos a tu silla.
         </div>
         """
 
         centro_html = "".join(_fila(i, es_al_centro=True, editable=False) for i in centro) if centro else """
-        <div class="text-center py-4 text-slate-500 text-xs">
-          <p>No hay pedidos al centro de la mesa.</p>
+        <div style="text-align:center;padding:16px 0;color:#64748b;font-size:12px;">
+          No hay pedidos al centro de la mesa.
         </div>
         """
 
         enviar_btn = ""
         if detalle_ids_borrador:
             enviar_btn = f"""
-            <div class="sticky bottom-4 mt-6">
-              <button data-action="enviarCocina"
-                      class="w-full rounded-2xl bg-gradient-to-r from-emerald-500 via-teal-600 to-emerald-500 hover:from-emerald-400 hover:to-teal-500 text-white font-black text-sm py-4 shadow-[0_10px_30px_rgba(16,185,129,0.4)] flex items-center justify-center gap-2 active:scale-95 transition">
-                <i class="fa-solid fa-fire text-amber-300"></i>
-                Enviar {len(detalle_ids_borrador)} platillo(s) a Cocina
-              </button>
-            </div>
+            <button data-action="enviarCocina" class="vs-cta-btn" style="box-shadow:0 10px 30px rgba(16,185,129,0.4);">
+              🔥 Enviar {len(detalle_ids_borrador)} platillo(s) a Cocina
+            </button>
             """
 
         html = f"""
-        <div class="min-h-screen max-w-md mx-auto bg-[#090d16] text-slate-100 font-sans pb-28">
+        <div class="vs-mobile-wrap">
           {self._header_html()}
 
-          <section class="px-4 pt-4">
-            <button data-action="volverInicio"
-                    class="inline-flex items-center gap-2 text-xs text-slate-400 hover:text-white py-1.5 px-3 rounded-xl bg-slate-900/60 border border-white/5 mb-3 transition">
-              <i class="fa-solid fa-arrow-left text-[11px]"></i> Volver al inicio
+          <div style="padding:16px 16px 0 16px;">
+            <button data-action="volverInicio" style="background:rgba(15,23,42,0.8);border:1px solid rgba(255,255,255,0.1);color:#94a3b8;font-size:12px;font-weight:800;padding:6px 12px;border-radius:12px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;margin-bottom:12px;">
+              ⬅ Volver al inicio
             </button>
 
-            <div class="flex items-center justify-between mb-4">
-              <h2 class="text-xl font-black text-white flex items-center gap-2">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+              <h2 style="font-size:20px;font-weight:900;color:#ffffff;margin:0;display:flex;align-items:center;gap:8px;">
                 <span>🧾</span> Mi Comanda &amp; Cuenta
               </h2>
-              <span class="text-xs font-black text-emerald-400 bg-emerald-500/15 border border-emerald-500/30 px-2.5 py-1 rounded-full">
+              <span style="font-size:13px;font-weight:900;color:#34d399;background:rgba(16,185,129,0.18);border:1px solid rgba(16,185,129,0.35);padding:4px 12px;border-radius:99px;">
                 Total: ${gran_total:,.2f}
               </span>
             </div>
 
             <!-- COMANDA PERSONAL -->
-            <div class="rounded-3xl border border-white/10 bg-slate-900/80 p-4 shadow-lg mb-4">
-              <div class="text-xs font-black text-emerald-400 uppercase tracking-wider flex items-center justify-between">
+            <div style="background:rgba(15,23,42,0.85);border:1px solid rgba(255,255,255,0.1);border-radius:22px;padding:16px;box-shadow:0 8px 24px rgba(0,0,0,0.3);margin-bottom:14px;">
+              <div style="font-size:12px;font-weight:900;color:#34d399;text-transform:uppercase;letter-spacing:1px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,0.08);padding-bottom:8px;">
                 <span>🍳 Mi Silla (Silla {silla})</span>
-                <span class="text-white">${subtotal_indiv:,.2f}</span>
+                <span style="color:#ffffff;">${subtotal_indiv:,.2f}</span>
               </div>
-              <div class="mt-2">{indiv_html}</div>
+              <div style="margin-top:4px;">{indiv_html}</div>
             </div>
 
             <!-- COMANDA AL CENTRO -->
-            <div class="rounded-3xl border border-white/10 bg-slate-900/80 p-4 shadow-lg mb-4">
-              <div class="text-xs font-black text-amber-400 uppercase tracking-wider flex items-center justify-between">
+            <div style="background:rgba(15,23,42,0.85);border:1px solid rgba(255,255,255,0.1);border-radius:22px;padding:16px;box-shadow:0 8px 24px rgba(0,0,0,0.3);margin-bottom:14px;">
+              <div style="font-size:12px;font-weight:900;color:#fbbf24;text-transform:uppercase;letter-spacing:1px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,0.08);padding-bottom:8px;">
                 <span>🍲 Al Centro de la Mesa</span>
-                <span class="text-white">${subtotal_centro:,.2f}</span>
+                <span style="color:#ffffff;">${subtotal_centro:,.2f}</span>
               </div>
-              <div class="mt-2">{centro_html}</div>
+              <div style="margin-top:4px;">{centro_html}</div>
             </div>
 
             {enviar_btn}
-          </section>
+          </div>
         </div>
         """
         self._reemplazar_contenido(html)
@@ -1044,21 +965,20 @@ class Menu(MenuTemplate):
 
         if not sillas_disponibles:
             self._reemplazar_contenido(f"""
-              <div class="min-h-screen max-w-md mx-auto bg-[#090d16] text-slate-100 font-sans pb-28">
+              <div class="vs-mobile-wrap">
                 {self._header_html()}
-                <section class="px-6 pt-10 text-center">
-                  <button data-action="volverInicio"
-                          class="inline-flex items-center gap-2 text-xs text-slate-400 hover:text-white py-1.5 px-3 rounded-xl bg-slate-900/60 border border-white/5 mb-6 transition">
-                    <i class="fa-solid fa-arrow-left text-[11px]"></i> Volver al inicio
+                <div style="padding:40px 24px;text-align:center;">
+                  <button data-action="volverInicio" style="background:rgba(15,23,42,0.8);border:1px solid rgba(255,255,255,0.1);color:#94a3b8;font-size:12px;font-weight:800;padding:6px 12px;border-radius:12px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;margin-bottom:24px;">
+                    ⬅ Volver al inicio
                   </button>
-                  <div class="w-20 h-20 mx-auto rounded-3xl bg-purple-500/15 border border-purple-500/30 flex items-center justify-center text-3xl mb-4 shadow-xl">
+                  <div style="width:72px;height:72px;border-radius:24px;background:rgba(168,85,247,0.2);border:1px solid rgba(168,85,247,0.4);display:flex;align-items:center;justify-content:center;font-size:32px;margin:0 auto 16px auto;">
                     👨‍👧
                   </div>
-                  <h2 class="text-xl font-black text-white">Pedir para otra silla</h2>
-                  <p class="text-xs text-slate-400 mt-2 leading-relaxed max-w-xs mx-auto">
-                    No hay otras sillas ocupadas en tu mesa actualmente. Pide a tus acompañantes escanear su QR para poder ayudarles.
+                  <h2 style="font-size:20px;font-weight:900;color:#ffffff;margin:0 0 8px 0;">Pedir para otra silla</h2>
+                  <p style="font-size:13px;color:#94a3b8;line-height:1.5;max-width:300px;margin:0 auto;">
+                    No hay otras sillas ocupadas en tu mesa actualmente. Pide a tus acompañantes escanear su portavasos para poder ayudarles.
                   </p>
-                </section>
+                </div>
               </div>
             """)
             return
@@ -1068,35 +988,31 @@ class Menu(MenuTemplate):
             snum = s.get("sillaId")
             nombre = s.get("comensalNombre", f"Silla {snum}")
             cards_html += f"""
-            <button data-action="tab" data-args="__setSilla{snum}"
-                    class="w-full rounded-3xl border border-white/10 bg-slate-900/80 hover:border-purple-400/80 p-4 flex items-center gap-3.5 transition-all shadow-md active:scale-[0.98] group">
-              <div class="w-12 h-12 rounded-2xl bg-purple-500/20 border border-purple-500/40 flex items-center justify-center text-purple-300 font-black text-sm flex-shrink-0 group-hover:scale-105 transition">
+            <div data-action="tab" data-args="__setSilla{snum}" class="vs-action-card vs-card-purple">
+              <div style="width:48px;height:48px;border-radius:14px;background:rgba(168,85,247,0.25);border:1px solid rgba(168,85,247,0.5);color:#d8b4fe;font-weight:900;font-size:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
                 S{snum}
               </div>
-              <div class="flex-1 text-left min-w-0">
-                <div class="text-sm font-black text-white">Silla {snum}</div>
-                <div class="text-xs text-slate-400 truncate">{nombre}</div>
+              <div style="flex:1;min-width:0;">
+                <div style="font-size:15px;font-weight:900;color:#ffffff;">Silla {snum}</div>
+                <div style="font-size:12px;color:#94a3b8;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{nombre}</div>
               </div>
-              <div class="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 group-hover:text-purple-400 transition">
-                <i class="fa-solid fa-chevron-right text-xs"></i>
-              </div>
-            </button>
+              <div style="color:#c084fc;font-size:14px;font-weight:900;">➔</div>
+            </div>
             """
 
         html = f"""
-        <div class="min-h-screen max-w-md mx-auto bg-[#090d16] text-slate-100 font-sans pb-28">
+        <div class="vs-mobile-wrap">
           {self._header_html()}
-          <section class="px-4 pt-4">
-            <button data-action="volverInicio"
-                    class="inline-flex items-center gap-2 text-xs text-slate-400 hover:text-white py-1.5 px-3 rounded-xl bg-slate-900/60 border border-white/5 mb-3 transition">
-              <i class="fa-solid fa-arrow-left text-[11px]"></i> Volver al inicio
+          <div style="padding:16px 16px 0 16px;">
+            <button data-action="volverInicio" style="background:rgba(15,23,42,0.8);border:1px solid rgba(255,255,255,0.1);color:#94a3b8;font-size:12px;font-weight:800;padding:6px 12px;border-radius:12px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;margin-bottom:12px;">
+              ⬅ Volver al inicio
             </button>
-            <h2 class="text-xl font-black text-white flex items-center gap-2">
+            <h2 style="font-size:20px;font-weight:900;color:#ffffff;margin:0 0 4px 0;display:flex;align-items:center;gap:8px;">
               <span>👨‍👧</span> Pedir para otra silla
             </h2>
-            <p class="text-xs text-slate-400 mt-1">Elige a qué acompañante de tu mesa deseas agregarle platillos:</p>
-            <div class="mt-4 flex flex-col gap-3">{cards_html}</div>
-          </section>
+            <p style="font-size:12px;color:#94a3b8;margin:0 0 16px 0;">Elige a qué comensal de tu mesa deseas agregarle platillos:</p>
+            <div style="display:flex;flex-direction:column;gap:2px;">{cards_html}</div>
+          </div>
         </div>
         """
         self._reemplazar_contenido(html)
@@ -1121,28 +1037,26 @@ class Menu(MenuTemplate):
         mesa = info.get("mesa_num", "?")
         silla = info.get("silla_num", "?")
         return f"""
-        <header class="sticky top-0 z-40 backdrop-blur-xl bg-[#090d16]/90 border-b border-white/10 px-4 py-3 max-w-md mx-auto flex items-center justify-between gap-2 shadow-lg">
-          <div class="flex items-center gap-2.5">
-            <div class="w-9 h-9 rounded-2xl bg-gradient-to-tr from-emerald-500 to-teal-600 flex items-center justify-center text-xs font-black text-white shadow-md">
+        <div class="vs-header-bar">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div class="vs-brand-logo">
               V&amp;S
             </div>
             <div>
-              <div class="text-xs font-black text-white leading-tight">Mesa {mesa} · Silla {silla}</div>
-              <div class="text-[10px] text-emerald-400 font-bold uppercase tracking-wider">La Terraza</div>
+              <div style="font-size:13px;font-weight:900;color:#ffffff;line-height:1.2;">Mesa {mesa} · Silla {silla}</div>
+              <div style="font-size:10px;font-weight:800;color:#34d399;text-transform:uppercase;letter-spacing:1px;">La Terraza</div>
             </div>
           </div>
           
-          <div class="flex items-center gap-2">
-            <button data-action="llamarMesero"
-                    class="px-3 py-1.5 text-[11px] font-black rounded-xl bg-amber-500/15 border border-amber-500/40 text-amber-300 flex items-center gap-1.5 active:scale-95 transition shadow-sm">
-              <i class="fa-solid fa-bell text-xs"></i> Mesero
+          <div style="display:flex;align-items:center;gap:8px;">
+            <button data-action="llamarMesero" class="vs-btn-amber">
+              🔔 Mesero
             </button>
-            <button data-action="verComanda"
-                    class="px-3 py-1.5 text-[11px] font-black rounded-xl bg-sky-500/15 border border-sky-500/40 text-sky-300 flex items-center gap-1.5 active:scale-95 transition shadow-sm">
-              <i class="fa-solid fa-receipt text-xs"></i> Cuenta
+            <button data-action="verComanda" class="vs-btn-sky">
+              🧾 Cuenta
             </button>
           </div>
-        </header>
+        </div>
         """
 
     def _llamar_mesero(self):
@@ -1189,13 +1103,13 @@ class Menu(MenuTemplate):
         banner.style.cssText = (
             "position: fixed; left: 0; right: 0; bottom: 0; z-index: 9999; "
             "background: linear-gradient(90deg, #d97706, #f59e0b, #d97706); "
-            "color: #fff; font-weight: 900; font-size: 13px; font-family: 'Plus Jakarta Sans', system-ui, sans-serif; "
+            "color: #fff; font-weight: 900; font-size: 13.5px; font-family: 'Plus Jakarta Sans', system-ui, sans-serif; "
             "padding: 14px 20px; text-align: center; "
             "box-shadow: 0 -8px 25px rgba(0,0,0,0.6); "
             "display: flex; align-items: center; justify-content: center; gap: 10px;"
         )
         banner.innerHTML = f"""
-          <i class="fa-solid fa-bell animate-bounce text-sm"></i>
+          <span style="font-size:16px;">🔔</span>
           <span>{etiqueta}</span>
         """
         doc.body.appendChild(banner)

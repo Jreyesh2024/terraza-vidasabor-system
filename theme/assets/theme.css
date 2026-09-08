@@ -1,12 +1,13 @@
 /* LA TERRAZA DE VIDA & SABOR (V&S) - IMMUTABLE CORE THEME STYLES */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
 html, body, .anvil-container, div[anvil-slot] {
-  font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
-  background-color: #eaf2fb !important;
-  color: #1e293b !important;
+  font-family: 'Plus Jakarta Sans', 'Inter', system-ui, -apple-system, sans-serif !important;
+  background-color: #090d16 !important;
+  color: #f8fafc !important;
   margin: 0 !important;
   padding: 0 !important;
+  -webkit-font-smoothing: antialiased;
 }
 
 /* Immutable Table Square CSS (Mesas Cuadradas Modulares) */
@@ -81,61 +82,32 @@ html, body, .anvil-container, div[anvil-slot] {
   z-index: 20 !important;
 }
 
-/* Diagonal positions for extra/arrimada chairs (S5+) - Clean non-overlapping offset */
-.chair-pos-diag-tr {
-  position: absolute !important;
-  top: 6px !important;
-  right: 6px !important;
-  z-index: 20 !important;
-}
-
-.chair-pos-diag-tl {
-  position: absolute !important;
-  top: 6px !important;
-  left: 6px !important;
-  z-index: 20 !important;
-}
-
-.chair-pos-diag-br {
-  position: absolute !important;
-  bottom: 6px !important;
-  right: 6px !important;
-  z-index: 20 !important;
-}
-
-.chair-pos-diag-bl {
-  position: absolute !important;
-  bottom: 6px !important;
-  left: 6px !important;
-  z-index: 20 !important;
-}
-
 /* Diagonal positions for extra/arrimada chairs (S5+) */
 .chair-pos-diag-tr {
   position: absolute !important;
-  top: 10px !important;
-  right: 10px !important;
+  top: 6px !important;
+  right: 6px !important;
   z-index: 20 !important;
 }
 
 .chair-pos-diag-tl {
   position: absolute !important;
-  top: 10px !important;
-  left: 10px !important;
+  top: 6px !important;
+  left: 6px !important;
   z-index: 20 !important;
 }
 
 .chair-pos-diag-br {
   position: absolute !important;
-  bottom: 10px !important;
-  right: 10px !important;
+  bottom: 6px !important;
+  right: 6px !important;
   z-index: 20 !important;
 }
 
 .chair-pos-diag-bl {
   position: absolute !important;
-  bottom: 10px !important;
-  left: 10px !important;
+  bottom: 6px !important;
+  left: 6px !important;
   z-index: 20 !important;
 }
 
@@ -211,3 +183,262 @@ html, body, .anvil-container, div[anvil-slot] {
   display: flex !important;
 }
 
+/* ==========================================================================
+   SISTEMA DE DISEÑO V&S MENÚ CLIENTE MÓVIL (100% PURE VANILLA CSS)
+   ========================================================================== */
+
+.vs-mobile-wrap {
+  width: 100% !important;
+  max-width: 480px !important;
+  margin: 0 auto !important;
+  min-height: 100vh !important;
+  background: #090d16 !important;
+  color: #f8fafc !important;
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif !important;
+  padding-bottom: 120px !important;
+  box-sizing: border-box !important;
+}
+
+.vs-header-bar {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 100 !important;
+  background: rgba(9, 13, 22, 0.94) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+  padding: 12px 16px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.5) !important;
+}
+
+.vs-brand-logo {
+  width: 38px !important;
+  height: 38px !important;
+  border-radius: 12px !important;
+  background: linear-gradient(135deg, #10b981 0%, #0f766e 100%) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-weight: 900 !important;
+  font-size: 13px !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4) !important;
+  flex-shrink: 0 !important;
+}
+
+.vs-btn-amber {
+  background: rgba(245, 158, 11, 0.18) !important;
+  border: 1px solid rgba(245, 158, 11, 0.5) !important;
+  color: #fcd34d !important;
+  font-weight: 800 !important;
+  font-size: 11.5px !important;
+  padding: 7px 12px !important;
+  border-radius: 12px !important;
+  cursor: pointer !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  transition: all 0.2s ease !important;
+}
+.vs-btn-amber:active { transform: scale(0.95) !important; }
+
+.vs-btn-sky {
+  background: rgba(14, 165, 233, 0.18) !important;
+  border: 1px solid rgba(14, 165, 233, 0.5) !important;
+  color: #7dd3fc !important;
+  font-weight: 800 !important;
+  font-size: 11.5px !important;
+  padding: 7px 12px !important;
+  border-radius: 12px !important;
+  cursor: pointer !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  transition: all 0.2s ease !important;
+}
+.vs-btn-sky:active { transform: scale(0.95) !important; }
+
+.vs-hero-card {
+  position: relative !important;
+  overflow: hidden !important;
+  background: linear-gradient(135deg, rgba(6, 78, 59, 0.55) 0%, rgba(15, 23, 42, 0.9) 60%, rgba(13, 148, 136, 0.35) 100%) !important;
+  border: 1px solid rgba(16, 185, 129, 0.4) !important;
+  border-radius: 24px !important;
+  padding: 20px !important;
+  margin: 16px 16px 20px 16px !important;
+  box-shadow: 0 16px 36px -10px rgba(16, 185, 129, 0.3) !important;
+  backdrop-filter: blur(12px) !important;
+}
+
+.vs-badge-active {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  font-size: 10px !important;
+  font-weight: 900 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.8px !important;
+  color: #6ee7b7 !important;
+  background: rgba(16, 185, 129, 0.2) !important;
+  border: 1px solid rgba(16, 185, 129, 0.5) !important;
+  padding: 4px 10px !important;
+  border-radius: 9999px !important;
+}
+
+.vs-pulse-dot {
+  width: 7px !important;
+  height: 7px !important;
+  border-radius: 50% !important;
+  background: #34d399 !important;
+  box-shadow: 0 0 8px #34d399 !important;
+  display: inline-block !important;
+}
+
+.vs-action-card {
+  width: calc(100% - 32px) !important;
+  margin: 0 16px 12px 16px !important;
+  text-align: left !important;
+  background: rgba(15, 23, 42, 0.85) !important;
+  border-radius: 22px !important;
+  padding: 16px !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 14px !important;
+  cursor: pointer !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35) !important;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  box-sizing: border-box !important;
+  -webkit-tap-highlight-color: transparent !important;
+}
+.vs-action-card:active {
+  transform: scale(0.97) !important;
+  filter: brightness(1.15) !important;
+}
+
+.vs-card-emerald {
+  border-color: rgba(16, 185, 129, 0.35) !important;
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.12) 0%, rgba(15, 23, 42, 0.9) 100%) !important;
+}
+.vs-card-amber {
+  border-color: rgba(245, 158, 11, 0.35) !important;
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.12) 0%, rgba(15, 23, 42, 0.9) 100%) !important;
+}
+.vs-card-purple {
+  border-color: rgba(168, 85, 247, 0.35) !important;
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.12) 0%, rgba(15, 23, 42, 0.9) 100%) !important;
+}
+.vs-card-sky {
+  border-color: rgba(14, 165, 233, 0.35) !important;
+  background: linear-gradient(135deg, rgba(14, 165, 233, 0.12) 0%, rgba(15, 23, 42, 0.9) 100%) !important;
+}
+
+.vs-icon-box {
+  width: 52px !important;
+  height: 52px !important;
+  border-radius: 16px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 26px !important;
+  flex-shrink: 0 !important;
+  box-shadow: inset 0 2px 6px rgba(255, 255, 255, 0.1) !important;
+}
+
+.vs-cats-grid {
+  display: grid !important;
+  grid-template-columns: repeat(2, 1fr) !important;
+  gap: 12px !important;
+  padding: 0 16px !important;
+  margin-top: 14px !important;
+  box-sizing: border-box !important;
+}
+
+.vs-cat-btn {
+  background: linear-gradient(180deg, rgba(30, 41, 59, 0.75) 0%, rgba(15, 23, 42, 0.95) 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  border-radius: 22px !important;
+  padding: 18px 12px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  cursor: pointer !important;
+  text-align: center !important;
+  min-height: 135px !important;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3) !important;
+  transition: all 0.2s ease !important;
+  color: #ffffff !important;
+}
+.vs-cat-btn:active {
+  transform: scale(0.95) !important;
+  border-color: #10b981 !important;
+}
+
+.vs-product-card {
+  width: calc(100% - 32px) !important;
+  margin: 0 16px 10px 16px !important;
+  text-align: left !important;
+  background: rgba(15, 23, 42, 0.85) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 20px !important;
+  padding: 14px 16px !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 14px !important;
+  cursor: pointer !important;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.25) !important;
+  transition: all 0.2s ease !important;
+  box-sizing: border-box !important;
+}
+.vs-product-card:active {
+  transform: scale(0.98) !important;
+  border-color: #10b981 !important;
+}
+
+.vs-modal-overlay {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 99999 !important;
+  background: rgba(0, 0, 0, 0.82) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  display: flex !important;
+  align-items: flex-end !important;
+  justify-content: center !important;
+}
+
+.vs-modal-sheet {
+  width: 100% !important;
+  max-width: 480px !important;
+  background: #0f172a !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.15) !important;
+  border-radius: 32px 32px 0 0 !important;
+  padding: 24px 20px 44px 20px !important;
+  box-shadow: 0 -12px 40px rgba(0, 0, 0, 0.7) !important;
+  box-sizing: border-box !important;
+}
+
+.vs-cta-btn {
+  width: 100% !important;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+  color: #ffffff !important;
+  font-weight: 900 !important;
+  font-size: 15px !important;
+  padding: 16px !important;
+  border-radius: 18px !important;
+  border: none !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4) !important;
+  margin-top: 18px !important;
+  transition: all 0.2s ease !important;
+}
+.vs-cta-btn:active { transform: scale(0.97) !important; }

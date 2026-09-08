@@ -1,12 +1,251 @@
 <anvil-form container="HtmlTemplate" prop:html="">
 <style>
-  html, body, .anvil-container {
+  html, body, .anvil-container, div[anvil-slot] {
     background-color: #090d16 !important;
     color: #f8fafc !important;
     font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif !important;
     margin: 0 !important;
     padding: 0 !important;
   }
+  .vs-mobile-wrap {
+    width: 100%;
+    max-width: 480px;
+    margin: 0 auto;
+    min-height: 100vh;
+    background: #090d16;
+    color: #f8fafc;
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    padding-bottom: 120px;
+    box-sizing: border-box;
+  }
+  .vs-header-bar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(9, 13, 22, 0.94);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  }
+  .vs-brand-logo {
+    width: 38px;
+    height: 38px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #10b981 0%, #0f766e 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    font-size: 13px;
+    color: #ffffff;
+    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+    flex-shrink: 0;
+  }
+  .vs-btn-amber {
+    background: rgba(245, 158, 11, 0.18);
+    border: 1px solid rgba(245, 158, 11, 0.5);
+    color: #fcd34d;
+    font-weight: 800;
+    font-size: 11.5px;
+    padding: 7px 12px;
+    border-radius: 12px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s ease;
+  }
+  .vs-btn-amber:active { transform: scale(0.95); }
+  .vs-btn-sky {
+    background: rgba(14, 165, 233, 0.18);
+    border: 1px solid rgba(14, 165, 233, 0.5);
+    color: #7dd3fc;
+    font-weight: 800;
+    font-size: 11.5px;
+    padding: 7px 12px;
+    border-radius: 12px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s ease;
+  }
+  .vs-btn-sky:active { transform: scale(0.95); }
+  .vs-hero-card {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, rgba(6, 78, 59, 0.55) 0%, rgba(15, 23, 42, 0.9) 60%, rgba(13, 148, 136, 0.35) 100%);
+    border: 1px solid rgba(16, 185, 129, 0.4);
+    border-radius: 24px;
+    padding: 20px;
+    margin: 16px 16px 20px 16px;
+    box-shadow: 0 16px 36px -10px rgba(16, 185, 129, 0.3);
+    backdrop-filter: blur(12px);
+  }
+  .vs-badge-active {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 10px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: #6ee7b7;
+    background: rgba(16, 185, 129, 0.2);
+    border: 1px solid rgba(16, 185, 129, 0.5);
+    padding: 4px 10px;
+    border-radius: 9999px;
+  }
+  .vs-pulse-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #34d399;
+    box-shadow: 0 0 8px #34d399;
+    display: inline-block;
+  }
+  .vs-action-card {
+    width: calc(100% - 32px);
+    margin: 0 16px 12px 16px;
+    text-align: left;
+    background: rgba(15, 23, 42, 0.85);
+    border-radius: 22px;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    cursor: pointer;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .vs-action-card:active {
+    transform: scale(0.97);
+    filter: brightness(1.15);
+  }
+  .vs-card-emerald {
+    border-color: rgba(16, 185, 129, 0.35);
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.12) 0%, rgba(15, 23, 42, 0.9) 100%);
+  }
+  .vs-card-amber {
+    border-color: rgba(245, 158, 11, 0.35);
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.12) 0%, rgba(15, 23, 42, 0.9) 100%);
+  }
+  .vs-card-purple {
+    border-color: rgba(168, 85, 247, 0.35);
+    background: linear-gradient(135deg, rgba(168, 85, 247, 0.12) 0%, rgba(15, 23, 42, 0.9) 100%);
+  }
+  .vs-card-sky {
+    border-color: rgba(14, 165, 233, 0.35);
+    background: linear-gradient(135deg, rgba(14, 165, 233, 0.12) 0%, rgba(15, 23, 42, 0.9) 100%);
+  }
+  .vs-icon-box {
+    width: 52px;
+    height: 52px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    flex-shrink: 0;
+    box-shadow: inset 0 2px 6px rgba(255, 255, 255, 0.1);
+  }
+  .vs-cats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    padding: 0 16px;
+    margin-top: 14px;
+    box-sizing: border-box;
+  }
+  .vs-cat-btn {
+    background: linear-gradient(180deg, rgba(30, 41, 59, 0.75) 0%, rgba(15, 23, 42, 0.95) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 22px;
+    padding: 18px 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    cursor: pointer;
+    text-align: center;
+    min-height: 135px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+    transition: all 0.2s ease;
+    color: #ffffff;
+  }
+  .vs-cat-btn:active {
+    transform: scale(0.95);
+    border-color: #10b981;
+  }
+  .vs-product-card {
+    width: calc(100% - 32px);
+    margin: 0 16px 10px 16px;
+    text-align: left;
+    background: rgba(15, 23, 42, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    cursor: pointer;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+  }
+  .vs-product-card:active {
+    transform: scale(0.98);
+    border-color: #10b981;
+  }
+  .vs-modal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    background: rgba(0, 0, 0, 0.82);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+  }
+  .vs-modal-sheet {
+    width: 100%;
+    max-width: 480px;
+    background: #0f172a;
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 32px 32px 0 0;
+    padding: 24px 20px 44px 20px;
+    box-shadow: 0 -12px 40px rgba(0, 0, 0, 0.7);
+    box-sizing: border-box;
+  }
+  .vs-cta-btn {
+    width: 100%;
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: #ffffff;
+    font-weight: 900;
+    font-size: 15px;
+    padding: 16px;
+    border-radius: 18px;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
+    margin-top: 18px;
+    transition: all 0.2s ease;
+  }
+  .vs-cta-btn:active { transform: scale(0.97); }
 </style>
-<div id="menuRoot" class="w-full min-h-screen bg-[#090d16] text-slate-100 font-sans"></div>
+<div id="menuRoot" class="vs-mobile-wrap"></div>
 </anvil-form>
