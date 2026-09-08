@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Índice de Portavasos QR — La Terraza</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+      background: #090d16;
+      color: #f8fafc;
+      padding: 32px 20px;
+    }
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .header {
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 24px;
+      padding: 24px 28px;
+      margin-bottom: 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .title {
+      font-size: 24px;
+      font-weight: 900;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .subtitle {
+      font-size: 13px;
+      color: #94a3b8;
+      margin-top: 4px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+      gap: 20px;
+    }
+    .grid-card {
+      background: #ffffff;
+      color: #0f172a;
+      border-radius: 20px;
+      padding: 20px;
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+      border: 2px solid #e2e8f0;
+      transition: all 0.2s;
+    }
+    .grid-card:hover {
+      transform: translateY(-5px);
+      border-color: #10b981;
+      box-shadow: 0 15px 35px rgba(16, 185, 129, 0.3);
+    }
+    .card-badge {
+      background: #0f172a;
+      color: #ffffff;
+      font-size: 11px;
+      font-weight: 900;
+      padding: 4px 10px;
+      border-radius: 8px;
+      margin-bottom: 12px;
+    }
+    .grid-qr {
+      width: 140px;
+      height: 140px;
+      object-fit: contain;
+      border: 1px solid #cbd5e1;
+      border-radius: 12px;
+      padding: 4px;
+      margin-bottom: 10px;
+    }
+    .card-code {
+      font-size: 13px;
+      font-weight: 900;
+      color: #059669;
+      font-family: monospace;
+    }
+    .card-area {
+      font-size: 11px;
+      color: #64748b;
+      font-weight: 700;
+      margin-top: 2px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div>
+        <div class="title"><span>🌴</span> Portavasos QR Individuales</div>
+        <div class="subtitle">Haz clic en cualquier lugar para abrir su portavasos individual de prueba.</div>
+      </div>
+    </div>
+    <div class="grid">
+      
+        <a href="PV-P-01-01.html" class="grid-card">
+          <div class="card-badge">MESA 1 · Silla 1</div>
+          <img src="PV-P-01-01.png" alt="PV-P-01-01" class="grid-qr">
+          <div class="card-code">PV-P-01-01</div>
+          <div class="card-area">🌴 Palapa Principal</div>
+        </a>
+        
+        <a href="PV-P-01-02.html" class="grid-card">
+          <div class="card-badge">MESA 1 · Silla 2</div>
+          <img src="PV-P-01-02.png" alt="PV-P-01-02" class="grid-qr">
+          <div class="card-code">PV-P-01-02</div>
+          <div class="card-area">🌴 Palapa Principal</div>
+        </a>
+        
+        <a href="PV-P-01-03.html" class="grid-card">
+          <div class="card-badge">MESA 1 · Silla 3</div>
+          <img src="PV-P-01-03.png" alt="PV-P-01-03" class="grid-qr">
+          <div class="card-code">PV-P-01-03</div>
+          <div class="card-area">🌴 Palapa Principal</div>
+        </a>
+        
+        <a href="PV-P-01-04.html" class="grid-card">
+          <div class="card-badge">MESA 1 · Silla 4</div>
+          <img src="PV-P-01-04.png" alt="PV-P-01-04" class="grid-qr">
+          <div class="card-code">PV-P-01-04</div>
+          <div class="card-area">🌴 Palapa Principal</div>
+        </a>
+        
+        <a href="PV-P-02-01.html" class="grid-card">
+          <div class="card-badge">MESA 2 · Silla 1</div>
+          <img src="PV-P-02-01.png" alt="PV-P-02-01" class="grid-qr">
+          <div class="card-code">PV-P-02-01</div>
+          <div class="card-area">👨‍👩‍👧‍👦 Palapa Central (Familia)</div>
+        </a>
+        
+        <a href="PV-P-02-02.html" class="grid-card">
+          <div class="card-badge">MESA 2 · Silla 2</div>
+          <img src="PV-P-02-02.png" alt="PV-P-02-02" class="grid-qr">
+          <div class="card-code">PV-P-02-02</div>
+          <div class="card-area">👨‍👩‍👧‍👦 Palapa Central (Familia)</div>
+        </a>
+        
+        <a href="PV-P-02-03.html" class="grid-card">
+          <div class="card-badge">MESA 2 · Silla 3</div>
+          <img src="PV-P-02-03.png" alt="PV-P-02-03" class="grid-qr">
+          <div class="card-code">PV-P-02-03</div>
+          <div class="card-area">👨‍👩‍👧‍👦 Palapa Central (Familia)</div>
+        </a>
+        
+        <a href="PV-P-02-04.html" class="grid-card">
+          <div class="card-badge">MESA 2 · Silla 4</div>
+          <img src="PV-P-02-04.png" alt="PV-P-02-04" class="grid-qr">
+          <div class="card-code">PV-P-02-04</div>
+          <div class="card-area">👨‍👩‍👧‍👦 Palapa Central (Familia)</div>
+        </a>
+        
+        <a href="PV-P-03-01.html" class="grid-card">
+          <div class="card-badge">MESA 3 · Silla 1</div>
+          <img src="PV-P-03-01.png" alt="PV-P-03-01" class="grid-qr">
+          <div class="card-code">PV-P-03-01</div>
+          <div class="card-area">🌿 Palapa Jardín</div>
+        </a>
+        
+        <a href="PV-P-03-02.html" class="grid-card">
+          <div class="card-badge">MESA 3 · Silla 2</div>
+          <img src="PV-P-03-02.png" alt="PV-P-03-02" class="grid-qr">
+          <div class="card-code">PV-P-03-02</div>
+          <div class="card-area">🌿 Palapa Jardín</div>
+        </a>
+        
+        <a href="PV-P-03-03.html" class="grid-card">
+          <div class="card-badge">MESA 3 · Silla 3</div>
+          <img src="PV-P-03-03.png" alt="PV-P-03-03" class="grid-qr">
+          <div class="card-code">PV-P-03-03</div>
+          <div class="card-area">🌿 Palapa Jardín</div>
+        </a>
+        
+        <a href="PV-P-03-04.html" class="grid-card">
+          <div class="card-badge">MESA 3 · Silla 4</div>
+          <img src="PV-P-03-04.png" alt="PV-P-03-04" class="grid-qr">
+          <div class="card-code">PV-P-03-04</div>
+          <div class="card-area">🌿 Palapa Jardín</div>
+        </a>
+        
+        <a href="PV-P-EX-01.html" class="grid-card">
+          <div class="card-badge">EXTRA · Extra #1</div>
+          <img src="PV-P-EX-01.png" alt="PV-P-EX-01" class="grid-qr">
+          <div class="card-code">PV-P-EX-01</div>
+          <div class="card-area">⭐ Pool Extras / Comodines</div>
+        </a>
+        
+        <a href="PV-P-EX-02.html" class="grid-card">
+          <div class="card-badge">EXTRA · Extra #2</div>
+          <img src="PV-P-EX-02.png" alt="PV-P-EX-02" class="grid-qr">
+          <div class="card-code">PV-P-EX-02</div>
+          <div class="card-area">⭐ Pool Extras / Comodines</div>
+        </a>
+        
+        <a href="PV-P-EX-03.html" class="grid-card">
+          <div class="card-badge">EXTRA · Extra #3</div>
+          <img src="PV-P-EX-03.png" alt="PV-P-EX-03" class="grid-qr">
+          <div class="card-code">PV-P-EX-03</div>
+          <div class="card-area">⭐ Pool Extras / Comodines</div>
+        </a>
+        
+    </div>
+  </div>
+</body>
+</html>
