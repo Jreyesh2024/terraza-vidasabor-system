@@ -437,14 +437,16 @@ def uplink_get_sillas(mesa_id=None):
 # ============================================================================
 
 def _construir_dict_cuentas_desde_db():
-    """Retorna el dict CUENTAS con formato compatible con JS legacy:
-    keys = "MM-SS" para sillas regulares, "EX-NN" para pool.
-    estado se lee de ocupaciones_silla (activa = ocupada).
-    items se toma de ITEMS_MEMORIA."""
+    """Retorna el dict CUENTAS sincronizado en tiempo real desde PostgreSQL:
+    - Sillas y ocupaciones desde BD.
+    - Items de comanda reales desde detalle_comanda (vinculados a sesiones activas).
+    - Cuentas de mesa al centro (f"{mesa}-0") desde detalle_comanda.
+    """
     resultado = {}
     conn = get_db_connection()
     try:
         with conn.cursor() as cur:
+            # 1. Sillas activas y sus ocupaciones vivas
             cur.execute("""
                 SELECT
                     s.id           AS silla_id,
@@ -467,33 +469,123 @@ def _construir_dict_cuentas_desde_db():
                          s.numero_en_mesa NULLS LAST;
             """)
             rows = cur.fetchall()
-        for r in rows:
-            if r["es_adicional"] or r["mesa_id"] is None:
-                pool_num = r["codigo_qr"].split("-")[-1]
-                key = f"EX-{pool_num}"
-                mesa_key = 0
-                silla_key = 0
-                nombre_default = f"Extra {pool_num}"
-            else:
-                mesa_key = int(r["numero_mesa"])
-                silla_key = int(r["numero_en_mesa"])
-                key = f"{mesa_key}-{silla_key}"
-                nombre_default = f"Silla {silla_key}"
-            estado = "ocupada" if r["ocupacion_id"] else "disponible"
-            resultado[key] = {
-                "mesaId": mesa_key,
-                "sillaId": silla_key,
-                "sillaDbId": int(r["silla_id"]),
-                "qrId": r["codigo_qr"],
-                "estado": estado,
-                "comensalNombre": r["cliente_display_name"] or nombre_default,
-                "items": ITEMS_MEMORIA.get(key, []),
-                "esAdicional": bool(r["es_adicional"]),
-                "ocupacionId": int(r["ocupacion_id"]) if r["ocupacion_id"] else None,
-                "sesionMesaId": int(r["sesion_mesa_id"]) if r["sesion_mesa_id"] else None,
-                "origen": r["origen"],
-                "abiertaAt": r["abierta_at"].isoformat() if r["abierta_at"] else None,
-            }
+
+            for r in rows:
+                if r["es_adicional"] or r["mesa_id"] is None:
+                    pool_num = r["codigo_qr"].split("-")[-1]
+                    key = f"EX-{pool_num}"
+                    mesa_key = 0
+                    silla_key = 0
+                    nombre_default = f"Extra {pool_num}"
+                else:
+                    mesa_key = int(r["numero_mesa"])
+                    silla_key = int(r["numero_en_mesa"])
+                    key = f"{mesa_key}-{silla_key}"
+                    nombre_default = f"Silla {silla_key}"
+
+                estado = "ocupada" if r["ocupacion_id"] else "disponible"
+                resultado[key] = {
+                    "mesaId": mesa_key,
+                    "sillaId": silla_key,
+                    "sillaDbId": int(r["silla_id"]),
+                    "qrId": r["codigo_qr"],
+                    "estado": estado,
+                    "comensalNombre": r["cliente_display_name"] or nombre_default,
+                    "items": list(ITEMS_MEMORIA.get(key, [])),
+                    "esAdicional": bool(r["es_adicional"]),
+                    "ocupacionId": int(r["ocupacion_id"]) if r["ocupacion_id"] else None,
+                    "sesionMesaId": int(r["sesion_mesa_id"]) if r["sesion_mesa_id"] else None,
+                    "origen": r["origen"],
+                    "abiertaAt": r["abierta_at"].isoformat() if r["abierta_at"] else None,
+                }
+
+            # 2. Cargar items reales de detalle_comanda para sesiones vivas
+            cur.execute("""
+                SELECT 
+                    d.id,
+                    d.comanda_id,
+                    d.producto_id,
+                    d.para_silla_id,
+                    d.pedido_por_silla_id,
+                    d.es_al_centro,
+                    d.tipo_consumo,
+                    d.cantidad,
+                    d.precio_unitario_snapshot,
+                    d.producto_nombre_snapshot,
+                    d.subtotal,
+                    d.notas_cliente,
+                    d.estado,
+                    d.hora_creado,
+                    c.sesion_mesa_id,
+                    c.tipo AS comanda_tipo,
+                    sm.mesa_id,
+                    m.numero_mesa,
+                    s_para.numero_en_mesa AS para_silla_num,
+                    s_para.codigo_qr      AS para_qr,
+                    s_para.es_adicional   AS para_es_adicional
+                FROM detalle_comanda d
+                JOIN comandas c ON d.comanda_id = c.id
+                JOIN sesiones_mesa sm ON c.sesion_mesa_id = sm.id AND sm.cerrada_at IS NULL
+                LEFT JOIN mesas m ON sm.mesa_id = m.id
+                LEFT JOIN sillas s_para ON d.para_silla_id = s_para.id
+                WHERE c.estado = 'abierta' AND d.estado <> 'cancelado'
+                ORDER BY d.hora_creado ASC;
+            """)
+            items_rows = cur.fetchall()
+
+            for it in items_rows:
+                mesa_num = int(it["numero_mesa"]) if it["numero_mesa"] else 1
+                hora_str = it["hora_creado"].strftime("%I:%M %p") if it["hora_creado"] else ""
+                
+                item_obj = {
+                    "id": int(it["id"]),
+                    "productoId": int(it["producto_id"]),
+                    "nombre": str(it["producto_nombre_snapshot"]),
+                    "precio": float(it["precio_unitario_snapshot"]),
+                    "cantidad": int(it["cantidad"]),
+                    "subtotal": float(it["subtotal"]),
+                    "notas": str(it["notas_cliente"] or ""),
+                    "estado": str(it["estado"]),
+                    "enviadoCocina": (it["estado"] != "borrador"),
+                    "tipo_consumo": str(it["tipo_consumo"] or "comida"),
+                    "hora": hora_str,
+                    "horaEnvioCocina": hora_str,
+                    "mesaId": mesa_num,
+                    "sillaNum": 0 if it["es_al_centro"] else (int(it["para_silla_num"]) if it["para_silla_num"] else 0),
+                    "es_cuenta_mesa": bool(it["es_al_centro"]),
+                }
+
+                if it["es_al_centro"]:
+                    mesa_key_centro = f"{mesa_num}-0"
+                    if mesa_key_centro not in resultado:
+                        resultado[mesa_key_centro] = {
+                            "mesaId": mesa_num,
+                            "sillaId": 0,
+                            "sillaDbId": 0,
+                            "qrId": f"MESA-{mesa_num:02d}",
+                            "estado": "ocupada",
+                            "comensalNombre": "⭐ Cuenta de MESA (Al Centro)",
+                            "items": [],
+                            "esAdicional": False,
+                            "ocupacionId": None,
+                            "sesionMesaId": int(it["sesion_mesa_id"]),
+                            "origen": "al_centro",
+                            "abiertaAt": None,
+                        }
+                    if not any(x.get("id") == item_obj["id"] for x in resultado[mesa_key_centro]["items"]):
+                        resultado[mesa_key_centro]["items"].append(item_obj)
+                else:
+                    if it["para_es_adicional"]:
+                        pool_num = it["para_qr"].split("-")[-1]
+                        chair_key = f"EX-{pool_num}"
+                    else:
+                        s_num = int(it["para_silla_num"]) if it["para_silla_num"] else 1
+                        chair_key = f"{mesa_num}-{s_num}"
+
+                    if chair_key in resultado:
+                        if not any(x.get("id") == item_obj["id"] for x in resultado[chair_key]["items"]):
+                            resultado[chair_key]["items"].append(item_obj)
+                        resultado[chair_key]["estado"] = "ocupada"
     finally:
         conn.close()
     return resultado
