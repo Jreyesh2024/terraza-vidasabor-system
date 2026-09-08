@@ -2,12 +2,11 @@
 # -*- coding: utf-8 -*-
 """
 ============================================================================
-LA TERRAZA DE VIDA & SABOR (V&S) - GENERADOR DE TARJETAS DE IMAGEN Y QRS
-Genera:
-1. Tarjetas de imagen completas en formato PNG (alta resolución con diseño,
-   logo, mesa, silla, portavasos y código QR incrustado).
-2. Códigos QR individuales en PNG.
-3. Archivos HTML individuales con QR incrustado en Base64 (100% autónomos).
+LA TERRAZA DE VIDA & SABOR (V&S) - GENERADOR DINÁMICO DE QRS DESDE POSTGRESQL
+Fuente única de verdad: Base de datos PostgreSQL (`dbterrazavidasabor`).
+Lee la tabla `sillas` + `mesas` + `areas` (sillas activas).
+Cualquier nueva silla o mesa agregada en la BD se reflejará automáticamente
+sin necesidad de modificar código.
 ============================================================================
 """
 
@@ -16,59 +15,45 @@ import sys
 import base64
 import io
 import qrcode
+import psycopg2
+from psycopg2.extras import RealDictCursor
 from PIL import Image, ImageDraw, ImageFont
 
-DEFAULT_BASE_URL = "https://impeccable-fruitful-beaver.anvil.app"
+DEFAULT_BASE_URL = os.environ.get("ANVIL_BASE_URL", "https://impeccable-fruitful-beaver.anvil.app")
+DATABASE_URL = os.environ.get("DATABASE_URL", "postgresql://localhost/dbterrazavidasabor")
 
-MESAS_CONFIG = [
-    {
-        "mesa": 1,
-        "nombre_area": "Palapa Principal",
-        "icono": "🌴",
-        "sillas": [
-            {"silla": 1, "qr_id": "PV-P-01-01", "etiqueta": "Silla 1"},
-            {"silla": 2, "qr_id": "PV-P-01-02", "etiqueta": "Silla 2"},
-            {"silla": 3, "qr_id": "PV-P-01-03", "etiqueta": "Silla 3"},
-            {"silla": 4, "qr_id": "PV-P-01-04", "etiqueta": "Silla 4"},
-        ]
-    },
-    {
-        "mesa": 2,
-        "nombre_area": "Palapa Central (Familia)",
-        "icono": "👨‍👩‍👧‍👦",
-        "sillas": [
-            {"silla": 1, "qr_id": "PV-P-02-01", "etiqueta": "Silla 1"},
-            {"silla": 2, "qr_id": "PV-P-02-02", "etiqueta": "Silla 2"},
-            {"silla": 3, "qr_id": "PV-P-02-03", "etiqueta": "Silla 3"},
-            {"silla": 4, "qr_id": "PV-P-02-04", "etiqueta": "Silla 4"},
-        ]
-    },
-    {
-        "mesa": 3,
-        "nombre_area": "Palapa Jardín",
-        "icono": "🌿",
-        "sillas": [
-            {"silla": 1, "qr_id": "PV-P-03-01", "etiqueta": "Silla 1"},
-            {"silla": 2, "qr_id": "PV-P-03-02", "etiqueta": "Silla 2"},
-            {"silla": 3, "qr_id": "PV-P-03-03", "etiqueta": "Silla 3"},
-            {"silla": 4, "qr_id": "PV-P-03-04", "etiqueta": "Silla 4"},
-        ]
-    },
-    {
-        "mesa": 0,
-        "nombre_area": "Pool Extras / Comodines",
-        "icono": "⭐",
-        "sillas": [
-            {"silla": 1, "qr_id": "PV-P-EX-01", "etiqueta": "Extra 1"},
-            {"silla": 2, "qr_id": "PV-P-EX-02", "etiqueta": "Extra 2"},
-            {"silla": 3, "qr_id": "PV-P-EX-03", "etiqueta": "Extra 3"},
-        ]
-    }
-]
+def get_db_connection():
+    return psycopg2.connect(DATABASE_URL, cursor_factory=RealDictCursor)
+
+def obtener_sillas_desde_db():
+    """Consulta PostgreSQL para obtener todas las sillas activas con sus mesas y áreas."""
+    conn = get_db_connection()
+    try:
+        with conn.cursor() as cur:
+            cur.execute("""
+                SELECT 
+                    s.id           AS silla_id,
+                    s.codigo_qr,
+                    s.numero_en_mesa,
+                    s.es_adicional,
+                    s.activa,
+                    m.numero_mesa,
+                    COALESCE(a.nombre, 'Palapa') AS area_nombre,
+                    COALESCE(a.codigo, 'P')      AS area_codigo
+                FROM sillas s
+                LEFT JOIN mesas m ON s.mesa_id = m.id
+                LEFT JOIN areas a ON m.area_id = a.id
+                WHERE s.activa = TRUE
+                ORDER BY s.es_adicional ASC, m.numero_mesa ASC NULLS LAST, s.numero_en_mesa ASC NULLS LAST;
+            """)
+            rows = cur.fetchall()
+            return [dict(r) for r in rows]
+    finally:
+        conn.close()
 
 def build_qr_url(base_url, mesa, silla, qr_id):
     clean_base = base_url.rstrip("/")
-    if mesa == 0:
+    if not mesa or mesa == 0:
         return f"{clean_base}#qr={qr_id}"
     return f"{clean_base}#mesa={mesa}&silla={silla}&qr={qr_id}"
 
@@ -85,28 +70,24 @@ def generar_qr_pil(url, box_size=12):
     return img
 
 def crear_tarjeta_imagen_completa(item, qr_img):
-    """Genera una imagen PNG completa de alta resolución (800x1000 px) de la tarjeta portavasos."""
+    """Genera una imagen PNG completa de alta resolución (800x1020 px) de la tarjeta portavasos."""
     W, H = 800, 1020
     card = Image.new("RGB", (W, H), "#090d16")
     draw = ImageDraw.Draw(card)
 
-    # Intentar cargar fuentes del sistema o usar default
     try:
         font_title = ImageFont.truetype("/System/Library/Fonts/Helvetica.ttc", 36)
         font_subtitle = ImageFont.truetype("/System/Library/Fonts/Helvetica.ttc", 20)
-        font_silla = ImageFont.truetype("/System/Library/Fonts/Helvetica.ttc", 40)
         font_code = ImageFont.truetype("/System/Library/Fonts/Menlo.ttc", 26)
         font_area = ImageFont.truetype("/System/Library/Fonts/Helvetica.ttc", 22)
         font_inst = ImageFont.truetype("/System/Library/Fonts/Helvetica.ttc", 18)
     except Exception:
         font_title = ImageFont.load_default()
         font_subtitle = font_title
-        font_silla = font_title
         font_code = font_title
         font_area = font_title
         font_inst = font_title
 
-    # Fondo de la tarjeta blanca central (con borde)
     margin_x = 40
     top_y = 40
     card_w = W - 2 * margin_x
@@ -121,7 +102,7 @@ def crear_tarjeta_imagen_completa(item, qr_img):
         width=4
     )
 
-    # Franja superior verde/esmeralda
+    # Franja superior verde esmeralda
     draw.rounded_rectangle(
         [margin_x, top_y, margin_x + card_w, top_y + 16],
         radius=0,
@@ -130,7 +111,6 @@ def crear_tarjeta_imagen_completa(item, qr_img):
 
     # Header: Logo y Marca
     header_y = top_y + 40
-    # Cuadrado logo V&S
     draw.rounded_rectangle(
         [margin_x + 30, header_y, margin_x + 90, header_y + 60],
         radius=14,
@@ -143,7 +123,8 @@ def crear_tarjeta_imagen_completa(item, qr_img):
     draw.text((margin_x + 105, header_y + 32), "VIDA & SABOR", fill="#047857", font=font_inst)
 
     # Badge de Mesa
-    mesa_lbl = f"MESA {item['mesa']}" if item['mesa'] > 0 else "EXTRA POOL"
+    mesa_val = item.get('numero_mesa')
+    mesa_lbl = f"MESA {mesa_val}" if mesa_val else "EXTRA POOL"
     draw.rounded_rectangle(
         [margin_x + card_w - 180, header_y + 8, margin_x + card_w - 30, header_y + 52],
         radius=14,
@@ -160,7 +141,6 @@ def crear_tarjeta_imagen_completa(item, qr_img):
     qr_x = margin_x + (card_w - qr_size) // 2
     qr_y = header_y + 105
 
-    # Marco del QR
     draw.rounded_rectangle(
         [qr_x - 12, qr_y - 12, qr_x + qr_size + 12, qr_y + qr_size + 12],
         radius=20,
@@ -172,17 +152,19 @@ def crear_tarjeta_imagen_completa(item, qr_img):
 
     # Textos inferiores
     info_y = qr_y + qr_size + 30
-    silla_title = f"MESA {item['mesa']} · SILLA {item['silla']}" if item['mesa'] > 0 else f"EXTRA #{item['silla']} (POOL)"
+    silla_num = item.get('numero_en_mesa')
+    if mesa_val:
+        silla_title = f"MESA {mesa_val} · SILLA {silla_num}"
+    else:
+        extra_num = item['codigo_qr'].split("-")[-1]
+        silla_title = f"EXTRA #{extra_num} (POOL)"
     
-    # Silla
     draw.text((W // 2, info_y), silla_title, fill="#0f172a", font=font_title, anchor="mm")
     
-    # Código Portavasos
-    code_lbl = f"PORTAVASOS #{item['qr_id']}"
+    code_lbl = f"PORTAVASOS #{item['codigo_qr']}"
     draw.text((W // 2, info_y + 40), code_lbl, fill="#059669", font=font_code, anchor="mm")
 
-    # Área
-    area_lbl = f"{item['nombre_area']} · {item['etiqueta']}"
+    area_lbl = f"Área: {item['area_nombre']}"
     draw.text((W // 2, info_y + 75), area_lbl, fill="#64748b", font=font_area, anchor="mm")
 
     # Footer con instrucción
@@ -197,80 +179,66 @@ def crear_tarjeta_imagen_completa(item, qr_img):
 
     return card
 
-def main():
-    base_url = sys.argv[1] if len(sys.argv) > 1 else DEFAULT_BASE_URL
-    output_dir = os.path.join(os.path.dirname(__file__), "..", "qrs_portavasos")
+def generar_catalogo_completo(base_url=None, output_dir=None):
+    base_url = base_url or DEFAULT_BASE_URL
+    if output_dir is None:
+        output_dir = os.path.join(os.path.dirname(__file__), "..", "qrs_portavasos")
     os.makedirs(output_dir, exist_ok=True)
-    
-    print(f"🚀 Generando tarjetas de imagen PNG y códigos QR en: {output_dir}")
-    print(f"🔗 URL Base: {base_url}\n")
+
+    print(f"📡 Conectando a PostgreSQL ({DATABASE_URL}) para leer sillas...")
+    sillas_db = obtener_sillas_desde_db()
+    print(f"✅ Se encontraron {len(sillas_db)} sillas activas en la base de datos.\n")
 
     portavasos_data = []
 
-    for mesa_info in MESAS_CONFIG:
-        mesa = mesa_info["mesa"]
-        for s in mesa_info["sillas"]:
-            silla = s["silla"]
-            qr_id = s["qr_id"]
-            etiqueta = s["etiqueta"]
-            qr_url = build_qr_url(base_url, mesa, silla, qr_id)
-            
-            # QR individual
-            qr_img = generar_qr_pil(qr_url, box_size=12)
-            
-            # Tarjeta completa como PNG
-            card_img = crear_tarjeta_imagen_completa({
-                "mesa": mesa,
-                "silla": silla,
-                "qr_id": qr_id,
-                "etiqueta": etiqueta,
-                "nombre_area": mesa_info["nombre_area"],
-            }, qr_img)
+    for s in sillas_db:
+        mesa = s.get("numero_mesa")
+        silla = s.get("numero_en_mesa")
+        qr_id = s["codigo_qr"]
+        qr_url = build_qr_url(base_url, mesa, silla, qr_id)
+        
+        qr_img = generar_qr_pil(qr_url, box_size=12)
+        
+        card_img = crear_tarjeta_imagen_completa(s, qr_img)
 
-            # Guardar tarjeta completa como imagen PNG principal
-            card_filename = f"{qr_id}.png"
-            card_filepath = os.path.join(output_dir, card_filename)
-            card_img.save(card_filepath, "PNG")
+        card_filename = f"{qr_id}.png"
+        card_filepath = os.path.join(output_dir, card_filename)
+        card_img.save(card_filepath, "PNG")
 
-            # Guardar QR puro también
-            qr_filename = f"qr_{qr_id}.png"
-            qr_filepath = os.path.join(output_dir, qr_filename)
-            qr_img.save(qr_filepath, "PNG")
+        qr_filename = f"qr_{qr_id}.png"
+        qr_filepath = os.path.join(output_dir, qr_filename)
+        qr_img.save(qr_filepath, "PNG")
 
-            # Convertir a base64 para el HTML autónomo
-            buffered = io.BytesIO()
-            card_img.save(buffered, format="PNG")
-            card_b64 = base64.b64encode(buffered.getvalue()).decode("utf-8")
+        buffered = io.BytesIO()
+        card_img.save(buffered, format="PNG")
+        card_b64 = base64.b64encode(buffered.getvalue()).decode("utf-8")
 
-            buffered_qr = io.BytesIO()
-            qr_img.save(buffered_qr, format="PNG")
-            qr_b64 = base64.b64encode(buffered_qr.getvalue()).decode("utf-8")
+        buffered_qr = io.BytesIO()
+        qr_img.save(buffered_qr, format="PNG")
+        qr_b64 = base64.b64encode(buffered_qr.getvalue()).decode("utf-8")
 
-            portavasos_data.append({
-                "mesa": mesa,
-                "silla": silla,
-                "qr_id": qr_id,
-                "etiqueta": etiqueta,
-                "nombre_area": mesa_info["nombre_area"],
-                "icono": mesa_info["icono"],
-                "url": qr_url,
-                "card_png": card_filename,
-                "qr_png": qr_filename,
-                "card_b64": card_b64,
-                "qr_b64": qr_b64,
-                "html": f"{qr_id}.html"
-            })
+        portavasos_data.append({
+            "mesa": mesa,
+            "silla": silla,
+            "qr_id": qr_id,
+            "area_nombre": s["area_nombre"],
+            "url": qr_url,
+            "card_png": card_filename,
+            "qr_png": qr_filename,
+            "card_b64": card_b64,
+            "qr_b64": qr_b64,
+            "html": f"{qr_id}.html"
+        })
 
-            mesa_lbl = f"Mesa {mesa}" if mesa > 0 else "Pool Extra"
-            print(f"  🖼️  Imagen generada: {card_filename} ({mesa_lbl} · Silla {silla})")
+        mesa_lbl = f"Mesa {mesa} · Silla {silla}" if mesa else f"Pool Extra #{qr_id}"
+        print(f"  🖼️  Generado desde BD: {card_filename} ({mesa_lbl})")
 
-    # Generar HTMLs individuales 100% autónomos con Base64 incrustado
+    # Generar HTMLs individuales
     total = len(portavasos_data)
     for i, item in enumerate(portavasos_data):
         prev_item = portavasos_data[(i - 1) % total]
         next_item = portavasos_data[(i + 1) % total]
-        mesa_badge = f"MESA {item['mesa']}" if item['mesa'] > 0 else "EXTRA"
-        silla_title = f"Mesa {item['mesa']} · Silla {item['silla']}" if item['mesa'] > 0 else f"Extra #{item['silla']}"
+        silla_title = f"Mesa {item['mesa']} · Silla {item['silla']}" if item['mesa'] else f"Extra #{item['qr_id']}"
 
         html_code = f"""<!DOCTYPE html>
 <html lang="es">
@@ -382,8 +350,8 @@ def main():
     # Actualizar index.html
     index_cards = ""
     for item in portavasos_data:
-        mesa_badge = f"MESA {item['mesa']}" if item['mesa'] > 0 else "EXTRA"
-        silla_lbl = f"Silla {item['silla']}" if item['mesa'] > 0 else f"Extra #{item['silla']}"
+        mesa_badge = f"MESA {item['mesa']}" if item['mesa'] else "EXTRA"
+        silla_lbl = f"Silla {item['silla']}" if item['mesa'] else f"Extra #{item['qr_id']}"
         index_cards += f"""
         <div class="grid-card">
           <div class="card-badge">{mesa_badge} · {silla_lbl}</div>
@@ -391,7 +359,7 @@ def main():
             <img src="data:image/png;base64,{item['qr_b64']}" alt="{item['qr_id']}" class="grid-qr">
           </a>
           <div class="card-code">{item['qr_id']}</div>
-          <div class="card-area">{item['icono']} {item['nombre_area']}</div>
+          <div class="card-area">{item['area_nombre']}</div>
           <div class="card-actions">
             <a href="{item['html']}" class="btn-sm">Ver Tarjeta</a>
             <a href="{item['card_png']}" download class="btn-sm btn-green">Descargar PNG</a>
@@ -526,8 +494,8 @@ def main():
   <div class="container">
     <div class="header">
       <div>
-        <div class="title"><span>🌴</span> Portavasos QR Individuales</div>
-        <div class="subtitle">15 lugares disponibles (Palapa 12 sillas + 3 Pool Extras). Abre cualquier tarjeta para tus ejercicios.</div>
+        <div class="title"><span>🌴</span> Portavasos QR Generados desde PostgreSQL</div>
+        <div class="subtitle">Sincronizado con la tabla `sillas`. Total: {len(portavasos_data)} sillas activas.</div>
       </div>
     </div>
     <div class="grid">
@@ -541,8 +509,9 @@ def main():
     with open(index_filepath, "w", encoding="utf-8") as f:
         f.write(index_html)
 
-    print(f"\n🎉 ¡Proceso finalizado con éxito!")
-    print(f"📂 Archivos PNG generados directamente en: {output_dir}")
+    print(f"\n🎉 ¡Catálogo regenerado con éxito directamente desde la base de datos PostgreSQL!")
+    return len(portavasos_data)
 
 if __name__ == "__main__":
-    main()
+    url_arg = sys.argv[1] if len(sys.argv) > 1 else None
+    generar_catalogo_completo(base_url=url_arg)
