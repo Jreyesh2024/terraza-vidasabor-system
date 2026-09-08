@@ -2,9 +2,10 @@
 # -*- coding: utf-8 -*-
 """
 ============================================================================
-LA TERRAZA DE VIDA & SABOR (V&S) - GENERADOR DE QRS PARA PORTAVASOS
+LA TERRAZA DE VIDA & SABOR (V&S) - GENERADOR DE QRS PARA PORTAVASOS v2
 Genera códigos QR de alta resolución (PNG) y un catálogo visual HTML listo
 para imprimir y escanear desde teléfonos móviles.
+Schema v2: Palapa (M1..M3) + Sillas 1..4 + Pool Extras (EX-01..EX-03).
 ============================================================================
 """
 
@@ -15,52 +16,60 @@ import io
 import qrcode
 from PIL import Image
 
-# URL Base de Anvil oficial
-DEFAULT_BASE_URL = "https://impeccable-fruitful-beaver.anvil.app/#menu"
+DEFAULT_BASE_URL = "https://impeccable-fruitful-beaver.anvil.app"
 
-# Configuración de las 3 Mesas y 12 Sillas
+# Configuración de las 3 Mesas Palapa (12 Sillas) + 3 Extras Pool
 MESAS_CONFIG = [
     {
         "mesa": 1,
-        "nombre_area": "Terraza Jardín",
-        "icono": "🌿",
+        "nombre_area": "Palapa Principal",
+        "icono": "🌴",
         "sillas": [
-            {"silla": 1, "qr_id": "PV-011", "etiqueta": "Comensal 1"},
-            {"silla": 2, "qr_id": "PV-012", "etiqueta": "Comensal 2"},
-            {"silla": 3, "qr_id": "PV-013", "etiqueta": "Comensal 3"},
-            {"silla": 4, "qr_id": "PV-014", "etiqueta": "Comensal 4"},
+            {"silla": 1, "qr_id": "PV-P-01-01", "etiqueta": "Silla 1"},
+            {"silla": 2, "qr_id": "PV-P-01-02", "etiqueta": "Silla 2"},
+            {"silla": 3, "qr_id": "PV-P-01-03", "etiqueta": "Silla 3"},
+            {"silla": 4, "qr_id": "PV-P-01-04", "etiqueta": "Silla 4"},
         ]
     },
     {
         "mesa": 2,
-        "nombre_area": "Terraza Principal (Familia)",
+        "nombre_area": "Palapa Central (Familia)",
         "icono": "👨‍👩‍👧‍👦",
         "sillas": [
-            {"silla": 1, "qr_id": "PV-021", "etiqueta": "Papá / Titular"},
-            {"silla": 2, "qr_id": "PV-022", "etiqueta": "Mamá"},
-            {"silla": 3, "qr_id": "PV-023", "etiqueta": "Niño 1"},
-            {"silla": 4, "qr_id": "PV-024", "etiqueta": "Niño 2"},
+            {"silla": 1, "qr_id": "PV-P-02-01", "etiqueta": "Silla 1"},
+            {"silla": 2, "qr_id": "PV-P-02-02", "etiqueta": "Silla 2"},
+            {"silla": 3, "qr_id": "PV-P-02-03", "etiqueta": "Silla 3"},
+            {"silla": 4, "qr_id": "PV-P-02-04", "etiqueta": "Silla 4"},
         ]
     },
     {
         "mesa": 3,
-        "nombre_area": "Palapa Central",
-        "icono": "🏖️",
+        "nombre_area": "Palapa Jardín",
+        "icono": "🌿",
         "sillas": [
-            {"silla": 1, "qr_id": "PV-031", "etiqueta": "Comensal 1"},
-            {"silla": 2, "qr_id": "PV-032", "etiqueta": "Comensal 2"},
-            {"silla": 3, "qr_id": "PV-033", "etiqueta": "Comensal 3"},
-            {"silla": 4, "qr_id": "PV-034", "etiqueta": "Comensal 4"},
+            {"silla": 1, "qr_id": "PV-P-03-01", "etiqueta": "Silla 1"},
+            {"silla": 2, "qr_id": "PV-P-03-02", "etiqueta": "Silla 2"},
+            {"silla": 3, "qr_id": "PV-P-03-03", "etiqueta": "Silla 3"},
+            {"silla": 4, "qr_id": "PV-P-03-04", "etiqueta": "Silla 4"},
+        ]
+    },
+    {
+        "mesa": 0,
+        "nombre_area": "Pool Extras / Comodines",
+        "icono": "⭐",
+        "sillas": [
+            {"silla": 1, "qr_id": "PV-P-EX-01", "etiqueta": "Extra 1"},
+            {"silla": 2, "qr_id": "PV-P-EX-02", "etiqueta": "Extra 2"},
+            {"silla": 3, "qr_id": "PV-P-EX-03", "etiqueta": "Extra 3"},
         ]
     }
 ]
 
 def build_qr_url(base_url, mesa, silla, qr_id):
-    sep = "?" if "?" not in base_url else "&"
-    if "#" in base_url:
-        return f"{base_url}{sep}mesa={mesa}&silla={silla}&qr={qr_id}"
-    else:
-        return f"{base_url}#menu?mesa={mesa}&silla={silla}&qr={qr_id}"
+    clean_base = base_url.rstrip("/")
+    if mesa == 0:
+        return f"{clean_base}#qr={qr_id}"
+    return f"{clean_base}#mesa={mesa}&silla={silla}&qr={qr_id}"
 
 def generar_qr_png(url):
     qr = qrcode.QRCode(
@@ -71,7 +80,7 @@ def generar_qr_png(url):
     )
     qr.add_data(url)
     qr.make(fit=True)
-    img = qr.make_image(fill_color="#0f172a", back_color="#ffffff")
+    img = qr.make_image(fill_color="#090d16", back_color="#ffffff")
     return img
 
 def main():
@@ -93,7 +102,7 @@ def main():
             qr_url = build_qr_url(base_url, mesa, silla, qr_id)
             
             img = generar_qr_png(qr_url)
-            filename = f"qr_mesa_{mesa}_silla_{silla}_{qr_id}.png"
+            filename = f"{qr_id}.png"
             filepath = os.path.join(output_dir, filename)
             img.save(filepath)
 
@@ -113,24 +122,27 @@ def main():
                 "filename": filename
             })
 
-            print(f"  ✅ Mesa {mesa} · Silla {silla} ({qr_id}) -> {filename}")
+            mesa_lbl = f"Mesa {mesa}" if mesa > 0 else "Pool Extra"
+            print(f"  ✅ {mesa_lbl} · Silla {silla} ({qr_id}) -> {filename}")
 
     # Generar archivo HTML interactivo e imprimible
     html_path = os.path.join(os.path.dirname(__file__), "..", "qrs_portavasos_la_terraza.html")
     
     cards_html = ""
     for item in portavasos_data:
+        mesa_badge = f"MESA {item['mesa']}" if item['mesa'] > 0 else "EXTRA POOL"
+        silla_lbl = f"SILLA {item['silla']}" if item['mesa'] > 0 else f"EXTRA #{item['silla']}"
         cards_html += f"""
         <div class="pv-card" data-mesa="{item['mesa']}" data-silla="{item['silla']}" data-qr="{item['qr_id']}">
           <div class="pv-header">
             <div class="pv-brand">
-              <span class="pv-logo-icon">🌿</span>
+              <span class="pv-logo-icon">🌴</span>
               <div>
                 <div class="pv-title">LA TERRAZA</div>
-                <div class="pv-subtitle">VIDA & SABOR</div>
+                <div class="pv-subtitle">VIDA &amp; SABOR</div>
               </div>
             </div>
-            <div class="pv-badge">MESA {item['mesa']}</div>
+            <div class="pv-badge">{mesa_badge}</div>
           </div>
           
           <div class="pv-body">
@@ -138,15 +150,15 @@ def main():
               <img id="img_qr_{item['mesa']}_{item['silla']}" src="data:image/png;base64,{item['b64']}" alt="QR Portavasos {item['qr_id']}" class="pv-qr-img" />
             </div>
             <div class="pv-info">
-              <div class="pv-silla">SILLA {item['silla']} <span class="pv-tag">{item['etiqueta']}</span></div>
-              <div class="pv-code">PORTAVASOS #{item['qr_id']}</div>
+              <div class="pv-silla">{silla_lbl} <span class="pv-tag">{item['etiqueta']}</span></div>
+              <div class="pv-code">{item['qr_id']}</div>
               <div class="pv-area">{item['icono']} {item['nombre_area']}</div>
             </div>
           </div>
 
           <div class="pv-footer">
             <div class="pv-instruction">
-              <i class="fa-solid fa-camera"></i> Escanea con tu celular para abrir Menú Digital y ordenar
+              <i class="fa-solid fa-camera"></i> Escanea con tu celular para ordenar
             </div>
             <div class="pv-url-preview" id="url_lbl_{item['mesa']}_{item['silla']}">{item['url']}</div>
           </div>
@@ -261,6 +273,7 @@ def main():
       display: flex;
       gap: 10px;
       margin-bottom: 20px;
+      flex-wrap: wrap;
     }}
     .filter-btn {{
       background: #1e293b;
@@ -466,8 +479,8 @@ def main():
   <!-- TOOLBAR INTERACTIVA -->
   <div class="toolbar">
     <div>
-      <h1><span>☕</span> Portavasos QR - La Terraza de Vida & Sabor</h1>
-      <p>Códigos QR físicos para ordenar directo a cada comensal y silla.</p>
+      <h1><span>🌴</span> Portavasos QR - La Terraza de Vida &amp; Sabor</h1>
+      <p>15 códigos QR oficiales: Palapa (12 sillas regulares) + 3 Pool Extras.</p>
     </div>
     
     <div class="url-config-box">
@@ -483,10 +496,11 @@ def main():
 
   <!-- FILTROS POR MESA -->
   <div class="filter-tabs">
-    <button class="filter-btn active" onclick="filtrarMesa('all', this)">Todas las Mesas (12 Sillas)</button>
-    <button class="filter-btn" onclick="filtrarMesa('1', this)">🌿 Mesa 1 (4)</button>
+    <button class="filter-btn active" onclick="filtrarMesa('all', this)">Todas las Sillas (15)</button>
+    <button class="filter-btn" onclick="filtrarMesa('1', this)">🌴 Mesa 1 (4)</button>
     <button class="filter-btn" onclick="filtrarMesa('2', this)">👨‍👩‍👧‍👦 Mesa 2 (4)</button>
-    <button class="filter-btn" onclick="filtrarMesa('3', this)">🏖️ Mesa 3 (4)</button>
+    <button class="filter-btn" onclick="filtrarMesa('3', this)">🌿 Mesa 3 (4)</button>
+    <button class="filter-btn" onclick="filtrarMesa('0', this)">⭐ Pool Extras (3)</button>
   </div>
 
   <!-- GRID DE TARJETAS PORTAVASOS -->
@@ -497,12 +511,11 @@ def main():
 
 <script>
   function buildUrl(baseUrl, mesa, silla, qrId) {{
-    var sep = baseUrl.includes('?') ? '&' : '?';
-    if (baseUrl.includes('#')) {{
-      return baseUrl + sep + 'mesa=' + mesa + '&silla=' + silla + '&qr=' + qrId;
-    }} else {{
-      return baseUrl + '#menu?mesa=' + mesa + '&silla=' + silla + '&qr=' + qrId;
+    var cleanBase = baseUrl.replace(/\\/$/, '');
+    if (mesa == 0) {{
+      return cleanBase + '#qr=' + qrId;
     }}
+    return cleanBase + '#mesa=' + mesa + '&silla=' + silla + '&qr=' + qrId;
   }}
 
   function actualizarTodosQRs() {{
@@ -522,14 +535,13 @@ def main():
       var urlLbl = document.getElementById('url_lbl_' + mesa + '_' + silla);
       if (urlLbl) urlLbl.innerText = newUrl;
 
-      // Generar nuevo QR dinámicamente con QRCode.js
       var qrWrapper = card.querySelector('.pv-qr-wrapper');
       qrWrapper.innerHTML = '';
       new QRCode(qrWrapper, {{
         text: newUrl,
         width: 102,
         height: 102,
-        colorDark: "#0f172a",
+        colorDark: "#090d16",
         colorLight: "#ffffff",
         correctLevel: QRCode.CorrectLevel.H
       }});
