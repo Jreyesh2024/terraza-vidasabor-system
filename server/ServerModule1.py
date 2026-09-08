@@ -172,4 +172,22 @@ def get_dashboard_kpis_terraza():
         print("Uplink get_dashboard_kpis error:", e)
         return {}
 
+@anvil.server.callable
+def liberar_buffer_mesa(mesa_id):
+    """Fuerza la liberación y envío inmediato del buffer de la mesa dada"""
+    try:
+        return anvil.server.call('uplink_liberar_buffer_mesa', mesa_id)
+    except Exception as e:
+        print("Uplink liberar_buffer_mesa error:", e)
+        return {"error": str(e)}
+
+@anvil.server.callable
+def get_estado_buffer_mesa(mesa_id):
+    """Consulta el estado del buffer de la mesa dada"""
+    try:
+        return anvil.server.call('uplink_get_estado_buffer_mesa', mesa_id)
+    except Exception as e:
+        print("Uplink get_estado_buffer_mesa error:", e)
+        return {"error": str(e)}
+
 

@@ -22,7 +22,7 @@ Cambios v2 respecto a v1:
 import os
 import random
 from decimal import Decimal
-from datetime import datetime, date
+from datetime import datetime, date, timezone, timedelta
 import psycopg2
 from psycopg2.extras import RealDictCursor, Json
 import anvil.server
@@ -499,6 +499,9 @@ def _construir_dict_cuentas_desde_db():
                     "abiertaAt": r["abierta_at"].isoformat() if r["abierta_at"] else None,
                 }
 
+            # 1.1 Procesar automáticamente buffers que hayan cumplido los 5 minutos
+            _procesar_todos_los_buffers_vencidos(cur, ventana_segundos=300)
+
             # 2. Cargar items reales de detalle_comanda para sesiones vivas
             cur.execute("""
                 SELECT 
@@ -605,15 +608,13 @@ def uplink_get_cuentas_terraza():
 @anvil.server.callable('checkin_silla_qr')
 @anvil.server.callable('uplink_checkin_silla_qr')
 def uplink_checkin_silla_qr(mesa_id, silla_id, qr_id='', qr_previo=None):
-    """Cliente escaneó QR → abre ocupacion en BD (origen='qr').
-    Políticas:
-      - Silla libre + sin qr_previo: check-in normal.
+    """Cliente escaneó QR → abre u adopta ocupacion en BD (origen='qr').
+    Políticas amigables:
+      - Silla libre: abre nueva ocupación.
+      - Silla ya activada previamente (por mesero o por el mismo comensal):
+        se enlaza limpiamente y actualiza origen a 'qr', sin bloquear al cliente.
       - Silla libre + qr_previo distinto: cambio de lugar silencioso (cierra
         la ocupación del qr_previo, abre la nueva).
-      - Silla ocupada + qr_previo COINCIDE con la silla: "es yo mismo",
-        bienvenida normal (idempotente).
-      - Silla ocupada + qr_previo NO coincide (o falta): CONFLICTO — crea
-        llamada al mesero y retorna error 'silla_ocupada_por_otro'.
     """
     conn = get_db_connection()
     try:
@@ -630,47 +631,35 @@ def uplink_checkin_silla_qr(mesa_id, silla_id, qr_id='', qr_previo=None):
 
             # ¿Esa silla ya tiene ocupación activa?
             cur.execute("""
-                SELECT id FROM ocupaciones_silla
+                SELECT id, origen, sesion_mesa_id FROM ocupaciones_silla
                 WHERE silla_id = %s AND cerrada_at IS NULL LIMIT 1;
             """, (int(silla_row['silla_id']),))
-            silla_ya_ocupada = cur.fetchone() is not None
+            ocup_row = cur.fetchone()
 
-            es_yo_mismo = bool(qr_previo) and qr_previo == silla_row['codigo_qr']
+            if ocup_row:
+                # Si ya estaba abierta (por mesero o refresco del cliente):
+                # La adoptamos de manera transparente y actualizamos el origen a 'qr'
+                cur.execute("""
+                    UPDATE ocupaciones_silla
+                    SET origen = 'qr'
+                    WHERE id = %s;
+                """, (int(ocup_row['id']),))
+                was_new = False
+                _ocup_id = int(ocup_row['id'])
+                _sesion_id = int(ocup_row['sesion_mesa_id'])
+            else:
+                # Cambio de lugar silencioso: cierro la ocupación del QR anterior si viene de otra silla
+                if qr_previo and qr_previo != silla_row['codigo_qr']:
+                    _cerrar_ocupacion_por_qr(cur, qr_previo)
 
-            if silla_ya_ocupada and not es_yo_mismo:
-                # CONFLICTO: silla ocupada por otro comensal. Crea alerta.
-                llamada_id = _crear_llamada_conflicto(
-                    cur, silla_row['silla_id'],
-                    notas=f"Escaneo conflictivo desde teléfono. qr_previo={qr_previo or 'ninguno'}"
+                _ocup_id, _sesion_id, was_new = _abrir_ocupacion_silla(
+                    cur,
+                    silla_id=silla_row['silla_id'],
+                    mesa_id=silla_row['mesa_id'],
+                    origen='qr',
                 )
-                conn.commit()
-                print(f"⚠️  [UPLINK] CONFLICTO silla ocupada: "
-                      f"qr={silla_row['codigo_qr']} qr_previo={qr_previo} "
-                      f"→ llamada mesero #{llamada_id}")
-                return {
-                    "error": "silla_ocupada_por_otro",
-                    "ya_ocupada": True,
-                    "qrId": silla_row['codigo_qr'],
-                    "llamada_id": llamada_id,
-                }
-
-            # Cambio de lugar silencioso: cierro la ocupación del QR anterior
-            # (si viene, no coincide con esta silla, y la silla anterior existe).
-            if qr_previo and qr_previo != silla_row['codigo_qr']:
-                _cerrar_ocupacion_por_qr(cur, qr_previo)
-
-            _ocup_id, _sesion_id, was_new = _abrir_ocupacion_silla(
-                cur,
-                silla_id=silla_row['silla_id'],
-                mesa_id=silla_row['mesa_id'],
-                origen='qr',
-            )
         conn.commit()
-        estado_txt = (
-            "MISMA SESIÓN" if es_yo_mismo else
-            "CAMBIO DE LUGAR (silencioso)" if qr_previo else
-            "NUEVA OCUPACIÓN"
-        )
+        estado_txt = "ADOPCIÓN / RECONEXIÓN" if not was_new else ("CAMBIO DE LUGAR" if qr_previo else "NUEVA OCUPACIÓN")
         print(f"🔔 [UPLINK] Check-in QR: silla_id={silla_row['silla_id']} "
               f"(qr={silla_row['codigo_qr']}) → {estado_txt}")
     except Exception as e:
@@ -684,7 +673,7 @@ def uplink_checkin_silla_qr(mesa_id, silla_id, qr_id='', qr_previo=None):
            if not silla_row['es_adicional']
            else f"EX-{silla_row['codigo_qr'].split('-')[-1]}")
     result = dict(all_cuentas.get(key, {}))
-    result["ya_ocupada"] = (not was_new)
+    result["ya_ocupada"] = False  # Para el cliente en móvil, siempre entra directo al menú
     return result
 
 
@@ -1004,6 +993,7 @@ def uplink_agregar_item_a_comanda(
 
             # Snapshot del producto
             snap = _snapshot_producto(cur, producto_id)
+            estacion_id = snap.get('estacion_id') or 1
 
             cur.execute("""
                 INSERT INTO detalle_comanda (
@@ -1022,7 +1012,7 @@ def uplink_agregar_item_a_comanda(
                 None if es_al_centro else silla_para_row['silla_id'],
                 silla_pedido_por_row['silla_id'],
                 es_al_centro,
-                'comida',  # tipo_consumo — Bloque D lo puede refinar según categoría
+                'bebida' if estacion_id == 3 else 'comida',
                 cantidad,
                 snap['precio'], snap['nombre'],
                 Json(extras or []),
@@ -1031,13 +1021,21 @@ def uplink_agregar_item_a_comanda(
                 notas_cliente or '',
             ))
             row = cur.fetchone()
+            detalle_id = int(row['id'])
+
+            # Registrar en buffer_pre_envio para la ventana de consolidación por mesa
+            cur.execute("""
+                INSERT INTO buffer_pre_envio (detalle_comanda_id, sesion_mesa_id, estacion_id, creado_at)
+                VALUES (%s, %s, %s, NOW())
+                ON CONFLICT (detalle_comanda_id) DO NOTHING;
+            """, (detalle_id, sesion_id, estacion_id))
         conn.commit()
-        print(f"➕ [UPLINK] Item agregado: {snap['nombre']} x{cantidad} "
+        print(f"➕ [UPLINK] Item agregado al buffer: {snap['nombre']} x{cantidad} "
               f"→ {'AL CENTRO' if es_al_centro else f'Silla {para_silla_num}'} "
               f"(pedido por Silla {silla_num_pedido_por}) [comanda #{comanda_id}]")
         return {
             "ok": True,
-            "detalle_id": int(row['id']),
+            "detalle_id": detalle_id,
             "comanda_id": comanda_id,
             "precio_unitario": float(row['precio_unitario_snapshot']),
             "subtotal": float(row['subtotal']),
@@ -1140,65 +1138,208 @@ def uplink_get_items_por_silla(mesa_num, silla_num):
         conn.close()
 
 
+# ============================================================================
+# BUFFER INTELIGENTE & CONSOLIDACIÓN CON MERGE EN FILA (Bloque D)
+# ============================================================================
+
+def _consolidar_detalle_ids_con_merge(cur, detalle_ids):
+    """Consolida lista de detalle_ids agrupando por (sesion_mesa_id, estacion_id).
+    Regla de Merge Inteligente:
+    Si la mesa ya tiene un ticket en espera en esa estación (timestamp_en_preparacion IS NULL),
+    incorpora los nuevos items a ese ticket existente para que salgan juntos."""
+    if not detalle_ids:
+        return []
+    cur.execute("""
+        SELECT d.id, d.comanda_id, c.sesion_mesa_id, COALESCE(p.estacion_id, 1) AS estacion_id
+        FROM detalle_comanda d
+        JOIN comandas c ON d.comanda_id = c.id
+        JOIN productos_menu p ON d.producto_id = p.id
+        WHERE d.id = ANY(%s) AND d.estado = 'borrador';
+    """, ([int(x) for x in detalle_ids],))
+    candidatos = cur.fetchall()
+    if not candidatos:
+        return []
+
+    grupos = {}
+    for c in candidatos:
+        key = (int(c['sesion_mesa_id']), int(c['estacion_id']))
+        grupos.setdefault(key, []).append(int(c['id']))
+
+    envios_procesados = []
+    for (sesion_id, estacion_id), item_ids in grupos.items():
+        # 1. ¿Existe ya un ticket en espera para esta mesa en esta estación?
+        cur.execute("""
+            SELECT id FROM envios_cocina
+            WHERE sesion_mesa_id = %s AND estacion_id = %s
+              AND timestamp_en_preparacion IS NULL AND timestamp_listo IS NULL
+            ORDER BY timestamp_envio DESC LIMIT 1;
+        """, (sesion_id, estacion_id))
+        envio_existente = cur.fetchone()
+
+        if envio_existente:
+            envio_id = int(envio_existente['id'])
+            es_merge = True
+        else:
+            cur.execute("""
+                INSERT INTO envios_cocina (sesion_mesa_id, estacion_id, timestamp_envio)
+                VALUES (%s, %s, NOW()) RETURNING id;
+            """, (sesion_id, estacion_id))
+            envio_id = int(cur.fetchone()['id'])
+            es_merge = False
+
+        cur.execute("""
+            UPDATE detalle_comanda
+            SET envio_cocina_id = %s,
+                estado = 'enviado_cocina',
+                hora_enviado_cocina = NOW()
+            WHERE id = ANY(%s);
+        """, (envio_id, item_ids))
+
+        cur.execute("""
+            UPDATE buffer_pre_envio
+            SET consolidado_en_envio_id = %s
+            WHERE detalle_comanda_id = ANY(%s);
+        """, (envio_id, item_ids))
+
+        envios_procesados.append({
+            "envio_id": envio_id,
+            "estacion_id": estacion_id,
+            "sesion_id": sesion_id,
+            "item_ids": item_ids,
+            "es_merge": es_merge,
+        })
+    return envios_procesados
+
+
+def _procesar_buffer_sesion(cur, sesion_mesa_id, forzar=False, ventana_segundos=300):
+    """Revisa y consolida los items en buffer de una sesión de mesa.
+    Si forzar=True o han transcurrido ventana_segundos desde el primer item, consolida."""
+    cur.execute("""
+        SELECT b.detalle_comanda_id, b.creado_at
+        FROM buffer_pre_envio b
+        JOIN detalle_comanda d ON b.detalle_comanda_id = d.id
+        WHERE b.sesion_mesa_id = %s AND b.consolidado_en_envio_id IS NULL AND d.estado = 'borrador'
+        ORDER BY b.creado_at ASC;
+    """, (int(sesion_mesa_id),))
+    rows = cur.fetchall()
+    if not rows:
+        return {"enviados": 0, "envios": [], "segundos_restantes": 0, "items_en_buffer": 0}
+
+    ahora = datetime.now(timezone.utc)
+    primer_creado = rows[0]['creado_at']
+    if primer_creado.tzinfo is None:
+        primer_creado = primer_creado.replace(tzinfo=timezone.utc)
+
+    transcurridos = (ahora - primer_creado).total_seconds()
+    segundos_restantes = max(0, int(ventana_segundos - transcurridos))
+
+    if forzar or transcurridos >= ventana_segundos:
+        item_ids = [r['detalle_comanda_id'] for r in rows]
+        envios = _consolidar_detalle_ids_con_merge(cur, item_ids)
+        return {
+            "enviados": len(item_ids),
+            "envios": envios,
+            "segundos_restantes": 0,
+            "consolidado": True,
+            "items_en_buffer": 0,
+        }
+
+    return {
+        "enviados": 0,
+        "envios": [],
+        "segundos_restantes": segundos_restantes,
+        "consolidado": False,
+        "items_en_buffer": len(rows),
+    }
+
+
+def _procesar_todos_los_buffers_vencidos(cur, ventana_segundos=300):
+    """Busca todas las sesiones con items en buffer que ya superaron los 5 minutos y los consolida."""
+    cur.execute("""
+        SELECT DISTINCT b.sesion_mesa_id
+        FROM buffer_pre_envio b
+        JOIN detalle_comanda d ON b.detalle_comanda_id = d.id
+        WHERE b.consolidado_en_envio_id IS NULL AND d.estado = 'borrador'
+          AND b.creado_at <= (NOW() - (INTERVAL '1 second' * %s));
+    """, (int(ventana_segundos),))
+    sesiones = cur.fetchall()
+    total_enviados = 0
+    for s in sesiones:
+        res = _procesar_buffer_sesion(cur, s['sesion_mesa_id'], forzar=True, ventana_segundos=ventana_segundos)
+        total_enviados += res.get('enviados', 0)
+    if total_enviados > 0:
+        print(f"⏱️  [BUFFER] Auto-consolidados {total_enviados} items por vencimiento de ventana (5 min).")
+    return total_enviados
+
+
 @anvil.server.callable('enviar_items_a_cocina')
 @anvil.server.callable('uplink_enviar_items_a_cocina')
 def uplink_enviar_items_a_cocina(detalle_ids):
     """Toma una lista de detalle_comanda_ids en estado 'borrador' y los envía
-    a cocina. Agrupa por estación → crea 1 envio_cocina por estación → asigna.
-    Versión simple SIN buffer inteligente (eso es Bloque D)."""
+    a cocina/barra aplicando la consolidación y merge inteligente por estación."""
     if not detalle_ids:
         return {"ok": True, "enviados": 0, "envios": []}
-    ids_list = [int(x) for x in detalle_ids]
     conn = get_db_connection()
-    envios_creados = []
     try:
         with conn.cursor() as cur:
-            # Obtener items válidos (estado borrador) + su estacion via producto
-            cur.execute("""
-                SELECT d.id, d.comanda_id, c.sesion_mesa_id, p.estacion_id
-                FROM detalle_comanda d
-                JOIN comandas c ON d.comanda_id = c.id
-                JOIN productos_menu p ON d.producto_id = p.id
-                WHERE d.id = ANY(%s) AND d.estado = 'borrador';
-            """, (ids_list,))
-            candidatos = cur.fetchall()
-            if not candidatos:
-                return {"ok": True, "enviados": 0, "envios": [],
-                        "aviso": "ningún item en estado borrador"}
-            # Agrupar por (sesion_id, estacion_id)
-            grupos = {}
-            for c in candidatos:
-                if c['estacion_id'] is None:
-                    continue  # skip items sin estación asignada
-                key = (int(c['sesion_mesa_id']), int(c['estacion_id']))
-                grupos.setdefault(key, []).append(int(c['id']))
-            # Por cada grupo, crear envio_cocina y marcar items
-            for (sesion_id, estacion_id), item_ids in grupos.items():
-                cur.execute("""
-                    INSERT INTO envios_cocina (sesion_mesa_id, estacion_id)
-                    VALUES (%s, %s) RETURNING id;
-                """, (sesion_id, estacion_id))
-                envio_id = int(cur.fetchone()['id'])
-                cur.execute("""
-                    UPDATE detalle_comanda
-                    SET envio_cocina_id = %s,
-                        estado = 'enviado_cocina',
-                        hora_enviado_cocina = NOW()
-                    WHERE id = ANY(%s);
-                """, (envio_id, item_ids))
-                envios_creados.append({
-                    "envio_id": envio_id,
-                    "estacion_id": estacion_id,
-                    "item_ids": item_ids,
-                })
+            envios = _consolidar_detalle_ids_con_merge(cur, detalle_ids)
         conn.commit()
-        total = sum(len(e['item_ids']) for e in envios_creados)
-        print(f"🍳 [UPLINK] Enviados a cocina: {total} items en "
-              f"{len(envios_creados)} envío(s).")
-        return {"ok": True, "enviados": total, "envios": envios_creados}
+        total = sum(len(e['item_ids']) for e in envios)
+        print(f"🍳 [UPLINK] Enviados a cocina/barra: {total} items en {len(envios)} ticket(s).")
+        return {"ok": True, "enviados": total, "envios": envios}
     except Exception as e:
         conn.rollback()
         print(f"[UPLINK] Error en enviar_items_a_cocina: {e}")
+        return {"error": str(e)}
+    finally:
+        conn.close()
+
+
+@anvil.server.callable('liberar_buffer_mesa')
+@anvil.server.callable('uplink_liberar_buffer_mesa')
+def uplink_liberar_buffer_mesa(mesa_id):
+    """Fuerza la liberación y envío inmediato de todos los items en buffer de esa mesa."""
+    conn = get_db_connection()
+    try:
+        with conn.cursor() as cur:
+            cur.execute("""
+                SELECT id FROM sesiones_mesa
+                WHERE mesa_id = %s AND cerrada_at IS NULL
+                ORDER BY abierta_at DESC LIMIT 1;
+            """, (int(mesa_id),))
+            sesion = cur.fetchone()
+            if not sesion:
+                return {"ok": False, "error": "No hay sesión activa en esta mesa"}
+            res = _procesar_buffer_sesion(cur, sesion['id'], forzar=True)
+        conn.commit()
+        print(f"🚀 [UPLINK] Buffer liberado manualmente para Mesa {mesa_id}: {res.get('enviados', 0)} items.")
+        return {"ok": True, **res}
+    except Exception as e:
+        conn.rollback()
+        print(f"[UPLINK] Error en liberar_buffer_mesa: {e}")
+        return {"error": str(e)}
+    finally:
+        conn.close()
+
+
+@anvil.server.callable('get_estado_buffer_mesa')
+@anvil.server.callable('uplink_get_estado_buffer_mesa')
+def uplink_get_estado_buffer_mesa(mesa_id):
+    """Consulta el estado del buffer (ítems acumulados y segundos restantes) de la mesa."""
+    conn = get_db_connection()
+    try:
+        with conn.cursor() as cur:
+            cur.execute("""
+                SELECT id FROM sesiones_mesa
+                WHERE mesa_id = %s AND cerrada_at IS NULL
+                ORDER BY abierta_at DESC LIMIT 1;
+            """, (int(mesa_id),))
+            sesion = cur.fetchone()
+            if not sesion:
+                return {"items_en_buffer": 0, "segundos_restantes": 0}
+            res = _procesar_buffer_sesion(cur, sesion['id'], forzar=False)
+            return res
+    except Exception as e:
         return {"error": str(e)}
     finally:
         conn.close()
