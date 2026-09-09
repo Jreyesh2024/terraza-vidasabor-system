@@ -25,9 +25,18 @@ class Menu(MenuTemplate):
         self._silla_destino_num = None
         self._timer_llamada = None
         self._llamada_id_pollend = None
+        self._vista_actual = "bienvenida"
 
         self.set_event_handler("show", self.form_show)
         self.set_event_handler("hide", self.form_hide)
+
+        # Timer en vivo para sincronización de estados de comanda / cocina
+        try:
+            self._timer_live_sync = anvil.Timer(interval=3.5)
+            self._timer_live_sync.set_event_handler('tick', self._on_live_sync_tick)
+            self.add_component(self._timer_live_sync)
+        except Exception:
+            pass
 
     # ─────────────────────────── ciclo de vida ───────────────────────────
     def form_show(self, **event_args):
@@ -47,6 +56,15 @@ class Menu(MenuTemplate):
             except Exception:
                 pass
             self._timer_llamada = None
+
+    def _on_live_sync_tick(self, **event_args):
+        try:
+            if getattr(self, "_vista_actual", None) == "comanda":
+                self._render_mi_comanda()
+            elif getattr(self, "_vista_actual", None) == "bienvenida":
+                self._render_bienvenida()
+        except Exception:
+            pass
 
     # ─────────────────── event delegation (Python owns) ──────────────────
     def _bind_events(self):
@@ -278,12 +296,128 @@ class Menu(MenuTemplate):
         """
         self._reemplazar_contenido(html)
 
+    def _banner_estado_pedido_html(self, mesa, silla):
+        try:
+            data = anvil.server.call("get_items_por_silla", mesa, silla) or {}
+        except Exception:
+            data = {}
+
+        indiv = data.get("items_individuales", []) or []
+        centro = data.get("items_al_centro", []) or []
+        todos = indiv + centro
+
+        # Filtrar items activos enviados a cocina
+        activos = [i for i in todos if str(i.get("estado")) not in ("borrador", "cancelado", "servido")]
+        if not activos:
+            return ""
+
+        hay_listo = any(str(i.get("estado")) == "listo" for i in activos)
+        hay_preparando = any(str(i.get("estado")) == "en_preparacion" for i in activos)
+        hay_buffer = any(str(i.get("estado")) == "en_buffer" for i in activos)
+
+        if hay_listo:
+            badge_text = "🛎️ LISTO EN PASE"
+            badge_color = "#38bdf8"
+            badge_bg = "rgba(2, 132, 199, 0.2)"
+            border_color = "#0284c7"
+            titulo = "¡Tu pedido está Listo!"
+            sub = "Listo en barra/pase. Tu mesero te lo llevará a tu mesa en unos instantes."
+            step1_done = True
+            step2_done = True
+            step3_done = True
+        elif hay_preparando:
+            badge_text = "🔥 EN PREPARACIÓN (EN FUEGO)"
+            badge_color = "#fbbf24"
+            badge_bg = "rgba(245, 158, 11, 0.2)"
+            border_color = "#f59e0b"
+            titulo = "Preparando tu pedido"
+            sub = "El personal de Barra y Cocina ya lo está elaborando."
+            step1_done = True
+            step2_done = True
+            step3_done = False
+        elif hay_buffer:
+            badge_text = "⏳ AGRUPANDO EN BUFFER (5 MIN)"
+            badge_color = "#38bdf8"
+            badge_bg = "rgba(56, 189, 248, 0.2)"
+            border_color = "#38bdf8"
+            titulo = "Agrupando comanda de tu mesa"
+            sub = "Margen de 5 min para sincronizar bebidas con tus acompañantes."
+            step1_done = True
+            step2_done = False
+            step3_done = False
+        else:
+            badge_text = "🟢 EN FILA DE ESPERA"
+            badge_color = "#34d399"
+            badge_bg = "rgba(16, 185, 129, 0.2)"
+            border_color = "#10b981"
+            titulo = "Comanda en Fila de Espera"
+            sub = "Tu orden fue recibida por Barra / Cocina y está en turno para preparación."
+            step1_done = True
+            step2_done = False
+            step3_done = False
+
+        resumen_items = ", ".join(f"{i.get('cantidad',1)}× {i.get('producto_nombre_snapshot','Item')}" for i in activos[:3])
+        if len(activos) > 3:
+            resumen_items += f" y {len(activos) - 3} más..."
+
+        s1_bg = "#10b981" if step1_done else "#334155"
+        s1_tx = "#34d399" if step1_done else "#64748b"
+        s2_bg = "#f59e0b" if step2_done else "#334155"
+        s2_tx = "#fbbf24" if step2_done else "#64748b"
+        s3_bg = "#0284c7" if step3_done else "#334155"
+        s3_tx = "#38bdf8" if step3_done else "#64748b"
+
+        return f"""
+        <div data-action="tab" data-args="comanda" style="margin-bottom:14px;border-radius:22px;border:2px solid {border_color};background:linear-gradient(135deg,rgba(15,23,42,0.95),rgba(30,41,59,0.95));padding:16px;box-shadow:0 12px 30px rgba(0,0,0,0.5);cursor:pointer;animation:ticketPop 0.3s ease-out;">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+            <span style="font-size:10.5px;font-weight:900;text-transform:uppercase;letter-spacing:1px;color:{badge_color};background:{badge_bg};padding:4px 10px;border-radius:99px;border:1px solid {border_color};display:inline-flex;align-items:center;gap:5px;">
+              <span class="vs-pulse-dot" style="background:{badge_color};"></span>
+              {badge_text}
+            </span>
+            <span style="font-size:11.5px;color:#38bdf8;font-weight:800;display:inline-flex;align-items:center;gap:4px;">
+              Ver comanda ➔
+            </span>
+          </div>
+
+          <div style="font-size:16px;font-weight:900;color:#ffffff;line-height:1.25;margin-bottom:4px;">
+            {titulo}
+          </div>
+          <div style="font-size:12px;color:#cbd5e1;line-height:1.4;margin-bottom:10px;">
+            {sub}
+          </div>
+          <div style="font-size:12.5px;font-weight:800;color:#fcd34d;background:rgba(0,0,0,0.35);padding:6px 10px;border-radius:10px;border:1px dashed rgba(255,255,255,0.1);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">
+            🍹 {resumen_items}
+          </div>
+
+          <!-- STEPPER DE ATENCIÓN -->
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-top:14px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.08);font-size:10px;font-weight:800;">
+            <div style="display:flex;flex-direction:column;align-items:center;gap:3px;flex:1;text-align:center;">
+              <span style="width:22px;height:22px;border-radius:50%;background:{s1_bg};color:#ffffff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;">1</span>
+              <span style="color:{s1_tx};">1. En Fila</span>
+            </div>
+            <div style="height:2px;background:{s2_bg};flex:1;margin:0 4px -10px 4px;"></div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:3px;flex:1;text-align:center;">
+              <span style="width:22px;height:22px;border-radius:50%;background:{s2_bg};color:#0f172a;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;">2</span>
+              <span style="color:{s2_tx};">2. En Fuego</span>
+            </div>
+            <div style="height:2px;background:{s3_bg};flex:1;margin:0 4px -10px 4px;"></div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:3px;flex:1;text-align:center;">
+              <span style="width:22px;height:22px;border-radius:50%;background:{s3_bg};color:#ffffff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;">3</span>
+              <span style="color:{s3_tx};">3. Listo en Pase</span>
+            </div>
+          </div>
+        </div>
+        """
+
     def _render_bienvenida(self):
+        self._vista_actual = "bienvenida"
         info = self._sesion_info or {}
-        mesa = info.get("mesa_num", "?")
-        silla = info.get("sillaId") or info.get("silla_num", "?")
+        mesa = int(info.get("mesa_num") or info.get("mesaId") or info.get("mesa") or 0)
+        silla = int(info.get("silla_num") or info.get("sillaId") or info.get("silla") or 0)
         qr = info.get("qrId") or info.get("qr", "")
         comensal = info.get("comensalNombre") or f"Comensal Silla {silla}"
+
+        banner_estado = self._banner_estado_pedido_html(mesa, silla)
 
         html = f"""
         <div class="vs-mobile-wrap">
@@ -308,6 +442,8 @@ class Menu(MenuTemplate):
               {comensal}. Explora nuestro menú y ordena directamente a tu silla o comparte con tu mesa.
             </p>
           </div>
+
+          {banner_estado}
 
           <!-- 4 TARJETAS PRINCIPALES DE ACCIÓN -->
           <div style="display:flex;flex-direction:column;gap:4px;">
@@ -869,6 +1005,8 @@ class Menu(MenuTemplate):
             </button>
             """
 
+        banner_estado = self._banner_estado_pedido_html(mesa, silla)
+
         html = f"""
         <div class="vs-mobile-wrap">
           {self._header_html()}
@@ -886,6 +1024,8 @@ class Menu(MenuTemplate):
                 Total: ${gran_total:,.2f}
               </span>
             </div>
+
+            {banner_estado}
 
             <!-- COMANDA PERSONAL -->
             <div style="background:rgba(15,23,42,0.85);border:1px solid rgba(255,255,255,0.1);border-radius:22px;padding:16px;box-shadow:0 8px 24px rgba(0,0,0,0.3);margin-bottom:14px;">
