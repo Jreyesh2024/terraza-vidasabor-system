@@ -1458,6 +1458,36 @@ def uplink_atender_llamada(llamada_id, mesero_id=None):
         conn.close()
 
 
+@anvil.server.callable('get_meseros_activos')
+@anvil.server.callable('uplink_get_meseros_activos')
+def uplink_get_meseros_activos(area_id=None):
+    """Lista todos los meseros activos para asignación de atención y turnos."""
+    conn = get_db_connection()
+    try:
+        with conn.cursor() as cur:
+            if area_id:
+                cur.execute("""
+                    SELECT id, nombre_completo, codigo_empleado, area_asignada_id
+                    FROM meseros
+                    WHERE activo = TRUE AND (area_asignada_id = %s OR area_asignada_id IS NULL)
+                    ORDER BY id ASC;
+                """, (int(area_id),))
+            else:
+                cur.execute("""
+                    SELECT id, nombre_completo, codigo_empleado, area_asignada_id
+                    FROM meseros
+                    WHERE activo = TRUE
+                    ORDER BY id ASC;
+                """)
+            rows = cur.fetchall()
+            return [clean_row(r) for r in rows]
+    except Exception as e:
+        print(f"[UPLINK] Error en get_meseros_activos: {e}")
+        return []
+    finally:
+        conn.close()
+
+
 @anvil.server.callable('crear_llamada_mesero')
 @anvil.server.callable('uplink_crear_llamada_mesero')
 def uplink_crear_llamada_mesero(mesa_num, silla_num, tipo='llamar_mesero',

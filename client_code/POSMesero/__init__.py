@@ -616,18 +616,59 @@ class POSMesero(POSMeseroTemplate):
             banner.style.setProperty("display", "none", "important")
 
     def _ver_alertas(self, *_):
-        """Modal con dos secciones: Pendientes (arriba) + Atendidas recientes."""
+        """Modal con dos secciones: Pendientes con asignación de mesero de Palapa + Historial y métricas."""
         doc = anvil.js.window.document
         prev = doc.getElementById("vs-alertas-modal")
         if prev is not None:
             prev.remove()
         llamadas = getattr(self, "_llamadas_pendientes", []) or []
-        # Cargar atendidas recientes (últimas 10) — se refresca al abrir el modal.
+        
+        # Cargar lista de meseros de Palapa (area_id = 1) desde PostgreSQL
         try:
-            atendidas = anvil.server.call("get_llamadas_recientes", 10) or []
+            meseros_palapa = anvil.server.call("get_meseros_activos", 1) or []
+            # Filtrar para mostrar meseros humanos de piso (excluir atención general si hay meseros asignados)
+            meseros_piso = [m for m in meseros_palapa if m.get("codigo_empleado") != "MES-000"]
+            if not meseros_piso:
+                meseros_piso = meseros_palapa
+        except Exception as e:
+            print(f"[POSMesero] Error get_meseros_activos: {e}")
+            meseros_piso = [{"id": 1, "nombre_completo": "Atención General V&S"}]
+
+        # Cargar atendidas recientes (últimas 25)
+        try:
+            atendidas = anvil.server.call("get_llamadas_recientes", 25) or []
         except Exception as e:
             print(f"[POSMesero] Error get_llamadas_recientes: {e}")
             atendidas = []
+
+        # Conteo de llamadas atendidas por mesero (para ranking y puntos)
+        conteo_meseros = {}
+        for a in atendidas:
+            por = a.get("atendida_por") or "Atención General"
+            conteo_meseros[por] = conteo_meseros.get(por, 0) + 1
+
+        ranking_pills = ""
+        for m_nombre, total in sorted(conteo_meseros.items(), key=lambda x: x[1], reverse=True):
+            ranking_pills += (
+                f'<span style="background:#1e293b;padding:3px 8px;border-radius:6px;font-size:11px;font-weight:700;color:#f1f5f9;border:1px solid #334155;">'
+                f'👤 {m_nombre}: <b style="color:#10b981;">{total}</b>'
+                f'</span>'
+            )
+        if not ranking_pills:
+            ranking_pills = '<span style="font-size:11px;color:#64748b;">Sin registros hoy</span>'
+
+        ranking_bar_html = f"""
+        <div style="background:#0a0f1a;border:1px solid #1e293b;border-radius:12px;padding:10px 14px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+          <div style="display:flex;align-items:center;gap:6px;font-size:11.5px;font-weight:900;color:#fbbf24;">
+            <span>🏆</span>
+            <span>Métricas de Atención (Palapa):</span>
+          </div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;">
+            {ranking_pills}
+          </div>
+        </div>
+        """
+
         etiqueta = {
             "conflicto_silla_ocupada": ("⚠️ Silla ocupada — conflicto",
                                         "linear-gradient(135deg,#dc2626,#991b1b)"),
@@ -635,6 +676,7 @@ class POSMesero(POSMeseroTemplate):
             "solicitar_cuenta":        ("🧾 Pide su cuenta",     "#0369a1"),
             "ayuda_pedido":            ("🤝 Ayuda con pedido",   "#7c3aed"),
         }
+
         def _card_pendiente(l):
             tipo = l.get("tipo", "?")
             lab, color = etiqueta.get(tipo, (f"🔔 {tipo}", "#334155"))
@@ -642,12 +684,27 @@ class POSMesero(POSMeseroTemplate):
             silla = l.get("numero_en_mesa", "?")
             qr = l.get("codigo_qr", "")
             hora = str(l.get("creada_at", ""))[11:16]
+            lid = l.get("id")
+
+            # Botones directos para cada mesero de Palapa
+            botones_meseros = ""
+            for m in meseros_piso:
+                nombre_corto = m.get("nombre_completo", "Mesero").split()[0]
+                botones_meseros += (
+                    f'<button data-action="atenderConMesero" data-llamada="{lid}" data-mesero="{m.get("id")}" '
+                    f'  style="padding:6px 12px;border-radius:8px;background:linear-gradient(135deg,#059669,#10b981);'
+                    f'  color:#ffffff;font-weight:800;font-size:11px;border:none;cursor:pointer;display:flex;'
+                    f'  align-items:center;gap:4px;box-shadow:0 2px 6px rgba(16,185,129,0.3);transition:all 0.15s;">'
+                    f'  ✋ {nombre_corto}'
+                    f'</button>'
+                )
+
             return (
-                f'<div style="background:#0f172a;border:1px solid #334155;'
-                f'border-radius:14px;padding:14px 16px;margin-bottom:10px;'
-                f'display:flex;flex-direction:column;gap:8px;">'
+                f'<div style="background:#0f172a;border:1.5px solid #334155;'
+                f'border-radius:14px;padding:14px 16px;margin-bottom:12px;'
+                f'display:flex;flex-direction:column;gap:10px;box-shadow:0 4px 12px rgba(0,0,0,0.3);">'
                 f'  <div style="display:flex;align-items:center;justify-content:space-between;">'
-                f'    <span style="font-size:12px;font-weight:900;padding:6px 12px;'
+                f'    <span style="font-size:12px;font-weight:900;padding:5px 12px;'
                 f'      border-radius:999px;background:{color};color:#fff;">{lab}</span>'
                 f'    <span style="font-size:11px;color:#94a3b8;font-family:monospace;">{hora}</span>'
                 f'  </div>'
@@ -655,10 +712,12 @@ class POSMesero(POSMeseroTemplate):
                 f'    Mesa {mesa} · Silla {silla}'
                 f'    <span style="font-size:11px;color:#64748b;font-family:monospace;margin-left:8px;">{qr}</span>'
                 f'  </div>'
-                f'  <button data-action="atenderAlerta" data-args="{l.get("id")}" '
-                f'    style="align-self:flex-end;padding:8px 18px;border-radius:10px;'
-                f'    background:#059669;color:#fff;font-weight:900;font-size:12px;'
-                f'    border:none;cursor:pointer;">Yo la atiendo</button>'
+                f'  <div style="border-top:1px solid #1e293b;padding-top:8px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">'
+                f'    <span style="font-size:11px;font-weight:800;color:#38bdf8;">¿Quién atiende este llamado?</span>'
+                f'    <div style="display:flex;gap:6px;flex-wrap:wrap;">'
+                f'      {botones_meseros}'
+                f'    </div>'
+                f'  </div>'
                 f'</div>'
             )
 
@@ -673,17 +732,17 @@ class POSMesero(POSMeseroTemplate):
             return (
                 f'<div style="background:#0a0f1a;border:1px solid #1e293b;'
                 f'border-radius:12px;padding:12px 14px;margin-bottom:8px;'
-                f'opacity:0.85;">'
+                f'opacity:0.9;">'
                 f'  <div style="display:flex;align-items:center;justify-content:space-between;'
                 f'    margin-bottom:6px;">'
                 f'    <span style="font-size:11px;font-weight:800;padding:4px 10px;'
-                f'      border-radius:999px;background:{color};color:#fff;opacity:0.75;">{lab}</span>'
+                f'      border-radius:999px;background:{color};color:#fff;opacity:0.85;">{lab}</span>'
                 f'    <span style="font-size:10px;color:#64748b;font-family:monospace;">'
                 f'      {hora_llamada} → {hora_atendida}</span>'
                 f'  </div>'
-                f'  <div style="font-size:13px;color:#cbd5e1;">'
-                f'    Mesa {mesa} · Silla {silla}'
-                f'    <span style="color:#10b981;margin-left:8px;font-weight:700;">'
+                f'  <div style="font-size:13px;color:#cbd5e1;display:flex;align-items:center;justify-content:space-between;">'
+                f'    <span>Mesa {mesa} · Silla {silla}</span>'
+                f'    <span style="color:#34d399;font-weight:800;font-size:11.5px;">'
                 f'      ✓ atendida por {por}</span>'
                 f'  </div>'
                 f'</div>'
@@ -693,16 +752,17 @@ class POSMesero(POSMeseroTemplate):
         if llamadas:
             pendientes_html = (
                 '<div style="font-size:11px;font-weight:900;color:#f87171;text-transform:uppercase;'
-                'letter-spacing:0.05em;margin:4px 0 10px 0;">Pendientes'
+                'letter-spacing:0.05em;margin:4px 0 10px 0;">Llamadas Pendientes'
                 f' ({len(llamadas)})</div>'
                 + "".join(_card_pendiente(l) for l in llamadas)
             )
         else:
             pendientes_html = (
-                '<div style="text-align:center;padding:20px;color:#64748b;">'
-                '<i class="fa-solid fa-check-circle" style="font-size:28px;'
-                'color:#10b981;margin-bottom:8px;"></i>'
-                '<div style="font-weight:700;font-size:13px;">Sin alertas pendientes</div>'
+                '<div style="text-align:center;padding:24px;background:#0a0f1a;border-radius:14px;border:1px solid #1e293b;color:#64748b;margin-bottom:14px;">'
+                '<i class="fa-solid fa-circle-check" style="font-size:32px;'
+                'color:#10b981;margin-bottom:8px;display:block;"></i>'
+                '<div style="font-weight:800;font-size:14px;color:#f1f5f9;">¡Sin alertas pendientes!</div>'
+                '<div style="font-size:11.5px;color:#94a3b8;margin-top:2px;">Todas las mesas de la Palapa están atendidas.</div>'
                 '</div>'
             )
         atendidas_html = ""
@@ -711,29 +771,34 @@ class POSMesero(POSMeseroTemplate):
                 '<div style="font-size:11px;font-weight:900;color:#94a3b8;text-transform:uppercase;'
                 'letter-spacing:0.05em;margin:18px 0 10px 0;'
                 'border-top:1px solid #1e293b;padding-top:14px;">'
-                f'Historial reciente ({len(atendidas)})</div>'
+                f'Historial Reciente ({len(atendidas)})</div>'
                 + "".join(_card_atendida(l) for l in atendidas)
             )
-        cards_html = pendientes_html + atendidas_html
+        cards_html = ranking_bar_html + pendientes_html + atendidas_html
         modal = doc.createElement("div")
         modal.id = "vs-alertas-modal"
         modal.style.cssText = (
-            "position:fixed;inset:0;z-index:10000;background:rgba(0,0,0,0.72);"
+            "position:fixed;inset:0;z-index:10000;background:rgba(0,0,0,0.75);"
             "display:flex;align-items:flex-start;justify-content:center;padding:40px 16px;"
-            "backdrop-filter:blur(6px);"
+            "backdrop-filter:blur(6px);overflow-y:auto;"
         )
         modal.innerHTML = (
-            '<div style="width:100%;max-width:520px;background:#020617;'
-            'border:1px solid #1e293b;border-radius:20px;padding:20px 20px 24px 20px;'
-            'box-shadow:0 20px 60px rgba(0,0,0,0.7);">'
+            '<div style="width:100%;max-width:540px;background:#020617;'
+            'border:1px solid #1e293b;border-radius:24px;padding:22px 24px 28px 24px;'
+            'box-shadow:0 25px 70px rgba(0,0,0,0.85);">'
             '  <div style="display:flex;align-items:center;justify-content:space-between;'
-            '    margin-bottom:14px;">'
-            '    <h2 style="font-size:18px;font-weight:900;color:#f1f5f9;">'
-            '      Alertas al Mesero</h2>'
+            '    margin-bottom:16px;border-bottom:1px solid #1e293b;padding-bottom:12px;">'
+            '    <div style="display:flex;align-items:center;gap:10px;">'
+            '      <span style="font-size:20px;">🔔</span>'
+            '      <div>'
+            '        <h2 style="font-size:17px;font-weight:900;color:#f1f5f9;margin:0;">Alertas & Llamadas al Mesero</h2>'
+            '        <span style="font-size:11px;color:#94a3b8;">Área: La Palapa (V&S)</span>'
+            '      </div>'
+            '    </div>'
             '    <button id="vs-alertas-close" '
-            '      style="background:#1e293b;border:none;color:#cbd5e1;'
+            '      style="background:#1e293b;border:1px solid #334155;color:#cbd5e1;'
             '      width:36px;height:36px;border-radius:10px;cursor:pointer;'
-            '      font-size:16px;">✕</button>'
+            '      font-size:16px;display:flex;align-items:center;justify-content:center;">✕</button>'
             '  </div>'
             f'  <div>{cards_html}</div>'
             '</div>'
@@ -747,14 +812,16 @@ class POSMesero(POSMeseroTemplate):
         close_btn = doc.getElementById("vs-alertas-close")
         if close_btn is not None:
             close_btn.addEventListener("click", lambda ev: self._cerrar_alertas())
-        # Botones "Atender esta llamada" — un listener por cada botón.
-        atender_btns = modal.querySelectorAll("[data-action='atenderAlerta']")
+        
+        # Botones "Atender con Mesero específico"
+        atender_btns = modal.querySelectorAll("[data-action='atenderConMesero']")
         for i in range(int(atender_btns.length)):
             btn = atender_btns.item(i)
-            lid = int(btn.dataset.args)
-            def _make_handler(llamada_id):
-                return lambda ev: self._atender_alerta(llamada_id)
-            btn.addEventListener("click", _make_handler(lid))
+            lid = int(btn.dataset.llamada)
+            mid = int(btn.dataset.mesero)
+            def _make_handler(llamada_id, mesero_id):
+                return lambda ev: self._atender_alerta(llamada_id, mesero_id)
+            btn.addEventListener("click", _make_handler(lid, mid))
 
     def _cerrar_alertas(self, *_):
         doc = anvil.js.window.document
@@ -762,9 +829,9 @@ class POSMesero(POSMeseroTemplate):
         if modal is not None:
             modal.remove()
 
-    def _atender_alerta(self, llamada_id, *_):
+    def _atender_alerta(self, llamada_id, mesero_id=None, *_):
         try:
-            anvil.server.call("atender_llamada", int(llamada_id))
+            anvil.server.call("atender_llamada", int(llamada_id), mesero_id)
         except Exception as e:
             print(f"[POSMesero] Error atendiendo llamada {llamada_id}: {e}")
             return

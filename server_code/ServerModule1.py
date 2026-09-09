@@ -182,12 +182,21 @@ def liberar_buffer_mesa(mesa_id):
         return {"error": str(e)}
 
 @anvil.server.callable
-def get_estado_buffer_mesa(mesa_id):
-    """Consulta el estado del buffer de la mesa dada"""
+def get_meseros_activos(area_id=None):
+    """Obtiene la lista de meseros activos en PostgreSQL"""
     try:
-        return anvil.server.call('uplink_get_estado_buffer_mesa', mesa_id)
+        return anvil.server.call('uplink_get_meseros_activos', area_id) or []
     except Exception as e:
-        print("Uplink get_estado_buffer_mesa error:", e)
+        print("Uplink get_meseros_activos error:", e)
+        return []
+
+@anvil.server.callable
+def atender_llamada(llamada_id, mesero_id=None):
+    """Marca una llamada como atendida por un mesero específico"""
+    try:
+        return anvil.server.call('uplink_atender_llamada', llamada_id, mesero_id)
+    except Exception as e:
+        print("Uplink atender_llamada error:", e)
         return {"error": str(e)}
 
 
