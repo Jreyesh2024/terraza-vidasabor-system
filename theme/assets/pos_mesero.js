@@ -150,70 +150,7 @@
     }
     window.volverAcategorias = function () { mostrarVistaCategorias(); };
 
-    var DEFAULT_CUENTAS = {
-      // MESA 1: 100% Libre / Disponible (0 comensales)
-
-      // MESA 2: Familia (Cuenta de Mesa al centro + Silla 1 y Silla 3)
-      '2-0': {
-        estado: 'ocupada',
-        qrId: 'MESA-02',
-        comensalNombre: '⭐ Cuenta de MESA (Al Centro)',
-        items: [
-          { id: 301, nombre: 'Entrada al Centro: Paneras & Mantequilla Gourmet', notas: 'Al centro para compartir', precio: 85.00, cantidad: 1, mesaId: 2, sillaNum: 0, es_cuenta_mesa: true, tipo_consumo: 'comida', hora: '09:26 AM', enviadoCocina: true, horaEnvioCocina: '09:26 AM' }
-        ],
-        historialUbicaciones: [
-          { mesaId: 2, sillaNum: 0, hora: '09:25 AM' }
-        ]
-      },
-      '2-1': {
-        estado: 'ocupada',
-        qrId: 'PV-021',
-        comensalNombre: 'Adulto 1 (Papá)',
-        items: [
-          { id: 402, nombre: 'Combo Chilaquiles V&S', notas: 'Con huevo estrellado y café de olla', precio: 175.00, cantidad: 1, mesaId: 2, sillaNum: 1, es_cuenta_mesa: false, tipo_consumo: 'comida', hora: '09:30 AM', enviadoCocina: true, horaEnvioCocina: '09:30 AM' },
-          { id: 501, nombre: 'Jugo de Naranja Natural', notas: 'Sin hielo', precio: 55.00, cantidad: 1, mesaId: 2, sillaNum: 1, es_cuenta_mesa: false, tipo_consumo: 'bebida', hora: '09:31 AM', enviadoCocina: true, horaEnvioCocina: '09:31 AM' }
-        ],
-        historialUbicaciones: [
-          { mesaId: 2, sillaNum: 1, hora: '09:25 AM' }
-        ]
-      },
-      '2-3': {
-        estado: 'ocupada',
-        qrId: 'PV-023',
-        comensalNombre: 'Niño 1',
-        items: [
-          { id: 601, nombre: 'Hotcakes Infantiles (2 piezas)', notas: 'Con miel y mantequilla', precio: 75.00, cantidad: 1, mesaId: 2, sillaNum: 3, es_cuenta_mesa: false, tipo_consumo: 'comida', hora: '09:32 AM', enviadoCocina: true, horaEnvioCocina: '09:32 AM' },
-          { id: 505, nombre: 'Chocolate Caliente Tradicional', notas: 'Tibio', precio: 55.00, cantidad: 1, mesaId: 2, sillaNum: 3, es_cuenta_mesa: false, tipo_consumo: 'bebida', hora: '09:34 AM', enviadoCocina: true, horaEnvioCocina: '09:34 AM' }
-        ],
-        historialUbicaciones: [
-          { mesaId: 2, sillaNum: 3, hora: '09:25 AM' }
-        ]
-      },
-
-      // MESA 3: 2 comensales (Silla 1 y Silla 2 ocupadas, Silla 3 y 4 libres)
-      '3-1': {
-        estado: 'ocupada',
-        qrId: 'PV-031',
-        comensalNombre: 'Comensal Silla 1',
-        items: [
-          { id: 201, nombre: 'Chilaquiles Verdisimos', notas: 'Con pollo • Salsa verde', precio: 145.00, cantidad: 1, mesaId: 3, sillaNum: 1, hora: '09:15 AM', enviadoCocina: true, horaEnvioCocina: '09:15 AM' }
-        ],
-        historialUbicaciones: [
-          { mesaId: 3, sillaNum: 1, hora: '09:10 AM' }
-        ]
-      },
-      '3-2': {
-        estado: 'ocupada',
-        qrId: 'PV-032',
-        comensalNombre: 'Comensal Silla 2',
-        items: [
-          { id: 502, nombre: 'Café con Leche / Capuchino', notas: 'Con canela', precio: 68.00, cantidad: 1, mesaId: 3, sillaNum: 2, hora: '09:20 AM', enviadoCocina: true, horaEnvioCocina: '09:20 AM' }
-        ],
-        historialUbicaciones: [
-          { mesaId: 3, sillaNum: 2, hora: '09:20 AM' }
-        ]
-      }
-    };
+    var DEFAULT_CUENTAS = {};
 
     function getGlobalCache() {
       try {

@@ -12,12 +12,21 @@ class MonitorCocina(MonitorCocinaTemplate):
       w = anvil.js.window
       w.navMenu = self.navegar_modulo
       w.anvilAppNav = self.navegar_modulo
+      w.anvilCambiarEstadoItemCocina = self.cambiar_estado_item_cocina
+      w.anvilDespacharTicketCocina = self.despachar_ticket_cocina
+      w.anvilGetKDSCuentas = self.sincronizar_con_servidor
       if hasattr(w, 'parent') and w.parent:
         w.parent.navMenu = self.navegar_modulo
         w.parent.anvilAppNav = self.navegar_modulo
+        w.parent.anvilCambiarEstadoItemCocina = self.cambiar_estado_item_cocina
+        w.parent.anvilDespacharTicketCocina = self.despachar_ticket_cocina
+        w.parent.anvilGetKDSCuentas = self.sincronizar_con_servidor
       if hasattr(w, 'top') and w.top:
         w.top.navMenu = self.navegar_modulo
         w.top.anvilAppNav = self.navegar_modulo
+        w.top.anvilCambiarEstadoItemCocina = self.cambiar_estado_item_cocina
+        w.top.anvilDespacharTicketCocina = self.despachar_ticket_cocina
+        w.top.anvilGetKDSCuentas = self.sincronizar_con_servidor
       w.scrollTo(0, 0)
     except Exception as e:
       print(f"[MonitorCocina] Error exponiendo funciones en window: {e}")
@@ -77,6 +86,24 @@ class MonitorCocina(MonitorCocinaTemplate):
     except Exception as e:
       print(f"Error en sincronizar_cuenta_servidor desde MonitorCocina: {e}")
       return None
+
+  def cambiar_estado_item_cocina(self, detalle_id, nuevo_estado):
+    try:
+      res = anvil.server.call('cambiar_estado_item_cocina', int(detalle_id), str(nuevo_estado))
+      return res
+    except Exception as e:
+      print(f"[MonitorCocina] Error cambiando estado de item #{detalle_id}: {e}")
+      return {"success": False, "error": str(e)}
+
+  def despachar_ticket_cocina(self, mesa_num, silla_num=None, nuevo_estado='listo'):
+    try:
+      s_val = int(silla_num) if (silla_num is not None and str(silla_num).isdigit()) else None
+      res = anvil.server.call('despachar_ticket_cocina', int(mesa_num), s_val, str(nuevo_estado))
+      return res
+    except Exception as e:
+      print(f"[MonitorCocina] Error despachando ticket mesa {mesa_num}: {e}")
+      return {"success": False, "error": str(e)}
+
 
   def cargar_recetario_db(self):
     try:

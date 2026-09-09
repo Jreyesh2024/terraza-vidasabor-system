@@ -199,4 +199,32 @@ def atender_llamada(llamada_id, mesero_id=None):
         print("Uplink atender_llamada error:", e)
         return {"error": str(e)}
 
+@anvil.server.callable
+def cambiar_estado_item_cocina(detalle_id, nuevo_estado):
+    """Actualiza el estado de un platillo en cocina/barra en PostgreSQL"""
+    try:
+        return anvil.server.call('uplink_cambiar_estado_item_cocina', detalle_id, nuevo_estado)
+    except Exception as e:
+        print("Uplink cambiar_estado_item_cocina error:", e)
+        return {"success": False, "error": str(e)}
+
+@anvil.server.callable
+def despachar_ticket_cocina(mesa_num, silla_num=None, nuevo_estado='listo'):
+    """Despacha ticket completo de cocina en PostgreSQL"""
+    try:
+        return anvil.server.call('uplink_despachar_ticket_cocina', mesa_num, silla_num, nuevo_estado)
+    except Exception as e:
+        print("Uplink despachar_ticket_cocina error:", e)
+        return {"success": False, "error": str(e)}
+
+@anvil.server.callable
+def get_kds_comandas():
+    """Obtiene comandas vivas para monitor de cocina desde PostgreSQL"""
+    try:
+        return anvil.server.call('uplink_get_kds') or {}
+    except Exception as e:
+        print("Uplink get_kds error:", e)
+        return {}
+
+
 

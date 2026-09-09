@@ -519,6 +519,11 @@ def _construir_dict_cuentas_desde_db():
                     d.notas_cliente,
                     d.estado,
                     d.hora_creado,
+                    d.hora_enviado_cocina,
+                    d.hora_listo,
+                    d.hora_servido,
+                    d.envio_cocina_id,
+                    ec.timestamp_en_preparacion,
                     c.sesion_mesa_id,
                     c.tipo AS comanda_tipo,
                     sm.mesa_id,
@@ -531,6 +536,7 @@ def _construir_dict_cuentas_desde_db():
                 JOIN sesiones_mesa sm ON c.sesion_mesa_id = sm.id AND sm.cerrada_at IS NULL
                 LEFT JOIN mesas m ON sm.mesa_id = m.id
                 LEFT JOIN sillas s_para ON d.para_silla_id = s_para.id
+                LEFT JOIN envios_cocina ec ON d.envio_cocina_id = ec.id
                 WHERE c.estado = 'abierta' AND d.estado <> 'cancelado'
                 ORDER BY d.hora_creado ASC;
             """)
@@ -539,7 +545,23 @@ def _construir_dict_cuentas_desde_db():
             for it in items_rows:
                 mesa_num = int(it["numero_mesa"]) if it["numero_mesa"] else 1
                 hora_str = it["hora_creado"].strftime("%I:%M %p") if it["hora_creado"] else ""
+                hora_envio_str = it["hora_enviado_cocina"].strftime("%I:%M %p") if it["hora_enviado_cocina"] else hora_str
                 
+                estado_raw = str(it["estado"])
+                if estado_raw == "en_preparacion":
+                    estado_cocina = "preparando"
+                elif estado_raw == "listo":
+                    estado_cocina = "listo"
+                elif estado_raw == "servido":
+                    estado_cocina = "servido"
+                elif estado_raw in ("enviado_cocina", "en_buffer"):
+                    estado_cocina = "recibido"
+                else:
+                    estado_cocina = "borrador"
+
+                ts_envio_ms = int(it["hora_enviado_cocina"].timestamp() * 1000) if it["hora_enviado_cocina"] else None
+                ts_inicio_ms = int(it["timestamp_en_preparacion"].timestamp() * 1000) if it.get("timestamp_en_preparacion") else None
+
                 item_obj = {
                     "id": int(it["id"]),
                     "productoId": int(it["producto_id"]),
@@ -548,11 +570,15 @@ def _construir_dict_cuentas_desde_db():
                     "cantidad": int(it["cantidad"]),
                     "subtotal": float(it["subtotal"]),
                     "notas": str(it["notas_cliente"] or ""),
-                    "estado": str(it["estado"]),
-                    "enviadoCocina": (it["estado"] != "borrador"),
+                    "estado": estado_raw,
+                    "estadoCocina": estado_cocina,
+                    "enviadoCocina": (estado_raw not in ("borrador", "en_buffer")),
                     "tipo_consumo": str(it["tipo_consumo"] or "comida"),
                     "hora": hora_str,
-                    "horaEnvioCocina": hora_str,
+                    "horaEnvioCocina": hora_envio_str,
+                    "timestampEnvioCocina": ts_envio_ms,
+                    "timestampInicioCocina": ts_inicio_ms,
+                    "envioCocinaId": int(it["envio_cocina_id"]) if it["envio_cocina_id"] else None,
                     "mesaId": mesa_num,
                     "sillaNum": 0 if it["es_al_centro"] else (int(it["para_silla_num"]) if it["para_silla_num"] else 0),
                     "es_cuenta_mesa": bool(it["es_al_centro"]),
@@ -1544,11 +1570,155 @@ def uplink_get_recetas_cocina():
         return []
 
 
-@anvil.server.callable
+@anvil.server.callable('cambiar_estado_item_cocina')
+@anvil.server.callable('uplink_cambiar_estado_item_cocina')
+def uplink_cambiar_estado_item_cocina(detalle_id, nuevo_estado):
+    """Actualiza el estado de preparación de un platillo individual en cocina/barra en PostgreSQL.
+    nuevo_estado: 'preparando'/'en_preparacion' (fuego), 'listo' (pase), 'servido' (entregado), 'recibido'/'enviado_cocina' (reabrir)."""
+    detalle_id = int(detalle_id)
+    if nuevo_estado in ('preparando', 'en_preparacion', 'fuego'):
+        db_estado = 'en_preparacion'
+    elif nuevo_estado in ('listo', 'pase'):
+        db_estado = 'listo'
+    elif nuevo_estado in ('servido', 'entregado'):
+        db_estado = 'servido'
+    else:
+        db_estado = 'enviado_cocina'
+
+    conn = get_db_connection()
+    try:
+        with conn.cursor() as cur:
+            if db_estado == 'en_preparacion':
+                cur.execute("""
+                    UPDATE detalle_comanda
+                    SET estado = 'en_preparacion'
+                    WHERE id = %s
+                    RETURNING envio_cocina_id;
+                """, (detalle_id,))
+                row = cur.fetchone()
+                if row and row['envio_cocina_id']:
+                    cur.execute("""
+                        UPDATE envios_cocina
+                        SET timestamp_en_preparacion = COALESCE(timestamp_en_preparacion, NOW())
+                        WHERE id = %s;
+                    """, (row['envio_cocina_id'],))
+            elif db_estado == 'listo':
+                cur.execute("""
+                    UPDATE detalle_comanda
+                    SET estado = 'listo', hora_listo = NOW()
+                    WHERE id = %s
+                    RETURNING envio_cocina_id;
+                """, (detalle_id,))
+                row = cur.fetchone()
+                if row and row['envio_cocina_id']:
+                    cur.execute("""
+                        SELECT COUNT(*) AS pend
+                        FROM detalle_comanda
+                        WHERE envio_cocina_id = %s AND estado NOT IN ('listo', 'servido', 'cancelado');
+                    """, (row['envio_cocina_id'],))
+                    cnt = cur.fetchone()
+                    if cnt and cnt['pend'] == 0:
+                        cur.execute("""
+                            UPDATE envios_cocina
+                            SET timestamp_listo = NOW()
+                            WHERE id = %s;
+                        """, (row['envio_cocina_id'],))
+            elif db_estado == 'servido':
+                cur.execute("""
+                    UPDATE detalle_comanda
+                    SET estado = 'servido', hora_servido = NOW()
+                    WHERE id = %s
+                    RETURNING envio_cocina_id;
+                """, (detalle_id,))
+                row = cur.fetchone()
+                if row and row['envio_cocina_id']:
+                    cur.execute("""
+                        UPDATE envios_cocina
+                        SET timestamp_recogido = NOW()
+                        WHERE id = %s;
+                    """, (row['envio_cocina_id'],))
+            elif db_estado == 'enviado_cocina':
+                cur.execute("""
+                    UPDATE detalle_comanda
+                    SET estado = 'enviado_cocina', hora_listo = NULL, hora_servido = NULL
+                    WHERE id = %s;
+                """, (detalle_id,))
+        conn.commit()
+        print(f"🍳 [UPLINK] Item #{detalle_id} actualizado en BD → estado='{db_estado}'")
+        return {"success": True, "detalle_id": detalle_id, "estado": db_estado}
+    except Exception as e:
+        conn.rollback()
+        print(f"[UPLINK] Error en uplink_cambiar_estado_item_cocina: {e}")
+        return {"success": False, "error": str(e)}
+    finally:
+        conn.close()
+
+
+@anvil.server.callable('despachar_ticket_cocina')
+@anvil.server.callable('uplink_despachar_ticket_cocina')
+def uplink_despachar_ticket_cocina(mesa_num, silla_num=None, nuevo_estado='listo'):
+    """Marca todos los platillos activos de una comanda/ticket como 'listo' o 'servido'."""
+    conn = get_db_connection()
+    try:
+        with conn.cursor() as cur:
+            mesa_num = int(mesa_num)
+            if silla_num is not None and str(silla_num) not in ('TODAS', '', 'None'):
+                s_int = int(silla_num)
+                if s_int == 0:
+                    cur.execute("""
+                        UPDATE detalle_comanda d
+                        SET estado = %s,
+                            hora_listo = CASE WHEN %s = 'listo' THEN NOW() ELSE d.hora_listo END,
+                            hora_servido = CASE WHEN %s = 'servido' THEN NOW() ELSE d.hora_servido END
+                        FROM comandas c
+                        JOIN sesiones_mesa sm ON c.sesion_mesa_id = sm.id AND sm.cerrada_at IS NULL
+                        WHERE d.comanda_id = c.id
+                          AND sm.mesa_id = (SELECT id FROM mesas WHERE numero_mesa = %s)
+                          AND d.es_al_centro = TRUE
+                          AND d.estado IN ('enviado_cocina', 'en_preparacion', 'listo');
+                    """, (nuevo_estado, nuevo_estado, nuevo_estado, mesa_num))
+                else:
+                    cur.execute("""
+                        UPDATE detalle_comanda d
+                        SET estado = %s,
+                            hora_listo = CASE WHEN %s = 'listo' THEN NOW() ELSE d.hora_listo END,
+                            hora_servido = CASE WHEN %s = 'servido' THEN NOW() ELSE d.hora_servido END
+                        FROM comandas c
+                        JOIN sesiones_mesa sm ON c.sesion_mesa_id = sm.id AND sm.cerrada_at IS NULL
+                        JOIN sillas s ON d.para_silla_id = s.id
+                        WHERE d.comanda_id = c.id
+                          AND sm.mesa_id = (SELECT id FROM mesas WHERE numero_mesa = %s)
+                          AND s.numero_en_mesa = %s
+                          AND d.estado IN ('enviado_cocina', 'en_preparacion', 'listo');
+                    """, (nuevo_estado, nuevo_estado, nuevo_estado, mesa_num, s_int))
+            else:
+                cur.execute("""
+                    UPDATE detalle_comanda d
+                    SET estado = %s,
+                        hora_listo = CASE WHEN %s = 'listo' THEN NOW() ELSE d.hora_listo END,
+                        hora_servido = CASE WHEN %s = 'servido' THEN NOW() ELSE d.hora_servido END
+                    FROM comandas c
+                    JOIN sesiones_mesa sm ON c.sesion_mesa_id = sm.id AND sm.cerrada_at IS NULL
+                    WHERE d.comanda_id = c.id
+                      AND sm.mesa_id = (SELECT id FROM mesas WHERE numero_mesa = %s)
+                      AND d.estado IN ('enviado_cocina', 'en_preparacion', 'listo');
+                """, (nuevo_estado, nuevo_estado, nuevo_estado, mesa_num))
+        conn.commit()
+        print(f"🔔 [UPLINK] Ticket Mesa {mesa_num} Silla {silla_num} despachado → '{nuevo_estado}'")
+        return {"success": True}
+    except Exception as e:
+        conn.rollback()
+        print(f"[UPLINK] Error en despachar_ticket_cocina: {e}")
+        return {"success": False, "error": str(e)}
+    finally:
+        conn.close()
+
+
+@anvil.server.callable('get_kds_comandas')
+@anvil.server.callable('uplink_get_kds')
 def uplink_get_kds():
-    """STUB. En el Bloque E se implementará consumiendo envios_cocina + detalle_comanda."""
-    print("⏸️  [UPLINK] uplink_get_kds llamado (stub — pendiente Bloque E).")
-    return []
+    """Retorna las cuentas de la terraza con estado vivo para el monitor KDS."""
+    return uplink_get_cuentas_terraza()
 
 
 # ============================================================================

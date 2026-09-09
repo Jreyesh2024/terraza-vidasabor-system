@@ -783,8 +783,8 @@ class Menu(MenuTemplate):
     # ─────────────────── vista MI COMANDA ────────────────────────────────
     def _render_mi_comanda(self):
         info = self._sesion_info or {}
-        mesa = info.get("mesa_num")
-        silla = info.get("silla_num")
+        mesa = int(info.get("mesa_num") or info.get("mesaId") or info.get("mesa") or 0)
+        silla = int(info.get("silla_num") or info.get("sillaId") or info.get("silla") or 0)
 
         try:
             data = anvil.server.call("get_items_por_silla", mesa, silla) or {}
@@ -801,13 +801,22 @@ class Menu(MenuTemplate):
             cantidad = int(item.get("cantidad") or 1)
             subtotal = float(item.get("subtotal") or (precio * cantidad))
             nombre = item.get("producto_nombre_snapshot", "?")
-            estado = item.get("estado", "borrador")
+            estado = str(item.get("estado", "borrador")).lower()
 
-            badge = ""
-            if estado != "borrador":
-                badge = '<span style="font-size:10px;font-weight:900;color:#34d399;background:rgba(16,185,129,0.18);padding:2px 8px;border-radius:6px;border:1px solid rgba(16,185,129,0.35);margin-left:6px;">🍳 En cocina</span>'
-            else:
+            if estado == "borrador":
                 badge = '<span style="font-size:10px;font-weight:900;color:#fbbf24;background:rgba(245,158,11,0.18);padding:2px 8px;border-radius:6px;border:1px solid rgba(245,158,11,0.35);margin-left:6px;">🟡 Por enviar</span>'
+            elif estado == "en_buffer":
+                badge = '<span style="font-size:10px;font-weight:900;color:#38bdf8;background:rgba(56,189,248,0.18);padding:2px 8px;border-radius:6px;border:1px solid rgba(56,189,248,0.35);margin-left:6px;">⏳ Buffer (5m)</span>'
+            elif estado == "enviado_cocina":
+                badge = '<span style="font-size:10px;font-weight:900;color:#34d399;background:rgba(16,185,129,0.18);padding:2px 8px;border-radius:6px;border:1px solid rgba(16,185,129,0.35);margin-left:6px;">🟢 En Espera Cocina</span>'
+            elif estado == "en_preparacion":
+                badge = '<span style="font-size:10px;font-weight:900;color:#fbbf24;background:rgba(245,158,11,0.25);padding:2px 8px;border-radius:6px;border:1px solid #f59e0b;margin-left:6px;"><i class="fa-solid fa-fire"></i> 🔥 En Fuego</span>'
+            elif estado == "listo":
+                badge = '<span style="font-size:10px;font-weight:900;color:#38bdf8;background:rgba(2,132,199,0.25);padding:2px 8px;border-radius:6px;border:1px solid #0284c7;margin-left:6px;">🛎️ Listo en Pase</span>'
+            elif estado == "servido":
+                badge = '<span style="font-size:10px;font-weight:900;color:#10b981;background:rgba(16,185,129,0.2);padding:2px 8px;border-radius:6px;border:1px solid #10b981;margin-left:6px;">✅ Servido</span>'
+            else:
+                badge = f'<span style="font-size:10px;font-weight:900;color:#94a3b8;background:rgba(255,255,255,0.1);padding:2px 8px;border-radius:6px;margin-left:6px;">{estado}</span>'
 
             del_btn = ""
             if editable and estado == "borrador":
