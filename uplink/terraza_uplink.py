@@ -250,9 +250,9 @@ def _abrir_o_reusar_comanda(cur, sesion_mesa_id, tipo, silla_id=None):
 
 
 def _snapshot_producto(cur, producto_id):
-    """Devuelve {precio, nombre, estacion_id} congelados al momento."""
+    """Devuelve {precio, nombre, estacion_id, estacion_preparacion} congelados al momento."""
     cur.execute("""
-        SELECT precio_unitario, nombre, estacion_id
+        SELECT precio_unitario, nombre, estacion_id, estacion_preparacion
         FROM productos_menu WHERE id = %s;
     """, (int(producto_id),))
     row = cur.fetchone()
@@ -262,6 +262,7 @@ def _snapshot_producto(cur, producto_id):
         "precio": float(row['precio_unitario']),
         "nombre": row['nombre'],
         "estacion_id": int(row['estacion_id']) if row['estacion_id'] else None,
+        "estacion_preparacion": row.get('estacion_preparacion', 'cocina'),
     }
 
 
@@ -631,11 +632,118 @@ def uplink_get_cuentas_terraza():
         return {}
 
 
+def _consultar_estado_horario_db(cur, area_id=None):
+    """Consulta en PostgreSQL si el restaurante y la cocina caliente están abiertos según horarios_atencion."""
+    try:
+        cur.execute("""
+            SELECT 
+                EXTRACT(DOW FROM NOW())::INT AS dow_num,
+                TO_CHAR(NOW(), 'TMDay') AS nombre_dia_actual,
+                NOW()::TIME AS hora_actual,
+                h.dia_semana,
+                h.nombre_dia,
+                h.abierto,
+                h.hora_apertura,
+                h.hora_cierre,
+                h.hora_cierre_cocina,
+                h.notas
+            FROM (SELECT EXTRACT(DOW FROM NOW())::INT AS dow) curr
+            LEFT JOIN horarios_atencion h ON h.dia_semana = curr.dow AND (h.area_id = %s OR h.area_id IS NULL)
+            ORDER BY h.area_id NULLS LAST
+            LIMIT 1;
+        """, (area_id,))
+        row = cur.fetchone()
+        if not row or row['abierto'] is None:
+            return {
+                "abierto": True,
+                "cocina_caliente_abierta": True,
+                "dia_nombre": "Servicio",
+                "hora_apertura_str": "08:00 AM",
+                "hora_cierre_str": "03:00 PM",
+                "hora_cierre_cocina_str": "02:00 PM",
+                "motivo": None
+            }
+
+        abierto_dia = bool(row['abierto'])
+        hora_act = row['hora_actual']
+        h_aper = row['hora_apertura']
+        h_cier = row['hora_cierre']
+        h_coc = row['hora_cierre_cocina']
+
+        esta_abierto = abierto_dia and (h_aper <= hora_act < h_cier)
+        cocina_abierta = esta_abierto and (hora_act < h_coc)
+
+        h_aper_str = h_aper.strftime("%I:%M %p") if h_aper else "08:00 AM"
+        h_cier_str = h_cier.strftime("%I:%M %p") if h_cier else "03:00 PM"
+        h_coc_str = h_coc.strftime("%I:%M %p") if h_coc else "02:00 PM"
+
+        motivo = None
+        if not abierto_dia:
+            motivo = f"Hoy {row['nombre_dia']} es nuestro día de descanso semanal. Abrimos de Martes a Domingo a partir de las 8:00 AM."
+        elif hora_act < h_aper:
+            motivo = f"Aún no abrimos. Nuestro horario de hoy {row['nombre_dia']} inicia a las {h_aper_str}."
+        elif hora_act >= h_cier:
+            motivo = f"Servicio cerrado por hoy {row['nombre_dia']}. Nuestro horario es de {h_aper_str} a {h_cier_str}."
+
+        return {
+            "abierto": esta_abierto,
+            "cocina_caliente_abierta": cocina_abierta,
+            "dia_semana": row['dia_semana'],
+            "dia_nombre": row['nombre_dia'],
+            "hora_apertura_str": h_aper_str,
+            "hora_cierre_str": h_cier_str,
+            "hora_cierre_cocina_str": h_coc_str,
+            "motivo": motivo
+        }
+    except Exception as e:
+        print(f"[UPLINK] Error consultando estado horario: {e}")
+        return {
+            "abierto": True,
+            "cocina_caliente_abierta": True,
+            "dia_nombre": "Servicio",
+            "hora_apertura_str": "08:00 AM",
+            "hora_cierre_str": "03:00 PM",
+            "hora_cierre_cocina_str": "02:00 PM",
+            "motivo": None
+        }
+
+
+@anvil.server.callable('get_estado_operativo_restaurante')
+@anvil.server.callable('uplink_get_estado_operativo_restaurante')
+def uplink_get_estado_operativo_restaurante(area_id=None):
+    """Retorna si el restaurante y la cocina caliente están en horario de servicio."""
+    conn = get_db_connection()
+    try:
+        with conn.cursor() as cur:
+            return _consultar_estado_horario_db(cur, area_id)
+    finally:
+        conn.close()
+
+
+@anvil.server.callable('get_horarios_semana')
+@anvil.server.callable('uplink_get_horarios_semana')
+def uplink_get_horarios_semana():
+    """Retorna la tabla completa de horarios de atención para mostrar al cliente."""
+    conn = get_db_connection()
+    try:
+        with conn.cursor() as cur:
+            cur.execute("""
+                SELECT dia_semana, nombre_dia, abierto, hora_apertura, hora_cierre, hora_cierre_cocina, notas
+                FROM horarios_atencion
+                ORDER BY (dia_semana + 6) % 7;
+            """)
+            rows = cur.fetchall()
+            return [clean_row(r) for r in rows]
+    finally:
+        conn.close()
+
+
 @anvil.server.callable('checkin_silla_qr')
 @anvil.server.callable('uplink_checkin_silla_qr')
 def uplink_checkin_silla_qr(mesa_id, silla_id, qr_id='', qr_previo=None):
-    """Cliente escaneó QR → abre u adopta ocupacion en BD (origen='qr').
+    """Cliente escaneó QR → valida horarios y abre u adopta ocupacion en BD (origen='qr').
     Políticas amigables:
+      - Fuera de horario / Lunes: rechaza amablemente indicando horarios.
       - Silla libre: abre nueva ocupación.
       - Silla ya activada previamente (por mesero o por el mismo comensal):
         se enlaza limpiamente y actualiza origen a 'qr', sin bloquear al cliente.
@@ -655,7 +763,17 @@ def uplink_checkin_silla_qr(mesa_id, silla_id, qr_id='', qr_previo=None):
                       f"(mesa={mesa_id} silla={silla_id} qr={qr_id})")
                 return {"error": "silla no encontrada"}
 
-            # ¿Esa silla ya tiene ocupación activa?
+            # 1. Validar horario de servicio del restaurante
+            estado_horario = _consultar_estado_horario_db(cur, silla_row.get('area_id'))
+            if not estado_horario.get('abierto', True):
+                print(f"🌙 [UPLINK] checkin_qr rechazado por fuera de horario: {estado_horario.get('motivo')}")
+                return {
+                    "error": "restaurante_cerrado",
+                    "horario_info": estado_horario,
+                    "qr": silla_row['codigo_qr']
+                }
+
+            # 2. ¿Esa silla ya tiene ocupación activa?
             cur.execute("""
                 SELECT id, origen, sesion_mesa_id FROM ocupaciones_silla
                 WHERE silla_id = %s AND cerrada_at IS NULL LIMIT 1;
@@ -776,6 +894,45 @@ def uplink_liberar_silla(mesa_id, silla_id):
     except Exception as e:
         conn.rollback()
         print(f"[UPLINK] Error en liberar_silla: {e}")
+        return {"error": str(e)}
+    finally:
+        conn.close()
+
+
+@anvil.server.callable('liberar_mesa')
+@anvil.server.callable('uplink_liberar_mesa')
+def uplink_liberar_mesa(mesa_id):
+    """Endpoint explícito para que el mesero o POS libere toda la mesa.
+    Cierra todas las ocupaciones activas de sus sillas y la sesión de mesa."""
+    conn = get_db_connection()
+    try:
+        with conn.cursor() as cur:
+            mesa_id = int(mesa_id)
+            cur.execute("""
+                UPDATE ocupaciones_silla os
+                SET cerrada_at = NOW(),
+                    cerrada_por_mesero_id = %s
+                FROM sillas s
+                WHERE os.silla_id = s.id
+                  AND s.mesa_id = %s
+                  AND os.cerrada_at IS NULL;
+            """, (_get_mesero_default_id(cur), mesa_id))
+            
+            cur.execute("""
+                UPDATE sesiones_mesa
+                SET cerrada_at = NOW()
+                WHERE mesa_id = %s AND cerrada_at IS NULL;
+            """, (mesa_id,))
+        conn.commit()
+        # Limpiar items en memoria para todas las sillas de esa mesa
+        for k in list(ITEMS_MEMORIA.keys()):
+            if k.startswith(f"{mesa_id}-"):
+                ITEMS_MEMORIA.pop(k, None)
+        print(f"🔓 [UPLINK] Mesa {mesa_id} liberada completamente (sesión y sillas cerradas)")
+        return {"ok": True}
+    except Exception as e:
+        conn.rollback()
+        print(f"[UPLINK] Error en liberar_mesa: {e}")
         return {"error": str(e)}
     finally:
         conn.close()
@@ -1020,6 +1177,16 @@ def uplink_agregar_item_a_comanda(
             # Snapshot del producto
             snap = _snapshot_producto(cur, producto_id)
             estacion_id = snap.get('estacion_id') or 1
+            estacion_prep = snap.get('estacion_preparacion') or 'cocina'
+
+            # Validar si es comida caliente y la cocina ya cerró por horario
+            if estacion_prep == 'cocina' or estacion_id != 3:
+                estado_horario = _consultar_estado_horario_db(cur, silla_pedido_por_row.get('area_id'))
+                if not estado_horario.get('cocina_caliente_abierta', True):
+                    return {
+                        "ok": False,
+                        "error": f"La cocina caliente cerró por hoy a las {estado_horario.get('hora_cierre_cocina_str')}. Aún puedes ordenar bebidas, barra y postres."
+                    }
 
             cur.execute("""
                 INSERT INTO detalle_comanda (

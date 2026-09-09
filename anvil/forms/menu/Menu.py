@@ -225,6 +225,10 @@ class Menu(MenuTemplate):
             return
 
         err = resp.get("error")
+        if err == "restaurante_cerrado":
+            self._render_restaurante_cerrado(resp.get("horario_info"))
+            return
+
         if err == "silla_ocupada_por_otro":
             self._render_silla_ajena(info["qr"])
             return
@@ -240,6 +244,81 @@ class Menu(MenuTemplate):
 
         self._sesion_info = {**info, **resp}
         self._render_bienvenida()
+
+    def _render_restaurante_cerrado(self, horario_info=None):
+        horario_info = horario_info or {}
+        motivo = horario_info.get("motivo") or "En este momento nos encontramos fuera del horario de servicio."
+        
+        # Consultar tabla semanal completa
+        try:
+            horarios_semana = anvil.server.call("get_horarios_semana") or []
+        except Exception:
+            horarios_semana = []
+
+        filas_html = ""
+        for h in horarios_semana:
+            es_hoy = (h.get("dia_semana") == horario_info.get("dia_semana"))
+            fondo_fila = "rgba(16,185,129,0.15)" if es_hoy else "transparent"
+            borde_fila = "1px solid rgba(16,185,129,0.4)" if es_hoy else "1px solid rgba(255,255,255,0.05)"
+            tag_hoy = '<span style="font-size:9px;background:#10b981;color:#ffffff;font-weight:900;padding:2px 6px;border-radius:6px;margin-left:4px;">HOY</span>' if es_hoy else ''
+            
+            if not h.get("abierto"):
+                horario_txt = '<span style="color:#ef4444;font-weight:800;">Cerrado (Descanso)</span>'
+                cocina_txt = '<span style="color:#64748b;">—</span>'
+            else:
+                h_ap = h.get("hora_apertura").strftime("%I:%M %p") if hasattr(h.get("hora_apertura"), "strftime") else str(h.get("hora_apertura"))[:5]
+                h_ci = h.get("hora_cierre").strftime("%I:%M %p") if hasattr(h.get("hora_cierre"), "strftime") else str(h.get("hora_cierre"))[:5]
+                h_co = h.get("hora_cierre_cocina").strftime("%I:%M %p") if hasattr(h.get("hora_cierre_cocina"), "strftime") else str(h.get("hora_cierre_cocina"))[:5]
+                horario_txt = f'<span style="color:#ffffff;font-weight:700;">{h_ap} - {h_ci}</span>'
+                cocina_txt = f'<span style="color:#fbbf24;font-size:11px;">Cocina caliente hasta {h_co}</span>'
+
+            filas_html += f"""
+            <tr style="background:{fondo_fila};border-bottom:{borde_fila};">
+              <td style="padding:8px 10px;font-weight:800;color:#ffffff;font-size:12.5px;">
+                {h.get('nombre_dia')}{tag_hoy}
+              </td>
+              <td style="padding:8px 10px;text-align:right;font-size:12px;">
+                {horario_txt}
+                <div style="margin-top:1px;">{cocina_txt}</div>
+              </td>
+            </tr>
+            """
+
+        html = f"""
+        <div class="vs-mobile-wrap" style="display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:32px 20px;">
+          <div style="width:84px;height:84px;border-radius:26px;background:rgba(245,158,11,0.15);border:2px solid rgba(245,158,11,0.5);display:flex;align-items:center;justify-content:center;font-size:40px;margin-bottom:16px;box-shadow:0 12px 35px rgba(245,158,11,0.25);">
+            🌙
+          </div>
+          
+          <span style="font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:1.5px;color:#fcd34d;background:rgba(245,158,11,0.2);padding:5px 14px;border-radius:99px;border:1px solid rgba(245,158,11,0.4);margin-bottom:12px;">
+            Fuera de Horario
+          </span>
+          
+          <h2 style="font-size:22px;font-weight:900;color:#ffffff;margin:0 0 8px 0;letter-spacing:-0.5px;">
+            La Terraza de Vida &amp; Sabor
+          </h2>
+          
+          <p style="font-size:13.5px;color:#cbd5e1;line-height:1.5;max-width:340px;margin:0 0 20px 0;">
+            {motivo}
+          </p>
+
+          <div style="background:rgba(15,23,42,0.9);border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:16px;box-shadow:0 12px 30px rgba(0,0,0,0.4);width:100%;box-sizing:border-box;margin-bottom:20px;">
+            <div style="font-size:12px;font-weight:900;color:#38bdf8;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;text-align:left;display:flex;align-items:center;gap:6px;">
+              <span>🗓️</span> Horarios de Atención
+            </div>
+            <table style="width:100%;border-collapse:collapse;text-align:left;">
+              {filas_html}
+            </table>
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:10px;width:100%;">
+            <button data-action="reintentarCheckin" class="vs-cta-btn" style="width:100%;">
+              🔄 Comprobar disponibilidad
+            </button>
+          </div>
+        </div>
+        """
+        self._reemplazar_contenido(html)
 
     def _render_silla_ajena(self, qr):
         html = f"""

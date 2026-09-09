@@ -226,5 +226,38 @@ def get_kds_comandas():
         print("Uplink get_kds error:", e)
         return {}
 
+@anvil.server.callable
+def get_estado_operativo_restaurante(area_id=None):
+    """Consulta si el restaurante y la cocina están abiertos según horarios de atención"""
+    try:
+        return anvil.server.call('uplink_get_estado_operativo_restaurante', area_id) or {}
+    except Exception as e:
+        print("Uplink get_estado_operativo error:", e)
+        return {"abierto": True, "cocina_caliente_abierta": True}
 
+@anvil.server.callable
+def get_horarios_semana():
+    """Obtiene la tabla completa de horarios de atención para mostrar a clientes"""
+    try:
+        return anvil.server.call('uplink_get_horarios_semana') or []
+    except Exception as e:
+        print("Uplink get_horarios_semana error:", e)
+        return []
 
+@anvil.server.callable
+def liberar_silla(mesa_id, silla_id):
+    """Libera una silla individual cerrando su ocupación en BD"""
+    try:
+        return anvil.server.call('uplink_liberar_silla', mesa_id, silla_id)
+    except Exception as e:
+        print("Uplink liberar_silla error:", e)
+        return {"error": str(e)}
+
+@anvil.server.callable
+def liberar_mesa(mesa_id):
+    """Libera todas las sillas de una mesa y cierra la sesión en BD"""
+    try:
+        return anvil.server.call('uplink_liberar_mesa', mesa_id)
+    except Exception as e:
+        print("Uplink liberar_mesa error:", e)
+        return {"error": str(e)}
