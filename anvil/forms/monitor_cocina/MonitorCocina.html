@@ -1430,7 +1430,7 @@
 
       if (pasosContainer) {
         pasosContainer.innerHTML = '';
-        receta.pasos.forEach(p => {
+        (receta.pasos || []).forEach(p => {
           const pEl = document.createElement('div');
           pEl.style.cssText = 'background: #020617; border: 1px solid #1e293b; border-radius: 8px; padding: 6px 10px;';
           pEl.innerText = p;
@@ -1452,12 +1452,14 @@
 
     // Navegación
     window.navMenu = function (modulo) {
-      if (window.anvilAppNav) {
+      if (typeof window.anvilAppNav === 'function') {
         window.anvilAppNav(modulo);
-      } else if (typeof window.parent !== 'undefined' && window.parent.anvilAppNav) {
+      } else if (typeof window.parent !== 'undefined' && typeof window.parent.anvilAppNav === 'function') {
         window.parent.anvilAppNav(modulo);
+      } else if (typeof window.top !== 'undefined' && typeof window.top.anvilAppNav === 'function') {
+        window.top.anvilAppNav(modulo);
       } else {
-        alert('Navegando a: ' + modulo);
+        console.log('[navMenu] Navegando a:', modulo);
       }
     };
 

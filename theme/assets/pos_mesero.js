@@ -3314,10 +3314,18 @@
       const viewSidebar = document.getElementById('viewSidebarComanda');
       const panelMenu = document.getElementById('panelMenuCatalogo');
 
-      if (mainGrid) mainGrid.className = isComandaMode ? 'mode-comanda' : 'mode-overview';
+      if (mainGrid) {
+        mainGrid.className = isComandaMode ? 'mode-comanda' : 'mode-overview';
+        mainGrid.style.setProperty('grid-template-columns', isComandaMode ? '420px 1fr' : '1fr', 'important');
+      }
       if (viewCroquis) viewCroquis.style.setProperty('display', isComandaMode ? 'none' : 'flex', 'important');
       if (viewSidebar) viewSidebar.style.setProperty('display', isComandaMode ? 'flex' : 'none', 'important');
-      if (panelMenu) panelMenu.style.setProperty('display', isComandaMode ? 'flex' : 'none', 'important');
+      if (panelMenu) {
+        panelMenu.style.setProperty('display', isComandaMode ? 'flex' : 'none', 'important');
+        if (isComandaMode) {
+          renderWaiterMenuGrid();
+        }
+      }
 
       // 2. Renderizar Mesas y Sillas en el Croquis Panorámico
       const unidas = window.palapaState.mesasUnidas;

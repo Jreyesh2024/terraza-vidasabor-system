@@ -7,62 +7,34 @@ import json
 class MonitorCocina(MonitorCocinaTemplate):
   def __init__(self, **properties):
     self.init_components(**properties)
-    try:
-      anvil.js.window.anvilAppNav = self.navegar_modulo
-      anvil.js.window.navMenu = self.navegar_modulo
-      anvil.js.window.scrollTo(0, 0)
-    except Exception:
-      pass
-
+    self._set_global_nav_hooks()
     self.set_event_handler("show", self._form_show)
     self.set_event_handler("hide", self._form_hide)
 
     # Cargar recetas y mesas dinámicas desde PostgreSQL
     self.cargar_recetario_db()
 
+  def _set_global_nav_hooks(self):
+    try:
+      w = anvil.js.window
+      w.anvilAppNav = self.navegar_modulo
+      w.navMenu = self.navegar_modulo
+      if hasattr(w, 'parent') and w.parent:
+        w.parent.anvilAppNav = self.navegar_modulo
+        w.parent.navMenu = self.navegar_modulo
+      if hasattr(w, 'top') and w.top:
+        w.top.anvilAppNav = self.navegar_modulo
+        w.top.navMenu = self.navegar_modulo
+      w.scrollTo(0, 0)
+    except Exception as e:
+      print(f"[MonitorCocina] Error registrando navMenu: {e}")
+
   def _form_show(self, **event_args):
-    # Adjuntar listener directo al botón "Volver a Mesa & POS" del header y
-    # a cualquier otro botón dentro del form que quiera navegar a POSMesero.
-    # Delay 200ms para que el DOM del form esté completamente inyectado.
-    anvil.js.window.setTimeout(self._reforzar_botones_salida, 200)
-    # Insurance: reintenta a los 800ms por si el HTML se reinyectó.
-    anvil.js.window.setTimeout(self._reforzar_botones_salida, 800)
+    self._set_global_nav_hooks()
+    anvil.js.window.setTimeout(self._set_global_nav_hooks, 300)
 
   def _form_hide(self, **event_args):
-    # Limpiar cualquier resto que hayamos podido inyectar en body.
-    try:
-      doc = anvil.js.window.document
-      leftover = doc.getElementById("vs-salir-cocina")
-      if leftover is not None:
-        leftover.remove()
-    except Exception:
-      pass
-
-  def _reforzar_botones_salida(self, *_):
-    """Enlaza directamente un handler Python al botón 'Volver a Mesa & POS'
-    del header del MonitorCocina, sin depender de window.navMenu ni de
-    scripts embebidos. Idempotente."""
-    try:
-      doc = anvil.js.window.document
-      # Cualquier botón cuyo texto contenga "Volver a Mesa" o "Volver a Mesas"
-      botones = doc.querySelectorAll("button")
-      for i in range(int(botones.length)):
-        btn = botones.item(i)
-        txt = (btn.textContent or "").strip().lower()
-        if ("volver a mesa" in txt or "volver a mesas" in txt) \
-           and not getattr(btn, "_vsHooked", False):
-          setattr(btn, "_vsHooked", True)
-          btn.addEventListener("click", lambda ev: self._salir_a_pos())
-    except Exception as e:
-      print(f"[MonitorCocina] Error reforzando botones salida: {e}")
-
-  def _salir_a_pos(self, *_):
-    """Sale a POSMesero limpiando el hash de URL para evitar redirects."""
-    try:
-      anvil.set_url_hash("", set_in_history=False)
-    except Exception:
-      pass
-    anvil.open_form("POSMesero")
+    pass
 
   def cargar_recetario_db(self):
     try:

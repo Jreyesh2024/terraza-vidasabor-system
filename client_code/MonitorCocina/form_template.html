@@ -1452,13 +1452,15 @@
 
                 // Navegación
                 window.navMenu = function (modulo) {
-                if (window.anvilAppNav) {
-                window.anvilAppNav(modulo);
-              } else if (typeof window.parent !== 'undefined' &amp;&amp; window.parent.anvilAppNav) {
-                window.parent.anvilAppNav(modulo);
-              } else {
-                alert('Navegando a: ' + modulo);
-              }
+                if (typeof window.anvilAppNav === 'function') {
+                  window.anvilAppNav(modulo);
+                } else if (typeof window.parent !== 'undefined' && typeof window.parent.anvilAppNav === 'function') {
+                  window.parent.anvilAppNav(modulo);
+                } else if (typeof window.top !== 'undefined' && typeof window.top.anvilAppNav === 'function') {
+                  window.top.anvilAppNav(modulo);
+                } else {
+                  console.log('[navMenu] Navegando a:', modulo);
+                }
               };
 
                 // Sonido de Campana de Cocina con Web Audio API (Sin archivos externos)

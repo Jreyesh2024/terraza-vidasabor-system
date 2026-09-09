@@ -162,25 +162,63 @@ html, body, .anvil-container, div[anvil-slot] {
 }
 
 /* Layout Dual POSMesero: Croquis Overview vs Comanda & Catalogo */
+#mainCanvasGrid {
+  display: grid !important;
+  gap: 20px !important;
+  width: 100% !important;
+}
+
+#mainCanvasGrid.mode-overview {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  gap: 20px !important;
+}
+
+#mainCanvasGrid.mode-overview #panelCroquisMesas {
+  width: 100% !important;
+  max-width: 100% !important;
+  display: flex !important;
+}
+
 #mainCanvasGrid.mode-overview #viewOverviewCroquis {
   display: flex !important;
 }
+
 #mainCanvasGrid.mode-overview #viewSidebarComanda,
 #mainCanvasGrid.mode-overview #panelMenuCatalogo {
   display: none !important;
 }
-#mainCanvasGrid.mode-comanda #panelCroquisMesas {
-  width: 420px !important;
-  max-width: 420px !important;
+
+#mainCanvasGrid.mode-comanda {
+  display: grid !important;
+  grid-template-columns: 420px 1fr !important;
+  gap: 20px !important;
+  align-items: stretch !important;
+  width: 100% !important;
 }
+
+#mainCanvasGrid.mode-comanda #panelCroquisMesas {
+  width: 100% !important;
+  max-width: 420px !important;
+  padding: 16px !important;
+  display: flex !important;
+}
+
 #mainCanvasGrid.mode-comanda #viewOverviewCroquis {
   display: none !important;
 }
+
 #mainCanvasGrid.mode-comanda #viewSidebarComanda {
   display: flex !important;
+  flex-direction: column !important;
+  height: 100% !important;
 }
+
 #mainCanvasGrid.mode-comanda #panelMenuCatalogo {
   display: flex !important;
+  flex-direction: column !important;
+  width: 100% !important;
+  min-height: 540px !important;
 }
 
 /* ==========================================================================
