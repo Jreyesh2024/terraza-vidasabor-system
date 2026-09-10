@@ -4364,29 +4364,66 @@
       _vsHoverTooltip = el;
       return el;
     }
-    function _vsMostrarTooltip(html, targetOrX, maybeY) {
+    function _vsMostrarTooltip(html, targetOrX, maybeRole) {
       if (typeof _ms !== 'undefined' && (_ms.active || _ms.dragging)) return;
       var el = _vsEnsureTooltipEl();
       el.innerHTML = html;
-      var w = 310, h = 230;
+      var w = 320, h = 230;
       var left = 20, top = 20;
 
       if (targetOrX && typeof targetOrX.getBoundingClientRect === 'function') {
         var rect = targetOrX.getBoundingClientRect();
-        // Posicionamiento 100% FIJO y ESTABLE anclado junto al botón inspeccionado
-        if (rect.right + w + 16 < window.innerWidth) {
-          left = rect.right + 10;
-        } else if (rect.left - w - 16 > 0) {
-          left = rect.left - w - 10;
+        var sillaNum = parseInt(maybeRole);
+
+        if (sillaNum === 4) {
+          // SILLA 4 (Izquierda): Desplegar hacia afuera a la IZQUIERDA para NO invadir la mesa central
+          if (rect.left - w - 12 > 10) {
+            left = rect.left - w - 12;
+          } else {
+            left = Math.max(10, rect.right + 12);
+          }
+          top = rect.top - 8;
+        } else if (sillaNum === 2) {
+          // SILLA 2 (Derecha): Desplegar hacia afuera a la DERECHA
+          if (rect.right + w + 12 < window.innerWidth - 10) {
+            left = rect.right + 12;
+          } else {
+            left = Math.max(10, rect.left - w - 12);
+          }
+          top = rect.top - 8;
+        } else if (sillaNum === 1) {
+          // SILLA 1 (Arriba): Desplegar a la derecha alineado con la silla superior
+          if (rect.right + w + 12 < window.innerWidth - 10) {
+            left = rect.right + 12;
+          } else {
+            left = Math.max(10, rect.left - w - 12);
+          }
+          top = rect.top - 6;
+        } else if (sillaNum === 3) {
+          // SILLA 3 (Abajo): Desplegar a la derecha o izquierda según espacio
+          if (rect.right + w + 12 < window.innerWidth - 10) {
+            left = rect.right + 12;
+          } else {
+            left = Math.max(10, rect.left - w - 12);
+          }
+          top = rect.top - 20;
         } else {
-          left = Math.max(12, Math.min(window.innerWidth - w - 12, rect.left));
+          // MESA CENTRAL: Desplegar hacia la derecha de la mesa central
+          if (rect.right + w + 14 < window.innerWidth - 10) {
+            left = rect.right + 14;
+          } else if (rect.left - w - 14 > 10) {
+            left = rect.left - w - 14;
+          } else {
+            left = Math.max(10, Math.min(window.innerWidth - w - 10, rect.left));
+          }
+          top = rect.top - 8;
         }
 
-        // Alinear verticalmente con el elemento inspeccionado, sin salirse del viewport
-        top = Math.max(12, Math.min(window.innerHeight - h - 12, rect.top - 8));
+        // Asegurar que no se salga por arriba ni por abajo de la ventana
+        top = Math.max(10, Math.min(window.innerHeight - h - 10, top));
       } else if (typeof targetOrX === 'number') {
         left = Math.min(window.innerWidth - w - 12, Math.max(12, targetOrX + 16));
-        top = Math.min(window.innerHeight - h - 12, Math.max(12, (maybeY || 0) - 8));
+        top = Math.min(window.innerHeight - h - 12, Math.max(12, (maybeRole || 0) - 8));
       }
 
       el.style.left = Math.round(left) + 'px';
@@ -4770,7 +4807,7 @@
             }
           }
           if (m !== null && s !== null && !isNaN(parseInt(m)) && !isNaN(parseInt(s))) {
-            _vsMostrarTooltip(_vsTooltipHTMLSilla(m, s), sillaEl);
+            _vsMostrarTooltip(_vsTooltipHTMLSilla(m, s), sillaEl, s);
             return;
           }
         }
@@ -4786,7 +4823,7 @@
             mesaNum = mparts[mparts.length - 1];
           }
           if (mesaNum && !isNaN(parseInt(mesaNum))) {
-            _vsMostrarTooltip(_vsTooltipHTMLMesa(mesaNum), mesaEl);
+            _vsMostrarTooltip(_vsTooltipHTMLMesa(mesaNum), mesaEl, 'mesa');
             return;
           }
         }
