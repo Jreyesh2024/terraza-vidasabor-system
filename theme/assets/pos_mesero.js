@@ -4391,29 +4391,30 @@
       } catch (e) { return ''; }
     }
     function _vsBadgeItem(item) {
-      // Deriva un estado normalizado leyendo TANTO los campos legacy
-      // (enviadoCocina, enFuego, listo, servido) como el estado v2 nuevo.
+      // Deriva un estado normalizado leyendo TANTO los campos legacy como el modelo v2
       var estado = item.estado || 'borrador';
-      // Mapeo desde flags legacy del JS de KDS al modelo v2
-      if (item.servido)               estado = 'servido';
-      else if (item.listo)            estado = 'listo';
-      else if (item.enFuego || item.enPreparacion) estado = 'preparando';
-      else if (item.enviadoCocina || estado === 'recibido') estado = 'enviado_cocina';
+      if (item.servido || estado === 'servido' || estado === 'entregado') estado = 'servido';
+      else if (item.listo || estado === 'listo' || estado === 'pase') estado = 'listo';
+      else if (item.enFuego || item.enPreparacion || estado === 'preparando' || estado === 'en_preparacion' || estado === 'fuego') estado = 'preparando';
+      else if (estado === 'en_buffer' || item.enBuffer) estado = 'buffer';
+      else if (item.enviadoCocina || estado === 'enviado_cocina' || estado === 'recibido') estado = 'enviado_cocina';
+
       var colores = {
-        'borrador':       ['linear-gradient(135deg,#475569,#334155)', '#cbd5e1', '📝 Pendiente'],
-        'buffer':         ['linear-gradient(135deg,#b45309,#78350f)', '#fef3c7', '⏳ En espera'],
-        'enviado_cocina': ['linear-gradient(135deg,#c2410c,#7c2d12)', '#fed7aa', '🍳 En cocina'],
-        'preparando':     ['linear-gradient(135deg,#dc2626,#991b1b)', '#fecaca', '🔥 En preparación'],
-        'listo':          ['linear-gradient(135deg,#16a34a,#166534)', '#dcfce7', '✅ Listo'],
-        'servido':        ['linear-gradient(135deg,#0284c7,#075985)', '#e0f2fe', '🍽️ Servido'],
+        'borrador':       ['linear-gradient(135deg,#475569,#334155)', '#cbd5e1', '📝 En Borrador'],
+        'buffer':         ['linear-gradient(135deg,#b45309,#78350f)', '#fef3c7', '⏳ En Buffer (5 min)'],
+        'enviado_cocina': ['linear-gradient(135deg,#059669,#065f46)', '#a7f3d0', '🟢 En Fila Cocina/Barra'],
+        'preparando':     ['linear-gradient(135deg,#d97706,#b45309)', '#fef08a', '🔥 En Preparación (Fuego)'],
+        'listo':          ['linear-gradient(135deg,#0284c7,#0369a1)', '#bae6fd', '🛎️ Listo en Pase'],
+        'servido':        ['linear-gradient(135deg,#475569,#334155)', '#cbd5e1', '🍽️ Servido en Mesa'],
         'cancelado':      ['linear-gradient(135deg,#dc2626,#7f1d1d)', '#fecaca', '✕ Cancelado'],
       };
       var c = colores[estado] || colores.borrador;
-      return '<span style="display:inline-block;padding:3px 10px;border-radius:999px;'
-             + 'background:' + c[0] + ';color:' + c[1] + ';font-size:10px;'
-             + 'font-weight:900;letter-spacing:0.02em;'
-             + 'box-shadow:0 2px 6px rgba(0,0,0,0.35);">' + c[2] + '</span>';
+      return '<span style="display:inline-block;padding:2px 8px;border-radius:999px;'
+             + 'background:' + c[0] + ';color:' + c[1] + ';font-size:9.5px;'
+             + 'font-weight:800;letter-spacing:0.02em;'
+             + 'box-shadow:0 2px 5px rgba(0,0,0,0.35);">' + c[2] + '</span>';
     }
+
     function _vsTooltipHTMLSilla(mesa, silla) {
       var st = window.palapaState || {};
       var key = mesa + '-' + silla;
@@ -4428,59 +4429,65 @@
       }
       var estado = cta.estado || 'disponible';
       var items = cta.items || [];
+
       // ────── SILLA LIBRE ──────
       if (estado !== 'ocupada' && items.length === 0) {
         return _vsTarjetaBase(
           'linear-gradient(135deg,#10b981,#059669)', '#a7f3d0',
           'Mesa ' + mesa + ' · Silla ' + silla, '✓ SILLA LIBRE',
-          '<div style="padding:18px 16px;text-align:center;">'
-          + '  <div style="font-size:36px;margin-bottom:6px;">🪑</div>'
-          + '  <div style="color:#e5e7eb;font-size:12px;font-weight:600;">Disponible para nuevo cliente</div>'
-          + '  <div style="color:#94a3b8;font-size:10px;margin-top:6px;">'
-          + '    Escanea el QR o clic para asignarla</div>'
+          '<div style="padding:16px;text-align:center;">'
+          + '  <div style="font-size:32px;margin-bottom:4px;">🪑</div>'
+          + '  <div style="color:#e5e7eb;font-size:12px;font-weight:700;">Disponible para nuevo cliente</div>'
+          + '  <div style="color:#94a3b8;font-size:10px;margin-top:4px;">'
+          + '    Escanea el QR o clic para asignar</div>'
           + '</div>'
         );
       }
+
       // ────── SILLA OCUPADA ──────
       var hace = _vsFormatoHace(cta.abiertaAt);
       var total = items.reduce(function (s, i) {
         return s + (parseFloat(i.precio) || 0) * (parseInt(i.cantidad) || 1);
       }, 0);
+
       // Contadores rápidos por estado
-      var pendientes = 0, encocina = 0, listos = 0, servidos = 0;
+      var pendientes = 0, enFila = 0, enFuego = 0, listos = 0, servidos = 0;
       items.forEach(function (i) {
-        if (i.servido) servidos++;
-        else if (i.listo) listos++;
-        else if (i.enFuego || i.enPreparacion) encocina++;
-        else if (i.enviadoCocina) encocina++;
+        var est = i.estado || 'borrador';
+        if (i.servido || est === 'servido' || est === 'entregado') servidos++;
+        else if (i.listo || est === 'listo' || est === 'pase') listos++;
+        else if (i.enFuego || i.enPreparacion || est === 'preparando' || est === 'en_preparacion' || est === 'fuego') enFuego++;
+        else if (i.enviadoCocina || est === 'enviado_cocina' || est === 'recibido') enFila++;
         else pendientes++;
       });
+
       var contadores = '';
       if (items.length > 0) {
         contadores = '<div style="display:grid;grid-template-columns:repeat(4,1fr);'
-                   +  'gap:4px;padding:10px;background:#020617;">'
-                   +  _vsMiniStat(pendientes, '#94a3b8', 'Pend.')
-                   +  _vsMiniStat(encocina,   '#fdba74', 'Cocina')
-                   +  _vsMiniStat(listos,     '#6ee7b7', 'Listo')
-                   +  _vsMiniStat(servidos,   '#67e8f9', 'Servido')
+                   +  'gap:3px;padding:8px;background:#020617;">'
+                   +  _vsMiniStat(pendientes, '#94a3b8', 'Borrador')
+                   +  _vsMiniStat(enFila,     '#34d399', 'En Fila')
+                   +  _vsMiniStat(enFuego,    '#fbbf24', 'En Fuego')
+                   +  _vsMiniStat(listos + servidos, '#38bdf8', 'Listo/Serv.')
                    +  '</div>';
       }
+
       var lineas = '';
       if (items.length === 0) {
         lineas = '<div style="padding:16px;text-align:center;">'
-               + '  <div style="font-size:28px;">⚠️</div>'
+               + '  <div style="font-size:26px;">⚠️</div>'
                + '  <div style="color:#fbbf24;font-size:12px;font-weight:700;margin-top:4px;">'
-               + '    Ocupada SIN pedido</div>'
+               + '    Ocupada SIN comanda</div>'
                + '  <div style="color:#94a3b8;font-size:10px;margin-top:4px;">'
-               + '    Considera acercarte a ofrecer atención</div>'
+               + '    Cliente aún no solicita alimentos</div>'
                + '</div>';
       } else {
         var lineasArr = [];
-        items.slice(0, 6).forEach(function (it) {
+        items.slice(0, 8).forEach(function (it) {
           lineasArr.push(
-            '<div style="padding:10px 12px;border-bottom:1px solid #1e293b;">'
+            '<div style="padding:8px 12px;border-bottom:1px solid #1e293b;">'
           +   '<div style="display:flex;justify-content:space-between;align-items:flex-start;'
-          +     'gap:8px;margin-bottom:6px;">'
+          +     'gap:8px;margin-bottom:4px;">'
           +   '  <div style="flex:1;min-width:0;font-size:12px;color:#f1f5f9;font-weight:700;'
           +     'overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'
           +     '<span style="color:#fbbf24;">' + (it.cantidad || 1) + '×</span> '
@@ -4494,31 +4501,33 @@
           + '</div>'
           );
         });
-        lineas = lineasArr.join('');
-        if (items.length > 6) {
+        lineas = '<div style="max-height:220px;overflow-y:auto;">' + lineasArr.join('') + '</div>';
+        if (items.length > 8) {
           lineas += '<div style="text-align:center;color:#94a3b8;font-size:10px;padding:6px;">'
-                  + '… y ' + (items.length - 6) + ' platillos más</div>';
+                  + '… y ' + (items.length - 8) + ' platillos más</div>';
         }
       }
+
       var comensal = cta.comensalNombre || ('Silla ' + silla);
       var qr = cta.qrId || '';
       var body = ''
         + '<div style="padding:8px 12px;background:#020617;border-bottom:1px solid #1e293b;">'
         + '  <div style="display:flex;justify-content:space-between;align-items:center;">'
-        + '    <div style="color:#94a3b8;font-size:11px;">👤 ' + comensal + '</div>'
+        + '    <div style="color:#f8fafc;font-size:11.5px;font-weight:700;">👤 ' + comensal + '</div>'
         + '    <div style="color:#64748b;font-size:9px;font-family:monospace;">' + qr + '</div>'
         + '  </div>'
         + (hace ? '<div style="color:#94a3b8;font-size:10px;margin-top:2px;">🕐 ' + hace + '</div>' : '')
         + '</div>'
         + contadores
-        + '<div>' + lineas + '</div>'
+        + lineas
         + (items.length > 0
           ? '<div style="display:flex;justify-content:space-between;align-items:center;'
-          +   'padding:12px;background:linear-gradient(180deg,#020617,#0f172a);'
+          +   'padding:10px 12px;background:linear-gradient(180deg,#020617,#0f172a);'
           +   'border-top:2px solid #10b981;">'
           + '  <span style="color:#94a3b8;font-size:11px;font-weight:700;">Total silla</span>'
-          + '  <span style="color:#10b981;font-weight:900;font-size:16px;">$' + total.toFixed(2) + '</span>'
+          + '  <span style="color:#10b981;font-weight:900;font-size:15px;">$' + total.toFixed(2) + '</span>'
           + '</div>' : '');
+
       return _vsTarjetaBase(
         'linear-gradient(135deg,#d97706,#b45309)', '#fde68a',
         'Mesa ' + mesa + ' · Silla ' + silla, '● OCUPADA',
@@ -4527,94 +4536,136 @@
     }
 
     function _vsTarjetaBase(gradienteHeader, colorAccento, titulo, subtitulo, bodyHTML) {
-      // Contenedor "tarjeta" vertical con cabecera coloreada arriba.
       return ''
-        + '<div style="background:#0f172a;border-radius:20px;overflow:hidden;'
-        +   'border:2px solid ' + colorAccento + ';">'
-        + '  <div style="background:' + gradienteHeader + ';padding:12px 16px;">'
-        + '    <div style="font-weight:900;font-size:14px;color:#fff;'
+        + '<div style="background:#0f172a;border-radius:18px;overflow:hidden;'
+        +   'border:2px solid ' + colorAccento + ';box-shadow:0 20px 50px rgba(0,0,0,0.85);">'
+        + '  <div style="background:' + gradienteHeader + ';padding:10px 14px;">'
+        + '    <div style="font-weight:900;font-size:13.5px;color:#fff;'
         +       'letter-spacing:0.02em;">' + titulo + '</div>'
         + '    <div style="font-size:10px;font-weight:900;color:' + colorAccento + ';'
-        +       'margin-top:2px;letter-spacing:0.06em;">' + subtitulo + '</div>'
+        +       'margin-top:1px;letter-spacing:0.06em;">' + subtitulo + '</div>'
         + '  </div>'
         + bodyHTML
         + '</div>';
     }
 
     function _vsMiniStat(n, color, label) {
-      return '<div style="text-align:center;padding:6px 4px;background:#0f172a;'
-           +   'border-radius:8px;">'
-           +   '<div style="font-size:16px;font-weight:900;color:' + color + ';">' + n + '</div>'
-           +   '<div style="font-size:8px;color:#64748b;font-weight:700;'
-           +     'text-transform:uppercase;letter-spacing:0.05em;">' + label + '</div>'
+      return '<div style="text-align:center;padding:5px 2px;background:#0f172a;'
+           +   'border-radius:6px;border:1px solid #1e293b;">'
+           +   '<div style="font-size:14px;font-weight:900;color:' + color + ';">' + n + '</div>'
+           +   '<div style="font-size:7.5px;color:#94a3b8;font-weight:800;'
+           +     'text-transform:uppercase;letter-spacing:0.04em;">' + label + '</div>'
            + '</div>';
     }
+
     function _vsTooltipHTMLMesa(mesa) {
       var st = window.palapaState || {};
       var cuentas = st.cuentas || {};
       var sillasOcupadas = 0, sillasTotal = 0, totalMesa = 0;
       var sinPedido = [];
+      var itemsMesa = [];
+
       Object.keys(cuentas).forEach(function (k) {
         var c = cuentas[k];
-        if (!c || c.mesaId !== parseInt(mesa)) return;
+        if (!c || parseInt(c.mesaId) !== parseInt(mesa)) return;
         sillasTotal++;
         if (c.estado === 'ocupada') {
           sillasOcupadas++;
           var items = c.items || [];
           items.forEach(function (i) {
             totalMesa += (parseFloat(i.precio) || 0) * (parseInt(i.cantidad) || 1);
+            itemsMesa.push({
+              silla: c.sillaId === 0 ? 'Al Centro' : ('Silla ' + c.sillaId),
+              item: i
+            });
           });
-          if (items.length === 0) sinPedido.push(c.sillaId);
+          if (items.length === 0 && c.sillaId !== 0) sinPedido.push('Silla ' + c.sillaId);
         }
       });
-      var esOcupada = sillasOcupadas > 0;
+
+      var esOcupada = sillasOcupadas > 0 || itemsMesa.length > 0;
       var titulo = 'Mesa ' + mesa;
-      var subtitulo = esOcupada ? '● OCUPADA' : '○ LIBRE';
+      var subtitulo = esOcupada ? '● EN SERVICIO' : '○ LIBRE';
       var gradiente = esOcupada
         ? 'linear-gradient(135deg,#7c3aed,#5b21b6)'
         : 'linear-gradient(135deg,#10b981,#059669)';
       var acento = esOcupada ? '#c4b5fd' : '#a7f3d0';
+
       var alertaSinPedido = '';
       if (sinPedido.length > 0) {
-        alertaSinPedido = '<div style="margin:10px;padding:10px 12px;'
+        alertaSinPedido = '<div style="margin:8px 10px;padding:6px 10px;'
                         + 'background:linear-gradient(135deg,#c2410c,#7c2d12);'
-                        + 'color:#fed7aa;border-radius:12px;'
-                        + 'font-size:11px;font-weight:800;text-align:center;'
+                        + 'color:#fed7aa;border-radius:10px;'
+                        + 'font-size:10.5px;font-weight:800;text-align:center;'
                         + 'border:1px solid #fdba74;">'
-                        + '⚠️ Silla(s) ' + sinPedido.join(', ')
-                        + '<br>ocupada(s) sin ordenar aún</div>';
+                        + '⚠️ ' + sinPedido.join(', ')
+                        + ' ocupada(s) sin comanda aún</div>';
       }
+
       var stats = '<div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;'
                 +   'background:#334155;padding:1px;">'
-                + '  <div style="background:#0f172a;padding:14px;text-align:center;">'
-                + '    <div style="color:#94a3b8;font-size:10px;font-weight:700;'
-                +       'text-transform:uppercase;letter-spacing:0.05em;">Ocupadas</div>'
-                + '    <div style="color:#fbbf24;font-size:24px;font-weight:900;margin-top:2px;">'
-                +       sillasOcupadas + '<span style="color:#64748b;font-size:14px;"> / '
+                + '  <div style="background:#0f172a;padding:10px;text-align:center;">'
+                + '    <div style="color:#94a3b8;font-size:9.5px;font-weight:700;'
+                +       'text-transform:uppercase;letter-spacing:0.05em;">Ocupación</div>'
+                + '    <div style="color:#fbbf24;font-size:18px;font-weight:900;margin-top:2px;">'
+                +       sillasOcupadas + '<span style="color:#64748b;font-size:12px;"> / '
                 +       sillasTotal + '</span></div>'
                 + '  </div>'
-                + '  <div style="background:#0f172a;padding:14px;text-align:center;">'
-                + '    <div style="color:#94a3b8;font-size:10px;font-weight:700;'
-                +       'text-transform:uppercase;letter-spacing:0.05em;">Total</div>'
-                + '    <div style="color:#10b981;font-size:20px;font-weight:900;margin-top:2px;">$'
+                + '  <div style="background:#0f172a;padding:10px;text-align:center;">'
+                + '    <div style="color:#94a3b8;font-size:9.5px;font-weight:700;'
+                +       'text-transform:uppercase;letter-spacing:0.05em;">Total Mesa</div>'
+                + '    <div style="color:#10b981;font-size:18px;font-weight:900;margin-top:2px;">$'
                 +       totalMesa.toFixed(2) + '</div>'
                 + '  </div>'
                 + '</div>';
-      var pie = '<div style="padding:10px;text-align:center;color:#64748b;'
-              +   'font-size:10px;font-weight:600;background:#020617;'
+
+      var lineas = '';
+      if (itemsMesa.length > 0) {
+        var lineasArr = [];
+        itemsMesa.slice(0, 8).forEach(function (obj) {
+          var it = obj.item;
+          lineasArr.push(
+            '<div style="padding:6px 12px;border-bottom:1px solid #1e293b;">'
+          +   '<div style="display:flex;justify-content:space-between;align-items:flex-start;'
+          +     'gap:8px;margin-bottom:2px;">'
+          +   '  <div style="flex:1;min-width:0;font-size:11.5px;color:#f1f5f9;font-weight:700;'
+          +     'overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'
+          +     '<span style="color:#38bdf8;font-size:9.5px;margin-right:4px;">[' + obj.silla + ']</span>'
+          +     '<span style="color:#fbbf24;">' + (it.cantidad || 1) + '×</span> '
+          +     (it.nombre || '?')
+          +   '</div>'
+          +   '  <div style="font-size:11.5px;font-weight:900;color:#10b981;">$'
+          +     ((parseFloat(it.precio) || 0) * (parseInt(it.cantidad) || 1)).toFixed(2)
+          +   '</div>'
+          +   '</div>'
+          +   '<div>' + _vsBadgeItem(it) + '</div>'
+          + '</div>'
+          );
+        });
+        lineas = '<div style="max-height:200px;overflow-y:auto;">' + lineasArr.join('') + '</div>';
+        if (itemsMesa.length > 8) {
+          lineas += '<div style="text-align:center;color:#94a3b8;font-size:10px;padding:5px;">'
+                  + '… y ' + (itemsMesa.length - 8) + ' platillos más</div>';
+        }
+      }
+
+      var pie = '<div style="padding:8px;text-align:center;color:#64748b;'
+              +   'font-size:9.5px;font-weight:600;background:#020617;'
               +   'border-top:1px solid #1e293b;">'
-              +   'Clic para pedir <b style="color:#fbbf24;">al centro</b> de la mesa</div>';
+              +   'Clic para gestionar comanda / pedir <b style="color:#fbbf24;">al centro</b></div>';
       return _vsTarjetaBase(gradiente, acento, titulo, subtitulo,
-                            stats + alertaSinPedido + pie);
+                            stats + alertaSinPedido + lineas + pie);
     }
+
     window.installHoverTooltips = function () {
       var root = document.body;
       if (root._vsHoverInstalled) return;
       root._vsHoverInstalled = true;
+
       // Vaciar el title nativo de sillas/mesas para que el navegador no
       // muestre su tooltip default en blanco y negro sobre nuestro tooltip.
       var neutralizeTitles = function () {
-        var els = document.querySelectorAll('[data-action="clickSilla"], [data-action="clickMesa"]');
+        var els = document.querySelectorAll('.chair-btn-fixed, [id^="chair-"], [id^="extra-chair-"], .table-circle-fixed, .table-square-fixed, [id^="table-circle-"], [id^="table-square-"], [id^="table-card-container-"], [id^="table-box-"], [data-action="clickSilla"], [data-action="clickMesa"]');
         for (var i = 0; i < els.length; i++) {
           if (els[i].getAttribute('title')) {
             els[i].dataset.origtitle = els[i].getAttribute('title');
@@ -4623,30 +4674,71 @@
         }
       };
       neutralizeTitles();
-      // Re-neutralizar cada 2s por si el JS re-renderiza los divs.
       setInterval(neutralizeTitles, 2000);
+
       root.addEventListener('mouseover', function (ev) {
-        var sillaEl = ev.target.closest ? ev.target.closest('[data-action="clickSilla"]') : null;
+        if (!ev.target || !ev.target.closest) return;
+
+        // 1. Hover sobre Silla
+        var sillaEl = ev.target.closest('.chair-btn-fixed, [id^="chair-"], [id^="extra-chair-"], [data-action="clickSilla"], [data-silla]');
         if (sillaEl) {
-          var args = (sillaEl.dataset.args || '').split(',');
-          if (args.length === 2) {
-            _vsMostrarTooltip(_vsTooltipHTMLSilla(args[0].trim(), args[1].trim()),
-                              ev.clientX, ev.clientY);
+          var m = null, s = null;
+          if (sillaEl.dataset.args) {
+            var args = sillaEl.dataset.args.split(',');
+            if (args.length >= 2) {
+              m = args[0].trim();
+              s = args[1].trim();
+            }
           }
-          return;
+          if (!m && sillaEl.id) {
+            var parts = sillaEl.id.split('-');
+            if (sillaEl.id.indexOf('extra-chair-') === 0 && parts.length === 3) {
+              m = '0';
+              s = parts[2];
+            } else if (parts.length === 3) {
+              m = parts[1];
+              s = parts[2];
+            }
+          }
+          if (m !== null && s !== null && !isNaN(parseInt(m)) && !isNaN(parseInt(s))) {
+            _vsMostrarTooltip(_vsTooltipHTMLSilla(m, s), ev.clientX, ev.clientY);
+            return;
+          }
         }
-        var mesaEl = ev.target.closest ? ev.target.closest('[data-action="clickMesa"]') : null;
+
+        // 2. Hover sobre Mesa
+        var mesaEl = ev.target.closest('.table-circle-fixed, .table-square-fixed, [id^="table-circle-"], [id^="table-square-"], [id^="table-card-container-"], [id^="table-box-"], [data-action="clickMesa"], [data-mesa]');
         if (mesaEl) {
-          _vsMostrarTooltip(_vsTooltipHTMLMesa((mesaEl.dataset.args || '').trim()),
-                            ev.clientX, ev.clientY);
+          var mesaNum = null;
+          if (mesaEl.dataset.args) {
+            mesaNum = mesaEl.dataset.args.trim();
+          } else if (mesaEl.id) {
+            var mparts = mesaEl.id.split('-');
+            mesaNum = mparts[mparts.length - 1];
+          }
+          if (mesaNum && !isNaN(parseInt(mesaNum))) {
+            _vsMostrarTooltip(_vsTooltipHTMLMesa(mesaNum), ev.clientX, ev.clientY);
+            return;
+          }
         }
       });
+
+      root.addEventListener('mousemove', function (ev) {
+        if (!_vsHoverTooltip || _vsHoverTooltip.style.display !== 'block') return;
+        var w = 310, h = 220;
+        var left = Math.min(window.innerWidth - w - 16, Math.max(16, ev.clientX + 16));
+        var top = Math.min(window.innerHeight - h - 16, Math.max(16, ev.clientY - 8));
+        _vsHoverTooltip.style.left = left + 'px';
+        _vsHoverTooltip.style.top  = top  + 'px';
+      });
+
       root.addEventListener('mouseout', function (ev) {
         var to = ev.relatedTarget;
         if (!to) return _vsOcultarTooltip();
-        // Si el mouse va hacia otra silla/mesa, no ocultar (se re-abrirá en mouseover).
-        if (to.closest && (to.closest('[data-action="clickSilla"]') ||
-                           to.closest('[data-action="clickMesa"]'))) return;
+        if (to.closest && (
+            to.closest('.chair-btn-fixed, [id^="chair-"], [id^="extra-chair-"], [data-action="clickSilla"]') ||
+            to.closest('.table-circle-fixed, .table-square-fixed, [id^="table-circle-"], [id^="table-card-container-"], [id^="table-box-"], [data-action="clickMesa"]')
+        )) return;
         _vsOcultarTooltip();
       });
     };
