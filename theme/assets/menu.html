@@ -181,6 +181,20 @@
 
     window.vsCartItems = [];
     window.categoriaActual = "Todos";
+    window.subcategoriaBebidas = null;
+
+    function getBebidaSubcategoria(prod) {
+      var nom = (prod.nombre || '').toLowerCase();
+      var desc = (prod.descripcion || '').toLowerCase();
+      var text = nom + ' ' + desc;
+      if (text.includes('té') || text.includes('te ') || text.includes('matcha') || text.includes('infusion') || text.includes('infusión') || text.includes('tisana') || text.includes('manzanilla') || text.includes('herbal')) {
+        return 'tes';
+      }
+      if (text.includes('café') || text.includes('cafe') || text.includes('espresso') || text.includes('capuchino') || text.includes('cappuccino') || text.includes('latte') || text.includes('machiatto') || text.includes('chocolate') || text.includes('americano') || text.includes('olla')) {
+        return 'cafes';
+      }
+      return 'bebidas';
+    }
 
     window.cargarDatosMenu = function(productos, categorias) {
       if (productos && productos.length > 0) window.vsMenuData = productos;
@@ -192,22 +206,33 @@
     window.renderCategoriasChips = function(categorias) {
       const container = document.getElementById('categoriesChips');
       if (!container) return;
-      container.innerHTML = `<button onclick="window.seleccionarCategoria('Todos')" class="cat-chip ${window.categoriaActual === 'Todos' ? 'active bg-emerald-500 text-white' : 'bg-slate-800/80 text-slate-400'} px-4 py-2 text-xs font-bold rounded-xl whitespace-nowrap transition">Todos</button>`;
+      container.innerHTML = `<button onclick="window.seleccionarCategoria('Todos')" class="cat-chip ${window.categoriaActual === 'Todos' ? 'active bg-emerald-500 text-white shadow-md shadow-emerald-500/20' : 'bg-slate-800/80 text-slate-400'} px-4 py-2 text-xs font-bold rounded-xl whitespace-nowrap transition">Todos</button>`;
       
       categorias.forEach(cat => {
         const btn = document.createElement('button');
-        const isActive = window.categoriaActual === cat.nombre;
+        var catName = cat.nombre;
+        var norm = catName.toLowerCase();
+        if (norm.includes('beb') || norm.includes('caf')) {
+          catName = 'Cafés y Bebidas';
+        }
+        const isActive = window.categoriaActual === catName;
         btn.className = `cat-chip ${isActive ? 'active bg-emerald-500 text-white shadow-md shadow-emerald-500/20' : 'bg-slate-800/80 text-slate-400 hover:text-white'} px-4 py-2 text-xs font-bold rounded-xl whitespace-nowrap transition`;
-        btn.innerText = `${cat.icono || '🍽️'} ${cat.nombre}`;
-        btn.onclick = () => window.seleccionarCategoria(cat.nombre);
+        btn.innerText = `${cat.icono || '🍽️'} ${catName}`;
+        btn.onclick = () => window.seleccionarCategoria(catName);
         container.appendChild(btn);
       });
     };
 
     window.seleccionarCategoria = function(catNombre) {
       window.categoriaActual = catNombre;
+      window.subcategoriaBebidas = null;
       const chips = document.querySelectorAll('.cat-chip');
       chips.forEach(c => c.classList.remove('active', 'bg-emerald-500', 'text-white'));
+      window.renderProductos();
+    };
+
+    window.seleccionarSubcategoriaBebida = function(subcat) {
+      window.subcategoriaBebidas = subcat;
       window.renderProductos();
     };
 
@@ -223,14 +248,41 @@
       container.innerHTML = '';
 
       const list = window.vsMenuData || [];
+      const isDrinks = (window.categoriaActual || '').toLowerCase().includes('caf') || (window.categoriaActual || '').toLowerCase().includes('beb');
+
+      // Banner selector de subcategorías si se está en Cafés y Bebidas
+      if (isDrinks && !searchVal) {
+        const subBanner = document.createElement('div');
+        subBanner.className = 'col-span-1 md:col-span-2 flex items-center gap-2 p-2 bg-slate-900/90 border border-slate-800 rounded-2xl mb-2 overflow-x-auto';
+        subBanner.innerHTML = `
+          <button onclick="window.seleccionarSubcategoriaBebida(null)" class="px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition ${!window.subcategoriaBebidas ? 'bg-amber-500 text-slate-950 font-black' : 'bg-slate-800 text-slate-400'}">Todas</button>
+          <button onclick="window.seleccionarSubcategoriaBebida('cafes')" class="px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition flex items-center gap-1.5 ${window.subcategoriaBebidas === 'cafes' ? 'bg-amber-500 text-slate-950 font-black shadow-md' : 'bg-slate-800 text-amber-300 hover:bg-slate-700'}">☕ Cafés</button>
+          <button onclick="window.seleccionarSubcategoriaBebida('tes')" class="px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition flex items-center gap-1.5 ${window.subcategoriaBebidas === 'tes' ? 'bg-emerald-500 text-slate-950 font-black shadow-md' : 'bg-slate-800 text-emerald-300 hover:bg-slate-700'}">🍵 Tés & Infusiones</button>
+          <button onclick="window.seleccionarSubcategoriaBebida('bebidas')" class="px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition flex items-center gap-1.5 ${window.subcategoriaBebidas === 'bebidas' ? 'bg-sky-500 text-slate-950 font-black shadow-md' : 'bg-slate-800 text-sky-300 hover:bg-slate-700'}">🥤 Bebidas & Refrescos</button>
+        `;
+        container.appendChild(subBanner);
+      }
+
       const filtrados = list.filter(p => {
-        const matchCat = window.categoriaActual === 'Todos' || p.categoria_nombre === window.categoriaActual;
+        let matchCat = false;
+        var pCat = (p.categoria_nombre || '').toLowerCase();
+        if (window.categoriaActual === 'Todos') {
+          matchCat = true;
+        } else if (isDrinks) {
+          matchCat = pCat.includes('caf') || pCat.includes('beb') || p.categoria_id === 6 || p.categoria_id === 1;
+          if (matchCat && window.subcategoriaBebidas) {
+            matchCat = (getBebidaSubcategoria(p) === window.subcategoriaBebidas);
+          }
+        } else {
+          matchCat = (p.categoria_nombre === window.categoriaActual);
+        }
+
         const matchSearch = p.nombre.toLowerCase().includes(searchVal) || (p.descripcion && p.descripcion.toLowerCase().includes(searchVal));
         return matchCat && matchSearch;
       });
 
       if (filtrados.length === 0) {
-        container.innerHTML = `<div class="text-center py-12 text-slate-500 text-sm col-span-2">No se encontraron platillos o bebidas disponibles</div>`;
+        container.innerHTML += `<div class="text-center py-12 text-slate-500 text-sm col-span-2">No se encontraron platillos o bebidas disponibles</div>`;
         return;
       }
 

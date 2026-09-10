@@ -733,9 +733,9 @@
         <!-- CATEGORY CHIPS: grid 3 columnas x N renglones (botones grandes vistosos) -->
         <div id="waiterCatChips"
              style="display: grid !important; grid-template-columns: repeat(3, 1fr) !important; gap: 12px !important; margin-bottom: 16px !important;">
-          <button data-cat="Bebidas & Jugos" id="wchip-Bebidas" data-action="filtrarCategoria" data-args="Bebidas & Jugos"
+          <button data-cat="Cafés y Bebidas" id="wchip-Bebidas" data-action="filtrarCategoria" data-args="Cafés y Bebidas"
             style="padding: 6px 11px !important; font-size: 11px !important; font-weight: 800 !important; border-radius: 10px !important; border: 1px solid #34d399 !important; background: #059669 !important; color: #ffffff !important; cursor: pointer !important;">☕
-            Bebidas & Cafetería</button>
+            Cafés y Bebidas</button>
           <button data-cat="Al Centro (Para Compartir)" id="wchip-AlCentro"
             data-action="filtrarCategoria" data-args="Al Centro (Para Compartir)"
             style="padding: 6px 11px !important; font-size: 11px !important; font-weight: 800 !important; border-radius: 10px !important; border: 1px solid #334155 !important; background: #1e293b !important; color: #cbd5e1 !important; cursor: pointer !important;">🧺
@@ -762,15 +762,55 @@
             Menú Infantil</button>
         </div>
 
+        <!-- SUBCATEGORÍAS DE BEBIDAS: 3 Cuadros Grandes (Cafés / Tés / Bebidas & Refrescos) -->
+        <div id="waiterDrinkSubcats"
+             style="display: none !important; grid-template-columns: repeat(3, 1fr) !important; gap: 14px !important; margin-bottom: 16px !important;">
+          <!-- 1. Cafés -->
+          <button type="button" onclick="window.filtrarBebidaSubcat('cafes')"
+                  style="display: flex !important; flex-direction: column !important; align-items: center !important; justify-content: center !important; text-align: center !important; gap: 10px !important; padding: 22px 14px !important; min-height: 170px !important; border-radius: 20px !important; border: 2px solid #f59e0b !important; background: linear-gradient(160deg, #1e293b 0%, #0f172a 100%) !important; color: #ffffff !important; cursor: pointer !important; box-shadow: 0 8px 24px rgba(245, 158, 11, 0.25) !important; transition: all 0.2s ease !important;">
+            <span style="font-size: 44px; line-height: 1;">☕</span>
+            <span style="font-size: 16px; font-weight: 900; color: #fef08a;">Cafés</span>
+            <span style="font-size: 11px; color: #94a3b8; line-height: 1.3;">Americanos, Capuchinos, Lattes, Espressos, Café con Leche y Chocolate</span>
+            <span style="padding: 2px 8px; border-radius: 999px; background: rgba(245, 158, 11, 0.2); color: #fbbf24; font-size: 10px; font-weight: 800; margin-top: 4px;">6 Platillos</span>
+          </button>
+          <!-- 2. Tés -->
+          <button type="button" onclick="window.filtrarBebidaSubcat('tes')"
+                  style="display: flex !important; flex-direction: column !important; align-items: center !important; justify-content: center !important; text-align: center !important; gap: 10px !important; padding: 22px 14px !important; min-height: 170px !important; border-radius: 20px !important; border: 2px solid #10b981 !important; background: linear-gradient(160deg, #1e293b 0%, #0f172a 100%) !important; color: #ffffff !important; cursor: pointer !important; box-shadow: 0 8px 24px rgba(16, 185, 129, 0.25) !important; transition: all 0.2s ease !important;">
+            <span style="font-size: 44px; line-height: 1;">🍵</span>
+            <span style="font-size: 16px; font-weight: 900; color: #a7f3d0;">Tés & Infusiones</span>
+            <span style="font-size: 11px; color: #94a3b8; line-height: 1.3;">Té Matcha Ceremonial, Té Verde, Tisanas Frutales y Manzanilla</span>
+            <span style="padding: 2px 8px; border-radius: 999px; background: rgba(16, 185, 129, 0.2); color: #34d399; font-size: 10px; font-weight: 800; margin-top: 4px;">3 Platillos</span>
+          </button>
+          <!-- 3. Bebidas & Refrescos -->
+          <button type="button" onclick="window.filtrarBebidaSubcat('bebidas')"
+                  style="display: flex !important; flex-direction: column !important; align-items: center !important; justify-content: center !important; text-align: center !important; gap: 10px !important; padding: 22px 14px !important; min-height: 170px !important; border-radius: 20px !important; border: 2px solid #0284c7 !important; background: linear-gradient(160deg, #1e293b 0%, #0f172a 100%) !important; color: #ffffff !important; cursor: pointer !important; box-shadow: 0 8px 24px rgba(2, 132, 199, 0.25) !important; transition: all 0.2s ease !important;">
+            <span style="font-size: 44px; line-height: 1;">🥤</span>
+            <span style="font-size: 16px; font-weight: 900; color: #bae6fd;">Bebidas & Refrescos</span>
+            <span style="font-size: 11px; color: #94a3b8; line-height: 1.3;">Jugos Naturales, Jugo Verde, Limonadas, Aguas Frescas y Refrescos</span>
+            <span style="padding: 2px 8px; border-radius: 999px; background: rgba(56, 189, 248, 0.2); color: #38bdf8; font-size: 10px; font-weight: 800; margin-top: 4px;">6 Platillos</span>
+          </button>
+        </div>
+
         <!-- HEADER de vista de categoría (visible sólo cuando se seleccionó una) -->
         <div id="waiterCatHeader"
-             style="display: none !important; align-items: center !important; gap: 12px !important; margin-bottom: 12px !important; padding-bottom: 10px !important; border-bottom: 1px solid #1e293b !important;">
-          <button data-action="volverAcategorias"
-                  style="display: flex !important; align-items: center !important; gap: 6px !important; padding: 8px 14px !important; background: #1e293b !important; color: #cbd5e1 !important; border: 1px solid #334155 !important; border-radius: 10px !important; font-size: 12px !important; font-weight: 800 !important; cursor: pointer !important;">
-            <i class="fa-solid fa-arrow-left"></i> Volver a categorías
-          </button>
-          <div id="waiterCatTitle"
-               style="font-size: 16px !important; font-weight: 900 !important; color: #f1f5f9 !important; display: flex !important; align-items: center !important; gap: 8px !important;">
+             style="display: none !important; align-items: center !important; justify-content: space-between !important; gap: 12px !important; margin-bottom: 12px !important; padding-bottom: 10px !important; border-bottom: 1px solid #1e293b !important; flex-wrap: wrap !important;">
+          <div style="display: flex !important; align-items: center !important; gap: 10px !important;">
+            <button id="btnVolverCat" data-action="volverAcategorias"
+                    style="display: flex !important; align-items: center !important; gap: 6px !important; padding: 8px 14px !important; background: #1e293b !important; color: #cbd5e1 !important; border: 1px solid #334155 !important; border-radius: 10px !important; font-size: 12px !important; font-weight: 800 !important; cursor: pointer !important;">
+              <i class="fa-solid fa-arrow-left"></i> Volver a categorías
+            </button>
+            <div id="waiterCatTitle"
+                 style="font-size: 16px !important; font-weight: 900 !important; color: #f1f5f9 !important; display: flex !important; align-items: center !important; gap: 8px !important;">
+            </div>
+          </div>
+          <!-- Subcategorías Pills Rápidas (visibles en modo bebidas) -->
+          <div id="waiterDrinkPills" style="display: none !important; align-items: center !important; gap: 6px !important;">
+            <button type="button" onclick="window.filtrarBebidaSubcat('cafes')" id="pill-cafes"
+                    style="padding: 6px 12px !important; font-size: 11px !important; font-weight: 800 !important; border-radius: 8px !important; border: 1px solid #f59e0b !important; background: rgba(245,158,11,0.2) !important; color: #fef08a !important; cursor: pointer !important;">☕ Cafés</button>
+            <button type="button" onclick="window.filtrarBebidaSubcat('tes')" id="pill-tes"
+                    style="padding: 6px 12px !important; font-size: 11px !important; font-weight: 800 !important; border-radius: 8px !important; border: 1px solid #10b981 !important; background: rgba(16,185,129,0.2) !important; color: #a7f3d0 !important; cursor: pointer !important;">🍵 Tés & Infusiones</button>
+            <button type="button" onclick="window.filtrarBebidaSubcat('bebidas')" id="pill-bebidas"
+                    style="padding: 6px 12px !important; font-size: 11px !important; font-weight: 800 !important; border-radius: 8px !important; border: 1px solid #0284c7 !important; background: rgba(2,132,199,0.2) !important; color: #bae6fd !important; cursor: pointer !important;">🥤 Bebidas & Refrescos</button>
           </div>
         </div>
 

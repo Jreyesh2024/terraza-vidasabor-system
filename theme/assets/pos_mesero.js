@@ -74,20 +74,43 @@
       renderWaiterMenuGrid();
     };
 
+    function getBebidaSubcategoria(prod) {
+      var nom = (prod.nombre || '').toLowerCase();
+      var desc = (prod.descripcion || '').toLowerCase();
+      var text = nom + ' ' + desc;
+
+      // 1. Tés & Infusiones
+      if (text.includes('té') || text.includes('te ') || text.includes('matcha') || text.includes('infusion') || text.includes('infusión') || text.includes('tisana') || text.includes('manzanilla') || text.includes('herbal')) {
+        return 'tes';
+      }
+
+      // 2. Cafés
+      if (text.includes('café') || text.includes('cafe') || text.includes('espresso') || text.includes('capuchino') || text.includes('cappuccino') || text.includes('latte') || text.includes('machiatto') || text.includes('chocolate') || text.includes('americano') || text.includes('olla')) {
+        return 'cafes';
+      }
+
+      // 3. Bebidas & Refrescos
+      return 'bebidas';
+    }
+
     function renderWaiterCatChips() {
       const container = document.getElementById('waiterCatChips');
       if (!container || !window.catalogCategories || window.catalogCategories.length === 0) return;
       container.innerHTML = '';
       // "Al Centro" se accede haciendo clic en la mesa del croquis, no aquí.
-      // Filtramos para que este menú de categorías quede más limpio.
       var categorias = window.catalogCategories.filter(function (cat) {
         return !cat.es_al_centro
             && !(cat.nombre || '').toLowerCase().includes('al centro');
       });
       categorias.forEach(function (cat) {
         const btn = document.createElement('button');
-        btn.dataset.cat = cat.nombre;
-        btn.onclick = function () { window.filtrarCategoria(cat.nombre); };
+        var catName = cat.nombre;
+        var norm = catName.toLowerCase();
+        if (norm.includes('beb') || norm.includes('caf')) {
+          catName = 'Cafés y Bebidas';
+        }
+        btn.dataset.cat = catName;
+        btn.onclick = function () { window.filtrarCategoria(catName); };
         // Tarjeta cuadrada grande estilo AdminMenu.
         btn.style.cssText = [
           'display: flex !important',
@@ -121,32 +144,130 @@
         };
         btn.innerHTML =
           '<span style="font-size:40px; line-height:1;">' + (cat.icono || '🍽️') + '</span>' +
-          '<span>' + cat.nombre + '</span>';
+          '<span>' + catName + '</span>';
         container.appendChild(btn);
       });
     }
 
-    // Mostrar/ocultar entre vista "categorías" y vista "productos de categoría"
+    // Mostrar/ocultar entre vista "categorías", "subcategorías de bebidas" y "productos"
     function mostrarVistaCategorias() {
-      const chips  = document.getElementById('waiterCatChips');
-      const header = document.getElementById('waiterCatHeader');
-      const grid   = document.getElementById('waiterMenuGrid');
-      if (chips)  chips.style.setProperty('display', 'grid', 'important');
-      if (header) header.style.setProperty('display', 'none', 'important');
-      if (grid)   grid.style.setProperty('display', 'none', 'important');
+      const chips   = document.getElementById('waiterCatChips');
+      const subcats = document.getElementById('waiterDrinkSubcats');
+      const header  = document.getElementById('waiterCatHeader');
+      const grid    = document.getElementById('waiterMenuGrid');
+      const pills   = document.getElementById('waiterDrinkPills');
+      if (chips)   chips.style.setProperty('display', 'grid', 'important');
+      if (subcats) subcats.style.setProperty('display', 'none', 'important');
+      if (header)  header.style.setProperty('display', 'none', 'important');
+      if (grid)    grid.style.setProperty('display', 'none', 'important');
+      if (pills)   pills.style.setProperty('display', 'none', 'important');
       window.palapaState.categoriaFiltro = null;
+      window.palapaState.bebidaSubcatFiltro = null;
     }
+
+    window.mostrarSubcategoriasBebidas = function () {
+      const chips   = document.getElementById('waiterCatChips');
+      const subcats = document.getElementById('waiterDrinkSubcats');
+      const header  = document.getElementById('waiterCatHeader');
+      const grid    = document.getElementById('waiterMenuGrid');
+      const pills   = document.getElementById('waiterDrinkPills');
+      const title   = document.getElementById('waiterCatTitle');
+      const btnVolver = document.getElementById('btnVolverCat');
+
+      if (chips)   chips.style.setProperty('display', 'none', 'important');
+      if (subcats) subcats.style.setProperty('display', 'grid', 'important');
+      if (header)  header.style.setProperty('display', 'flex', 'important');
+      if (grid)    grid.style.setProperty('display', 'none', 'important');
+      if (pills)   pills.style.setProperty('display', 'none', 'important');
+
+      if (title) {
+        title.innerHTML = '<span style="font-size:22px;">☕</span><span>Cafés y Bebidas • Elige una sección</span>';
+      }
+      if (btnVolver) {
+        btnVolver.onclick = function () { mostrarVistaCategorias(); };
+        btnVolver.innerHTML = '<i class="fa-solid fa-arrow-left"></i> Volver a categorías';
+      }
+      window.palapaState.categoriaFiltro = 'Cafés y Bebidas';
+      window.palapaState.bebidaSubcatFiltro = null;
+    };
+
+    window.filtrarBebidaSubcat = function (subcatKey) {
+      window.palapaState.categoriaFiltro = 'Cafés y Bebidas';
+      window.palapaState.bebidaSubcatFiltro = subcatKey;
+
+      const chips   = document.getElementById('waiterCatChips');
+      const subcats = document.getElementById('waiterDrinkSubcats');
+      const header  = document.getElementById('waiterCatHeader');
+      const grid    = document.getElementById('waiterMenuGrid');
+      const pills   = document.getElementById('waiterDrinkPills');
+      const title   = document.getElementById('waiterCatTitle');
+      const btnVolver = document.getElementById('btnVolverCat');
+
+      if (chips)   chips.style.setProperty('display', 'none', 'important');
+      if (subcats) subcats.style.setProperty('display', 'none', 'important');
+      if (header)  header.style.setProperty('display', 'flex', 'important');
+      if (grid)    grid.style.setProperty('display', 'grid', 'important');
+      if (pills)   pills.style.setProperty('display', 'flex', 'important');
+
+      if (btnVolver) {
+        btnVolver.onclick = function () { window.mostrarSubcategoriasBebidas(); };
+        btnVolver.innerHTML = '<i class="fa-solid fa-arrow-left"></i> Volver a Cafés y Bebidas';
+      }
+
+      var subcatInfo = {
+        'cafes':   ['☕', 'Cafés de Especialidad & Cafetería', '#f59e0b', '#fef08a'],
+        'tes':     ['🍵', 'Tés & Infusiones Aromáticas', '#10b981', '#a7f3d0'],
+        'bebidas': ['🥤', 'Bebidas, Jugos Naturales & Refrescos', '#0284c7', '#bae6fd']
+      };
+      var info = subcatInfo[subcatKey] || subcatInfo['cafes'];
+      if (title) {
+        title.innerHTML = '<span style="font-size:22px;">' + info[0] + '</span><span style="color:' + info[3] + ';">' + info[1] + '</span>';
+      }
+
+      // Actualizar pills activas
+      ['cafes', 'tes', 'bebidas'].forEach(function (k) {
+        var el = document.getElementById('pill-' + k);
+        if (el) {
+          if (k === subcatKey) {
+            el.style.background = (k === 'cafes' ? '#d97706' : (k === 'tes' ? '#059669' : '#0284c7'));
+            el.style.color = '#ffffff';
+            el.style.fontWeight = '900';
+            el.style.boxShadow = '0 0 10px rgba(255,255,255,0.2)';
+          } else {
+            el.style.background = 'rgba(30, 41, 59, 0.7)';
+            el.style.color = '#94a3b8';
+            el.style.fontWeight = '700';
+            el.style.boxShadow = 'none';
+          }
+        }
+      });
+
+      renderWaiterMenuGrid();
+    };
+
     function mostrarVistaProductos(catNombre, catIcono) {
-      const chips  = document.getElementById('waiterCatChips');
-      const header = document.getElementById('waiterCatHeader');
-      const grid   = document.getElementById('waiterMenuGrid');
-      const title  = document.getElementById('waiterCatTitle');
-      if (chips)  chips.style.setProperty('display', 'none', 'important');
-      if (header) header.style.setProperty('display', 'flex', 'important');
-      if (grid)   grid.style.setProperty('display', 'grid', 'important');
-      if (title)  title.innerHTML =
-        '<span style="font-size:22px;">' + (catIcono || '🍽️') + '</span>' +
-        '<span>' + catNombre + '</span>';
+      const chips   = document.getElementById('waiterCatChips');
+      const subcats = document.getElementById('waiterDrinkSubcats');
+      const header  = document.getElementById('waiterCatHeader');
+      const grid    = document.getElementById('waiterMenuGrid');
+      const pills   = document.getElementById('waiterDrinkPills');
+      const title   = document.getElementById('waiterCatTitle');
+      const btnVolver = document.getElementById('btnVolverCat');
+
+      if (chips)   chips.style.setProperty('display', 'none', 'important');
+      if (subcats) subcats.style.setProperty('display', 'none', 'important');
+      if (header)  header.style.setProperty('display', 'flex', 'important');
+      if (grid)    grid.style.setProperty('display', 'grid', 'important');
+      if (pills)   pills.style.setProperty('display', 'none', 'important');
+
+      if (btnVolver) {
+        btnVolver.onclick = function () { mostrarVistaCategorias(); };
+        btnVolver.innerHTML = '<i class="fa-solid fa-arrow-left"></i> Volver a categorías';
+      }
+
+      if (title) {
+        title.innerHTML = '<span style="font-size:22px;">' + (catIcono || '🍽️') + '</span><span>' + catNombre + '</span>';
+      }
     }
     window.volverAcategorias = function () { mostrarVistaCategorias(); };
 
@@ -4251,28 +4372,56 @@
         return;
       }
 
-      const catFiltro = window.palapaState.categoriaFiltro || (window.catalogCategories && window.catalogCategories[0] ? window.catalogCategories[0].nombre : 'Bebidas & Jugos');
-      let filtrados = window.catalogProducts.filter(p => p.categoria_nombre === catFiltro);
-      if (filtrados.length === 0 && window.catalogProducts.length > 0) {
-        filtrados = window.catalogProducts.filter(p => p.categoria_nombre === window.catalogProducts[0].categoria_nombre);
+      const catFiltro = window.palapaState.categoriaFiltro || 'Cafés y Bebidas';
+      const subcatFiltro = window.palapaState.bebidaSubcatFiltro;
+
+      let filtrados = [];
+      var normCat = (catFiltro || '').toLowerCase();
+
+      if (normCat.includes('caf') || normCat.includes('beb')) {
+        // Obtenemos todos los productos de bebidas/café
+        var allDrinks = window.catalogProducts.filter(function (p) {
+          var cNom = (p.categoria_nombre || '').toLowerCase();
+          return cNom.includes('caf') || cNom.includes('beb') || p.categoria_id === 6 || p.categoria_id === 1;
+        });
+
+        if (subcatFiltro) {
+          filtrados = allDrinks.filter(function (p) {
+            return getBebidaSubcategoria(p) === subcatFiltro;
+          });
+        } else {
+          filtrados = allDrinks;
+        }
+      } else {
+        filtrados = window.catalogProducts.filter(function (p) {
+          return p.categoria_nombre === catFiltro;
+        });
       }
+
+      if (filtrados.length === 0 && window.catalogProducts.length > 0 && !subcatFiltro) {
+        filtrados = window.catalogProducts;
+      }
+
       const sillaNum = (window.palapaState.sillaSeleccionadaNum !== null && window.palapaState.sillaSeleccionadaNum !== undefined) ? window.palapaState.sillaSeleccionadaNum : 1;
 
       filtrados.forEach(prod => {
         const card = document.createElement('div');
         card.style.cssText = 'background: #0f172a !important; border: 1px solid #1e293b !important; border-radius: 14px !important; padding: 12px 14px !important; display: flex !important; flex-direction: column !important; justify-content: space-between !important; gap: 10px !important; transition: all 0.2s ease !important; cursor: pointer !important;';
 
+        var precioNum = Number(prod.precio !== undefined ? prod.precio : (prod.precio_unitario || 0));
+        var tiempoTxt = prod.tiempo || prod.tiempo_estimado || '5–8 min';
+
         card.innerHTML = `
           <div style="display: flex; align-items: flex-start; gap: 10px;" onclick="window.agregarPlatilloDirectoById(${prod.id});">
-            <span style="font-size: 26px; padding: 4px; background: #020617; border-radius: 10px; border: 1px solid #1e293b;">${prod.icono}</span>
+            <span style="font-size: 26px; padding: 4px; background: #020617; border-radius: 10px; border: 1px solid #1e293b;">${prod.icono || '🍽️'}</span>
             <div style="flex: 1;">
               <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                 <span style="font-size: 12px; font-weight: 800; color: #ffffff; line-height: 1.2;">${prod.nombre}</span>
               </div>
               <span style="font-size: 10px; color: #94a3b8; display: block; line-height: 1.3; margin-top: 3px;">${prod.descripcion || ''}</span>
               <div style="display: flex; align-items: center; gap: 6px; margin-top: 6px;">
-                <span style="font-size: 13px; font-weight: 900; color: #34d399;">$${prod.precio.toFixed(2)}</span>
-                <span style="font-size: 9px; color: #38bdf8; font-weight: 700; background: rgba(56,189,248,0.15); padding: 1px 6px; border-radius: 4px;">⏱️ ${prod.tiempo || '8–10 min'}</span>
+                <span style="font-size: 13px; font-weight: 900; color: #34d399;">$${precioNum.toFixed(2)}</span>
+                <span style="font-size: 9px; color: #38bdf8; font-weight: 700; background: rgba(56,189,248,0.15); padding: 1px 6px; border-radius: 4px;">⏱️ ${tiempoTxt}</span>
               </div>
             </div>
           </div>
@@ -4446,6 +4595,17 @@
 
     window.filtrarCategoria = function (catNombre) {
       window.palapaState.categoriaFiltro = catNombre;
+      window.palapaState.bebidaSubcatFiltro = null;
+
+      var norm = (catNombre || '').toLowerCase();
+      // Si el usuario da clic en la categoría de Cafés / Bebidas:
+      if (norm.includes('caf') || norm.includes('beb')) {
+        if (typeof window.mostrarSubcategoriasBebidas === 'function') {
+          window.mostrarSubcategoriasBebidas();
+          return;
+        }
+      }
+
       // Buscar el icono de la categoría para mostrarlo en el header.
       var cat = (window.catalogCategories || []).find(function (c) {
         return c.nombre === catNombre;
