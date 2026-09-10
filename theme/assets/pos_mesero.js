@@ -409,6 +409,16 @@
       if (!window.palapaState || !window.palapaState.cuentas) return;
 
       var changed = false;
+
+      // 1. Limpiar cuentas al centro (ej. '2-0') que no existen en el servidor
+      Object.keys(window.palapaState.cuentas).forEach(function(k) {
+        if (k.endsWith('-0') && !cuentasServidor[k]) {
+          delete window.palapaState.cuentas[k];
+          changed = true;
+        }
+      });
+
+      // 2. Sincronizar todas las cuentas desde PostgreSQL
       Object.keys(cuentasServidor).forEach(function(k) {
         var srv = cuentasServidor[k];
         if (!srv) return;
@@ -418,8 +428,8 @@
           changed = true;
         } else {
           var curr = window.palapaState.cuentas[k];
-          if (srv.estado === 'ocupada' && curr.estado !== 'ocupada') {
-            curr.estado = 'ocupada';
+          if (srv.estado !== curr.estado) {
+            curr.estado = srv.estado;
             changed = true;
           }
           if (srv.qrId && !curr.qrId) {
@@ -430,30 +440,21 @@
             curr.comensalNombre = srv.comensalNombre;
             changed = true;
           }
-          if (srv.items && Array.isArray(srv.items)) {
-            var localItems = curr.items || [];
-            var mergedItems = srv.items.map(function(sItem, sIdx) {
-              var lItem = localItems[sIdx] || localItems.find(function(it) {
-                return (it.id && it.id === sItem.id) || (it.nombre === sItem.nombre && it.precio === sItem.precio);
-              });
-              if (lItem && lItem.enviadoCocina && !sItem.enviadoCocina) {
-                return Object.assign({}, sItem, {
-                  enviadoCocina: true,
-                  horaEnvioCocina: lItem.horaEnvioCocina || sItem.horaEnvioCocina
-                });
-              }
-              return sItem;
-            });
 
-            if (!areItemsEqual(curr.items || [], mergedItems)) {
-              curr.items = mergedItems;
-              curr.estado = srv.estado || (curr.items.length > 0 ? 'ocupada' : curr.estado);
+          var srvItems = Array.isArray(srv.items) ? srv.items : [];
+          // Si en servidor está vacía o limpia, sincronizar directo
+          if (srvItems.length === 0 && (curr.items && curr.items.length > 0)) {
+            // Solo conservar si hay un item nuevo pendiente en memoria que el mesero acaba de agregar
+            var pendingLocals = curr.items.filter(function(it) { return !it.enviadoCocina && !it.id; });
+            if (pendingLocals.length === 0) {
+              curr.items = [];
               changed = true;
             }
-          }
-          if (srv.estado && curr.estado !== srv.estado) {
-            curr.estado = srv.estado;
-            changed = true;
+          } else if (srvItems.length > 0) {
+            if (!areItemsEqual(curr.items || [], srvItems)) {
+              curr.items = JSON.parse(JSON.stringify(srvItems));
+              changed = true;
+            }
           }
         }
       });
@@ -3365,6 +3366,7 @@
 
     window.volverAlCroquisGeneral = function () {
       window.palapaState.modoComandaActiva = false;
+      saveStateToStorage();
       renderStateUI();
       const bannerText = document.getElementById('bannerText');
       if (bannerText) {
