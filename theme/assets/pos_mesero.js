@@ -3335,7 +3335,7 @@
         else if (isMoveMode) stateClass = `chair-moving-target ${stateClass}`;
 
         chairEl.className = `chair-btn-fixed ${stateClass}`;
-        chairEl.style.cssText = `position: absolute !important; ${posCss} z-index: 25 !important; cursor: pointer !important; white-space: nowrap !important;`;
+        chairEl.style.cssText = `position: absolute !important; ${posCss} z-index: 25 !important; cursor: pointer !important; white-space: nowrap !important; box-sizing: border-box !important; text-align: center !important; overflow: hidden !important; text-overflow: ellipsis !important;`;
         chairEl.onclick = function (e) {
           if (_wasDrag) return;
           if (e) e.stopPropagation();
@@ -3353,15 +3353,15 @@
         let itemBadge = '';
         if (totalItems > 0 && !isPaid) {
           const badgeColor = hasNewItems ? '#ef4444' : '#d97706';
-          itemBadge = ` <span style="display:inline-block;background:${badgeColor};color:#fff;border-radius:10px;padding:0px 5px;font-size:9px;font-weight:900;vertical-align:middle;min-width:16px;text-align:center;line-height:15px;margin-left:2px;">${totalItems}</span>`;
+          itemBadge = ` <span style="display:inline-block;background:${badgeColor};color:#fff;border-radius:8px;padding:0px 4px;font-size:8.5px;font-weight:900;vertical-align:middle;min-width:13px;text-align:center;line-height:13px;margin-left:2px;">${totalItems}</span>`;
         }
 
         // Mini resumen del primer producto
         let miniProd = '';
         if (totalItems > 0 && !isPaid && cuenta && cuenta.items) {
           const primero = cuenta.items[0];
-          const nombre = primero.nombre ? primero.nombre.substring(0, 12) + (primero.nombre.length > 12 ? '…' : '') : '';
-          miniProd = `<div style="font-size:8px;opacity:0.9;margin-top:1px;line-height:1.1;max-width:64px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${hasNewItems ? '🆕 ' : ''}${nombre}${totalItems > 1 ? ` +${totalItems-1}` : ''}</div>`;
+          const nombre = primero.nombre ? primero.nombre.substring(0, 8) + (primero.nombre.length > 8 ? '…' : '') : '';
+          miniProd = `<div style="font-size:7.5px;opacity:0.9;margin-top:1px;line-height:1;max-width:52px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin:0 auto;">${hasNewItems ? '🆕' : ''}${nombre}${totalItems > 1 ? ` +${totalItems-1}` : ''}</div>`;
         }
 
         if (isJoinedMode) {
@@ -3533,10 +3533,10 @@
             </div>
           `;
           let busy3 = 0;
-          busy3 += renderChairBadge(3, 1, 'top: 2px; left: 50%; transform: translateX(-50%);', box3, false);
-          busy3 += renderChairBadge(3, 2, 'right: 2px; top: 50%; transform: translateY(-50%);', box3, false);
-          busy3 += renderChairBadge(3, 3, 'bottom: 2px; left: 50%; transform: translateX(-50%);', box3, false);
-          busy3 += renderChairBadge(3, 4, 'left: 2px; top: 50%; transform: translateY(-50%);', box3, false);
+          busy3 += renderChairBadge(3, 1, 'top: 4px; left: 50%; transform: translateX(-50%); width: 72px; max-width: 72px;', box3, false);
+          busy3 += renderChairBadge(3, 2, 'right: 4px; top: 50%; transform: translateY(-50%); width: 60px; max-width: 60px;', box3, false);
+          busy3 += renderChairBadge(3, 3, 'bottom: 4px; left: 50%; transform: translateX(-50%); width: 72px; max-width: 72px;', box3, false);
+          busy3 += renderChairBadge(3, 4, 'left: 4px; top: 50%; transform: translateY(-50%); width: 60px; max-width: 60px;', box3, false);
           if (label3) {
             label3.style.color = busy3 > 0 ? '#d97706' : '#059669';
             label3.innerHTML = busy3 > 0 ? `🟡 Ocupada (${busy3} Comensal${busy3 > 1 ? 'es' : ''})` : `🟢 Disponible`;
@@ -3567,10 +3567,10 @@
             </div>
           `;
           let busy1 = 0;
-          busy1 += renderChairBadge(1, 1, 'top: 2px; left: 50%; transform: translateX(-50%);', box1, false);
-          busy1 += renderChairBadge(1, 2, 'right: 2px; top: 50%; transform: translateY(-50%);', box1, false);
-          busy1 += renderChairBadge(1, 3, 'bottom: 2px; left: 50%; transform: translateX(-50%);', box1, false);
-          busy1 += renderChairBadge(1, 4, 'left: 2px; top: 50%; transform: translateY(-50%);', box1, false);
+          busy1 += renderChairBadge(1, 1, 'top: 4px; left: 50%; transform: translateX(-50%); width: 72px; max-width: 72px;', box1, false);
+          busy1 += renderChairBadge(1, 2, 'right: 4px; top: 50%; transform: translateY(-50%); width: 60px; max-width: 60px;', box1, false);
+          busy1 += renderChairBadge(1, 3, 'bottom: 4px; left: 50%; transform: translateX(-50%); width: 72px; max-width: 72px;', box1, false);
+          busy1 += renderChairBadge(1, 4, 'left: 4px; top: 50%; transform: translateY(-50%); width: 60px; max-width: 60px;', box1, false);
           if (label1) {
             label1.style.color = busy1 > 0 ? '#d97706' : '#059669';
             label1.innerHTML = busy1 > 0 ? `🟡 Ocupada (${busy1} Comensal${busy1 > 1 ? 'es' : ''})` : `🟢 Disponible`;
@@ -3773,10 +3773,10 @@
             `;
 
             // Sillas 1..4
-            busyCount += renderChairBadge(m, 1, 'top: 2px; left: 50%; transform: translateX(-50%);', currentBox, false);
-            busyCount += renderChairBadge(m, 2, 'right: 2px; top: 50%; transform: translateY(-50%);', currentBox, false);
-            busyCount += renderChairBadge(m, 3, 'bottom: 2px; left: 50%; transform: translateX(-50%);', currentBox, false);
-            busyCount += renderChairBadge(m, 4, 'left: 2px; top: 50%; transform: translateY(-50%);', currentBox, false);
+            busyCount += renderChairBadge(m, 1, 'top: 4px; left: 50%; transform: translateX(-50%); width: 72px; max-width: 72px;', currentBox, false);
+            busyCount += renderChairBadge(m, 2, 'right: 4px; top: 50%; transform: translateY(-50%); width: 60px; max-width: 60px;', currentBox, false);
+            busyCount += renderChairBadge(m, 3, 'bottom: 4px; left: 50%; transform: translateX(-50%); width: 72px; max-width: 72px;', currentBox, false);
+            busyCount += renderChairBadge(m, 4, 'left: 4px; top: 50%; transform: translateY(-50%); width: 60px; max-width: 60px;', currentBox, false);
 
             // Sillas Arrimadas (S5+) ubicadas según su posicionArrimada
             Object.keys(window.palapaState.cuentas).forEach(k => {
@@ -3787,12 +3787,12 @@
                   arrimadasCount++;
                   const pos = window.palapaState.cuentas[k].posicionArrimada || 'top';
                   const offsetCss = pos === 'top'
-                    ? 'top: 2px; left: calc(50% + 56px);'
+                    ? 'top: 4px; left: calc(50% + 56px); width: 64px; max-width: 64px;'
                     : pos === 'bottom'
-                      ? 'bottom: 2px; left: calc(50% + 56px);'
+                      ? 'bottom: 4px; left: calc(50% + 56px); width: 64px; max-width: 64px;'
                       : pos === 'right'
-                        ? 'right: 2px; top: calc(50% - 44px);'
-                        : 'left: 2px; top: calc(50% - 44px);';
+                        ? 'right: 4px; top: calc(50% - 44px); width: 60px; max-width: 60px;'
+                        : 'left: 4px; top: calc(50% - 44px); width: 60px; max-width: 60px;';
                   busyCount += renderChairBadge(m, sn, offsetCss, currentBox, false);
                 }
               }

@@ -52,33 +52,41 @@ html, body, .anvil-container, div[anvil-slot] {
 /* Immutable Chair Nodes Positions */
 .chair-pos-top {
   position: absolute !important;
-  top: 2px !important;
+  top: 4px !important;
   left: 50% !important;
   transform: translateX(-50%) !important;
+  width: 72px !important;
+  max-width: 72px !important;
   z-index: 20 !important;
 }
 
 .chair-pos-right {
   position: absolute !important;
-  right: 2px !important;
+  right: 4px !important;
   top: 50% !important;
   transform: translateY(-50%) !important;
+  width: 60px !important;
+  max-width: 60px !important;
   z-index: 20 !important;
 }
 
 .chair-pos-bottom {
   position: absolute !important;
-  bottom: 2px !important;
+  bottom: 4px !important;
   left: 50% !important;
   transform: translateX(-50%) !important;
+  width: 72px !important;
+  max-width: 72px !important;
   z-index: 20 !important;
 }
 
 .chair-pos-left {
   position: absolute !important;
-  left: 2px !important;
+  left: 4px !important;
   top: 50% !important;
   transform: translateY(-50%) !important;
+  width: 60px !important;
+  max-width: 60px !important;
   z-index: 20 !important;
 }
 
@@ -113,8 +121,8 @@ html, body, .anvil-container, div[anvil-slot] {
 
 /* Immutable Chair Base Button */
 .chair-btn-fixed {
-  padding: 6px 14px !important;
-  font-size: 11px !important;
+  padding: 4px 5px !important;
+  font-size: 10.5px !important;
   font-weight: 700 !important;
   border-radius: 10px !important;
   cursor: pointer !important;
@@ -122,6 +130,9 @@ html, body, .anvil-container, div[anvil-slot] {
   user-select: none !important;
   box-shadow: 0 2px 6px -1px rgba(0, 0, 0, 0.12) !important;
   transition: all 0.15s ease !important;
+  box-sizing: border-box !important;
+  text-align: center !important;
+  overflow: hidden !important;
 }
 
 /* Chair States - Soft VidaSpa Palette */
