@@ -553,6 +553,7 @@
 
     function _chairMousedown(e, mesaId, sillaNum) {
       if (e.button !== 0) return;
+      if (typeof _vsOcultarTooltip === 'function') _vsOcultarTooltip();
 
       if (mesaId === 'extra') {
         _ms.active = true;
@@ -4363,14 +4364,33 @@
       _vsHoverTooltip = el;
       return el;
     }
-    function _vsMostrarTooltip(html, x, y) {
+    function _vsMostrarTooltip(html, targetOrX, maybeY) {
+      if (typeof _ms !== 'undefined' && (_ms.active || _ms.dragging)) return;
       var el = _vsEnsureTooltipEl();
       el.innerHTML = html;
-      var w = 320, h = 200;
-      var left = Math.min(window.innerWidth - w - 12, Math.max(12, x + 16));
-      var top = Math.min(window.innerHeight - h - 12, Math.max(12, y - 8));
-      el.style.left = left + 'px';
-      el.style.top  = top  + 'px';
+      var w = 310, h = 230;
+      var left = 20, top = 20;
+
+      if (targetOrX && typeof targetOrX.getBoundingClientRect === 'function') {
+        var rect = targetOrX.getBoundingClientRect();
+        // Posicionamiento 100% FIJO y ESTABLE anclado junto al botón inspeccionado
+        if (rect.right + w + 16 < window.innerWidth) {
+          left = rect.right + 10;
+        } else if (rect.left - w - 16 > 0) {
+          left = rect.left - w - 10;
+        } else {
+          left = Math.max(12, Math.min(window.innerWidth - w - 12, rect.left));
+        }
+
+        // Alinear verticalmente con el elemento inspeccionado, sin salirse del viewport
+        top = Math.max(12, Math.min(window.innerHeight - h - 12, rect.top - 8));
+      } else if (typeof targetOrX === 'number') {
+        left = Math.min(window.innerWidth - w - 12, Math.max(12, targetOrX + 16));
+        top = Math.min(window.innerHeight - h - 12, Math.max(12, (maybeY || 0) - 8));
+      }
+
+      el.style.left = Math.round(left) + 'px';
+      el.style.top  = Math.round(top)  + 'px';
       el.style.display = 'block';
       requestAnimationFrame(function () { el.style.opacity = '1'; });
     }
@@ -4750,7 +4770,7 @@
             }
           }
           if (m !== null && s !== null && !isNaN(parseInt(m)) && !isNaN(parseInt(s))) {
-            _vsMostrarTooltip(_vsTooltipHTMLSilla(m, s), ev.clientX, ev.clientY);
+            _vsMostrarTooltip(_vsTooltipHTMLSilla(m, s), sillaEl);
             return;
           }
         }
@@ -4766,7 +4786,7 @@
             mesaNum = mparts[mparts.length - 1];
           }
           if (mesaNum && !isNaN(parseInt(mesaNum))) {
-            _vsMostrarTooltip(_vsTooltipHTMLMesa(mesaNum), ev.clientX, ev.clientY);
+            _vsMostrarTooltip(_vsTooltipHTMLMesa(mesaNum), mesaEl);
             return;
           }
         }
@@ -4775,13 +4795,9 @@
         _vsOcultarTooltip();
       });
 
-      root.addEventListener('mousemove', function (ev) {
-        if (!_vsHoverTooltip || _vsHoverTooltip.style.display !== 'block') return;
-        var w = 310, h = 220;
-        var left = Math.min(window.innerWidth - w - 16, Math.max(16, ev.clientX + 16));
-        var top = Math.min(window.innerHeight - h - 16, Math.max(16, ev.clientY - 8));
-        _vsHoverTooltip.style.left = left + 'px';
-        _vsHoverTooltip.style.top  = top  + 'px';
+      // Ocultar inmediatamente al hacer clic o iniciar arrastre
+      root.addEventListener('mousedown', function () {
+        _vsOcultarTooltip();
       });
 
       root.addEventListener('mouseout', function (ev) {
