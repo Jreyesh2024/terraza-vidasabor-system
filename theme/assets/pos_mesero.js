@@ -380,6 +380,24 @@
     // Snapshot anterior para detectar items NUEVOS y disparar notificaciones al mesero
     var _prevCuentasSnapshot = {};
 
+    function areItemsEqual(listA, listB) {
+      if (!listA && !listB) return true;
+      if (!listA || !listB) return false;
+      if (listA.length !== listB.length) return false;
+      for (var i = 0; i < listA.length; i++) {
+        var a = listA[i];
+        var b = listB[i];
+        if (!a || !b) return false;
+        if (a.id !== b.id || a.nombre !== b.nombre || a.cantidad !== b.cantidad || a.precio !== b.precio) return false;
+        if (!!a.enviadoCocina !== !!b.enviadoCocina) return false;
+        if (!!a.listo !== !!b.listo) return false;
+        if (!!a.servido !== !!b.servido) return false;
+        if (a.estado !== b.estado || a.estadoCocina !== b.estadoCocina) return false;
+        if (!!a.pagado !== !!b.pagado) return false;
+      }
+      return true;
+    }
+
     window.aplicarCuentasServidor = function(cuentasServidor) {
       if (!cuentasServidor) return;
       if (typeof cuentasServidor === 'string') {
@@ -427,7 +445,7 @@
               return sItem;
             });
 
-            if (JSON.stringify(curr.items || []) !== JSON.stringify(mergedItems)) {
+            if (!areItemsEqual(curr.items || [], mergedItems)) {
               curr.items = mergedItems;
               curr.estado = srv.estado || (curr.items.length > 0 ? 'ocupada' : curr.estado);
               changed = true;
@@ -4372,6 +4390,9 @@
         }
       }
 
+      if (typeof window.actualizarBadgePase === 'function') {
+        window.actualizarBadgePase();
+      }
       renderWaiterMenuGrid();
     }
 
@@ -5056,14 +5077,275 @@
       });
 
       root.addEventListener('mouseout', function (ev) {
-        var to = ev.relatedTarget;
-        if (!to) return _vsOcultarTooltip();
-        if (to.closest && (
-            to.closest('.chair-btn-fixed, [id^="chair-"], [id^="extra-chair-"], [data-action="clickSilla"]') ||
-            to.closest('.table-circle-fixed, .table-square-fixed, [id^="table-circle-"], [id^="table-square-"], [data-action="clickMesa"]')
-        )) return;
         _vsOcultarTooltip();
       });
+    };
+
+    // ============================================================================
+    // MONITOR DE DESPACHO, PASE DE COCINA & ALERTAS KDS (EXPEDITER)
+    // ============================================================================
+    window.tabPaseActiva = 'listos';
+
+    function parseHoraToMs(horaStr) {
+      if (!horaStr) return Date.now();
+      try {
+        var parts = horaStr.split(':');
+        var d = new Date();
+        d.setHours(parseInt(parts[0], 10), parseInt(parts[1], 10), 0, 0);
+        return d.getTime();
+      } catch (e) {
+        return Date.now();
+      }
+    }
+
+    window.obtenerTodosLosPedidosActivos = function () {
+      var cuentas = (window.palapaState && window.palapaState.cuentas) ? window.palapaState.cuentas : {};
+      var list = [];
+      var now = Date.now();
+
+      Object.keys(cuentas).forEach(function (key) {
+        var c = cuentas[key];
+        if (!c || !c.items || !Array.isArray(c.items)) return;
+        var parts = key.split('-');
+        var mId = parts[0] || '1';
+        var sNum = parts[1] || '1';
+        var esMesa = (sNum === '0');
+
+        c.items.forEach(function (it, idx) {
+          if (it.pagado && (it.servido || it.estado === 'servido')) return;
+
+          var isListo = !!(it.listo || it.estado === 'listo' || it.estadoCocina === 'listo');
+          var isServido = !!(it.servido || it.estado === 'servido' || it.estadoCocina === 'servido');
+          var isEnviado = !!it.enviadoCocina;
+
+          var startMs = it.timestampInicioCocina || it.timestampEnvioCocina || (it.horaEnvioCocina ? parseHoraToMs(it.horaEnvioCocina) : null);
+          var minutosTranscurridos = startMs ? Math.max(0, Math.floor((now - startMs) / 60000)) : 0;
+          var isDemorado = isEnviado && !isServido && !isListo && (minutosTranscurridos >= 12);
+
+          var estadoCategoria = 'espera';
+          if (isServido) estadoCategoria = 'servido';
+          else if (isListo) estadoCategoria = 'listo';
+          else if (isDemorado) estadoCategoria = 'demorado';
+          else if (isEnviado) estadoCategoria = 'cocina';
+
+          list.push({
+            cuentaKey: key,
+            itemIdx: idx,
+            mesaId: parseInt(mId, 10),
+            sillaNum: parseInt(sNum, 10),
+            esMesa: esMesa,
+            comensalNombre: c.comensalNombre || (esMesa ? '⭐ Mesa Completa' : ('Comensal Silla ' + sNum)),
+            productoId: it.id,
+            nombre: it.nombre,
+            cantidad: it.cantidad || 1,
+            precio: it.precio || 0,
+            notas: it.notas || '',
+            hora: it.hora || it.horaEnvioCocina || '--:--',
+            minutosTranscurridos: minutosTranscurridos,
+            estadoCategoria: estadoCategoria,
+            isListo: isListo,
+            isServido: isServido,
+            isEnviado: isEnviado,
+            isDemorado: isDemorado,
+            estadoCocina: it.estadoCocina || (isEnviado ? 'recibido' : 'pendiente')
+          });
+        });
+      });
+
+      list.sort(function (a, b) {
+        var order = { listo: 1, demorado: 2, cocina: 3, espera: 4, servido: 5 };
+        var prioA = order[a.estadoCategoria] || 99;
+        var prioB = order[b.estadoCategoria] || 99;
+        if (prioA !== prioB) return prioA - prioB;
+        return b.minutosTranscurridos - a.minutosTranscurridos;
+      });
+
+      return list;
+    };
+
+    window.actualizarBadgePase = function () {
+      var all = window.obtenerTodosLosPedidosActivos ? window.obtenerTodosLosPedidosActivos() : [];
+      var listos = all.filter(function (x) { return x.estadoCategoria === 'listo'; });
+      var demorados = all.filter(function (x) { return x.estadoCategoria === 'demorado'; });
+      var cocina = all.filter(function (x) { return x.estadoCategoria === 'cocina'; });
+
+      var badgeTop = document.getElementById('badgeTopPaseCount');
+      var badgeCat = document.getElementById('badgePaseCount');
+
+      var txt = (listos.length > 0 || demorados.length > 0)
+        ? `${listos.length > 0 ? `${listos.length} Listo${listos.length > 1 ? 's' : ''}` : ''}${listos.length > 0 && demorados.length > 0 ? ' • ' : ''}${demorados.length > 0 ? `${demorados.length} 🚨` : ''}`
+        : '0';
+
+      if (badgeTop) {
+        badgeTop.innerText = txt;
+        badgeTop.style.background = listos.length > 0 ? '#059669' : (demorados.length > 0 ? '#dc2626' : '#0f172a');
+        badgeTop.style.color = listos.length > 0 ? '#ffffff' : (demorados.length > 0 ? '#ffffff' : '#38bdf8');
+      }
+      if (badgeCat) {
+        badgeCat.innerText = txt;
+        badgeCat.style.background = listos.length > 0 ? 'rgba(16,185,129,0.25)' : (demorados.length > 0 ? 'rgba(239,68,68,0.25)' : 'rgba(56,189,248,0.2)');
+        badgeCat.style.color = listos.length > 0 ? '#34d399' : (demorados.length > 0 ? '#f87171' : '#38bdf8');
+        badgeCat.style.borderColor = listos.length > 0 ? '#10b981' : (demorados.length > 0 ? '#ef4444' : '#38bdf8');
+      }
+
+      var mListos = document.getElementById('paseMetricListos');
+      var mDemorados = document.getElementById('paseMetricDemorados');
+      var mCocina = document.getElementById('paseMetricCocina');
+      var mTotal = document.getElementById('paseMetricTotal');
+
+      if (mListos) mListos.innerText = listos.length;
+      if (mDemorados) mDemorados.innerText = demorados.length;
+      if (mCocina) mCocina.innerText = cocina.length;
+      if (mTotal) mTotal.innerText = all.length;
+
+      var tListos = document.getElementById('tabCountListos');
+      var tDemorados = document.getElementById('tabCountDemorados');
+      var tCocina = document.getElementById('tabCountCocina');
+      if (tListos) tListos.innerText = listos.length;
+      if (tDemorados) tDemorados.innerText = demorados.length;
+      if (tCocina) tCocina.innerText = cocina.length;
+    };
+
+    window.abrirMonitorPase = function (tab) {
+      if (tab) window.tabPaseActiva = tab;
+      var modal = document.getElementById('modalMonitorPaseBackdrop');
+      if (modal) {
+        modal.style.display = 'flex';
+        window.renderMonitorPase();
+      }
+    };
+
+    window.cerrarMonitorPase = function () {
+      var modal = document.getElementById('modalMonitorPaseBackdrop');
+      if (modal) {
+        modal.style.display = 'none';
+      }
+    };
+
+    window.filtrarPaseTab = function (tab) {
+      window.tabPaseActiva = tab;
+      ['listos', 'demorados', 'cocina', 'todos'].forEach(function (t) {
+        var btn = document.getElementById('paseTabBtn-' + t);
+        if (btn) {
+          if (t === tab) {
+            btn.style.background = (t === 'listos' ? '#10b981' : (t === 'demorados' ? '#ef4444' : (t === 'cocina' ? '#f59e0b' : '#0284c7')));
+            btn.style.color = '#ffffff';
+            btn.style.border = 'none';
+          } else {
+            btn.style.background = '#1e293b';
+            btn.style.color = '#94a3b8';
+            btn.style.border = '1px solid #334155';
+          }
+        }
+      });
+      window.renderMonitorPase();
+    };
+
+    window.renderMonitorPase = function () {
+      var listContainer = document.getElementById('paseOrdersList');
+      if (!listContainer) return;
+      listContainer.innerHTML = '';
+
+      window.actualizarBadgePase();
+
+      var all = window.obtenerTodosLosPedidosActivos ? window.obtenerTodosLosPedidosActivos() : [];
+      var tab = window.tabPaseActiva || 'listos';
+
+      var filtrados = all;
+      if (tab === 'listos') {
+        filtrados = all.filter(function (x) { return x.estadoCategoria === 'listo'; });
+      } else if (tab === 'demorados') {
+        filtrados = all.filter(function (x) { return x.estadoCategoria === 'demorado'; });
+      } else if (tab === 'cocina') {
+        filtrados = all.filter(function (x) { return x.estadoCategoria === 'cocina' || x.estadoCategoria === 'demorado'; });
+      }
+
+      if (filtrados.length === 0) {
+        var emptyMsg = 'No hay platillos en esta sección';
+        if (tab === 'listos') emptyMsg = '🔔 No hay platillos pendientes por entregar en la ventana de pase.';
+        else if (tab === 'demorados') emptyMsg = '✅ Excelente ritmo: no hay órdenes demoradas en cocina.';
+        else if (tab === 'cocina') emptyMsg = '🍳 No hay órdenes en preparación activa.';
+
+        listContainer.innerHTML = `
+          <div style="text-align: center; padding: 40px 20px; color: #94a3b8; font-size: 13px;">
+            <i class="fa-solid fa-circle-check" style="font-size: 28px; color: #10b981; display: block; margin-bottom: 10px;"></i>
+            ${emptyMsg}
+          </div>
+        `;
+        return;
+      }
+
+      filtrados.forEach(function (item) {
+        var card = document.createElement('div');
+        var borderCol = '#1e293b';
+        var bgCol = '#0f172a';
+        var badgeHtml = '';
+
+        if (item.estadoCategoria === 'listo') {
+          borderCol = '#10b981';
+          bgCol = 'rgba(16, 185, 129, 0.08)';
+          badgeHtml = `<span style="background: #059669; color: #ffffff; font-size: 10px; font-weight: 900; padding: 3px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px; box-shadow: 0 0 10px rgba(16,185,129,0.3);"><i class="fa-solid fa-bell"></i> 🍽️ Listo en Ventana</span>`;
+        } else if (item.estadoCategoria === 'demorado') {
+          borderCol = '#ef4444';
+          bgCol = 'rgba(239, 68, 68, 0.08)';
+          badgeHtml = `<span style="background: #dc2626; color: #ffffff; font-size: 10px; font-weight: 900; padding: 3px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px; box-shadow: 0 0 10px rgba(239,68,68,0.3);"><i class="fa-solid fa-triangle-exclamation"></i> 🔴 Demorado (${item.minutosTranscurridos} min)</span>`;
+        } else if (item.estadoCategoria === 'cocina') {
+          borderCol = '#f59e0b';
+          bgCol = 'rgba(245, 158, 11, 0.05)';
+          badgeHtml = `<span style="background: rgba(245,158,11,0.2); border: 1px solid #f59e0b; color: #fbbf24; font-size: 10px; font-weight: 800; padding: 2px 7px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;"><i class="fa-solid fa-fire"></i> En Cocina (${item.minutosTranscurridos} min)</span>`;
+        } else {
+          badgeHtml = `<span style="background: #1e293b; color: #94a3b8; font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 6px;">⏳ En Espera</span>`;
+        }
+
+        card.style.cssText = `background: ${bgCol}; border: 1.5px solid ${borderCol}; border-radius: 12px; padding: 12px 14px; display: flex; justify-content: space-between; align-items: center; gap: 12px; transition: all 0.2s ease;`;
+        card.innerHTML = `
+          <div style="flex: 1;">
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+              <span style="font-size: 13px; font-weight: 900; color: #ffffff;">${item.cantidad}x ${item.nombre}</span>
+              ${badgeHtml}
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px; font-size: 11px; color: #94a3b8;">
+              <span style="color: #38bdf8; font-weight: 800;"><i class="fa-solid fa-chair"></i> Mesa ${item.mesaId} • ${item.esMesa ? '⭐ Al Centro' : 'Silla ' + item.sillaNum}</span>
+              <span style="color: #cbd5e1;">(${item.comensalNombre})</span>
+              <span>⏱️ Pedido: ${item.hora}</span>
+            </div>
+            ${item.notas ? `<div style="font-size: 10px; color: #fde68a; margin-top: 3px;"><i class="fa-solid fa-note-sticky"></i> ${item.notas}</div>` : ''}
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <button onclick="window.navegarAComandaDesdeMonitor(${item.mesaId}, ${item.sillaNum});"
+              style="background: #1e293b; color: #38bdf8; border: 1px solid #334155; padding: 6px 12px; border-radius: 8px; font-size: 11px; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 4px;" title="Ver la comanda de esta silla">
+              <i class="fa-solid fa-eye"></i> Ver Mesa
+            </button>
+            ${item.estadoCategoria === 'listo'
+              ? `<button onclick="window.entregarItemDesdeMonitor('${item.cuentaKey}', ${item.itemIdx});"
+                  style="background: linear-gradient(135deg, #10b981, #059669); color: #ffffff; border: none; padding: 6px 14px; border-radius: 8px; font-size: 11px; font-weight: 900; cursor: pointer; display: flex; align-items: center; gap: 5px; box-shadow: 0 2px 8px rgba(16,185,129,0.4);" title="Marcar como entregado al cliente">
+                  <i class="fa-solid fa-check"></i> ✅ Entregar a Mesa
+                </button>`
+              : `<button onclick="window.entregarItemDesdeMonitor('${item.cuentaKey}', ${item.itemIdx});"
+                  style="background: #1e293b; color: #cbd5e1; border: 1px solid #334155; padding: 6px 10px; border-radius: 8px; font-size: 10px; font-weight: 700; cursor: pointer;" title="Servir directo">
+                  Entregar
+                </button>`}
+          </div>
+        `;
+        listContainer.appendChild(card);
+      });
+    };
+
+    window.entregarItemDesdeMonitor = function (cuentaKey, itemIdx) {
+      if (typeof window.marcarItemEntregado === 'function') {
+        window.marcarItemEntregado(cuentaKey, itemIdx);
+      }
+      window.renderMonitorPase();
+    };
+
+    window.navegarAComandaDesdeMonitor = function (mesaId, sillaNum) {
+      window.cerrarMonitorPase();
+      window.palapaState.mesaSeleccionadaId = mesaId;
+      window.palapaState.sillaSeleccionadaNum = sillaNum;
+      window.palapaState.modoComandaActiva = true;
+      saveStateToStorage();
+      mostrarVistaProductos();
+      renderStateUI();
     };
 
     // Exponer funciones clave globalmente para que Python y llamadas onclick directas puedan interactuar
