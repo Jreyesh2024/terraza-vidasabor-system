@@ -4618,149 +4618,74 @@
     function _vsTooltipHTMLMesa(mesa) {
       var st = window.palapaState || {};
       var cuentas = st.cuentas || {};
-      var sillasOcupadas = 0, sillasTotal = 0, totalMesa = 0;
       var totalAlCentro = 0;
-      var sinPedido = [];
       var itemsAlCentro = [];
-      var itemsSillas = [];
 
       Object.keys(cuentas).forEach(function (k) {
         var c = cuentas[k];
-        if (!c || parseInt(c.mesaId) !== parseInt(mesa)) return;
+        if (!c) return;
+        var parts = k.split('-');
+        var mId = parseInt(c.mesaId) || parseInt(parts[0]);
+        var sId = (c.sillaId !== undefined) ? parseInt(c.sillaId) : (parts.length > 1 ? parseInt(parts[1]) : 0);
+        if (mId !== parseInt(mesa)) return;
 
-        var isCentro = (parseInt(c.sillaId) === 0 || c.esAlCentro === true || k.endsWith('-0'));
-        if (!isCentro) {
-          sillasTotal++;
-          if (c.estado === 'ocupada') {
-            sillasOcupadas++;
-            var items = c.items || [];
-            items.forEach(function (i) {
-              var sub = (parseFloat(i.precio) || 0) * (parseInt(i.cantidad) || 1);
-              totalMesa += sub;
-              itemsSillas.push({
-                silla: 'Silla ' + c.sillaId,
-                item: i
-              });
-            });
-            if (items.length === 0) sinPedido.push('Silla ' + c.sillaId);
-          }
-        } else {
-          // Cuenta Al Centro de la mesa
+        var isCentro = (sId === 0 || c.esAlCentro === true || c.es_cuenta_mesa === true || k.endsWith('-0'));
+        if (isCentro) {
           var itemsC = c.items || [];
           itemsC.forEach(function (i) {
             var sub = (parseFloat(i.precio) || 0) * (parseInt(i.cantidad) || 1);
-            totalMesa += sub;
             totalAlCentro += sub;
-            itemsAlCentro.push({
-              silla: 'Al Centro',
-              item: i
-            });
+            itemsAlCentro.push(i);
           });
         }
       });
 
-      var esOcupada = sillasOcupadas > 0 || itemsAlCentro.length > 0 || itemsSillas.length > 0;
       var titulo = 'Mesa ' + mesa;
-      var subtitulo = esOcupada ? '● EN SERVICIO' : '○ DISPONIBLE';
-      var gradiente = esOcupada
-        ? 'linear-gradient(135deg,#7c3aed,#5b21b6)'
-        : 'linear-gradient(135deg,#10b981,#059669)';
-      var acento = esOcupada ? '#c4b5fd' : '#a7f3d0';
 
-      var alertaSinPedido = '';
-      if (sinPedido.length > 0) {
-        alertaSinPedido = '<div style="margin:8px 10px;padding:6px 10px;'
-                        + 'background:linear-gradient(135deg,#c2410c,#7c2d12);'
-                        + 'color:#fed7aa;border-radius:10px;'
-                        + 'font-size:10.5px;font-weight:800;text-align:center;'
-                        + 'border:1px solid #fdba74;">'
-                        + '⚠️ ' + sinPedido.join(', ')
-                        + ' ocupada(s) sin comanda aún</div>';
-      }
-
-      var stats = '<div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;'
-                +   'background:#334155;padding:1px;">'
-                + '  <div style="background:#0f172a;padding:8px 10px;text-align:center;">'
-                + '    <div style="color:#94a3b8;font-size:9.5px;font-weight:700;'
-                +       'text-transform:uppercase;letter-spacing:0.05em;">Ocupación</div>'
-                + '    <div style="color:#fbbf24;font-size:17px;font-weight:900;margin-top:2px;">'
-                +       sillasOcupadas + '<span style="color:#64748b;font-size:12px;"> / '
-                +       sillasTotal + '</span></div>'
-                + '  </div>'
-                + '  <div style="background:#0f172a;padding:8px 10px;text-align:center;">'
-                + '    <div style="color:#94a3b8;font-size:9.5px;font-weight:700;'
-                +       'text-transform:uppercase;letter-spacing:0.05em;">Total Mesa</div>'
-                + '    <div style="color:#10b981;font-size:17px;font-weight:900;margin-top:2px;">$'
-                +       totalMesa.toFixed(2) + '</div>'
-                + '  </div>'
-                + '</div>';
-
-      // ────── SECCIÓN: COMANDA AL CENTRO (PARA TODOS) ──────
-      var bloqueAlCentro = '';
+      // SI HAY PEDIDOS AL CENTRO DE LA MESA
       if (itemsAlCentro.length > 0) {
+        var gradiente = 'linear-gradient(135deg,#d97706,#b45309)';
+        var acento = '#fde68a';
+        var subtitulo = '🍲 ' + itemsAlCentro.length + ' PLATILLO(S) AL CENTRO';
+
+        var totalBanner = '<div style="display:flex;justify-content:space-between;align-items:center;background:#020617;padding:8px 12px;border-bottom:1px solid #1e293b;">'
+                        + '  <span style="color:#94a3b8;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.04em;">Total al Centro:</span>'
+                        + '  <span style="color:#10b981;font-size:14px;font-weight:900;">$' + totalAlCentro.toFixed(2) + '</span>'
+                        + '</div>';
+
         var centroRows = '';
-        itemsAlCentro.forEach(function (obj) {
-          var it = obj.item;
-          centroRows += '<div style="padding:6px 12px;border-bottom:1px solid rgba(251,191,36,0.15);">'
-                      + '  <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:3px;">'
-                      + '    <div style="flex:1;min-width:0;font-size:11.5px;color:#fef08a;font-weight:800;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'
+        itemsAlCentro.forEach(function (it) {
+          var sub = (parseFloat(it.precio) || 0) * (parseInt(it.cantidad) || 1);
+          centroRows += '<div style="padding:8px 12px;border-bottom:1px solid #1e293b;display:flex;flex-direction:column;gap:4px;">'
+                      + '  <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">'
+                      + '    <div style="flex:1;min-width:0;font-size:12px;color:#fef08a;font-weight:800;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'
                       + '      <span style="color:#fbbf24;">' + (it.cantidad || 1) + '×</span> ' + (it.nombre || '?')
                       + '    </div>'
-                      + '    <div style="font-size:11.5px;font-weight:900;color:#10b981;">$'
-                      +        ((parseFloat(it.precio) || 0) * (parseInt(it.cantidad) || 1)).toFixed(2)
-                      + '    </div>'
+                      + '    <div style="font-size:12px;font-weight:900;color:#10b981;">$' + sub.toFixed(2) + '</div>'
                       + '  </div>'
+                      + (it.notas ? '<div style="font-size:10px;color:#fde047;font-style:italic;">Nota: ' + it.notas + '</div>' : '')
                       + '  <div>' + _vsBadgeItem(it) + '</div>'
                       + '</div>';
         });
-        bloqueAlCentro = '<div style="background:linear-gradient(180deg,rgba(180,83,9,0.15),rgba(15,23,42,0.8));border-bottom:1px solid rgba(251,191,36,0.3);">'
-                       + '  <div style="padding:6px 12px;background:rgba(245,158,11,0.15);border-bottom:1px solid rgba(251,191,36,0.2);display:flex;justify-content:space-between;align-items:center;">'
-                       + '    <span style="color:#fbbf24;font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:0.05em;display:flex;align-items:center;gap:4px;">'
-                       + '      <span>🍲</span> Comanda Al Centro (Compartida)'
-                       + '    </span>'
-                       + '    <span style="color:#fde68a;font-size:11px;font-weight:900;">$' + totalAlCentro.toFixed(2) + '</span>'
-                       + '  </div>'
-                       + '  <div style="max-height:140px;overflow-y:auto;">' + centroRows + '</div>'
-                       + '</div>';
-      } else {
-        bloqueAlCentro = '<div style="padding:6px 12px;background:rgba(15,23,42,0.6);border-bottom:1px solid #1e293b;color:#64748b;font-size:10px;font-weight:600;display:flex;align-items:center;gap:5px;">'
-                       + '  <span>🍲</span> <span>Sin pedidos al centro aún</span>'
-                       + '</div>';
+
+        var lista = '<div style="max-height:180px;overflow-y:auto;">' + centroRows + '</div>';
+        var pie = '<div style="padding:8px;text-align:center;color:#94a3b8;font-size:10px;font-weight:700;background:#020617;border-top:1px solid #1e293b;">'
+                + 'Clic en la mesa para gestionar pedido al centro</div>';
+
+        return _vsTarjetaBase(gradiente, acento, titulo, subtitulo, totalBanner + lista + pie);
       }
 
-      // ────── SECCIÓN: COMANDAS INDIVIDUALES POR SILLA ──────
-      var bloqueSillas = '';
-      if (itemsSillas.length > 0) {
-        var sillasRows = '';
-        itemsSillas.slice(0, 6).forEach(function (obj) {
-          var it = obj.item;
-          sillasRows += '<div style="padding:6px 12px;border-bottom:1px solid #1e293b;">'
-                      + '  <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:3px;">'
-                      + '    <div style="flex:1;min-width:0;font-size:11.5px;color:#f1f5f9;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'
-                      + '      <span style="color:#38bdf8;font-size:9.5px;margin-right:4px;">[' + obj.silla + ']</span>'
-                      + '      <span style="color:#fbbf24;">' + (it.cantidad || 1) + '×</span> ' + (it.nombre || '?')
-                      + '    </div>'
-                      + '    <div style="font-size:11.5px;font-weight:900;color:#10b981;">$'
-                      +        ((parseFloat(it.precio) || 0) * (parseInt(it.cantidad) || 1)).toFixed(2)
-                      + '    </div>'
-                      + '  </div>'
-                      + '  <div>' + _vsBadgeItem(it) + '</div>'
+      // SI NO HAY PEDIDO AL CENTRO DE LA MESA
+      var gradienteVacio = 'linear-gradient(135deg,#334155,#1e293b)';
+      var acentoVacio = '#94a3b8';
+      var subtituloVacio = '○ SIN PEDIDO AL CENTRO';
+      var cuerpoVacio = '<div style="padding:22px 16px;text-align:center;">'
+                      + '  <div style="font-size:30px;margin-bottom:6px;">🍲</div>'
+                      + '  <div style="color:#f1f5f9;font-size:13px;font-weight:800;">No hay pedido al centro de la mesa</div>'
+                      + '  <div style="color:#94a3b8;font-size:10.5px;margin-top:4px;">Clic en la mesa para agregar platillos compartidos (Al Centro)</div>'
                       + '</div>';
-        });
-        bloqueSillas = '<div style="max-height:160px;overflow-y:auto;">' + sillasRows + '</div>';
-        if (itemsSillas.length > 6) {
-          bloqueSillas += '<div style="text-align:center;color:#94a3b8;font-size:10px;padding:5px;">'
-                        + '… y ' + (itemsSillas.length - 6) + ' platillos individuales más</div>';
-        }
-      }
 
-      var pie = '<div style="padding:8px;text-align:center;color:#64748b;'
-              +   'font-size:9.5px;font-weight:600;background:#020617;'
-              +   'border-top:1px solid #1e293b;">'
-              +   'Clic para gestionar comanda / pedir <b style="color:#fbbf24;">al centro</b></div>';
-              
-      return _vsTarjetaBase(gradiente, acento, titulo, subtitulo,
-                            stats + alertaSinPedido + bloqueAlCentro + bloqueSillas + pie);
+      return _vsTarjetaBase(gradienteVacio, acentoVacio, titulo, subtituloVacio, cuerpoVacio);
     }
 
     window.installHoverTooltips = function () {
