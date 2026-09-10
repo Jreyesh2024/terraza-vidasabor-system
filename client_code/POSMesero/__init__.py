@@ -270,10 +270,19 @@ class POSMesero(POSMeseroTemplate):
         w.anvilSyncCuenta = self._sincronizar_cuenta_servidor
         w.anvilCambiarEstadoItem = self._cambiar_estado_item_cocina
         w.anvilDespacharTicket = self._despachar_ticket
+        w.anvilReiniciarJornada = self._reiniciar_jornada
+
+    def _reiniciar_jornada(self):
+        try:
+            res = anvil.server.call("reiniciar_jornada_terraza")
+            return json.dumps(res) if res else "{}"
+        except Exception as e:
+            print(f"[POSMesero] Error en reiniciar jornada: {e}")
+            return "{}"
 
     def _retirar_puente_python(self):
         w = anvil.js.window
-        for name in ("anvilAppNav", "anvilGetCuentasServidor", "anvilSyncCuenta", "anvilCambiarEstadoItem", "anvilDespacharTicket"):
+        for name in ("anvilAppNav", "anvilGetCuentasServidor", "anvilSyncCuenta", "anvilCambiarEstadoItem", "anvilDespacharTicket", "anvilReiniciarJornada"):
             try:
                 # Asignar None es equivalente a borrar la referencia funcional.
                 setattr(w, name, None)

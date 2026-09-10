@@ -940,6 +940,79 @@ def uplink_liberar_mesa(mesa_id):
         conn.close()
 
 
+@anvil.server.callable('reiniciar_jornada_terraza')
+@anvil.server.callable('uplink_reiniciar_jornada_terraza')
+def uplink_reiniciar_jornada_terraza():
+    """CIERRE DE JORNADA / REINICIO DE TURNO (RESET OPERATIVO COMPLETO):
+    - Cierra todas las sesiones de mesa y ocupaciones de sillas activas.
+    - Cierra comandas abiertas y marca detalles anteriores como concluidos.
+    - Cierra llamadas de mesero pendientes.
+    - Limpia la memoria transaccional y buffers.
+    - Retorna el tablero 100% libre (verde) para iniciar un nuevo día en blanco.
+    """
+    conn = get_db_connection()
+    try:
+        with conn.cursor() as cur:
+            mesero_id = _get_mesero_default_id(cur)
+            
+            # 1. Cerrar todas las ocupaciones de silla activas
+            cur.execute("""
+                UPDATE ocupaciones_silla
+                SET cerrada_at = NOW(),
+                    cerrada_por_mesero_id = %s
+                WHERE cerrada_at IS NULL;
+            """, (mesero_id,))
+
+            # 2. Cerrar todas las sesiones de mesa activas
+            cur.execute("""
+                UPDATE sesiones_mesa
+                SET cerrada_at = NOW()
+                WHERE cerrada_at IS NULL;
+            """)
+
+            # 3. Cerrar comandas abiertas
+            cur.execute("""
+                UPDATE comandas
+                SET estado = 'cerrada',
+                    cerrada_at = NOW()
+                WHERE estado = 'abierta';
+            """)
+
+            # 4. Cerrar detalles de comanda activos
+            cur.execute("""
+                UPDATE detalle_comanda
+                SET estado = 'servido',
+                    hora_servido = COALESCE(hora_servido, NOW())
+                WHERE estado IN ('borrador', 'en_buffer', 'enviado_cocina', 'en_preparacion', 'listo');
+            """)
+
+            # 5. Cerrar llamadas al mesero pendientes
+            cur.execute("""
+                UPDATE llamadas_mesero
+                SET atendida_at = NOW(),
+                    atendida_por_mesero_id = %s
+                WHERE atendida_at IS NULL;
+            """, (mesero_id,))
+
+            # 6. Limpiar buffer pre-envío si existe la tabla
+            try:
+                cur.execute("DELETE FROM buffer_pre_envio WHERE consolidado_en_envio_id IS NULL;")
+            except Exception:
+                pass
+
+        conn.commit()
+        # 7. Vaciar memoria de items en tránsito
+        ITEMS_MEMORIA.clear()
+        print("🌅 [UPLINK] ¡Jornada de La Terraza reiniciada con éxito! Todas las mesas quedaron libres para el nuevo día.")
+        return _construir_dict_cuentas_desde_db()
+    except Exception as e:
+        conn.rollback()
+        print(f"[UPLINK] Error reiniciando jornada de la terraza: {e}")
+        return {"error": str(e)}
+    finally:
+        conn.close()
+
+
 # ============================================================================
 # GESTIÓN DE MENÚ (sin cambio de schema — productos_menu igual estructura)
 # ============================================================================

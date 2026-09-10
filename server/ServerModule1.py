@@ -88,6 +88,17 @@ def get_cuentas_terraza():
     return {}
 
 @anvil.server.callable
+def reiniciar_jornada_terraza():
+    """Ejecuta el reinicio de jornada completo en el Uplink PostgreSQL"""
+    try:
+        res = anvil.server.call('uplink_reiniciar_jornada_terraza')
+        if res and isinstance(res, dict):
+            return res
+    except Exception as e:
+        print("Uplink reiniciar_jornada_terraza error:", e)
+    return {}
+
+@anvil.server.callable
 def checkin_silla_qr(mesa_id, silla_id, qr_id=''):
     """Registra la ocupación de una silla directamente en el Uplink"""
     mesa_id = int(mesa_id)

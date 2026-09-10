@@ -5408,6 +5408,46 @@
       renderStateUI();
     };
 
+    window.confirmarReinicioJornada = function () {
+      if (!confirm('🌅 ¿Deseas realizar el Cierre de Jornada y reiniciar el restaurante para un Nuevo Día en Blanco?\n\n• Se liberarán todas las mesas y sillas.\n• Se cerrarán todas las órdenes y alertas pendientes.\n• El sistema quedará 100% limpio listo para operar.')) {
+        return;
+      }
+
+      showDragToast('🔄 Reiniciando jornada y liberando mesas...', 'info');
+
+      try {
+        localStorage.removeItem('palapa_cuentas_v1');
+        localStorage.removeItem('palapa_croquis_state_v1');
+        localStorage.removeItem('kds_filtro_mesa');
+        sessionStorage.removeItem('palapa_cuentas_v1');
+        sessionStorage.removeItem('palapa_croquis_state_v1');
+      } catch (e) { }
+
+      window.palapaState.modoComandaActiva = false;
+      window.palapaState.modoMoverActivo = false;
+      window.palapaState.sillaOrigenMover = null;
+      window.palapaState.mesaSeleccionadaId = 1;
+      window.palapaState.sillaSeleccionadaNum = 1;
+
+      if (typeof window.anvilReiniciarJornada === 'function') {
+        try {
+          var res = window.anvilReiniciarJornada();
+          if (res) {
+            window.aplicarCuentasServidor(res);
+          }
+        } catch (err) {
+          console.warn('Error llamando anvilReiniciarJornada:', err);
+        }
+      }
+
+      setTimeout(function () {
+        if (typeof window.volverAlCroquisGeneral === 'function') {
+          window.volverAlCroquisGeneral();
+        }
+        showDragToast('🌅 ¡Jornada reiniciada con éxito! Todas las mesas están listas para el nuevo día.', 'ok');
+      }, 350);
+    };
+
     // Exponer funciones clave globalmente para que Python y llamadas onclick directas puedan interactuar
     window.renderStateUI = renderStateUI;
     window.setupDragListeners = setupDragListeners;
