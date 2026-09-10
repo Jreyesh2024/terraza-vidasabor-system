@@ -14,6 +14,8 @@ class POSMesero(POSMeseroTemplate):
       anvil.js.window.anvilAppNav = self.navegar_modulo
       anvil.js.window.anvilGetCuentasServidor = self.obtener_cuentas_servidor
       anvil.js.window.anvilSyncCuenta = self.sincronizar_cuenta_servidor
+      anvil.js.window.anvilCambiarEstadoItem = self.cambiar_estado_item
+      anvil.js.window.anvilDespacharTicket = self.despachar_ticket
 
       pass
     except Exception as e:
@@ -120,6 +122,20 @@ class POSMesero(POSMeseroTemplate):
       return res
     except Exception as e:
       print(f"Error en sincronizar_cuenta_servidor desde POSMesero: {e}")
+      return None
+
+  def cambiar_estado_item(self, detalle_id, nuevo_estado):
+    try:
+      return anvil.server.call('cambiar_estado_item_cocina', int(detalle_id), str(nuevo_estado))
+    except Exception as e:
+      print(f"Error en cambiar_estado_item desde POSMesero: {e}")
+      return None
+
+  def despachar_ticket(self, mesa_num, silla_num=None, nuevo_estado='servido'):
+    try:
+      return anvil.server.call('despachar_ticket_cocina', int(mesa_num), silla_num, str(nuevo_estado))
+    except Exception as e:
+      print(f"Error en despachar_ticket desde POSMesero: {e}")
       return None
 
   def navegar_modulo(self, modulo_nombre):

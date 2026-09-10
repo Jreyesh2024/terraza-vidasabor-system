@@ -268,15 +268,31 @@ class POSMesero(POSMeseroTemplate):
         w.anvilAppNav = self._navegar_por_alias
         w.anvilGetCuentasServidor = self._obtener_cuentas_servidor
         w.anvilSyncCuenta = self._sincronizar_cuenta_servidor
+        w.anvilCambiarEstadoItem = self._cambiar_estado_item_cocina
+        w.anvilDespacharTicket = self._despachar_ticket
 
     def _retirar_puente_python(self):
         w = anvil.js.window
-        for name in ("anvilAppNav", "anvilGetCuentasServidor", "anvilSyncCuenta"):
+        for name in ("anvilAppNav", "anvilGetCuentasServidor", "anvilSyncCuenta", "anvilCambiarEstadoItem", "anvilDespacharTicket"):
             try:
                 # Asignar None es equivalente a borrar la referencia funcional.
                 setattr(w, name, None)
             except Exception:
                 pass
+
+    def _cambiar_estado_item_cocina(self, detalle_id, nuevo_estado):
+        try:
+            return anvil.server.call("cambiar_estado_item_cocina", int(detalle_id), str(nuevo_estado))
+        except Exception as e:
+            print(f"[POSMesero] Error cambiando estado item: {e}")
+            return None
+
+    def _despachar_ticket(self, mesa_num, silla_num=None, nuevo_estado="servido"):
+        try:
+            return anvil.server.call("despachar_ticket_cocina", int(mesa_num), silla_num, str(nuevo_estado))
+        except Exception as e:
+            print(f"[POSMesero] Error despachando ticket: {e}")
+            return None
 
     # ─────────────────────────── datos / sync ────────────────────────────
     def _cargar_catalogo_pos_db(self):

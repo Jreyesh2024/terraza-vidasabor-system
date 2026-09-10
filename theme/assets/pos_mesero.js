@@ -1648,6 +1648,10 @@
           cuenta.items.forEach((it, idx) => {
             var itSub = it.precio * it.cantidad;
             var isItPaid = !!(it.pagado || isPaid);
+            var isEntregado = !!(it.servido || it.estado === 'servido' || it.estadoCocina === 'servido');
+            var isListo = !!(it.listo || it.estado === 'listo' || it.estadoCocina === 'listo');
+            var isFuego = !!(it.enFuego || it.enPreparacion || it.estado === 'preparando' || it.estado === 'en_preparacion' || it.estadoCocina === 'preparando');
+
             var row = document.createElement('div');
             row.style.cssText = 'display: flex !important; justify-content: space-between !important; align-items: center !important; background: #0f172a !important; padding: 8px 12px !important; border-radius: 10px !important; border: 1px solid #1e293b !important; font-size: 12px !important;';
             row.innerHTML = `
@@ -1655,20 +1659,31 @@
                 <div style="display: flex; align-items: center; gap: 6px;">
                   <span style="font-weight: 700; color: #ffffff;">${it.cantidad}x ${it.nombre}</span>
                 </div>
-                <span style="font-size: 10px; color: #94a3b8; font-style: italic;">${it.notas ? it.notas + ' • ' : ''}${it.hora || ''}</span>
+                <span style="font-size: 10px; color: #94a3b8; font-style: italic;">${it.notas ? it.notas + ' • ' : ''}${it.horaServido ? ('Entregado: ' + it.horaServido) : (it.hora || '')}</span>
               </div>
               <div style="display: flex; align-items: center; gap: 8px;">
                 <span style="font-weight: 900; color: ${isItPaid ? '#94a3b8' : '#34d399'}; font-size: 12px;">$${itSub.toFixed(2)}</span>
                 ${isItPaid
                 ? `<span style="font-size: 9px; color: #38bdf8; font-weight: 800; background: rgba(2,132,199,0.2) !important; border: 1px solid rgba(56,189,248,0.4) !important; padding: 2px 6px !important; border-radius: 4px !important; display: inline-flex !important; align-items: center !important; gap: 3px !important;"><i class="fa-solid fa-circle-check"></i> Pagado</span>`
                 : (it.enviadoCocina
-                  ? (it.estadoCocina === 'listo'
-                    ? `<span style="font-size: 9px; color: #38bdf8; font-weight: 900; background: rgba(2,132,199,0.25) !important; border: 1px solid #0284c7 !important; padding: 2px 6px !important; border-radius: 4px !important; display: inline-flex !important; align-items: center !important; gap: 3px !important;"><i class="fa-solid fa-circle-check"></i> ¡Listo en Pase!</span>`
-                    : (it.estadoCocina === 'preparando'
-                      ? (((Date.now() - (it.timestampInicioCocina || it.timestampEnvioCocina || Date.now())) / 60000 >= 14)
-                        ? `<span style="font-size: 9px; color: #f87171; font-weight: 900; background: rgba(239,68,68,0.2) !important; border: 1px solid #ef4444 !important; padding: 2px 6px !important; border-radius: 4px !important; display: inline-flex !important; align-items: center !important; gap: 3px !important;"><i class="fa-solid fa-triangle-exclamation"></i> 🔴 Demorado</span>`
-                        : `<span style="font-size: 9px; color: #fbbf24; font-weight: 800; background: rgba(245,158,11,0.2) !important; border: 1px solid rgba(245,158,11,0.4) !important; padding: 2px 6px !important; border-radius: 4px !important; display: inline-flex !important; align-items: center !important; gap: 3px !important;"><i class="fa-solid fa-fire"></i> 🟡 En Fuego</span>`)
-                      : `<span style="font-size: 9px; color: #34d399; font-weight: 800; background: rgba(16,185,129,0.15) !important; border: 1px solid rgba(16,185,129,0.3) !important; padding: 2px 6px !important; border-radius: 4px !important; display: inline-flex !important; align-items: center !important; gap: 3px !important;"><i class="fa-solid fa-clock"></i> 🟢 Recibido</span>`))
+                  ? (isEntregado
+                    ? `<span style="font-size: 9.5px; color: #cbd5e1; font-weight: 800; background: rgba(100,116,139,0.25) !important; border: 1px solid #64748b !important; padding: 2px 8px !important; border-radius: 4px !important; display: inline-flex !important; align-items: center !important; gap: 4px !important;"><i class="fa-solid fa-utensils"></i> 🍽️ Entregado</span>`
+                    : (isListo
+                      ? `<div style="display: flex; align-items: center; gap: 6px;">
+                          <span style="font-size: 9.5px; color: #38bdf8; font-weight: 900; background: rgba(2,132,199,0.25) !important; border: 1px solid #0284c7 !important; padding: 2px 7px !important; border-radius: 4px !important; display: inline-flex !important; align-items: center !important; gap: 3px !important;"><i class="fa-solid fa-bell"></i> ¡Listo!</span>
+                          <button type="button" onclick="window.marcarItemEntregado('${key}', ${idx})" style="padding: 4px 9px !important; background: linear-gradient(135deg, #10b981, #059669) !important; color: #ffffff !important; border: none !important; border-radius: 6px !important; font-size: 10.5px !important; font-weight: 800 !important; cursor: pointer !important; display: inline-flex !important; align-items: center !important; gap: 4px !important; box-shadow: 0 2px 8px rgba(16,185,129,0.4) !important;" title="Marcar como entregado al comensal"><i class="fa-solid fa-check"></i> Entregar</button>
+                        </div>`
+                      : (isFuego
+                        ? `<div style="display: flex; align-items: center; gap: 5px;">
+                            ${(((Date.now() - (it.timestampInicioCocina || it.timestampEnvioCocina || Date.now())) / 60000 >= 14)
+                              ? `<span style="font-size: 9px; color: #f87171; font-weight: 900; background: rgba(239,68,68,0.2) !important; border: 1px solid #ef4444 !important; padding: 2px 6px !important; border-radius: 4px !important; display: inline-flex !important; align-items: center !important; gap: 3px !important;"><i class="fa-solid fa-triangle-exclamation"></i> 🔴 Demorado</span>`
+                              : `<span style="font-size: 9px; color: #fbbf24; font-weight: 800; background: rgba(245,158,11,0.2) !important; border: 1px solid rgba(245,158,11,0.4) !important; padding: 2px 6px !important; border-radius: 4px !important; display: inline-flex !important; align-items: center !important; gap: 3px !important;"><i class="fa-solid fa-fire"></i> 🟡 En Fuego</span>`)}
+                            <button type="button" onclick="window.marcarItemEntregado('${key}', ${idx})" style="padding: 2px 6px !important; background: #1e293b !important; color: #cbd5e1 !important; border: 1px solid #334155 !important; border-radius: 4px !important; font-size: 9.5px !important; font-weight: 700 !important; cursor: pointer !important;" title="Marcar como entregado directo">Entregar</button>
+                          </div>`
+                        : `<div style="display: flex; align-items: center; gap: 5px;">
+                            <span style="font-size: 9px; color: #34d399; font-weight: 800; background: rgba(16,185,129,0.15) !important; border: 1px solid rgba(16,185,129,0.3) !important; padding: 2px 6px !important; border-radius: 4px !important; display: inline-flex !important; align-items: center !important; gap: 3px !important;"><i class="fa-solid fa-clock"></i> 🟢 En Fila</span>
+                            <button type="button" onclick="window.marcarItemEntregado('${key}', ${idx})" style="padding: 2px 6px !important; background: #1e293b !important; color: #cbd5e1 !important; border: 1px solid #334155 !important; border-radius: 4px !important; font-size: 9.5px !important; font-weight: 700 !important; cursor: pointer !important;" title="Marcar como entregado directo">Entregar</button>
+                          </div>`)))
                   : `<button onclick="window.eliminarItemModal('${key}', ${idx})" style="background: transparent; border: none; color: #f87171; cursor: pointer; padding: 2px;" title="Eliminar (No enviado)"><i class="fa-solid fa-trash-can" style="font-size: 11px;"></i></button>`)}
               </div>
             `;
@@ -3093,6 +3108,100 @@
       }
     };
 
+    window.marcarItemEntregado = function (key, idx) {
+      if (!window.palapaState.cuentas || !window.palapaState.cuentas[key]) return;
+      var cta = window.palapaState.cuentas[key];
+      if (!cta.items || !cta.items[idx]) return;
+
+      var it = cta.items[idx];
+      var nowStr = (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      it.servido = true;
+      it.estado = 'servido';
+      it.estadoCocina = 'servido';
+      it.horaServido = nowStr;
+
+      saveStateToStorage();
+      renderStateUI();
+      if (document.getElementById('modalComandaBackdrop') && document.getElementById('modalComandaBackdrop').style.display !== 'none') {
+        abrirModalComandaActual();
+      }
+
+      // Sincronizar en BD PostgreSQL
+      var parts = key.split('-');
+      var mId = parseInt(parts[0]) || 1;
+      var sId = (parts.length > 1) ? parseInt(parts[1]) : 0;
+
+      try {
+        if (it.id && window.anvilCambiarEstadoItem) {
+          window.anvilCambiarEstadoItem(it.id, 'servido');
+        }
+      } catch (err) {
+        console.warn('Error llamando anvilCambiarEstadoItem:', err);
+      }
+
+      try {
+        if (window.anvilSyncCuenta) {
+          window.anvilSyncCuenta(mId, sId, JSON.stringify(cta.items), cta.estado || 'ocupada');
+        }
+      } catch (err) {
+        console.warn('Error llamando anvilSyncCuenta al servir item:', err);
+      }
+
+      showDragToast('🍽️ ¡' + (it.nombre || 'Platillo') + ' marcado como ENTREGADO al comensal!', 'ok');
+    };
+
+    window.marcarComandaCompletaEntregada = function (mId, sId) {
+      var mesaId = (mId !== undefined && mId !== null) ? mId : window.palapaState.mesaSeleccionadaId;
+      var sillaNum = (sId !== undefined && sId !== null) ? sId : window.palapaState.sillaSeleccionadaNum;
+      if (sillaNum === null || sillaNum === undefined) sillaNum = 0;
+
+      var key = mesaId + '-' + sillaNum;
+      var cta = window.palapaState.cuentas[key];
+      if (!cta || !cta.items || cta.items.length === 0) {
+        showDragToast('No hay platillos en esta orden para marcar como entregados.', 'info');
+        return;
+      }
+
+      var nowStr = (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      var count = 0;
+      cta.items.forEach(function (it) {
+        if (it.estado !== 'servido' || !it.servido) {
+          it.servido = true;
+          it.estado = 'servido';
+          it.estadoCocina = 'servido';
+          it.horaServido = nowStr;
+          count++;
+          if (it.id && window.anvilCambiarEstadoItem) {
+            try { window.anvilCambiarEstadoItem(it.id, 'servido'); } catch (e) {}
+          }
+        }
+      });
+
+      saveStateToStorage();
+      renderStateUI();
+      if (document.getElementById('modalComandaBackdrop') && document.getElementById('modalComandaBackdrop').style.display !== 'none') {
+        abrirModalComandaActual();
+      }
+
+      try {
+        if (window.anvilDespacharTicket) {
+          window.anvilDespacharTicket(mesaId, sillaNum, 'servido');
+        }
+      } catch (err) {
+        console.warn('Error despachando ticket:', err);
+      }
+
+      try {
+        if (window.anvilSyncCuenta) {
+          window.anvilSyncCuenta(mesaId, sillaNum, JSON.stringify(cta.items), cta.estado || 'ocupada');
+        }
+      } catch (err) {
+        console.warn('Error sincronizando cuenta completa entregada:', err);
+      }
+
+      showDragToast('🍽️ ¡' + (count > 0 ? (count + ' platillo(s)') : 'Todos los platillos') + ' marcados como ENTREGADOS al comensal!', 'ok');
+    };
+
     window.volverAlCroquisGeneral = function () {
       window.palapaState.modoComandaActiva = false;
       renderStateUI();
@@ -4056,13 +4165,24 @@
                     ${isItPaid
                   ? `<span style="background: rgba(2,132,199,0.25); border: 1px solid #0284c7; color: #38bdf8; font-size: 9px; font-weight: 800; padding: 1px 5px; border-radius: 4px;"><i class="fa-solid fa-check"></i> Pagado</span>`
                   : (it.enviadoCocina
-                    ? (it.estadoCocina === 'listo'
-                      ? `<span style="background: rgba(2,132,199,0.25); border: 1px solid #0284c7; color: #38bdf8; font-size: 9px; font-weight: 900; padding: 1px 5px; border-radius: 4px;"><i class="fa-solid fa-circle-check"></i> ¡Listo en Pase!</span>`
-                      : (it.estadoCocina === 'preparando'
-                        ? (((Date.now() - (it.timestampInicioCocina || it.timestampEnvioCocina || Date.now())) / 60000 >= 14)
-                          ? `<span style="background: rgba(239,68,68,0.2); border: 1px solid #ef4444; color: #f87171; font-size: 9px; font-weight: 900; padding: 1px 5px; border-radius: 4px;"><i class="fa-solid fa-triangle-exclamation"></i> 🔴 Demorado</span>`
-                          : `<span style="background: rgba(245,158,11,0.2); border: 1px solid #f59e0b; color: #fbbf24; font-size: 9px; font-weight: 800; padding: 1px 5px; border-radius: 4px;"><i class="fa-solid fa-fire"></i> 🟡 En Fuego</span>`)
-                        : `<span style="background: rgba(16,185,129,0.15); border: 1px solid rgba(16,185,129,0.4); color: #34d399; font-size: 9px; font-weight: 800; padding: 1px 5px; border-radius: 4px;"><i class="fa-solid fa-clock"></i> 🟢 Recibido</span>`))
+                    ? ((it.servido || it.estado === 'servido' || it.estadoCocina === 'servido')
+                      ? `<span style="background: rgba(100,116,139,0.25); border: 1px solid #64748b; color: #cbd5e1; font-size: 9px; font-weight: 800; padding: 1px 5px; border-radius: 4px;"><i class="fa-solid fa-utensils"></i> 🍽️ Entregado</span>`
+                      : ((it.listo || it.estado === 'listo' || it.estadoCocina === 'listo')
+                        ? `<div style="display: flex; align-items: center; gap: 4px;">
+                            <span style="background: rgba(2,132,199,0.25); border: 1px solid #0284c7; color: #38bdf8; font-size: 9px; font-weight: 900; padding: 1px 5px; border-radius: 4px;"><i class="fa-solid fa-bell"></i> ¡Listo!</span>
+                            <button onclick="window.marcarItemEntregado('${key}', ${idx});" style="background: linear-gradient(135deg, #10b981, #059669); color: #ffffff; border: none; padding: 2px 7px; border-radius: 4px; font-size: 9.5px; font-weight: 900; cursor: pointer; display: flex; align-items: center; gap: 2px; box-shadow: 0 1px 4px rgba(16,185,129,0.4);" title="Marcar como entregado al comensal"><i class="fa-solid fa-check"></i> Entregar</button>
+                          </div>`
+                        : ((it.estadoCocina === 'preparando' || it.estado === 'en_preparacion')
+                          ? `<div style="display: flex; align-items: center; gap: 4px;">
+                              ${(((Date.now() - (it.timestampInicioCocina || it.timestampEnvioCocina || Date.now())) / 60000 >= 14)
+                                ? `<span style="background: rgba(239,68,68,0.2); border: 1px solid #ef4444; color: #f87171; font-size: 9px; font-weight: 900; padding: 1px 5px; border-radius: 4px;"><i class="fa-solid fa-triangle-exclamation"></i> 🔴 Demorado</span>`
+                                : `<span style="background: rgba(245,158,11,0.2); border: 1px solid #f59e0b; color: #fbbf24; font-size: 9px; font-weight: 800; padding: 1px 5px; border-radius: 4px;"><i class="fa-solid fa-fire"></i> 🟡 En Fuego</span>`)}
+                              <button onclick="window.marcarItemEntregado('${key}', ${idx});" style="background: #1e293b; color: #cbd5e1; border: 1px solid #334155; padding: 2px 5px; border-radius: 4px; font-size: 9px; font-weight: 700; cursor: pointer;" title="Servir directo">Entregar</button>
+                            </div>`
+                          : `<div style="display: flex; align-items: center; gap: 4px;">
+                              <span style="background: rgba(16,185,129,0.15); border: 1px solid rgba(16,185,129,0.4); color: #34d399; font-size: 9px; font-weight: 800; padding: 1px 5px; border-radius: 4px;"><i class="fa-solid fa-clock"></i> 🟢 Recibido</span>
+                              <button onclick="window.marcarItemEntregado('${key}', ${idx});" style="background: #1e293b; color: #cbd5e1; border: 1px solid #334155; padding: 2px 5px; border-radius: 4px; font-size: 9px; font-weight: 700; cursor: pointer;" title="Servir directo">Entregar</button>
+                            </div>`)))
                     : `<div style="display: flex; align-items: center; gap: 4px;">
                             <span style="background: rgba(245,158,11,0.25); border: 1px solid #f59e0b; color: #fbbf24; font-size: 9px; font-weight: 800; padding: 1px 5px; border-radius: 4px;"><i class="fa-solid fa-clock"></i> Pendiente</span>
                             <button onclick="window.enviarItemIndividualACocina(${idx});" style="background: #f59e0b; color: #0f172a; border: none; padding: 2px 6px; border-radius: 4px; font-size: 9px; font-weight: 900; cursor: pointer; display: flex; align-items: center; gap: 2px;" title="Enviar este producto a cocina ahora">🚀 Enviar</button>
@@ -4450,9 +4570,9 @@
     function _vsBadgeItem(item) {
       // Deriva un estado normalizado leyendo TANTO los campos legacy como el modelo v2
       var estado = item.estado || 'borrador';
-      if (item.servido || estado === 'servido' || estado === 'entregado') estado = 'servido';
-      else if (item.listo || estado === 'listo' || estado === 'pase') estado = 'listo';
-      else if (item.enFuego || item.enPreparacion || estado === 'preparando' || estado === 'en_preparacion' || estado === 'fuego') estado = 'preparando';
+      if (item.servido || estado === 'servido' || estado === 'entregado' || item.estadoCocina === 'servido') estado = 'servido';
+      else if (item.listo || estado === 'listo' || estado === 'pase' || item.estadoCocina === 'listo') estado = 'listo';
+      else if (item.enFuego || item.enPreparacion || estado === 'preparando' || estado === 'en_preparacion' || estado === 'fuego' || item.estadoCocina === 'preparando') estado = 'preparando';
       else if (estado === 'en_buffer' || item.enBuffer) estado = 'buffer';
       else if (item.enviadoCocina || estado === 'enviado_cocina' || estado === 'recibido') estado = 'enviado_cocina';
 
@@ -4462,7 +4582,7 @@
         'enviado_cocina': ['linear-gradient(135deg,#059669,#065f46)', '#a7f3d0', '🟢 En Fila Cocina/Barra'],
         'preparando':     ['linear-gradient(135deg,#d97706,#b45309)', '#fef08a', '🔥 En Preparación (Fuego)'],
         'listo':          ['linear-gradient(135deg,#0284c7,#0369a1)', '#bae6fd', '🛎️ Listo en Pase'],
-        'servido':        ['linear-gradient(135deg,#475569,#334155)', '#cbd5e1', '🍽️ Servido en Mesa'],
+        'servido':        ['linear-gradient(135deg,#334155,#1e293b)', '#cbd5e1', '🍽️ Entregado al Cliente'],
         'cancelado':      ['linear-gradient(135deg,#dc2626,#7f1d1d)', '#fecaca', '✕ Cancelado'],
       };
       var c = colores[estado] || colores.borrador;
@@ -4511,9 +4631,9 @@
       var pendientes = 0, enFila = 0, enFuego = 0, listos = 0, servidos = 0;
       items.forEach(function (i) {
         var est = i.estado || 'borrador';
-        if (i.servido || est === 'servido' || est === 'entregado') servidos++;
-        else if (i.listo || est === 'listo' || est === 'pase') listos++;
-        else if (i.enFuego || i.enPreparacion || est === 'preparando' || est === 'en_preparacion' || est === 'fuego') enFuego++;
+        if (i.servido || est === 'servido' || est === 'entregado' || i.estadoCocina === 'servido') servidos++;
+        else if (i.listo || est === 'listo' || est === 'pase' || i.estadoCocina === 'listo') listos++;
+        else if (i.enFuego || i.enPreparacion || est === 'preparando' || est === 'en_preparacion' || est === 'fuego' || i.estadoCocina === 'preparando') enFuego++;
         else if (i.enviadoCocina || est === 'enviado_cocina' || est === 'recibido') enFila++;
         else pendientes++;
       });
@@ -4522,10 +4642,10 @@
       if (items.length > 0) {
         contadores = '<div style="display:grid;grid-template-columns:repeat(4,1fr);'
                    +  'gap:3px;padding:8px;background:#020617;">'
-                   +  _vsMiniStat(pendientes, '#94a3b8', 'Borrador')
                    +  _vsMiniStat(enFila,     '#34d399', 'En Fila')
                    +  _vsMiniStat(enFuego,    '#fbbf24', 'En Fuego')
-                   +  _vsMiniStat(listos + servidos, '#38bdf8', 'Listo/Serv.')
+                   +  _vsMiniStat(listos,     '#38bdf8', 'Listo')
+                   +  _vsMiniStat(servidos,   '#94a3b8', 'Entregado')
                    +  '</div>';
       }
 
