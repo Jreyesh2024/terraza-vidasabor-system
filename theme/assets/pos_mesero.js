@@ -4714,7 +4714,7 @@
       // Vaciar el title nativo de sillas/mesas para que el navegador no
       // muestre su tooltip default en blanco y negro sobre nuestro tooltip.
       var neutralizeTitles = function () {
-        var els = document.querySelectorAll('.chair-btn-fixed, [id^="chair-"], [id^="extra-chair-"], .table-circle-fixed, .table-square-fixed, [id^="table-circle-"], [id^="table-square-"], [id^="table-card-container-"], [id^="table-box-"], [data-action="clickSilla"], [data-action="clickMesa"]');
+        var els = document.querySelectorAll('.chair-btn-fixed, [id^="chair-"], [id^="extra-chair-"], .table-circle-fixed, .table-square-fixed, [id^="table-circle-"], [id^="table-square-"], [data-action="clickSilla"], [data-action="clickMesa"]');
         for (var i = 0; i < els.length; i++) {
           if (els[i].getAttribute('title')) {
             els[i].dataset.origtitle = els[i].getAttribute('title');
@@ -4728,8 +4728,8 @@
       root.addEventListener('mouseover', function (ev) {
         if (!ev.target || !ev.target.closest) return;
 
-        // 1. Hover sobre Silla
-        var sillaEl = ev.target.closest('.chair-btn-fixed, [id^="chair-"], [id^="extra-chair-"], [data-action="clickSilla"], [data-silla]');
+        // 1. Hover ESTRICTO sobre el botón de Silla
+        var sillaEl = ev.target.closest('.chair-btn-fixed, [id^="chair-"], [id^="extra-chair-"], [data-action="clickSilla"]');
         if (sillaEl) {
           var m = null, s = null;
           if (sillaEl.dataset.args) {
@@ -4755,8 +4755,8 @@
           }
         }
 
-        // 2. Hover sobre Mesa
-        var mesaEl = ev.target.closest('.table-circle-fixed, .table-square-fixed, [id^="table-circle-"], [id^="table-square-"], [id^="table-card-container-"], [id^="table-box-"], [data-action="clickMesa"], [data-mesa]');
+        // 2. Hover ESTRICTO sobre el botón CENTRAL de Mesa (cuadro / círculo central)
+        var mesaEl = ev.target.closest('.table-circle-fixed, .table-square-fixed, [id^="table-circle-"], [id^="table-square-"], [data-action="clickMesa"]');
         if (mesaEl) {
           var mesaNum = null;
           if (mesaEl.dataset.args) {
@@ -4770,6 +4770,9 @@
             return;
           }
         }
+
+        // Si el cursor está en el fondo del contenedor, marco exterior o espacio vacío, ocultar
+        _vsOcultarTooltip();
       });
 
       root.addEventListener('mousemove', function (ev) {
@@ -4786,7 +4789,7 @@
         if (!to) return _vsOcultarTooltip();
         if (to.closest && (
             to.closest('.chair-btn-fixed, [id^="chair-"], [id^="extra-chair-"], [data-action="clickSilla"]') ||
-            to.closest('.table-circle-fixed, .table-square-fixed, [id^="table-circle-"], [id^="table-card-container-"], [id^="table-box-"], [data-action="clickMesa"]')
+            to.closest('.table-circle-fixed, .table-square-fixed, [id^="table-circle-"], [id^="table-square-"], [data-action="clickMesa"]')
         )) return;
         _vsOcultarTooltip();
       });
