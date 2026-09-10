@@ -5394,7 +5394,9 @@
       window.palapaState.sillaSeleccionadaNum = sillaNum;
       window.palapaState.modoComandaActiva = true;
       saveStateToStorage();
-      mostrarVistaProductos();
+      if (typeof mostrarVistaCategorias === 'function') {
+        mostrarVistaCategorias();
+      }
       renderStateUI();
     };
 
