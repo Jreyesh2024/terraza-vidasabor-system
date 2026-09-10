@@ -1178,7 +1178,16 @@
             const row = document.createElement('div');
             row.style.cssText = 'display: flex; justify-content: space-between; align-items: center; padding: 4px 8px; background: rgba(0,0,0,0.25); border-radius: 8px; border: 1px dashed rgba(234,179,8,0.25);';
             
-            let statusBadge = it.enviadoCocina ? `<span style="color: #34d399; font-size: 9px; font-weight: 800;">🟢 ${it.estadoCocina || 'Recibido'}</span>` : `<span style="color: #f59e0b; font-size: 9px; font-weight: 800;">⏳ Por Enviar</span>`;
+            let statusBadge = '';
+            if (it.servido || it.estado === 'servido') {
+              statusBadge = `<span style="color: #94a3b8; font-size: 9px; font-weight: 800;">🍽️ Entregado</span>`;
+            } else if (it.listo || it.estado === 'listo') {
+              statusBadge = `<span style="color: #34d399; font-size: 9px; font-weight: 900;">🔔 ¡Listo en Pase!</span>`;
+            } else if (it.enviadoCocina) {
+              statusBadge = `<span style="color: #38bdf8; font-size: 9px; font-weight: 800;">🍳 En Cocina</span>`;
+            } else {
+              statusBadge = `<span style="color: #f59e0b; font-size: 9px; font-weight: 800;">⏳ Por Enviar</span>`;
+            }
 
             row.innerHTML = `
               <div style="display: flex; align-items: center; gap: 6px;">
@@ -4321,22 +4330,22 @@
                       ? `<span style="background: rgba(100,116,139,0.25); border: 1px solid #64748b; color: #cbd5e1; font-size: 9px; font-weight: 800; padding: 1px 5px; border-radius: 4px;"><i class="fa-solid fa-utensils"></i> 🍽️ Entregado</span>`
                       : ((it.listo || it.estado === 'listo' || it.estadoCocina === 'listo')
                         ? `<div style="display: flex; align-items: center; gap: 4px;">
-                            <span style="background: rgba(2,132,199,0.25); border: 1px solid #0284c7; color: #38bdf8; font-size: 9px; font-weight: 900; padding: 1px 5px; border-radius: 4px;"><i class="fa-solid fa-bell"></i> ¡Listo!</span>
+                            <span style="background: rgba(16,185,129,0.2); border: 1px solid #10b981; color: #34d399; font-size: 9px; font-weight: 900; padding: 1px 5px; border-radius: 4px;"><i class="fa-solid fa-bell"></i> 🔔 ¡Listo en Pase!</span>
                             <button onclick="window.marcarItemEntregado('${key}', ${idx});" style="background: linear-gradient(135deg, #10b981, #059669); color: #ffffff; border: none; padding: 2px 7px; border-radius: 4px; font-size: 9.5px; font-weight: 900; cursor: pointer; display: flex; align-items: center; gap: 2px; box-shadow: 0 1px 4px rgba(16,185,129,0.4);" title="Marcar como entregado al comensal"><i class="fa-solid fa-check"></i> Entregar</button>
                           </div>`
                         : ((it.estadoCocina === 'preparando' || it.estado === 'en_preparacion')
                           ? `<div style="display: flex; align-items: center; gap: 4px;">
-                              ${(((Date.now() - (it.timestampInicioCocina || it.timestampEnvioCocina || Date.now())) / 60000 >= 14)
-                                ? `<span style="background: rgba(239,68,68,0.2); border: 1px solid #ef4444; color: #f87171; font-size: 9px; font-weight: 900; padding: 1px 5px; border-radius: 4px;"><i class="fa-solid fa-triangle-exclamation"></i> 🔴 Demorado</span>`
-                                : `<span style="background: rgba(245,158,11,0.2); border: 1px solid #f59e0b; color: #fbbf24; font-size: 9px; font-weight: 800; padding: 1px 5px; border-radius: 4px;"><i class="fa-solid fa-fire"></i> 🟡 En Fuego</span>`)}
-                              <button onclick="window.marcarItemEntregado('${key}', ${idx});" style="background: #1e293b; color: #cbd5e1; border: 1px solid #334155; padding: 2px 5px; border-radius: 4px; font-size: 9px; font-weight: 700; cursor: pointer;" title="Servir directo">Entregar</button>
+                              ${(((Date.now() - (it.timestampInicioCocina || it.timestampEnvioCocina || it.timestampCreado || Date.now())) / 60000 >= 12)
+                                ? `<span style="background: rgba(239,68,68,0.2); border: 1px solid #ef4444; color: #f87171; font-size: 9px; font-weight: 900; padding: 1px 5px; border-radius: 4px;"><i class="fa-solid fa-triangle-exclamation"></i> 🔴 Demorado en Cocina</span>`
+                                : `<span style="background: rgba(245,158,11,0.2); border: 1px solid #f59e0b; color: #fbbf24; font-size: 9px; font-weight: 800; padding: 1px 5px; border-radius: 4px;"><i class="fa-solid fa-fire"></i> 🔥 En Preparación</span>`)}
                             </div>`
                           : `<div style="display: flex; align-items: center; gap: 4px;">
-                              <span style="background: rgba(16,185,129,0.15); border: 1px solid rgba(16,185,129,0.4); color: #34d399; font-size: 9px; font-weight: 800; padding: 1px 5px; border-radius: 4px;"><i class="fa-solid fa-clock"></i> 🟢 Recibido</span>
-                              <button onclick="window.marcarItemEntregado('${key}', ${idx});" style="background: #1e293b; color: #cbd5e1; border: 1px solid #334155; padding: 2px 5px; border-radius: 4px; font-size: 9px; font-weight: 700; cursor: pointer;" title="Servir directo">Entregar</button>
+                              ${(((Date.now() - (it.timestampEnvioCocina || it.timestampCreado || Date.now())) / 60000 >= 12)
+                                ? `<span style="background: rgba(239,68,68,0.2); border: 1px solid #ef4444; color: #f87171; font-size: 9px; font-weight: 900; padding: 1px 5px; border-radius: 4px;"><i class="fa-solid fa-triangle-exclamation"></i> 🔴 Demorado en Cocina</span>`
+                                : `<span style="background: rgba(56,189,248,0.15); border: 1px solid rgba(56,189,248,0.4); color: #38bdf8; font-size: 9px; font-weight: 800; padding: 1px 5px; border-radius: 4px;"><i class="fa-solid fa-kitchen-set"></i> 🍳 En Cocina</span>`)}
                             </div>`)))
                     : `<div style="display: flex; align-items: center; gap: 4px;">
-                            <span style="background: rgba(245,158,11,0.25); border: 1px solid #f59e0b; color: #fbbf24; font-size: 9px; font-weight: 800; padding: 1px 5px; border-radius: 4px;"><i class="fa-solid fa-clock"></i> Pendiente</span>
+                            <span style="background: rgba(245,158,11,0.25); border: 1px solid #f59e0b; color: #fbbf24; font-size: 9px; font-weight: 800; padding: 1px 5px; border-radius: 4px;"><i class="fa-solid fa-clock"></i> ⏳ Por Enviar</span>
                             <button onclick="window.enviarItemIndividualACocina(${idx});" style="background: #f59e0b; color: #0f172a; border: none; padding: 2px 6px; border-radius: 4px; font-size: 9px; font-weight: 900; cursor: pointer; display: flex; align-items: center; gap: 2px;" title="Enviar este producto a cocina ahora">🚀 Enviar</button>
                           </div>`)}
                   </div>
