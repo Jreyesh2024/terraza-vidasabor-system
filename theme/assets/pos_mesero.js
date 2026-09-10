@@ -5371,10 +5371,7 @@
                   style="background: linear-gradient(135deg, #10b981, #059669); color: #ffffff; border: none; padding: 6px 14px; border-radius: 8px; font-size: 11px; font-weight: 900; cursor: pointer; display: flex; align-items: center; gap: 5px; box-shadow: 0 2px 8px rgba(16,185,129,0.4);" title="Marcar como entregado al cliente">
                   <i class="fa-solid fa-check"></i> ✅ Entregar a Mesa
                 </button>`
-              : `<button onclick="window.entregarItemDesdeMonitor('${item.cuentaKey}', ${item.itemIdx});"
-                  style="background: #1e293b; color: #cbd5e1; border: 1px solid #334155; padding: 6px 10px; border-radius: 8px; font-size: 10px; font-weight: 700; cursor: pointer;" title="Servir directo">
-                  Entregar
-                </button>`}
+              : ''}
           </div>
         `;
         listContainer.appendChild(card);
