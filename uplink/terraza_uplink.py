@@ -560,6 +560,7 @@ def _construir_dict_cuentas_desde_db():
                 else:
                     estado_cocina = "borrador"
 
+                ts_creado_ms = int(it["hora_creado"].timestamp() * 1000) if it["hora_creado"] else None
                 ts_envio_ms = int(it["hora_enviado_cocina"].timestamp() * 1000) if it["hora_enviado_cocina"] else None
                 ts_inicio_ms = int(it["timestamp_en_preparacion"].timestamp() * 1000) if it.get("timestamp_en_preparacion") else None
 
@@ -577,6 +578,7 @@ def _construir_dict_cuentas_desde_db():
                     "tipo_consumo": str(it["tipo_consumo"] or "comida"),
                     "hora": hora_str,
                     "horaEnvioCocina": hora_envio_str,
+                    "timestampCreado": ts_creado_ms,
                     "timestampEnvioCocina": ts_envio_ms,
                     "timestampInicioCocina": ts_inicio_ms,
                     "envioCocinaId": int(it["envio_cocina_id"]) if it["envio_cocina_id"] else None,

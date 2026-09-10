@@ -5089,13 +5089,29 @@
     function parseHoraToMs(horaStr) {
       if (!horaStr) return Date.now();
       try {
-        var parts = horaStr.split(':');
+        var clean = horaStr.trim();
+        var isPM = /PM/i.test(clean);
+        var isAM = /AM/i.test(clean);
+        var timePart = clean.replace(/(AM|PM)/gi, '').trim();
+        var parts = timePart.split(':');
+        var hours = parseInt(parts[0], 10);
+        var minutes = parseInt(parts[1], 10);
+        if (isPM && hours < 12) hours += 12;
+        if (isAM && hours === 12) hours = 0;
         var d = new Date();
-        d.setHours(parseInt(parts[0], 10), parseInt(parts[1], 10), 0, 0);
+        d.setHours(hours, minutes, 0, 0);
         return d.getTime();
       } catch (e) {
         return Date.now();
       }
+    }
+
+    function formatoTiempoTranscurrido(minutos) {
+      if (minutos <= 0) return 'hace un momento';
+      if (minutos < 60) return `${minutos} min`;
+      var h = Math.floor(minutos / 60);
+      var m = minutos % 60;
+      return `${h}h ${m < 10 ? '0' : ''}${m}m`;
     }
 
     window.obtenerTodosLosPedidosActivos = function () {
@@ -5116,17 +5132,43 @@
 
           var isListo = !!(it.listo || it.estado === 'listo' || it.estadoCocina === 'listo');
           var isServido = !!(it.servido || it.estado === 'servido' || it.estadoCocina === 'servido');
-          var isEnviado = !!it.enviadoCocina;
+          var isEnviado = !!(it.enviadoCocina || it.estado === 'enviado_cocina' || it.estado === 'en_preparacion' || it.estadoCocina === 'recibido' || it.estadoCocina === 'preparando');
 
-          var startMs = it.timestampInicioCocina || it.timestampEnvioCocina || (it.horaEnvioCocina ? parseHoraToMs(it.horaEnvioCocina) : null);
+          var esBebida = !!(it.tipo_consumo === 'bebida' || (it.categoria && /bebida|caf|jugo|refresco|té|infus/i.test(it.categoria)) || /café|cafe|limonada|refresco|naranjada|té|jugo|agua|coca|latte|capuchino|espresso|tisana/i.test(it.nombre || ''));
+
+          var startMs = it.timestampInicioCocina || it.timestampEnvioCocina || it.timestampCreado || (it.hora ? parseHoraToMs(it.hora) : null) || (it.horaEnvioCocina ? parseHoraToMs(it.horaEnvioCocina) : null);
           var minutosTranscurridos = startMs ? Math.max(0, Math.floor((now - startMs) / 60000)) : 0;
-          var isDemorado = isEnviado && !isServido && !isListo && (minutosTranscurridos >= 12);
+          
+          // Umbrales diferenciados de demora:
+          // 1. Bebidas en preparación: 6 min
+          // 2. Comida caliente en preparación: 12 min
+          // 3. Órdenes en espera / pre-cocina sin enviar: 5 min
+          var isDemorado = false;
+          var tipoDemora = '';
+          if (!isServido && !isListo) {
+            if (isEnviado) {
+              if (esBebida && minutosTranscurridos >= 6) {
+                isDemorado = true;
+                tipoDemora = 'barra';
+              } else if (!esBebida && minutosTranscurridos >= 12) {
+                isDemorado = true;
+                tipoDemora = 'cocina';
+              }
+            } else {
+              // No enviado aún (en espera / borrador)
+              if (minutosTranscurridos >= 5) {
+                isDemorado = true;
+                tipoDemora = 'espera';
+              }
+            }
+          }
 
           var estadoCategoria = 'espera';
           if (isServido) estadoCategoria = 'servido';
           else if (isListo) estadoCategoria = 'listo';
           else if (isDemorado) estadoCategoria = 'demorado';
           else if (isEnviado) estadoCategoria = 'cocina';
+          else estadoCategoria = 'espera';
 
           list.push({
             cuentaKey: key,
@@ -5142,7 +5184,10 @@
             notas: it.notas || '',
             hora: it.hora || it.horaEnvioCocina || '--:--',
             minutosTranscurridos: minutosTranscurridos,
+            tiempoFormateado: formatoTiempoTranscurrido(minutosTranscurridos),
             estadoCategoria: estadoCategoria,
+            tipoDemora: tipoDemora,
+            esBebida: esBebida,
             isListo: isListo,
             isServido: isServido,
             isEnviado: isEnviado,
@@ -5167,7 +5212,7 @@
       var all = window.obtenerTodosLosPedidosActivos ? window.obtenerTodosLosPedidosActivos() : [];
       var listos = all.filter(function (x) { return x.estadoCategoria === 'listo'; });
       var demorados = all.filter(function (x) { return x.estadoCategoria === 'demorado'; });
-      var cocina = all.filter(function (x) { return x.estadoCategoria === 'cocina'; });
+      var cocina = all.filter(function (x) { return x.estadoCategoria === 'cocina' || x.estadoCategoria === 'espera'; });
 
       var badgeTop = document.getElementById('badgeTopPaseCount');
       var badgeCat = document.getElementById('badgePaseCount');
@@ -5257,14 +5302,14 @@
       } else if (tab === 'demorados') {
         filtrados = all.filter(function (x) { return x.estadoCategoria === 'demorado'; });
       } else if (tab === 'cocina') {
-        filtrados = all.filter(function (x) { return x.estadoCategoria === 'cocina' || x.estadoCategoria === 'demorado'; });
+        filtrados = all.filter(function (x) { return x.estadoCategoria === 'cocina' || x.estadoCategoria === 'espera' || x.estadoCategoria === 'demorado'; });
       }
 
       if (filtrados.length === 0) {
         var emptyMsg = 'No hay platillos en esta sección';
         if (tab === 'listos') emptyMsg = '🔔 No hay platillos pendientes por entregar en la ventana de pase.';
-        else if (tab === 'demorados') emptyMsg = '✅ Excelente ritmo: no hay órdenes demoradas en cocina.';
-        else if (tab === 'cocina') emptyMsg = '🍳 No hay órdenes en preparación activa.';
+        else if (tab === 'demorados') emptyMsg = '✅ Excelente ritmo: no hay órdenes demoradas en cocina ni barra.';
+        else if (tab === 'cocina') emptyMsg = '🍳 No hay órdenes en preparación activa o espera.';
 
         listContainer.innerHTML = `
           <div style="text-align: center; padding: 40px 20px; color: #94a3b8; font-size: 13px;">
@@ -5287,14 +5332,19 @@
           badgeHtml = `<span style="background: #059669; color: #ffffff; font-size: 10px; font-weight: 900; padding: 3px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px; box-shadow: 0 0 10px rgba(16,185,129,0.3);"><i class="fa-solid fa-bell"></i> 🍽️ Listo en Ventana</span>`;
         } else if (item.estadoCategoria === 'demorado') {
           borderCol = '#ef4444';
-          bgCol = 'rgba(239, 68, 68, 0.08)';
-          badgeHtml = `<span style="background: #dc2626; color: #ffffff; font-size: 10px; font-weight: 900; padding: 3px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px; box-shadow: 0 0 10px rgba(239,68,68,0.3);"><i class="fa-solid fa-triangle-exclamation"></i> 🔴 Demorado (${item.minutosTranscurridos} min)</span>`;
+          bgCol = 'rgba(239, 68, 68, 0.12)';
+          var icon = item.tipoDemora === 'barra' ? 'fa-mug-hot' : (item.tipoDemora === 'espera' ? 'fa-clock' : 'fa-triangle-exclamation');
+          var labelDemora = item.tipoDemora === 'barra' ? '🚨 Barra Demorada' : (item.tipoDemora === 'espera' ? '🚨 Sin Enviar / Espera' : '🚨 Cocina Demorada');
+          badgeHtml = `<span style="background: #dc2626; color: #ffffff; font-size: 10px; font-weight: 900; padding: 3px 8px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px; box-shadow: 0 0 10px rgba(239,68,68,0.4);"><i class="fa-solid ${icon}"></i> ${labelDemora} (${item.tiempoFormateado})</span>`;
         } else if (item.estadoCategoria === 'cocina') {
-          borderCol = '#f59e0b';
-          bgCol = 'rgba(245, 158, 11, 0.05)';
-          badgeHtml = `<span style="background: rgba(245,158,11,0.2); border: 1px solid #f59e0b; color: #fbbf24; font-size: 10px; font-weight: 800; padding: 2px 7px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;"><i class="fa-solid fa-fire"></i> En Cocina (${item.minutosTranscurridos} min)</span>`;
+          borderCol = item.esBebida ? '#38bdf8' : '#f59e0b';
+          bgCol = item.esBebida ? 'rgba(56, 189, 248, 0.06)' : 'rgba(245, 158, 11, 0.05)';
+          var labelCocina = item.esBebida ? `☕ En Barra (${item.tiempoFormateado})` : `🔥 En Cocina (${item.tiempoFormateado})`;
+          var colorBadge = item.esBebida ? '#0284c7' : 'rgba(245,158,11,0.2)';
+          var colorTxt = item.esBebida ? '#e0f2fe' : '#fbbf24';
+          badgeHtml = `<span style="background: ${colorBadge}; border: 1px solid ${borderCol}; color: ${colorTxt}; font-size: 10px; font-weight: 800; padding: 2px 7px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px;"><i class="fa-solid ${item.esBebida ? 'fa-mug-saucer' : 'fa-fire'}"></i> ${labelCocina}</span>`;
         } else {
-          badgeHtml = `<span style="background: #1e293b; color: #94a3b8; font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 6px;">⏳ En Espera</span>`;
+          badgeHtml = `<span style="background: #1e293b; color: #94a3b8; font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 6px;">⏳ En Espera (${item.tiempoFormateado})</span>`;
         }
 
         card.style.cssText = `background: ${bgCol}; border: 1.5px solid ${borderCol}; border-radius: 12px; padding: 12px 14px; display: flex; justify-content: space-between; align-items: center; gap: 12px; transition: all 0.2s ease;`;
