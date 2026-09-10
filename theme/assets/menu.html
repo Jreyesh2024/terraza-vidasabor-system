@@ -186,13 +186,31 @@
     function getBebidaSubcategoria(prod) {
       var nom = (prod.nombre || '').toLowerCase();
       var desc = (prod.descripcion || '').toLowerCase();
-      var text = nom + ' ' + desc;
-      if (text.includes('té') || text.includes('te ') || text.includes('matcha') || text.includes('infusion') || text.includes('infusión') || text.includes('tisana') || text.includes('manzanilla') || text.includes('herbal')) {
+      var sku = (prod.codigo_sku || '').toLowerCase();
+
+      // 1. Tés e infusiones prioritarios por nombre (Té Matcha, Té Verde, Tisana, Infusión, etc.)
+      if (/\b(té|tés|matcha|tisana|tisanas|infusión|infusion|infusiones|manzanilla|chai|herbal)\b/i.test(nom) || /^té\b/i.test(nom)) {
         return 'tes';
       }
-      if (text.includes('café') || text.includes('cafe') || text.includes('espresso') || text.includes('capuchino') || text.includes('cappuccino') || text.includes('latte') || text.includes('machiatto') || text.includes('chocolate') || text.includes('americano') || text.includes('olla')) {
+
+      // 2. Cafés prioritarios por nombre (Café, Espresso, Latte, Capuchino, Americano, etc.)
+      if (/\b(café|cafe|espresso|espressos|latte|lattes|capuchino|capuchinos|cappuccino|cappuccinos|americano|americanos|macchiato|moka|mocha)\b/i.test(nom)) {
         return 'cafes';
       }
+
+      // 3. Por código SKU
+      if (sku.includes('caf')) return 'cafes';
+      if (sku.includes('tea') || sku.includes('tis') || sku.includes('inf') || sku.includes('tev')) return 'tes';
+
+      // 4. Por descripción
+      if (/\b(matcha|tisana|tisanas|infusión|infusion|manzanilla|chai)\b/i.test(desc)) {
+        return 'tes';
+      }
+      if (/\b(café|cafe|espresso|latte|capuchino|cappuccino|americano)\b/i.test(desc)) {
+        return 'cafes';
+      }
+
+      // 5. Todo lo demás -> Bebidas & Refrescos
       return 'bebidas';
     }
 
