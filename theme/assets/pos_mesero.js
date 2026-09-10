@@ -398,7 +398,7 @@
       return true;
     }
 
-    window.aplicarCuentasServidor = function(cuentasServidor) {
+    window.aplicarCuentasServidor = function(cuentasServidor, forceClean) {
       if (!cuentasServidor) return;
       if (typeof cuentasServidor === 'string') {
         try {
@@ -406,9 +406,18 @@
         } catch (e) { return; }
       }
       if (!cuentasServidor || typeof cuentasServidor !== 'object') return;
-      if (!window.palapaState || !window.palapaState.cuentas) return;
+      if (!window.palapaState) return;
+      if (!window.palapaState.cuentas) window.palapaState.cuentas = {};
 
       var changed = false;
+
+      if (forceClean) {
+        window.palapaState.cuentas = JSON.parse(JSON.stringify(cuentasServidor));
+        setGlobalCache(JSON.parse(JSON.stringify(cuentasServidor)));
+        saveStateToStorage();
+        renderStateUI();
+        return;
+      }
 
       // 1. Limpiar cuentas al centro (ej. '2-0') que no existen en el servidor
       Object.keys(window.palapaState.cuentas).forEach(function(k) {
@@ -440,13 +449,28 @@
             curr.comensalNombre = srv.comensalNombre;
             changed = true;
           }
+          if (srv.ocupacionId !== curr.ocupacionId) {
+            curr.ocupacionId = srv.ocupacionId;
+            changed = true;
+          }
+          if (srv.sesionMesaId !== curr.sesionMesaId) {
+            curr.sesionMesaId = srv.sesionMesaId;
+            changed = true;
+          }
 
           var srvItems = Array.isArray(srv.items) ? srv.items : [];
-          // Si en servidor está vacía o limpia, sincronizar directo
-          if (srvItems.length === 0 && (curr.items && curr.items.length > 0)) {
-            // Solo conservar si hay un item nuevo pendiente en memoria que el mesero acaba de agregar
-            var pendingLocals = curr.items.filter(function(it) { return !it.enviadoCocina && !it.id; });
-            if (pendingLocals.length === 0) {
+          // Si el servidor indica que la silla está disponible (libre), limpiar items inmediatamente
+          if (srv.estado === 'disponible') {
+            if (curr.items && curr.items.length > 0) {
+              curr.items = [];
+              changed = true;
+            }
+          } else if (srvItems.length === 0 && (curr.items && curr.items.length > 0)) {
+            // Solo conservar si el mesero está editando esta silla exacta en este instante
+            var isEditingThisChair = window.palapaState.modoComandaActiva &&
+                                    (window.palapaState.mesaSeleccionadaId === srv.mesaId) &&
+                                    (window.palapaState.sillaSeleccionadaNum === (srv.sillaId || srv.sillaNum));
+            if (!isEditingThisChair) {
               curr.items = [];
               changed = true;
             }
@@ -505,19 +529,21 @@
     }, 2000);
 
     function resetDemoState() {
-      var initial = JSON.parse(JSON.stringify(DEFAULT_CUENTAS));
-      window.palapaState.cuentas = initial;
-      window.palapaState.mesaSeleccionadaId = 3;
+      window.palapaState.cuentas = {};
+      window.palapaState.mesaSeleccionadaId = 1;
       window.palapaState.sillaSeleccionadaNum = 1;
       window.palapaState.modoComandaActiva = false;
-      setGlobalCache(initial);
+      setGlobalCache({});
+      _prevCuentasSnapshot = {};
       try { localStorage.removeItem('palapa_cuentas_v1'); } catch (e) { }
       try { sessionStorage.removeItem('palapa_cuentas_v1'); } catch (e) { }
+      try { localStorage.removeItem('palapa_croquis_state_v1'); } catch (e) { }
+      try { sessionStorage.removeItem('palapa_croquis_state_v1'); } catch (e) { }
       saveStateToStorage();
       cancelarModoMover();
       cerrarModalComanda();
       renderStateUI();
-      showDragToast('🔄 Estado reiniciado a demo (Mesa 1: Libre, Mesa 2: 2 ocupadas, Mesa 3: 2 ocupadas)', 'ok');
+      showDragToast('🔄 Estado reiniciado: todas las mesas limpias y libres.', 'ok');
     }
 
     // ── Toast de notificación (reemplaza alert()) ──
@@ -5415,6 +5441,7 @@
 
       showDragToast('🔄 Reiniciando jornada y liberando mesas...', 'info');
 
+      // 1. Limpiar todo almacenamiento del navegador
       try {
         localStorage.removeItem('palapa_cuentas_v1');
         localStorage.removeItem('palapa_croquis_state_v1');
@@ -5423,29 +5450,60 @@
         sessionStorage.removeItem('palapa_croquis_state_v1');
       } catch (e) { }
 
+      // 2. Limpiar cache global en memoria y snapshot de pedidos
+      setGlobalCache({});
+      _prevCuentasSnapshot = {};
+
+      // 3. Resetear el estado local de UI
+      window.palapaState.cuentas = {};
       window.palapaState.modoComandaActiva = false;
       window.palapaState.modoMoverActivo = false;
       window.palapaState.sillaOrigenMover = null;
       window.palapaState.mesaSeleccionadaId = 1;
       window.palapaState.sillaSeleccionadaNum = 1;
 
-      if (typeof window.anvilReiniciarJornada === 'function') {
-        try {
-          var res = window.anvilReiniciarJornada();
-          if (res) {
-            window.aplicarCuentasServidor(res);
-          }
-        } catch (err) {
-          console.warn('Error llamando anvilReiniciarJornada:', err);
+      // 4. Invocar reset en el servidor Python/PostgreSQL y renderizar limpio
+      function aplicarReinicioLimpio(res) {
+        var cleanData = res;
+        if (typeof cleanData === 'string') {
+          try { cleanData = JSON.parse(cleanData); } catch (e) { cleanData = {}; }
         }
-      }
-
-      setTimeout(function () {
+        if (cleanData && typeof cleanData === 'object') {
+          window.palapaState.cuentas = cleanData;
+          setGlobalCache(cleanData);
+          saveStateToStorage();
+        }
         if (typeof window.volverAlCroquisGeneral === 'function') {
           window.volverAlCroquisGeneral();
         }
+        renderStateUI();
         showDragToast('🌅 ¡Jornada reiniciada con éxito! Todas las mesas están listas para el nuevo día.', 'ok');
-      }, 350);
+      }
+
+      if (typeof window.anvilReiniciarJornada === 'function') {
+        try {
+          var p = window.anvilReiniciarJornada();
+          if (p && typeof p.then === 'function') {
+            p.then(function(res) {
+              aplicarReinicioLimpio(res);
+            }).catch(function(err) {
+              console.warn('Error en reinicio async:', err);
+              renderStateUI();
+            });
+          } else {
+            aplicarReinicioLimpio(p);
+          }
+        } catch (err) {
+          console.warn('Error llamando anvilReiniciarJornada:', err);
+          renderStateUI();
+        }
+      } else {
+        if (typeof window.volverAlCroquisGeneral === 'function') {
+          window.volverAlCroquisGeneral();
+        }
+        renderStateUI();
+        showDragToast('🌅 ¡Jornada reiniciada con éxito! Todas las mesas están listas para el nuevo día.', 'ok');
+      }
     };
 
     // Exponer funciones clave globalmente para que Python y llamadas onclick directas puedan interactuar
