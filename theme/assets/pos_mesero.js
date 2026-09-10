@@ -44,6 +44,7 @@
               ingredientes: parsedIng.length > 0 ? parsedIng : ['Ingredientes frescos de temporada'],
               pasos: parsedPasos.length > 0 ? parsedPasos : ['Preparar al momento con ingredientes de calidad.'],
               adicionales: parsedExtras,
+              opciones_termino: Array.isArray(p.opciones_termino) ? p.opciones_termino : [],
               notas: p.notas_receta || p.notas || ''
             };
           });
