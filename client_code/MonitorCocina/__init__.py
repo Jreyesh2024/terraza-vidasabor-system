@@ -11,8 +11,25 @@ class MonitorCocina(MonitorCocinaTemplate):
     self.set_event_handler("show", self._form_show)
     self.set_event_handler("hide", self._form_hide)
 
+    # Exponer función de sincronización de cuenta para que KDS actualice el servidor
+    try:
+      anvil.js.window.anvilSyncCuenta = self.sincronizar_cuenta_servidor
+    except Exception:
+      pass
+
     # Cargar recetas y mesas dinámicas desde PostgreSQL
     self.cargar_recetario_db()
+    self.cargar_cuentas_kds_db()
+
+    # Timer nativo de Anvil en segundo plano para sincronizar KDS cada 3 segundos
+    try:
+      self.timer_sync = anvil.Timer(interval=3.0)
+      self.timer_sync.set_event_handler('tick', self.timer_tick_sync)
+      self.add_component(self.timer_sync)
+    except Exception as e:
+      print(f"Error iniciando timer sync en MonitorCocina: {e}")
+
+  def timer_tick_sync(self, **event_args):
     self.cargar_cuentas_kds_db()
 
   def _set_global_nav_hooks(self):
@@ -72,6 +89,22 @@ class MonitorCocina(MonitorCocinaTemplate):
       print(f"[MonitorCocina] Error obteniendo comandas KDS desde DB: {e}")
       return {}
 
+  def sincronizar_cuenta_servidor(self, mesa_id, silla_id, items, estado='ocupada'):
+    try:
+      if isinstance(items, str):
+        try: items_clean = json.loads(items)
+        except Exception: items_clean = []
+      elif isinstance(items, list):
+        items_clean = items
+      else:
+        try: items_clean = json.loads(json.dumps(items))
+        except Exception: items_clean = []
+      res = anvil.server.call('actualizar_cuenta_silla', int(mesa_id), int(silla_id), items_clean, str(estado))
+      return res
+    except Exception as e:
+      print(f"Error en sincronizar_cuenta_servidor desde MonitorCocina: {e}")
+      return None
+
   def cambiar_estado_item_cocina(self, detalle_id, nuevo_estado):
     try:
       res = anvil.server.call('cambiar_estado_item_cocina', int(detalle_id), str(nuevo_estado))
@@ -105,4 +138,3 @@ class MonitorCocina(MonitorCocinaTemplate):
       target_form = 'AdminMenu'
     
     anvil.open_form(target_form)
-

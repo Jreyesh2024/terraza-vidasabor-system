@@ -7,37 +7,9 @@ import json
 class MonitorCocina(MonitorCocinaTemplate):
   def __init__(self, **properties):
     self.init_components(**properties)
-    try:
-      # Exponer navegación directamente en window, parent y top
-      w = anvil.js.window
-      w.navMenu = self.navegar_modulo
-      w.anvilAppNav = self.navegar_modulo
-      w.anvilCambiarEstadoItemCocina = self.cambiar_estado_item_cocina
-      w.anvilDespacharTicketCocina = self.despachar_ticket_cocina
-      w.anvilGetKDSCuentas = self.sincronizar_con_servidor
-      if hasattr(w, 'parent') and w.parent:
-        w.parent.navMenu = self.navegar_modulo
-        w.parent.anvilAppNav = self.navegar_modulo
-        w.parent.anvilCambiarEstadoItemCocina = self.cambiar_estado_item_cocina
-        w.parent.anvilDespacharTicketCocina = self.despachar_ticket_cocina
-        w.parent.anvilGetKDSCuentas = self.sincronizar_con_servidor
-      if hasattr(w, 'top') and w.top:
-        w.top.navMenu = self.navegar_modulo
-        w.top.anvilAppNav = self.navegar_modulo
-        w.top.anvilCambiarEstadoItemCocina = self.cambiar_estado_item_cocina
-        w.top.anvilDespacharTicketCocina = self.despachar_ticket_cocina
-        w.top.anvilGetKDSCuentas = self.sincronizar_con_servidor
-      w.scrollTo(0, 0)
-    except Exception as e:
-      print(f"[MonitorCocina] Error exponiendo funciones en window: {e}")
-
-    # Ejecutar scripts de plantilla
-    try:
-      dom = anvil.js.get_dom_node(self)
-      if hasattr(anvil.js.window, 'runFormScripts'):
-        anvil.js.window.runFormScripts(dom)
-    except Exception:
-      pass
+    self._set_global_nav_hooks()
+    self.set_event_handler("show", self._form_show)
+    self.set_event_handler("hide", self._form_hide)
 
     # Exponer función de sincronización de cuenta para que KDS actualice el servidor
     try:
@@ -47,29 +19,75 @@ class MonitorCocina(MonitorCocinaTemplate):
 
     # Cargar recetas y mesas dinámicas desde PostgreSQL
     self.cargar_recetario_db()
-    self.sincronizar_con_servidor()
+    self.cargar_cuentas_kds_db()
 
-    # Timer nativo de Anvil en segundo plano para sincronizar KDS cada 2.5 segundos
+    # Timer nativo de Anvil en segundo plano para sincronizar KDS cada 3 segundos
     try:
-      self.timer_sync = anvil.Timer(interval=2.5)
+      self.timer_sync = anvil.Timer(interval=3.0)
       self.timer_sync.set_event_handler('tick', self.timer_tick_sync)
       self.add_component(self.timer_sync)
     except Exception as e:
       print(f"Error iniciando timer sync en MonitorCocina: {e}")
 
   def timer_tick_sync(self, **event_args):
-    self.sincronizar_con_servidor()
+    self.cargar_cuentas_kds_db()
 
-  def sincronizar_con_servidor(self):
+  def _set_global_nav_hooks(self):
+    try:
+      w = anvil.js.window
+      w.anvilAppNav = self.navegar_modulo
+      w.navMenu = self.navegar_modulo
+      w.anvilCambiarEstadoItemCocina = self.cambiar_estado_item_cocina
+      w.anvilDespacharTicketCocina = self.despachar_ticket_cocina
+      w.anvilGetKDSCuentas = self.cargar_cuentas_kds_db
+      if hasattr(w, 'parent') and w.parent:
+        w.parent.anvilAppNav = self.navegar_modulo
+        w.parent.navMenu = self.navegar_modulo
+        w.parent.anvilCambiarEstadoItemCocina = self.cambiar_estado_item_cocina
+        w.parent.anvilDespacharTicketCocina = self.despachar_ticket_cocina
+        w.parent.anvilGetKDSCuentas = self.cargar_cuentas_kds_db
+      if hasattr(w, 'top') and w.top:
+        w.top.anvilAppNav = self.navegar_modulo
+        w.top.navMenu = self.navegar_modulo
+        w.top.anvilCambiarEstadoItemCocina = self.cambiar_estado_item_cocina
+        w.top.anvilDespacharTicketCocina = self.despachar_ticket_cocina
+        w.top.anvilGetKDSCuentas = self.cargar_cuentas_kds_db
+      w.scrollTo(0, 0)
+    except Exception as e:
+      print(f"[MonitorCocina] Error registrando navMenu y hooks: {e}")
+
+  def _form_show(self, **event_args):
+    self._set_global_nav_hooks()
+    self.cargar_cuentas_kds_db()
+    anvil.js.window.setTimeout(self._set_global_nav_hooks, 300)
+
+  def _form_hide(self, **event_args):
+    pass
+
+  def cargar_recetario_db(self):
+    try:
+      recetas = anvil.server.call('get_recetas_cocina_terraza')
+      mesas = anvil.server.call('get_mesas_terraza')
+      areas = anvil.server.call('get_areas_terraza')
+      if hasattr(anvil.js.window, 'setRecetarioFromDB'):
+        anvil.js.window.setRecetarioFromDB(json.dumps(recetas) if recetas else "[]")
+      if hasattr(anvil.js.window, 'setMesasCocinaFromDB'):
+        anvil.js.window.setMesasCocinaFromDB(
+          json.dumps(mesas) if mesas else "[]",
+          json.dumps(areas) if areas else "[]"
+        )
+    except Exception as e:
+      print(f"Error cargando recetario KDS desde DB: {e}")
+
+  def cargar_cuentas_kds_db(self):
     try:
       cuentas = anvil.server.call('get_cuentas_terraza')
-      if cuentas:
-        if hasattr(anvil.js.window, 'setKDSCuentasFromDB'):
-          anvil.js.window.setKDSCuentasFromDB(json.dumps(cuentas))
-        elif hasattr(anvil.js.window, 'cargarKDS'):
-          anvil.js.window.cargarKDS()
+      if hasattr(anvil.js.window, 'setKDSCuentasFromDB'):
+        anvil.js.window.setKDSCuentasFromDB(json.dumps(cuentas) if cuentas else "{}")
+      return cuentas
     except Exception as e:
-      print(f"Error sincronizando servidor en MonitorCocina: {e}")
+      print(f"[MonitorCocina] Error obteniendo comandas KDS desde DB: {e}")
+      return {}
 
   def sincronizar_cuenta_servidor(self, mesa_id, silla_id, items, estado='ocupada'):
     try:
@@ -103,22 +121,6 @@ class MonitorCocina(MonitorCocinaTemplate):
     except Exception as e:
       print(f"[MonitorCocina] Error despachando ticket mesa {mesa_num}: {e}")
       return {"success": False, "error": str(e)}
-
-
-  def cargar_recetario_db(self):
-    try:
-      recetas = anvil.server.call('get_recetas_cocina_terraza')
-      mesas = anvil.server.call('get_mesas_terraza')
-      areas = anvil.server.call('get_areas_terraza')
-      if hasattr(anvil.js.window, 'setRecetarioFromDB'):
-        anvil.js.window.setRecetarioFromDB(json.dumps(recetas) if recetas else "[]")
-      if hasattr(anvil.js.window, 'setMesasCocinaFromDB'):
-        anvil.js.window.setMesasCocinaFromDB(
-          json.dumps(mesas) if mesas else "[]",
-          json.dumps(areas) if areas else "[]"
-        )
-    except Exception as e:
-      print(f"Error cargando recetario KDS desde DB: {e}")
 
   def navegar_modulo(self, modulo_nombre):
     target_form = 'POSMesero'
