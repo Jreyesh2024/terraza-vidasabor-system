@@ -4426,24 +4426,48 @@
         if (ivaEl) ivaEl.innerText = `$${iva.toFixed(2)}`;
         if (totalEl) totalEl.innerText = `$${total.toFixed(2)}`;
 
-        // Botón de Enviar a Cocina (KDS) por tramos
+        // Botón de Enviar a Cocina / Barra (KDS) por tramos
         const btnSendCocina = document.getElementById('btnSidebarEnviarCocina');
         const btnSendCocinaTxt = document.getElementById('btnSidebarEnviarCocinaTxt');
         if (btnSendCocina && btnSendCocinaTxt) {
+          const pendientesItems = (cuenta.items || []).filter(i => !i.enviadoCocina);
+          const allDrinks = pendientesItems.length > 0 && pendientesItems.every(i => {
+            const nom = (i.nombre || '').toLowerCase();
+            return nom.includes('caf') || nom.includes('beb') || nom.includes('jugo') || nom.includes('té') || nom.includes('refresco') || nom.includes('agua') || nom.includes('chocolate');
+          });
+          const allFood = pendientesItems.length > 0 && pendientesItems.every(i => {
+            const nom = (i.nombre || '').toLowerCase();
+            return !(nom.includes('caf') || nom.includes('beb') || nom.includes('jugo') || nom.includes('té') || nom.includes('refresco') || nom.includes('agua') || nom.includes('chocolate'));
+          });
+
+          let sendLabel = 'Enviar a Cocina / Barra';
+          let sendBg = 'linear-gradient(135deg, #f59e0b, #d97706)';
+          let sendColor = '#0f172a';
+
+          if (allDrinks) {
+            sendLabel = 'Enviar a Barra de Bebidas';
+            sendBg = 'linear-gradient(135deg, #0284c7, #0369a1)';
+            sendColor = '#ffffff';
+          } else if (allFood) {
+            sendLabel = 'Enviar a Cocina';
+            sendBg = 'linear-gradient(135deg, #f59e0b, #d97706)';
+            sendColor = '#0f172a';
+          }
+
           if (pendientesCount > 0) {
             btnSendCocina.disabled = false;
             btnSendCocina.style.opacity = '1';
             btnSendCocina.style.cursor = 'pointer';
-            btnSendCocina.style.background = 'linear-gradient(135deg, #f59e0b, #d97706)';
-            btnSendCocina.style.color = '#0f172a';
-            btnSendCocinaTxt.innerHTML = `<b>Enviar a Cocina / Barra</b> (${pendientesCount} pendiente${pendientesCount > 1 ? 's' : ''})`;
+            btnSendCocina.style.background = sendBg;
+            btnSendCocina.style.color = sendColor;
+            btnSendCocinaTxt.innerHTML = `<i class="fa-solid fa-paper-plane"></i> <b>${sendLabel}</b> (${pendientesCount} pendiente${pendientesCount > 1 ? 's' : ''})`;
           } else if (cuenta.items && cuenta.items.length > 0) {
             btnSendCocina.disabled = true;
-            btnSendCocina.style.opacity = '0.6';
+            btnSendCocina.style.opacity = '0.7';
             btnSendCocina.style.cursor = 'default';
             btnSendCocina.style.background = '#1e293b';
             btnSendCocina.style.color = '#34d399';
-            btnSendCocinaTxt.innerHTML = `<i class="fa-solid fa-check-double"></i> Todo enviado a Cocina`;
+            btnSendCocinaTxt.innerHTML = `<i class="fa-solid fa-check-double"></i> Todo enviado a Cocina / Barra`;
           } else {
             btnSendCocina.disabled = true;
             btnSendCocina.style.opacity = '0.4';
