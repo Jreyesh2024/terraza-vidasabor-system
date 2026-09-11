@@ -361,7 +361,11 @@
           if (it.estacion === 'INFANTIL') countInfantil += it.cantidad;
 
           if (it.estado === 'preparando') {
-            batchMap[it.nombre] = (batchMap[it.nombre] || 0) + it.cantidad;
+            if (!batchMap[it.nombre]) {
+              batchMap[it.nombre] = { qty: it.cantidad, est: it.estacion };
+            } else {
+              batchMap[it.nombre].qty += it.cantidad;
+            }
           }
         }
       });
@@ -429,7 +433,15 @@
       if (currentMesa !== 'TODAS') {
         const areaObj = getTableArea(currentMesa);
         const mesaTicketsCount = window.kdsState.tickets.filter(t => t.mesaId === currentMesa).length;
-        focusText.innerHTML = 'Visualizando comandas de: <b>Mesa ' + currentMesa + ' (' + areaObj.nombre + ')</b> • <b>' + mesaTicketsCount + ' Comensales / Columnas</b> de Servicio';
+        let estInfo = '';
+        if (currentStation === 'BARRA') {
+          estInfo = ' • <span style="background:rgba(56,189,248,0.25); color:#38bdf8; padding:2px 8px; border-radius:6px; border:1px solid #0284c7; font-weight:900;"><i class="fa-solid fa-mug-hot"></i> Solo Barra & Bebidas</span>';
+        } else if (currentStation === 'COCINA') {
+          estInfo = ' • <span style="background:rgba(245,158,11,0.25); color:#fbbf24; padding:2px 8px; border-radius:6px; border:1px solid #f59e0b; font-weight:900;"><i class="fa-solid fa-fire"></i> Solo Cocina Caliente</span>';
+        } else if (currentStation === 'REPOSTERIA') {
+          estInfo = ' • <span style="background:rgba(192,132,252,0.25); color:#c084fc; padding:2px 8px; border-radius:6px; border:1px solid #9333ea; font-weight:900;"><i class="fa-solid fa-cake-candles"></i> Solo Postres</span>';
+        }
+        focusText.innerHTML = 'Visualizando comanda: <b>Mesa ' + currentMesa + ' (' + areaObj.nombre + ')</b>' + estInfo + ' • <b>' + mesaTicketsCount + ' Comensal(es)</b>';
         focusBanner.style.display = 'flex';
       } else if (currentArea !== 'TODAS') {
         focusText.innerHTML = 'Visualizando área: <b>' + (currentArea === 'PALAPA' ? 'La Palapa (Mesas 1-3)' : (currentArea === 'PATIO' ? 'Terraza / Patio (Mesas 4-6)' : 'La Chimenea (Mesas 7-9)')) + '</b>';
@@ -439,18 +451,38 @@
       }
     }
 
-    // Renderizar Lote en Fuego (Batch Cooking Pills)
+    // Renderizar Lote en Fuego / Preparación (Batch Cooking & Bar Pills)
     if (batchContainer) {
       batchContainer.innerHTML = '';
       const batchKeys = Object.keys(batchMap);
       if (batchKeys.length === 0) {
-        batchContainer.innerHTML = '<span style="font-size: 11px; color: #64748b; font-style: italic;">Sin platillos activos en fuego. Presiona "Iniciar Fuego" para comenzar.</span>';
+        batchContainer.innerHTML = '<span style="font-size: 11px; color: #64748b; font-style: italic;">Sin órdenes en preparación activa. Presiona "Iniciar Fuego" / "Preparar Bebida" para comenzar.</span>';
       } else {
         batchKeys.forEach(nombre => {
-          const qty = batchMap[nombre];
+          const itemInfo = batchMap[nombre];
+          const qty = typeof itemInfo === 'object' ? itemInfo.qty : itemInfo;
+          const est = typeof itemInfo === 'object' ? itemInfo.est : getProductStation(nombre);
+
+          let pillBg = 'rgba(245, 158, 11, 0.18)';
+          let pillBorder = '#f59e0b';
+          let pillColor = '#fbbf24';
+          let iconTag = '<i class="fa-solid fa-fire"></i>';
+
+          if (est === 'BARRA') {
+            pillBg = 'rgba(56, 189, 248, 0.18)';
+            pillBorder = '#0284c7';
+            pillColor = '#38bdf8';
+            iconTag = '<i class="fa-solid fa-mug-hot"></i>';
+          } else if (est === 'REPOSTERIA') {
+            pillBg = 'rgba(192, 132, 252, 0.18)';
+            pillBorder = '#9333ea';
+            pillColor = '#c084fc';
+            iconTag = '<i class="fa-solid fa-cake-candles"></i>';
+          }
+
           const pill = document.createElement('span');
-          pill.style.cssText = 'padding: 4px 10px; background: rgba(245, 158, 11, 0.18); border: 1px solid #f59e0b; color: #fbbf24; border-radius: 20px; font-size: 11px; font-weight: 800; display: inline-flex; align-items: center; gap: 5px;';
-          pill.innerHTML = '<b>' + qty + 'x</b> ' + nombre;
+          pill.style.cssText = 'padding: 4px 10px; background: ' + pillBg + '; border: 1px solid ' + pillBorder + '; color: ' + pillColor + '; border-radius: 20px; font-size: 11px; font-weight: 800; display: inline-flex; align-items: center; gap: 5px;';
+          pill.innerHTML = iconTag + ' <b>' + qty + 'x</b> ' + nombre;
           batchContainer.appendChild(pill);
         });
       }
@@ -473,19 +505,34 @@
       if (visibleItems.length === 0) return;
       renderedTicketsCount++;
 
-      let hasDelayedItem = false;
-      let hasPreparingItem = false;
+      let hasDelayedBarra = false;
+      let hasDelayedCocina = false;
+      let hasPreparingBarra = false;
+      let hasPreparingCocina = false;
       let allItemsReady = true;
 
       visibleItems.forEach(it => {
         if (it.estado !== 'listo') allItemsReady = false;
 
+        const isBarra = (it.estacion === 'BARRA');
+        const threshold = isBarra ? 7 : 14;
+
         if (it.estado === 'preparando') {
-          hasPreparingItem = true;
+          if (isBarra) hasPreparingBarra = true;
+          else hasPreparingCocina = true;
+
           const startTime = it.timestampInicio || it.timestampEnvio || ticket.timestampEnvio || (now - 5 * 60000);
           const elapsedMins = Math.floor((now - startTime) / 60000);
-          if (elapsedMins >= 14) {
-            hasDelayedItem = true;
+          if (elapsedMins >= threshold) {
+            if (isBarra) hasDelayedBarra = true;
+            else hasDelayedCocina = true;
+          }
+        } else if (it.estado === 'recibido') {
+          const startTime = it.timestampEnvio || ticket.timestampEnvio || (now - 5 * 60000);
+          const elapsedMins = Math.floor((now - startTime) / 60000);
+          if (elapsedMins >= threshold) {
+            if (isBarra) hasDelayedBarra = true;
+            else hasDelayedCocina = true;
           }
         }
       });
@@ -499,15 +546,33 @@
         semaforoBg = '#0284c7';
         semaforoText = '#38bdf8';
         semaforoLabel = '✅ LISTO EN PASE';
-      } else if (hasDelayedItem) {
+      } else if (hasDelayedBarra && hasDelayedCocina) {
         semaforoBg = '#ef4444';
         semaforoText = '#f87171';
-        semaforoLabel = '🔴 DEMORADO (>14m)';
+        semaforoLabel = '🔴 DEMORA BARRA & COCINA';
         isUrgent = true;
-      } else if (hasPreparingItem) {
+      } else if (hasDelayedBarra) {
+        semaforoBg = '#ef4444';
+        semaforoText = '#f87171';
+        semaforoLabel = '🔴 BARRA DEMORADA (>7m)';
+        isUrgent = true;
+      } else if (hasDelayedCocina) {
+        semaforoBg = '#ef4444';
+        semaforoText = '#f87171';
+        semaforoLabel = '🔴 COCINA DEMORADA (>14m)';
+        isUrgent = true;
+      } else if (hasPreparingCocina && hasPreparingBarra) {
+        semaforoBg = '#f59e0b';
+        semaforoText = '#fbbf24';
+        semaforoLabel = '🟡 EN PREPARACIÓN';
+      } else if (hasPreparingCocina) {
         semaforoBg = '#f59e0b';
         semaforoText = '#fbbf24';
         semaforoLabel = '🟡 EN FUEGO';
+      } else if (hasPreparingBarra) {
+        semaforoBg = '#0284c7';
+        semaforoText = '#38bdf8';
+        semaforoLabel = '🟡 PREPARANDO BEBIDA';
       } else {
         semaforoBg = '#10b981';
         semaforoText = '#34d399';
@@ -565,25 +630,72 @@
         let itemBorder = '#1e293b';
         let actionButtonHtml = '';
 
-        const itemElapsedMins = it.timestampInicio ? Math.floor((now - it.timestampInicio) / 60000) : 0;
+        const itemElapsedMins = it.timestampInicio ? Math.floor((now - it.timestampInicio) / 60000) : (it.timestampEnvio ? Math.floor((now - it.timestampEnvio) / 60000) : 0);
+        const isBarra = (it.estacion === 'BARRA');
+        const isRep = (it.estacion === 'REPOSTERIA');
+        const threshold = isBarra ? 7 : (isRep ? 10 : 14);
 
         if (it.estado === 'recibido') {
+          let stIcon = 'fa-solid fa-fire';
+          let btnText = 'Iniciar Fuego';
+          let btnGradient = 'linear-gradient(135deg, #f59e0b, #d97706)';
+          let btnTextColor = '#0f172a';
+
+          if (isBarra) {
+            stIcon = 'fa-solid fa-mug-hot';
+            btnText = 'Preparar Bebida';
+            btnGradient = 'linear-gradient(135deg, #0284c7, #0369a1)';
+            btnTextColor = '#ffffff';
+          } else if (isRep) {
+            stIcon = 'fa-solid fa-cake-candles';
+            btnText = 'Preparar Postre';
+            btnGradient = 'linear-gradient(135deg, #9333ea, #7e22ce)';
+            btnTextColor = '#ffffff';
+          } else if (it.estacion === 'INFANTIL') {
+            stIcon = 'fa-solid fa-child';
+            btnText = 'Iniciar Infantil';
+            btnGradient = 'linear-gradient(135deg, #16a34a, #15803d)';
+            btnTextColor = '#ffffff';
+          }
+
           itemStateBadge = '<span style="font-size: 9px; font-weight: 800; background: rgba(16,185,129,0.15); color: #34d399; border: 1px solid rgba(16,185,129,0.4); padding: 2px 6px; border-radius: 4px;">🟢 En Espera</span>';
           itemBorder = 'rgba(16,185,129,0.3)';
           actionButtonHtml = `
-            <button onclick="window.iniciarAtencionItemKDS(${tIdx}, ${iIdx});" style="padding: 4px 10px; font-size: 10px; font-weight: 900; border-radius: 6px; border: none; cursor: pointer; background: linear-gradient(135deg, #f59e0b, #d97706); color: #0f172a; display: flex; align-items: center; gap: 4px; box-shadow: 0 2px 8px rgba(245,158,11,0.25);">
-              <i class="fa-solid fa-fire"></i> Iniciar Fuego
+            <button onclick="window.iniciarAtencionItemKDS(${tIdx}, ${iIdx});" style="padding: 4px 10px; font-size: 10px; font-weight: 900; border-radius: 6px; border: none; cursor: pointer; background: ${btnGradient}; color: ${btnTextColor}; display: flex; align-items: center; gap: 4px; box-shadow: 0 2px 8px rgba(0,0,0,0.25);">
+              <i class="${stIcon}"></i> ${btnText}
             </button>
           `;
         } else if (it.estado === 'preparando') {
-          if (itemElapsedMins >= 14) {
-            itemStateBadge = '<span style="font-size: 9px; font-weight: 900; background: rgba(239,68,68,0.2); color: #f87171; border: 1px solid #ef4444; padding: 2px 6px; border-radius: 4px; animation: urgentPulse 1.8s infinite;"><i class="fa-solid fa-triangle-exclamation"></i> 🔴 Retraso (' + itemElapsedMins + ' min)</span>';
+          let prepText = '🟡 En Fuego';
+          let prepIcon = 'fa-solid fa-fire-burner';
+          let prepColor = '#fbbf24';
+          let prepBorder = 'rgba(245,158,11,0.4)';
+          let prepBg = 'rgba(245,158,11,0.2)';
+
+          if (isBarra) {
+            prepText = '🟡 Preparando Bebida';
+            prepIcon = 'fa-solid fa-mug-hot';
+            prepColor = '#38bdf8';
+            prepBorder = 'rgba(56,189,248,0.4)';
+            prepBg = 'rgba(56,189,248,0.18)';
+          } else if (isRep) {
+            prepText = '🟡 Preparando Postre';
+            prepIcon = 'fa-solid fa-cake-candles';
+            prepColor = '#c084fc';
+            prepBorder = 'rgba(192,132,252,0.4)';
+            prepBg = 'rgba(192,132,252,0.18)';
+          }
+
+          if (itemElapsedMins >= threshold) {
+            const delayLabel = isBarra ? '🔴 Barra Demorada' : (isRep ? '🔴 Postre Demorado' : '🔴 Retraso Cocina');
+            itemStateBadge = '<span style="font-size: 9px; font-weight: 900; background: rgba(239,68,68,0.2); color: #f87171; border: 1px solid #ef4444; padding: 2px 6px; border-radius: 4px; animation: urgentPulse 1.8s infinite;"><i class="fa-solid fa-triangle-exclamation"></i> ' + delayLabel + ' (' + itemElapsedMins + ' min)</span>';
             itemBorder = '#ef4444';
             itemBg = 'rgba(239,68,68,0.08)';
           } else {
-            itemStateBadge = '<span style="font-size: 9px; font-weight: 800; background: rgba(245,158,11,0.2); color: #fbbf24; border: 1px solid rgba(245,158,11,0.4); padding: 2px 6px; border-radius: 4px;"><i class="fa-solid fa-fire-burner"></i> 🟡 En Fuego (' + itemElapsedMins + 'm)</span>';
-            itemBorder = '#f59e0b';
+            itemStateBadge = '<span style="font-size: 9px; font-weight: 800; background: ' + prepBg + '; color: ' + prepColor + '; border: 1px solid ' + prepBorder + '; padding: 2px 6px; border-radius: 4px;"><i class="' + prepIcon + '"></i> ' + prepText + ' (' + itemElapsedMins + 'm)</span>';
+            itemBorder = isBarra ? '#0284c7' : '#f59e0b';
           }
+
           actionButtonHtml = `
             <button onclick="window.marcarListoItemKDS(${tIdx}, ${iIdx});" style="padding: 4px 10px; font-size: 10px; font-weight: 900; border-radius: 6px; border: none; cursor: pointer; background: linear-gradient(135deg, #059669, #10b981); color: #ffffff; display: flex; align-items: center; gap: 4px; box-shadow: 0 2px 8px rgba(16,185,129,0.3);">
               <i class="fa-solid fa-check"></i> Marcar Listo
