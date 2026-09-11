@@ -833,8 +833,11 @@ def uplink_actualizar_cuenta_silla(mesa_id, silla_id, items, estado='ocupada'):
     silla_id = int(silla_id)
     key = f"{mesa_id}-{silla_id}"
 
-    # Items siempre en memoria (Bloque C los pasa a detalle_comanda)
-    ITEMS_MEMORIA[key] = items or []
+    # Items en memoria: solo actualizar si se proporcionan items explícitos
+    if items is not None and isinstance(items, list) and len(items) > 0:
+        ITEMS_MEMORIA[key] = items
+    elif items is not None and isinstance(items, list) and len(items) == 0 and estado in ('disponible', 'libre'):
+        ITEMS_MEMORIA.pop(key, None)
 
     conn = get_db_connection()
     try:

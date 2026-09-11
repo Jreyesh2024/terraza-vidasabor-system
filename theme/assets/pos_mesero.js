@@ -475,8 +475,21 @@
               changed = true;
             }
           } else if (srvItems.length > 0) {
-            if (!areItemsEqual(curr.items || [], srvItems)) {
-              curr.items = JSON.parse(JSON.stringify(srvItems));
+            // Preservar el flag enviadoCocina si el mesero local ya envió el item
+            var mergedItems = srvItems.map(function(srvIt, sIdx) {
+              var currIt = (curr.items && curr.items[sIdx]) ? curr.items[sIdx] : null;
+              if (currIt && (currIt.nombre === srvIt.nombre || currIt.id === srvIt.id)) {
+                if (currIt.enviadoCocina && !srvIt.enviadoCocina) {
+                  srvIt.enviadoCocina = true;
+                  srvIt.horaEnvioCocina = currIt.horaEnvioCocina || srvIt.horaEnvioCocina;
+                  if (srvIt.estado === 'borrador') srvIt.estado = 'enviado_cocina';
+                  if (srvIt.estadoCocina === 'borrador') srvIt.estadoCocina = 'recibido';
+                }
+              }
+              return srvIt;
+            });
+            if (!areItemsEqual(curr.items || [], mergedItems)) {
+              curr.items = JSON.parse(JSON.stringify(mergedItems));
               changed = true;
             }
           }
@@ -1206,12 +1219,13 @@
             row.style.cssText = 'display: flex; justify-content: space-between; align-items: center; padding: 4px 8px; background: rgba(0,0,0,0.25); border-radius: 8px; border: 1px dashed rgba(234,179,8,0.25);';
             
             let statusBadge = '';
+            var esBeb = it.tipo_consumo === 'bebida' || (it.nombre && /caf|té|jugo|limonada|agua|refresco|frapp/i.test(it.nombre));
             if (it.servido || it.estado === 'servido') {
               statusBadge = `<span style="color: #94a3b8; font-size: 9px; font-weight: 800;">🍽️ Entregado</span>`;
             } else if (it.listo || it.estado === 'listo') {
               statusBadge = `<span style="color: #34d399; font-size: 9px; font-weight: 900;">🔔 ¡Listo en Pase!</span>`;
             } else if (it.enviadoCocina) {
-              statusBadge = `<span style="color: #38bdf8; font-size: 9px; font-weight: 800;">🍳 En Cocina</span>`;
+              statusBadge = `<span style="color: #38bdf8; font-size: 9px; font-weight: 800;">${esBeb ? '☕ En Barra' : '🍳 En Cocina'}</span>`;
             } else {
               statusBadge = `<span style="color: #f59e0b; font-size: 9px; font-weight: 800;">⏳ Por Enviar</span>`;
             }
@@ -3475,6 +3489,9 @@
       const nowStr = (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
       item.enviadoCocina = true;
       item.horaEnvioCocina = nowStr;
+      item.timestampEnvioCocina = Date.now();
+      if (item.estado === 'borrador' || !item.estado) item.estado = 'enviado_cocina';
+      if (item.estadoCocina === 'borrador' || !item.estadoCocina) item.estadoCocina = 'recibido';
 
       saveStateToStorage();
       renderStateUI();
@@ -3489,7 +3506,9 @@
         console.error('Error sincronizando item individual con servidor:', err);
       }
 
-      showDragToast(`🚀 ¡${item.nombre} enviado a Cocina / Barra (${nowStr})!`, 'ok');
+      var esBeb = item.tipo_consumo === 'bebida' || (item.nombre && /caf|té|jugo|limonada|agua|refresco|frapp/i.test(item.nombre));
+      var dest = esBeb ? 'Barra de Bebidas' : 'Cocina';
+      showDragToast(`🚀 ¡${item.nombre} enviado a ${dest} (${nowStr})!`, 'ok');
     };
 
     window.enviarACocinaComandaActiva = function () {
@@ -3507,7 +3526,7 @@
       }
 
       if (!cuenta || !cuenta.items || cuenta.items.length === 0) {
-        showDragToast('ℹ Agrega al menos un producto a la comanda antes de enviar a cocina.', 'warn');
+        showDragToast('ℹ Agrega al menos un producto a la comanda antes de enviar a cocina / barra.', 'warn');
         return;
       }
 
@@ -3521,6 +3540,9 @@
       pendientes.forEach(i => {
         i.enviadoCocina = true;
         i.horaEnvioCocina = nowStr;
+        i.timestampEnvioCocina = Date.now();
+        if (i.estado === 'borrador' || !i.estado) i.estado = 'enviado_cocina';
+        if (i.estadoCocina === 'borrador' || !i.estadoCocina) i.estadoCocina = 'recibido';
       });
 
       saveStateToStorage();
@@ -3536,7 +3558,7 @@
         console.error('Error sincronizando comanda activa con servidor:', err);
       }
 
-      showDragToast(`🚀 ¡${pendientes.length} producto(s) enviados a Cocina / Barra (KDS)! (${nowStr})`, 'ok');
+      showDragToast(`🚀 ¡${pendientes.length} producto(s) enviados a Cocina / Barra (${nowStr})!`, 'ok');
     };
 
     function renderStateUI() {
@@ -4342,6 +4364,12 @@
               }
               if (!it.enviadoCocina) pendientesCount++;
 
+              const isBeb = (it.tipo_consumo === 'bebida') ||
+                            (it.categoria_nombre && /caf|bebida|jugo|refresco|té|infusi|cerveza|agua/i.test(it.categoria_nombre)) ||
+                            (it.nombre && /café|cafe|americano|capuchino|espresso|latte|té|te|jugo|limonada|naranjada|agua|soda|refresco|infusion|frapp/i.test(it.nombre));
+              const delayMins = (Date.now() - (it.timestampInicioCocina || it.timestampEnvioCocina || it.timestampCreado || Date.now())) / 60000;
+              const isDemorado = isBeb ? (delayMins >= 6) : (delayMins >= 12);
+
               const row = document.createElement('div');
               row.style.cssText = 'display: flex; justify-content: space-between; align-items: center; background: #0f172a; padding: 6px 8px; border-radius: 8px; border: 1px solid #1e293b; font-size: 11px;';
               row.innerHTML = `
@@ -4363,24 +4391,24 @@
                           </div>`
                         : ((it.estadoCocina === 'preparando' || it.estado === 'en_preparacion')
                           ? `<div style="display: flex; align-items: center; gap: 4px;">
-                              ${(((Date.now() - (it.timestampInicioCocina || it.timestampEnvioCocina || it.timestampCreado || Date.now())) / 60000 >= 12)
-                                ? `<span style="background: rgba(239,68,68,0.2); border: 1px solid #ef4444; color: #f87171; font-size: 9px; font-weight: 900; padding: 1px 5px; border-radius: 4px;"><i class="fa-solid fa-triangle-exclamation"></i> 🔴 Demorado en Cocina</span>`
-                                : `<span style="background: rgba(245,158,11,0.2); border: 1px solid #f59e0b; color: #fbbf24; font-size: 9px; font-weight: 800; padding: 1px 5px; border-radius: 4px;"><i class="fa-solid fa-fire"></i> 🔥 En Preparación</span>`)}
+                              ${(isDemorado
+                                ? `<span style="background: rgba(239,68,68,0.2); border: 1px solid #ef4444; color: #f87171; font-size: 9px; font-weight: 900; padding: 1px 5px; border-radius: 4px;"><i class="fa-solid fa-triangle-exclamation"></i> 🔴 ${isBeb ? 'Barra Demorada' : 'Cocina Demorada'}</span>`
+                                : `<span style="background: rgba(245,158,11,0.2); border: 1px solid #f59e0b; color: #fbbf24; font-size: 9px; font-weight: 800; padding: 1px 5px; border-radius: 4px;"><i class="${isBeb ? 'fa-solid fa-mug-hot' : 'fa-solid fa-fire'}"></i> ${isBeb ? '☕ Preparando en Barra' : '🔥 En Preparación'}</span>`)}
                             </div>`
                           : `<div style="display: flex; align-items: center; gap: 4px;">
-                              ${(((Date.now() - (it.timestampEnvioCocina || it.timestampCreado || Date.now())) / 60000 >= 12)
-                                ? `<span style="background: rgba(239,68,68,0.2); border: 1px solid #ef4444; color: #f87171; font-size: 9px; font-weight: 900; padding: 1px 5px; border-radius: 4px;"><i class="fa-solid fa-triangle-exclamation"></i> 🔴 Demorado en Cocina</span>`
-                                : `<span style="background: rgba(56,189,248,0.15); border: 1px solid rgba(56,189,248,0.4); color: #38bdf8; font-size: 9px; font-weight: 800; padding: 1px 5px; border-radius: 4px;"><i class="fa-solid fa-kitchen-set"></i> 🍳 En Cocina</span>`)}
+                              ${(isDemorado
+                                ? `<span style="background: rgba(239,68,68,0.2); border: 1px solid #ef4444; color: #f87171; font-size: 9px; font-weight: 900; padding: 1px 5px; border-radius: 4px;"><i class="fa-solid fa-triangle-exclamation"></i> 🔴 ${isBeb ? 'Barra Demorada' : 'Cocina Demorada'}</span>`
+                                : `<span style="background: rgba(56,189,248,0.15); border: 1px solid rgba(56,189,248,0.4); color: #38bdf8; font-size: 9px; font-weight: 800; padding: 1px 5px; border-radius: 4px;"><i class="${isBeb ? 'fa-solid fa-mug-hot' : 'fa-solid fa-kitchen-set'}"></i> ${isBeb ? '☕ En Barra / Bebidas' : '🍳 En Cocina'}</span>`)}
                             </div>`)))
                     : `<div style="display: flex; align-items: center; gap: 4px;">
                             <span style="background: rgba(245,158,11,0.25); border: 1px solid #f59e0b; color: #fbbf24; font-size: 9px; font-weight: 800; padding: 1px 5px; border-radius: 4px;"><i class="fa-solid fa-clock"></i> ⏳ Por Enviar</span>
-                            <button onclick="window.enviarItemIndividualACocina(${idx});" style="background: #f59e0b; color: #0f172a; border: none; padding: 2px 6px; border-radius: 4px; font-size: 9px; font-weight: 900; cursor: pointer; display: flex; align-items: center; gap: 2px;" title="Enviar este producto a cocina ahora">🚀 Enviar</button>
+                            <button onclick="window.enviarItemIndividualACocina(${idx});" style="background: #f59e0b; color: #0f172a; border: none; padding: 2px 6px; border-radius: 4px; font-size: 9px; font-weight: 900; cursor: pointer; display: flex; align-items: center; gap: 2px;" title="Enviar este producto a ${isBeb ? 'barra de bebidas' : 'cocina'} ahora">🚀 Enviar</button>
                           </div>`)}
                   </div>
                 </div>
                 ${!isItPaid && !it.enviadoCocina
                   ? `<button onclick="window.eliminarItemSidebar(${idx});" style="background: transparent; border: none; color: #f87171; cursor: pointer; padding: 2px 4px; font-size: 12px;" title="Eliminar (Pendiente)">✕</button>`
-                  : `<span style="color: #64748b; font-size: 10px; padding: 2px 4px;" title="${isItPaid ? 'Cuenta pagada' : 'En preparación en cocina'}"><i class="fa-solid fa-lock" style="font-size: 10px; opacity: 0.5;"></i></span>`}
+                  : `<span style="color: #64748b; font-size: 10px; padding: 2px 4px;" title="${isItPaid ? 'Cuenta pagada' : (isBeb ? 'En preparación en barra' : 'En preparación en cocina')}"><i class="fa-solid fa-lock" style="font-size: 10px; opacity: 0.5;"></i></span>`}
               `;
               itemsList.appendChild(row);
             });

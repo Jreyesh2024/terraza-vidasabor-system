@@ -464,9 +464,15 @@ class POSMesero(POSMeseroTemplate):
         except Exception as e:
             print(f"[POSMesero] Error marcando ocupada localmente: {e}")
             return
+        items_actuales = None
+        try:
+            if hasattr(cuenta, "items") and cuenta.items:
+                items_actuales = json.loads(json.dumps(cuenta.items))
+        except Exception:
+            items_actuales = None
         try:
             self._sincronizar_cuenta_servidor(
-                int(mesa_id), int(silla_num), [], "ocupada"
+                int(mesa_id), int(silla_num), items_actuales, "ocupada"
             )
         except Exception as e:
             print(f"[POSMesero] Error persistiendo ocupada al servidor: {e}")
@@ -502,11 +508,11 @@ class POSMesero(POSMeseroTemplate):
         Cuando el mesero abre una silla, marca ocupada en local (handleSillaClick)
         pero NO envía al servidor. El timer sync trae del servidor "disponible"
         cada 2s y pisa la ocupada local. Solución: al despachar clickSilla,
-        Python persiste 'ocupada' al servidor de inmediato.
+        Python persiste 'ocupada' al servidor de inmediato sin borrar items existentes.
         """
         if action == "clickSilla" and len(args) >= 2:
             try:
-                self._sincronizar_cuenta_servidor(args[0], args[1], [], "ocupada")
+                self._sincronizar_cuenta_servidor(args[0], args[1], None, "ocupada")
             except Exception as e:
                 print(f"[POSMesero] Error persistiendo ocupada: {e}")
 
