@@ -54,9 +54,9 @@ class POSMesero(POSMeseroTemplate):
     except Exception as e:
       print(f"[POSMesero] Error en renderStateUI inicial: {e}")
 
-    # Timer nativo de Anvil en segundo plano para sincronizar cada 2 segundos
+    # Timer nativo de Anvil en segundo plano para sincronizar cada 4 segundos
     try:
-      self.timer_sync = anvil.Timer(interval=2)
+      self.timer_sync = anvil.Timer(interval=4)
       self.timer_sync.set_event_handler('tick', self.timer_tick_sync)
       self.add_component(self.timer_sync)
     except Exception as e:
@@ -67,7 +67,8 @@ class POSMesero(POSMeseroTemplate):
 
   def obtener_cuentas_servidor(self):
     try:
-      res = anvil.server.call('get_cuentas_terraza')
+      call_fn = getattr(anvil.server, "call_s", anvil.server.call)
+      res = call_fn('get_cuentas_terraza')
       return json.dumps(res) if res else "{}"
     except Exception as e:
       print(f"Error obteniendo cuentas de servidor: {e}")
@@ -75,7 +76,8 @@ class POSMesero(POSMeseroTemplate):
 
   def sincronizar_con_servidor(self):
     try:
-      cuentas = anvil.server.call('get_cuentas_terraza')
+      call_fn = getattr(anvil.server, "call_s", anvil.server.call)
+      cuentas = call_fn('get_cuentas_terraza')
       if cuentas:
         try:
           if hasattr(anvil.js.window, 'aplicarCuentasServidor'):

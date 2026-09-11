@@ -81,7 +81,8 @@ class MonitorCocina(MonitorCocinaTemplate):
 
   def cargar_cuentas_kds_db(self):
     try:
-      cuentas = anvil.server.call('get_cuentas_terraza')
+      call_fn = getattr(anvil.server, "call_s", anvil.server.call)
+      cuentas = call_fn('get_cuentas_terraza')
       if hasattr(anvil.js.window, 'setKDSCuentasFromDB'):
         anvil.js.window.setKDSCuentasFromDB(json.dumps(cuentas) if cuentas else "{}")
       return cuentas

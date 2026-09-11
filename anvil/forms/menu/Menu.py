@@ -1002,7 +1002,8 @@ class Menu(MenuTemplate):
         silla = int(info.get("silla_num") or info.get("sillaId") or info.get("silla") or 0)
 
         try:
-            data = anvil.server.call("get_items_por_silla", mesa, silla) or {}
+            call_fn = getattr(anvil.server, "call_s", anvil.server.call)
+            data = call_fn("get_items_por_silla", mesa, silla) or {}
         except Exception as e:
             print(f"[Menu] Error get_items_por_silla: {e}")
             data = {"items_individuales": [], "items_al_centro": []}

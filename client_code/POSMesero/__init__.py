@@ -318,7 +318,8 @@ class POSMesero(POSMeseroTemplate):
 
     def _sincronizar_con_servidor(self):
         try:
-            cuentas = anvil.server.call("get_cuentas_terraza")
+            call_fn = getattr(anvil.server, "call_s", anvil.server.call)
+            cuentas = call_fn("get_cuentas_terraza")
         except Exception as e:
             print(f"[POSMesero] Error obteniendo cuentas: {e}")
             return
@@ -334,7 +335,8 @@ class POSMesero(POSMeseroTemplate):
 
     def _obtener_cuentas_servidor(self):
         try:
-            res = anvil.server.call("get_cuentas_terraza")
+            call_fn = getattr(anvil.server, "call_s", anvil.server.call)
+            res = call_fn("get_cuentas_terraza")
             return json.dumps(res) if res else "{}"
         except Exception as e:
             print(f"[POSMesero] Error obteniendo cuentas: {e}")
@@ -538,7 +540,7 @@ class POSMesero(POSMeseroTemplate):
     # ─────────────────────────── timer de sync ───────────────────────────
     def _iniciar_timer_sync(self):
         try:
-            self._timer_sync = anvil.Timer(interval=2)
+            self._timer_sync = anvil.Timer(interval=4)
             self._timer_sync.set_event_handler("tick", self._tick_sync)
             self.add_component(self._timer_sync)
         except Exception as e:
@@ -626,7 +628,8 @@ class POSMesero(POSMeseroTemplate):
 
     def _tick_alertas(self, **event_args):
         try:
-            llamadas = anvil.server.call("get_llamadas_pendientes") or []
+            call_fn = getattr(anvil.server, "call_s", anvil.server.call)
+            llamadas = call_fn("get_llamadas_pendientes") or []
         except Exception as e:
             print(f"[POSMesero] Error consultando llamadas: {e}")
             return
