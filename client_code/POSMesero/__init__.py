@@ -306,17 +306,26 @@ class POSMesero(POSMeseroTemplate):
     # ─────────────────────────── datos / sync ────────────────────────────
     def _cargar_catalogo_pos_db(self):
         try:
-            prods = anvil.server.call("get_productos_terraza") or []
-            cats = anvil.server.call("get_categorias_terraza") or []
-            mesas = anvil.server.call("get_mesas_terraza") or []
+            call_fn = getattr(anvil.server, "call_s", anvil.server.call)
+            prods = call_fn("get_productos_terraza") or []
+            cats = call_fn("get_categorias_terraza") or []
+            mesas = call_fn("get_mesas_terraza") or []
         except Exception as e:
             print(f"[POSMesero] Error cargando catálogo: {e}")
             return
         set_cat = getattr(anvil.js.window, "setPOSCatalogoFromDB", None)
-        if set_cat is not None:
+        if set_cat is not None and prods:
             set_cat(json.dumps(prods), json.dumps(cats), json.dumps(mesas))
 
     def _sincronizar_con_servidor(self):
+        # Si el catálogo aún no tiene productos (p.ej. el uplink tardó en conectar), reintentar carga
+        try:
+            prods_loaded = getattr(anvil.js.window, "catalogProducts", None)
+            if not prods_loaded or len(prods_loaded) == 0:
+                self._cargar_catalogo_pos_db()
+        except Exception:
+            pass
+
         try:
             call_fn = getattr(anvil.server, "call_s", anvil.server.call)
             cuentas = call_fn("get_cuentas_terraza")

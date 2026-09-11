@@ -76,6 +76,13 @@ class POSMesero(POSMeseroTemplate):
 
   def sincronizar_con_servidor(self):
     try:
+      prods_loaded = getattr(anvil.js.window, "catalogProducts", None)
+      if not prods_loaded or len(prods_loaded) == 0:
+        self.cargar_catalogo_pos_db()
+    except Exception:
+      pass
+
+    try:
       call_fn = getattr(anvil.server, "call_s", anvil.server.call)
       cuentas = call_fn('get_cuentas_terraza')
       if cuentas:
@@ -91,10 +98,11 @@ class POSMesero(POSMeseroTemplate):
 
   def cargar_catalogo_pos_db(self):
     try:
-      prods = anvil.server.call('get_productos_terraza')
-      cats = anvil.server.call('get_categorias_terraza')
-      mesas = anvil.server.call('get_mesas_terraza')
-      if hasattr(anvil.js.window, 'setPOSCatalogoFromDB'):
+      call_fn = getattr(anvil.server, "call_s", anvil.server.call)
+      prods = call_fn('get_productos_terraza')
+      cats = call_fn('get_categorias_terraza')
+      mesas = call_fn('get_mesas_terraza')
+      if hasattr(anvil.js.window, 'setPOSCatalogoFromDB') and prods:
         anvil.js.window.setPOSCatalogoFromDB(
           json.dumps(prods) if prods else "[]",
           json.dumps(cats) if cats else "[]",
