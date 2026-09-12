@@ -3352,6 +3352,88 @@
       showDragToast('🍽️ ¡' + (it.nombre || 'Platillo') + ' marcado como ENTREGADO al comensal!', 'ok');
     };
 
+    window.iniciarPreparacionItemPOS = function (key, idx) {
+      if (!window.palapaState.cuentas || !window.palapaState.cuentas[key]) return;
+      var cta = window.palapaState.cuentas[key];
+      if (!cta.items || !cta.items[idx]) return;
+
+      var it = cta.items[idx];
+      it.estadoCocina = 'preparando';
+      it.estado = 'en_preparacion';
+      it.timestampInicioCocina = Date.now();
+
+      saveStateToStorage();
+      renderStateUI();
+      if (document.getElementById('modalComandaBackdrop') && document.getElementById('modalComandaBackdrop').style.display !== 'none') {
+        abrirModalComandaActual();
+      }
+
+      var parts = key.split('-');
+      var mId = parseInt(parts[0]) || 1;
+      var sId = (parts.length > 1) ? parseInt(parts[1]) : 0;
+
+      try {
+        if (it.id && window.anvilCambiarEstadoItem) {
+          window.anvilCambiarEstadoItem(it.id, 'preparando');
+        }
+      } catch (err) {
+        console.warn('Error llamando anvilCambiarEstadoItem:', err);
+      }
+
+      try {
+        if (window.anvilSyncCuenta) {
+          window.anvilSyncCuenta(mId, sId, JSON.stringify(cta.items), cta.estado || 'ocupada');
+        }
+      } catch (err) {
+        console.warn('Error llamando anvilSyncCuenta:', err);
+      }
+
+      var isBeb = (it.tipo_consumo === 'bebida') ||
+                  (it.categoria_nombre && /caf|bebida|jugo|refresco|té|infusi|cerveza|agua/i.test(it.categoria_nombre)) ||
+                  (it.nombre && /café|cafe|americano|capuchino|espresso|latte|té|te|jugo|limonada|naranjada|agua|soda|refresco|infusion|frapp/i.test(it.nombre));
+
+      showDragToast((isBeb ? '☕' : '🔥') + ' ¡' + (it.nombre || 'Producto') + (isBeb ? ' puesto en preparación en barra!' : ' puesto en fuego en cocina!'), 'ok');
+    };
+
+    window.marcarItemListoPOS = function (key, idx) {
+      if (!window.palapaState.cuentas || !window.palapaState.cuentas[key]) return;
+      var cta = window.palapaState.cuentas[key];
+      if (!cta.items || !cta.items[idx]) return;
+
+      var it = cta.items[idx];
+      it.estadoCocina = 'listo';
+      it.estado = 'listo';
+      it.listo = true;
+
+      saveStateToStorage();
+      renderStateUI();
+      if (document.getElementById('modalComandaBackdrop') && document.getElementById('modalComandaBackdrop').style.display !== 'none') {
+        abrirModalComandaActual();
+      }
+
+      var parts = key.split('-');
+      var mId = parseInt(parts[0]) || 1;
+      var sId = (parts.length > 1) ? parseInt(parts[1]) : 0;
+
+      try {
+        if (it.id && window.anvilCambiarEstadoItem) {
+          window.anvilCambiarEstadoItem(it.id, 'listo');
+        }
+      } catch (err) {
+        console.warn('Error llamando anvilCambiarEstadoItem:', err);
+      }
+
+      try {
+        if (window.anvilSyncCuenta) {
+          window.anvilSyncCuenta(mId, sId, JSON.stringify(cta.items), cta.estado || 'ocupada');
+        }
+      } catch (err) {
+        console.warn('Error llamando anvilSyncCuenta:', err);
+      }
+
+      showDragToast('🔔 ¡' + (it.nombre || 'Producto') + ' marcado LISTO EN PASE!', 'ok');
+    };
+
     window.marcarComandaCompletaEntregada = function (mId, sId) {
       var mesaId = (mId !== undefined && mId !== null) ? mId : window.palapaState.mesaSeleccionadaId;
       var sillaNum = (sId !== undefined && sId !== null) ? sId : window.palapaState.sillaSeleccionadaNum;
@@ -4383,7 +4465,7 @@
                   ? `<span style="background: rgba(2,132,199,0.25); border: 1px solid #0284c7; color: #38bdf8; font-size: 9px; font-weight: 800; padding: 1px 5px; border-radius: 4px;"><i class="fa-solid fa-check"></i> Pagado</span>`
                   : (it.enviadoCocina
                     ? ((it.servido || it.estado === 'servido' || it.estadoCocina === 'servido')
-                      ? `<span style="background: rgba(100,116,139,0.25); border: 1px solid #64748b; color: #cbd5e1; font-size: 9px; font-weight: 800; padding: 1px 5px; border-radius: 4px;"><i class="fa-solid fa-utensils"></i> 🍽️ Entregado</span>`
+                      ? `<span style="background: rgba(100,116,139,0.25); border: 1px solid #64748b; color: #cbd5e1; font-size: 9px; font-weight: 800; padding: 1px 5px; border-radius: 4px;"><i class="fa-solid fa-utensils"></i> 🍽️ Entregado al Cliente</span>`
                       : ((it.listo || it.estado === 'listo' || it.estadoCocina === 'listo')
                         ? `<div style="display: flex; align-items: center; gap: 4px;">
                             <span style="background: rgba(16,185,129,0.2); border: 1px solid #10b981; color: #34d399; font-size: 9px; font-weight: 900; padding: 1px 5px; border-radius: 4px;"><i class="fa-solid fa-bell"></i> 🔔 ¡Listo en Pase!</span>
@@ -4393,14 +4475,14 @@
                           ? `<div style="display: flex; align-items: center; gap: 4px;">
                               ${(isDemorado
                                 ? `<span style="background: rgba(239,68,68,0.2); border: 1px solid #ef4444; color: #f87171; font-size: 9px; font-weight: 900; padding: 1px 5px; border-radius: 4px;"><i class="fa-solid fa-triangle-exclamation"></i> 🔴 ${isBeb ? 'Barra Demorada' : 'Cocina Demorada'}</span>`
-                                : `<span style="background: rgba(245,158,11,0.2); border: 1px solid #f59e0b; color: #fbbf24; font-size: 9px; font-weight: 800; padding: 1px 5px; border-radius: 4px;"><i class="${isBeb ? 'fa-solid fa-mug-hot' : 'fa-solid fa-fire'}"></i> ${isBeb ? '☕ Preparando en Barra' : '🔥 En Preparación'}</span>`)}
-                              <button onclick="window.marcarItemEntregado('${key}', ${idx});" style="background: linear-gradient(135deg, ${isBeb ? '#0284c7, #0369a1' : '#10b981, #059669'}); color: #ffffff; border: none; padding: 2px 7px; border-radius: 4px; font-size: 9.5px; font-weight: 900; cursor: pointer; display: flex; align-items: center; gap: 2px; box-shadow: 0 1px 4px rgba(0,0,0,0.3);" title="Dar salida y marcar como entregado al comensal"><i class="fa-solid fa-check"></i> ${isBeb ? 'Despachar' : 'Entregar'}</button>
+                                : `<span style="background: rgba(245,158,11,0.2); border: 1px solid #f59e0b; color: #fbbf24; font-size: 9px; font-weight: 800; padding: 1px 5px; border-radius: 4px;"><i class="${isBeb ? 'fa-solid fa-mug-hot' : 'fa-solid fa-fire'}"></i> ${isBeb ? '☕ Preparando Bebida' : '🔥 En Preparación'}</span>`)}
+                              <button onclick="window.marcarItemListoPOS('${key}', ${idx});" style="background: linear-gradient(135deg, #0284c7, #0369a1); color: #ffffff; border: none; padding: 2px 7px; border-radius: 4px; font-size: 9.5px; font-weight: 900; cursor: pointer; display: flex; align-items: center; gap: 2px; box-shadow: 0 1px 4px rgba(2,132,199,0.4);" title="Marcar como listo y pasar a pase"><i class="fa-solid fa-bell"></i> Listo</button>
                             </div>`
                           : `<div style="display: flex; align-items: center; gap: 4px;">
                               ${(isDemorado
                                 ? `<span style="background: rgba(239,68,68,0.2); border: 1px solid #ef4444; color: #f87171; font-size: 9px; font-weight: 900; padding: 1px 5px; border-radius: 4px;"><i class="fa-solid fa-triangle-exclamation"></i> 🔴 ${isBeb ? 'Barra Demorada' : 'Cocina Demorada'}</span>`
-                                : `<span style="background: rgba(56,189,248,0.15); border: 1px solid rgba(56,189,248,0.4); color: #38bdf8; font-size: 9px; font-weight: 800; padding: 1px 5px; border-radius: 4px;"><i class="${isBeb ? 'fa-solid fa-mug-hot' : 'fa-solid fa-kitchen-set'}"></i> ${isBeb ? '☕ En Barra / Bebidas' : '🍳 En Cocina'}</span>`)}
-                              <button onclick="window.marcarItemEntregado('${key}', ${idx});" style="background: linear-gradient(135deg, ${isBeb ? '#0284c7, #0369a1' : '#10b981, #059669'}); color: #ffffff; border: none; padding: 2px 7px; border-radius: 4px; font-size: 9.5px; font-weight: 900; cursor: pointer; display: flex; align-items: center; gap: 2px; box-shadow: 0 1px 4px rgba(0,0,0,0.3);" title="Dar salida y marcar como entregado al comensal"><i class="fa-solid fa-check"></i> ${isBeb ? 'Despachar' : 'Entregar'}</button>
+                                : `<span style="background: rgba(56,189,248,0.15); border: 1px solid rgba(56,189,248,0.4); color: #38bdf8; font-size: 9px; font-weight: 800; padding: 1px 5px; border-radius: 4px;"><i class="${isBeb ? 'fa-solid fa-mug-hot' : 'fa-solid fa-kitchen-set'}"></i> ${isBeb ? '☕ En Fila (Barra)' : '🍳 En Fila (Cocina)'}</span>`)}
+                              <button onclick="window.iniciarPreparacionItemPOS('${key}', ${idx});" style="background: linear-gradient(135deg, ${isBeb ? '#0284c7, #0369a1' : '#f59e0b, #d97706'}); color: #ffffff; border: none; padding: 2px 7px; border-radius: 4px; font-size: 9.5px; font-weight: 900; cursor: pointer; display: flex; align-items: center; gap: 2px; box-shadow: 0 1px 4px rgba(0,0,0,0.3);" title="Iniciar preparación en ${isBeb ? 'barra de bebidas' : 'cocina'}"><i class="${isBeb ? 'fa-solid fa-mug-hot' : 'fa-solid fa-fire'}"></i> ${isBeb ? 'Preparar' : 'Cocinar'}</button>
                             </div>`)))
                     : `<div style="display: flex; align-items: center; gap: 4px;">
                             <span style="background: rgba(245,158,11,0.25); border: 1px solid #f59e0b; color: #fbbf24; font-size: 9px; font-weight: 800; padding: 1px 5px; border-radius: 4px;"><i class="fa-solid fa-clock"></i> ⏳ Por Enviar</span>
