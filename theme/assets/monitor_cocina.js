@@ -249,6 +249,11 @@
       window.kdsState.mesaFiltro = requestedMesa;
     }
 
+    var requestedStation = localStorage.getItem('kds_estacion_activa');
+    if (requestedStation) {
+      window.kdsState.estacionFiltro = requestedStation;
+    }
+
     var state = null;
     if (window.kdsCuentasServer && typeof window.kdsCuentasServer === 'object' && Object.keys(window.kdsCuentasServer).length > 0) {
       state = { cuentas: window.kdsCuentasServer };
@@ -812,8 +817,55 @@
     renderKDSUI();
   };
 
-  window.filtrarEstacionKDS = function (estacion) {
+  window.filtrarEstacionKDS = function (estacion, persist = true) {
     window.kdsState.estacionFiltro = estacion;
+    if (persist) {
+      try { localStorage.setItem('kds_estacion_activa', estacion); } catch (e) { }
+    }
+
+    const titleEl = document.getElementById('kdsMainTitle');
+    const subEl = document.getElementById('kdsMainSubtitle');
+    const iconEl = document.getElementById('kdsMainIcon');
+    const iconWrap = document.getElementById('kdsMainIconWrap');
+    const badgeEl = document.getElementById('kdsActiveStationBadge');
+
+    if (estacion === 'COCINA') {
+      if (titleEl) titleEl.innerText = 'Monitor de Cocina Caliente (KDS)';
+      if (subEl) subEl.innerText = 'La Terraza de Vida & Sabor • Estación de Fuego, Plancha & Especialidades';
+      if (iconEl) iconEl.className = 'fa-solid fa-fire-burner';
+      if (iconWrap) iconWrap.style.background = 'linear-gradient(135deg, #f59e0b, #d97706)';
+      if (badgeEl) {
+        badgeEl.innerHTML = '🍳 Estación: Cocina Caliente';
+        badgeEl.style.cssText = 'display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 800; background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.4); padding: 3px 10px; border-radius: 20px;';
+      }
+    } else if (estacion === 'BARRA') {
+      if (titleEl) titleEl.innerText = 'Monitor de Barra & Bebidas (KDS)';
+      if (subEl) subEl.innerText = 'La Terraza de Vida & Sabor • Estación de Cafetería, Bebidas de Autor & Coctelería';
+      if (iconEl) iconEl.className = 'fa-solid fa-mug-hot';
+      if (iconWrap) iconWrap.style.background = 'linear-gradient(135deg, #0284c7, #0369a1)';
+      if (badgeEl) {
+        badgeEl.innerHTML = '☕ Estación: Barra & Bebidas';
+        badgeEl.style.cssText = 'display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 800; background: rgba(56, 189, 248, 0.2); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.4); padding: 3px 10px; border-radius: 20px;';
+      }
+    } else if (estacion === 'REPOSTERIA') {
+      if (titleEl) titleEl.innerText = 'Monitor de Repostería & Postres (KDS)';
+      if (subEl) subEl.innerText = 'La Terraza de Vida & Sabor • Estación de Postres, Waffles & Crepas';
+      if (iconEl) iconEl.className = 'fa-solid fa-cake-candles';
+      if (iconWrap) iconWrap.style.background = 'linear-gradient(135deg, #9333ea, #7e22ce)';
+      if (badgeEl) {
+        badgeEl.innerHTML = '🍰 Estación: Repostería';
+        badgeEl.style.cssText = 'display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 800; background: rgba(192, 132, 252, 0.2); color: #c084fc; border: 1px solid rgba(192, 132, 252, 0.4); padding: 3px 10px; border-radius: 20px;';
+      }
+    } else {
+      if (titleEl) titleEl.innerText = 'Monitor de Cocina & Barra (KDS - Expeditor)';
+      if (subEl) subEl.innerText = 'La Terraza de Vida & Sabor • Control Integral de Producción, Fuego & Despacho';
+      if (iconEl) iconEl.className = 'fa-solid fa-kitchen-set';
+      if (iconWrap) iconWrap.style.background = 'linear-gradient(135deg, #059669, #10b981)';
+      if (badgeEl) {
+        badgeEl.innerHTML = '👑 Estación: Todas (Expeditor)';
+        badgeEl.style.cssText = 'display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 800; background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.4); padding: 3px 10px; border-radius: 20px;';
+      }
+    }
 
     const chips = ['TODAS', 'COCINA', 'BARRA', 'REPOSTERIA', 'INFANTIL'];
     chips.forEach(c => {
@@ -832,6 +884,80 @@
     });
 
     renderKDSUI();
+  };
+
+  // MODAL AUTH / CAMBIO DE ESTACIÓN KDS
+  window.selectedAuthStation = 'COCINA';
+
+  window.abrirModalEstacionKDS = function () {
+    const backdrop = document.getElementById('modalEstacionAuthBackdrop');
+    if (backdrop) {
+      backdrop.style.display = 'flex';
+      window.seleccionarEstacionKDSAuth(window.kdsState.estacionFiltro || 'COCINA');
+      const pinInput = document.getElementById('kdsPinInput');
+      if (pinInput) { pinInput.value = ''; pinInput.focus(); }
+    }
+  };
+
+  window.cerrarModalEstacionKDS = function () {
+    const backdrop = document.getElementById('modalEstacionAuthBackdrop');
+    if (backdrop) backdrop.style.display = 'none';
+  };
+
+  window.seleccionarEstacionKDSAuth = function (estacion) {
+    window.selectedAuthStation = estacion;
+    const stations = ['COCINA', 'BARRA', 'REPOSTERIA', 'TODAS'];
+    stations.forEach(st => {
+      const btn = document.getElementById('btnAuthStation-' + st);
+      if (btn) {
+        if (st === estacion) {
+          btn.style.border = '2px solid #38bdf8';
+          btn.style.background = '#1e293b';
+          btn.style.boxShadow = '0 0 12px rgba(56, 189, 248, 0.3)';
+        } else {
+          btn.style.border = '2px solid #334155';
+          btn.style.background = '#0f172a';
+          btn.style.boxShadow = 'none';
+        }
+      }
+    });
+
+    const fb = document.getElementById('kdsStationAuthFeedback');
+    if (fb) {
+      if (estacion === 'COCINA') fb.innerText = '🍳 Cocina Caliente (PIN: 1234)';
+      else if (estacion === 'BARRA') fb.innerText = '☕ Barra & Bebidas (PIN: 5678)';
+      else if (estacion === 'REPOSTERIA') fb.innerText = '🍰 Repostería (PIN: 9999)';
+      else fb.innerText = '👑 Expeditor / Supervisor (PIN: 0000)';
+      fb.style.color = '#fbbf24';
+    }
+  };
+
+  window.confirmarEstacionKDSAuth = function (bypassPin) {
+    const target = window.selectedAuthStation || 'COCINA';
+    const pinInput = document.getElementById('kdsPinInput');
+    const enteredPin = pinInput ? pinInput.value.trim() : '';
+
+    const validPins = {
+      'COCINA': ['1234', '0000', '1111', 'admin'],
+      'BARRA': ['5678', '0000', '2222', 'admin'],
+      'REPOSTERIA': ['9999', '0000', '3333', 'admin'],
+      'TODAS': ['0000', 'admin', '1234']
+    };
+
+    if (!bypassPin && enteredPin.length > 0) {
+      const allowed = validPins[target] || ['0000', 'admin'];
+      if (!allowed.includes(enteredPin)) {
+        const fb = document.getElementById('kdsStationAuthFeedback');
+        if (fb) {
+          fb.innerText = '❌ PIN incorrecto para ' + target;
+          fb.style.color = '#f87171';
+        }
+        return;
+      }
+    }
+
+    window.filtrarEstacionKDS(target, true);
+    window.cerrarModalEstacionKDS();
   };
 
   // 6. ACCIONES DE COCINA: INICIAR ATENCIÓN / FUEGO (VERDE -> ÁMBAR)

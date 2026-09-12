@@ -75,15 +75,19 @@
   <div
     style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1e293b; padding-bottom: 14px; flex-wrap: wrap; gap: 12px;">
     <div style="display: flex; align-items: center; gap: 14px;">
-      <div
+      <div id="kdsMainIconWrap"
         style="width: 48px; height: 48px; border-radius: 14px; background: linear-gradient(135deg, #f59e0b, #d97706); display: flex; align-items: center; justify-content: center; font-size: 22px; color: #0f172a; box-shadow: 0 4px 16px rgba(245, 158, 11, 0.35);">
-        <i class="fa-solid fa-fire-burner"></i>
+        <i id="kdsMainIcon" class="fa-solid fa-fire-burner"></i>
       </div>
       <div>
-        <div style="display: flex; align-items: center; gap: 10px;">
-          <h1 style="font-size: 20px; font-weight: 900; margin: 0; color: #ffffff; letter-spacing: -0.5px;">
+        <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+          <h1 id="kdsMainTitle" style="font-size: 20px; font-weight: 900; margin: 0; color: #ffffff; letter-spacing: -0.5px;">
             Monitor de Cocina &amp; Barra (KDS)
           </h1>
+          <span id="kdsActiveStationBadge"
+            style="display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 800; background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.4); padding: 3px 10px; border-radius: 20px;">
+            🍳 Estación: Todas
+          </span>
           <span id="kdsLiveDot"
             style="display: inline-flex; align-items: center; gap: 5px; font-size: 10px; font-weight: 800; background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.4); padding: 3px 8px; border-radius: 20px;">
             <span
@@ -91,7 +95,7 @@
             EN VIVO
           </span>
         </div>
-        <p style="font-size: 12px; color: #94a3b8; margin: 2px 0 0 0;">
+        <p id="kdsMainSubtitle" style="font-size: 12px; color: #94a3b8; margin: 2px 0 0 0;">
           La Terraza de Vida &amp; Sabor • Control de Producción, Fuego &amp; Despacho
         </p>
       </div>
@@ -105,6 +109,11 @@
         <span id="kdsClock"
           style="font-size: 14px; font-weight: 900; color: #f8fafc; font-variant-numeric: tabular-nums;">--:--:--</span>
       </div>
+
+      <button onclick="if (typeof window.abrirModalEstacionKDS === 'function') window.abrirModalEstacionKDS();"
+        style="background: #0f172a; color: #fbbf24; border: 1px solid #f59e0b; border-radius: 12px; padding: 8px 14px; font-size: 12px; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+        <i class="fa-solid fa-user-shield"></i> Cambiar Estación / PIN
+      </button>
 
       <button onclick="if (typeof window.cargarKDS === 'function') window.cargarKDS();"
         style="background: #0f172a; color: #cbd5e1; border: 1px solid #334155; border-radius: 12px; padding: 8px 14px; font-size: 12px; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 6px;">
@@ -338,6 +347,87 @@
       style="width: 100%; padding: 10px; background: #1e293b; color: #f8fafc; font-weight: 800; font-size: 12px; border: 1px solid #334155; border-radius: 10px; cursor: pointer;">
       Cerrar Ficha
     </button>
+  </div>
+</div>
+
+<!-- MODAL IDENTIFICACIÓN / CAMBIO DE ESTACIÓN KDS (PIN) -->
+<div id="modalEstacionAuthBackdrop" onclick="if (event.target === this) window.cerrarModalEstacionKDS();"
+  style="display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.88); backdrop-filter: blur(10px); z-index: 120; align-items: center; justify-content: center; padding: 16px;">
+  <div id="modalEstacionAuthCard"
+    style="background: #090d16; border: 1px solid #1e293b; border-radius: 24px; width: 100%; max-width: 520px; box-shadow: 0 25px 50px rgba(0, 0, 0, 0.95); color: #f8fafc; padding: 24px; display: flex; flex-direction: column; gap: 18px;">
+
+    <!-- Modal Header -->
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid #1e293b; padding-bottom: 12px;">
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <div style="width: 44px; height: 44px; border-radius: 12px; background: rgba(245, 158, 11, 0.2); border: 1px solid rgba(245, 158, 11, 0.4); display: flex; align-items: center; justify-content: center; font-size: 20px; color: #fbbf24;">
+          <i class="fa-solid fa-lock"></i>
+        </div>
+        <div>
+          <h2 style="font-size: 17px; font-weight: 900; margin: 0; color: #ffffff;">Control de Estación KDS</h2>
+          <p style="font-size: 11px; color: #94a3b8; margin: 2px 0 0 0;">Selecciona el área de trabajo para esta pantalla táctil</p>
+        </div>
+      </div>
+      <button onclick="window.cerrarModalEstacionKDS();"
+        style="background: #1e293b; border: none; color: #94a3b8; width: 32px; height: 32px; border-radius: 8px; font-weight: bold; cursor: pointer;">✕</button>
+    </div>
+
+    <!-- Station Selection Grid -->
+    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;" id="kdsStationAuthGrid">
+      <button type="button" onclick="window.seleccionarEstacionKDSAuth('COCINA');" id="btnAuthStation-COCINA"
+        style="background: #0f172a; border: 2px solid #334155; border-radius: 14px; padding: 14px 10px; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center; transition: all 0.2s;">
+        <span style="font-size: 24px;">🍳</span>
+        <span style="font-size: 12px; font-weight: 900; color: #f8fafc;">Cocina Caliente</span>
+        <span style="font-size: 10px; color: #94a3b8;">Comidas, Fuego &amp; Plancha</span>
+        <span style="font-size: 9px; background: rgba(245,158,11,0.2); color: #fbbf24; padding: 2px 6px; border-radius: 6px; font-weight: 800; margin-top: 4px;">PIN: 1234</span>
+      </button>
+
+      <button type="button" onclick="window.seleccionarEstacionKDSAuth('BARRA');" id="btnAuthStation-BARRA"
+        style="background: #0f172a; border: 2px solid #334155; border-radius: 14px; padding: 14px 10px; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center; transition: all 0.2s;">
+        <span style="font-size: 24px;">☕</span>
+        <span style="font-size: 12px; font-weight: 900; color: #f8fafc;">Barra &amp; Bebidas</span>
+        <span style="font-size: 10px; color: #94a3b8;">Cafetería, Vinos &amp; Coctelería</span>
+        <span style="font-size: 9px; background: rgba(56,189,248,0.2); color: #38bdf8; padding: 2px 6px; border-radius: 6px; font-weight: 800; margin-top: 4px;">PIN: 5678</span>
+      </button>
+
+      <button type="button" onclick="window.seleccionarEstacionKDSAuth('REPOSTERIA');" id="btnAuthStation-REPOSTERIA"
+        style="background: #0f172a; border: 2px solid #334155; border-radius: 14px; padding: 14px 10px; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center; transition: all 0.2s;">
+        <span style="font-size: 24px;">🍰</span>
+        <span style="font-size: 12px; font-weight: 900; color: #f8fafc;">Repostería</span>
+        <span style="font-size: 10px; color: #94a3b8;">Postres &amp; Dulces</span>
+        <span style="font-size: 9px; background: rgba(192,132,252,0.2); color: #c084fc; padding: 2px 6px; border-radius: 6px; font-weight: 800; margin-top: 4px;">PIN: 9999</span>
+      </button>
+
+      <button type="button" onclick="window.seleccionarEstacionKDSAuth('TODAS');" id="btnAuthStation-TODAS"
+        style="background: #0f172a; border: 2px solid #334155; border-radius: 14px; padding: 14px 10px; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center; transition: all 0.2s;">
+        <span style="font-size: 24px;">👑</span>
+        <span style="font-size: 12px; font-weight: 900; color: #f8fafc;">Expeditor / Chef</span>
+        <span style="font-size: 10px; color: #94a3b8;">Todas las Estaciones</span>
+        <span style="font-size: 9px; background: rgba(52,211,153,0.2); color: #34d399; padding: 2px 6px; border-radius: 6px; font-weight: 800; margin-top: 4px;">PIN: 0000</span>
+      </button>
+    </div>
+
+    <!-- PIN Input & Keypad -->
+    <div style="background: #020617; border: 1px solid #1e293b; border-radius: 16px; padding: 14px; display: flex; flex-direction: column; gap: 10px;">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <span style="font-size: 11px; font-weight: 800; color: #94a3b8;">PIN de Autorización (Opcional):</span>
+        <span id="kdsStationAuthFeedback" style="font-size: 11px; font-weight: 800; color: #fbbf24;">Selecciona una estación</span>
+      </div>
+      <div style="display: flex; gap: 8px;">
+        <input type="password" id="kdsPinInput" maxlength="6" placeholder="PIN (ej. 1234, 5678, 0000)"
+          style="flex: 1; background: #0f172a; border: 1px solid #334155; border-radius: 10px; padding: 10px 14px; font-size: 14px; color: #ffffff; text-align: center; letter-spacing: 4px; font-weight: 900;" />
+        <button type="button" onclick="window.confirmarEstacionKDSAuth();"
+          style="padding: 10px 18px; background: linear-gradient(135deg, #059669, #10b981); color: #ffffff; border: none; border-radius: 10px; font-size: 12px; font-weight: 900; cursor: pointer; display: flex; align-items: center; gap: 6px; box-shadow: 0 4px 12px rgba(16,185,129,0.3);">
+          <i class="fa-solid fa-check"></i> Activar
+        </button>
+      </div>
+    </div>
+
+    <div style="display: flex; justify-content: space-between; align-items: center; font-size: 11px; color: #64748b;">
+      <span><i class="fa-solid fa-shield-halved" style="color: #38bdf8;"></i> La estación queda fijada durante todo el turno.</span>
+      <button type="button" onclick="window.confirmarEstacionKDSAuth(true);" style="background: transparent; border: none; color: #38bdf8; font-size: 11px; font-weight: 800; cursor: pointer; text-decoration: underline;">
+        Acceso Rápido
+      </button>
+    </div>
   </div>
 </div>
 
