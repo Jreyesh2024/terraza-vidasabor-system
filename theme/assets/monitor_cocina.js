@@ -27,6 +27,25 @@
     try {
       const cuentas = typeof cuentasJson === 'string' ? JSON.parse(cuentasJson) : cuentasJson;
       if (cuentas && typeof cuentas === 'object') {
+        // Preservar estados locales que sean más recientes que los del server para evitar reversiones visuales
+        if (window.kdsCuentasServer) {
+          Object.keys(window.kdsCuentasServer).forEach(k => {
+            const oldCta = window.kdsCuentasServer[k];
+            const newCta = cuentas[k];
+            if (oldCta && newCta && oldCta.items && newCta.items) {
+              oldCta.items.forEach(oldIt => {
+                if (oldIt && (oldIt.estadoCocina === 'listo' || oldIt.estado === 'listo' || oldIt.listo)) {
+                  const matchingNew = newCta.items.find(n => (oldIt.id && n.id === oldIt.id) || (n.nombre === oldIt.nombre && n.estadoCocina !== 'servido'));
+                  if (matchingNew && matchingNew.estadoCocina !== 'servido') {
+                    matchingNew.estadoCocina = 'listo';
+                    matchingNew.estado = 'listo';
+                    matchingNew.listo = true;
+                  }
+                }
+              });
+            }
+          });
+        }
         window.kdsCuentasServer = cuentas;
         if (typeof window.cargarKDS === 'function') {
           window.cargarKDS();
@@ -37,22 +56,49 @@
     }
   };
 
-  function syncKDSItemToAllStoragesAndServer(keyCuenta, idxInCuenta, newEstado, newTimestamp, itemId) {
+  function syncKDSItemToAllStoragesAndServer(keyCuenta, idxInCuenta, newEstado, newTimestamp, itemId, itemNombre) {
     if (!keyCuenta) return;
     var parts = keyCuenta.split('-');
     var mesaId = parseInt(parts[0]) || 1;
     var sillaNum = parseInt(parts[1]) || 0;
 
+    function updateItemInList(items) {
+      if (!items || !items.length) return null;
+      var target = null;
+      if (itemId) {
+        target = items.find(function (it) { return it.id === itemId; });
+      }
+      if (!target && idxInCuenta !== undefined && items[idxInCuenta]) {
+        target = items[idxInCuenta];
+      }
+      if (!target && itemNombre) {
+        target = items.find(function (it) { return it.nombre === itemNombre; });
+      }
+      if (target) {
+        target.estadoCocina = newEstado;
+        target.estado = (newEstado === 'preparando' ? 'en_preparacion' : (newEstado === 'listo' ? 'listo' : (newEstado === 'servido' ? 'servido' : 'enviado_cocina')));
+        if (newEstado === 'listo') {
+          target.listo = true;
+          target.horaListo = (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        }
+        if (newEstado === 'servido') {
+          target.servido = true;
+          target.horaServido = (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        }
+        if (newTimestamp) {
+          target.timestampInicioCocina = newTimestamp;
+        }
+        if (!itemId && target.id) itemId = target.id;
+      }
+      return items;
+    }
+
     // 1. En window.kdsCuentasServer
     var updatedItems = null;
     if (window.kdsCuentasServer && window.kdsCuentasServer[keyCuenta]) {
       var ctaSrv = window.kdsCuentasServer[keyCuenta];
-      if (ctaSrv.items && ctaSrv.items[idxInCuenta]) {
-        ctaSrv.items[idxInCuenta].estadoCocina = newEstado;
-        ctaSrv.items[idxInCuenta].estado = (newEstado === 'preparando' ? 'en_preparacion' : (newEstado === 'listo' ? 'listo' : (newEstado === 'servido' ? 'servido' : 'enviado_cocina')));
-        if (newTimestamp) ctaSrv.items[idxInCuenta].timestampInicioCocina = newTimestamp;
-        updatedItems = ctaSrv.items;
-        if (!itemId && ctaSrv.items[idxInCuenta].id) itemId = ctaSrv.items[idxInCuenta].id;
+      if (ctaSrv.items) {
+        updatedItems = updateItemInList(ctaSrv.items);
       }
     }
 
@@ -62,15 +108,10 @@
       if (raw) {
         var state = JSON.parse(raw);
         if (state && state.cuentas && state.cuentas[keyCuenta] && state.cuentas[keyCuenta].items) {
-          if (state.cuentas[keyCuenta].items[idxInCuenta]) {
-            state.cuentas[keyCuenta].items[idxInCuenta].estadoCocina = newEstado;
-            state.cuentas[keyCuenta].items[idxInCuenta].estado = (newEstado === 'preparando' ? 'en_preparacion' : (newEstado === 'listo' ? 'listo' : (newEstado === 'servido' ? 'servido' : 'enviado_cocina')));
-            if (newTimestamp) state.cuentas[keyCuenta].items[idxInCuenta].timestampInicioCocina = newTimestamp;
-            localStorage.setItem('palapa_croquis_state_v1', JSON.stringify(state));
-            sessionStorage.setItem('palapa_croquis_state_v1', JSON.stringify(state));
-            if (!updatedItems) updatedItems = state.cuentas[keyCuenta].items;
-            if (!itemId && state.cuentas[keyCuenta].items[idxInCuenta].id) itemId = state.cuentas[keyCuenta].items[idxInCuenta].id;
-          }
+          updateItemInList(state.cuentas[keyCuenta].items);
+          localStorage.setItem('palapa_croquis_state_v1', JSON.stringify(state));
+          sessionStorage.setItem('palapa_croquis_state_v1', JSON.stringify(state));
+          if (!updatedItems) updatedItems = state.cuentas[keyCuenta].items;
         }
       }
     } catch (e) { }
@@ -81,15 +122,10 @@
       if (rawCuentas) {
         var ctas = JSON.parse(rawCuentas);
         if (ctas && ctas[keyCuenta] && ctas[keyCuenta].items) {
-          if (ctas[keyCuenta].items[idxInCuenta]) {
-            ctas[keyCuenta].items[idxInCuenta].estadoCocina = newEstado;
-            ctas[keyCuenta].items[idxInCuenta].estado = (newEstado === 'preparando' ? 'en_preparacion' : (newEstado === 'listo' ? 'listo' : (newEstado === 'servido' ? 'servido' : 'enviado_cocina')));
-            if (newTimestamp) ctas[keyCuenta].items[idxInCuenta].timestampInicioCocina = newTimestamp;
-            localStorage.setItem('palapa_cuentas_v1', JSON.stringify(ctas));
-            sessionStorage.setItem('palapa_cuentas_v1', JSON.stringify(ctas));
-            if (!updatedItems) updatedItems = ctas[keyCuenta].items;
-            if (!itemId && ctas[keyCuenta].items[idxInCuenta].id) itemId = ctas[keyCuenta].items[idxInCuenta].id;
-          }
+          updateItemInList(ctas[keyCuenta].items);
+          localStorage.setItem('palapa_cuentas_v1', JSON.stringify(ctas));
+          sessionStorage.setItem('palapa_cuentas_v1', JSON.stringify(ctas));
+          if (!updatedItems) updatedItems = ctas[keyCuenta].items;
         }
       }
     } catch (e) { }
@@ -97,12 +133,9 @@
     // 4. En window.palapaState si existe
     if (window.palapaState && window.palapaState.cuentas && window.palapaState.cuentas[keyCuenta]) {
       var pItems = window.palapaState.cuentas[keyCuenta].items;
-      if (pItems && pItems[idxInCuenta]) {
-        pItems[idxInCuenta].estadoCocina = newEstado;
-        pItems[idxInCuenta].estado = (newEstado === 'preparando' ? 'en_preparacion' : (newEstado === 'listo' ? 'listo' : (newEstado === 'servido' ? 'servido' : 'enviado_cocina')));
-        if (newTimestamp) pItems[idxInCuenta].timestampInicioCocina = newTimestamp;
+      if (pItems) {
+        updateItemInList(pItems);
         if (!updatedItems) updatedItems = pItems;
-        if (!itemId && pItems[idxInCuenta].id) itemId = pItems[idxInCuenta].id;
       }
     }
 
@@ -304,23 +337,25 @@
               };
             }
 
-            enviados.forEach(function (it, idxInCta) {
-              var st = getProductStation(it.nombre);
-              ticketsMap[ticketKey].items.push({
-                id: it.id,
-                nombre: it.nombre,
-                cantidad: it.cantidad || 1,
-                notas: it.notas || '',
-                sillaNum: sillaNum,
-                keyCuenta: key,
-                idxInCuenta: idxInCta,
-                estacion: st,
-                horaEnvio: it.horaEnvioCocina || it.hora || '09:00 AM',
-                timestampEnvio: it.timestampEnvioCocina || (Date.now() - (6 * 60 * 1000)),
-                timestampInicio: it.timestampInicioCocina || null,
-                minutosEnAtencion: it.minutosEnAtencion || 0,
-                estado: it.estadoCocina || 'recibido'
-              });
+            cta.items.forEach(function (it, realIdx) {
+              if ((it.enviadoCocina === true || it.enviadoCocina === 'true') && it.estadoCocina !== 'servido') {
+                var st = getProductStation(it.nombre);
+                ticketsMap[ticketKey].items.push({
+                  id: it.id,
+                  nombre: it.nombre,
+                  cantidad: it.cantidad || 1,
+                  notas: it.notas || '',
+                  sillaNum: sillaNum,
+                  keyCuenta: key,
+                  idxInCuenta: realIdx,
+                  estacion: st,
+                  horaEnvio: it.horaEnvioCocina || it.hora || '09:00 AM',
+                  timestampEnvio: it.timestampEnvioCocina || (Date.now() - (6 * 60 * 1000)),
+                  timestampInicio: it.timestampInicioCocina || null,
+                  minutosEnAtencion: it.minutosEnAtencion || 0,
+                  estado: it.estadoCocina || (it.estado === 'listo' ? 'listo' : (it.estado === 'en_preparacion' ? 'preparando' : 'recibido'))
+                });
+              }
             });
           }
         }
@@ -365,11 +400,13 @@
           if (it.estacion === 'REPOSTERIA') countReposteria += it.cantidad;
           if (it.estacion === 'INFANTIL') countInfantil += it.cantidad;
 
-          if (it.estado === 'preparando') {
-            if (!batchMap[it.nombre]) {
-              batchMap[it.nombre] = { qty: it.cantidad, est: it.estacion };
-            } else {
-              batchMap[it.nombre].qty += it.cantidad;
+          if (it.estado === 'preparando' || it.estado === 'recibido') {
+            if (currentStation === 'TODAS' || it.estacion === currentStation) {
+              if (!batchMap[it.nombre]) {
+                batchMap[it.nombre] = { qty: it.cantidad, est: it.estacion };
+              } else {
+                batchMap[it.nombre].qty += it.cantidad;
+              }
             }
           }
         }
@@ -969,7 +1006,7 @@
     it.estado = 'preparando';
     it.timestampInicio = Date.now();
 
-    syncKDSItemToAllStoragesAndServer(it.keyCuenta, it.idxInCuenta, 'preparando', it.timestampInicio, it.id);
+    syncKDSItemToAllStoragesAndServer(it.keyCuenta, it.idxInCuenta, 'preparando', it.timestampInicio, it.id, it.nombre);
     renderKDSUI();
   };
 
@@ -981,7 +1018,7 @@
     const it = ticket.items[itemIdx];
     it.estado = 'listo';
 
-    syncKDSItemToAllStoragesAndServer(it.keyCuenta, it.idxInCuenta, 'listo', null, it.id);
+    syncKDSItemToAllStoragesAndServer(it.keyCuenta, it.idxInCuenta, 'listo', null, it.id, it.nombre);
     renderKDSUI();
   };
 
@@ -996,7 +1033,7 @@
 
     ticket.items.forEach(it => {
       it.estado = 'servido';
-      syncKDSItemToAllStoragesAndServer(it.keyCuenta, it.idxInCuenta, 'servido', null, it.id);
+      syncKDSItemToAllStoragesAndServer(it.keyCuenta, it.idxInCuenta, 'servido', null, it.id, it.nombre);
     });
 
     playKitchenBell();
