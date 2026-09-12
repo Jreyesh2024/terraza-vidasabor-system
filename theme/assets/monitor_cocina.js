@@ -283,8 +283,10 @@
     }
 
     var requestedStation = localStorage.getItem('kds_estacion_activa');
-    if (requestedStation) {
-      window.kdsState.estacionFiltro = requestedStation;
+    if (requestedStation && (!window.kdsStationInitialized || window.kdsState.estacionFiltro !== requestedStation)) {
+      window.kdsStationInitialized = true;
+      window.filtrarEstacionKDS(requestedStation, false);
+      return;
     }
 
     var state = null;
@@ -320,15 +322,12 @@
             var isMesaCentro = (sillaNum === '0' || cta.es_cuenta_mesa);
             var areaInfo = getTableArea(mesaId);
 
-            var ticketKey = isMesaCentro ? ('MESA-' + mesaId + '-CENTRO') : ('MESA-' + mesaId + '-S-' + sillaNum);
+            var ticketKey = 'MESA-' + mesaId;
             if (!ticketsMap[ticketKey]) {
               ticketsMap[ticketKey] = {
-                id: isMesaCentro ? ('T-' + mesaId + '-CENTRO') : ('T-' + mesaId + '-' + sillaNum),
+                id: 'T-MESA-' + mesaId,
                 mesaId: mesaId.toString(),
-                sillaNum: sillaNum.toString(),
-                es_cuenta_mesa: isMesaCentro,
-                mesaNombre: isMesaCentro ? ('⭐ Mesa ' + mesaId + ' • AL CENTRO') : ('Mesa ' + mesaId + ' • Silla ' + sillaNum),
-                comensalNombre: isMesaCentro ? '⭐ PLATILLOS AL CENTRO' : (cta.comensalNombre || ('Comensal Silla ' + sillaNum)),
+                mesaNombre: 'Mesa ' + mesaId,
                 areaId: areaInfo.id,
                 areaNombre: areaInfo.nombre,
                 horaEnvio: enviados[0].horaEnvioCocina || enviados[0].hora || '09:00 AM',
@@ -345,7 +344,9 @@
                   nombre: it.nombre,
                   cantidad: it.cantidad || 1,
                   notas: it.notas || '',
-                  sillaNum: sillaNum,
+                  sillaNum: isMesaCentro ? '0' : sillaNum,
+                  isMesaCentro: isMesaCentro,
+                  comensalNombre: isMesaCentro ? 'Al Centro' : (cta.comensalNombre || ('Silla ' + sillaNum)),
                   keyCuenta: key,
                   idxInCuenta: realIdx,
                   estacion: st,
@@ -636,17 +637,19 @@
       header.innerHTML = `
         <div>
           <div style="display: flex; align-items: center; gap: 6px;">
-            <span style="font-size: 15px; font-weight: 900; color: #ffffff;">
-              ${ticket.mesaNombre}
+            <span style="font-size: 16px; font-weight: 900; color: #ffffff;">
+              <i class="fa-solid fa-chair" style="color: #fbbf24;"></i> ${ticket.mesaNombre}
+            </span>
+            <span style="font-size: 10px; font-weight: 800; padding: 2px 7px; border-radius: 6px; background: rgba(15,23,42,0.9); color: #38bdf8; border: 1px solid #0284c7;">
+              ${ticket.areaNombre}
             </span>
             <span style="font-size: 10px; font-weight: 900; padding: 2px 6px; border-radius: 6px; background: rgba(15,23,42,0.9); color: ${semaforoText}; border: 1px solid ${semaforoBg};">
               ${semaforoLabel}
             </span>
           </div>
-          <div style="display: flex; align-items: center; gap: 6px; margin-top: 2px;">
-            <span style="font-size: 11px; font-weight: 800; color: #38bdf8;"><i class="fa-solid fa-user"></i> ${ticket.comensalNombre || ('Comensal Silla ' + ticket.sillaNum)}</span>
+          <div style="display: flex; align-items: center; gap: 6px; margin-top: 3px;">
             <span style="font-size: 11px; color: #94a3b8; font-weight: 700;">
-              • <i class="fa-regular fa-clock"></i> ${ticket.horaEnvio} (${totalElapsedMins} min)
+              <i class="fa-regular fa-clock"></i> ${ticket.horaEnvio} (${totalElapsedMins} min) • <b>${visibleItems.length} producto(s)</b>
             </span>
           </div>
         </div>
@@ -659,7 +662,7 @@
       const itemsWrap = document.createElement('div');
       itemsWrap.style.cssText = 'display: flex; flex-direction: column; gap: 8px; padding: 8px 6px; border-top: 1px solid #1e293b; border-bottom: 1px solid #1e293b;';
 
-      visibleItems.forEach((it, iIdx) => {
+      visibleItems.forEach((it) => {
         let stBadgeBg = '#1e293b';
         let stBadgeColor = '#38bdf8';
         let stLabel = 'Cocina';
@@ -703,7 +706,7 @@
           itemStateBadge = '<span style="font-size: 9px; font-weight: 800; background: rgba(16,185,129,0.15); color: #34d399; border: 1px solid rgba(16,185,129,0.4); padding: 2px 6px; border-radius: 4px;">🟢 En Espera</span>';
           itemBorder = 'rgba(16,185,129,0.3)';
           actionButtonHtml = `
-            <button onclick="window.iniciarAtencionItemKDS(${tIdx}, ${iIdx});" style="padding: 4px 10px; font-size: 10px; font-weight: 900; border-radius: 6px; border: none; cursor: pointer; background: ${btnGradient}; color: ${btnTextColor}; display: flex; align-items: center; gap: 4px; box-shadow: 0 2px 8px rgba(0,0,0,0.25);">
+            <button onclick="window.iniciarAtencionItemKDS('${it.keyCuenta}', ${it.idxInCuenta}, '${it.id || ''}');" style="padding: 4px 10px; font-size: 10px; font-weight: 900; border-radius: 6px; border: none; cursor: pointer; background: ${btnGradient}; color: ${btnTextColor}; display: flex; align-items: center; gap: 4px; box-shadow: 0 2px 8px rgba(0,0,0,0.25);">
               <i class="${stIcon}"></i> ${btnText}
             </button>
           `;
@@ -739,7 +742,7 @@
           }
 
           actionButtonHtml = `
-            <button onclick="window.marcarListoItemKDS(${tIdx}, ${iIdx});" style="padding: 4px 10px; font-size: 10px; font-weight: 900; border-radius: 6px; border: none; cursor: pointer; background: linear-gradient(135deg, #059669, #10b981); color: #ffffff; display: flex; align-items: center; gap: 4px; box-shadow: 0 2px 8px rgba(16,185,129,0.3);">
+            <button onclick="window.marcarListoItemKDS('${it.keyCuenta}', ${it.idxInCuenta}, '${it.id || ''}');" style="padding: 4px 10px; font-size: 10px; font-weight: 900; border-radius: 6px; border: none; cursor: pointer; background: linear-gradient(135deg, #059669, #10b981); color: #ffffff; display: flex; align-items: center; gap: 4px; box-shadow: 0 2px 8px rgba(16,185,129,0.3);">
               <i class="fa-solid fa-check"></i> Marcar Listo
             </button>
           `;
@@ -748,11 +751,14 @@
           itemBorder = '#0284c7';
           itemBg = 'rgba(2,132,199,0.1)';
           actionButtonHtml = `
-            <button onclick="window.iniciarAtencionItemKDS(${tIdx}, ${iIdx});" style="padding: 3px 8px; font-size: 9px; font-weight: 700; border-radius: 6px; border: 1px solid #334155; cursor: pointer; background: #0f172a; color: #94a3b8; display: flex; align-items: center; gap: 3px;">
+            <button onclick="window.iniciarAtencionItemKDS('${it.keyCuenta}', ${it.idxInCuenta}, '${it.id || ''}');" style="padding: 3px 8px; font-size: 9px; font-weight: 700; border-radius: 6px; border: 1px solid #334155; cursor: pointer; background: #0f172a; color: #94a3b8; display: flex; align-items: center; gap: 3px;">
               <i class="fa-solid fa-rotate-left"></i> Reabrir
             </button>
           `;
         }
+
+        const sillaLabel = (it.isMesaCentro || it.sillaNum === '0' || it.sillaNum === 0) ? '⭐ Al Centro' : ('Silla ' + it.sillaNum);
+        const sillaColor = (it.isMesaCentro || it.sillaNum === '0' || it.sillaNum === 0) ? '#38bdf8' : '#fbbf24';
 
         const row = document.createElement('div');
         row.style.cssText = 'background: ' + itemBg + '; border: 1px solid ' + itemBorder + '; border-radius: 10px; padding: 8px 10px; display: flex; flex-direction: column; gap: 4px;';
@@ -762,7 +768,7 @@
               <span style="font-size: 13px; font-weight: 900; color: ${it.estado === 'listo' ? '#38bdf8' : '#ffffff'};">
                 ${it.cantidad}x ${it.nombre}
               </span>
-              <span style="font-size: 9px; font-weight: 800; background: #0f172a; color: ${(it.sillaNum === '0' || it.sillaNum === 0) ? '#38bdf8' : '#fbbf24'}; border: 1px solid #334155; padding: 1px 5px; border-radius: 4px;">${(it.sillaNum === '0' || it.sillaNum === 0) ? '⭐ Al Centro' : ('Silla ' + it.sillaNum)}</span>
+              <span style="font-size: 9px; font-weight: 800; background: #0f172a; color: ${sillaColor}; border: 1px solid #334155; padding: 1px 5px; border-radius: 4px;">${sillaLabel}</span>
             </div>
             <div style="display: flex; align-items: center; gap: 4px;">
               ${itemStateBadge}
@@ -792,7 +798,7 @@
         const footer = document.createElement('div');
         footer.style.cssText = 'padding-left: 6px; display: flex; gap: 8px;';
         footer.innerHTML = `
-          <button onclick="window.despacharTicketCompletoKDS(${tIdx});" style="flex: 1; padding: 10px; background: linear-gradient(135deg, #059669, #10b981); color: #ffffff; border: none; border-radius: 12px; font-size: 12px; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; box-shadow: 0 4px 12px rgba(16,185,129,0.3);">
+          <button onclick="window.despacharTicketCompletoKDS('${ticket.mesaId}');" style="flex: 1; padding: 10px; background: linear-gradient(135deg, #059669, #10b981); color: #ffffff; border: none; border-radius: 12px; font-size: 12px; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; box-shadow: 0 4px 12px rgba(16,185,129,0.3);">
             <i class="fa-solid fa-bell-concierge"></i> 🔔 Pase / Entregar a Mesero
           </button>
         `;
@@ -998,42 +1004,50 @@
   };
 
   // 6. ACCIONES DE COCINA: INICIAR ATENCIÓN / FUEGO (VERDE -> ÁMBAR)
-  window.iniciarAtencionItemKDS = function (ticketIdx, itemIdx) {
-    const ticket = window.kdsState.tickets[ticketIdx];
-    if (!ticket || !ticket.items[itemIdx]) return;
+  window.iniciarAtencionItemKDS = function (keyCuenta, idxInCuenta, itemId) {
+    const timestamp = Date.now();
+    window.kdsState.tickets.forEach(ticket => {
+      ticket.items.forEach(it => {
+        if (it.keyCuenta === keyCuenta && (it.idxInCuenta === idxInCuenta || (itemId && it.id === itemId))) {
+          it.estado = 'preparando';
+          it.timestampInicio = timestamp;
+        }
+      });
+    });
 
-    const it = ticket.items[itemIdx];
-    it.estado = 'preparando';
-    it.timestampInicio = Date.now();
-
-    syncKDSItemToAllStoragesAndServer(it.keyCuenta, it.idxInCuenta, 'preparando', it.timestampInicio, it.id, it.nombre);
+    syncKDSItemToAllStoragesAndServer(keyCuenta, idxInCuenta, 'preparando', timestamp, itemId);
     renderKDSUI();
   };
 
   // MARCAR PLATILLO LISTO (ÁMBAR/ROJO -> LISTO)
-  window.marcarListoItemKDS = function (ticketIdx, itemIdx) {
-    const ticket = window.kdsState.tickets[ticketIdx];
-    if (!ticket || !ticket.items[itemIdx]) return;
+  window.marcarListoItemKDS = function (keyCuenta, idxInCuenta, itemId) {
+    window.kdsState.tickets.forEach(ticket => {
+      ticket.items.forEach(it => {
+        if (it.keyCuenta === keyCuenta && (it.idxInCuenta === idxInCuenta || (itemId && it.id === itemId))) {
+          it.estado = 'listo';
+        }
+      });
+    });
 
-    const it = ticket.items[itemIdx];
-    it.estado = 'listo';
-
-    syncKDSItemToAllStoragesAndServer(it.keyCuenta, it.idxInCuenta, 'listo', null, it.id, it.nombre);
+    syncKDSItemToAllStoragesAndServer(keyCuenta, idxInCuenta, 'listo', null, itemId);
     renderKDSUI();
   };
 
   // 7. DESPACHAR TICKET COMPLETO (PASE / SERVIDO)
-  window.despacharTicketCompletoKDS = function (ticketIdx) {
-    const ticket = window.kdsState.tickets[ticketIdx];
+  window.despacharTicketCompletoKDS = function (ticketMesaId) {
+    const ticket = window.kdsState.tickets.find(t => t.mesaId === ticketMesaId.toString());
     if (!ticket) return;
 
     if (typeof window.anvilDespacharTicketCocina === 'function') {
-      window.anvilDespacharTicketCocina(ticket.mesaId, ticket.sillaNum, 'servido');
+      window.anvilDespacharTicketCocina(ticket.mesaId, 'ALL', 'servido');
     }
 
+    const currentStation = window.kdsState.estacionFiltro;
     ticket.items.forEach(it => {
-      it.estado = 'servido';
-      syncKDSItemToAllStoragesAndServer(it.keyCuenta, it.idxInCuenta, 'servido', null, it.id, it.nombre);
+      if (currentStation === 'TODAS' || it.estacion === currentStation) {
+        it.estado = 'servido';
+        syncKDSItemToAllStoragesAndServer(it.keyCuenta, it.idxInCuenta, 'servido', null, it.id, it.nombre);
+      }
     });
 
     playKitchenBell();
