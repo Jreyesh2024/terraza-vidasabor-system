@@ -379,7 +379,8 @@
     <div
       style="display: flex !important; flex-wrap: wrap !important; gap: 8px !important; background: #0f2744 !important; padding: 6px 10px !important; border-radius: 12px !important; border: 1px solid rgba(255,255,255,0.12) !important; align-items: center !important;">
       <button id="btn-nav-admin" data-action="anvilAppNav" data-args="admin_menu"
-        style="padding: 7px 14px !important; font-size: 11px !important; font-weight: 800 !important; border-radius: 8px !important; background: #0f172a !important; color: #34d399 !important; border: 1px solid #34d399 !important; cursor: pointer !important; display: flex !important; align-items: center !important; gap: 6px !important;">
+        style="padding: 7px 14px !important; font-size: 11px !important; font-weight: 800 !important; border-radius: 8px !important; background: #0f172a !important; color: #34d399 !important; border: 1px solid #34d399 !important; cursor: pointer !important; display: flex !important; align-items: center !important; gap: 6px !important;"
+        title="Volver al Selector de Roles / Hub Principal">
         <i class="fa-solid fa-house"></i> Inicio / Hub
       </button>
       <button id="btn-area-palapa"
@@ -392,20 +393,6 @@
         title="Monitor de entregas, platillos listos en pase y demoras">
         <i class="fa-solid fa-bell-concierge" style="color: #fcd34d !important;"></i> 🍽️ Pase & Alertas
         <span id="badgeTopPaseCount" style="padding: 1px 6px; border-radius: 6px; font-size: 10px; font-weight: 900; background: #0f172a; color: #38bdf8; border: 1px solid #38bdf8;">0</span>
-      </button>
-      <button id="btn-nav-cocina" onclick="try{localStorage.setItem('kds_estacion_activa','COCINA');}catch(e){} if(typeof window.anvilAppNav==='function') window.anvilAppNav('monitor_cocina'); else if(typeof window.navMenu==='function') window.navMenu('monitor_cocina');"
-        style="padding: 7px 14px !important; font-size: 11px !important; font-weight: 700 !important; border-radius: 8px !important; background: rgba(245,158,11,0.18) !important; color: #fbbf24 !important; border: 1px solid rgba(245,158,11,0.4) !important; cursor: pointer !important; display: flex !important; align-items: center !important; gap: 6px !important;"
-        title="Monitor KDS de Cocina Caliente (Alimentos)">
-        <i class="fa-solid fa-fire" style="color: #f59e0b !important;"></i> Cocina KDS
-      </button>
-      <button id="btn-nav-barra" onclick="try{localStorage.setItem('kds_estacion_activa','BARRA');}catch(e){} if(typeof window.anvilAppNav==='function') window.anvilAppNav('monitor_cocina'); else if(typeof window.navMenu==='function') window.navMenu('monitor_cocina');"
-        style="padding: 7px 14px !important; font-size: 11px !important; font-weight: 700 !important; border-radius: 8px !important; background: rgba(56,189,248,0.18) !important; color: #38bdf8 !important; border: 1px solid rgba(56,189,248,0.4) !important; cursor: pointer !important; display: flex !important; align-items: center !important; gap: 6px !important;"
-        title="Monitor KDS de Barra & Cafetería (Bebidas)">
-        <i class="fa-solid fa-mug-hot" style="color: #38bdf8 !important;"></i> Barra & Bebidas
-      </button>
-      <button id="btn-nav-fiscal" data-action="anvilAppNav" data-args="monitor_fiscal"
-        style="padding: 7px 14px !important; font-size: 11px !important; font-weight: 600 !important; border-radius: 8px !important; background: transparent !important; color: #e2e8f0 !important; border: 1px solid transparent !important; cursor: pointer !important; display: flex !important; align-items: center !important; gap: 6px !important;">
-        <i class="fa-solid fa-chart-pie" style="color: #38bdf8 !important;"></i> Fiscal
       </button>
       <button id="btn-reiniciar-jornada" onclick="window.confirmarReinicioJornada();"
         style="padding: 7px 12px !important; font-size: 11px !important; font-weight: 800 !important; border-radius: 8px !important; background: rgba(239,68,68,0.18) !important; color: #fca5a5 !important; border: 1px solid rgba(239,68,68,0.45) !important; cursor: pointer !important; display: flex !important; align-items: center !important; gap: 5px !important;"

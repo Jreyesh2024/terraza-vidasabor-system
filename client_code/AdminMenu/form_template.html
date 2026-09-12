@@ -67,11 +67,67 @@
     <!-- TÍTULO Y SUBTÍTULO -->
     <div class=&quot;mb-8&quot;>
       <h2 class=&quot;text-2xl md:text-3xl font-bold tracking-tight mb-1 text-white flex items-center gap-2&quot;>
-        Buen día, Terraza Vida &amp; Sabor 👋
+        Bienvenido a Terraza Vida &amp; Sabor 👋
       </h2>
       <p class=&quot;text-[#a3a3a3] text-sm md:text-base font-light&quot;>
-        Panel de control gerencial y operación general — acceso rápido a todas las funciones del restaurante
+        Sistema de Operación &amp; Despacho — selecciona tu área de trabajo para comenzar el turno
       </p>
+    </div>
+
+    <!-- SELECTOR PRINCIPAL DE ROLES Y PANTALLAS DEDICADAS -->
+    <div class=&quot;mb-10 bg-gradient-to-r from-slate-900 via-[#131b2e] to-slate-900 rounded-3xl p-6 sm:p-8 border border-white/10 shadow-2xl relative overflow-hidden&quot;>
+      <div class=&quot;mb-6&quot;>
+        <span class=&quot;text-[11px] font-black tracking-widest text-emerald-400 uppercase bg-emerald-500/10 border border-emerald-500/20 px-3 py-1 rounded-full&quot;>OPERACIÓN POR RESPONSABILIDAD</span>
+        <h3 class=&quot;text-2xl sm:text-3xl font-black text-white mt-2&quot;>Selecciona tu Área de Trabajo</h3>
+        <p class=&quot;text-xs sm:text-sm text-slate-400 mt-1&quot;>Ingresa a tu pantalla especializada de trabajo con un solo clic</p>
+      </div>
+
+      <div class=&quot;grid grid-cols-1 md:grid-cols-3 gap-5&quot;>
+        <!-- ROL 1: MESERO / PISO -->
+        <button onclick=&quot;window.navMenu('pos_mesero')&quot; class=&quot;text-left bg-gradient-to-b from-emerald-950/40 to-slate-900 rounded-2xl p-6 border-2 border-emerald-500/40 hover:border-emerald-400 hover:scale-[1.02] transition-all group shadow-lg flex flex-col justify-between cursor-pointer active:scale-95&quot;>
+          <div>
+            <div class=&quot;w-14 h-14 rounded-2xl bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-3xl mb-4 group-hover:scale-110 transition-transform&quot;>
+              📱
+            </div>
+            <h4 class=&quot;text-xl font-black text-white group-hover:text-emerald-300 transition-colors&quot;>Servicio a Mesas (POS)</h4>
+            <p class=&quot;text-xs text-slate-300 font-medium mt-2 leading-relaxed&quot;>Croquis interactivo de la palapa, captura por silla, comanda al centro, envío a producción y entrega de platillos al comensal.</p>
+          </div>
+          <div class=&quot;mt-6 flex items-center justify-between pt-3 border-t border-emerald-500/20&quot;>
+            <span class=&quot;text-xs font-black text-emerald-400 uppercase tracking-wider&quot;>Entrar como Mesero →</span>
+            <span class=&quot;w-8 h-8 rounded-full bg-emerald-500 text-slate-950 font-black flex items-center justify-center text-sm shadow-md&quot;>✓</span>
+          </div>
+        </button>
+
+        <!-- ROL 2: COCINA CALIENTE KDS -->
+        <button onclick=&quot;try{localStorage.setItem('kds_estacion_activa','COCINA');}catch(e){} window.navMenu('monitor_cocina');&quot; class=&quot;text-left bg-gradient-to-b from-amber-950/40 to-slate-900 rounded-2xl p-6 border-2 border-amber-500/40 hover:border-amber-400 hover:scale-[1.02] transition-all group shadow-lg flex flex-col justify-between cursor-pointer active:scale-95&quot;>
+          <div>
+            <div class=&quot;w-14 h-14 rounded-2xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-3xl mb-4 group-hover:scale-110 transition-transform&quot;>
+              🍳
+            </div>
+            <h4 class=&quot;text-xl font-black text-white group-hover:text-amber-300 transition-colors&quot;>Cocina Caliente (KDS)</h4>
+            <p class=&quot;text-xs text-slate-300 font-medium mt-2 leading-relaxed&quot;>Pantalla táctil exclusiva para cocineros. Control de fuego, tiempos de preparación, fichas técnicas y pase de alimentos.</p>
+          </div>
+          <div class=&quot;mt-6 flex items-center justify-between pt-3 border-t border-amber-500/20&quot;>
+            <span class=&quot;text-xs font-black text-amber-400 uppercase tracking-wider&quot;>Entrar como Cocina →</span>
+            <span class=&quot;w-8 h-8 rounded-full bg-amber-500 text-slate-950 font-black flex items-center justify-center text-sm shadow-md&quot;>🔥</span>
+          </div>
+        </button>
+
+        <!-- ROL 3: BARRA &amp; BEBIDAS KDS -->
+        <button onclick=&quot;try{localStorage.setItem('kds_estacion_activa','BARRA');}catch(e){} window.navMenu('monitor_cocina');&quot; class=&quot;text-left bg-gradient-to-b from-sky-950/40 to-slate-900 rounded-2xl p-6 border-2 border-sky-500/40 hover:border-sky-400 hover:scale-[1.02] transition-all group shadow-lg flex flex-col justify-between cursor-pointer active:scale-95&quot;>
+          <div>
+            <div class=&quot;w-14 h-14 rounded-2xl bg-sky-500/20 border border-sky-500/40 flex items-center justify-center text-3xl mb-4 group-hover:scale-110 transition-transform&quot;>
+              ☕
+            </div>
+            <h4 class=&quot;text-xl font-black text-white group-hover:text-sky-300 transition-colors&quot;>Barra &amp; Bebidas (KDS)</h4>
+            <p class=&quot;text-xs text-slate-300 font-medium mt-2 leading-relaxed&quot;>Pantalla táctil exclusiva para baristas y bartenders. Cafetería gourmet, infusiones, jugos, coctelería y vinos.</p>
+          </div>
+          <div class=&quot;mt-6 flex items-center justify-between pt-3 border-t border-sky-500/20&quot;>
+            <span class=&quot;text-xs font-black text-sky-400 uppercase tracking-wider&quot;>Entrar como Barra →</span>
+            <span class=&quot;w-8 h-8 rounded-full bg-sky-400 text-slate-950 font-black flex items-center justify-center text-sm shadow-md&quot;>☕</span>
+          </div>
+        </button>
+      </div>
     </div>
 
     <!-- 4 FILA DE KPIS (ESTILO VIDASPA CON BARRAS SUPERIORES DE COLOR) -->
